@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'dk_cool_crayonregular';
+    src: url('fonts/dk_cool_crayon-webfont.eot');
+    src: url('fonts/dk_cool_crayon-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/dk_cool_crayon-webfont.woff2') format('woff2'),
+         url('fonts/dk_cool_crayon-webfont.woff') format('woff'),
+         url('fonts/dk_cool_crayon-webfont.ttf') format('truetype'),
+         url('fonts/dk_cool_crayon-webfont.svg#dk_cool_crayonregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
