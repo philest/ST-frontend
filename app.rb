@@ -80,8 +80,7 @@ get '/sms' do
    				r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
 			end
  			twiml.text
-
-
+ 			break
 	 	end
 
     	@user.save
