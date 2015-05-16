@@ -61,6 +61,10 @@ get '/sms' do
 		end
  		twiml.text
 	else
+		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message "Something broke-- response when not given a prompt."
+		end
+ 		twiml.text
 		raise "something broke-- message was not regeistered"
 	end
 end
