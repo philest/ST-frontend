@@ -3,6 +3,8 @@ require 'sinatra/activerecord'
 require './config/environments' #database configuration
 require './models/user' #add the user model
 require 'twilio-ruby'
+require 'numbers_in_words'
+require 'numbers_in_words/duck_punch'
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
@@ -23,13 +25,30 @@ get '/sms' do
    			r.Message "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
     	end
     	twiml.text
+
     elsif @user.child_age == EMPTY_INT #update child's birthdate
-    	@user.child_age = Integer(params[:Body])
+    	
+   		# if in words
+   		if /[[A-Za-z]/ =~ params[:Body]
+   			if params[:Body].in_numbers #it's a real number, spelled
+   				@user.child_age = params[:Body].in_numbers
+   			else #not a real number
+   				twiml = Twilio::TwiML::Response.new do |r|
+   					r.Message "We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+				end
+ 				twiml.text
+ 				break
+ 			end
+ 		else
+    		@user.child_age = Integer(params[:Body])
+ 		end
+
     	@user.save
   		twiml = Twilio::TwiML::Response.new do |r|
    			r.Message "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
 		end
  		twiml.text
+
  	elsif @user.time.eql? EMPTY_STR #update time and child's name
  		response = params[:Body]
  		arr = response.split
@@ -64,6 +83,7 @@ get '/sms' do
    			r.Message "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
 		end
  		twiml.text
+
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
    			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
