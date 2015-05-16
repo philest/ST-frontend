@@ -116,7 +116,7 @@ end
 
 
 # TESTING ROUTE!!!!
-get '/test' do
+get '/test/:From/:Body' do
 	#check if new user
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 

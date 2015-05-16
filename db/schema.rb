@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20150516141122) do
     t.datetime "updated_at"
     t.string   "child_birthdate"
     t.string   "time"
-    t.string   "child_age"
-    t.integer  "child_name"
+    t.integer  "child_age"
+    t.string   "child_name"
   end
 
 end
