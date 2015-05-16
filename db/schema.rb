@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20150516122426) do
     t.string   "phone"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "child_birthdate"
+    t.string   "time"
   end
 
 end
