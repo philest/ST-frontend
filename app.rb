@@ -52,7 +52,7 @@ get '/sms' do
 	 			@user.name = arr[2]
 	 		end
 	 	else
-	 		raise "this format is incorrect. try again"
+	 		# raise "this format is incorrect. try again"
 	 		twiml = Twilio::TwiML::Response.new do |r|
    				r.Message "Something broke-- ERROR SPLIT."
 			end
@@ -66,10 +66,10 @@ get '/sms' do
  		twiml.text
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "Something broke-- response when not given a prompt."
+   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
 		end
  		twiml.text
-		raise "something broke-- message was not regeistered"
+		# raise "something broke-- message was not regeistered"
 	end
 end
 
