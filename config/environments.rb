@@ -3,7 +3,7 @@
 
 
 
-configure :development, :production do
+configure :development, :production, :test do
  db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:sharlach1@localhost/development')
 
  
