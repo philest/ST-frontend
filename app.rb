@@ -13,6 +13,7 @@ get '/' do
 	erb :main
 end
 
+
 # register an incoming SMS
 get '/sms' do
 	#check if new user
@@ -27,9 +28,8 @@ get '/sms' do
     	twiml.text
 
     elsif @user.child_age == EMPTY_INT #update child's birthdate
-    	
    		# if in words
-   		if /[[A-Za-z]/ =~ params[:Body]
+   		if /[A-Za-z]/ =~ params[:Body]
    			if params[:Body].in_numbers #it's a real number, spelled
    				@user.child_age = params[:Body].in_numbers
    			else #not a real number
@@ -97,9 +97,6 @@ get '/sms' do
 		# raise "something broke-- message was not regeistered"
 	end
 end
-
-
-
 
 	#add user to db
 # 	@user = User.create(name: "empty", phone: params[:From])
