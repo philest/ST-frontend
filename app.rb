@@ -73,9 +73,15 @@ get '/sms' do
 	 	else
 	 		# raise "this format is incorrect. try again"
 	 		twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "Something broke-- ERROR SPLIT."
+   				r.Message "(1/2)We did not understand what you typed. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)."
 			end
  			twiml.text
+	 		twiml = Twilio::TwiML::Response.new do |r|
+   				r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+			end
+ 			twiml.text
+
+
 	 	end
 
     	@user.save
