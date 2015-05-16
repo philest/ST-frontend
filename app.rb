@@ -7,4 +7,8 @@ get '/' do
 	erb :main
 end
 
-# post '/users/new/:name' do
+get '/users/new/:phone' do
+	# add user to db
+	@user = User.create(name: "empty", phone: params[:phone])
+	erb :new
+end
