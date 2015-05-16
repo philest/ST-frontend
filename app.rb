@@ -27,7 +27,7 @@ get '/sms' do
     	@user.child_age = Integer(params[:Body])
     	@user.save
   		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Great! You've got free nightly stories by text. When do you want them? Reply with your preferred time and your child's name (e.g. 5:30pm Brianna)"
+   			r.Message "StoryTime: Great! You've got free nightly stories by text. When do you want them? Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
 		end
  		twiml.text
  	elsif @user.time.eql? "empty" #update time 
