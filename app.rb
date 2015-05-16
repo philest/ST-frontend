@@ -4,6 +4,9 @@ require './config/environments' #database configuration
 require './models/user' #add the user model
 require 'twilio-ruby'
 
+EMPTY_AGE = 999
+
+
 get '/' do
 	erb :main
 end
@@ -15,13 +18,13 @@ get '/sms' do
 	@user = User.find_by_phone(params[:From]) 
 
 	if @user == nil #new user, add her
-		@user = User.create(name: "empty", child_birthdate: "empty", time: "empty", phone: params[:From])
+		@user = User.create(child_name: "empty", child_age: EMPTY_AGE, time: "empty", phone: params[:From])
   		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Thanks for signing up! Reply with your child's birthdate in MMYY format (e.g. 0912 for September 2013)."
+   			r.Message "StoryTime: Thanks for signing up! Reply with your age in years (e.g. 3)."
     	end
     	twiml.text
-    elsif @user.child_birthdate.eql? "empty" #update child's birthdate
-    	@user.child_birthdate = params[:Body]
+    elsif @user.child_age.eql? "empty" #update child's birthdate
+    	@user.child_age = Integer(params[:Body])
     	@user.save
   		twiml = Twilio::TwiML::Response.new do |r|
    			r.Message "StoryTime: Great! You've got free nightly stories by text. When do you want them? Reply with your preferred time and your child's name (e.g. 5:30pm Brianna)"
@@ -30,11 +33,31 @@ get '/sms' do
  	elsif @user.time.eql? "empty" #update time 
  		response = params[:Body]
  		arr = response.split
- 		@user.time = arr[0]
- 		@user.name = arr[1]
+
+ 		if arr.length == 2
+	 		#handle wrong order
+	 		if arr[0] ~= [A-Za-z] #the first element is the name
+	 			@user.name = arr[0]
+	 			@user.time = arr[1]
+	 		else
+	 			@user.time = arr[0]
+	 			@user.name = arr[1]
+	 		end
+	 	elsif arr.length == 3
+	 		if arr[0] ~= [A-Za-z] #the first element is the name
+	 			@user.name = arr[0]
+	 			@user.time = arr[1] + arr[2]
+	 		else
+	 			@user.time = arr[0] + arr[1]
+	 			@user.name = arr[2]
+	 		end
+	 	else
+	 		raise "this format is incorrect. try again"
+	 	end
+
     	@user.save
   		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Sounds good! We'll send you and #{arr[1]} a new story each night at #{arr[0]}."
+   			r.Message "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
 		end
  		twiml.text
 	end
