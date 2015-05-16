@@ -20,10 +20,10 @@ get '/sms' do
 	if @user == nil #new user, add her
 		@user = User.create(child_name: "empty", child_age: EMPTY_AGE, time: "empty", phone: params[:From])
   		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Thanks for signing up! Reply with your age in years (e.g. 3)."
+   			r.Message "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
     	end
     	twiml.text
-    elsif @user.child_age.eql? "empty" #update child's birthdate
+    elsif @user.child_age == EMPTY_AGE #update child's birthdate
     	@user.child_age = Integer(params[:Body])
     	@user.save
   		twiml = Twilio::TwiML::Response.new do |r|
@@ -60,6 +60,8 @@ get '/sms' do
    			r.Message "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
 		end
  		twiml.text
+	else
+		raise "something broke-- message was not regeistered"
 	end
 end
 
