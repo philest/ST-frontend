@@ -12,7 +12,7 @@ end
 get '/sms' do
   @user = User.create(name: "empty", phone: params[:From])
   twiml = Twilio::TwiML::Response.new do |r|
-    r.Message "Hey Monkey. Thanks for the message!"
+    r.Message "Thanks ya jew- You've got StoryTime JSC!"
   end
   twiml.text
 end
