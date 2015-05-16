@@ -36,7 +36,7 @@ get '/sms' do
 
  		if arr.length == 2
 	 		#handle wrong order
-	 		if arr[0] ~= [A-Za-z] #the first element is the name
+	 		if arr[0] =~ [A-Za-z] #the first element is the name
 	 			@user.name = arr[0]
 	 			@user.time = arr[1]
 	 		else
@@ -44,7 +44,7 @@ get '/sms' do
 	 			@user.name = arr[1]
 	 		end
 	 	elsif arr.length == 3
-	 		if arr[0] ~= [A-Za-z] #the first element is the name
+	 		if arr[0] =~ [A-Za-z] #the first element is the name
 	 			@user.name = arr[0]
 	 			@user.time = arr[1] + arr[2]
 	 		else
