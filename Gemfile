@@ -6,9 +6,6 @@ gem "sinatra-activerecord"
 gem "twilio-ruby"
 gem 'pg'
 gem 'numbers_in_words'
-gem 'clockwork'
-gem 'stalker'
-gem 'iron_mq'
 gem 'sidetiq'
 gem 'redis'
 
