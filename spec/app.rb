@@ -49,6 +49,7 @@ describe 'The StoryTime App' do
 
   end
 
+# STAGE 2 TESTS 
   it "registers numeric age" do
   	get '/test/111/STORY'
   	get '/test/111/3'
@@ -67,6 +68,20 @@ describe 'The StoryTime App' do
   	expect(@@twiml).to eq("We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
   end
 
+# STAGE 3 TESTS
+	it "registers name then time" do
+		get '/test/833/STORY'
+		get '/test/833/3'
+		get "/test/833/Lindsay%206:00pm"
+		expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and Lindsay a new story each night at 6:00pm.")
+	end
+
+	it "rejects a bad registration" do
+		get '/test/633/STORY'
+		get '/test/633/3'
+		get '/test/633/Lindsay'
+		expect(@@twiml).to eq("(1/2)We did not understand what you typed. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm).")	
+	end
 
 
 end

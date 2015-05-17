@@ -55,7 +55,7 @@ get '/sms' do
  		response = params[:Body]
  		arr = response.split
 
-	 	if arr.length == 2 or arr.length == 3 #plausible format
+	 	if arr.length == 2 || arr.length == 3 #plausible format
 	 		if arr.length == 2
 		 		#handle wrong order
 		 		if /[A-Za-z]/ =~ arr[0]#the first element is the name
@@ -148,7 +148,7 @@ get '/test/:From/:Body' do
  		response = params[:Body]
  		arr = response.split
 
-	 	if arr.length == 2 or arr.length == 3 #plausible format
+	 	if arr.length == 2 || arr.length == 3 #plausible format
 	 		if arr.length == 2
 		 		#handle wrong order
 		 		if /[A-Za-z]/ =~ arr[0]#the first element is the name
