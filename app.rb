@@ -11,6 +11,12 @@ EMPTY_INT = 999
 EMPTY_STR = "empty"
 numberNames = ['zero','one','two','three','four','five','six','seven','eight','nine','ten']
 
+
+SomeWorker.perform #begin sidetiq recurrring background tasks
+
+
+
+
 get '/' do
 	erb :main
 end
