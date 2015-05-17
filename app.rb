@@ -5,7 +5,7 @@ require './models/user' #add the user model
 require 'twilio-ruby'
 require 'numbers_in_words'
 require 'numbers_in_words/duck_punch'
-require 'pry'
+require 'sidekiq'
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
@@ -38,15 +38,23 @@ get '/sms' do
     	if /[1-9]/ =~ params[:Body] #it's a stringified integer
   			@user.child_age = Integer(params[:Body])
   			@user.save
-	       	@@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
+  			twiml = Twilio::TwiML::Response.new do |r|
+   				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
+			end
+ 			twiml.text
 	    
 	    elsif numberNames.include? params[:Body] #the number is spelled out as name
 	    	@user.child_age = params[:Body].in_numbers
   			@user.save
-	       	@@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
-
+  			twiml = Twilio::TwiML::Response.new do |r|
+   				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
+			end
+ 			twiml.text
 	    else #not a valid format
-   			@@twiml = "We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+  			twiml = Twilio::TwiML::Response.new do |r|
+   				r.Message "We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+			end
+ 			twiml.text
  		end 	
 
  	# third reply: update time and child's name
@@ -145,7 +153,6 @@ get '/test/:From/:Body' do
  	# third reply: update time and child's name
  	elsif @user.time.eql? EMPTY_STR
  		
-
 
  		response = params[:Body]
  		arr = response.split

@@ -1,22 +1,17 @@
 require 'rubygems'
 require 'clockwork'
-require File.expand_path('../config/environment', __FILE__)
+require 'stalker'
 
 
 module Clockwork
   handler do |job|
+  	Stalker.enqueue(job)
     puts "Running #{job}"
   end
 
 
 
-every(2.minutes, 'Queueing the job to check ready reminders') { Delayed::Job.enqueue IntervalJob.new }
-
-
-
-
-
-
+every(4.seconds, 'reminders.send') 
 
 
 end

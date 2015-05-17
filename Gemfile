@@ -7,8 +7,10 @@ gem "twilio-ruby"
 gem 'pg'
 gem 'numbers_in_words'
 gem 'clockwork'
-gem 'delayed_job'
-gem 'delayed_job_active_record'
+gem 'stalker'
+gem 'iron_mq'
+gem 'sidetiq'
+gem 'redis'
 
 group :test do
 	gem 'rspec'

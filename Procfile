@@ -1,2 +1,2 @@
 web: bundle exec rackup config.ru -p $PORT
-clock: bundle exec clockwork lib/clock.rb
+worker: bundle exec sidekiq -c 5 -v
