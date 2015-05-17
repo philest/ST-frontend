@@ -10,4 +10,5 @@ gem 'numbers_in_words'
 group :test do
 	gem 'rspec'
 	gem 'capybara'
+	gem 'database_cleaner'
 end

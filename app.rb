@@ -125,10 +125,10 @@ get '/test/:From/:Body' do
 	#first reply: new user, add her
 	if @user == nil 
 		@user = User.create(child_name: EMPTY_STR, child_age: EMPTY_INT, time: EMPTY_STR, phone: params[:From])
-  		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
-    	end
-    	twiml.text
+  		@twiml = "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
+
+  		
+
 
     # second reply: update child's birthdate
     elsif @user.child_age == EMPTY_INT 
@@ -143,16 +143,10 @@ get '/test/:From/:Body' do
        		end
 
 	       	@user.save
-	  		twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
-			end
- 			twiml.text
+	       	@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
 
    		else #not a real number
-   			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
-			end
- 			twiml.text
+   			@twiml = "We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
  		end 	
 
  	# third reply: update time and child's name
@@ -181,29 +175,15 @@ get '/test/:From/:Body' do
 		 		end
 		 	end
 
-			@user.save
-  			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
-			end
- 			twiml.text
+   				@twiml = "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
  		
 	 	else #wrong format
-	 		twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "(1/2)We did not understand what you typed. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)."
-			end
- 			twiml.text
-	 		twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
-			end
- 			twiml.text
+   				@twiml = "(1/2)We did not understand what you typed. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)."
 	 	end
 
 	#response matches nothing
 	else
-		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
-		end
- 		twiml.text
+  		@twiml = "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
 		# raise "something broke-- message was not regeistered"
 	end
 end
