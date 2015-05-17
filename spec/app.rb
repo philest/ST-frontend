@@ -84,5 +84,14 @@ describe 'The StoryTime App' do
 	end
 
 
+# PASSED ALL STAGES TESTS
+	it "doesn't recognize further commands" do
+		get '/test/488/STORY'
+		get '/test/488/3'
+		get "/test/488/Lindsay%206:00pm"
+		get "/test/488/hello"
+		expect(@@twiml).to eq("This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
+	end
+
 end
 

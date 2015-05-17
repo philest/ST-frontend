@@ -5,7 +5,7 @@ require './models/user' #add the user model
 require 'twilio-ruby'
 require 'numbers_in_words'
 require 'numbers_in_words/duck_punch'
-# require 'pry'
+require 'pry'
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
@@ -145,6 +145,8 @@ get '/test/:From/:Body' do
  	# third reply: update time and child's name
  	elsif @user.time.eql? EMPTY_STR
  		
+
+
  		response = params[:Body]
  		arr = response.split
 
@@ -168,6 +170,7 @@ get '/test/:From/:Body' do
 		 		end
 		 	end
 
+		 		@user.save
    				@@twiml = "StoryTime: Sounds good! We'll send you and #{@user.name} a new story each night at #{@user.time}."
  		
 	 	else #wrong format
