@@ -34,10 +34,10 @@ describe 'The StoryTime App' do
 
   it "sends correct sign up sms" do
   	get '/test/999/STORY'
-  	expect(@twiml).to eq("StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3).")
+  	expect(@@twiml).to eq("StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3).")
   end
 
-  
+
   describe User do
   	before(:each) do
  	 	@user = User.create(child_name: EMPTY_STR, child_age: EMPTY_INT, time: EMPTY_STR, phone: "444")
@@ -47,10 +47,24 @@ describe 'The StoryTime App' do
   		expect(@user.child_age).to eq(EMPTY_INT)
   	end
 
+  end
 
+  it "registers numeric age" do
+  	get '/test/111/STORY'
+  	get '/test/111/3'
+  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)")
+  end
 
+  it "registers age in words" do
+  	get '/test/222/STORY'
+  	get '/test/222/three'
+  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)")
+  end
 
-
+  it "rejects non-age" do
+  	get '/test/1000/STORY'
+  	get '/test/1000/badphone'
+  	expect(@@twiml).to eq("We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
   end
 
 
