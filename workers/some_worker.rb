@@ -1,4 +1,9 @@
 # require '.config/environments'
+require 'rubygems'
+require 'twilio-ruby'
+ 
+account_sid = ENV['TW_ACCOUNT_SID']
+auth_token = ENV['TW_AUTH_TOKEN']
 
 
 class SomeWorker
@@ -14,7 +19,21 @@ class SomeWorker
   									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
 
   def perform(*args)
+
+
+  	@client = Twilio::REST::Client.new account_sid, auth_token
+
+  	# send Twilio message
+  	if true == true 
+		message = @client.account.messages.create(:body => 
+		"StoryTime: the timed job worked!",
+	    :to => "+15612125831",     # Replace with your phone number
+	    :from => "+17377778679")   # Replace with your Twilio number
+	end
+
     puts "doing hard work!!"
+
+
   end
 
 
