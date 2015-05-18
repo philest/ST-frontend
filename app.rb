@@ -18,9 +18,12 @@ numberNames = ['zero','one','two','three','four','five','six','seven','eight','n
 
 
 
+get '/worker' do
+	SomeWorker.perform #begin sidetiq recurrring background tasks
+	redirect to('/')
+end
 
 get '/' do
-	SomeWorker.perform #begin sidetiq recurrring background tasks
 	erb :main
 end
 
