@@ -23,7 +23,7 @@ class SomeWorker
   	@client = Twilio::REST::Client.new account_sid, auth_token
 
   	# send Twilio message
-  	if true == true 
+  	if false == true 
 		message = @client.account.messages.create(:body => 
 		"StoryTime: the timed job worked!",
 	    :to => "+15612125831",     # Replace with your phone number
