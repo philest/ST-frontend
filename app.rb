@@ -6,18 +6,21 @@ require 'twilio-ruby'
 require 'numbers_in_words'
 require 'numbers_in_words/duck_punch'
 require 'sidekiq'
+require 'sidetiq'
+
+require './workers/some_worker'
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
 numberNames = ['zero','one','two','three','four','five','six','seven','eight','nine','ten']
 
 
-SomeWorker.perform #begin sidetiq recurrring background tasks
 
 
 
 
 get '/' do
+	SomeWorker.perform #begin sidetiq recurrring background tasks
 	erb :main
 end
 

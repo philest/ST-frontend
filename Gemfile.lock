@@ -145,6 +145,7 @@ DEPENDENCIES
   pg
   redis
   rspec
+  sidekiq
   sidetiq
   sinatra
   sinatra-activerecord
