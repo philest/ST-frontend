@@ -2,9 +2,6 @@
 require 'rubygems'
 require 'twilio-ruby'
  
-account_sid = ENV['TW_ACCOUNT_SID']
-auth_token = ENV['TW_AUTH_TOKEN']
-
 
 class SomeWorker
   include Sidekiq::Worker
@@ -19,7 +16,9 @@ class SomeWorker
   									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
 
   def perform(*args)
-
+    
+    account_sid = ENV['TW_ACCOUNT_SID']
+    auth_token = ENV['TW_AUTH_TOKEN']
 
   	@client = Twilio::REST::Client.new account_sid, auth_token
 
