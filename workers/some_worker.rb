@@ -2,7 +2,7 @@
 require 'rubygems'
 require 'twilio-ruby'
 require 'sinatra/activerecord'
-require '../models/user'           #add the user model
+require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
