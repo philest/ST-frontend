@@ -5,7 +5,7 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
-
+require 'pry'
 
 
 class SomeWorker
@@ -28,11 +28,12 @@ class SomeWorker
   	@client = Twilio::REST::Client.new account_sid, auth_token
 
 
+    puts "SystemTime is: " + SomeWorker.cleanSysTime
 
   	# send Twilio message
     User.all.each do |user|
     	
-      print 'Send story to user with time ' +user.time+"?: "
+      print 'Send story to time ' +SomeWorker.convertTimeTo24(user.time)+"?: "
       if SomeWorker.sendStory?(user)
         puts 'YES!!'
       else
@@ -74,6 +75,8 @@ class SomeWorker
     if ENV['MY_MACHINE'] != "true"
     userHour = (userTime[0,2].to_i + 4).to_s
     end
+
+    binding.pry
 
     len = currTime.length 
     # assert(currTime.length == userTime.length, "lengths differ")
@@ -159,6 +162,8 @@ class SomeWorker
     return cleanedTime
 
   end
+
+binding.pry
 
 
 
