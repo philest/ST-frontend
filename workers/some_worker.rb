@@ -5,7 +5,6 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
-require 'pry'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -135,7 +134,6 @@ class SomeWorker
       cleanedTime= hours + colonAndMinutes
 
 
-      binding.pry
 
     if oldTime[len-2,2] == "pm" && hours != "12" #if pm, add 12 to hours (unless noon)     
 
@@ -165,7 +163,6 @@ class SomeWorker
   end
 
 
-binding.pry
 
 end
 
