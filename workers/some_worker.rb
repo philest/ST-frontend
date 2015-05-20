@@ -39,13 +39,14 @@ class SomeWorker
     	    :to => user.phone,     # Replace with your phone number
     	    :from => "+17377778679")   # Replace with your Twilio number
 
-        puts "Sent message to" + user.phone + "\n"
+        puts "Sent message to" + user.phone + "\n\n"
 
       end
 
     end
 
-    puts "doing hard work!!" + "\n"
+    puts "doing hard work!!" + "\n\n" 
+
 
 
   end
