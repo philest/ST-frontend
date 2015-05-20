@@ -27,13 +27,11 @@ class SomeWorker
 
   	@client = Twilio::REST::Client.new account_sid, auth_token
 
-    binding.pry
 
   	# send Twilio message
 
     User.all.each do |user|
 
-      binding.pry
     	
       if SomeWorker.sendStory?(user) 
     		message = @client.account.messages.create(:body => 
