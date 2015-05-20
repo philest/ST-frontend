@@ -28,10 +28,12 @@ class SomeWorker
   	@client = Twilio::REST::Client.new account_sid, auth_token
 
 
+
   	# send Twilio message
     User.all.each do |user|
-
     	
+      puts 'Send story to user with time ' +user.time+"?: "+SomeWorker.sendStory?(user)
+
       if SomeWorker.sendStory?(user) 
     		message = @client.account.messages.create(:body => 
     		"StoryTime: the timed job worked!!",
