@@ -38,6 +38,8 @@ class SomeWorker
     	    :from => "+17377778679")   # Replace with your Twilio number
       end
 
+    end
+
     puts "doing hard work!!"
 
   end
@@ -143,7 +145,7 @@ class SomeWorker
 
 
 end
-end
+
 
 
 
