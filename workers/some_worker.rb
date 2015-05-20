@@ -29,7 +29,6 @@ class SomeWorker
 
 
   	# send Twilio message
-
     User.all.each do |user|
 
     	
@@ -60,8 +59,13 @@ class SomeWorker
     currTime = SomeWorker.cleanSysTime
     userTime = SomeWorker.convertTimeTo24(user.time)
 
-    currHour = currTime[0,2]
+    currHour = currTime[0,2]   
     userHour = userTime[0,2]
+
+    #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
+    if ENV['MY_MACHINE'] != "true"
+    userHour = (userTime[0,2].to_i + 4).to_s
+    end
 
     len = currTime.length 
     # assert(currTime.length == userTime.length, "lengths differ")
