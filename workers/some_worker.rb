@@ -32,7 +32,13 @@ class SomeWorker
   	# send Twilio message
     User.all.each do |user|
     	
-      puts 'Send story to user with time ' +user.time+"?: "+SomeWorker.sendStory?(user)
+      print 'Send story to user with time ' +user.time+"?: "
+      if SomeWorker.sendStory?(user)
+        puts 'YES!!'
+      else
+        puts 'No.'
+      end
+
 
       if SomeWorker.sendStory?(user) 
     		message = @client.account.messages.create(:body => 
