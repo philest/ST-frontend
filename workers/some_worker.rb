@@ -5,7 +5,6 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
-require 'pry'
 
 
 class SomeWorker
@@ -76,7 +75,6 @@ class SomeWorker
     userHour = (userTime[0,2].to_i + 4).to_s
     end
 
-    binding.pry
 
     len = currTime.length 
     # assert(currTime.length == userTime.length, "lengths differ")
@@ -163,7 +161,6 @@ class SomeWorker
 
   end
 
-binding.pry
 
 
 
