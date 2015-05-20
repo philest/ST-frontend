@@ -31,7 +31,7 @@ class SomeWorker
 
     User.all.each do |user|
     	
-      if sendStory?(user) 
+      if SomeWorker.sendStory?(user) 
     		message = @client.account.messages.create(:body => 
     		"StoryTime: the timed job worked!!",
     	    :to => user.phone,     # Replace with your phone number
