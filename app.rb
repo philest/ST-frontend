@@ -7,6 +7,8 @@ require 'numbers_in_words'
 require 'numbers_in_words/duck_punch'
 require 'sidekiq'
 require 'sidetiq'
+require 'redis'
+require 'sidekiq/api'
 
 require './workers/some_worker'
 
