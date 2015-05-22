@@ -74,3 +74,4 @@ E, [2015-05-22T12:10:34.598422 #25436] ERROR -- : adding listener failed addr=0.
 	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/bin/unicorn:126:in `<top (required)>'
 	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `load'
 	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `<main>'
+D, [2015-05-22T12:31:16.719976 #25409] DEBUG -- : waiting 16.0s after suspend/hibernation
