@@ -1,0 +1,76 @@
+F, [2015-05-22T12:08:34.062571 #25308] FATAL -- : error adding listener addr=../StoryTime/tmp/sockets/unicorn.sock
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/socket_helper.rb:167:in `bind_listen': Don't know how to bind: ../StoryTime/tmp/sockets/unicorn.sock (ArgumentError)
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:242:in `listen'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `block in bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `each'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:138:in `start'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/bin/unicorn:126:in `<top (required)>'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `load'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `<main>'
+F, [2015-05-22T12:08:38.215759 #25330] FATAL -- : error adding listener addr=../StoryTime/tmp/sockets/unicorn.sock
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/socket_helper.rb:167:in `bind_listen': Don't know how to bind: ../StoryTime/tmp/sockets/unicorn.sock (ArgumentError)
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:242:in `listen'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `block in bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `each'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:138:in `start'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/bin/unicorn:126:in `<top (required)>'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `load'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `<main>'
+I, [2015-05-22T12:10:24.716112 #25409]  INFO -- : listening on addr=0.0.0.0:8080 fd=10
+I, [2015-05-22T12:10:24.716989 #25409]  INFO -- : worker=0 spawning...
+I, [2015-05-22T12:10:24.717885 #25409]  INFO -- : worker=1 spawning...
+I, [2015-05-22T12:10:24.718705 #25409]  INFO -- : master process ready
+I, [2015-05-22T12:10:24.719349 #25410]  INFO -- : worker=0 spawned pid=25410
+I, [2015-05-22T12:10:24.720082 #25410]  INFO -- : Refreshing Gem list
+I, [2015-05-22T12:10:24.720269 #25411]  INFO -- : worker=1 spawned pid=25411
+I, [2015-05-22T12:10:24.721003 #25411]  INFO -- : Refreshing Gem list
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-0.17.0.pre15/lib/celluloid/deprecate.rb:13: warning: already initialized constant Celluloid::Logger
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-essentials-0.20.0.pre17/lib/celluloid/essentials.rb:27: warning: previous definition of Logger was here
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-0.17.0.pre15/lib/celluloid/deprecate.rb:13: warning: already initialized constant Celluloid::Logger
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-essentials-0.20.0.pre17/lib/celluloid/essentials.rb:27: warning: previous definition of Logger was here
+I, [2015-05-22T12:10:26.219249 #25411]  INFO -- : +--------------------------------------------------+
+I, [2015-05-22T12:10:26.219266 #25410]  INFO -- : +--------------------------------------------------+
+I, [2015-05-22T12:10:26.219432 #25411]  INFO -- : |    Celluloid version running now: 0.17.0.pre15   +
+I, [2015-05-22T12:10:26.219449 #25410]  INFO -- : |    Celluloid version running now: 0.17.0.pre15   +
+W, [2015-05-22T12:10:26.219551 #25411]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.219556 #25410]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.219635 #25411]  WARN -- : |     Celluloid is running in BACKPORTED mode.     |
+W, [2015-05-22T12:10:26.219655 #25410]  WARN -- : |     Celluloid is running in BACKPORTED mode.     |
+W, [2015-05-22T12:10:26.219741 #25411]  WARN -- : |   Time to update deprecated code, before v1.0!   |
+W, [2015-05-22T12:10:26.219758 #25410]  WARN -- : |   Time to update deprecated code, before v1.0!   |
+W, [2015-05-22T12:10:26.219830 #25411]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.219899 #25410]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.219904 #25411]  WARN -- : |  Prepare! As of v0.17.5 you can begin updating.  |
+W, [2015-05-22T12:10:26.219981 #25410]  WARN -- : |  Prepare! As of v0.17.5 you can begin updating.  |
+W, [2015-05-22T12:10:26.219988 #25411]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.220053 #25410]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.220058 #25411]  WARN -- : |    Want to read about it? http://git.io/vJf3J    |
+W, [2015-05-22T12:10:26.220128 #25410]  WARN -- : |    Want to read about it? http://git.io/vJf3J    |
+W, [2015-05-22T12:10:26.220134 #25411]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T12:10:26.220202 #25410]  WARN -- : +--------------------------------------------------+
+I, [2015-05-22T12:10:26.277088 #25410]  INFO -- : worker=0 ready
+I, [2015-05-22T12:10:26.277090 #25411]  INFO -- : worker=1 ready
+E, [2015-05-22T12:10:32.089425 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+E, [2015-05-22T12:10:32.090396 #25436] ERROR -- : retrying in 0.5 seconds (4 tries left)
+E, [2015-05-22T12:10:32.591545 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+E, [2015-05-22T12:10:32.591784 #25436] ERROR -- : retrying in 0.5 seconds (3 tries left)
+E, [2015-05-22T12:10:33.093284 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+E, [2015-05-22T12:10:33.093486 #25436] ERROR -- : retrying in 0.5 seconds (2 tries left)
+E, [2015-05-22T12:10:33.594323 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+E, [2015-05-22T12:10:33.594525 #25436] ERROR -- : retrying in 0.5 seconds (1 tries left)
+E, [2015-05-22T12:10:34.096614 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+E, [2015-05-22T12:10:34.096949 #25436] ERROR -- : retrying in 0.5 seconds (0 tries left)
+E, [2015-05-22T12:10:34.598422 #25436] ERROR -- : adding listener failed addr=0.0.0.0:8080 (in use)
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/socket_helper.rb:185:in `bind': Address already in use - bind(2) for 0.0.0.0:8080 (Errno::EADDRINUSE)
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/socket_helper.rb:185:in `new_tcp_server'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/socket_helper.rb:165:in `bind_listen'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:242:in `listen'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `block in bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `each'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:813:in `bind_new_listeners!'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/lib/unicorn/http_server.rb:138:in `start'
+	from /Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/unicorn-4.9.0/bin/unicorn:126:in `<top (required)>'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `load'
+	from /Users/philesterman/.rbenv/versions/2.1.5/bin/unicorn:23:in `<main>'

@@ -1,20 +1,24 @@
-# set path to app that will be used to configure unicorn,
-# note the trailing slash in this example
 
-@dir = "../app.rb/"
+worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
+timeout 15
+preload_app true
 
-worker_processes 2
-working_directory @dir
+before_fork do |server, worker|
+  Signal.trap 'TERM' do
+    puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
+    Process.kill 'QUIT', Process.pid
+  end
 
-timeout 30
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.connection.disconnect!
+end
 
-# Specify path to socket unicorn listens to,
-# we will use this in our nginx.conf later
-listen "#{@dir}tmp/sockets/unicorn.sock", :backlog => 64
 
-# Set process id path
-pid "#{@dir}tmp/pids/unicorn.pid"
+after_fork do |server, worker|
+  Signal.trap 'TERM' do
+    puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to send QUIT'
+  end
 
-# Set log file paths
-stderr_path "#{@dir}log/unicorn.stderr.log"
-stdout_path "#{@dir}log/unicorn.stdout.log"
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.establish_connection
+end
