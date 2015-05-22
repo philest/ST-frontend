@@ -9,6 +9,7 @@ gem 'numbers_in_words'
 gem 'sidekiq'
 gem 'sidetiq'
 gem 'redis'
+gem 'unicorn'
 
 group :test do
 	gem 'rspec'
