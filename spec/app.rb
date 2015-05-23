@@ -5,6 +5,7 @@ require 'rspec'
 require 'capybara/rspec'
 require 'rack/test'
 
+
 describe 'The StoryTime App' do
   include Rack::Test::Methods
 
@@ -52,44 +53,53 @@ describe 'The StoryTime App' do
 # STAGE 2 TESTS 
   it "registers numeric age" do
   	get '/test/111/STORY'
-  	get '/test/111/3'
-  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)")
+  	get '/test/111/091412'
+  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
   end
 
   it "registers age in words" do
   	get '/test/222/STORY'
-  	get '/test/222/three'
-  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)")
+  	get '/test/222/011811'
+  	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
   end
 
   it "rejects non-age" do
   	get '/test/1000/STORY'
   	get '/test/1000/badphone'
-  	expect(@@twiml).to eq("We did not understand what you typed. Please reply with your child's age in years. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
+  	expect(@@twiml).to eq("We did not understand what you typed. Please reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
   end
 
 # STAGE 3 TESTS
-	it "registers name then time" do
+	it "registers timepm" do
 		get '/test/833/STORY'
-		get '/test/833/3'
-		get "/test/833/Lindsay%206:00pm"
-		expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and Lindsay a new story each night at 6:00pm.")
+		get '/test/833/091412'
+		get "/test/833/6:00pm"
+		expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
 	end
 
-	it "rejects a bad registration" do
+
+  it "registers time then pm" do
+    get '/test/844/STORY'
+    get '/test/844/091412'
+    get '/test/844/6:00%20pm'
+    expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
+  end
+
+
+	it "rejects a bad time registration" do
 		get '/test/633/STORY'
-		get '/test/633/3'
-		get '/test/633/Lindsay'
-		expect(@@twiml).to eq("(1/2)We did not understand what you typed. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm).")	
+		get '/test/633/091412'
+		get '/test/633/boo'
+		expect(@@twiml).to eq("(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm).")	
 	end
 
 
 # PASSED ALL STAGES TESTS
 	it "doesn't recognize further commands" do
 		get '/test/488/STORY'
-		get '/test/488/3'
-		get "/test/488/Lindsay%206:00pm"
-		get "/test/488/hello"
+		get '/test/488/091412'
+		get '/test/488/6:00pm'
+		get '/test/488/hello'
 		expect(@@twiml).to eq("This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
 	end
 
