@@ -8,10 +8,6 @@ app_path = File.expand_path(File.dirname(__FILE__) + '/..')
 
 working_directory app_path
 
-
-stderr_path app_path + '/log/unicorn.stderr.log'
-stdout_path app_path + '/log/unicorn.stdout.log'
-
 # stderr_path app_path + '/log/unicorn.stderr.log'
 # stdout_path app_path + '/log/unicorn.stdout.log'
 
