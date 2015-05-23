@@ -15,6 +15,6 @@ group :test do
 	gem 'rspec'
 	gem 'capybara'
 	gem 'database_cleaner'
-	gem 'pry', ">= 0.10.0"
+	gem 'pry', "= 0.10.0"
 	gem 'pry-nav'
 end

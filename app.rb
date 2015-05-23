@@ -53,7 +53,7 @@ get '/sms' do
 
 	  	# Carrier Lookup
 	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-	  	@user.carrier = number.carrier[:name]
+	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
 
