@@ -88,3 +88,54 @@ D, [2015-05-22T21:40:31.922243 #25409] DEBUG -- : waiting 16.0s after suspend/hi
 D, [2015-05-22T21:46:33.411562 #25409] DEBUG -- : waiting 16.0s after suspend/hibernation
 D, [2015-05-22T21:47:43.603914 #25409] DEBUG -- : waiting 16.0s after suspend/hibernation
 D, [2015-05-22T22:01:16.290587 #25409] DEBUG -- : waiting 16.0s after suspend/hibernation
+I, [2015-05-22T22:15:56.314481 #29385]  INFO -- : unlinking existing socket=/Users/philesterman/Code/StoryTime/tmp/unicorn.sock
+I, [2015-05-22T22:15:56.314676 #29385]  INFO -- : listening on addr=/Users/philesterman/Code/StoryTime/tmp/unicorn.sock fd=9
+I, [2015-05-22T22:15:56.315437 #29385]  INFO -- : listening on addr=0.0.0.0:3000 fd=10
+I, [2015-05-22T22:15:56.317932 #29385]  INFO -- : master process ready
+I, [2015-05-22T22:15:56.318558 #29405]  INFO -- : Refreshing Gem list
+I, [2015-05-22T22:15:56.319242 #29407]  INFO -- : Refreshing Gem list
+I, [2015-05-22T22:15:56.319300 #29406]  INFO -- : Refreshing Gem list
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-0.17.0.pre15/lib/celluloid/deprecate.rb:13: warning: already initialized constant Celluloid::Logger
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-essentials-0.20.0.pre17/lib/celluloid/essentials.rb:27: warning: previous definition of Logger was here
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-0.17.0.pre15/lib/celluloid/deprecate.rb:13: warning: already initialized constant Celluloid::Logger
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-essentials-0.20.0.pre17/lib/celluloid/essentials.rb:27: warning: previous definition of Logger was here
+I, [2015-05-22T22:15:57.994943 #29406]  INFO -- : +--------------------------------------------------+
+I, [2015-05-22T22:15:57.995138 #29405]  INFO -- : +--------------------------------------------------+
+I, [2015-05-22T22:15:57.995116 #29406]  INFO -- : |    Celluloid version running now: 0.17.0.pre15   +
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-0.17.0.pre15/lib/celluloid/deprecate.rb:13: warning: already initialized constant Celluloid::Logger
+/Users/philesterman/.rbenv/versions/2.1.5/lib/ruby/gems/2.1.0/gems/celluloid-essentials-0.20.0.pre17/lib/celluloid/essentials.rb:27: warning: previous definition of Logger was here
+W, [2015-05-22T22:15:57.995263 #29406]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995369 #29406]  WARN -- : |     Celluloid is running in BACKPORTED mode.     |
+I, [2015-05-22T22:15:57.995357 #29407]  INFO -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995443 #29406]  WARN -- : |   Time to update deprecated code, before v1.0!   |
+I, [2015-05-22T22:15:57.995459 #29407]  INFO -- : |    Celluloid version running now: 0.17.0.pre15   +
+W, [2015-05-22T22:15:57.995507 #29406]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995541 #29407]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995565 #29406]  WARN -- : |  Prepare! As of v0.17.5 you can begin updating.  |
+W, [2015-05-22T22:15:57.995608 #29407]  WARN -- : |     Celluloid is running in BACKPORTED mode.     |
+W, [2015-05-22T22:15:57.995629 #29406]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995676 #29407]  WARN -- : |   Time to update deprecated code, before v1.0!   |
+W, [2015-05-22T22:15:57.995692 #29406]  WARN -- : |    Want to read about it? http://git.io/vJf3J    |
+W, [2015-05-22T22:15:57.995745 #29407]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995755 #29406]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995809 #29407]  WARN -- : |  Prepare! As of v0.17.5 you can begin updating.  |
+W, [2015-05-22T22:15:57.995864 #29407]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.995919 #29407]  WARN -- : |    Want to read about it? http://git.io/vJf3J    |
+W, [2015-05-22T22:15:57.995973 #29407]  WARN -- : +--------------------------------------------------+
+I, [2015-05-22T22:15:57.995253 #29405]  INFO -- : |    Celluloid version running now: 0.17.0.pre15   +
+W, [2015-05-22T22:15:57.996972 #29405]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.997047 #29405]  WARN -- : |     Celluloid is running in BACKPORTED mode.     |
+W, [2015-05-22T22:15:57.997172 #29405]  WARN -- : |   Time to update deprecated code, before v1.0!   |
+W, [2015-05-22T22:15:57.997282 #29405]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.997382 #29405]  WARN -- : |  Prepare! As of v0.17.5 you can begin updating.  |
+W, [2015-05-22T22:15:57.997485 #29405]  WARN -- : +--------------------------------------------------+
+W, [2015-05-22T22:15:57.997581 #29405]  WARN -- : |    Want to read about it? http://git.io/vJf3J    |
+W, [2015-05-22T22:15:57.997644 #29405]  WARN -- : +--------------------------------------------------+
+I, [2015-05-22T22:15:58.049240 #29407]  INFO -- : worker=2 ready
+I, [2015-05-22T22:15:58.050000 #29405]  INFO -- : worker=0 ready
+I, [2015-05-22T22:15:58.050418 #29406]  INFO -- : worker=1 ready
+127.0.0.1 - - [22/May/2015:22:16:07 -0400] "GET / HTTP/1.1" 200 477 0.0290
+I, [2015-05-22T22:16:10.939341 #29385]  INFO -- : reaped #<Process::Status: pid 29407 exit 0> worker=2
+I, [2015-05-22T22:16:10.939505 #29385]  INFO -- : reaped #<Process::Status: pid 29406 exit 0> worker=1
+I, [2015-05-22T22:16:10.939792 #29385]  INFO -- : reaped #<Process::Status: pid 29405 exit 0> worker=0
+I, [2015-05-22T22:16:10.939865 #29385]  INFO -- : master complete

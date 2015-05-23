@@ -25,9 +25,10 @@ end
 
 working_directory app_path
 
-pid app_path + '/tmp/unicorn.pid'
+pid app_path + '/tmp/pids/unicorn.pid'
 
 listen(3000, backlog: 64) if ENV['RACK_ENV'] == 'development'
 
-stderr_path app_path + '/log/unicorn.log'
-stdout_path app_path + '/log/unicorn.log'
+stderr_path app_path + '/log/unicorn.stderr.log'
+stdout_path app_path + '/log/unicorn.stdout.log'
+
