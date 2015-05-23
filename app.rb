@@ -73,7 +73,7 @@ get '/sms' do
 		end 	
 
  	# third reply: update time and child's name
- 	elsif @user.time.eql? EMPTY_STR
+ 	elsif @user.time == EMPTY_STR
  		
  		response = params[:Body]
  		arr = response.split
@@ -82,8 +82,8 @@ get '/sms' do
  			if arr.length == 1
  				if /[0-9]{1,2}[:][0-9]{2}[ap][m]/ =~ arr[0]
  					@user.time = arr[0]
-
-		 			user.save
+ 					
+		 			@user.save
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
 					end
@@ -103,7 +103,7 @@ get '/sms' do
  				if /[0-9]{1,2}[:][0-9]{2}/ =~ arr[0] && /[ap][m]/ =~ arr[1]
  					@user.time = arr[0] + arr[1]
 
-		 			user.save
+		 			@user.save
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
 					end
