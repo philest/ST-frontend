@@ -50,7 +50,7 @@ get '/sms' do
     elsif @user.child_birthdate == EMPTY_STR 
    		
 
-		if /[0-9]{6}/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
+		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			@user.child_birthdate = params[:Body]
   			@user.save
   			twiml = Twilio::TwiML::Response.new do |r|
@@ -80,9 +80,9 @@ get '/sms' do
 
  		if arr.length == 1 || arr.length == 2 #plausible format
  			if arr.length == 1
- 				if /[0-9]{1,2}[:][0-9]{2}[ap][m]/ =~ arr[0]
+ 				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
  					@user.time = arr[0]
- 					
+
 		 			@user.save
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
@@ -100,7 +100,7 @@ get '/sms' do
 		 			twiml.text
  				end
  			else
- 				if /[0-9]{1,2}[:][0-9]{2}/ =~ arr[0] && /[ap][m]/ =~ arr[1]
+ 				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					@user.time = arr[0] + arr[1]
 
 		 			@user.save
@@ -167,7 +167,7 @@ get '/test/:From/:Body' do
     elsif @user.child_birthdate == EMPTY_STR
 		
 
-		if /[0-9]{6}/ =~ params[:Body] #it's a stringified integer
+		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer
   			@user.child_birthdate = params[:Body]
   			@user.save
 	       	@@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
@@ -192,7 +192,7 @@ get '/test/:From/:Body' do
 	 	if arr.length == 1 || arr.length == 2 #plausible format
 	 		if arr.length == 1
 		 		#handle wrong order
- 				if /[0-9]{1,2}[:][0-9]{2}[ap][m]/ =~ arr[0]
+ 				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/  =~ arr[0]
 		 			@user.time = arr[0]
 		 			@user.save
 		 			@@twiml = "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
@@ -200,7 +200,7 @@ get '/test/:From/:Body' do
 		   			@@twiml = "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm)."
 		 		end
 		 	else 
-				if /[0-9]{1,2}[:][0-9]{2}/ =~ arr[0] && /[ap][m]/ =~ arr[1]				 			
+ 				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
 					@user.time = arr[0] + arr[1]
 		 			@user.save					
 					@@twiml = "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
