@@ -139,3 +139,4 @@ I, [2015-05-22T22:16:10.939341 #29385]  INFO -- : reaped #<Process::Status: pid 
 I, [2015-05-22T22:16:10.939505 #29385]  INFO -- : reaped #<Process::Status: pid 29406 exit 0> worker=1
 I, [2015-05-22T22:16:10.939792 #29385]  INFO -- : reaped #<Process::Status: pid 29405 exit 0> worker=0
 I, [2015-05-22T22:16:10.939865 #29385]  INFO -- : master complete
+D, [2015-05-22T22:21:27.656788 #25409] DEBUG -- : waiting 16.0s after suspend/hibernation
