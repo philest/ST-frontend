@@ -15,8 +15,6 @@ require './workers/some_worker'
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
-numberNames = ['zero','one','two','three','four','five','six','seven','eight','nine','ten']
-
 
 
 
@@ -51,11 +49,12 @@ get '/sms' do
     	#setup Twilio user account
    		account_sid = ENV['TW_ACCOUNT_SID']
     	auth_token = ENV['TW_AUTH_TOKEN']
-	  	@client = Twilio::REST::Client.new account_sid, auth_token
+	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
 	  	# Carrier Lookup
-	  	number = @client.phone_numbers.get(@user.phone)
-	  	@user.update(carrier: number.carrier[:name])
+	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+	  	@user.carrier = number.carrier[:name]
+	  	@user.save
 
 
 
