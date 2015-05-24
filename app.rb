@@ -18,11 +18,6 @@ EMPTY_STR = "empty"
 
 
 
-get '/rtf' do
-  File.read(File.join('public', 'test.rtf'))
-end
-
-
 get '/worker' do
 	SomeWorker.perform #begin sidetiq recurrring background tasks
 	redirect to('/')
