@@ -5,6 +5,7 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
+require 'pry'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -161,7 +162,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
             sleep 2
 
           end
-          
+
         end
 
 
@@ -241,6 +242,9 @@ Can you make the shape of the letter “g” with your fingers? How about with y
   # check if user's story time is in the next two minutes
   def self.sendStory?(user) #don't know object as parameter
 
+
+    binding.pry
+
     currTime = SomeWorker.cleanSysTime
     userTime = SomeWorker.convertTimeTo24(user.time)
 
@@ -248,7 +252,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
     userHour = userTime[0,2]
 
     #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
-    if ENV['MY_MACHINE'] != "true"
+    if ENV['MY_MACHINE?'] != "true"
     userHour = (userTime[0,2].to_i + 4).to_s
     end
 
@@ -341,6 +345,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
   end
 
 
+binding.pry
 
 end
 
