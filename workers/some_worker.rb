@@ -6,6 +6,7 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
+
 class SomeWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
@@ -202,7 +203,6 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
         if endIndex == startIndex #no newlines in block
 
-          binding.pry
 
           endIndex = startIndex + MAX_TEXT #recharge endindex
           
@@ -240,6 +240,8 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
   # check if user's story time is in the next two minutes
   def self.sendStory?(user) #don't know object as parameter
+
+
 
     currTime = SomeWorker.cleanSysTime
     userTime = SomeWorker.convertTimeTo24(user.time)
@@ -291,10 +293,16 @@ Can you make the shape of the letter “g” with your fingers? How about with y
     if min < 10
       min = min.to_s
       min = "0"+min #add zero infront 
-      cleanedTime = hours.to_s+":"+min #24 hour format- example 15:25
-    else
-      cleanedTime = hours.to_s+":"+min.to_s 
     end
+
+    # check if hour is single digit
+    if hours < 10
+    	hours = hours.to_s
+    	hours = "0" + hours #add zero to front
+    end
+
+    	cleanedTime = hours.to_s+":"+min.to_s 
+
 
     return cleanedTime
   end
