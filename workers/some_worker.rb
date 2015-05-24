@@ -263,7 +263,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
       currMin = currMin.to_i
       userMin = userMin.to_i    
 
-    if currHour == userHour #same hour
+    if currHour.to_i == userHour.to_i #same hour (03 converts to 3)
 
       if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #send the message
         return true
