@@ -18,6 +18,10 @@ EMPTY_STR = "empty"
 
 
 
+get '/rtf' do
+	send_file('test.rtf')
+end
+
 
 get '/worker' do
 	SomeWorker.perform #begin sidetiq recurrring background tasks
