@@ -19,7 +19,7 @@ EMPTY_STR = "empty"
 
 
 get '/rtf' do
-	send_file('test.rtf')
+  File.read(File.join('public', 'test.rtf'))
 end
 
 
