@@ -249,7 +249,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
     #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
     if ENV['MY_MACHINE?'] != "true"
-    userHour = (userTime[0,2].to_i + 4).to_s
+    userHour = ((userTime[0,2].to_i + 4) % 24).to_s
     end
 
 
