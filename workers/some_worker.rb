@@ -5,13 +5,25 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
-
+require 'pry'
 
 class SomeWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
 
-@story = [ "StoryTime: Enjoy tonight's story:
+  MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
+	
+	sidekiq_options retry: false #if fails, don't resent (multiple texts)
+
+
+  recurrence { hourly.minute_of_hour(0, 2, 4, 6, 8, 10,
+  									12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
+  									32, 34, 36, 38, 40, 42, 44, 46, 48, 50,
+  									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
+
+  def perform(*args)
+    
+  	@story = [ "StoryTime: Enjoy tonight's story:
 
   Now We Are Six
 
@@ -100,17 +112,9 @@ a) Have you ever been to the end of the sidewalk? Would you want to go? What do 
 b) Reread the third line. Ask your child to repeat it. Try to think of 10 other words that start with the letter “g”! 
 Can you make the shape of the letter “g” with your fingers? How about with your body?"]
 
-  MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
-	
-	sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
 
-  recurrence { hourly.minute_of_hour(0, 2, 4, 6, 8, 10,
-  									12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
-  									32, 34, 36, 38, 40, 42, 44, 46, 48, 50,
-  									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
 
-  def perform(*args)
     
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
@@ -348,6 +352,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
   end
 
+binding.pry
 
 end
 
