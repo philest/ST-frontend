@@ -5,7 +5,6 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
-require 'pry'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -115,7 +114,7 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
 
 
-    
+
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
 
@@ -352,7 +351,6 @@ Can you make the shape of the letter “g” with your fingers? How about with y
 
   end
 
-binding.pry
 
 end
 
