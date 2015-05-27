@@ -10,11 +10,16 @@ require 'sidetiq'
 require 'redis'
 require 'sidekiq/api'
 
+require 'sprint'
+
 require './workers/some_worker'
 
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
+HELPSMS =  "StoryTime sends 2 msgs/week. If msgs aren't delivered properly or you have feedback, please call or text our director, Phil, at 561-212-5831.
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime before 6pm. 
+Reply STOP to cancel messages."
 
 
 
@@ -55,6 +60,30 @@ get '/sms' do
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
+	elsif params[:Body].casecmp("HELP") == 0 #HELP option
+		
+		#if sprint
+		if @user.carrier == "Sprint Spectrum, L.P." 
+
+			smsArr = Sprint.chop(HELPSMS)
+			
+			smsArr.each do |text|
+				message = @client.account.messages.create(
+            	  :body => text,
+            	  :to => user.phone,     # Replace with your phone number
+            	  :from => "+17377778679")   # Replace with your Twilio number
+
+	            sleep 2
+			end
+
+		else #not Sprint
+
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message HELPSMS
+	    	end
+	    	twiml.text
+
+		end
 
 
     # second reply: update child's birthdate
