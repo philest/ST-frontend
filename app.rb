@@ -10,7 +10,7 @@ require 'sidetiq'
 require 'redis'
 require 'sidekiq/api'
 
-require 'sprint'
+require './sprint'
 
 require './workers/some_worker'
 
