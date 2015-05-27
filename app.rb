@@ -203,6 +203,23 @@ get '/test/:From/:Body' do
   		@@twiml = "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
 
 
+	elsif params[:Body].casecmp("HELP") == 0 #HELP option
+		
+		#if sprint
+		if @user.carrier == "Sprint Spectrum, L.P." 
+
+			smsArr = Sprint.chop(HELPSMS)
+			
+			smsArr.each do |text|
+				@@twiml.push(text)
+	            # sleep 2
+			end
+
+		else #not Sprint
+
+			@@twiml = HELPSMS
+		
+		end
     # second reply: update child's birthdate
     elsif @user.child_birthdate == EMPTY_STR
 		

@@ -50,6 +50,34 @@ describe 'The StoryTime App' do
 
   end
 
+#HELP TESTS
+
+  it "responds to HELP (non-sprint)" do
+    get "/test/909/STORY"
+    get "/test/909/HELP"
+    expect(@@twiml).to eq("StoryTime sends 2 msgs/week. If msgs aren't delivered properly or you have feedback, please call or text our director, Phil, at 561-212-5831.
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime before 6pm. 
+Reply STOP to cancel messages.")
+  end
+
+  it "responds to \'help\' (non-sprint)" do
+    get "/test/911/STORY"
+    get "test/911/help"
+    expect(@@twiml).to eq("StoryTime sends 2 msgs/week. If msgs aren't delivered properly or you have feedback, please call or text our director, Phil, at 561-212-5831.
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime before 6pm. 
+Reply STOP to cancel messages.")
+  end
+
+  it "responds to HELP in-midst signup" do
+    get "/test/912/STORY"
+    get "test/912/091412"
+    get "test/912/help"
+    expect(@@twiml).to eq("StoryTime sends 2 msgs/week. If msgs aren't delivered properly or you have feedback, please call or text our director, Phil, at 561-212-5831.
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime before 6pm. 
+Reply STOP to cancel messages.")
+  end
+
+
 # STAGE 2 TESTS 
   it "registers numeric age" do
   	get '/test/111/STORY'
