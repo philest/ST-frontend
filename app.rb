@@ -130,7 +130,7 @@ get '/sms' do
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 	  			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+	   				r.Message "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read early."
 	  				end
 	 			twiml.text
 
