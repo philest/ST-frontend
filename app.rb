@@ -46,11 +46,6 @@ get '/sms' do
 	#first reply: new user, add her
 	if @user == nil 
 		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, time: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
-  		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Thanks for signing up! When was your child born? Reply with your child's birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012)."
-    	end
-    	twiml.text
-
 
     	# Lookup wireless carrier
     	#setup Twilio user account
@@ -62,6 +57,14 @@ get '/sms' do
 	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
+
+	  	#send the reply
+  		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message "StoryTime: Thanks for signing up! When was your child born? Reply with your child's birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012)."
+    	end
+    	twiml.text
+
+
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
