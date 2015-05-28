@@ -23,6 +23,7 @@ HELPSMS =  "StoryTime sends 2 msgs/week. If msgs aren't delivered properly or yo
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime before 6pm. 
 Reply STOP to cancel messages."
 
+HELP = "HELP NOW"
 
 
 get '/worker' do
@@ -62,7 +63,7 @@ get '/sms' do
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
-	elsif params[:Body].casecmp("HELP") == 0 #HELP option
+	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
 		#if sprint
 		if @user.carrier == "Sprint Spectrum, L.P." 
