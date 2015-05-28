@@ -38,7 +38,7 @@ HELP_SPRINT = "StoryTime texts free kids' stories twice/week. For help or feedba
 STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Please contact our director, Phil, at 561-212-5831 if you have any feedback."
 
 STARTSMS = 
-"Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012)."
+"Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
 
 
 get '/worker' do
