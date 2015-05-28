@@ -130,9 +130,8 @@ get '/sms' do
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 	  			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "(1/2) StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 5:00pm)"
-	   				r.Message "(2/2) Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day."
-				end
+	   				r.Message "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+	  				end
 	 			twiml.text
 
 	 		else #Wrong age rage
@@ -176,7 +175,7 @@ get '/sms' do
  				else
  					twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm)."
-						r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
+						# r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
 					end
 		 			twiml.text
  				end
@@ -194,10 +193,10 @@ get '/sms' do
 		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:30pm)."
 					end
 		 			twiml.text
-			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
-					end
-		 			twiml.text
+			 	# 	twiml = Twilio::TwiML::Response.new do |r|
+		   # 				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
+					# end
+		 		# 	twiml.text
  				end
  			end
 
@@ -207,10 +206,10 @@ get '/sms' do
 		   		r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:30pm)."
 			end
 		 	twiml.text
-			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
-			end
-		 	twiml.text
+			# twiml = Twilio::TwiML::Response.new do |r|
+		 #   		r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
+			# end
+		 # 	twiml.text
  		end
  		
 	#response matches nothing
