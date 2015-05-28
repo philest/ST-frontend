@@ -5,6 +5,7 @@ timeout 30
 
 app_path = File.expand_path(File.dirname(__FILE__) + '/..')
 
+preload_app true # important for newrelic gem
 
 working_directory app_path
 

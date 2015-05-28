@@ -3,8 +3,6 @@ require 'sinatra/activerecord'
 require './config/environments' #database configuration
 require './models/user' #add the user model
 require 'twilio-ruby'
-require 'numbers_in_words'
-require 'numbers_in_words/duck_punch'
 require 'sidekiq'
 require 'sidetiq'
 require 'redis'
@@ -13,6 +11,10 @@ require 'sidekiq/api'
 require './sprint'
 
 require './workers/some_worker'
+
+configure :production do
+  require 'newrelic_rpm'
+end
 
 
 EMPTY_INT = 999

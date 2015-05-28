@@ -10,6 +10,7 @@ gem 'sidekiq'
 gem 'sidetiq'
 gem 'redis'
 gem 'unicorn'
+gem 'newrelic_rpm'
 
 group :test do
 	gem 'rspec'
