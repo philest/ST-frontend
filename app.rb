@@ -31,11 +31,14 @@ Remember that looking at screens within two hours of bedtime can delay children'
 
 Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel."
 
+
+HELP_SPRINT = "StoryTime texts free kids' stories twice/week. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+
 STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Please contact our director, Phil, at 561-212-5831 if you have any feedback."
 
 STARTSMS = 
-"StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with your child\'s birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012).
-Or reply " + HELP + " or " + STOP + "."
+"Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012)."
 
 
 get '/worker' do
@@ -71,36 +74,11 @@ get '/sms' do
 	  	@user.save
 
 
-
-		#if sprint
-		if @user.carrier == "Sprint Spectrum, L.P." 
-
-			smsArr = Sprint.chop(STARTSMS)
-
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message smsArr[0]
-	    	end
-	    	twiml.text
-
-	    	sleep 2
-			
-			smsArr[1, (smsArr.length - 1)].each do |text|
-				message = @client.account.messages.create(
-            	  :body => text,
-            	  :to => user.phone,     # Replace with your phone number
-            	  :from => "+17377778679")   # Replace with your Twilio number
-
-	            sleep 2
-			end
-
-		else #not Sprint
-
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message STARTSMS
-	    	end
-	    	twiml.text
-
-		end
+		twiml = Twilio::TwiML::Response.new do |r|
+	   		r.Message STARTSMS
+	    end
+	    twiml.text
+		
 
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
@@ -108,21 +86,15 @@ get '/sms' do
 		#if sprint
 		if @user.carrier == "Sprint Spectrum, L.P." 
 
-			smsArr = Sprint.chop(HELPSMS)
-			
-			smsArr.each do |text|
-				message = @client.account.messages.create(
-            	  :body => text,
-            	  :to => user.phone,     # Replace with your phone number
-            	  :from => "+17377778679")   # Replace with your Twilio number
-
-	            sleep 2
-			end
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message HELP_SPRINT #SEND SPRINT MSG
+	    	end
+	    	twiml.text
 
 		else #not Sprint
 
 			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELPSMS
+	   			r.Message HELPSMS	#SEND NORMAL
 	    	end
 	    	twiml.text
 
