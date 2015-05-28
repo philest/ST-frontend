@@ -19,14 +19,16 @@ end
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
+
+HELP = "HELP NOW"
+STOP = "STOP NOW"
+
 HELPSMS =  "StoryTime texts free kids' stories. For help or feedback, please contact our director, Phil, at 561-212-5831.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
 Msg and data rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel messages."
 
-HELP= "HELP NOW"
-STOP = "STOP NOW"
 
 get '/worker' do
 	SomeWorker.perform #begin sidetiq recurrring background tasks
