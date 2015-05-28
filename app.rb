@@ -17,6 +17,7 @@ configure :production do
   require 'newrelic_rpm'
 end
 
+@@quiters = Array.new #people who have left (STOP)
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
@@ -28,7 +29,9 @@ HELPSMS =  "StoryTime texts free kids' stories. For help or feedback, please con
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
-Msg and data rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel messages."
+Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel."
+
+STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Please contact our director, Phil, at 561-212-5831 if you have any feedback."
 
 
 get '/worker' do
@@ -65,7 +68,8 @@ get '/sms' do
 
 	  	#send the reply
   		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: Thanks for signing up! When was your child born? Reply with your child's birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012)."
+   			r.Message "StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with your child's birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012).
+   			Or reply " + HELP + " or " + STOP + "."
     	end
     	twiml.text
 
@@ -95,6 +99,19 @@ get '/sms' do
 	    	twiml.text
 
 		end
+
+	elsif params[:Body].casecmp(STOP) == 0 #STOP option
+		
+		#add to ended list
+		@@quiters.push @user
+
+		#delete user
+		@user.delete
+
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message STOPSMS
+	    	end
+	    	twiml.text
 
 
     # second reply: update child's birthdate
