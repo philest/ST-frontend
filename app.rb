@@ -126,7 +126,7 @@ get '/sms' do
 	 			@user.save
 
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Sorry, we now only sends msgs for kids ages 3 to 5. We'll contact you when we expand. Reply with child's birthdate in MMDDYY format."
+	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand! Reply with child's birthdate in MMDDYY format."
 				end
 	 			twiml.text
 	 		end
