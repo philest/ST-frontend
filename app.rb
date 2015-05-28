@@ -25,7 +25,7 @@ Remember that looking at screens within two hours of bedtime can delay children'
 
 Msg and data rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel messages."
 
-HELP = "HELP NOW"
+HELP= "HELP NOW"
 STOP = "STOP NOW"
 
 get '/worker' do
@@ -115,7 +115,7 @@ get '/sms' do
  		# 	twiml.text
 	    else #not a valid format
   			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "We did not understand what you typed. Reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+   				r.Message "We did not understand what you typed. Reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply" +HELP+ ". To Stop messages, reply STOP."
 			end
  			twiml.text
 		end 	
@@ -143,7 +143,7 @@ get '/sms' do
 					end
 		 			twiml.text
 			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+		   				r.Message "(2/2)For questions about StoryTime, reply "+HELP+". To Stop messages, reply STOP."
 					end
 		 			twiml.text
  				end
@@ -162,7 +162,7 @@ get '/sms' do
 					end
 		 			twiml.text
 			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+		   				r.Message "(2/2)For questions about StoryTime, reply "+HELP+". To Stop messages, reply STOP."
 					end
 		 			twiml.text
  				end
@@ -175,7 +175,7 @@ get '/sms' do
 			end
 		 	twiml.text
 			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "(2/2)For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+		   		r.Message "(2/2)For questions about StoryTime, reply " +HELP+". To Stop messages, reply STOP."
 			end
 		 	twiml.text
  		end
@@ -183,7 +183,7 @@ get '/sms' do
 	#response matches nothing
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply "+ HELP+". To Stop messages, reply STOP."
 		end
  		twiml.text
 		# raise "something broke-- message was not regeistered"

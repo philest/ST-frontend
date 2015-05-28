@@ -124,7 +124,8 @@ Can you make the shape of the letter “g” with your fingers? How about with y
     puts "SystemTime is: " + SomeWorker.cleanSysTime
 
   	# send Twilio message
-    User.all.each do |user|
+    # ignores improperly registered users
+    User.where.not(time: "empty").find_each do |user|
 
       #logging info
       print 'Send story to time ' +SomeWorker.convertTimeTo24(user.time)+"?: "
