@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150523201445) do
+ActiveRecord::Schema.define(version: 20150528180137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150523201445) do
     t.integer  "child_age"
     t.string   "child_name"
     t.string   "carrier"
+    t.integer  "story_number",    default: 0
   end
 
 end
