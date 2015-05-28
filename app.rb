@@ -102,6 +102,7 @@ get '/sms' do
    		
 
 		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
+  			
   			@user.child_birthdate = params[:Body]
   			@user.save
 
@@ -109,22 +110,30 @@ get '/sms' do
   			@user.child_age = Age.InYears(@user.child_birthdate)
   			@user.save
 
+  			#check if in right age range
+  			if @user.child_age <= 5 && @user.child_age >= 3 
+	  			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
+				end
+	 			twiml.text
 
-  			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
-			end
- 			twiml.text
-	    
-	  #   elsif numberNames.include? params[:Body] #the number is spelled out as name
-	  #   	@user.child_age = params[:Body].in_numbers
-  	# 		@user.save
-  	# 		twiml = Twilio::TwiML::Response.new do |r|
-   # 				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
-			# end
- 		# 	twiml.text
+	 		else #Wrong age rage
+
+	 			@user.child_birthdate = EMPTY_STR
+	 			@user.save
+
+	 			@user.child_age = EMPTY_INT
+	 			@user.save
+
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message "StoryTime: Sorry, we now only sends msgs for kids ages 3 to 5. We'll contact you when we expand. Reply with child's birthdate in MMDDYY format."
+				end
+	 			twiml.text
+	 		end
+
 	    else #not a valid format
   			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "We did not understand what you typed. Reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply" +HELP+ ". To Stop messages, reply STOP."
+   				r.Message "We did not understand what you typed. Reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
 			end
  			twiml.text
 		end 	
@@ -152,7 +161,7 @@ get '/sms' do
 					end
 		 			twiml.text
 			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply "+HELP+". To Stop messages, reply STOP."
+		   				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
 					end
 		 			twiml.text
  				end
@@ -171,7 +180,7 @@ get '/sms' do
 					end
 		 			twiml.text
 			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply "+HELP+". To Stop messages, reply STOP."
+		   				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
 					end
 		 			twiml.text
  				end
@@ -184,7 +193,7 @@ get '/sms' do
 			end
 		 	twiml.text
 			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "(2/2)For questions about StoryTime, reply " +HELP+". To Stop messages, reply STOP."
+		   		r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
 			end
 		 	twiml.text
  		end
@@ -192,7 +201,7 @@ get '/sms' do
 	#response matches nothing
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply "+ HELP+". To Stop messages, reply STOP."
+   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
 		end
  		twiml.text
 		# raise "something broke-- message was not regeistered"
