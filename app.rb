@@ -35,7 +35,6 @@ STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Pleas
 
 STARTSMS = 
 "StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with your child\'s birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012).
-
 Or reply " + HELP + " or " + STOP + "."
 
 
