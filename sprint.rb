@@ -54,7 +54,6 @@ def self.chop(story)
 
 	sms.each do |text|
 		text.gsub!(/[\/][X][)]/, "\/#{smsNum-1})")
-		puts text
 	end
 
 	return sms

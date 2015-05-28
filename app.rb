@@ -34,7 +34,7 @@ Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to ca
 STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Please contact our director, Phil, at 561-212-5831 if you have any feedback."
 
 STARTSMS = 
-"StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with your child's birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012).
+"StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with your child\'s birthdate in MMDDYY format (e.g. 091412 for Septempber 14, 2012).
 
 Or reply " + HELP + " or " + STOP + "."
 
@@ -77,8 +77,15 @@ get '/sms' do
 		if @user.carrier == "Sprint Spectrum, L.P." 
 
 			smsArr = Sprint.chop(STARTSMS)
+
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message smsArr[0]
+	    	end
+	    	twiml.text
+
+	    	sleep 2
 			
-			smsArr.each do |text|
+			smsArr[1, (smsArr.length - 1)].each do |text|
 				message = @client.account.messages.create(
             	  :body => text,
             	  :to => user.phone,     # Replace with your phone number
