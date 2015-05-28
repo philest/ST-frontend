@@ -109,6 +109,8 @@ class SomeWorker
          
           end
 
+          sleep 2 #sleep after sending msg
+
         else #a SPRINT phone with message greater than 160 char!
 
           #ONE PICTURE
@@ -120,6 +122,8 @@ class SomeWorker
                 :from => "+17377778679",
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
+            sleep 2
+            
             sprintArr.each_with_index do |text, index|  
               message = @client.account.messages.create(
                 :body => text,
