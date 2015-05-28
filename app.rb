@@ -130,7 +130,12 @@ get '/sms' do
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 	  			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
+	   				r.Message "(1/2) StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 5:00pm)"
+				end
+	 			twiml.text
+
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message "(2/2) Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day."
 				end
 	 			twiml.text
 
@@ -174,11 +179,11 @@ get '/sms' do
 
  				else
  					twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:30pm)."
+		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm)."
 					end
 		 			twiml.text
 			 		twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
+		   				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
 					end
 		 			twiml.text
  				end
