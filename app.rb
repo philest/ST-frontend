@@ -9,6 +9,7 @@ require 'redis'
 require 'sidekiq/api'
 
 require './sprint'
+require './age'
 
 require './workers/some_worker'
 
@@ -103,6 +104,12 @@ get '/sms' do
 		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			@user.child_birthdate = params[:Body]
   			@user.save
+
+  			#add child's age
+  			@user.child_age = Age.InYears(@user.child_birthdate)
+  			@user.save
+
+
   			twiml = Twilio::TwiML::Response.new do |r|
    				r.Message "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
 			end

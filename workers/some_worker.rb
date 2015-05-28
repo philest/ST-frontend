@@ -44,71 +44,143 @@ class SomeWorker
 
   def perform(*args)
 
-
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
 
-  	@client = Twilio::REST::Client.new account_sid, auth_token
+    @client = Twilio::REST::Client.new account_sid, auth_token
 
 
     puts "SystemTime is: " + SomeWorker.cleanSysTime
 
-  	# send Twilio message
+    # send Twilio message
     # ignores improperly registered users
     User.where.not(time: "empty").find_each do |user|
 
       #logging info
-      print 'Send story to time ' +SomeWorker.convertTimeTo24(user.time)+"?: "
+      print 'Send story to time ' + SomeWorker.convertTimeTo24(user.time) + "?: "
       if SomeWorker.sendStory?(user)
         puts 'YES!!'
       else
          puts 'No.'
       end
 
-    	
-      if user.carrier != "Sprint Spectrum, L.P."
 
+      if SomeWorker.sendStory?(user) 
 
-        if SomeWorker.sendStory?(user) 
-      		message = @client.account.messages.create(:body => 
-      		"StoryTime: the timed job worked!!",
-      	    :to => user.phone,     # Replace with your phone number
-      	    :from => "+17377778679")   # Replace with your Twilio number
+        story = @@storyArr[user.story_number]  
+       
+        #update story number by 1
+        user.update(story_number: (user.story_number + 1))
+
+        # if NOT sprint or if under 160 char
+        if user.carrier != "Sprint Spectrum, L.P." ||
+           (sprintArr = SomeWorker.sprint(story.smsHash[user.child_age]).length == 1)
+
+        # if there's a single picture message
+          if story.mmsArr.length == 1
+
+            message = @client.account.messages.create(
+              :body => story.smsHash[user.child_age],
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
           puts "Sent message to" + user.phone + "\n\n"
 
-        end
-
-      else #sprint phone
-      
-        if SomeWorker.sendStory?(user) 
-
-          smsArr = SomeWorker.sprint(@story[0])
-
-          smsArr.each_with_index do |text, index|
+          elsif story.mmsArr.length == 2
+            #first picture (no SMS)
             message = @client.account.messages.create(
-              :body => text,
-              :to => user.phone,     # Replace with your phone number
-              :from => "+17377778679")   # Replace with your Twilio number
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
-            puts "Sent message part #{index} to" + user.phone + "\n\n"
+            sleep 2
+            #second picture with SMS
+            message = @client.account.messages.create(
+              :body => story.smsHash[user.child_age],
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[1])   # Replace with your Twilio number
+
+          puts "Sent message to" + user.phone + "\n\n"
+
+          else 
+            puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
+         
+          end
+
+        else #a SPRINT phone with message greater than 160 char!
+
+          #ONE PICTURE
+          if story.mmsArr.length == 1
+
+            #send single picture
+            message = @client.account.messages.create(
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+            sprintArr.each_with_index do |text, index|  
+              message = @client.account.messages.create(
+                :body => text,
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679")   # Replace with your Twilio number
+
+              puts "Sent message part #{index} to" + user.phone + "\n\n"
+
+              sleep 2
+
+            end
+
+          elsif story.mmsArr.length == 2            
+
+            #send first picture
+            message = @client.account.messages.create(
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+            sleep 2
+            
+            #send second picture
+            message = @client.account.messages.create(
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679",
+                :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
             sleep 2
 
-          end
+            #send sms chain
+            sprintArr.each_with_index do |text, index|  
+              message = @client.account.messages.create(
+                :body => text,
+                :to => user.phone,     # Replace with your phone number
+                :from => "+17377778679")   # Replace with your Twilio number
 
-        end
+              puts "Sent message part #{index} to" + user.phone + "\n\n"
 
+              sleep 2
 
-      end
+            end
 
-    end
+          else
 
+            puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
+
+          end#end sub-sprint
+
+        end#end nonsprint/sprint
+
+      end#end sendStory?
+
+    end#end User.do
+
+        
     puts "doing hard work!!" + "\n\n" 
 
+  end #end perform method
 
 
-  end
 
   # converts one long 160+ character string into an array of <160 char strings
   def self.sprint(story) 
