@@ -34,7 +34,29 @@ class SomeWorker
         mmsArr = ["http://i.imgur.com/GAyZhKa.jpg"]
 
         #create the sms Hash.
-        smsHash = SomeWorker.makeHash("test3", "test4", "test5")
+        smsHash = SomeWorker.makeHash("StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+
+Activities:
+
+a) Ask your child if they can make a convincing owl hoot.
+
+b) What part of the body do you use to speak? To hear? To know?", 
+          
+          "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+
+Activities:
+
+a) Ask your child if they can make a convincing owl hoot.
+
+b) What part of the body do you use to speak? To hear? To know?",
+
+ "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+
+Activities:
+
+a) Ask your child if they can make a convincing owl hoot.
+
+b) What part of the body do you use to speak? To hear? To know?")
 
         #zeroth
         zero = Struct::Story.new(mmsArr, smsHash)
@@ -123,7 +145,7 @@ class SomeWorker
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
             sleep 2
-            
+
             sprintArr.each_with_index do |text, index|  
               message = @client.account.messages.create(
                 :body => text,
