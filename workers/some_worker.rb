@@ -106,7 +106,7 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
 
     # send Twilio message
     # ignores improperly registered users, AND users who have unsubscribed
-    User.where.(subscribed: true).where.not(time: "empty").find_each do |user|
+    User.where.not(time: "empty").find_each do |user|
 
       #logging info
       print 'Send story to time ' + SomeWorker.convertTimeTo24(user.time) + "?: "
