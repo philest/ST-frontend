@@ -6,7 +6,7 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
-require '../sprint'
+require_relative '../sprint'
 
 class SomeWorker
   include Sidekiq::Worker
