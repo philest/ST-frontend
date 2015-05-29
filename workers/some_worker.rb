@@ -177,7 +177,7 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :from => "+17377778679",
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
-            sleep 2
+            sleep 5
 
             sprintArr.each_with_index do |text, index|  
               message = @client.account.messages.create(
@@ -199,6 +199,7 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :from => "+17377778679",
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
+            puts "Sent first photo!"
             sleep 2
             
             #send second picture
@@ -207,7 +208,8 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :from => "+17377778679",
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
-            sleep 2
+            puts "Sent second photo!"
+            sleep 4
 
             #send sms chain
             sprintArr.each_with_index do |text, index|  
@@ -217,8 +219,7 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :from => "+17377778679")   # Replace with your Twilio number
 
               puts "Sent message part #{index} to" + user.phone + "\n\n"
-
-              sleep 2
+              sleep 1
 
             end
 
