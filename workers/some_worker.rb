@@ -72,21 +72,21 @@ Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil.",
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.",
         "StoryTime: Remember, you and your child can act out each orange word:
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil.",
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.",
         "StoryTime: Remember, you and your child can act out each orange word:
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil."))
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil."))
 
         @@storyArr.push one
 
@@ -209,7 +209,7 @@ b) Show your child the rhymes & have them repeat after you: “Soil and toil.”
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
             puts "Sent second photo!"
-            sleep 20
+            sleep 16
 
             #send sms chain
             sprintArr.each_with_index do |text, index|  
