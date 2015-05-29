@@ -26,17 +26,18 @@ EMPTY_STR = "empty"
 HELP = "HELP NOW"
 STOP = "STOP NOW"
 
-HELPSMS =  "StoryTime texts free kids' stories. For help or feedback, please contact our director, Phil, at 561-212-5831.
+HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, please contact our director, Phil, at 561-212-5831.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
-Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " + STOP + " to cancel."
+Normal text rates may apply. Reply " + STOP + " to cancel."
 
 
-HELP_SPRINT = "StoryTime texts free kids' stories twice/week. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
+			  
 
-STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
+STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
 STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012).
 Text " + HELP + " for help."
