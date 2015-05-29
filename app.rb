@@ -44,11 +44,7 @@ Text " + HELP + " for help."
 START_SPRINT = 
 "Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
 
-
-
-TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).
-
-Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier." 
+ 
 
 
 TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (ex 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
@@ -186,6 +182,11 @@ get '/sms' do
 		  				end
 		 			twiml.text
 		 		else
+
+					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).
+
+					Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+
 		 			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message TIME_SMS
 		  				end
