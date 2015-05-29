@@ -44,17 +44,26 @@ START_SPRINT =
 "Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
 
 
+
+TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).
+
+Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier." 
+
+
 TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (ex 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
 
-TIMESMS = "StoryTime: Great, you've got StoryTime! Reply with your preferred reading time (e.g. 5:00pm).
+# TIMESMS = "StoryTime: Great, you've got StoryTime! Reply with your preferred reading time (e.g. 5:00pm).
 
-Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so try to read earlier."
+# Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so try to read earlier."
 
 BAD_TIME_SMS = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). 
 For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 	
 BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). Reply " + HELP + "for help."
 	
+REDO_BIRTHDATE = "When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
+
+
 
 get '/worker' do
 	SomeWorker.perform #begin sidetiq recurrring background tasks
@@ -133,11 +142,24 @@ get '/sms' do
 	    	end
 	    	twiml.text
 
+	elsif params[:Body].casecmp("STORY") == 0 #texted STORY
+
+		#undo birthdate
+		 		@user.child_birthdate = EMPTY_STR
+	 			@user.save
+
+	 			@user.child_age = EMPTY_INT
+	 			@user.save
+
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message REDO_BIRTHDATE
+				end
+	 			twiml.text
+	 			
 
     # second reply: update child's birthdate
-    elsif @user.child_birthdate == EMPTY_STR 
+    elsif (@user.child_birthdate == EMPTY_STR) 
    		
-
 		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
   			@user.child_birthdate = params[:Body]
@@ -157,7 +179,7 @@ get '/sms' do
 		 			twiml.text
 		 		else
 		 			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message TIMESMS
+		   				r.Message TIME_SMS
 		  				end
 		 			twiml.text
 		 		end
