@@ -7,10 +7,10 @@ DAYS_IN_YEAR = 365
 		currDate = Time.new
 
 		#the days now
-		daysNow = (currDate.year * 365) + (currDate.month * 30.5) + currDate.day
+		daysNow = (currDate.year * 365) + (currDate.month * 30.5)
 
 		#the days at birth
-		daysThen = ((2000 + birthdate[4,2].to_i) * 365) + (birthdate[0,2].to_i * 30.5) + birthdate[2,2].to_i 
+		daysThen = ((2000 + birthdate[2,2].to_i) * 365) + (birthdate[0,2].to_i * 30.5)
 
 		ageInDays = daysNow - daysThen
 

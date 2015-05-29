@@ -26,11 +26,11 @@ EMPTY_STR = "empty"
 HELP = "HELP NOW"
 STOP = "STOP NOW"
 
-HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, please contact our director, Phil, at 561-212-5831.
+HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
-Normal text rates may apply. Reply " + STOP + " to cancel."
+Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
 
 HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
@@ -38,16 +38,13 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012).
+STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! For age-appropriate stories, reply with your child's birthdate in MMYY foramat (e.g. 0912 for September 2012). 
 Text " + HELP + " for help."
 
-START_SPRINT = 
-"Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
+START_SPRINT = "Welcome to StoryTime, free stories by text! For age-appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
  
-
-
-TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm).
+TIME_SPRINT = "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm).
 
 Screentime w/in 2hrs before bedtime can carry health risks, so please read earlier."
 
@@ -60,7 +57,7 @@ For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + S
 	
 BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). Reply " + HELP + "for help."
 	
-REDO_BIRTHDATE = "When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
+REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
 
 
@@ -159,7 +156,7 @@ get '/sms' do
     # second reply: update child's birthdate
     elsif (@user.child_birthdate == EMPTY_STR) 
    		
-		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
+		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
   			@user.child_birthdate = params[:Body]
   			@user.save
@@ -187,7 +184,7 @@ get '/sms' do
 		 			twiml.text
 		 		else
 
-					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm). \n\nScreentime w/in 2hrs before bedtime can carry child health risks, so please read earlier."
+					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).\n\nScreentime w/in 2hrs before bedtime can carry child health risks, so please read earlier."
 
 		 			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message TIME_SMS
