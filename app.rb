@@ -47,7 +47,9 @@ START_SPRINT =
  
 
 
-TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (ex 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm).
+
+Screentime w/in 2hrs before bedtime can carry health risks, so please read earlier."
 
 # TIMESMS = "StoryTime: Great, you've got StoryTime! Reply with your preferred reading time (e.g. 5:00pm).
 

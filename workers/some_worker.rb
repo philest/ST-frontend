@@ -6,6 +6,8 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
+require '../sprint'
+
 class SomeWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
@@ -122,9 +124,12 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
         #update story number by 1
         user.update(story_number: (user.story_number + 1))
 
+        #arr for sprint
+        sprintArr = Sprint.chop(story.smsHash[user.child_age])
+
         # if NOT sprint or if under 160 char
         if user.carrier != "Sprint Spectrum, L.P." ||
-           (sprintArr = SomeWorker.sprint(story.smsHash[user.child_age]).length == 1)
+           (sprintArr.length == 1)
 
         # if there's a single picture message
           if story.mmsArr.length == 1
