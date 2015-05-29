@@ -187,9 +187,7 @@ get '/sms' do
 		 			twiml.text
 		 		else
 
-					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).
-
-					Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + "/" + params[:Body][4,2] +". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm). \n\nScreentime w/in 2hrs before bedtime can carry child health risks, so please read earlier."
 
 		 			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message TIME_SMS

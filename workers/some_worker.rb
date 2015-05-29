@@ -33,7 +33,7 @@ class SomeWorker
       #Day 0:
 
         #create the mmsArr for the story:
-        mmsArr = ["http://i.imgur.com/GAyZhKa.jpg"]
+        mmsArr = ["http://i.imgur.com/IzpnamS.png"]
 
         #create the sms Hash.
         smsHash = SomeWorker.makeHash("StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
