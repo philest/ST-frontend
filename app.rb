@@ -179,7 +179,6 @@ get '/sms' do
   			if @user.child_age <= 5 && @user.child_age >= 3 
 	  			
   				#redo subscription for parents who entered in bday wrongly
-  				@user.update(subscription: true)
 
 				if @user.carrier == "Sprint Spectrum, L.P." 
 		  			twiml = Twilio::TwiML::Response.new do |r|
@@ -207,9 +206,6 @@ get '/sms' do
 
 	 			@@badAge.push @user #add to badAge list 
 
-	 			#change subscription
-	 			@user.update(subscription: false)
-
 	 			twiml = Twilio::TwiML::Response.new do |r|
 	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand soon! Reply with child's birthdate in MMDDYY format."
 				end
@@ -233,8 +229,10 @@ get '/sms' do
  			if arr.length == 1
  				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
  					@user.time = arr[0]
-
 		 			@user.save
+
+		 			@user.update(subscribed: true) #Subscription complete!
+
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time} to read aloud together."
 					end
@@ -265,6 +263,10 @@ get '/sms' do
  					@user.time = arr[0] + arr[1]
 
 		 			@user.save
+
+		 			@user.update(subscribed: true) #Subscription complete!
+
+
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
 					end
