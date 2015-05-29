@@ -209,7 +209,7 @@ b) Show your child the rhymes & have them repeat after you: “Soil and toil.”
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
             puts "Sent second photo!"
-            sleep 15
+            sleep 10
 
             #send sms chain
             sprintArr.each_with_index do |text, index|  
