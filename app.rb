@@ -29,17 +29,32 @@ HELPSMS =  "StoryTime texts free kids' stories. For help or feedback, please con
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
-Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " +STOP+ " to cancel."
+Normal text rates may apply. StoryTime sends 2 msgs/week. Reply " + STOP + " to cancel."
 
 
 HELP_SPRINT = "StoryTime texts free kids' stories twice/week. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
 
-STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! Please contact our director, Phil, at 561-212-5831 if you have any feedback."
+STOPSMS = "Okay, we'll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = 
+STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012).
+Text " + HELP + " for help."
+
+START_SPRINT = 
 "Welcome to StoryTime, free stories by text! When was your child born? Reply with birthdate in MMDDYY format (e.g. 091412 for September 14, 2012)."
 
+
+TIME_SPRINT ="StoryTime: Great! Reply with your preferred reading time (ex 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read earlier."
+
+TIMESMS = "StoryTime: Great, you've got StoryTime! Reply with your preferred reading time (e.g. 5:00pm).
+
+Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so try to read earlier."
+
+BAD_TIME_SMS = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). 
+For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
+	
+BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). Reply " + HELP + "for help."
+	
 
 get '/worker' do
 	SomeWorker.perform #begin sidetiq recurrring background tasks
@@ -73,12 +88,17 @@ get '/sms' do
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
-
-		twiml = Twilio::TwiML::Response.new do |r|
-	   		r.Message STARTSMS
-	    end
-	    twiml.text
-		
+	  	if @user.carrier == "Sprint Spectrum, L.P." 
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message START_SPRINT #SEND SPRINT MSG
+	    	end
+	    	twiml.text
+	    else
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message STARTSMS
+		    end
+		    twiml.text
+		end
 
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
@@ -129,10 +149,18 @@ get '/sms' do
 
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
-	  			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm). Screentime w/in 2hrs before bedtime can carry child health risks, so try to read early."
-	  				end
-	 			twiml.text
+	  			
+				if @user.carrier == "Sprint Spectrum, L.P." 
+		  			twiml = Twilio::TwiML::Response.new do |r|
+		   				r.Message TIME_SPRINT
+		  				end
+		 			twiml.text
+		 		else
+		 			twiml = Twilio::TwiML::Response.new do |r|
+		   				r.Message TIMESMS
+		  				end
+		 			twiml.text
+		 		end
 
 	 		else #Wrong age rage
 
@@ -143,14 +171,14 @@ get '/sms' do
 	 			@user.save
 
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand! Reply with child's birthdate in MMDDYY format."
+	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand soon! Reply with child's birthdate in MMDDYY format."
 				end
 	 			twiml.text
 	 		end
 
 	    else #not a valid format
   			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "We did not understand what you typed. Reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
+   				r.Message "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
 			end
  			twiml.text
 		end 	
@@ -168,17 +196,30 @@ get '/sms' do
 
 		 			@user.save
 		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
+		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time} to read aloud together."
 					end
 		 			twiml.text
 
  				else
- 					twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm)."
-						# r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
+
+					#if sprint
+					if @user.carrier == "Sprint Spectrum, L.P." 
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+				    	end
+				    	twiml.text
+
+					else #not Sprint
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SMS	#SEND NORMAL
+				    	end
+				    	twiml.text
 					end
-		 			twiml.text
+
  				end
+
  			else
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					@user.time = arr[0] + arr[1]
@@ -189,27 +230,43 @@ get '/sms' do
 					end
 		 			twiml.text 					
  				else
- 					twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:30pm)."
+
+					#if sprint
+					if @user.carrier == "Sprint Spectrum, L.P." 
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+				    	end
+				    	twiml.text
+
+					else #not Sprint
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SMS	#SEND NORMAL
+				    	end
+				    	twiml.text
 					end
-		 			twiml.text
-			 	# 	twiml = Twilio::TwiML::Response.new do |r|
-		   # 				r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
-					# end
-		 		# 	twiml.text
+
  				end
+ 				
  			end
 
-
  		else #wrong format
- 			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:30pm)."
-			end
-		 	twiml.text
-			# twiml = Twilio::TwiML::Response.new do |r|
-		 #   		r.Message "(2/2)For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
-			# end
-		 # 	twiml.text
+					#if sprint
+					if @user.carrier == "Sprint Spectrum, L.P." 
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+				    	end
+				    	twiml.text
+
+					else #not Sprint
+
+						twiml = Twilio::TwiML::Response.new do |r|
+				   			r.Message BAD_TIME_SMS	#SEND NORMAL
+				    	end
+				    	twiml.text
+					end
  		end
  		
 	#response matches nothing
@@ -221,6 +278,14 @@ get '/sms' do
 		# raise "something broke-- message was not regeistered"
 	end
 end
+
+
+
+
+
+
+
+
 
 
 
