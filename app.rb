@@ -18,6 +18,7 @@ configure :production do
 end
 
 @@quiters = Array.new #people who have left (STOP)
+@@badAge = Array.new #people with kids in wrong age group 
 
 EMPTY_INT = 999
 EMPTY_STR = "empty"
@@ -193,11 +194,12 @@ get '/sms' do
 
 	 		else #Wrong age rage
 
+
+
 	 			@user.child_birthdate = EMPTY_STR
 	 			@user.save
 
-	 			@user.child_age = EMPTY_INT
-	 			@user.save
+	 			@@badAge.push @user #add to badAge list 
 
 	 			twiml = Twilio::TwiML::Response.new do |r|
 	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand soon! Reply with child's birthdate in MMDDYY format."

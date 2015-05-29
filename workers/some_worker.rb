@@ -61,6 +61,34 @@ b) What part of the body do you use to speak? To hear? To know?")
         #zeroth
         zero = Struct::Story.new(mmsArr, smsHash)
         @@storyArr.push zero 
+
+
+        one = Struct::Story.new( ["http://i.imgur.com/kbG4kzZ.png", "http://i.imgur.com/SM9r6eS.png"],
+        SomeWorker.makeHash("StoryTime: Remember, you and your child can act out each orange word:
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil.",
+        "StoryTime: Remember, you and your child can act out each orange word:
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil.",
+        "StoryTime: Remember, you and your child can act out each orange word:
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil."))
+
+        @@storyArr.push one
+
+
   end
 
 
