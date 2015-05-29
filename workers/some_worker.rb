@@ -149,6 +149,8 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                 :from => "+17377778679",
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
+            puts "Sent first photo to " + user.phone + "\n\n"
+
             sleep 2
             #second picture with SMS
             message = @client.account.messages.create(
@@ -157,7 +159,7 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                 :from => "+17377778679",
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
-          puts "Sent message to" + user.phone + "\n\n"
+          puts "Sent seecond photo with message to" + user.phone + "\n\n"
 
           else 
             puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
