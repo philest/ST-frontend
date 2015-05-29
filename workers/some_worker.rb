@@ -105,8 +105,8 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
     puts "SystemTime is: " + SomeWorker.cleanSysTime
 
     # send Twilio message
-    # ignores improperly registered users
-    User.where.not(time: "empty").find_each do |user|
+    # ignores improperly registered users, AND users who have unsubscribed
+    User.where.not(time: "empty").where.(subscribed: true).find_each do |user|
 
       #logging info
       print 'Send story to time ' + SomeWorker.convertTimeTo24(user.time) + "?: "

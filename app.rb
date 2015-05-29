@@ -133,8 +133,8 @@ get '/sms' do
 		#add to ended list
 		@@quiters.push @user
 
-		#delete user
-		@user.delete
+		#change subscription
+		@user.update(subscribed: false)
 
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message STOPSMS
@@ -178,6 +178,9 @@ get '/sms' do
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 	  			
+  				#redo subscription for parents who entered in bday wrongly
+  				@user.update(subscription: true)
+
 				if @user.carrier == "Sprint Spectrum, L.P." 
 		  			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message TIME_SPRINT
@@ -203,6 +206,9 @@ get '/sms' do
 	 			@user.save
 
 	 			@@badAge.push @user #add to badAge list 
+
+	 			#change subscription
+	 			@user.update(subscription: false)
 
 	 			twiml = Twilio::TwiML::Response.new do |r|
 	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand soon! Reply with child's birthdate in MMDDYY format."
