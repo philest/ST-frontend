@@ -166,7 +166,14 @@ get '/sms' do
   			@user.save
 
   			#add child's age
-  			@user.child_age = Age.InYears(@user.child_birthdate)
+  			
+  			ageFloat = Age.InYears(@user.child_birthdate)
+
+  			if ageFloat < 3 && ageFloat >= 2.7 #let the older two's in.
+  				ageFloat = 3
+  			end
+
+  			@user.child_age = ageFloat.to_i
   			@user.save
 
   			#check if in right age range
