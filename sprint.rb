@@ -1,8 +1,16 @@
 
 
-MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
+MAX_TEXT = 154 #leaves room for (1/6) at start (160 char msg)
 
 BREAK = "\n" #for Help Message
+
+JEW = "StoryTime: Remember, you and your child can act out each orange word:
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil."
 
 class Sprint
 

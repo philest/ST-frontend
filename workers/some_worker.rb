@@ -72,21 +72,21 @@ Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil.",
+b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil.",
         "StoryTime: Remember, you and your child can act out each orange word:
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil.",
+b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil.",
         "StoryTime: Remember, you and your child can act out each orange word:
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child some of the rhymes and have them repeat after you: \“Soil and toil.\” Ask your child which of the following words rhymes with toil: building, boring, boil."))
+b) Show your child the rhymes & have them repeat after you: “Soil and toil.” Ask which of the following words rhymes with toil: building, boring, boil."))
 
         @@storyArr.push one
 
@@ -200,7 +200,7 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
             puts "Sent first photo!"
-            sleep 2
+            sleep 5
             
             #send second picture
             message = @client.account.messages.create(
@@ -209,7 +209,7 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
             puts "Sent second photo!"
-            sleep 4
+            sleep 15
 
             #send sms chain
             sprintArr.each_with_index do |text, index|  
