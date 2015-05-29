@@ -65,7 +65,7 @@ b) What part of the body do you use to speak? To hear? To know?")
         @@storyArr.push zero 
 
 
-        one = Struct::Story.new( ["http://i.imgur.com/kbG4kzZ.png", "http://i.imgur.com/SM9r6eS.png"],
+        one = Struct::Story.new( ["http://i.imgur.com/6Of22ZY.png", "http://i.imgur.com/1b0XzVh.png"],
         SomeWorker.makeHash("StoryTime: Remember, you and your child can act out each orange word:
 
 Activites:
@@ -209,7 +209,7 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                 :media_url => story.mmsArr[1])   # Replace with your Twilio number
 
             puts "Sent second photo!"
-            sleep 16
+            sleep 20
 
             #send sms chain
             sprintArr.each_with_index do |text, index|  
