@@ -277,45 +277,53 @@ b) What part of the body do you use to speak? To hear? To know?")
   # check if user's story time is in the next two minutes
   def self.sendStory?(user) #don't know object as parameter
 
+    weekday = Time.new.wday 
+    
+    if (weekday == 2 || weekday == 4) || (user.story_number == 0)
+
+      currTime = SomeWorker.cleanSysTime
+      userTime = SomeWorker.convertTimeTo24(user.time)
+
+      currHour = currTime[0,2]   
+      userHour = userTime[0,2]
+
+      #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
+      if ENV['MY_MACHINE?'] != "true"
+      userHour = ((userTime[0,2].to_i + 4) % 24).to_s
+      end
 
 
-    currTime = SomeWorker.cleanSysTime
-    userTime = SomeWorker.convertTimeTo24(user.time)
+      len = currTime.length 
+      # assert(currTime.length == userTime.length, "lengths differ")
+      # assert(len == 5, "lengths differ")
 
-    currHour = currTime[0,2]   
-    userHour = userTime[0,2]
+        currMin = currTime[3, len]
+        userMin = userTime[3, len]
 
-    #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
-    if ENV['MY_MACHINE?'] != "true"
-    userHour = ((userTime[0,2].to_i + 4) % 24).to_s
-    end
+        currMin = currMin.to_i
+        userMin = userMin.to_i    
 
+      if currHour.to_i == userHour.to_i #same hour (03 converts to 3)
 
-    len = currTime.length 
-    # assert(currTime.length == userTime.length, "lengths differ")
-    # assert(len == 5, "lengths differ")
-
-      currMin = currTime[3, len]
-      userMin = userTime[3, len]
-
-      currMin = currMin.to_i
-      userMin = userMin.to_i    
-
-    if currHour.to_i == userHour.to_i #same hour (03 converts to 3)
-
-      if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #send the message
-        return true
+        if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #send the message
+          return true
+        else
+          return false
+        end
+      elsif (userHour.to_i == 1 + currHour.to_i) &&  
+            ((currMin == 58 && userMin == 0) || (currMin == 59 && userMin == 1)) #the 5:58 send the 6:00 message
+          return true
       else
         return false
       end
-    elsif (userHour.to_i == 1 + currHour.to_i) &&  
-          ((currMin == 58 && userMin == 0) || (currMin == 59 && userMin == 1)) #the 5:58 send the 6:00 message
-        return true
-    else
-      return false
-    end
 
-  end
+    else
+
+      return false
+    
+    end#end weekday/first time
+
+  end#end sendStory?
 
   # returns a cleaned version of the current system time in 24 hour version
   def self.cleanSysTime
