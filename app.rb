@@ -38,19 +38,19 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! For age-appropriate stories, reply with your child's birthdate in MMYY foramat (e.g. 0912 for September 2012). 
+STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! For age-appropriate stories, just reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012). 
 Text " + HELP + " for help."
 
-START_SPRINT = "Welcome to StoryTime, free stories by text! For age-appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
+START_SPRINT = "Welcome to StoryTime, free stories by text! For age-appropriate stories, just reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
  
-TIME_SPRINT = "StoryTime: Great! Reply with your preferred reading time (e.g. 5:00pm).
+TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 
 Screentime w/in 2hrs before bedtime can carry health risks, so please read earlier."
 
-# TIMESMS = "StoryTime: Great, you've got StoryTime! Reply with your preferred reading time (e.g. 5:00pm).
+TIMESMS = "StoryTime: Great, last question! When do you want to receive stories (e.g. 5:00pm)? 
 
-# Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so try to read earlier."
+Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
 BAD_TIME_SMS = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). 
 For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
