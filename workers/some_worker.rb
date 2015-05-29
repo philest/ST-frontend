@@ -307,7 +307,8 @@ b) Show your child some of the rhymes and have them repeat after you: \“Soil a
 
     weekday = Time.new.wday 
     
-    if (weekday == 2 || weekday == 4) || (user.story_number == 0)
+    if (weekday == 2 || weekday == 4) || (user.story_number == 0) ||
+      (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
 
       currTime = SomeWorker.cleanSysTime
       userTime = SomeWorker.convertTimeTo24(user.time)
