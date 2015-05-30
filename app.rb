@@ -20,7 +20,7 @@ end
 @@quiters = Array.new #people who have left (STOP)
 @@badAge = Array.new #people with kids in wrong age group 
 
-EMPTY_INT = 999
+EMPTY_INT = 9999
 EMPTY_STR = "empty"
 
 HELP = "HELP NOW"
@@ -42,12 +42,12 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! For age-appropriate stories, just reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012). 
-Text " + HELP + " for help."
+STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- starting tonight! 
 
-START_SPRINT = "Welcome to StoryTime, free stories by text! For age-appropriate stories, just reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
+Text " + HELP + " for help, or " + STOP + " to cancel."
 
- 
+START_SPRINT = "Welcome to StoryTime, free stories by text! We\'ll send you & your child a two stories a week to read aloud-- starting tonight! Text " + HELP + " for help."
+
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 
 Screentime w/in 2hrs before bedtime can carry health risks, so please read earlier."
@@ -172,7 +172,7 @@ get '/sms' do
 	 			
 
     # second reply: update child's birthdate
-    elsif (@user.child_birthdate == EMPTY_STR) 
+    elsif (@user.child_age == EMPTY_INT) 
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
