@@ -27,6 +27,9 @@ HELP = "HELP NOW"
 STOP = "STOP NOW"
 TEXT = "TEXT"
 
+
+MMS_UPDATE = "Okay, you'll now receive just the text of each poem. Hope this works better!"
+
 HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
@@ -138,6 +141,20 @@ get '/sms' do
 	   			r.Message STOPSMS
 	    	end
 	    	twiml.text
+
+
+	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option
+		
+
+		#change mms to sms
+		@user.update(mms: false)
+
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message MMS_UPDATE
+	    	end
+	    	twiml.text
+
+
 
 	elsif params[:Body].casecmp("STORY") == 0 #texted STORY
 
