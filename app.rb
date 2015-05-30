@@ -25,6 +25,7 @@ EMPTY_STR = "empty"
 
 HELP = "HELP NOW"
 STOP = "STOP NOW"
+TEXT = "TEXT"
 
 HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
 
