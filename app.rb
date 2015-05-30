@@ -86,6 +86,10 @@ get '/sms' do
 	if @user == nil 
 		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
 
+
+		#update subscription
+		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
+
     	# Lookup wireless carrier
     	#setup Twilio user account
    		account_sid = ENV['TW_ACCOUNT_SID']
@@ -212,8 +216,6 @@ get '/sms' do
 
 	 		else #Wrong age rage
 
-
-
 	 			@user.child_birthdate = EMPTY_STR
 	 			@user.save
 
@@ -232,8 +234,8 @@ get '/sms' do
  			twiml.text
 		end 	
 
- 	# third reply: update time and child's name
- 	elsif @user.time == EMPTY_STR
+ 	# Update TIME before (or after) third story
+ 	elsif (@user.story_number == 2 || @user.story_number ==3) && /[:|((am)|(pm))]/ =~ params[:Body]
  		
  		response = params[:Body]
  		arr = response.split
@@ -244,10 +246,8 @@ get '/sms' do
  					@user.time = arr[0]
 		 			@user.save
 
-		 			@user.update(subscribed: true) #Subscription complete!
-
 		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time} to read aloud together."
+		   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
 					end
 		 			twiml.text
 
@@ -274,14 +274,11 @@ get '/sms' do
  			else
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					@user.time = arr[0] + arr[1]
-
 		 			@user.save
-
-		 			@user.update(subscribed: true) #Subscription complete!
 
 
 		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
+		   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
 					end
 		 			twiml.text 					
  				else

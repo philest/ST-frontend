@@ -13,7 +13,29 @@ class SomeWorker
   include Sidetiq::Schedulable
 
   MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
-	
+  
+  TIME_SMS_NORMAL = "StoryTime: Hey there! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?
+
+  Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
+
+  TIME_SMS_SPRINT_1 = "(1/2) StoryTime: Hi! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?"
+
+  TIME_SMS_SPRINT_2 = "(2/2) Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
+
+  SPRINT = "Sprint Spectrum, L.P."
+
+
+
+  if ENV['MY_MACHINE?'] != "true" #on the INTERNET
+
+    UPDATE_TIME = "20:00" #time for the birthdate and time updates
+  
+  else #my machine
+ 
+    UPDATE_TIME = "16:00"
+ 
+  end
+
 	sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
 
@@ -157,6 +179,37 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
       else
          puts 'No.'
       end
+
+
+      if SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 2 #Customize time 
+          
+        if user.carrier == SPRINT
+                    message = @client.account.messages.create(
+                      :body => TIME_SMS_SPRINT_1,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent time update message part 1 to " + user.phone + "\n\n"
+
+                sleep 2
+
+                     message = @client.account.messages.create(
+                      :body => TIME_SMS_SPRINT_2,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent time update message part 2 to " + user.phone + "\n\n"
+
+        else #NORMAL carrier
+
+                    message = @client.account.messages.create(
+                      :body => TIME_SMS_NORMAL,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent time update message part 1 to " + user.phone + "\n\n"
+
+
 
 
       if SomeWorker.sendStory?(user) 
