@@ -28,7 +28,7 @@ class SomeWorker
   @@storyArr = Array.new #holds all the story structs!
 
   def self.buildStoryArr
-    Struct.new("Story", :mmsArr, :smsHash) #creates a new type of struct for Story
+    Struct.new("Story", :mmsArr, :smsHash, :poemSMS) #creates a new type of struct for Story
 
       #Day 0:
 
@@ -61,7 +61,21 @@ a) Ask your child if they can make a convincing owl hoot.
 b) What part of the body do you use to speak? To hear? To know?")
 
         #zeroth
-        zero = Struct::Story.new(mmsArr, smsHash)
+        zero = Struct::Story.new(mmsArr, smsHash, "StoryTime: Enjoy your first poem!
+
+The Wise Old Owl
+
+There was an old owl who lived in an oak;
+The more he heard, the less he spoke
+
+The less he spoke, the more he heard,
+Why aren't we like that wise old bird?
+
+Activities:
+
+a) Ask your child if they can make a convincing owl hoot.
+
+b) What part of the body do you use to speak? To hear? To know?")
         @@storyArr.push zero 
 
 
@@ -86,7 +100,35 @@ Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil."))
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil."), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
+
+The Farmer Knows Soil
+
+The farmer knows soil
+From plowing and toil
+ 
+The soil knows sand
+\'cause they\'re both friends with land.
+ 
+The sand knows the sea
+Since they kiss in between.
+ 
+The sea knows the sky;
+They both make me sigh.
+ 
+The sky knows the weather,
+For they live together.
+ 
+The weather knows farmers,
+Since rain gives to the gardeners.
+ 
+And the farmer knows soil.
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.")
 
         @@storyArr.push one
 
@@ -124,62 +166,13 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
         #update story number by 1
         user.update(story_number: (user.story_number + 1))
 
-        #arr for sprint
-        sprintArr = Sprint.chop(story.smsHash[user.child_age])
 
-        # if NOT sprint or if under 160 char
-        if user.carrier != "Sprint Spectrum, L.P." ||
-           (sprintArr.length == 1)
+        #JUST SMS MESSAGING!
+        if user.mms == false
 
-        # if there's a single picture message
-          if story.mmsArr.length == 1
+          if user.carrier == "Sprint Spectrum, L.P." 
 
-            message = @client.account.messages.create(
-              :body => story.smsHash[user.child_age],
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-          puts "Sent message to" + user.phone + "\n\n"
-
-          elsif story.mmsArr.length == 2
-            #first picture (no SMS)
-            message = @client.account.messages.create(
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-            puts "Sent first photo to " + user.phone + "\n\n"
-
-            sleep 2
-            #second picture with SMS
-            message = @client.account.messages.create(
-              :body => story.smsHash[user.child_age],
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-          puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-          else 
-            puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
-         
-          end
-
-          sleep 2 #sleep after sending msg
-
-        else #a SPRINT phone with message greater than 160 char!
-
-          #ONE PICTURE
-          if story.mmsArr.length == 1
-
-            #send single picture
-            message = @client.account.messages.create(
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-            sleep 5
+            sprintArr = Sprint.chop(story.pureSMS)
 
             sprintArr.each_with_index do |text, index|  
               message = @client.account.messages.create(
@@ -190,48 +183,132 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
               puts "Sent message part #{index} to" + user.phone + "\n\n"
 
               sleep 2
-
             end
 
-          elsif story.mmsArr.length == 2            
+          else # NOT SPRINT (normal carrier) 
 
-            #send first picture
             message = @client.account.messages.create(
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-            puts "Sent first photo!"
-            sleep 5
-            
-            #send second picture
-            message = @client.account.messages.create(
-                :to => user.phone,     # Replace with your phone number
-                :from => "+17377778679",
-                :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-            puts "Sent second photo!"
-            sleep 20
-
-            #send sms chain
-            sprintArr.each_with_index do |text, index|  
-              message = @client.account.messages.create(
-                :body => text,
+                :body => story.pureSMS,
                 :to => user.phone,     # Replace with your phone number
                 :from => "+17377778679")   # Replace with your Twilio number
 
-              puts "Sent message part #{index} to" + user.phone + "\n\n"
-              sleep 1
+            puts "Sent message to" + user.phone + "\n\n"
 
+          end# end of sprint/non-sprint sub block
+
+
+        else #MULTIMEDIA MESSAGING (MMS)!
+
+          #arr for sprint
+          sprintArr = Sprint.chop(story.smsHash[user.child_age])
+
+          # if NOT sprint or if under 160 char
+          if user.carrier != "Sprint Spectrum, L.P." ||
+             (sprintArr.length == 1)
+
+          # if there's a single picture message
+            if story.mmsArr.length == 1
+
+              message = @client.account.messages.create(
+                :body => story.smsHash[user.child_age],
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+            puts "Sent message to" + user.phone + "\n\n"
+
+            elsif story.mmsArr.length == 2
+              #first picture (no SMS)
+              message = @client.account.messages.create(
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+              puts "Sent first photo to " + user.phone + "\n\n"
+
+              sleep 2
+              #second picture with SMS
+              message = @client.account.messages.create(
+                :body => story.smsHash[user.child_age],
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[1])   # Replace with your Twilio number
+
+            puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+            else 
+              puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
+           
             end
 
-          else
+            sleep 2 #sleep after sending msg
 
-            puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
+          else #a SPRINT phone with message greater than 160 char!
 
-          end#end sub-sprint
+            #ONE PICTURE
+            if story.mmsArr.length == 1
 
-        end#end nonsprint/sprint
+              #send single picture
+              message = @client.account.messages.create(
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+              sleep 5
+
+              sprintArr.each_with_index do |text, index|  
+                message = @client.account.messages.create(
+                  :body => text,
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent message part #{index} to" + user.phone + "\n\n"
+
+                sleep 2
+
+              end
+
+            elsif story.mmsArr.length == 2            
+
+              #send first picture
+              message = @client.account.messages.create(
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+              puts "Sent first photo!"
+              sleep 5
+              
+              #send second picture
+              message = @client.account.messages.create(
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :media_url => story.mmsArr[1])   # Replace with your Twilio number
+
+              puts "Sent second photo!"
+              sleep 20
+
+              #send sms chain
+              sprintArr.each_with_index do |text, index|  
+                message = @client.account.messages.create(
+                  :body => text,
+                  :to => user.phone,     # Replace with your phone number
+                  :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent message part #{index} to" + user.phone + "\n\n"
+                sleep 1
+
+              end
+
+            else
+
+              puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
+
+            end#end sub-sprint
+
+          end#end nonsprint/sprint
+
+        end#MMS or SMS
 
       end#end sendStory?
 
