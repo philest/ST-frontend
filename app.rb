@@ -327,7 +327,7 @@ get '/sms' do
 	#response matches nothing
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply STOP."
+   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
 		end
  		twiml.text
 		# raise "something broke-- message was not regeistered"
