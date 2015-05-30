@@ -42,11 +42,11 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- starting tonight! 
+STARTSMS = "StoryTime: Welcome to StoryTime, free kindergarten-prep stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- starting tonight! 
 
 Text " + HELP + " for help, or " + STOP + " to cancel."
 
-START_SPRINT = "Welcome to StoryTime, free stories by text! We\'ll send you & your child a two stories a week to read aloud-- starting tonight! Text " + HELP + " for help."
+START_SPRINT = "Welcome to StoryTime, free kindergarten-prep stories by text! We\'ll send you & your child two stories a week to read aloud together. Text HELP NOW for help."
 
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 
@@ -433,7 +433,7 @@ get '/test/:From/:Body' do
 
 	#response matches nothing
 	else
-  		@@twiml = "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
+  		@@twiml = "StoryTime: This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP NOW. To stop messages, reply STOP NOW."
 		# raise "something broke-- message was not regeistered"
 	end
 end
