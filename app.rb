@@ -84,7 +84,7 @@ get '/sms' do
 
 	#first reply: new user, add her
 	if @user == nil 
-		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, time: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
+		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
 
     	# Lookup wireless carrier
     	#setup Twilio user account
@@ -327,7 +327,7 @@ get '/sms' do
 	#response matches nothing
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "This service is automatic. We did not understand what you typed. For questions about StoryTime, reply " + HELP + ". To Stop messages, reply " + STOP + "."
+   			r.Message "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 		end
  		twiml.text
 		# raise "something broke-- message was not regeistered"
