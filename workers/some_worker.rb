@@ -22,7 +22,11 @@ class SomeWorker
 
   TIME_SMS_SPRINT_2 = "(2/2) Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
+  BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
+
   SPRINT = "Sprint Spectrum, L.P."
+
+  
 
 
 
@@ -64,7 +68,11 @@ Activities:
 
 a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?", 
+b) What part of the body do you use to speak? To hear? To know?
+
+If this picture msg was unreadable, reply TEXT for text-only stories.
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
           
           "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
@@ -72,7 +80,11 @@ Activities:
 
 a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?",
+b) What part of the body do you use to speak? To hear? To know?
+
+If this picture msg was unreadable, reply TEXT for text-only stories.
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
 
  "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
@@ -80,7 +92,11 @@ Activities:
 
 a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?")
+b) What part of the body do you use to speak? To hear? To know?
+
+If this picture msg was unreadable, reply TEXT for text-only stories.
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
 
         #zeroth
         zero = Struct::Story.new(mmsArr, smsHash, "StoryTime: Enjoy your first poem!
@@ -97,7 +113,9 @@ Activities:
 
 a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?")
+b) What part of the body do you use to speak? To hear? To know?
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
         @@storyArr.push zero 
 
 
@@ -200,6 +218,8 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
 
                 puts "Sent time update message part 2 to " + user.phone + "\n\n"
 
+                sleep 1
+
         else #NORMAL carrier
 
                     message = @client.account.messages.create(
@@ -208,8 +228,28 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                       :from => "+17377778679")   # Replace with your Twilio number
 
                 puts "Sent time update message part 1 to " + user.phone + "\n\n"
+
+                sleep 1
         end
       end
+
+
+      #UPDATE Birthdate! 
+      if SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
+
+
+                    message = @client.account.messages.create(
+                      :body => BIRTHDATE_UPDATE,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                puts "Sent birthday update message part 1 to " + user.phone + "\n\n"
+
+                sleep 1
+      end
+
+
+
 
 
 

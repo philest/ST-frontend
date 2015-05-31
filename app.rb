@@ -36,9 +36,7 @@ Remember that looking at screens within two hours of bedtime can delay children'
 
 Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
-
 HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
-
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
@@ -173,10 +171,25 @@ get '/sms' do
 	   				r.Message REDO_BIRTHDATE
 				end
 	 			twiml.text
+
+	 			
+	elsif /\A[1-5]{1}\z/ =~ params[:Body] #texted STORY
+
+		#undo birthdate
+		 		@user.child_birthdate = EMPTY_STR
+	 			@user.save
+
+	 			@user.child_age = EMPTY_INT
+	 			@user.save
+
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message REDO_BIRTHDATE
+				end
+	 			twiml.text
 	 			
 
     # second reply: update child's birthdate
-    elsif (@user.child_age == EMPTY_INT) 
+    elsif (@user.story_number == 4 || @user.story_number == 5) && (/\A[0-9]{4}\z/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
@@ -187,42 +200,41 @@ get '/sms' do
   			
   			ageFloat = Age.InYears(@user.child_birthdate)
 
-  			if ageFloat < 3 && ageFloat >= 2.7 #let the older two's in.
+  			if ageFloat < 3 && ageFloat >= 2.8 #let the older two's in.
   				ageFloat = 3
   			end
+
 
   			@user.child_age = ageFloat.to_i
   			@user.save
 
+   			#give allow six year olds
+ 			if @user.child_age == 6 
+  				@user.update(child_age: 5)
+ 			end
+
+
+
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
-	  			
+
+  				@user.update(subscribed: true)
   				#redo subscription for parents who entered in bday wrongly
 
-				if @user.carrier == "Sprint Spectrum, L.P." 
-		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message TIME_SPRINT
-		  				end
-		 			twiml.text
-		 		else
-
-					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, reply with your preferred reading time (ex 5:00pm).\n\nScreentime w/in 2hrs before bedtime can carry child health risks, so please read earlier."
+					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
 		 			twiml = Twilio::TwiML::Response.new do |r|
 		   				r.Message TIME_SMS
 		  				end
 		 			twiml.text
-		 		end
 
 	 		else #Wrong age rage
 
-	 			@user.child_birthdate = EMPTY_STR
-	 			@user.save
+	 			@user.update(subscribed: false)
 
-	 			@@badAge.push @user #add to badAge list 
-
+	 			#NOTE: Keep the real birthdate.
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Sorry, for now we only sends msgs for kids ages 3 to 5. We'll contact you when we expand soon! Reply with child's birthdate in MMDDYY format."
+	   				r.Message "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
 				end
 	 			twiml.text
 	 		end
