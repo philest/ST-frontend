@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150530214246) do
+ActiveRecord::Schema.define(version: 20150531171820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20150530214246) do
     t.integer  "story_number",    default: 0
     t.boolean  "subscribed",      default: false
     t.boolean  "mms",             default: true
+    t.integer  "last_feedback",   default: -1
   end
 
 end

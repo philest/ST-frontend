@@ -6,6 +6,10 @@ require 'twilio-ruby'
 require 'sidekiq'
 require 'sidetiq'
 require 'redis'
+
+#REDIS initialization
+require './config/initializers/redis'
+
 require 'sidekiq/api'
 
 require './sprint'
@@ -17,8 +21,7 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-@@quiters = Array.new #people who have left (STOP)
-@@badAge = Array.new #people with kids in wrong age group 
+@@tips = ["Thanks for continuing w/ StoryTime!\n\nEverytime your read or talk w/ your child, you're shaping a mind when it's growing most. You've already got all it takes!"]
 
 EMPTY_INT = 9999
 EMPTY_STR = "empty"
@@ -26,6 +29,7 @@ EMPTY_STR = "empty"
 HELP = "HELP NOW"
 STOP = "STOP NOW"
 TEXT = "TEXT"
+
 
 
 MMS_UPDATE = "Okay, you'll now receive just the text of each poem. Hope this works better!"
@@ -173,23 +177,27 @@ get '/sms' do
 	 			twiml.text
 
 	 			
-	elsif /\A[1-5]{1}\z/ =~ params[:Body] #texted STORY
+	elsif /\A[1-5]{1}\z/ =~ params[:Body] #texted feedback 1 to 5.
 
-		#undo birthdate
-		 		@user.child_birthdate = EMPTY_STR
-	 			@user.save
+			#SAVE FEEDBACK
 
-	 			@user.child_age = EMPTY_INT
-	 			@user.save
+			REDIS.zadd(@user.phone, @user.story_number - 1, params[:Body]) 
+			#add the user's 1 to 5 feedback (value) to the story_number (key) of that night's story
+			#in a sorted set by key of phonenumber;
+			#EX: REDIS.zadd("+15612125831", 0, 5)  
 
+
+			#UPDATE LAST FEEDBACK
+			@user.update(last_feedback: @user.story_number - 1)
+
+			#GIVE FEEDBACK! 
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message REDO_BIRTHDATE
+	   				r.Message @@tips[@user.story_number - 1]
 				end
 	 			twiml.text
-	 			
 
     # second reply: update child's birthdate
-    elsif (@user.story_number == 4 || @user.story_number == 5) && (/\A[0-9]{4}\z/ =~ params[:Body]
+    elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}\z/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
@@ -247,7 +255,7 @@ get '/sms' do
 		end 	
 
  	# Update TIME before (or after) third story
- 	elsif (@user.story_number == 2 || @user.story_number ==3) && /[:|((am)|(pm))]/ =~ params[:Body]
+ 	elsif (@user.story_number == 2 || @user.story_number == 3) && /[:apm]/ =~ params[:Body]
  		
  		response = params[:Body]
  		arr = response.split
