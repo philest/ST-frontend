@@ -208,6 +208,8 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                       :from => "+17377778679")   # Replace with your Twilio number
 
                 puts "Sent time update message part 1 to " + user.phone + "\n\n"
+        end
+      end
 
 
 
