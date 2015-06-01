@@ -25,7 +25,7 @@ If this picture msg was unreadable, reply TEXT for text-only stories."
 
 class FirstTextWorker
   include Sidekiq::Worker
-  
+
   sidekiq_options :queue => :critical
 
   sidekiq_options retry: false
@@ -55,7 +55,7 @@ class FirstTextWorker
                     :from => "+17377778679",
                     :media_url => FIRST_MMS)   # Replace with your Twilio number
 
-                sleep 15
+                sleep 6
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
