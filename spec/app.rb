@@ -213,6 +213,14 @@ describe 'The StoryTime App' do
       expect(@user.last_feedback).to eq(0)
     end
 
+    it "rejects bad response" do
+      get '/test/700/best/ATT'
+      @user.reload
+      expect(@@twiml).to eq(NO_OPTION)
+    end
+
+
+
     it "updates last_feedback on conflict days" do
       @user.update(story_number: 4)
       @user.reload
@@ -277,6 +285,10 @@ describe 'The StoryTime App' do
 
 
       end
+
+
+
+
 
 
 
