@@ -10,7 +10,7 @@ require_relative '../sprint'
 SPRINT_NAME = "Sprint Spectrum, L.P."
 
 
-FIRST_MMS = "http://i.imgur.com/APOGiDq.png"
+FIRST_MMS = "http://i.imgur.com/jOVW5ZJ.jpg"
 
 FIRST_SMS = "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
