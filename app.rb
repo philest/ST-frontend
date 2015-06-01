@@ -123,7 +123,7 @@ get '/sms' do
 
 	  	if @user.carrier == "Sprint Spectrum, L.P." 
 
-	  		FirstTextWorker.perform_in(3.seconds, @user.phone)
+	  		FirstTextWorker.perform(@user.phone)
 
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message START_SPRINT #SEND SPRINT MSG
@@ -131,7 +131,7 @@ get '/sms' do
 	    	twiml.text
 	    else
 
-	  		FirstTextWorker.perform_in(8.seconds, @user.phone)
+	  		FirstTextWorker.perform(@user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
 		        r.Message STARTSMS
