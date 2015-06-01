@@ -359,7 +359,9 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
                     :from => "+17377778679",
                     :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
-                sleep 5
+                # sleep 5 JUNE 30
+                sleep 20
+
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
@@ -369,7 +371,8 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
 
                   puts "Sent message part #{index} to" + user.phone + "\n\n"
 
-                  sleep 2
+                  # sleep 2 JUNE 30
+                   sleep 5
 
                 end
 
