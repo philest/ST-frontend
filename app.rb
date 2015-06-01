@@ -7,7 +7,6 @@ require 'sidekiq'
 require 'sidetiq'
 require 'redis'
 
-require 'pry'
 
 #REDIS initialization
 require_relative './config/initializers/redis'
