@@ -106,7 +106,7 @@ describe 'The StoryTime App' do
       end
 
         it "responds to HELP NOW from sprint" do
-          get "/test/400/HELP%20NOW/sprint"
+          get "/test/400/HELP%20NOW/" + SPRINT_QUERY_STRING
           expect(@@twiml).to eq(HELP_SPRINT)
       end
 
@@ -205,13 +205,79 @@ describe 'The StoryTime App' do
 
     describe "feedback" do
       before(:each) do
-        @user = User.create(phone: "700", story_number: 4)
+        @user = User.create(phone: "700", story_number: 1)
       end
 
     it "updates last_feedback" do
-      get '/test/700/5'
+      get '/test/700/5/ATT'
+      @user.reload
+      expect(@user.last_feedback).to eq(0)
+    end
+
+    it "updates last_feedback on conflict days" do
+      @user.update(story_number: 4)
+      @user.reload
+      get '/test/700/5/ATT'
+      @user.reload
+      expect(@user.last_feedback).to eq(3)
+    end
+
+    it "delivers right tip (first day) for sprint" do
+          get '/test/700/5/' + SPRINT_QUERY_STRING
+          @user.reload
+          expect(@@twiml).to eq(@@tips_sprint[0])
+    end
+
+   it "delivers right tip (first day) for normal" do
+          get '/test/700/5/ATT'
+          @user.reload
+          expect(@@twiml).to eq(@@tips_normal[0])
+    end
+
+       it "delivers right tip (second day) for normal" do
+          @user.update(story_number: 2)
+          @user.reload         
+          get '/test/700/5/ATT'
+          @user.reload
+          expect(@@twiml).to eq(@@tips_normal[1])
+    end
 
 
+  end
+
+
+
+
+      describe "STOP NOW works" do
+        before(:each) do
+          @user = User.create(phone: "800", story_number: 1, subscribed: true)
+        end
+
+        it "properly unsubscribes" do
+          get '/test/800/' + STOP_URL + "/ATT"
+          @user.reload
+          expect(@user.subscribed).to eq(false)
+        end
+
+
+        it "properly resubscribes" do
+          get '/test/800/' + STOP_URL + "/ATT"
+          @user.reload
+          get '/test/800/STORY/ATT'
+          @user.reload
+          expect(@user.subscribed).to eq(true)
+        end
+
+        it "send good resubscription msg" do
+          get '/test/800/' + STOP_URL + "/ATT"
+          @user.reload
+          get '/test/800/STORY/ATT'
+          @user.reload
+          expect(@@twiml).to eq(RESUBSCRIBE)
+        end
+
+
+      end
 
 
 

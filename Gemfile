@@ -11,6 +11,8 @@ gem 'sidetiq'
 gem 'redis'
 gem 'unicorn'
 gem 'newrelic_rpm'
+gem 'rake'
+
 
 group :test do
 	gem 'rspec'
@@ -20,3 +22,4 @@ group :test do
 	gem 'pry-nav'
 	gem "factory_girl"
 end
+

@@ -23,7 +23,15 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-@@tips = ["Thanks for continuing w/ StoryTime!\n\nEverytime your read or talk w/ your child, you're shaping a mind when it's growing most. You've already got all it takes!"]
+@@tips_normal = ["Thanks for continuing with StoryTime!\n\nEverytime your read or talk with your child, you're shaping a mind when it's growing most. You've already got all it takes!",
+"Thanks again-- you're doing an awesome job!\n\nBeginning word sounds are essential for reading. You can help your child learn to
+read by saying the beginning sound of words. \"Read\" starts w/ \"rrr\""]
+
+@@tips_sprint = ["Thanks for continuing w/ StoryTime!\n\nEverytime your read or talk w/ your child, you're shaping a mind when it's growing most. You've already got all it takes!",
+"Great, you're doing awesome!\n\nBeginning word sounds are essential for reading. You can help your child learn to
+read by saying them. \"Read\" starts w/ \"rrr\""]
+
+
 
 EMPTY_INT = 9999
 EMPTY_STR = "empty"
@@ -32,6 +40,8 @@ HELP = "HELP NOW"
 STOP = "STOP NOW"
 TEXT = "TEXT"
 
+
+RESUBSCRIBE = "StoryTime: Welcome back to StoryTime! Twice a week, we'll send you a new free story to read aloud-- continuing from where you left off!"
 
 WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
 
@@ -89,8 +99,7 @@ end
 get '/sms' do
 	#check if new user
 	#returns nil if not found
-	@user = User.find_by_phone(params[:From]) 
-	
+	@user = User.find_by_phone(params[:From])
 
 	#first reply: new user, add her
 	if @user == nil 
@@ -123,6 +132,15 @@ get '/sms' do
 		    twiml.text
 		end
 
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
+
+			#REACTIVATE SUBSCRIPTION
+			@user.update(subscribed: true)
+
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message RESUBSCRIBE
+		    end
+		    twiml.text
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -199,10 +217,21 @@ get '/sms' do
 			@user.update(last_feedback: @user.story_number - 1)
 
 			#GIVE FEEDBACK! 
+
+			#SPRINT
+			if @user.carrier == SPRINT
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message @@tips[@user.story_number - 1]
+	   				r.Message @@tips_sprint[@user.story_number - 1]
+				end
+	 			twiml.text				
+
+	 		#NORMAL
+	 		else 
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message @@tips_normal[@user.story_number - 1]
 				end
 	 			twiml.text
+	 		end
 
     # second reply: update child's birthdate
     elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}\z/ =~ params[:Body]
@@ -386,6 +415,9 @@ get '/test/:From/:Body/:Carrier' do
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 
 
+	if @user != nil #if user exists
+		@user.update(carrier: params[:Carrier]) 
+	end
 
 	#first reply: new user, add her
 	if @user == nil 
@@ -406,6 +438,11 @@ get '/test/:From/:Body/:Carrier' do
 				@@twiml = STARTSMS
 		end
 
+
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
+
+		@user.update(subscribed: true)
+		@@twiml = RESUBSCRIBE
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -464,8 +501,12 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(last_feedback: @user.story_number - 1)
 
 			#GIVE FEEDBACK! 
-	   		@@twiml = @@tips[@user.story_number - 1]
-
+			if @user.carrier == SPRINT
+				@@twiml = @@tips_sprint[@user.story_number - 1]
+	 		#NORMAL
+	 		else 
+		   		@@twiml = @@tips_normal[@user.story_number - 1]
+	 		end
 
     # second reply: update child's birthdate
     elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}/ =~ params[:Body]
