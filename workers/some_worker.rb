@@ -11,6 +11,9 @@ require_relative '../sprint'
 class SomeWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
+  
+  sidekiq_options :queue => :default
+
 
   MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
   

@@ -25,6 +25,9 @@ If this picture msg was unreadable, reply TEXT for text-only stories."
 
 class FirstTextWorker
   include Sidekiq::Worker
+  
+  sidekiq_options :queue => :critical
+
   sidekiq_options retry: false
 
   def perform(phoneNum) #Send the User the first poem shortly after first signup

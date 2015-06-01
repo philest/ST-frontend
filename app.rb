@@ -87,7 +87,7 @@ NO_OPTION = "StoryTime: This service is automatic. We didn't understand what you
 
 
 get '/worker' do
-	SomeWorker.perform #begin sidetiq recurrring background tasks
+	SomeWorker.perform_async #begin sidetiq recurrring background tasks
 	redirect to('/')
 end
 
@@ -123,7 +123,7 @@ get '/sms' do
 
 	  	if @user.carrier == "Sprint Spectrum, L.P." 
 
-	  		FirstTextWorker.perform(@user.phone)
+	  		FirstTextWorker.perform_async(@user.phone)
 
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message START_SPRINT #SEND SPRINT MSG
@@ -131,7 +131,7 @@ get '/sms' do
 	    	twiml.text
 	    else
 
-	  		FirstTextWorker.perform(@user.phone)
+	  		FirstTextWorker.perform_async(@user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
 		        r.Message STARTSMS
