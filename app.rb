@@ -123,7 +123,7 @@ get '/sms' do
 
 	  	if @user.carrier == "Sprint Spectrum, L.P." 
 
-	  		FirstTextWorker.perform_in(@user.phone)
+	  		FirstTextWorker.perform_async(@user.phone)
 
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message START_SPRINT #SEND SPRINT MSG

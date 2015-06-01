@@ -10,7 +10,7 @@ require_relative '../sprint'
 SPRINT_NAME = "Sprint Spectrum, L.P."
 
 
-FIRST_MMS = "http://i.imgur.com/IzpnamS.png"
+FIRST_MMS = "http://i.imgur.com/APOGiDq.png"
 
 FIRST_SMS = "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
@@ -45,7 +45,7 @@ class FirstTextWorker
 
 
   	#SPRINT
-  	if @user.carrier == SPRINT_NAME
+    if @user.carrier == SPRINT_NAME
 
   		sprintArr = Sprint.chop(FIRST_SMS)
 
@@ -55,7 +55,7 @@ class FirstTextWorker
                     :from => "+17377778679",
                     :media_url => FIRST_MMS)   # Replace with your Twilio number
 
-                sleep 5
+                sleep 20
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
@@ -65,9 +65,9 @@ class FirstTextWorker
 
                   puts "Sent message part #{index} to" + @user.phone + "\n\n"
 
-                  sleep 3
+                  sleep 7
 
-          		end
+          		  end
     else #NORMAL
                   message = @client.account.messages.create(
                     :media_url => FIRST_MMS,
@@ -78,9 +78,9 @@ class FirstTextWorker
                   puts "Sent message to" + @user.phone + "\n\n"
 
                   sleep 1
-	end
+
+    end
 
   end
-
 
 end
