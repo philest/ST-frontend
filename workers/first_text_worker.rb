@@ -52,7 +52,7 @@ class FirstTextWorker
                     :from => "+17377778679",
                     :media_url => FIRST_MMS)   # Replace with your Twilio number
 
-                sleep 5
+                sleep 15
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
