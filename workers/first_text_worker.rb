@@ -30,6 +30,17 @@ class FirstTextWorker
   def perform(phoneNum) #Send the User the first poem shortly after first signup
   	@user = User.find_by(phone: phoneNum)
 
+
+    #set TWILIO credentials:
+    account_sid = ENV['TW_ACCOUNT_SID']
+    auth_token = ENV['TW_AUTH_TOKEN']
+
+    @client = Twilio::REST::Client.new account_sid, auth_token
+
+
+
+
+
   	#SPRINT
   	if @user.carrier == SPRINT_NAME
 
