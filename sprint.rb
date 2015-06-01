@@ -1,6 +1,6 @@
 
 
-MAX_TEXT = 154 #leaves room for (1/6) at start (160 char msg)
+MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
 
 BREAK = "\n" #for Help Message
 
@@ -52,7 +52,15 @@ def self.chop(story)
 
 		totalChar += smsLen #chars dealt with so far
 
-		sms.push "(#{smsNum}/X)"+story[startIndex, smsLen]
+
+		if (story[startIndex] != "\n") #if it doesn't start with a newline...
+	
+		sms.push "(#{smsNum}/X)\n"+story[startIndex, smsLen] #...add two
+
+		else
+		sms.push "(#{smsNum}/X)"+story[startIndex, smsLen]#...just add one
+		end
+
 
 		startIndex = endIndex
 
