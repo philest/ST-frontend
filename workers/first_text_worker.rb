@@ -27,8 +27,8 @@ class FirstTextWorker
   include Sidekiq::Worker
   sidekiq_options retry: false
 
-  def perform(phone) #Send the User the first poem shortly after first signup
-  	@user = User.find_by(phone)
+  def perform(phoneNum) #Send the User the first poem shortly after first signup
+  	@user = User.find_by(phone: phoneNum)
 
   	#SPRINT
   	if @user.carrier == SPRINT_NAME
