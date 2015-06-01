@@ -65,7 +65,7 @@ class FirstTextWorker
 
                   puts "Sent message part #{index} to" + @user.phone + "\n\n"
 
-                  sleep 2
+                  sleep 3
 
           		end
     else #NORMAL
@@ -77,7 +77,7 @@ class FirstTextWorker
 
                   puts "Sent message to" + @user.phone + "\n\n"
 
-                  sleep 2
+                  sleep 1
 	end
 
   end
