@@ -2,40 +2,16 @@ ENV['RACK_ENV'] = "test"
 
 require_relative "./spec_helper"
 
-require '../app.rb'
-
-# require '../models/user'
 
 require 'capybara/rspec'
 require 'rack/test'
 
-
-
-configure :test do
-  puts "yup"
-end
-
-
-configure :test do
-   db = URI.parse('postgres://postgres:sharlach1@localhost/test')
-
-
-  #adding development REDIS config
-  ENV["REDISTOGO_URL"] = "redis://redistogo:120075187f5e39ba84e429f311eb69a5@hammerjaw.redistogo.com:9787/"
-   
-    ActiveRecord::Base.establish_connection(
-        :adapter => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
-        :host     => db.host,
-        :username => db.user,
-        :password => db.password,
-        :database => db.path[1..-1],
-        :encoding => 'utf8'
-    )
-end
+require 'pry'
 
 
 #CONSTANTS
 
+#NOTE: THE CARRIER PARAMA DOES NOTHING!!!! IT'S A HOAX
 
 HELP_URL = "HELP%20NOW"
 STOP_URL = "STOP%20NOW"
@@ -107,25 +83,35 @@ describe 'The StoryTime App' do
 
 
 #HELP TESTS
+  describe "Help tests" do
+    before(:each) do
+      @user = User.create(phone: "400")
+    end
 
-  it "responds to HELP NOW" do
-    get "/test/909/STORY/ATT"
-    get "/test/909/" + HELP_URL
-    expect(@@twiml).to eq(HELPSMS)
+
+    it "responds to HELP NOW" do
+      get "/test/400/" + HELP_URL + "/ATT"
+      expect(@@twiml).to eq(HELPSMS)
+    end
+
+    it "responds to 'help now' (non-sprint)" do
+      get "/test/400/help%20now/ATT"
+      expect(@@twiml).to eq(HELPSMS)
+    end
+
+
+    describe "sub test" do
+      before(:each) do
+        @user.update(carrier: "Sprint Spectrum, L.P.")
+      end
+
+        it "responds to HELP NOW from sprint" do
+          get "/test/400/HELP%20NOW/sprint"
+          expect(@@twiml).to eq(HELP_SPRINT)
+      end
+    end
+    
   end
-
-  it "responds to 'help now' (non-sprint)" do
-    get "/test/911/STORY/ATT"
-    get "/test/911/help%20now"
-    expect(@@twiml).to eq(HELPSMS)
-  end
-
-  it "responds to HELP NOW from sprint" do
-    get "/test/912/STORY/" + SPRINT_QUERY_STRING
-    get "/test/912/" + HELP_URL
-    expect(@@twiml).to eq(HELP_SPRINT)
-  end
-
 
 # STAGE 2 TESTS 
 #   it "registers numeric age" do
