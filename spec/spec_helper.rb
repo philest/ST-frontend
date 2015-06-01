@@ -26,6 +26,8 @@ require_relative '../app.rb'
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 
+# FactoryGirl.definition_file_paths = %w{./factories ./test/factories ./spec/factories}
+# FactoryGirl.find_definitions
 
 
 RSpec.configure do |config|
@@ -33,34 +35,37 @@ RSpec.configure do |config|
 
 
 
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
+  # config.before(:suite) do
+  #   DatabaseCleaner.clean_with(:truncation)
+  # end
+
+  # config.before(:each) do
+  #   DatabaseCleaner.strategy = :transaction
+  # end
+
+  # config.before(:each, :js => true) do
+  #   DatabaseCleaner.strategy = :truncation
+  # end
+
+  # config.before(:each) do
+  #   DatabaseCleaner.start
+  # end
+
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
+
+
+
+  DatabaseCleaner.strategy = :truncation
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-  end
-
-  config.before(:each, :js => true) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.before(:each) do
-    DatabaseCleaner.start
+    DatabaseCleaner.clean
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-
-
-  # DatabaseCleaner.strategy = :truncation
-
-  # config.before(:each) do
-  #   DatabaseCleaner.clean
-  # end
-
 
 
   # config.before(:suite) do

@@ -7,6 +7,8 @@ require 'sidekiq'
 require 'sidetiq'
 require 'redis'
 
+require 'pry'
+
 #REDIS initialization
 require_relative './config/initializers/redis'
 
@@ -31,6 +33,9 @@ STOP = "STOP NOW"
 TEXT = "TEXT"
 
 
+WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
+
+TOO_YOUNG_SMS = "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
 
 MMS_UPDATE = "Okay, you'll now receive just the text of each poem. Hope this works better!"
 
@@ -66,6 +71,8 @@ BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your child's
 REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
 SPRINT = "Sprint Spectrum, L.P."
+
+NO_OPTION = "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 
 
 get '/worker' do
@@ -243,14 +250,14 @@ get '/sms' do
 
 	 			#NOTE: Keep the real birthdate.
 	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
+	   				r.Message TOO_YOUNG_SMS
 				end
 	 			twiml.text
 	 		end
 
 	    else #not a valid format
   			twiml = Twilio::TwiML::Response.new do |r|
-   				r.Message "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
+   				r.Message WRONG_BDAY_FORMAT
 			end
  			twiml.text
 		end 	
@@ -345,7 +352,7 @@ get '/sms' do
 	#response matches nothing
 	else
 		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
+   			r.Message NO_OPTION
 		end
  		twiml.text
 		# raise "something broke-- message was not regeistered"
@@ -379,6 +386,7 @@ get '/test/:From/:Body/:Carrier' do
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 
 
+
 	#first reply: new user, add her
 	if @user == nil 
 		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
@@ -401,6 +409,7 @@ get '/test/:From/:Body/:Carrier' do
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
+
 		#if sprint
 		if @user.carrier == SPRINT
 
@@ -459,8 +468,12 @@ get '/test/:From/:Body/:Carrier' do
 
 
     # second reply: update child's birthdate
-    elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}\z/ =~ params[:Body]
-   		
+    elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}/ =~ params[:Body]
+   	
+    
+
+
+
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
   			
   			@user.child_birthdate = params[:Body]
@@ -501,24 +514,25 @@ get '/test/:From/:Body/:Carrier' do
 	 			@user.update(subscribed: false)
 
 	 			#NOTE: Keep the real birthdate.
-	   			@@twiml = r.Message "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
+	   			@@twiml =  TOO_YOUNG_SMS
 	 		end
 
 	    else #not a valid format
-   			@@twiml = r.Message "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
+   			@@twiml =  WRONG_BDAY_FORMAT
 		end 	
 
  	# Update TIME before (or after) third story
  	elsif (@user.story_number == 2 || @user.story_number == 3) && /[:apm]/ =~ params[:Body]
- 		
+ 	
+ 	
+
  		response = params[:Body]
  		arr = response.split
 
  		if arr.length == 1 || arr.length == 2 #plausible format
  			if arr.length == 1
  				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
- 					@user.time = arr[0]
-		 			@user.save
+ 					@user.update(time: arr[0])
 
 		   				@@twiml = "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
 
@@ -573,12 +587,12 @@ get '/test/:From/:Body/:Carrier' do
  		
 	#response matches nothing
 	else
-   			@@twiml = "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
+		
+
+   			@@twiml = NO_OPTION
 		# raise "something broke-- message was not regeistered"
 	end
 end
-
-
 
 
 

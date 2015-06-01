@@ -28,6 +28,8 @@ GEM
     connection_pool (2.2.0)
     database_cleaner (1.4.1)
     diff-lcs (1.2.5)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
     hitimes (1.2.2)
     i18n (0.7.0)
     ice_cube (0.11.1)
@@ -115,6 +117,7 @@ DEPENDENCIES
   activerecord
   capybara
   database_cleaner
+  factory_girl
   newrelic_rpm
   numbers_in_words
   pg

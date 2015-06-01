@@ -109,9 +109,121 @@ describe 'The StoryTime App' do
           get "/test/400/HELP%20NOW/sprint"
           expect(@@twiml).to eq(HELP_SPRINT)
       end
+
     end
-    
+
   end
+
+
+#BIRTHDAY REGISTRATION
+  describe "BIRTHDATE tests" do
+    before(:each) do
+      @user = User.create(phone: "500", story_number: 4) #have just received third story
+    end
+
+
+    it "should not register invalid birthdate" do
+      # binding.pry
+      get '/test/500/0912555/ATT'
+      expect(@@twiml).to eq(WRONG_BDAY_FORMAT)
+    end
+
+    it "registers a custom birthdate" do
+      get '/test/500/0911/ATT'
+     TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+      expect(@@twiml).to eq(TIME_SMS)
+    end
+
+    it "correctly updates age" do
+      get '/test/500/0911/ATT'
+      @user.reload
+      expect(@user.child_age).to eq(3)
+    end
+
+
+
+    it "too young shouldn't be allowed in" do
+       get '/test/500/0914/ATT'
+      expect(@@twiml).to eq(TOO_YOUNG_SMS)
+    end
+
+
+    it "keeps birthdate for too young" do
+       get '/test/500/0914/ATT'
+       @user.reload
+      expect(@user.child_birthdate).to eq("0914")
+    end
+
+
+
+    describe "further Bday" do
+      before(:each) do
+      @user.update(story_number: 2) #have just received third story
+    end
+
+      it "shouldn't register a birthday until third story" do
+        get '/test/500/0911/ATT'
+       TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+        expect(@@twiml).not_to eq(TIME_SMS)
+      end
+
+    end
+
+  end
+
+
+    describe "TIME tests" do
+    before(:each) do
+      @user = User.create(phone: "600", story_number: 2) #have just received first two stories
+    end
+
+      it "registers a custom time" do
+        get '/test/600/6:00pm/ATT'
+        @user.reload
+        expect(@@twiml).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!")
+      end
+
+      it "registers a custom time in spaced format" do
+        get '/test/600/6:00%20pm/ATT'
+        @user.reload
+        expect(@@twiml).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!")
+      end
+
+      describe "further time tests" do
+        before(:each) do
+        @user.update(story_number: 1) #have just received third story
+      end
+
+      it "shouldn't register a time until second story" do
+        get '/test/600/6:00pm/ATT'
+        expect(@@twiml).to eq(NO_OPTION)
+      end
+
+    end
+
+
+
+    describe "feedback" do
+      before(:each) do
+        @user = User.create(phone: "700", story_number: 4)
+      end
+
+    it "updates last_feedback" do
+      get '/test/700/5'
+
+
+
+
+
+
+
+end
+
+
+
+
+
+
 
 # STAGE 2 TESTS 
 #   it "registers numeric age" do

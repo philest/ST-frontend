@@ -18,4 +18,5 @@ group :test do
 	gem 'database_cleaner'
 	gem 'pry', "= 0.10.0"
 	gem 'pry-nav'
+	gem "factory_girl"
 end
