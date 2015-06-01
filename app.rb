@@ -18,6 +18,8 @@ require_relative './age'
 
 require_relative './workers/some_worker'
 
+require_relative './workers/first_text_worker'
+
 configure :production do
   require 'newrelic_rpm'
 end
@@ -58,7 +60,7 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free kindergarten-prep stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- starting tonight! 
+STARTSMS = "StoryTime: Welcome to StoryTime, free kindergarten-prep stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- starting tonight!
 
 Text " + HELP + " for help, or " + STOP + " to cancel."
 
@@ -120,15 +122,22 @@ get '/sms' do
 	  	@user.save
 
 	  	if @user.carrier == "Sprint Spectrum, L.P." 
+
+	  		FirstTextWorker.perform_in(8.seconds, @user.phone)
+
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message START_SPRINT #SEND SPRINT MSG
 	    	end
 	    	twiml.text
 	    else
-			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message STARTSMS
+
+	  		FirstTextWorker.perform_in(8.seconds, @user.phone)
+
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message STARTSMS
 		    end
 		    twiml.text
+
 		end
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
