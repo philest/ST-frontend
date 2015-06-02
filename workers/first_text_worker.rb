@@ -12,7 +12,7 @@ SPRINT_NAME = "Sprint Spectrum, L.P."
 
 FIRST_MMS = "http://i.imgur.com/jOVW5ZJ.jpg"
 
-FIRST_SMS = FIRST_SMS = "StoryTime: Here's your first poem! Show your child the owl & act out each orange word as you read aloud. 
+FIRST_SMS = "StoryTime: Here's your first poem! Show your child the owl & act out each orange word as you read aloud. 
 
 Activities:
 
