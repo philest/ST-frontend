@@ -510,7 +510,7 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
     Time.now - 1.day = :one_day_ago
 
     
-    if ((weekday == 2 || weekday == 4) && (user.created_at <= :one_day_ago) ||
+    if ((weekday == 2 || weekday == 4) && (user.created_at <= :one_day_ago)) ||
       (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
                                                                      #SEND IF TUES OR THURS and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:00pm on a M or W
