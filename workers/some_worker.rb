@@ -59,91 +59,93 @@ class SomeWorker
   def self.buildStoryArr
     Struct.new("Story", :mmsArr, :smsHash, :poemSMS) #creates a new type of struct for Story
 
-      #Day 0:
+#       #Day 0:
 
-        #create the mmsArr for the story:
-        mmsArr = ["http://i.imgur.com/IzpnamS.png"]
+#         #create the mmsArr for the story:
+#         mmsArr = ["http://i.imgur.com/IzpnamS.png"]
 
-        #create the sms Hash.
-        smsHash = SomeWorker.makeHash("StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+#         #create the sms Hash.
+#         smsHash = SomeWorker.makeHash("StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
-Activities:
+# Activities:
 
-a) Ask your child if they can make a convincing owl hoot.
+# a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?
+# b) What part of the body do you use to speak? To hear? To know?
 
-If this picture msg was unreadable, reply TEXT for text-only stories.
+# If this picture msg was unreadable, reply TEXT for text-only stories.
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
+# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
           
-          "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+#           "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
-Activities:
+# Activities:
 
-a) Ask your child if they can make a convincing owl hoot.
+# a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?
+# b) What part of the body do you use to speak? To hear? To know?
 
-If this picture msg was unreadable, reply TEXT for text-only stories.
+# If this picture msg was unreadable, reply TEXT for text-only stories.
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
+# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
 
- "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+#  "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
 
-Activities:
+# Activities:
 
-a) Ask your child if they can make a convincing owl hoot.
+# a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?
+# b) What part of the body do you use to speak? To hear? To know?
 
-If this picture msg was unreadable, reply TEXT for text-only stories.
+# If this picture msg was unreadable, reply TEXT for text-only stories.
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
+# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
 
-        #zeroth
-        zero = Struct::Story.new(mmsArr, smsHash, "StoryTime: Enjoy your first poem!
+#         #zeroth
+#         zero = Struct::Story.new(mmsArr, smsHash, "StoryTime: Enjoy your first poem!
 
-The Wise Old Owl
+# The Wise Old Owl
 
-There was an old owl who lived in an oak;
-The more he heard, the less he spoke
+# There was an old owl who lived in an oak;
+# The more he heard, the less he spoke
 
-The less he spoke, the more he heard,
-Why aren't we like that wise old bird?
+# The less he spoke, the more he heard,
+# Why aren't we like that wise old bird?
 
-Activities:
+# Activities:
 
-a) Ask your child if they can make a convincing owl hoot.
+# a) Ask your child if they can make a convincing owl hoot.
 
-b) What part of the body do you use to speak? To hear? To know?
+# b) What part of the body do you use to speak? To hear? To know?
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
-        @@storyArr.push zero 
+# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
+#         @@storyArr.push zero 
 
 
-        one = Struct::Story.new( ["http://i.imgur.com/6Of22ZY.png", "http://i.imgur.com/1b0XzVh.png"],
-        SomeWorker.makeHash("StoryTime: Remember, you and your child can act out each orange word:
-
-Activites:
-
-a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
- 
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.",
-        "StoryTime: Remember, you and your child can act out each orange word:
+        zero = Struct::Story.new( ["http://i.imgur.com/6Of22ZY.png", "http://i.imgur.com/1b0XzVh.png"],
+        SomeWorker.makeHash("StoryTime: Remember, you and your child can act out each orange word!
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.",
-        "StoryTime: Remember, you and your child can act out each orange word:
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
+        "StoryTime: Remember, you and your child can act out each orange word!
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil."), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale",
+        "StoryTime: Remember, you and your child can act out each orange word!
+
+Activites:
+
+a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
+ 
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale"), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
 
 The Farmer Knows Soil
 
@@ -171,9 +173,9 @@ Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.")
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
 
-        @@storyArr.push one
+        @@storyArr.push zero
 
 
   end
@@ -504,10 +506,14 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
   def self.sendStory?(user) #don't know object as parameter
 
     weekday = Time.new.wday 
-    
-    if (weekday == 2 || weekday == 4) || (user.story_number == 0) ||
-      (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
 
+    Time.now - 1.day = :one_day_ago
+
+    
+    if ((weekday == 2 || weekday == 4) && (user.created_at <= :one_day_ago) ||
+      (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
+                                                                     #SEND IF TUES OR THURS and NOT created this past day!
+                                                                    #Note: this messes up if they created this past 5:00pm on a M or W
       currTime = SomeWorker.cleanSysTime
       userTime = SomeWorker.convertTimeTo24(user.time)
 

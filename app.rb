@@ -60,11 +60,11 @@ HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free kindergarten-prep stories by text! Twice a week, we\'ll send you and your child a new story to read aloud together-- the first is on the way!
+STARTSMS = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!
 
 Text " + HELP + " for help, or " + STOP + " to cancel."
 
-START_SPRINT = "Welcome to StoryTime, free stories by text! We\'ll send you & your child 2 stories/week to read aloud together-- the 1st is on the way! Text HELP NOW for help."
+START_SPRINT = "Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
 
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 

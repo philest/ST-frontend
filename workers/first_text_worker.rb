@@ -12,15 +12,13 @@ SPRINT_NAME = "Sprint Spectrum, L.P."
 
 FIRST_MMS = "http://i.imgur.com/jOVW5ZJ.jpg"
 
-FIRST_SMS = "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
+FIRST_SMS = FIRST_SMS = "StoryTime: Here's your first poem! Show your child the owl & act out each orange word as you read aloud. 
 
 Activities:
 
-a) Ask your child if they can make a convincing owl hoot.
+a) Ask your child if they can make a convincing owl hoot! 
 
-b) What part of the body do you use to speak? To hear? To know?
-
-If this picture msg was unreadable, reply TEXT for text-only stories."
+b) What part of the body do you use to speak? To hear? To know?"
 
 
 class FirstTextWorker
