@@ -223,7 +223,7 @@ get '/sms' do
 
 			#SAVE FEEDBACK
 
-			REDIS.zadd(@user.phone, @user.story_number - 1, params[:Body]) 
+			REDIS.zadd(@user.phone, @user.story_number - 1, params[:Body].to_i) 
 			#add the user's 1 to 5 feedback (value) to the story_number (key) of that night's story
 			#in a sorted set by key of phonenumber;
 			#EX: REDIS.zadd("+15612125831", 0, 5)  

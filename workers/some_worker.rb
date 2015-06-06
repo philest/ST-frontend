@@ -138,14 +138,14 @@ a) Pretend you are farmers! Ask your child what types of crops are grown on the 
  
 b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale",
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
         "StoryTime: Remember, you and your child can act out each orange word!
 
 Activites:
 
 a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
  
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale"), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
+b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale."), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
 
 The Farmer Knows Soil
 
