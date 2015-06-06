@@ -174,6 +174,14 @@ get '/sms' do
 		#add to ended list
 		@@quiters.push @user
 
+
+			#SAVE QUITTERS
+
+			REDIS.set(@user.phone+":quit", "true") 
+			#update if the user quits
+			#EX: REDIS.zadd("+15612125831:quit", true)  
+
+
 		#change subscription
 		@user.update(subscribed: false)
 
