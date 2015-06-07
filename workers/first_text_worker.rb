@@ -10,16 +10,14 @@ require_relative '../sprint'
 SPRINT_NAME = "Sprint Spectrum, L.P."
 
 
-FIRST_MMS = "http://i.imgur.com/jOVW5ZJ.jpg"
+FIRST_MMS =  ["http://i.imgur.com/2SU3JaA.jpg", "http://i.imgur.com/xVN3dFI.jpg"]
 
-FIRST_SMS = "StoryTime: Here's your first poem! Show your child the owl & act out each orange word as you read aloud. 
 
-Activities:
+FIRST_SMS = "StoryTime: Your first poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme! 
 
-a) Ask your child if they can make a convincing owl hoot! 
+Activity:
 
-b) What part of the body do you use to speak? To hear? To know?"
-
+Elephants have floppy ears. See what sounds you can add to the beginning of \“ear\”— like \”fear\” & \”dear.\” Take turns, and make up some words!"
 
 class FirstTextWorker
   include Sidekiq::Worker
@@ -51,9 +49,17 @@ class FirstTextWorker
                 message = @client.account.messages.create(
                     :to => @user.phone,     # Replace with your phone number
                     :from => "+17377778679",
-                    :media_url => FIRST_MMS)   # Replace with your Twilio number
+                    :media_url => FIRST_MMS[0])   # Replace with your Twilio number
 
                 sleep 20
+
+                message = @client.account.messages.create(
+                    :to => @user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => FIRST_MMS[1])   # Replace with your Twilio number
+
+                sleep 15
+
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
@@ -67,8 +73,18 @@ class FirstTextWorker
 
           		  end
     else #NORMAL
+
+
+                   #send first picture
+                message = @client.account.messages.create(
+                    :to => @user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => FIRST_MMS[0])   # Replace with your Twilio number
+
+                sleep 20
+
                   message = @client.account.messages.create(
-                    :media_url => FIRST_MMS,
+                    :media_url => FIRST_MMS[1],
                     :body => FIRST_SMS,
                     :to => @user.phone,     # Replace with your phone number
                     :from => "+17377778679")   # Replace with your Twilio number
