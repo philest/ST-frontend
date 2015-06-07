@@ -127,6 +127,14 @@ get '/sms' do
 		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
 
 
+		#randomly assign to get two days a week or three days a week
+		if Random.rand(2) == 0
+			@user.update(days_per_week: 2)
+		else
+			@user.update(days_per_week: 3)
+		end
+
+
 		#update subscription
 		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 
