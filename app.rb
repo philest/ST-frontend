@@ -50,21 +50,41 @@ TOO_YOUNG_SMS = "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 
 
 MMS_UPDATE = "Okay, you'll now receive just the text of each poem. Hope this works better!"
 
-HELPSMS =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
+HELPSMS_2 =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
 Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
-HELP_SPRINT = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+HELPSMS_3 =  "StoryTime texts free kids' stories on Mon, Wed & Fri. If you can't receive picture msgs, reply TEXT for text-only stories.
+
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
+
+Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+
+HELP_SPRINT_2 = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+HELP_SPRINT_3 = "StoryTime texts free kids' stories on Mon, Wed & Fri. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!
+STARTSMS_2 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!
 
 Text " + HELP + " for help, or " + STOP + " to cancel."
 
-START_SPRINT = "Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
+STARTSMS_3 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 3 stories/week-- the first is on the way!
+
+Text " + HELP + " for help, or " + STOP + " to cancel."
+
+
+
+START_SPRINT_2 = "Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
+
+START_SPRINT_3 = "Welcome to StoryTime, free pre-k stories by text! You'll get 3 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
+
 
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 
