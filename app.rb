@@ -149,24 +149,40 @@ get '/sms' do
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
-	  	if @user.carrier == "Sprint Spectrum, L.P." 
+	  	if @user.carrier == "Sprint Spectrum, L.P." && (user.days_per_week == 2 || user.days_per_week == nil)
 
 	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message START_SPRINT #SEND SPRINT MSG
+	   			r.Message START_SPRINT_2 #SEND SPRINT MSG
 	    	end
 	    	twiml.text
-	    else
+
+	    elsif @user.carrier == "Sprint Spectrum, L.P."
 
 	  		FirstTextWorker.perform_async(@user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message STARTSMS
+		        r.Message START_SPRINT_3
 		    end
 		    twiml.text
 
+		 elsif (user.days_per_week == 2 || user.days_per_week == nil)
+	  		FirstTextWorker.perform_async(@user.phone)
+
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message STARTSMS_2
+		    end
+		    twiml.text
+		 else
+	  		FirstTextWorker.perform_async(@user.phone)
+
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message STARTSMS_3
+		    end
+		    twiml.text
 		end
+
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
 
@@ -181,21 +197,40 @@ get '/sms' do
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
 		#if sprint
-		if @user.carrier == "Sprint Spectrum, L.P." 
+	  	if @user.carrier == "Sprint Spectrum, L.P." && (user.days_per_week == 2 || user.days_per_week == nil)
+
+	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELP_SPRINT #SEND SPRINT MSG
+	   			r.Message HELP_SPRINT_2 #SEND SPRINT MSG
 	    	end
 	    	twiml.text
 
-		else #not Sprint
+	    elsif @user.carrier == "Sprint Spectrum, L.P."
 
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELPSMS	#SEND NORMAL
-	    	end
-	    	twiml.text
+	  		FirstTextWorker.perform_async(@user.phone)
 
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message HELP_SPRINT_3
+		    end
+		    twiml.text
+
+		 elsif (user.days_per_week == 2 || user.days_per_week == nil)
+	  		FirstTextWorker.perform_async(@user.phone)
+
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message HELPSMS_2
+		    end
+		    twiml.text
+		 else
+	  		FirstTextWorker.perform_async(@user.phone)
+
+		    twiml = Twilio::TwiML::Response.new do |r|
+		        r.Message HELPSMS_3
+		    end
+		    twiml.text
 		end
+
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
 		
