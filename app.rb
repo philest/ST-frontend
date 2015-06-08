@@ -128,7 +128,7 @@ get '/sms' do
 
 
 		#randomly assign to get two days a week or three days a week
-		if Random.rand(2) == 0
+		if Random.rand(4) == 0
 			@user.update(days_per_week: 2)
 		else
 			@user.update(days_per_week: 3)
