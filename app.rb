@@ -149,7 +149,7 @@ get '/sms' do
 	  	@user.carrier = number.carrier['name']
 	  	@user.save
 
-	  	if @user.carrier == "Sprint Spectrum, L.P." && (user.days_per_week == 2 || user.days_per_week == nil)
+	  	if @user.carrier == "Sprint Spectrum, L.P." && (@user.days_per_week == 2 || @user.days_per_week == nil)
 
 	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
@@ -167,7 +167,7 @@ get '/sms' do
 		    end
 		    twiml.text
 
-		 elsif (user.days_per_week == 2 || user.days_per_week == nil)
+		 elsif (@user.days_per_week == 2 || @user.days_per_week == nil)
 	  		FirstTextWorker.perform_async(@user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
