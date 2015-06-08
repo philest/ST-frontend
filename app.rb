@@ -138,6 +138,11 @@ get '/sms' do
 		#update subscription
 		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 
+		#backup for defaults
+		@user.update(time: "5:00pm", child_age: 4)
+
+
+
     	# Lookup wireless carrier
     	#setup Twilio user account
    		account_sid = ENV['TW_ACCOUNT_SID']
