@@ -177,6 +177,43 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
 
         @@storyArr.push zero
 
+        
+
+first = Struct::Story.new( ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"],
+        SomeWorker.makeHash("StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
+          "StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
+          "StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale."),
+          
+"StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach a blank line, let your child say the rhyme!
+
+I can tell you a lot about elephants,
+If you want to learn.
+
+Like—- did you know that elephants
+can get a bad sunburn?
+
+An elephant can live to be 86 years old,
+And elephants do not forget anything,
+If I remember what I’m told!
+
+An elephant purrs like a cat,
+if you listen to him,
+
+And even though he’s big and ___,
+An elephant can swim!
+
+
+An elephant has floppy ears,
+But hears things with his feet!
+
+He finds lots of plants
+And green healthy things to ___!
+
+To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
+
+        @@storyArr.push first
+
+
 
   end
 
