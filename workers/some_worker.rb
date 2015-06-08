@@ -177,7 +177,7 @@ b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' A
 
         @@storyArr.push zero
 
-        
+
 
 first = Struct::Story.new( ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"],
         SomeWorker.makeHash("StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
@@ -370,7 +370,7 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
 
                 puts "Sent first photo to " + user.phone + "\n\n"
 
-                sleep 2
+                sleep 20
                 #second picture with SMS
                 message = @client.account.messages.create(
                   :body => story.smsHash[user.child_age] + warning,
@@ -424,7 +424,7 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
                     :media_url => story.mmsArr[0])   # Replace with your Twilio number
 
                 puts "Sent first photo!"
-                sleep 5
+                sleep 20
                 
                 #send second picture
                 message = @client.account.messages.create(
