@@ -12,11 +12,7 @@ SPRINT_NAME = "Sprint Spectrum, L.P."
 
 FIRST_MMS =  ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"]
 
-FIRST_SMS = "StoryTime: Your first poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme! 
-
-Activity:
-
-Elephants have floppy ears. See what sounds you can add to the start of \“ear\”— like \”fear\” & \”dear.\” Take turns and make up words!"
+FIRST_SMS = "StoryTime: Your first poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!"
 
 class FirstTextWorker
   include Sidekiq::Worker
