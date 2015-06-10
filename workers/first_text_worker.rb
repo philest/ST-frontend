@@ -36,7 +36,7 @@ class FirstTextWorker
 
 
   	#SPRINT
-    if @user.carrier == SPRINT_NAME && FIRST_SMS.legnth > 160
+    if @user.carrier == SPRINT_NAME && FIRST_SMS.length > 160
 
   		sprintArr = Sprint.chop(FIRST_SMS)
 
