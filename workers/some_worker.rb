@@ -123,58 +123,28 @@ class SomeWorker
 #         @@storyArr.push zero 
 
 
-        zero = Struct::Story.new( ["http://i.imgur.com/6Of22ZY.png", "http://i.imgur.com/1b0XzVh.png"],
-        SomeWorker.makeHash("StoryTime: Remember, you and your child can act out each orange word!
+        zero = Struct::Story.new( ["http://i.imgur.com/Bnji4mo.jpg", "http://i.imgur.com/0I9irBy.jpg"],
+        SomeWorker.makeHash("StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).",
+          "StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).",
+          "StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best)."),
+"StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).
 
-Activites:
+Builder, Builder, build me a house.
 
-a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
- 
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
-        "StoryTime: Remember, you and your child can act out each orange word!
+A sweet little house for a sweet little mouse.
 
-Activites:
+A sweet little mouse and a family too.
 
-a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
- 
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.
+We know that you can and we hope that you __.
 
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
-        "StoryTime: Remember, you and your child can act out each orange word!
+Build it of brick so it's cozy and warm,
 
-Activites:
+to keep us from harm in a cold winter _____.
 
-a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
- 
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale."), "StoryTime: Here's your second poem! Try to act it out with your child as you go along.
+Builder, builder, build our house please.
 
-The Farmer Knows Soil
+As soon as you finish, we'll pay you with cheese!")
 
-The farmer knows soil
-From plowing and toil
- 
-The soil knows sand
-\'cause they\'re both friends with land.
- 
-The sand knows the sea
-Since they kiss in between.
- 
-The sea knows the sky;
-They both make me sigh.
- 
-The sky knows the weather,
-For they live together.
- 
-The weather knows farmers,
-Since rain gives to the gardeners.
- 
-And the farmer knows soil.
-
-Activites:
-
-a) Pretend you are farmers! Ask your child what types of crops are grown on the farm. Which crop is their favorite? Are there any animals?
- 
-b) Show your child the rhymes & have them repeat after you: \'Soil and toil.\' Ask which of these words rhymes with toil: building, boring, boil.\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
 
         @@storyArr.push zero
 
