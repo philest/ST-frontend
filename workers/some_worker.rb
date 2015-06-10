@@ -292,8 +292,7 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
 
 
         #They haven't responded to feedback for the past two stories.
-      if user.story_number - user.last_feedback >= 3
-
+      if (user.story_number - user.last_feedback >= 3) && (user.story_number > 2) #ignore for the first three stories (didn't ask for feedback)
         #drop 'em
         user.update(subscribed: false)
 
@@ -305,8 +304,8 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
           
 
           ##appended warning if you missed one day of feedback! 
-          if user.story_number - user.last_feedback == 2
-              warning = "\n\n If we don't hear from you, you will stop receiving StoryTime msgs."
+          if (user.story_number - user.last_feedback == 2) && (user.story_number > 2)
+              warning = "\n\nIf we don't hear from you, you will stop receiving StoryTime msgs."
           else
             warning = "" #NOTHING
           end

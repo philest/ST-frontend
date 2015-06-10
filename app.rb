@@ -220,7 +220,7 @@ get '/sms' do
 		    end
 		    twiml.text
 
-		 elsif (user.days_per_week == 2 || user.days_per_week == nil)
+		 elsif (@user.days_per_week == 2 || @user.days_per_week == nil)
 	  		FirstTextWorker.perform_async(@user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
