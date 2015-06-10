@@ -29,7 +29,8 @@ class SomeWorker
 
   SPRINT = "Sprint Spectrum, L.P."
 
-  
+  DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
+
 
 
 
@@ -292,9 +293,16 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
 
 
         #They haven't responded to feedback for the past two stories.
-      if (user.story_number - user.last_feedback >= 3) && (user.story_number > 2) #ignore for the first three stories (didn't ask for feedback)
-        #drop 'em
+      if (user.story_number - user.last_feedback >= 3) && (user.story_number > 2) && SomeWorker.sendStory?(user) 
+       #ignore for the first three stories (didn't ask for feedback)
+        #drop 'em just before they'd receive their third unrated story.
+
         user.update(subscribed: false)
+
+         message = @client.account.messages.create(
+          :body => DROPPED,
+          :to => user.phone,     # Replace with your phone num
+          :from => "+17377778679")   
 
       else
 
