@@ -24,13 +24,9 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-@@tips_normal = ["Thanks for continuing with StoryTime!\n\nEverytime your read or talk with your child, you're shaping a mind when it's growing most. You've already got all it takes!",
-"Thanks again-- you're doing an awesome job!\n\nBeginning word sounds are essential for reading. You can help your child learn to
-read by saying the beginning sound of words. \"Read\" starts w/ \"rrr\""]
+@@tips_normal = [ "Thanks!", "Great, thanks for joining StoryTime!", "Thanks again :)"]
 
-@@tips_sprint = ["Thanks for continuing w/ StoryTime!\n\nEverytime your read or talk w/ your child, you're shaping a mind when it's growing most. You've already got all it takes!",
-"Great, you're doing awesome!\n\nBeginning word sounds are essential for reading. You can help your child learn to
-read by saying them. \"Read\" starts w/ \"rrr\""]
+@@tips_sprint = [ "Thanks!", "Great, thanks for joining StoryTime!", "Thanks again :)"]
 
 
 
@@ -189,7 +185,7 @@ get '/sms' do
 		end
 
 
-	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
 			#REACTIVATE SUBSCRIPTION
 			@user.update(subscribed: true)
@@ -202,7 +198,7 @@ get '/sms' do
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
 		#if sprint
-	  	if @user.carrier == "Sprint Spectrum, L.P." && (user.days_per_week == 2 || user.days_per_week == nil)
+	  	if @user.carrier == "Sprint Spectrum, L.P." && (@user.days_per_week == 2 || @user.days_per_week == nil)
 
 	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
@@ -287,7 +283,7 @@ get '/sms' do
 	 			twiml.text
 
 	 			
-	elsif /\A[1-5]{1}\z/ =~ params[:Body] #texted feedback 1 to 5.
+	elsif /\A[\s]*[1-5]{1}[\s]*\z/ =~ params[:Body] #texted feedback 1 to 5.
 
 			#SAVE FEEDBACK
 
