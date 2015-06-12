@@ -230,7 +230,7 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
 
                 puts "Sent time update message part 1 to " + user.phone + "\n\n"
 
-                sleep 2
+                sleep 10
 
                      message = @client.account.messages.create(
                       :body => TIME_SMS_SPRINT_2,
