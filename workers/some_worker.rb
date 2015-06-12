@@ -184,6 +184,14 @@ To continue with StoryTime, reply with a rating of your experience on a 1 (worst
 
         @@storyArr.push first
 
+MSG = "StoryTime: Here's a new story about a crocodile! Show your child the colored rhyming words after you read.\n\n To continue with StoryTime, please text your feedback on a 1 (worst) to 5 (best) scale."
+
+
+second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.com/kIMjf3Q.jpg", "http://i.imgur.com/wSJ390c.jpg"],
+  SomeWorker.makeHash(MSG, MSG, MSG), "Sorry, we're writing your story now. We'll send it soon!") 
+
+@@storyArr.push second
+
 
 
   end
