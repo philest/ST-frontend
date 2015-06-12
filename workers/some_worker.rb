@@ -602,7 +602,7 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
     one_day_age = Time.now - 1.day
 
     
-    if (((user.days_per_week == 3 && (weekday == 1 || weekday == 3 || weekday == 5)) || ((user.days_per_week == 2 || user.days_per_week == nil) && (weekday == 2 || weekday == 4))) && (user.created_at <= one_day_age)) ||
+    if (((user.days_per_week == 3 && (weekday == 1 || weekday == 3 || weekday == 5)) || (user.days_per_week == 1 && (weekday == 3)) || ((user.days_per_week == 2 || user.days_per_week == nil) && (weekday == 2 || weekday == 4))) && (user.created_at <= one_day_age)) ||
       (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
                                                                      #SEND IF TUES OR THURS and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:00pm on a M or W
