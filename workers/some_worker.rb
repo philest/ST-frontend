@@ -365,6 +365,40 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
 
               puts "Sent seecond photo with message to" + user.phone + "\n\n"
 
+           #THREE MMS
+              elsif story.mmsArr.length == 3
+                #first picture (no SMS)
+                message = @client.account.messages.create(
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+                puts "Sent first photo to " + user.phone + "\n\n"
+
+                sleep 20
+                #second picture (no SMS)
+                message = @client.account.messages.create(
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
+
+              puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+                sleep 20
+                #THIRD picture with SMS
+                message = @client.account.messages.create(
+                  :body => story.smsHash[user.child_age] + warning,
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[2])   # Replace with your Twilio number
+
+
+
+
+
+
+
+
               else 
                 puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
              
