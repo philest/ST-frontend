@@ -394,11 +394,6 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
 
 
 
-
-
-
-
-
               else 
                 puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
              
@@ -464,6 +459,47 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
                   puts "Sent message part #{index} to" + user.phone + "\n\n"
                   sleep 1
 
+                end
+
+
+                         #THREE MMS
+              elsif story.mmsArr.length == 3
+                #first picture (no SMS)
+                message = @client.account.messages.create(
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
+
+                puts "Sent first photo to " + user.phone + "\n\n"
+
+                sleep 20
+                #second picture (no SMS)
+                message = @client.account.messages.create(
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
+
+              puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+                sleep 20
+                #THIRD picture with SMS
+                message = @client.account.messages.create(
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679",
+                    :media_url => story.mmsArr[2])   # Replace with your Twilio number 
+
+                sleep 20
+
+
+                #send sms chain
+                sprintArr.each_with_index do |text, index|  
+                  message = @client.account.messages.create(
+                    :body => text,
+                    :to => user.phone,     # Replace with your phone number
+                    :from => "+17377778679")   # Replace with your Twilio number
+
+                  puts "Sent message part #{index} to" + user.phone + "\n\n"
+                  sleep 1
                 end
 
               else
