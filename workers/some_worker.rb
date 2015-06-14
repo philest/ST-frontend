@@ -220,7 +220,7 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
       end
 
 
-      if SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 2 #Customize time 
+      if user.set_time == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 2 #Customize time 
           
         if user.carrier == SPRINT
                     message = @client.account.messages.create(
@@ -252,11 +252,15 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
 
                 sleep 1
         end
+
+        #They've set their own time, so don't ask again
+        user.update(set_time: true)
+
       end
 
 
       #UPDATE Birthdate! 
-      if SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
+      if user.set_birthdate == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
 
 
                     message = @client.account.messages.create(
@@ -267,6 +271,9 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
                 puts "Sent birthday update message part 1 to " + user.phone + "\n\n"
 
                 sleep 1
+
+          user.update(set_birthdate: true)
+
       end
 
 
