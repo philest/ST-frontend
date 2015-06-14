@@ -10,9 +10,11 @@ require_relative '../sprint'
 SPRINT_NAME = "Sprint Spectrum, L.P."
 
 
-FIRST_MMS =  ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"]
+FIRST_MMS = ["http://i.imgur.com/FfGSHjw.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
 
-FIRST_SMS = "StoryTime: Your first poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!"
+
+
+FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
 class FirstTextWorker
   include Sidekiq::Worker
