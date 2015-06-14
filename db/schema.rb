@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150607193053) do
+ActiveRecord::Schema.define(version: 20150614204032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20150607193053) do
     t.boolean  "mms",             default: true
     t.integer  "last_feedback",   default: -1
     t.integer  "days_per_week"
+    t.boolean  "set_time",        default: false
+    t.boolean  "set_birthdate",   default: false
   end
 
 end
