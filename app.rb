@@ -161,9 +161,9 @@ get '/sms' do
 
 	  	#find the day names
 	  	case @user.days_per_week
-	  	when 1, nil
+	  	when 1
 	  		dayNames = "Wed"
-	  	when 2
+	  	when 2, nil
 	  		dayNames = "Tues and Thurs"
 	  	when 3
 	  		dayNames = "Mon Wed & Fri"
@@ -329,38 +329,47 @@ end
 
 
 
-
-
-
-
-
-
 helpers do
 
-  def text(normalSMS, sprintSMS)
-	#if sprint
-	if @user.carrier == SPRINT
+	def text(normalSMS, sprintSMS)
+	
+		#if sprint
+		if @user.carrier == SPRINT
 
-		msg = sprintSMS 
+			msg = sprintSMS 
 
-		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message sprintSMS #SEND SPRINT MSG
-    	end
-    	twiml.text
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message sprintSMS #SEND SPRINT MSG
+	    	end
+	    	twiml.text
 
-	else #not Sprint
+		else #not Sprint
 
-		msg = normalSMS 
+			msg = normalSMS 
 
-		twiml = Twilio::TwiML::Response.new do |r|
-   			r.Message normalSMS	#SEND NORMAL
-    	end
-    	twiml.text
-	end 
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message normalSMS	#SEND NORMAL
+	    	end
+	    	twiml.text
+		end 
 
-	puts "Sent message to #{@user.phone}: " + "\"" + msg[0,15] + "...\""
+		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,15] + "...\""
 
-  end  	
+	end  	
+
+ 	def test_text(normalSMS, sprintSMS)
+
+	 	#if sprint
+		if @user.carrier == SPRINT
+
+			@@twiml = sprintSMS
+
+		else #not Sprint
+			@@twiml = normalSMS
+		end 
+
+	end
+
 
 end
 
@@ -374,8 +383,7 @@ end
 
 
 
-
-#THIS IS SIMPLY FOR TESTING! UPDATED MAY 30. 
+#THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
 	#check if new user
@@ -386,340 +394,199 @@ get '/test/:From/:Body/:Carrier' do
 		@user.update(carrier: params[:Carrier]) 
 	end
 
-	#first reply: new user, add her
-	if @user == nil 
-		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
-
+	if @user == nil
+		#2 days per week
+		@user = User.create(phone: params[:From], days_per_week: 2, carrier: params[:Carrier] )
 
 		#update subscription
 		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
+		#backup for defaults
+		@user.update(time: "5:00pm", child_age: 4)
 
-    	# udpate wireless carrier
-    	@user.update(carrier: params[:Carrier])
+	  	days = @user.days_per_week.to_s
+	  	
+	  	# FirstTextWorker.perform_in(18.seconds, @user.phone)
 
-
-	  	if @user.carrier == SPRINT
-
-	   			@@twiml = START_SPRINT #SEND SPRINT MSG
-	    else
-				@@twiml = STARTSMS
-		end
+	  	test_text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2)	
 
 
-	elsif @user.subscribed == false && params[:Body].casecmp("STORY") #if returning
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
-		@user.update(subscribed: true)
-		@@twiml = RESUBSCRIBE
+			#REACTIVATE SUBSCRIPTION
+			@user.update(subscribed: true)
+			@user.update(next_index_in_series: nil)
+
+			test_text(RESUBSCRIBE, RESUBSCRIBE)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
+	  	#default 2 days a week
+	  	if @user.days_per_week == nil
+	  		@user.update(days_per_week: 2)
+	  	end
 
-		#if sprint
-		if @user.carrier == SPRINT
+	  	#find the day names
+	  	case @user.days_per_week
+	  	when 1
+	  		dayNames = "Wed"
+	  	when 2, nil
+	  		dayNames = "Tues and Thurs"
+	  	when 3
+	  		dayNames = "Mon Wed & Fri"
+	  	else
+	  		puts "ERR: invalid days of week"
+	  	end
 
-			@@twiml = HELP_SPRINT
-
-		else #not Sprint
-
-			@@twiml = HELPSMS
-
-		end
+	  	test_text(HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2)
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
+		
+
+		#SAVE QUITTERS
+		# REDIS.set(@user.phone+":quit", "true") 
+			#update if the user quits
+			#EX: REDIS.zadd("+15612125831:quit", true)  
 
 		#change subscription
 		@user.update(subscribed: false)
 
-	   		@@twiml = STOPSMS
-
+		test_text(STOPSMS, STOPSMS)
 
 	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option
 		
-
 		#change mms to sms
 		@user.update(mms: false)
 
-	   		@@twiml = MMS_UPDATE
+		test_text(MMS_UPDATE, MMS_UPDATE)
 
+	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
-	elsif params[:Body].casecmp("STORY") == 0 #texted STORY
+		#no need to manually undo birthdate
+		test_text(REDO_BIRTHDATE, REDO_BIRTHDATE)
 
-		#undo birthdate
-		 		@user.child_birthdate = EMPTY_STR
-	 			@user.save
+	#Responds with a letter when prompted to choose a series
+	#Account for quotations
+	elsif @user.awaiting_choice == true && /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
+		
+		body = params[:Body]
 
-	 			@user.child_age = EMPTY_INT
-	 			@user.save
+		#has quotations => extract the juicy part
+		if  !(/\A[a-zA-Z]\z/ =~ params[:Body])
+			body = params[:Body][1,1]
+		end
 
-	   			@twiml = REDO_BIRTHDATE
+		#push back to zero incase this was changed to -1 to denote one 'day' after
+        @user.update(next_index_in_series: 0)
 
+		#check if the choice is valid
+		if MessageSeries.codeIsInHash( body + @user.series_number)
 	 			
-	elsif /\A[1-5]{1}\z/ =~ params[:Body] #texted feedback 1 to 5.
+			#update the series choice
+			@user.update(series_choice: body)
+			 @user.update(awaiting_choice: false)
 
-			# **DONT** SAVE FEEDBACK
+			#send the choice text
+			ChoiceWorker.perform_in(18.seconds, @user.phone)
 
-			# REDIS.zadd(@user.phone, @user.story_number - 1, params[:Body]) 
-			#add the user's 1 to 5 feedback (value) to the story_number (key) of that night's story
-			#in a sorted set by key of phonenumber;
-			#EX: REDIS.zadd("+15612125831", 0, 5)  
+			test_text(GOOD_CHOICE, GOOD_CHOICE)
+	 	else	 			
+			test_text(BAD_CHOICE, BAD_CHOICE)
+	 	end				
 
-
-			#UPDATE LAST FEEDBACK
-			@user.update(last_feedback: @user.story_number - 1)
-
-			#GIVE FEEDBACK! 
-			if @user.carrier == SPRINT
-				@@twiml = @@tips_sprint[@user.story_number - 1]
-	 		#NORMAL
-	 		else 
-		   		@@twiml = @@tips_normal[@user.story_number - 1]
-	 		end
 
     # second reply: update child's birthdate
-    elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}/ =~ params[:Body]
-   	
-    
-
-
-
-		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
+    elsif @user.set_birthdate == false && /\A[0-9]{4}\z/ =~ params[:Body]
+   		
+		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
-  			@user.child_birthdate = params[:Body]
-  			@user.save
+  			@user.update(child_birthdate: params[:Body])
 
   			#add child's age
-  			
   			ageFloat = Age.InYears(@user.child_birthdate)
 
   			if ageFloat < 3 && ageFloat >= 2.8 #let the older two's in.
   				ageFloat = 3
   			end
 
+  			@user.update(child_age: ageFloat.to_i)
 
-  			@user.child_age = ageFloat.to_i
-  			@user.save
-
-   			#give allow six year olds
+   			# allow six year olds
  			if @user.child_age == 6 
   				@user.update(child_age: 5)
  			end
 
-
-
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 
-  				@user.update(subscribed: true)
   				#redo subscription for parents who entered in bday wrongly
+  				@user.update(subscribed: true)
+  				@user.update(set_birthdate: true)
 
-					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
-		   			@@twiml = TIME_SMS
-
+					test_text(time_sms, time_sms)
 
 	 		else #Wrong age rage
 
 	 			@user.update(subscribed: false)
 
 	 			#NOTE: Keep the real birthdate.
-	   			@@twiml =  TOO_YOUNG_SMS
+	 			test_text(TOO_YOUNG_SMS, TOO_YOUNG_SMS)
+
 	 		end
 
 	    else #not a valid format
-   			@@twiml =  WRONG_BDAY_FORMAT
+	  		test_text(WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT)
 		end 	
 
  	# Update TIME before (or after) third story
- 	elsif (@user.story_number == 2 || @user.story_number == 3) && /[:apm]/ =~ params[:Body]
- 	
- 	
-
+ 	elsif @user.set_time == false && /(:|pm|am)/ =~ params[:Body]
+ 		
  		response = params[:Body]
  		arr = response.split
 
- 		if arr.length == 1 || arr.length == 2 #plausible format
- 			if arr.length == 1
- 				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
- 					@user.update(time: arr[0])
+ 		case arr.length
+ 		when 1
 
-		   				@@twiml = "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
+			if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
+				
+				@user.update(time: arr[0]) 
+		        #They've set their own time, so don't ask again
+		        @user.update(set_time: true)
 
- 				else
+				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
+				
+				test_text(good_time, good_time)
+			else
+			
+				test_text(BAD_TIME_SMS, BAD_TIME_SPRINT)
+			end
 
-					#if sprint
-					if @user.carrier == SPRINT
-
-				   			@@twiml = BAD_TIME_SPRINT #SEND SPRINT MSG
-
-					else #not Sprint
-
-				   			@@twiml = BAD_TIME_SMS	#SEND NORMAL
-					end
-
- 				end
-
- 			else
+		when 2
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
- 					@user.time = arr[0] + arr[1]
-		 			@user.save
+ 					
+ 					@user.update(time: arr[0] + arr[1])
 
+					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
+					
+					test_text(good_time, good_time)
 
-		   				@@twiml = "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
  				else
-
-					#if sprint
-					if @user.carrier == SPRINT 
-
-				   			@@twiml = BAD_TIME_SPRINT #SEND SPRINT MSG
-
-					else #not Sprint
-
-				   			@@twiml = BAD_TIME_SMS	#SEND NORMAL
-					end
+					
+					test_text(BAD_TIME_SMS, BAD_TIME_SPRINT)
 
  				end
- 				
- 			end
+ 		else 
+		
+			test_text(BAD_TIME_SMS, BAD_TIME_SPRINT)
 
- 		else #wrong format
-					#if sprint
-					if @user.carrier == "Sprint Spectrum, L.P." 
+		end
 
-				   			@@twiml = BAD_TIME_SPRINT #SEND SPRINT MSG
-
-					else #not Sprint
-
-				   			@@twiml = BAD_TIME_SMS #SEND SPRINT MSG
-					end
- 		end
- 		
 	#response matches nothing
 	else
-		
 
-   			@@twiml = NO_OPTION
-		# raise "something broke-- message was not regeistered"
-	end
-end
+		test_text(NO_OPTION, NO_OPTION)
 
+	end#end options
 
-
-
-
-
-
-
-
-
-
-
-# # TESTING ROUTE!!!!
-# get '/test/:From/:Body' do
-# 	#check if new user
-# 	#returns nil if not found
-# 	@user = User.find_by_phone(params[:From]) 
-	
-
-# 	#first reply: new user, add her
-# 	if @user == nil 
-# 		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, time: EMPTY_STR, phone: params[:From])
-#   		@@twiml = "StoryTime: Thanks for signing up! Reply with your child's age in years (e.g. 3)."
-
-
-# 	elsif params[:Body].casecmp("HELP") == 0 #HELP option
-		
-# 		#if sprint
-# 		if @user.carrier == "Sprint Spectrum, L.P." 
-
-# 			smsArr = Sprint.chop(HELPSMS)
-			
-# 			smsArr.each do |text|
-# 				@@twiml.push(text)
-# 	            # sleep 2
-# 			end
-
-# 		else #not Sprint
-
-# 			@@twiml = HELPSMS
-		
-# 		end
-#     # second reply: update child's birthdate
-#     elsif @user.child_birthdate == EMPTY_STR
-		
-
-# 		if /\A[0-9]{6}\z/ =~ params[:Body] #it's a stringified integer
-#   			@user.child_birthdate = params[:Body]
-#   			@user.save
-# 	       	@@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)"
-	    
-# 	    # elsif numberNames.include? params[:Body] #the number is spelled out as name
-# 	    # 	@user.child_age = params[:Body].in_numbers
-#   			# @user.save
-# 	    #    	@@twiml = "StoryTime: Great! You've got free nightly stories. Reply with your child's name and your preferred time to receive stories (e.g. Brianna 5:30pm)"
-
-# 	    else #not a valid format
-#    			@@twiml = "We did not understand what you typed. Please reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP."
-# 		end 	
- 
-
-#  	# third reply: update time and child's name
-#  	elsif @user.time.eql? EMPTY_STR
-
-
-#  		response = params[:Body]
-#  		arr = response.split
-
-# 	 	if arr.length == 1 || arr.length == 2 #plausible format
-# 	 		if arr.length == 1
-# 		 		#handle wrong order
-#  				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/  =~ arr[0]
-# 		 			@user.time = arr[0]
-# 		 			@user.save
-# 		 			@@twiml = "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
-# 		 		else
-# 		   			@@twiml = "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm)."
-# 		 		end
-# 		 	else 
-#  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
-# 					@user.time = arr[0] + arr[1]
-# 		 			@user.save					
-# 					@@twiml = "StoryTime: Sounds good! We'll send you and your child a new story each night at #{@user.time}."
-
-# 		 		else
-# 		   			@@twiml = "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm)."
-# 		 		end
-# 		 	end
- 		
-# 	 	else #wrong format
-#    				@@twiml = "(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm)."
-# 	 	end
-
-# 	#response matches nothing
-# 	else
-#   		@@twiml = "StoryTime: This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP NOW. To stop messages, reply STOP NOW."
-# 		# raise "something broke-- message was not regeistered"
-# 	end
-# end
-
-
-
-
-
-
-
-
-	#add user to db
-# 	@user = User.create(name: "empty", phone: params[:From])
-# 	twiml = Twilio::TwiML::Response.new do |r|
-#     	r.Message "Thanks for signing up for StoryTime!"
-#   	end
-#   	twiml.text
-# end
-
-# get '/users/new/:phone' do
-# 	# add user to db
-# 	@user = User.create(name: "empty", phone: params[:phone])
-# 	erb :new
-# end
-
-
+end#end TEST get
