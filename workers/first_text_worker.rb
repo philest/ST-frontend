@@ -64,7 +64,7 @@ class FirstTextWorker
                     :to => @user.phone,     # Replace with your phone number
                     :from => "+17377778679")   # Replace with your Twilio number
 
-                  puts "Sent message part #{index} to" + @user.phone + "\n\n"
+                  puts "Sent first pic message part #{index} to" + @user.phone + "\n\n"
 
                   sleep 7
 
@@ -86,7 +86,7 @@ class FirstTextWorker
                     :to => @user.phone,     # Replace with your phone number
                     :from => "+17377778679")   # Replace with your Twilio number
 
-                  puts "Sent message to" + @user.phone + "\n\n"
+                  puts "Sent Very First Story message to" + @user.phone + "\n\n"
 
                   sleep 1
 

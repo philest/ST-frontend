@@ -138,7 +138,7 @@ get '/sms' do
 	  	days = @user.days_per_week
 
 	  	
-	  	FirstTextWorker.perform_in(12.seconds, @user.phone)
+	  	FirstTextWorker.perform_in(18.seconds, @user.phone)
 
 	  	text(START_SMS_1 + days.to_s + START_SMS_2, START_SPRINT_1 + days.to_s + START_SPRINT_2)	
 
@@ -194,20 +194,23 @@ get '/sms' do
 	  		puts "ERR: invalid days of week"
 	  	end
 
-	  	#send out help message
-	  	if @user.carrier == SPRINT
+	  	text(HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2)
 
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELP_SPRINT_1 + dayNames + HELP_SPRINT_2 #SEND SPRINT MSG
-	    	end
-	    	twiml.text
-	    else
 
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELP_SMS_1 + dayNames + HELP_SMS_2  #SEND SPRINT MSG
-	    	end
-	    	twiml.text
-		end
+	 #  	#send out help message
+	 #  	if @user.carrier == SPRINT
+
+		# 	twiml = Twilio::TwiML::Response.new do |r|
+	 #   			r.Message HELP_SPRINT_1 + dayNames + HELP_SPRINT_2 #SEND SPRINT MSG
+	 #    	end
+	 #    	twiml.text
+	 #    else
+
+		# 	twiml = Twilio::TwiML::Response.new do |r|
+	 #   			r.Message HELP_SMS_1 + dayNames + HELP_SMS_2  #SEND SPRINT MSG
+	 #    	end
+	 #    	twiml.text
+		# end
 
 
 
