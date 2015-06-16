@@ -5,7 +5,6 @@ require_relative "./spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
-require 'pry'
 
 
 #CONSTANTS

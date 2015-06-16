@@ -339,6 +339,9 @@ helpers do
 
 			msg = sprintSMS 
 
+			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+
+
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message sprintSMS #SEND SPRINT MSG
 	    	end
@@ -348,13 +351,14 @@ helpers do
 
 			msg = normalSMS 
 
+			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+
 			twiml = Twilio::TwiML::Response.new do |r|
 	   			r.Message normalSMS	#SEND NORMAL
 	    	end
 	    	twiml.text
 		end 
 
-		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,15] + "...\""
 
 	end  	
 
