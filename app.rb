@@ -18,6 +18,7 @@ require_relative './workers/first_text_worker'
 require_relative './workers/choice_worker'
 
 
+# require 'pry'
 
 configure :production do
   require 'newrelic_rpm'
@@ -231,7 +232,7 @@ get '/sms' do
 
 
     # second reply: update child's birthdate
-    elsif @user.set_birthdate == false && /\A[0-9]{4}\z/ =~ params[:Body]
+    elsif @user.set_birthdate == false && /[0-9]{4}/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
@@ -386,6 +387,9 @@ end
 #THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
+
+
+
 	#check if new user
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 
@@ -495,7 +499,7 @@ get '/test/:From/:Body/:Carrier' do
 
 
     # second reply: update child's birthdate
-    elsif @user.set_birthdate == false && /\A[0-9]{4}\z/ =~ params[:Body]
+    elsif @user.set_birthdate == false && /[0-9]{4}/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
