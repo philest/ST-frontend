@@ -49,7 +49,6 @@ HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
 
-
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
 START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
@@ -87,11 +86,6 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 For help, reply HELP NOW."
 
 
-
-#TWILIO set up:
-   		account_sid = ENV['TW_ACCOUNT_SID']
-    	auth_token = ENV['TW_AUTH_TOKEN']
-	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
 
 
@@ -131,6 +125,10 @@ get '/sms' do
 		@user.update(time: "5:00pm", child_age: 4)
 
 
+		#TWILIO set up:
+   		account_sid = ENV['TW_ACCOUNT_SID']
+    	auth_token = ENV['TW_AUTH_TOKEN']
+	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
     	# Lookup wireless carrier
 	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
