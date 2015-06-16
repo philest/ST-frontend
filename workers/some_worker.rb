@@ -124,9 +124,6 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
                 sleep 1
         end
 
-        #They've set their own time, so don't ask again
-        user.update(set_time: true)
-
       end
 
 

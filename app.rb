@@ -69,10 +69,10 @@ TIMESMS = "StoryTime: Great, last question! When do you want to receive stories 
 
 Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
-BAD_TIME_SMS = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). 
+BAD_TIME_SMS = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). 
 For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 	
-BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 5:00pm). Reply " + HELP + "for help."
+BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). Reply " + HELP + "for help."
 	
 REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
@@ -139,24 +139,29 @@ get '/sms' do
 
 	  	days = @user.days_per_week
 
-	  	if @user.carrier == SPRINT
+	  	
+	  	FirstTextWorker.perform_in(12.seconds, @user.phone)
 
-	  	 	FirstTextWorker.perform_in(12.seconds, @user.phone)
+	  	text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2)	
 
-	  	 	twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message START_SPRINT_1 + days + START_SPRINT_2 #SEND SPRINT MSG
-	    	end
-	    	twiml.text
+	 #  	if @user.carrier == SPRINT
 
-	    else
+	 #  	 	FirstTextWorker.perform_in(12.seconds, @user.phone)
 
-	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
+	 #  	 	twiml = Twilio::TwiML::Response.new do |r|
+	 #   			r.Message START_SPRINT_1 + days + START_SPRINT_2 #SEND SPRINT MSG
+	 #    	end
+	 #    	twiml.text
 
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message START_SMS_1 + days + START_SMS_2
-		    end
-		    twiml.text
-		end
+	 #    else
+
+	 #  		FirstTextWorker.perform_in(12.seconds, @user.phone)
+
+		#     twiml = Twilio::TwiML::Response.new do |r|
+		#         r.Message START_SMS_1 + days + START_SMS_2
+		#     end
+		#     twiml.text
+		# end
 
 
 
@@ -284,74 +289,37 @@ get '/sms' do
 	 	end				
 
 
-
-	elsif /\A[\s]*[1-5]{1}[\s]*\z/ =~ params[:Body] #texted feedback 1 to 5.
-
-			#SAVE FEEDBACK
-
-			REDIS.zadd(@user.phone, @user.story_number - 1, params[:Body].to_i) 
-			#add the user's 1 to 5 feedback (value) to the story_number (key) of that night's story
-			#in a sorted set by key of phonenumber;
-			#EX: REDIS.zadd("+15612125831", 0, 5)  
-
-
-			#UPDATE LAST FEEDBACK
-			@user.update(last_feedback: @user.story_number - 1)
-
-			#GIVE FEEDBACK! 
-
-			#SPRINT
-			if @user.carrier == SPRINT
-	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message @@tips_sprint[@user.story_number - 1]
-				end
-	 			twiml.text				
-
-	 		#NORMAL
-	 		else 
-	 			twiml = Twilio::TwiML::Response.new do |r|
-	   				r.Message @@tips_normal[@user.story_number - 1]
-				end
-	 			twiml.text
-	 		end
-
     # second reply: update child's birthdate
     elsif (@user.story_number == 4 || @user.story_number == 5) && /\A[0-9]{4}\z/ =~ params[:Body]
    		
-		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMDDYY format
+		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
-  			@user.child_birthdate = params[:Body]
-  			@user.save
+  			@user.update(child_birthdate: params[:Body])
 
   			#add child's age
-  			
   			ageFloat = Age.InYears(@user.child_birthdate)
 
   			if ageFloat < 3 && ageFloat >= 2.8 #let the older two's in.
   				ageFloat = 3
   			end
 
+  			@user.update(child_age: ageFloat.to_i)
 
-  			@user.child_age = ageFloat.to_i
-  			@user.save
-
-   			#give allow six year olds
+   			# allow six year olds
  			if @user.child_age == 6 
   				@user.update(child_age: 5)
  			end
 
-
-
   			#check if in right age range
   			if @user.child_age <= 5 && @user.child_age >= 3 
 
-  				@user.update(subscribed: true)
   				#redo subscription for parents who entered in bday wrongly
+  				@user.update(subscribed: true)
 
-					TIME_SMS = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
 		 			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message TIME_SMS
+		   				r.Message time_sms
 		  				end
 		 			twiml.text
 
@@ -374,56 +342,55 @@ get '/sms' do
 		end 	
 
  	# Update TIME before (or after) third story
- 	elsif (@user.story_number == 2 || @user.story_number == 3) && /[:apm]/ =~ params[:Body]
+ 	elsif @user.set_time == false && /(:|pm|am)/ =~ params[:Body]
  		
  		response = params[:Body]
  		arr = response.split
 
- 		if arr.length == 1 || arr.length == 2 #plausible format
- 			if arr.length == 1
- 				if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
- 					@user.time = arr[0]
-		 			@user.save
+ 		case arr.length
+ 		when 1
 
-		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
-					end
-		 			twiml.text
+			if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
+				
+				@user.update(time: arr[0]) 
+		        #They've set their own time, so don't ask again
+		        user.update(set_time: true)
 
- 				else
+				twiml = Twilio::TwiML::Response.new do |r|
+					r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
+				end
+				twiml.text
 
-					#if sprint
-					if @user.carrier == "Sprint Spectrum, L.P." 
+			else
+			#if sprint
+				if @user.carrier == SPRINT
 
-						twiml = Twilio::TwiML::Response.new do |r|
-				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
-				    	end
-				    	twiml.text
+					twiml = Twilio::TwiML::Response.new do |r|
+			   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+			    	end
+			    	twiml.text
 
-					else #not Sprint
+				else #not Sprint
 
-						twiml = Twilio::TwiML::Response.new do |r|
-				   			r.Message BAD_TIME_SMS	#SEND NORMAL
-				    	end
-				    	twiml.text
-					end
+					twiml = Twilio::TwiML::Response.new do |r|
+			   			r.Message BAD_TIME_SMS	#SEND NORMAL
+			    	end
+			    	twiml.text
+				end
 
- 				end
+			end
 
- 			else
+		when 2
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
- 					@user.time = arr[0] + arr[1]
-		 			@user.save
-
+ 					@user.update(time: arr[0] + arr[1])
 
 		  			twiml = Twilio::TwiML::Response.new do |r|
-		   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
+		   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					end
 		 			twiml.text 					
  				else
-
 					#if sprint
-					if @user.carrier == "Sprint Spectrum, L.P." 
+					if @user.carrier == SPRINT
 
 						twiml = Twilio::TwiML::Response.new do |r|
 				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
@@ -439,26 +406,116 @@ get '/sms' do
 					end
 
  				end
+ 		else 
+				#if sprint
+				if @user.carrier == SPRINT
+
+					twiml = Twilio::TwiML::Response.new do |r|
+			   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+			    	end
+			    	twiml.text
+
+				else #not Sprint
+
+					twiml = Twilio::TwiML::Response.new do |r|
+			   			r.Message BAD_TIME_SMS	#SEND NORMAL
+			    	end
+			    	twiml.text
+				end
+		end
+
+
+
+
+
+
+
+
+
+
+ 		# if arr.length == 1 || arr.length == 2 #plausible format
+
+ 		# 	if arr.length == 1
+ 		
+ 		# 		if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
+ 					
+ 		# 			@user.update(time: arr[0]) 
+			#         #They've set their own time, so don't ask again
+			#         user.update(set_time: true)
+
+		 #  			twiml = Twilio::TwiML::Response.new do |r|
+		 #   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
+			# 		end
+		 # 			twiml.text
+
+ 		# 		else
+			# 		#if sprint
+			# 		if @user.carrier == SPRINT
+
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+			# 	    	end
+			# 	    	twiml.text
+
+			# 		else #not Sprint
+
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SMS	#SEND NORMAL
+			# 	    	end
+			# 	    	twiml.text
+			# 		end
+
+ 		# 		end
+
+ 		# 	else
+ 		# 		if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
+ 		# 			@user.time = arr[0] + arr[1]
+		 # 			@user.save
+
+
+		 #  			twiml = Twilio::TwiML::Response.new do |r|
+		 #   				r.Message "StoryTime: Sounds good! Your new story time is #{@user.time}-- enjoy!"
+			# 		end
+		 # 			twiml.text 					
+ 		# 		else
+
+			# 		#if sprint
+			# 		if @user.carrier == "Sprint Spectrum, L.P." 
+
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+			# 	    	end
+			# 	    	twiml.text
+
+			# 		else #not Sprint
+
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SMS	#SEND NORMAL
+			# 	    	end
+			# 	    	twiml.text
+			# 		end
+
+ 		# 		end
  				
- 			end
+ 		# 	end
 
- 		else #wrong format
-					#if sprint
-					if @user.carrier == "Sprint Spectrum, L.P." 
+ 		# else #wrong format
+			# 		#if sprint
+			# 		if @user.carrier == "Sprint Spectrum, L.P." 
 
-						twiml = Twilio::TwiML::Response.new do |r|
-				   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
-				    	end
-				    	twiml.text
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+			# 	    	end
+			# 	    	twiml.text
 
-					else #not Sprint
+			# 		else #not Sprint
 
-						twiml = Twilio::TwiML::Response.new do |r|
-				   			r.Message BAD_TIME_SMS	#SEND NORMAL
-				    	end
-				    	twiml.text
-					end
- 		end
+			# 			twiml = Twilio::TwiML::Response.new do |r|
+			# 	   			r.Message BAD_TIME_SMS	#SEND NORMAL
+			# 	    	end
+			# 	    	twiml.text
+			# 		end
+ 		# end
  		
 	#response matches nothing
 	else
@@ -478,6 +535,47 @@ end
 
 
 
+helpers do
+
+  def sendBadTimeSMS(user_phone)
+	#if sprint
+	if @user.carrier == SPRINT
+
+		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message BAD_TIME_SPRINT #SEND SPRINT MSG
+    	end
+    	twiml.text
+
+	else #not Sprint
+
+		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message BAD_TIME_SMS	#SEND NORMAL
+    	end
+    	twiml.text
+	end 
+
+  end
+
+  def text(normalSMS, sprintSMS)
+	#if sprint
+	if @user.carrier == SPRINT
+
+		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message sprintSMS #SEND SPRINT MSG
+    	end
+    	twiml.text
+
+	else #not Sprint
+
+		twiml = Twilio::TwiML::Response.new do |r|
+   			r.Message normalSMS	#SEND NORMAL
+    	end
+    	twiml.text
+	end 
+
+  end  	
+
+end
 
 
 
