@@ -140,7 +140,7 @@ get '/sms' do
 	  	
 	  	FirstTextWorker.perform_in(12.seconds, @user.phone)
 
-	  	text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2)	
+	  	text(START_SMS_1 + days.to_s + START_SMS_2, START_SPRINT_1 + days.to_s + START_SPRINT_2)	
 
 	 #  	if @user.carrier == SPRINT
 
