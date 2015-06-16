@@ -46,7 +46,7 @@ Normal text rates may apply. For help or feedback, please contact our director, 
 
 HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
-HELP_SPRINT_2 ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
 
 
