@@ -6,18 +6,13 @@ require 'twilio-ruby'
 require 'sidekiq'
 require 'sidetiq'
 require 'redis'
-
-
 #REDIS initialization
 require_relative './config/initializers/redis'
 
 require 'sidekiq/api'
-
 require_relative './sprint'
 require_relative './age'
 require_relative './messageSeries'
-
-
 require_relative './workers/some_worker'
 require_relative './workers/first_text_worker'
 require_relative './workers/choice_worker'
@@ -27,15 +22,6 @@ require_relative './workers/choice_worker'
 configure :production do
   require 'newrelic_rpm'
 end
-
-@@tips_normal = [ "Thanks!", "Great, thanks for joining StoryTime!", "Thanks again :)"]
-
-@@tips_sprint = [ "Thanks!", "Great, thanks for joining StoryTime!", "Thanks again :)"]
-
-
-
-EMPTY_INT = 9999
-EMPTY_STR = "empty"
 
 HELP = "HELP NOW"
 STOP = "STOP NOW"
@@ -71,19 +57,13 @@ HELP_SPRINT_3 = "StoryTime texts free kids' stories on Mon, Wed & Fri. For help 
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
-STARTSMS_2 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!
+START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
 
-Text " + HELP + " for help, or " + STOP + " to cancel."
+START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
 
-STARTSMS_3 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 3 stories/week-- the first is on the way!
+START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You'll get "
 
-Text " + HELP + " for help, or " + STOP + " to cancel."
-
-
-
-START_SPRINT_2 = "Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
-
-START_SPRINT_3 = "Welcome to StoryTime, free pre-k stories by text! You'll get 3 stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
+START_SPRINT_2 = " stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
 
 
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
@@ -112,6 +92,14 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 For help, reply HELP NOW."
 
 
+
+#TWILIO set up:
+   		account_sid = ENV['TW_ACCOUNT_SID']
+    	auth_token = ENV['TW_AUTH_TOKEN']
+	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
+
+
+
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
 	redirect to('/')
@@ -130,8 +118,8 @@ get '/sms' do
 
 	#first reply: new user, add her
 	if @user == nil 
-		@user = User.create(child_name: EMPTY_STR, child_birthdate: EMPTY_STR, carrier: EMPTY_STR, phone: params[:From])
 
+		@user = User.create(phone: params[:From])
 
 		#randomly assign to get two days a week or three days a week
 		if (rand = Random.rand(9)) == 0
@@ -142,65 +130,46 @@ get '/sms' do
 			@user.update(days_per_week: 2)
 		end
 
-
 		#update subscription
 		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
-
 		#backup for defaults
 		@user.update(time: "5:00pm", child_age: 4)
 
 
 
     	# Lookup wireless carrier
-    	#setup Twilio user account
-   		account_sid = ENV['TW_ACCOUNT_SID']
-    	auth_token = ENV['TW_AUTH_TOKEN']
-	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
-
-	  	# Carrier Lookup
 	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-	  	@user.carrier = number.carrier['name']
-	  	@user.save
+	  	@user.update(carrier: number.carrier['name'])
 
-	  	if @user.carrier == "Sprint Spectrum, L.P." && (@user.days_per_week == 2 || @user.days_per_week == nil)
 
-	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
+	  	days = @user.days_per_week
 
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message START_SPRINT_2 #SEND SPRINT MSG
+	  	if @user.carrier == SPRINT
+
+	  	 	FirstTextWorker.perform_in(12.seconds, @user.phone)
+
+	  	 	twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message START_SPRINT_1 + days + START_SPRINT_2 #SEND SPRINT MSG
 	    	end
 	    	twiml.text
 
-	    elsif @user.carrier == "Sprint Spectrum, L.P."
+	    else
 
 	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message START_SPRINT_3
-		    end
-		    twiml.text
-
-		 elsif (@user.days_per_week == 2 || @user.days_per_week == nil)
-	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
-
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message STARTSMS_2
-		    end
-		    twiml.text
-		 else
-	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
-
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message STARTSMS_3
+		        r.Message START_SMS_1 + days + START_SMS_2
 		    end
 		    twiml.text
 		end
+
 
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
 			#REACTIVATE SUBSCRIPTION
 			@user.update(subscribed: true)
+			@user.update(next_index_in_series: nil)
 
 			twiml = Twilio::TwiML::Response.new do |r|
 		   		r.Message RESUBSCRIBE
@@ -209,6 +178,14 @@ get '/sms' do
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
+
+	  	#default 2
+	  	if @user.days_per_week == nil
+	  		@user.update(days_per_week: 2)
+	  	end
+
+
+
 		#if sprint
 	  	if @user.carrier == "Sprint Spectrum, L.P." && (@user.days_per_week == 2 || @user.days_per_week == nil)
 
