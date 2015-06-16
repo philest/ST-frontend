@@ -34,24 +34,19 @@ WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's bi
 
 TOO_YOUNG_SMS = "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
 
-MMS_UPDATE = "Okay, you'll now receive just the text of each poem. Hope this works better!"
+MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this helps!"
 
-HELPSMS_2 =  "StoryTime texts free kids' stories on Tues and Thurs. If you can't receive picture msgs, reply TEXT for text-only stories.
+HELP_SMS_1 =  "StoryTime texts free kids' stories on "
 
-Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
-
-Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
-
-HELPSMS_3 =  "StoryTime texts free kids' stories on Mon, Wed & Fri. If you can't receive picture msgs, reply TEXT for text-only stories.
+HELP_SMS_2 = ". If you can't receive picture msgs, reply TEXT for text-only stories.
 
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
 
 Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
+HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
-HELP_SPRINT_2 = "StoryTime texts free kids' stories on Tues and Thurs. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
-
-HELP_SPRINT_3 = "StoryTime texts free kids' stories on Mon, Wed & Fri. For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+HELP_SPRINT_2 ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
 
 
@@ -179,61 +174,47 @@ get '/sms' do
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
 
-	  	#default 2
+	  	#default 2 days a week
 	  	if @user.days_per_week == nil
 	  		@user.update(days_per_week: 2)
 	  	end
 
+	  	#find the day names
+	  	case @user.days_per_week
+	  	when 1, nil
+	  		dayNames = "Wed"
+	  	when 2
+	  		dayNames = "Tues and Thurs"
+	  	when 3
+	  		dayNames = "Mon Wed & Fri"
+	  	else
+	  		puts "ERR: invalid days of week"
+	  	end
 
-
-		#if sprint
-	  	if @user.carrier == "Sprint Spectrum, L.P." && (@user.days_per_week == 2 || @user.days_per_week == nil)
-
-	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
+	  	#send out help message
+	  	if @user.carrier == SPRINT
 
 			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message HELP_SPRINT_2 #SEND SPRINT MSG
+	   			r.Message HELP_SPRINT_1 + dayNames + HELP_SPRINT_2 #SEND SPRINT MSG
 	    	end
 	    	twiml.text
+	    else
 
-	    elsif @user.carrier == "Sprint Spectrum, L.P."
-
-	  		FirstTextWorker.perform_async(@user.phone)
-
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message HELP_SPRINT_3
-		    end
-		    twiml.text
-
-		 elsif (@user.days_per_week == 2 || @user.days_per_week == nil)
-	  		FirstTextWorker.perform_async(@user.phone)
-
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message HELPSMS_2
-		    end
-		    twiml.text
-		 else
-	  		FirstTextWorker.perform_async(@user.phone)
-
-		    twiml = Twilio::TwiML::Response.new do |r|
-		        r.Message HELPSMS_3
-		    end
-		    twiml.text
+			twiml = Twilio::TwiML::Response.new do |r|
+	   			r.Message HELP_SMS_1 + dayNames + HELP_SMS_2  #SEND SPRINT MSG
+	    	end
+	    	twiml.text
 		end
+
 
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
 		
-		#add to ended list
-		@@quiters.push @user
 
-
-			#SAVE QUITTERS
-
-			REDIS.set(@user.phone+":quit", "true") 
+		#SAVE QUITTERS
+		REDIS.set(@user.phone+":quit", "true") 
 			#update if the user quits
 			#EX: REDIS.zadd("+15612125831:quit", true)  
-
 
 		#change subscription
 		@user.update(subscribed: false)
@@ -256,15 +237,9 @@ get '/sms' do
 	    	twiml.text
 
 
+	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
-	elsif params[:Body].casecmp("STORY") == 0 #texted STORY
-
-		#undo birthdate
-		 		@user.child_birthdate = EMPTY_STR
-	 			@user.save
-
-	 			@user.child_age = EMPTY_INT
-	 			@user.save
+		#no need to manually undo birthdate
 
 	 			twiml = Twilio::TwiML::Response.new do |r|
 	   				r.Message REDO_BIRTHDATE
