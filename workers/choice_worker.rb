@@ -7,7 +7,7 @@ require 'sidekiq'
 require_relative '../sprint'
 require_relative '../messageSeries'
 
-SPRINT_NAME = "Sprint Spectrum, L.P."
+SPRINT_NAME_2 = "Sprint Spectrum, L.P."
 
 
 
@@ -39,7 +39,7 @@ class ChoiceWorker
 
     if @user.mms == true 
 
-      if @user.carrier != SPRINT_NAME || story.getSMS < 160
+      if @user.carrier != SPRINT_NAME_2 || story.getSMS < 160
 
           story.getMmsArr.each_with_index do |mms_url, index|
 
@@ -103,7 +103,7 @@ class ChoiceWorker
     end
 
   end
-  
+
 end
 
 
