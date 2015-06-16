@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150614204032) do
+ActiveRecord::Schema.define(version: 20150616030058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,17 +22,21 @@ ActiveRecord::Schema.define(version: 20150614204032) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "child_birthdate"
-    t.string   "time",            default: "5:00pm"
-    t.integer  "child_age",       default: 4
+    t.string   "time",                 default: "5:00pm"
+    t.integer  "child_age",            default: 4
     t.string   "child_name"
     t.string   "carrier"
-    t.integer  "story_number",    default: 0
-    t.boolean  "subscribed",      default: true
-    t.boolean  "mms",             default: true
-    t.integer  "last_feedback",   default: -1
+    t.integer  "story_number",         default: 0
+    t.boolean  "subscribed",           default: true
+    t.boolean  "mms",                  default: true
+    t.integer  "last_feedback",        default: -1
     t.integer  "days_per_week"
-    t.boolean  "set_time",        default: false
-    t.boolean  "set_birthdate",   default: false
+    t.boolean  "set_time",             default: false
+    t.boolean  "set_birthdate",        default: false
+    t.integer  "series_number",        default: 0
+    t.string   "series_choice"
+    t.integer  "next_index_in_series"
+    t.boolean  "awaiting_choice",      default: false
   end
 
 end

@@ -15,10 +15,14 @@ require 'sidekiq/api'
 
 require_relative './sprint'
 require_relative './age'
+require_relative './messageSeries'
+
 
 require_relative './workers/some_worker'
-
 require_relative './workers/first_text_worker'
+require_relative './workers/choice_worker'
+
+
 
 configure :production do
   require 'newrelic_rpm'
@@ -101,6 +105,12 @@ SPRINT = "Sprint Spectrum, L.P."
 
 NO_OPTION = "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 
+GOOD_CHOICE = "Great, it's on the way!"
+
+BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.
+
+For help, reply HELP NOW."
+
 
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
@@ -163,7 +173,7 @@ get '/sms' do
 
 	    elsif @user.carrier == "Sprint Spectrum, L.P."
 
-	  		FirstTextWorker.perform_async(@user.phone)
+	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
 		        r.Message START_SPRINT_3
@@ -171,14 +181,14 @@ get '/sms' do
 		    twiml.text
 
 		 elsif (@user.days_per_week == 2 || @user.days_per_week == nil)
-	  		FirstTextWorker.perform_async(@user.phone)
+	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
 		        r.Message STARTSMS_2
 		    end
 		    twiml.text
 		 else
-	  		FirstTextWorker.perform_async(@user.phone)
+	  		FirstTextWorker.perform_in(12.seconds, @user.phone)
 
 		    twiml = Twilio::TwiML::Response.new do |r|
 		        r.Message STARTSMS_3
@@ -284,7 +294,45 @@ get '/sms' do
 				end
 	 			twiml.text
 
+	#Responds with a letter when prompted to choose a series
+	#Account for quotations
+	elsif @user.series_choice == nil &&  @user.next_index_in_series == 0 && /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
+		
+		body = params[:Body]
+
+		#has quotations => extract the juicy part
+		if  !(/\A[a-zA-Z]\z/ =~ params[:Body])
+			body = params[:Body][1,1]
+		end
+
+		#push back to zero incase this was changed to -1 to denote one 'day' after
+        user.update(next_index_in_series: 0)
+
+
+		#check if the choice is valid
+		if MessageSeries.codeIsInHash( body + @user.series_number)
 	 			
+				#update the series choice
+				@user.update(series_choice: body)
+     		    user.update(awaiting_choice: false)
+
+				#send the choice text
+				ChoiceWorker.perform_in(14.seconds, @user.phone)
+
+
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message GOOD_CHOICE
+	   			end
+	 			twiml.text
+	 	else
+	 			twiml = Twilio::TwiML::Response.new do |r|
+	   				r.Message BAD_CHOICE
+	   			end
+	 			twiml.text
+	 	end				
+
+
+
 	elsif /\A[\s]*[1-5]{1}[\s]*\z/ =~ params[:Body] #texted feedback 1 to 5.
 
 			#SAVE FEEDBACK

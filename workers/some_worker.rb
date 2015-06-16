@@ -7,6 +7,8 @@ require 'sidekiq'
 require 'sidetiq'
 
 require_relative '../sprint'
+require_relative '../message'
+require_relative '../messageSeries'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -27,9 +29,13 @@ class SomeWorker
 
   BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
-  SPRINT = "Sprint Spectrum, L.P."
+
+DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story. To continue getting StoryTime stories, just reply \"yes\"\n\nThanks :)"
+
 
   DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
+
+SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
 
 
 
@@ -54,145 +60,11 @@ class SomeWorker
 
 
 
-  #create the structure for holding all stories (with sub MMS and age-approp SMS)
-  @@storyArr = Array.new #holds all the story structs!
-
   def self.buildStoryArr
-    Struct.new("Story", :mmsArr, :smsHash, :poemSMS) #creates a new type of struct for Story
 
-#       #Day 0:
+    @@messageArr = Message.getMessageArray
 
-#         #create the mmsArr for the story:
-#         mmsArr = ["http://i.imgur.com/IzpnamS.png"]
-
-#         #create the sms Hash.
-#         smsHash = SomeWorker.makeHash("StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
-
-# Activities:
-
-# a) Ask your child if they can make a convincing owl hoot.
-
-# b) What part of the body do you use to speak? To hear? To know?
-
-# If this picture msg was unreadable, reply TEXT for text-only stories.
-
-# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
-          
-#           "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
-
-# Activities:
-
-# a) Ask your child if they can make a convincing owl hoot.
-
-# b) What part of the body do you use to speak? To hear? To know?
-
-# If this picture msg was unreadable, reply TEXT for text-only stories.
-
-# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.",
-
-#  "StoryTime: Here's your first poem! Act out each orange word as you read aloud. 
-
-# Activities:
-
-# a) Ask your child if they can make a convincing owl hoot.
-
-# b) What part of the body do you use to speak? To hear? To know?
-
-# If this picture msg was unreadable, reply TEXT for text-only stories.
-
-# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
-
-#         #zeroth
-#         zero = Struct::Story.new(mmsArr, smsHash, "StoryTime: Enjoy your first poem!
-
-# The Wise Old Owl
-
-# There was an old owl who lived in an oak;
-# The more he heard, the less he spoke
-
-# The less he spoke, the more he heard,
-# Why aren't we like that wise old bird?
-
-# Activities:
-
-# a) Ask your child if they can make a convincing owl hoot.
-
-# b) What part of the body do you use to speak? To hear? To know?
-
-# To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
-#         @@storyArr.push zero 
-
-
-        zero = Struct::Story.new( ["http://i.imgur.com/Bnji4mo.jpg", "http://i.imgur.com/0I9irBy.jpg"],
-        SomeWorker.makeHash("StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).",
-          "StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).",
-          "StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best)."),
-"StoryTime: Here’s your new poem. After you read each line, let your child repeat it after you!\n\nTo keep getting StoryTime, please rate this poem from 1 (worst) to 5 (best).
-
-Builder, Builder, build me a house.
-
-A sweet little house for a sweet little mouse.
-
-A sweet little mouse and a family too.
-
-We know that you can and we hope that you __.
-
-Build it of brick so it's cozy and warm,
-
-to keep us from harm in a cold winter _____.
-
-Builder, builder, build our house please.
-
-As soon as you finish, we'll pay you with cheese!")
-
-
-        @@storyArr.push zero
-
-
-
-first = Struct::Story.new( ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"],
-        SomeWorker.makeHash("StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
-          "StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.", 
-          "StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach an orange line, let your child say the rhyme!\n\nTo continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale."),
-          
-"StoryTime: This poem's full of rhymes, which help your child build reading skills. When you reach a blank line, let your child say the rhyme!
-
-I can tell you a lot about elephants,
-If you want to learn.
-
-Like—- did you know that elephants
-can get a bad sunburn?
-
-An elephant can live to be 86 years old,
-And elephants do not forget anything,
-If I remember what I’m told!
-
-An elephant purrs like a cat,
-if you listen to him,
-
-And even though he’s big and ___,
-An elephant can swim!
-
-
-An elephant has floppy ears,
-But hears things with his feet!
-
-He finds lots of plants
-And green healthy things to ___!
-
-To continue with StoryTime, reply with a rating of your experience on a 1 (worst) to 5 (best) scale.")
-
-        @@storyArr.push first
-
-msg = "StoryTime: Here's a new story about a crocodile! Show your child the colored rhyming words after you read.\n\n To continue with StoryTime, please text your feedback on a 1 (worst) to 5 (best) scale."
-
-
-second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.com/kIMjf3Q.jpg", "http://i.imgur.com/wSJ390c.jpg"],
-  SomeWorker.makeHash(msg, msg, msg), "Sorry, we're writing your story now. We'll send it soon!") 
-
-@@storyArr.push second
-
-
+    @@messageSeriesHash = MessageSeries.getMessageSeriesHash
 
   end
 
@@ -277,151 +149,82 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
       end
 
 
-        #They haven't responded to feedback for the past two stories.
-      if (user.story_number - user.last_feedback >= 3) && (user.story_number > 2) && SomeWorker.sendStory?(user) 
-       #ignore for the first three stories (didn't ask for feedback)
-        #drop 'em just before they'd receive their third unrated story.
 
-        user.update(subscribed: false)
 
-         message = @client.account.messages.create(
-          :body => DROPPED,
-          :to => user.phone,     # Replace with your phone num
-          :from => "+17377778679")   
-
-      else
 
         if SomeWorker.sendStory?(user) 
 
-          story = @@storyArr[user.story_number]  
+
+         #Should the user be asked to choose a series?
+          #If it's all of these:
+          #0) not awaiting chioce
+          #a) their time, 
+          #b) their third story, or every third one thereafter.
+          #c) they're not in the middle of a series
+          if user.awaiting_choice == false && (SomeWorker.sendStory?(user) &&  (user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && next_index_in_series == nil)
+
+            #get set for first in series
+            user.update(next_index_in_series: 0)
+            user.update(awaiting_choice: true)
+
+            #choose a series
+                message = @client.account.messages.create(
+                  :to => myphone,     # Replace with your phone number
+                  :from => "+17377778679",
+                  :body => SERIES_CHOICES[user.series_number])
+
+          elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
           
+             message = @client.account.messages.create(
+                      :to => myphone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :body => DAY_LATE
+                      )
 
-          ##appended warning if you missed one day of feedback! 
-          if (user.story_number - user.last_feedback == 2) && (user.story_number > 2)
-              warning = "\n\nIf we don't hear from you, you will stop receiving StoryTime msgs."
-          else
-            warning = "" #NOTHING
-          end
+             user.update(next_index_in_series: 999)  
 
-          #JUST SMS MESSAGING!
-          if user.mms == false
-
-            if user.carrier == "Sprint Spectrum, L.P." 
-
-              sprintArr = Sprint.chop(story.pureSMS + warning)
-
-              sprintArr.each_with_index do |text, index|  
-                message = @client.account.messages.create(
-                  :body => text,
-                  :to => user.phone,     # Replace with your phone number
-                  :from => "+17377778679")   # Replace with your Twilio number
-
-                puts "Sent message part #{index} to" + user.phone + "\n\n"
-
-                sleep 2
-              end
-
-            else # NOT SPRINT (normal carrier) 
-
-              message = @client.account.messages.create(
-                  :body => story.pureSMS + warning,
-                  :to => user.phone,     # Replace with your phone number
-                  :from => "+17377778679")   # Replace with your Twilio number
-
-              puts "Sent message to" + user.phone + "\n\n"
-
-            end# end of sprint/non-sprint sub block
+          elsif user.next_index_in_series == 999 #the second time they haven't responded
 
 
-          else #MULTIMEDIA MESSAGING (MMS)!
+             user.update(subscribed: false)
 
-            #arr for sprint
-            sprintArr = Sprint.chop(story.smsHash[user.child_age] + warning)
-
-            # if NOT sprint or if under 160 char
-            if user.carrier != "Sprint Spectrum, L.P." ||
-               (sprintArr.length == 1)
-
-            # if there's a single picture message
-              if story.mmsArr.length == 1
-
-                message = @client.account.messages.create(
-                  :body => story.smsHash[user.child_age] + warning,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-              puts "Sent message to" + user.phone + "\n\n"
-
-              elsif story.mmsArr.length == 2
-                #first picture (no SMS)
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-                puts "Sent first photo to " + user.phone + "\n\n"
-
-                sleep 20
-                #second picture with SMS
-                message = @client.account.messages.create(
-                  :body => story.smsHash[user.child_age] + warning,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-              puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-           #THREE MMS
-              elsif story.mmsArr.length == 3
-                #first picture (no SMS)
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-                puts "Sent first photo to " + user.phone + "\n\n"
-
-                sleep 20
-                #second picture (no SMS)
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-              puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-                sleep 20
-                #THIRD picture with SMS
-                message = @client.account.messages.create(
-                  :body => story.smsHash[user.child_age] + warning,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[2])   # Replace with your Twilio number
+             message = @client.account.messages.create(
+                      :to => myphone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :body => DROPPED
+                      )
 
 
 
-              else 
-                puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
-             
-              end
+          #send STORY or SERIES, but not if awaiting series response
+          elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
-              sleep 2 #sleep after sending msg
+            #SERIES
+            if user.series_choice != nil
 
-            else #a SPRINT phone with message greater than 160 char!
+              story = @@messageSeriesHash[user.series_choice + user.series_number][user.next_index_in_series]
 
-              #ONE PICTURE
-              if story.mmsArr.length == 1
+            #STORY
+            else 
 
-                #send single picture
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
+              story = @@messageArr[user.story_number] 
+            end 
+            
 
-                # sleep 5 JUNE 30
-                sleep 20
+            ##appended feedback request after first week, then every two weeks! 
+            if (user.story_number - user.last_feedback == 2) && (user.story_number > 2)
+                warning = "\n\nIf we don't hear from you, you will stop receiving StoryTime msgs."
+            else
+              warning = "" #NOTHING
+            end
 
+
+            #JUST SMS MESSAGING!
+            if user.mms == false
+
+              if user.carrier == "Sprint Spectrum, L.P." 
+
+                sprintArr = Sprint.chop(story.getPoemSMS + warning)
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
@@ -431,100 +234,231 @@ second = Struct::Story.new( ["http://i.imgur.com/rp11H68.jpg", "http://i.imgur.c
 
                   puts "Sent message part #{index} to" + user.phone + "\n\n"
 
-                  # sleep 2 JUNE 30
-                   sleep 5
-
+                  sleep 2
                 end
 
-              elsif story.mmsArr.length == 2            
+              else # NOT SPRINT (normal carrier) 
 
-                #send first picture
                 message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
-
-                puts "Sent first photo!"
-                sleep 20
-                
-                #send second picture
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-                puts "Sent second photo!"
-                sleep 20
-
-                #send sms chain
-                sprintArr.each_with_index do |text, index|  
-                  message = @client.account.messages.create(
-                    :body => text,
+                    :body => story.getPoemSMS + warning,
                     :to => user.phone,     # Replace with your phone number
                     :from => "+17377778679")   # Replace with your Twilio number
 
-                  puts "Sent message part #{index} to" + user.phone + "\n\n"
-                  sleep 1
+                puts "Sent message to" + user.phone + "\n\n"
 
+              end# end of sprint/non-sprint sub block
+
+
+            else #MULTIMEDIA MESSAGING (MMS)!
+
+              #arr for sprint
+              sprintArr = Sprint.chop(story.getSMS + warning)
+
+              # if NOT sprint or if under 160 char
+              if user.carrier != "Sprint Spectrum, L.P." ||
+                 (sprintArr.length == 1)
+
+              # if there's a single picture message
+                if story.getMmsArr.length == 1
+
+                  message = @client.account.messages.create(
+                    :body => story.getSMS + warning,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
+
+                puts "Sent message to" + user.phone + "\n\n"
+
+                elsif story.mmsArr.length == 2
+                  #first picture (no SMS)
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
+
+                  puts "Sent first photo to " + user.phone + "\n\n"
+
+                  sleep 20
+                  #second picture with SMS
+                  message = @client.account.messages.create(
+                    :body => story.getSMS + warning,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMmsArr[1])   # Replace with your Twilio number
+
+                puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+             #THREE MMS
+                elsif story.mmsArr.length == 3
+                  #first picture (no SMS)
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
+
+                  puts "Sent first photo to " + user.phone + "\n\n"
+
+                  sleep 20
+                  #second picture (no SMS)
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMmsArr[1])   # Replace with your Twilio number
+
+                puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+                  sleep 20
+                  #THIRD picture with SMS
+                  message = @client.account.messages.create(
+                    :body => story.getSMS + warning,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[2])   # Replace with your Twilio number
+
+
+
+                else 
+                  puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
+               
                 end
 
+                sleep 2 #sleep after sending msg
 
-                         #THREE MMS
-              elsif story.mmsArr.length == 3
-                #first picture (no SMS)
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[0])   # Replace with your Twilio number
+              else #a SPRINT phone with message greater than 160 char!
 
-                puts "Sent first photo to " + user.phone + "\n\n"
+                #ONE PICTURE
+                if story.mmsArr.length == 1
 
-                sleep 20
-                #second picture (no SMS)
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[1])   # Replace with your Twilio number
-
-              puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-                sleep 20
-                #THIRD picture with SMS
-                message = @client.account.messages.create(
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => story.mmsArr[2])   # Replace with your Twilio number 
-
-                sleep 20
-
-
-                #send sms chain
-                sprintArr.each_with_index do |text, index|  
+                  #send single picture
                   message = @client.account.messages.create(
-                    :body => text,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679")   # Replace with your Twilio number
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
 
-                  puts "Sent message part #{index} to" + user.phone + "\n\n"
-                  sleep 1
+                  # sleep 5 JUNE 30
+                  sleep 20
+
+
+                  sprintArr.each_with_index do |text, index|  
+                    message = @client.account.messages.create(
+                      :body => text,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                    puts "Sent message part #{index} to" + user.phone + "\n\n"
+
+                    # sleep 2 JUNE 30
+                     sleep 5
+
+                  end
+
+                elsif story.mmsArr.length == 2            
+
+                  #send first picture
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
+
+                  puts "Sent first photo!"
+                  sleep 20
+                  
+                  #send second picture
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[1])   # Replace with your Twilio number
+
+                  puts "Sent second photo!"
+                  sleep 20
+
+                  #send sms chain
+                  sprintArr.each_with_index do |text, index|  
+                    message = @client.account.messages.create(
+                      :body => text,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                    puts "Sent message part #{index} to" + user.phone + "\n\n"
+                    sleep 1
+
+                  end
+
+
+                           #THREE MMS
+                elsif story.mmsArr.length == 3
+                  #first picture (no SMS)
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
+
+                  puts "Sent first photo to " + user.phone + "\n\n"
+
+                  sleep 20
+                  #second picture (no SMS)
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[1])   # Replace with your Twilio number
+
+                puts "Sent seecond photo with message to" + user.phone + "\n\n"
+
+                  sleep 20
+                  #THIRD picture with SMS
+                  message = @client.account.messages.create(
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :media_url => story.getMMSArr[2])   # Replace with your Twilio number 
+
+                  sleep 20
+
+
+                  #send sms chain
+                  sprintArr.each_with_index do |text, index|  
+                    message = @client.account.messages.create(
+                      :body => text,
+                      :to => user.phone,     # Replace with your phone number
+                      :from => "+17377778679")   # Replace with your Twilio number
+
+                    puts "Sent message part #{index} to" + user.phone + "\n\n"
+                    sleep 1
+                  end
+
+                else
+
+                  puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
+
+                end#end sub-sprint
+
+              end#end nonsprint/sprint
+
+            end#MMS or SMS
+
+              #updating story or series number
+              #next_index_in_series == nil (or series_choice == nil?) means that you're not in a series
+              if user.next_index_in_series != nil
+                user.update(next_index_in_series: (user.next_index_in_series + 1))
+
+                #exit series if time's up
+                if user.next_index_in_series == @@messageSeriesArr[user.series_number].length
+
+                  ##return variable to nil: (nil, which means "you're asking the wrong question-- I'm not in a series")
+                  user.update(next_index_in_series: nil)
+                  user.update(series_choice: nil)
+
+                  #get ready for next series
+                  user.udpate(series_number: user.series_number + 1)
+
                 end
 
               else
+                user.update(story_number: user.story_number + 1)
+              end
 
-                puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
+          end#end story_subpart
 
-              end#end sub-sprint
-
-            end#end nonsprint/sprint
-
-          end#MMS or SMS
-
-          #update story number by 1
-          user.update(story_number: (user.story_number + 1))
-
-        end#end sendStory?
-
-      end#end of DROP of NOT because of not giving feedback
+        end#end sendStory? large
 
     end#end User.do
 
