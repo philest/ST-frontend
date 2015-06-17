@@ -95,7 +95,6 @@ class SomeWorker
 
           new_text(TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
 
-
         else #NORMAL carrier
 
           new_text(TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
@@ -107,7 +106,6 @@ class SomeWorker
 
       #UPDATE Birthdate! 
       if user.set_birthdate == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
-
 
         new_text(BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
@@ -148,215 +146,26 @@ class SomeWorker
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
             #get the story and series structures
-            @@messageArr = Message.getMessageArray
-            @@messageSeriesHash = MessageSeries.getMessageSeriesHash
+            messageArr = Message.getMessageArray
+            messageSeriesHash = MessageSeries.getMessageSeriesHash
 
             #SERIES
             if user.series_choice != nil
-              story = @@messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
+              story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
             #STORY
             else 
-              story = @@messageArr[user.story_number]
+              story = messageArr[user.story_number]
             end 
           
 
             #JUST SMS MESSAGING!
             if user.mms == false
 
-              if user.carrier == SPRINT
-
-                  new_sprint_long_sms(story.getPoemSMS, user.phone)
-
-              else # NOT SPRINT (normal carrier) 
-
-                  new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
-
-              end# end of sprint/non-sprint sub block
-
+                new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
-              #arr for sprint
-              sprintArr = Sprint.chop(story.getSMS)
-
-              # if NOT sprint or if under 160 char
-              if user.carrier != "Sprint Spectrum, L.P." ||
-                 (sprintArr.length == 1)
-
-              # if there's a single picture message
-                if story.getMmsArr.length == 1
-
-                  message = @client.account.messages.create(
-                    :body => story.getSMS,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
-
-                puts "Sent message to" + user.phone + "\n\n"
-
-                elsif story.mmsArr.length == 2
-                  #first picture (no SMS)
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
-
-                  puts "Sent first photo to " + user.phone + "\n\n"
-
-                  sleep 20
-                  #second picture with SMS
-                  message = @client.account.messages.create(
-                    :body => story.getSMS,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMmsArr[1])   # Replace with your Twilio number
-
-                puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-             #THREE MMS
-                elsif story.mmsArr.length == 3
-                  #first picture (no SMS)
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMmsArr[0])   # Replace with your Twilio number
-
-                  puts "Sent first photo to " + user.phone + "\n\n"
-
-                  sleep 20
-                  #second picture (no SMS)
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMmsArr[1])   # Replace with your Twilio number
-
-                puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-                  sleep 20
-                  #THIRD picture with SMS
-                  message = @client.account.messages.create(
-                    :body => story.getSMS,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[2])   # Replace with your Twilio number
-
-
-
-                else 
-                  puts "AN IMPOSSIBLE NUMBER OF PICTURE MESSAGES"
-               
-                end
-
-                sleep 2 #sleep after sending msg
-
-              else #a SPRINT phone with message greater than 160 char!
-
-                #ONE PICTURE
-                if story.mmsArr.length == 1
-
-                  #send single picture
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
-
-                  # sleep 5 JUNE 30
-                  sleep 20
-
-
-                  sprintArr.each_with_index do |text, index|  
-                    message = @client.account.messages.create(
-                      :body => text,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
-
-                    puts "Sent message part #{index} to" + user.phone + "\n\n"
-
-                    # sleep 2 JUNE 30
-                     sleep 5
-
-                  end
-
-                elsif story.mmsArr.length == 2            
-
-                  #send first picture
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
-
-                  puts "Sent first photo!"
-                  sleep 20
-                  
-                  #send second picture
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[1])   # Replace with your Twilio number
-
-                  puts "Sent second photo!"
-                  sleep 20
-
-                  #send sms chain
-                  sprintArr.each_with_index do |text, index|  
-                    message = @client.account.messages.create(
-                      :body => text,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
-
-                    puts "Sent message part #{index} to" + user.phone + "\n\n"
-                    sleep 1
-
-                  end
-
-
-                           #THREE MMS
-                elsif story.mmsArr.length == 3
-                  #first picture (no SMS)
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[0])   # Replace with your Twilio number
-
-                  puts "Sent first photo to " + user.phone + "\n\n"
-
-                  sleep 20
-                  #second picture (no SMS)
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[1])   # Replace with your Twilio number
-
-                puts "Sent seecond photo with message to" + user.phone + "\n\n"
-
-                  sleep 20
-                  #THIRD picture with SMS
-                  message = @client.account.messages.create(
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => story.getMMSArr[2])   # Replace with your Twilio number 
-
-                  sleep 20
-
-
-                  #send sms chain
-                  sprintArr.each_with_index do |text, index|  
-                    message = @client.account.messages.create(
-                      :body => text,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
-
-                    puts "Sent message part #{index} to" + user.phone + "\n\n"
-                    sleep 1
-                  end
-
-                else
-
-                  puts "AN IMPOSSIBLE NUMBER OF PICTURES!"
-
-                end#end sub-sprint
-
-              end#end nonsprint/sprint
+                new_mms(story.getSMS, story.getMmsArr, user.phone)
 
             end#MMS or SMS
 
@@ -366,14 +175,14 @@ class SomeWorker
                 user.update(next_index_in_series: (user.next_index_in_series + 1))
 
                 #exit series if time's up
-                if user.next_index_in_series == @@messageSeriesArr[user.series_number].length
+                if user.next_index_in_series == messageSeriesHash[user.series_choice + user.series_number.to_s].length
 
                   ##return variable to nil: (nil, which means "you're asking the wrong question-- I'm not in a series")
                   user.update(next_index_in_series: nil)
                   user.update(series_choice: nil)
 
                   #get ready for next series
-                  user.udpate(series_number: user.series_number + 1)
+                  user.update(series_number: user.series_number + 1)
 
                 end
 
