@@ -1,16 +1,16 @@
 
-helpers do
 
+class Helpers
 #testing goods
-	  	@@twiml_sms = Array.new
+
+		@@twiml_sms = Array.new
 	  	@@twiml_mms = Array.new
 
-
-
-
 	#ONLY A RESPONSE
-	def text(normalSMS, sprintSMS)
+	def self.text(normalSMS, sprintSMS, user_phone)
 	
+ 		@user = User.find_by(phone: user_phone)
+
 		#if sprint
 		if @user.carrier == SPRINT
 			msg = sprintSMS 
@@ -30,7 +30,7 @@ helpers do
 	end  
 
 	#helper method to deliver sprint texts
-	def new_sprint_long_sms(long_sms, user_phone)
+	def self.new_sprint_long_sms(long_sms, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -51,7 +51,7 @@ helpers do
 	end
 
 	#helper test method to deliver sprint texts
-	def test_new_sprint_long_sms(long_sms, user_phone)
+	def self.test_new_sprint_long_sms(long_sms, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -61,7 +61,7 @@ helpers do
 
 	end
 
-	def test_new_mms(sms, mms_array, user_phone)
+	def self.test_new_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -85,9 +85,7 @@ helpers do
 
 
 
-
-
-	def new_mms(sms, mms_array, user_phone)
+	def self.new_sms_first_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -95,7 +93,57 @@ helpers do
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user.carrier == SPRINT && sms.length > 160
 
-			sprintArr = Sprint.chop(sms)
+			new_sprint_long_sms(sms, user_phone)
+
+			mms_array.each_with_index do |mms_url, index|
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :mms_url => mms_url
+		                      )
+
+					 sleep 20
+			end
+
+
+		else
+			#SMS first!
+			message = @client.account.messages.create(
+	                  :to => @user.phone,     # Replace with your phone number
+	                  :from => "+17377778679",
+	                  :body => sms
+	                  )
+
+			sleep 13
+
+			mms_array.each_with_index do |mms_url, index|
+
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :mms_url => mms_url
+		                      )
+
+					 sleep 20
+			end
+
+			
+
+		end
+
+	end
+
+
+	def self.new_mms(sms, mms_array, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+
+		#if long sprint mms + sms, send all images, then texts one-by-one
+		if @user.carrier == SPRINT && sms.length > 160
+
 
 			mms_array.each_with_index do |mms_url, index|
 
@@ -187,7 +235,7 @@ helpers do
  # 	end
 
 
-	def test_new_text(normalSMS, sprintSMS, user_phone)
+	def self.test_new_text(normalSMS, sprintSMS, user_phone)
 		
 		@user = User.find_by(phone: user_phone)
 
@@ -214,7 +262,7 @@ helpers do
 
 
 	#send a NEW, unprompted text-- NOT a response
-	def new_text(normalSMS, sprintSMS, user_phone)
+	def self.new_text(normalSMS, sprintSMS, user_phone)
 		
 		@user = User.find_by(phone: user_phone)
 
@@ -251,7 +299,9 @@ helpers do
 
 
 
- 	def test_text(normalSMS, sprintSMS)
+ 	def self.test_text(normalSMS, sprintSMS, user_phone)
+
+ 		@user = User.find_by(phone: user_phone)
 
 	 	#if sprint
 		if @user.carrier == SPRINT

@@ -89,15 +89,15 @@ class SomeWorker
           
         if user.carrier == SPRINT
 
-          new_text(TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
+          Helpers.new_text(TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
 
                 sleep 10
 
-          new_text(TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
+          Helpers.new_text(TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
 
         else #NORMAL carrier
 
-          new_text(TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
+          Helpers.new_text(TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
 
         end
 
@@ -107,7 +107,7 @@ class SomeWorker
       #UPDATE Birthdate! 
       if user.set_birthdate == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
 
-        new_text(BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
+        Helpers.new_text(BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
         user.update(set_birthdate: true)
 
@@ -129,18 +129,18 @@ class SomeWorker
             user.update(awaiting_choice: true)
 
             #choose a series
-            new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
+            Helpers.new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
           
             
-            new_text(DAY_LATE, DAY_LATE, user.phone)
+            Helpers.new_text(DAY_LATE, DAY_LATE, user.phone)
             user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
 
              user.update(subscribed: false)
-             user.new_text(DROPPED, DROPPED, user.phone)
+             Helpers.new_text(DROPPED, DROPPED, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -161,11 +161,11 @@ class SomeWorker
             #JUST SMS MESSAGING!
             if user.mms == false
 
-                new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
+                Helpers.new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
-                new_mms(story.getSMS, story.getMmsArr, user.phone)
+                Helpers.new_mms(story.getSMS, story.getMmsArr, user.phone)
 
             end#MMS or SMS
 

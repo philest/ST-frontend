@@ -23,15 +23,21 @@ FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 class TestFirstTextWorker
   include Sidekiq::Worker
 
+
+
   sidekiq_options :queue => :critical
 
   sidekiq_options retry: false
 
   def perform(phoneNum) #Send the User the first poem shortly after first signup
   	
+
+  # binding.pry
+
+
     @user = User.find_by(phone: phoneNum)
 
-    test_new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+    Helpers.test_new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
 

@@ -31,26 +31,39 @@ describe 'The StoryTime Workers' do
 
 
 
+
+
+		before(:each) do
+  			TestFirstTextWorker.jobs.clear
+		end
+
+
    		it "properly enques a firstTextWorker" do
    		expect {
-   				# assert_equal 0, HardWorker.jobs.size
+   		# assert_equal 0, HardWorker.jobs.size
    				TestFirstTextWorker.perform_async("+15612125831")
    				# assert_equal 1, HardWorker.jobs.size
    		}.to change(TestFirstTextWorker.jobs, :size).by(1)
    		end
 
+   		it "starts with none, then adds more one" do
+   			expect(TestFirstTextWorker.jobs.size).to eq(0)
+   			TestFirstTextWorker.perform_async("+15612125831")
+   			expect(TestFirstTextWorker.jobs.size).to eq(1)
+   		end
 
 		  # SMS TESTS
 		it "isn't there before" do
 	 	  expect(User.find_by_phone("555")).to eq(nil)
 		end
 
-		before(:each) do
-  			get '/test/556/STORY/ATT'
-		end
 
 		it "has all the Brandon SMS in right order" do
-			expect(@@twiml_sms).to eq([START_SMS_1 + START_SMS_2].push TestFirstTextWorker::FIRST_SMS)
+			get '/test/556/STORY/ATT'
+			expect(TestFirstTextWorker.jobs.size).to eq(1)
+			TestFirstTextWorker.drain
+			expect(TestFirstTextWorker.jobs.size).to eq(0)
+			expect(@@twiml_sms).to eq([START_SMS_1 + "2" + START_SMS_2].push TestFirstTextWorker::FIRST_SMS)
 		end
 
 

@@ -39,11 +39,11 @@ class ChoiceWorker
 
     if @user.mms == true 
 
-      new_mms(story.getSMS, story.getMmsArr, @user.phone)
+      Helpers.new_sms_first_mms("Great, it's on the way!\n\n", story.getSMS, story.getMmsArr, @user.phone)
 
     else 
 
-      new_text(story.getPoemsSMS, story.getPoemsSMS, @user.phone )
+      Helpers.new_text("Great! Here it is.\n\n" + story.getPoemsSMS, story.getPoemsSMS, @user.phone )
 
     end
 
@@ -51,6 +51,8 @@ class ChoiceWorker
     @user.update(next_index_in_series: next_index_in_series + 1)
 
   end
+
+
 
 
 
