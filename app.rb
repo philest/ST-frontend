@@ -118,7 +118,7 @@ get '/sms' do
 	craig = "+16109520714"
 	joe = "+16105852565"
 
-		if (@user.phone == craig || @user.phone == joe)
+		if @user != nil && (@user.phone == craig || @user.phone == joe)
 			twiml = Twilio::TwiML::Response.new do |r|
 		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
 		   	end
