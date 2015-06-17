@@ -39,17 +39,119 @@ helpers do
 
 		@user = User.find_by(phone: user_phone)
 
+
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user.carrier == SPRINT && sms.length > 160
 
+			sprintArr = Sprint.chop(sms)
+
+			mms_array.each_with_index do |mms_url, index|
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :mms_url => mms_url
+		                      )
+
+					 sleep 20
+			end
+
+			sprintArr.each do |sprint_chunk|
+
+ 			 message = @client.account.messages.create(
+                      :to => @user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :body => sprint_chunk
+                      )
+
+ 			 sleep 10
+
+ 			end
 
 
+		else
 
+			mms_array.each_with_index do |mms_url, index|
 
+				if index + 1 == mms_array.length #last image
+				
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :mms_url => mms_url,
+		                      :body => sms
+		                      )
 
-		end 	
+					 sleep 10
 
+				else
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :mms_url => mms_url
+		                      )
+
+					 sleep 20
+				end
+
+			end
+
+		end
+		
 	end
+
+
+	def new_single_mms(sms, mms, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+		
+		if @user.carrier == SPRINT && sms.length > 160
+
+			sprintArr = Sprint.chop(sms)
+ 		
+ 			message = @client.account.messages.create(
+                      :to => @user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :mms_url => mms
+                      )
+
+ 			sleep 20
+
+ 			sprintArr.each do |sprint_chunk|
+
+ 			 message = @client.account.messages.create(
+                      :to => @user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :body => sprint_chunk
+                      )
+
+ 			 sleep 10
+
+ 			end
+
+ 		else
+
+ 			message = @client.account.messages.create(
+                      :to => @user.phone,     # Replace with your phone number
+                      :from => "+17377778679",
+                      :mms_url => mms,
+                      :body => sms
+                      )
+
+ 			sleep 10
+
+ 		end
+
+ 	end
+
+
+
+
+
+
+
+
 
 	#send a NEW, unprompted text-- NOT a response
 	def new_text(normalSMS, sprintSMS, user_phone)
