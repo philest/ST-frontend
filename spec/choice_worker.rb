@@ -8,6 +8,7 @@ require 'rack/test'
 
 # require_relative '../config/environments'
 
+require_relative '../messageSeries'
 
 
 
@@ -53,7 +54,26 @@ describe 'The StoryTime Workers' do
 	 	  expect(User.find_by_phone("555")).to eq(nil)
 		end
 
-		describe ""
+		describe "choiceWorker Details" do
+
+		before(:each) do
+  			@user = User.create(phone: "666", awaiting_choice: true)
+		end
+
+		
+			it "updates everything properly when make good choice" do
+				get '/test/556/p/ATT'
+				@user.reload
+		 	 	expect(@user.series_choice).to eq("p")
+		 	 	expect(@user.next_index_in_series).to eq(0)
+		 	 	expect(@user.awaiting_choice).to eq(false)		 	 	
+			end
+
+
+
+
+		end
+
 
 
 
