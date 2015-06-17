@@ -2,14 +2,14 @@
 require 'rubygems'
 require 'twilio-ruby'
 require 'sinatra/activerecord'
-require_relative '../models/user'           #add the user model
+require_relative '../../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
-require_relative '../sprint'
-require_relative '../message'
-require_relative '../messageSeries'
-require_relative '../helpers'
+require_relative '../../sprint'
+require_relative '../../message'
+require_relative '../../messageSeries'
+require_relative '../../helpers'
 
 class SomeWorker
   include Sidekiq::Worker

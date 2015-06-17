@@ -368,14 +368,9 @@ end
 
 
 
-
-
-
 #THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
-
-
 
 	#check if new user
 	#returns nil if not found
@@ -396,7 +391,8 @@ get '/test/:From/:Body/:Carrier' do
 
 	  	days = @user.days_per_week.to_s
 	  	
-	  	# FirstTextWorker.perform_in(18.seconds, @user.phone)
+
+	  	TestFirstTextWorker.perform_async(@user.phone)
 
 	  	test_text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2)	
 

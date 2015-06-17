@@ -1,6 +1,13 @@
 
 helpers do
 
+#testing goods
+	  	@@twiml_sms = Array.new
+	  	@@twiml_mms = Array.new
+
+
+
+
 	#ONLY A RESPONSE
 	def text(normalSMS, sprintSMS)
 	
@@ -53,6 +60,31 @@ helpers do
         end
 
 	end
+
+	def test_new_mms(sms, mms_array, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+		if @user.carrier == SPRINT && sms.length > 160
+
+			mms_array.each_with_index do |mms_url, index|
+				@@twiml_mms.push mms_url
+			end
+			test_new_sprint_long_sms(sms, user_phone)
+		else
+
+			mms_array.each_with_index do |mms_url, index|
+				@@twiml_mms.push mms_url
+			end
+
+			@@twiml_sms.push sms
+
+		end
+
+	end
+
+
+
 
 
 	def new_mms(sms, mms_array, user_phone)
@@ -225,9 +257,12 @@ helpers do
 		if @user.carrier == SPRINT
 
 			@@twiml = sprintSMS
+			@@twiml_sms.push sprintSMS
 
 		else #not Sprint
 			@@twiml = normalSMS
+			@@twiml_sms.push normalSMS
+
 		end 
 
 	end
