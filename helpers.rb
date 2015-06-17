@@ -34,6 +34,27 @@ helpers do
 	end  
 
 
+	def new_sprint_long_sms(long_sms, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+		sprintArr = Sprint.chop(long_sms)
+
+        sprintArr.each_with_index do |text, index|  
+          message = @client.account.messages.create(
+            :body => text,
+            :to => user.phone,     # Replace with your phone number
+            :from => "+17377778679")   # Replace with your Twilio number
+
+          puts "Sent sms part #{index} to" + user.phone + "\n\n"
+
+          sleep 10
+
+        end
+
+	end
+
+
 
 	def new_many_mms(sms, mms_array, user_phone)
 
@@ -98,7 +119,7 @@ helpers do
 			end
 
 		end
-		
+
 	end
 
 

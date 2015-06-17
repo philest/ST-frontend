@@ -153,7 +153,7 @@ class SomeWorker
 
             #SERIES
             if user.series_choice != nil
-              story = @@messageSeriesHash[user.series_choice + user.series_number][user.next_index_in_series]
+              story = @@messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
             #STORY
             else 
               story = @@messageArr[user.story_number]
@@ -163,29 +163,13 @@ class SomeWorker
             #JUST SMS MESSAGING!
             if user.mms == false
 
-              if user.carrier == "Sprint Spectrum, L.P." 
+              if user.carrier == SPRINT
 
-                sprintArr = Sprint.chop(story.getPoemSMS)
-
-                sprintArr.each_with_index do |text, index|  
-                  message = @client.account.messages.create(
-                    :body => text,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679")   # Replace with your Twilio number
-
-                  puts "Sent message part #{index} to" + user.phone + "\n\n"
-
-                  sleep 2
-                end
+                  new_sprint_long_sms(story.getPoemSMS, user.phone)
 
               else # NOT SPRINT (normal carrier) 
 
-                message = @client.account.messages.create(
-                    :body => story.getPoemSMS,
-                    :to => user.phone,     # Replace with your phone number
-                    :from => "+17377778679")   # Replace with your Twilio number
-
-                puts "Sent message to" + user.phone + "\n\n"
+                  new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
 
               end# end of sprint/non-sprint sub block
 
