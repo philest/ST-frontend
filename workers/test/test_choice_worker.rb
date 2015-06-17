@@ -39,11 +39,11 @@ class TestChoiceWorker
 
     if @user.mms == true 
 
-      new_mms(story.getSMS, story.getMmsArr, @user.phone)
+      test_new_mms(story.getSMS, story.getMmsArr, @user.phone)
 
     else 
 
-      new_text(story.getPoemsSMS, story.getPoemsSMS, @user.phone )
+      test_new_text(story.getPoemsSMS, story.getPoemsSMS, @user.phone )
 
     end
 

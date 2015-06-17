@@ -478,7 +478,7 @@ get '/test/:From/:Body/:Carrier' do
 			#send the choice text
 			# ChoiceWorker.perform_in(18.seconds, @user.phone)
 
-			Helpers.test_text(GOOD_CHOICE, GOOD_CHOICE, @user.phone)
+			# ChoiceWorker.perform_async(@user.phone)
 	 	else	 			
 			Helpers.test_text(BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
