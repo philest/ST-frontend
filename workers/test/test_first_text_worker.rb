@@ -15,7 +15,7 @@ FIRST_MMS = ["http://i.imgur.com/FfGSHjw.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
 
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
-class FirstTextWorker
+class TestFirstTextWorker
   include Sidekiq::Worker
 
   sidekiq_options :queue => :critical
@@ -25,13 +25,6 @@ class FirstTextWorker
   def perform(phoneNum) #Send the User the first poem shortly after first signup
   	
     @user = User.find_by(phone: phoneNum)
-
-    #set TWILIO credentials:
-    account_sid = ENV['TW_ACCOUNT_SID']
-    auth_token = ENV['TW_AUTH_TOKEN']
-
-    @client = Twilio::REST::Client.new account_sid, auth_token
-
 
     new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
 

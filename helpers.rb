@@ -43,6 +43,16 @@ helpers do
 
 	end
 
+	#helper test method to deliver sprint texts
+	def test_new_sprint_long_sms(long_sms, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+		Sprint.chop(long_sms).each_with_index do |text, index|  
+	        @@twiml_sms.push text
+        end
+
+	end
 
 
 	def new_mms(sms, mms_array, user_phone)
@@ -143,6 +153,32 @@ helpers do
  # 		end
 
  # 	end
+
+
+	def test_new_text(normalSMS, sprintSMS, user_phone)
+		
+		@user = User.find_by(phone: user_phone)
+
+		#if sprint
+		if @user.carrier == SPRINT && sprintSMS.length > 160
+
+			test_new_sprint_long_sms(sprintSMS, user_phone)
+
+		elsif @user.carrier == SPRINT
+
+			@@twiml_sms.push sprintSMS 
+
+		else #not Sprint
+
+			@@twiml_sms.push normalSMS 
+
+		end 
+
+		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+
+	end  
+
+
 
 
 	#send a NEW, unprompted text-- NOT a response

@@ -20,7 +20,13 @@ require_relative './workers/first_text_worker'
 require_relative './workers/choice_worker'
 require_relative './helpers.rb'
 
-# require 'pry'
+#require the testing workers
+configure :test, :development do
+	require_relative './workers/test/test_first_text_worker'
+	require_relative './workers/test/test_choice_worker'
+	require_relative './workers/test/test_some_worker'
+end
+
 
 configure :production do
   require 'newrelic_rpm'
@@ -108,10 +114,33 @@ get '/sms' do
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From])
 
+	
+	craig = "+16109520714"
+	joe = "+16105852565"
+
+		if (@user.phone == craig || @user.phone == joe)
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
+		   	end
+		    twiml.text
+		end
+
+
 	#first reply: new user, add her
 	if @user == nil 
 
 		@user = User.create(phone: params[:From])
+
+	craig = "+16109520714"
+	joe = "+16105852565"
+
+		if (@user.phone == craig || @user.phone == joe)
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
+		   	end
+		    twiml.text
+		end
+
 
 		#randomly assign to get two days a week or three days a week
 		if (rand = Random.rand(9)) == 0
