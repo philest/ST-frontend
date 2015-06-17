@@ -29,13 +29,24 @@ describe 'The StoryTime Workers' do
 
    describe "FirstTextWoker" do
 
+
+
+   		it "properly enques a firstTextWorker" do
+   		expect {
+   				# assert_equal 0, HardWorker.jobs.size
+   				TestFirstTextWorker.perform_async("+15612125831")
+   				# assert_equal 1, HardWorker.jobs.size
+   		}.to change(TestFirstTextWorker.jobs, :size).by(1)
+   		end
+
+
 		  # SMS TESTS
 		it "isn't there before" do
-	 	  expect(User.find_by_phone("555")).not_to eq("555")
+	 	  expect(User.find_by_phone("555")).to eq(nil)
 		end
 
 		before(:each) do
-  			get '/test/555/STORY/ATT'
+  			get '/test/556/STORY/ATT'
 		end
 
 		it "has all the Brandon SMS in right order" do
