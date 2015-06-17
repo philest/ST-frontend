@@ -5,6 +5,7 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 
 require_relative '../sprint'
+require_relative '../helpers'
 
 
 SPRINT_NAME = "Sprint Spectrum, L.P."
@@ -24,8 +25,8 @@ class FirstTextWorker
   sidekiq_options retry: false
 
   def perform(phoneNum) #Send the User the first poem shortly after first signup
-  	@user = User.find_by(phone: phoneNum)
-
+  	
+    @user = User.find_by(phone: phoneNum)
 
     #set TWILIO credentials:
     account_sid = ENV['TW_ACCOUNT_SID']
@@ -34,63 +35,9 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
+    new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
 
-
-
-  	#SPRINT
-    if @user.carrier == SPRINT_NAME && FIRST_SMS.length > 160
-
-  		sprintArr = Sprint.chop(FIRST_SMS)
-
-  		                #send single picture
-                message = @client.account.messages.create(
-                    :to => @user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => FIRST_MMS[0])   # Replace with your Twilio number
-
-                sleep 20
-
-                message = @client.account.messages.create(
-                    :to => @user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => FIRST_MMS[1])   # Replace with your Twilio number
-
-                sleep 15
-
-
-                sprintArr.each_with_index do |text, index|  
-                  message = @client.account.messages.create(
-                    :body => text,
-                    :to => @user.phone,     # Replace with your phone number
-                    :from => "+17377778679")   # Replace with your Twilio number
-
-                  puts "Sent first pic message part #{index} to" + @user.phone + "\n\n"
-
-                  sleep 7
-
-          		  end
-    else #NORMAL
-
-
-                   #send first picture
-                message = @client.account.messages.create(
-                    :to => @user.phone,     # Replace with your phone number
-                    :from => "+17377778679",
-                    :media_url => FIRST_MMS[0])   # Replace with your Twilio number
-
-                sleep 20
-
-                  message = @client.account.messages.create(
-                    :media_url => FIRST_MMS[1],
-                    :body => FIRST_SMS,
-                    :to => @user.phone,     # Replace with your phone number
-                    :from => "+17377778679")   # Replace with your Twilio number
-
-                  puts "Sent Very First Story message to" + @user.phone + "\n\n"
-
-                  sleep 1
-
-    end
+    puts "Sent Very First Story message to" + @user.phone + "\n\n"
 
   end
 

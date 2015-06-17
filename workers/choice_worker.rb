@@ -39,70 +39,21 @@ class ChoiceWorker
 
     if @user.mms == true 
 
-      if @user.carrier != SPRINT_NAME_2 || story.getSMS < 160
-
-          story.getMmsArr.each_with_index do |mms_url, index|
-
-                    if (index + 1) < story.getMmsArr.length #Not the last image yet
-
-                      message = @client.account.messages.create(
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => mms_url
-                      )   # Replace with your Twilio number
-
-                      sleep 20
-
-                    else
-
-                      message = @client.account.messages.create(
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => mms_url,
-                      :body => story.getSMS
-
-                      )   # Replace with your Twilio number
-
-                      sleep 2
-
-                    end
-          end
-
-      else #SPRINT
-
-              sprintArr = Sprint.chop(story.getSMS)
-
-              story.getMmsArr.each do |mms_url|
-                     
-                      message = @client.account.messages.create(
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :media_url => mms_url
-                      )   # Replace with your Twilio number
-
-                      sleep 20
-              end
-
-              sprintArr.each do |sms|
-
-                      message = @client.account.messages.create(
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :body => sms
-                    )
-
-                      sleep 10
-              end
-
-      end
+      new_mms(story.getSMS, story.getMmsArr, @user.phone)
 
     else 
 
-      puts "Haven't yet enabled SMS version"
+      new_text(story.getPoemsSMS, story.getPoemsSMS, @user.phone )
 
     end
 
+    #prep for next
+    @user.update(next_index_in_series: next_index_in_series + 1)
+
   end
+
+
+
 
 end
 

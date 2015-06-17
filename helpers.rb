@@ -68,9 +68,6 @@ helpers do
 
 			new_sprint_long_sms(sms, user_phone)
 
- 			end
-
-
 		else
 
 			mms_array.each_with_index do |mms_url, index|
