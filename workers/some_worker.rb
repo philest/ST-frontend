@@ -9,6 +9,7 @@ require 'sidetiq'
 require_relative '../sprint'
 require_relative '../message'
 require_relative '../messageSeries'
+require_relative '../helpers'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -23,30 +24,25 @@ class SomeWorker
 
   Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
-  TIME_SMS_SPRINT_1 = "(1/2) StoryTime: Hi! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?"
+  TIME_SMS_SPRINT_1 = "(1/2)\nStoryTime: Hi! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?"
 
-  TIME_SMS_SPRINT_2 = "(2/2) Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
+  TIME_SMS_SPRINT_2 = "(2/2)\nRememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
   BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
-DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story. To continue getting StoryTime stories, just reply \"yes\"\n\nThanks :)"
-
+  DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story. To continue getting StoryTime stories, just reply \"yes\"\n\nThanks :)"
 
   DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
-SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
+  SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
 
 
-
-
-  if ENV['MY_MACHINE?'] != "true" #on the INTERNET
-
-    UPDATE_TIME = "20:00" #time for the birthdate and time updates
-  
-  else #my machine
- 
+  #time for the birthdate and time updates: NOTE, EST set.
+  if ENV['MY_MACHINE?'] == "true" #my machine
     UPDATE_TIME = "16:00"
- 
+
+  else #on the INTERNET
+    UPDATE_TIME = "20:00" 
   end
 
 	sidekiq_options retry: false #if fails, don't resent (multiple texts)
@@ -59,13 +55,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
 
 
 
-  def self.buildStoryArr
 
-    @@messageArr = Message.getMessageArray
-
-    @@messageSeriesHash = MessageSeries.getMessageSeriesHash
-
-  end
 
 
   def perform(*args)
@@ -75,53 +65,41 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
 
     @client = Twilio::REST::Client.new account_sid, auth_token
 
+    #logging
+    puts "\nSystemTime: " + SomeWorker.cleanSysTime + "\n"
 
-    puts "SystemTime is: " + SomeWorker.cleanSysTime
+
+    #logging
+    puts "\nSend story?: \n"
 
     # send Twilio message
-    # ignores improperly registered users, AND users who have unsubscribed
+    # only for subscribed
     User.where(subscribed: true).find_each do |user|
 
       #logging info
-      print 'Send story to time ' + SomeWorker.convertTimeTo24(user.time) + "?: "
+      puts  user.phone + " with time " + SomeWorker.convertTimeTo24(user.time) + ": "
       if SomeWorker.sendStory?(user)
         puts 'YES!!'
       else
-         puts 'No.'
+        puts 'No.'
       end
 
-
+      #UPDATE time
       if user.set_time == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 2 #Customize time 
           
         if user.carrier == SPRINT
-                    message = @client.account.messages.create(
-                      :body => TIME_SMS_SPRINT_1,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
 
-                puts "Sent time update message part 1 to " + user.phone + "\n\n"
+          new_text(TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
 
                 sleep 10
 
-                     message = @client.account.messages.create(
-                      :body => TIME_SMS_SPRINT_2,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
+          new_text(TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
 
-                puts "Sent time update message part 2 to " + user.phone + "\n\n"
-
-                sleep 1
 
         else #NORMAL carrier
 
-                    message = @client.account.messages.create(
-                      :body => TIME_SMS_NORMAL,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
+          new_text(TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
 
-                puts "Sent time update message part 1 to " + user.phone + "\n\n"
-
-                sleep 1
         end
 
       end
@@ -131,25 +109,14 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
       if user.set_birthdate == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
 
 
-                    message = @client.account.messages.create(
-                      :body => BIRTHDATE_UPDATE,
-                      :to => user.phone,     # Replace with your phone number
-                      :from => "+17377778679")   # Replace with your Twilio number
-
-                puts "Sent birthday update message part 1 to " + user.phone + "\n\n"
-
-                sleep 1
-
-          user.update(set_birthdate: true)
+        new_text(BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
+        
+        user.update(set_birthdate: true)
 
       end
 
 
-
-
-
         if SomeWorker.sendStory?(user) 
-
 
          #Should the user be asked to choose a series?
           #If it's all of these:
@@ -157,70 +124,48 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
           #a) their time, 
           #b) their third story, or every third one thereafter.
           #c) they're not in the middle of a series
-          if user.awaiting_choice == false && (SomeWorker.sendStory?(user) &&  (user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && next_index_in_series == nil)
+          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && (user.story_number + 1) % 3 == 0)) && next_index_in_series == nil)
 
             #get set for first in series
             user.update(next_index_in_series: 0)
             user.update(awaiting_choice: true)
 
             #choose a series
-                message = @client.account.messages.create(
-                  :to => myphone,     # Replace with your phone number
-                  :from => "+17377778679",
-                  :body => SERIES_CHOICES[user.series_number])
+            new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
           
-             message = @client.account.messages.create(
-                      :to => myphone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :body => DAY_LATE
-                      )
-
-             user.update(next_index_in_series: 999)  
+            
+            new_text(DAY_LATE, DAY_LATE, user.phone)
+            user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
 
-
              user.update(subscribed: false)
-
-             message = @client.account.messages.create(
-                      :to => myphone,     # Replace with your phone number
-                      :from => "+17377778679",
-                      :body => DROPPED
-                      )
-
-
+             user.new_text(DROPPED, DROPPED, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
+            #get the story and series structures
+            @@messageArr = Message.getMessageArray
+            @@messageSeriesHash = MessageSeries.getMessageSeriesHash
+
             #SERIES
             if user.series_choice != nil
-
               story = @@messageSeriesHash[user.series_choice + user.series_number][user.next_index_in_series]
-
             #STORY
             else 
-
-              story = @@messageArr[user.story_number] 
+              story = @@messageArr[user.story_number]
             end 
-            
-
-            ##appended feedback request after first week, then every two weeks! 
-            if (user.story_number - user.last_feedback == 2) && (user.story_number > 2)
-                warning = "\n\nIf we don't hear from you, you will stop receiving StoryTime msgs."
-            else
-              warning = "" #NOTHING
-            end
-
+          
 
             #JUST SMS MESSAGING!
             if user.mms == false
 
               if user.carrier == "Sprint Spectrum, L.P." 
 
-                sprintArr = Sprint.chop(story.getPoemSMS + warning)
+                sprintArr = Sprint.chop(story.getPoemSMS)
 
                 sprintArr.each_with_index do |text, index|  
                   message = @client.account.messages.create(
@@ -236,7 +181,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
               else # NOT SPRINT (normal carrier) 
 
                 message = @client.account.messages.create(
-                    :body => story.getPoemSMS + warning,
+                    :body => story.getPoemSMS,
                     :to => user.phone,     # Replace with your phone number
                     :from => "+17377778679")   # Replace with your Twilio number
 
@@ -248,7 +193,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
             else #MULTIMEDIA MESSAGING (MMS)!
 
               #arr for sprint
-              sprintArr = Sprint.chop(story.getSMS + warning)
+              sprintArr = Sprint.chop(story.getSMS)
 
               # if NOT sprint or if under 160 char
               if user.carrier != "Sprint Spectrum, L.P." ||
@@ -258,7 +203,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
                 if story.getMmsArr.length == 1
 
                   message = @client.account.messages.create(
-                    :body => story.getSMS + warning,
+                    :body => story.getSMS,
                       :to => user.phone,     # Replace with your phone number
                       :from => "+17377778679",
                       :media_url => story.getMmsArr[0])   # Replace with your Twilio number
@@ -277,7 +222,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
                   sleep 20
                   #second picture with SMS
                   message = @client.account.messages.create(
-                    :body => story.getSMS + warning,
+                    :body => story.getSMS,
                       :to => user.phone,     # Replace with your phone number
                       :from => "+17377778679",
                       :media_url => story.getMmsArr[1])   # Replace with your Twilio number
@@ -306,7 +251,7 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
                   sleep 20
                   #THIRD picture with SMS
                   message = @client.account.messages.create(
-                    :body => story.getSMS + warning,
+                    :body => story.getSMS,
                       :to => user.phone,     # Replace with your phone number
                       :from => "+17377778679",
                       :media_url => story.getMMSArr[2])   # Replace with your Twilio number
@@ -653,11 +598,6 @@ SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want st
     return cleanedTime
 
   end
-
-
-#start doing stuff!
-SomeWorker.buildStoryArr #Go!
-
 
 
 end

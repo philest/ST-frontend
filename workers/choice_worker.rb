@@ -31,7 +31,7 @@ class ChoiceWorker
     #get the first poem in the series
     messageSeriesHash = MessageSeries.getMessageSeriesHash
 
-    story = messageSeriesHash[@user.series_choice + @user.series_number][0]
+    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
 
     #Picture Messaging

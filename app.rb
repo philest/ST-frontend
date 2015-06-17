@@ -12,11 +12,13 @@ require_relative './config/initializers/redis'
 require 'sidekiq/api'
 require_relative './sprint'
 require_relative './age'
+
+require_relative './message'
 require_relative './messageSeries'
 require_relative './workers/some_worker'
 require_relative './workers/first_text_worker'
 require_relative './workers/choice_worker'
-
+require_relative './helpers.rb'
 
 # require 'pry'
 
@@ -212,15 +214,17 @@ get '/sms' do
 			body = params[:Body][1,1]
 		end
 
+		body.downcase!
+
 		#push back to zero incase this was changed to -1 to denote one 'day' after
         @user.update(next_index_in_series: 0)
 
 		#check if the choice is valid
-		if MessageSeries.codeIsInHash( body + @user.series_number)
+		if MessageSeries.codeIsInHash( body + @user.series_number.to_s)
 	 			
 			#update the series choice
 			@user.update(series_choice: body)
-			    @user.update(awaiting_choice: false)
+			@user.update(awaiting_choice: false)
 
 			#send the choice text
 			ChoiceWorker.perform_in(18.seconds, @user.phone)
@@ -330,56 +334,6 @@ end
 
 
 
-helpers do
-
-	def text(normalSMS, sprintSMS)
-	
-		#if sprint
-		if @user.carrier == SPRINT
-
-			msg = sprintSMS 
-
-			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
-
-
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message sprintSMS #SEND SPRINT MSG
-	    	end
-	    	twiml.text
-
-		else #not Sprint
-
-			msg = normalSMS 
-
-			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
-
-			twiml = Twilio::TwiML::Response.new do |r|
-	   			r.Message normalSMS	#SEND NORMAL
-	    	end
-	    	twiml.text
-		end 
-
-
-	end  	
-
- 	def test_text(normalSMS, sprintSMS)
-
-	 	#if sprint
-		if @user.carrier == SPRINT
-
-			@@twiml = sprintSMS
-
-		else #not Sprint
-			@@twiml = normalSMS
-		end 
-
-	end
-
-
-end
-
-
-
 
 
 
@@ -483,18 +437,20 @@ get '/test/:From/:Body/:Carrier' do
 			body = params[:Body][1,1]
 		end
 
+		body.downcase!
+
 		#push back to zero incase this was changed to -1 to denote one 'day' after
         @user.update(next_index_in_series: 0)
 
 		#check if the choice is valid
-		if MessageSeries.codeIsInHash( body + @user.series_number)
+		if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
 	 			
 			#update the series choice
 			@user.update(series_choice: body)
-			 @user.update(awaiting_choice: false)
+			@user.update(awaiting_choice: false)
 
 			#send the choice text
-			ChoiceWorker.perform_in(18.seconds, @user.phone)
+			# ChoiceWorker.perform_in(18.seconds, @user.phone)
 
 			test_text(GOOD_CHOICE, GOOD_CHOICE)
 	 	else	 			

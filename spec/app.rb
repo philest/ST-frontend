@@ -17,7 +17,6 @@ TEXT_URL = "TEXT"
 
 SPRINT_QUERY_STRING = 'Sprint%20Spectrum%2C%20L%2EP%2E'
 
-
 RESUBSCRIBE = "StoryTime: Welcome back to StoryTime! Twice a week, we'll send you a new free story to read aloud-- continuing from where you left off!"
 
 WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
@@ -37,7 +36,6 @@ Normal text rates may apply. For help or feedback, please contact our director, 
 HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
 HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
-
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
 
@@ -260,49 +258,56 @@ describe 'The StoryTime App' do
 
     describe "Series" do
       before(:each) do
-        @user = User.create(phone: "700", story_number: 3)
+        @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
       end
 
-    it "updates last_feedback" do
-      get '/test/700/5/ATT'
+    it "updates series_choice" do
+      get '/test/700/p/ATT'
       @user.reload
-      expect(@user.last_feedback).to eq(0)
+      expect(@user.series_choice).to eq("p")
     end
 
-    it "rejects bad response" do
-      get '/test/700/best/ATT'
+    it "good text response" do
+      get '/test/700/p/ATT'
+      @user.reload
+      expect(@@twiml).to eq(GOOD_CHOICE)
+    end
+
+    it "doesn't register a letter weird choice" do
+      get '/test/700/X/ATT'
+      @user.reload
+      expect(@@twiml).to eq(BAD_CHOICE)
+    end
+
+    it "doesn't register a letter on a diff day" do
+      @user.update(series_number: 1)
+      @user.reload
+      get '/test/700/p/ATT'
+      @user.reload
+      expect(@@twiml).to eq(BAD_CHOICE)
+    end
+
+
+    it "works for uppercase" do
+      get '/test/700/P/ATT'
+      @user.reload
+      expect(@@twiml).to eq(GOOD_CHOICE)
+    end
+
+
+    it "updates awaiting choice" do
+      get '/test/700/P/ATT'
+      @user.reload
+      expect(@user.awaiting_choice).to eq(false)
+    end
+
+
+    it "updates awaiting choice" do
+      @user.update(awaiting_choice: false)
+      @user.reload
+      get '/test/700/p/ATT'
       @user.reload
       expect(@@twiml).to eq(NO_OPTION)
-    end
-
-
-
-    it "updates last_feedback on conflict days" do
-      @user.update(story_number: 4)
-      @user.reload
-      get '/test/700/5/ATT'
-      @user.reload
-      expect(@user.last_feedback).to eq(3)
-    end
-
-    it "delivers right tip (first day) for sprint" do
-          get '/test/700/5/' + SPRINT_QUERY_STRING
-          @user.reload
-          expect(@@twiml).to eq(@@tips_sprint[0])
-    end
-
-   it "delivers right tip (first day) for normal" do
-          get '/test/700/5/ATT'
-          @user.reload
-          expect(@@twiml).to eq(@@tips_normal[0])
-    end
-
-       it "delivers right tip (second day) for normal" do
-          @user.update(story_number: 2)
-          @user.reload         
-          get '/test/700/5/ATT'
-          @user.reload
-          expect(@@twiml).to eq(@@tips_normal[1])
     end
 
 
