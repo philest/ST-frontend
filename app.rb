@@ -98,6 +98,10 @@ For help, reply HELP NOW."
 
 SAMPLE_GREET = 'StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)'
 
+POST_SAMPLE = "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."
+
+NO_SIGNUP_MATCH = "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
+
 
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
@@ -182,10 +186,13 @@ get '/sms' do
 
 		Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
 
+	elsif @user.sample == true
+
+		Helpers.text(POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user == nil
 
-		#Didn't recognize that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample.
+		Helpers.text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
