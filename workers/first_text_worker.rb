@@ -45,7 +45,7 @@ class FirstTextWorker
     if type == FIRST
       Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
     else
-      Helpers.new_sms_first_mms(SAMPLE_SMS, SAMPLE_SMS, @user.phone)
+      Helpers.new_sms_first_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
     end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
