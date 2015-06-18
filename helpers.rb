@@ -107,7 +107,7 @@ class Helpers
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
-		                      :mms_url => mms_url
+		                      :media_url => mms_url
 		                      )
 
 					 sleep 20
@@ -130,7 +130,7 @@ class Helpers
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
-		                      :mms_url => mms_url
+		                      :media_url => mms_url
 		                      )
 
 					 sleep 20
@@ -178,13 +178,12 @@ class Helpers
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user.carrier == SPRINT && sms.length > 160
 
-
 			mms_array.each_with_index do |mms_url, index|
 
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
-		                      :mms_url => mms_url
+		                      :media_url => mms_url
 		                      )
 
 					 sleep 20
@@ -194,14 +193,14 @@ class Helpers
 
 		else
 
-			mms_array.each_with_index do |mms_url, index|
+			mms_array.each do |mms|
 
 				if index + 1 == mms_array.length #last image
 				
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
-		                      :mms_url => mms_url,
+		                      :media_url => mms,
 		                      :body => sms
 		                      )
 
@@ -212,7 +211,7 @@ class Helpers
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
-		                      :mms_url => mms_url
+		                      :media_url => mms
 		                      )
 
 					 sleep 20
