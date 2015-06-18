@@ -10,10 +10,17 @@ require_relative '../helpers'
 
 SPRINT_NAME = "Sprint Spectrum, L.P."
 
+FIRST = "FIRST"
 
 FIRST_MMS = ["http://i.imgur.com/FfGSHjw.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
 
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
+
+
+
+SAMPLE_SMS = 'StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)'
+
+
 
 class FirstTextWorker
   include Sidekiq::Worker
@@ -22,7 +29,8 @@ class FirstTextWorker
 
   sidekiq_options retry: false
 
-  def perform(phoneNum) #Send the User the first poem shortly after first signup
+  def perform(type, phoneNum) #Send the User the first poem shortly after first signup
+                              #if SAMPLE, send the text first and a different message
   	
     @user = User.find_by(phone: phoneNum)
 
@@ -33,7 +41,12 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
-    Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+
+    if type == FIRST
+      Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+    else
+      Helpers.new_sms_first_mms(SAMPLE_SMS, SAMPLE_SMS, @user.phone)
+    end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
 

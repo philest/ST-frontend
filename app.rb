@@ -96,12 +96,14 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 For help, reply HELP NOW."
 
 
-SAMPLE_GREET = 'StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)'
 
 POST_SAMPLE = "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."
 
 NO_SIGNUP_MATCH = "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
 
+SAMPLE = "SAMPLE"
+
+FIRST = "FIRST"
 
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
@@ -172,7 +174,7 @@ get '/sms' do
 		  	days = @user.days_per_week.to_s
 
 		  	
-		  	FirstTextWorker.perform_in(15.seconds, @user.phone)
+		  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
 
 		  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
@@ -182,9 +184,9 @@ get '/sms' do
 
 		@user.create(sample: true, phone: params[:From])
 
-		FirstTextWorker.perform_in(15.seconds, params[:From])
+		FirstTextWorker.perform_async(SAMPLE, params[:From])
 
-		Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
+		# Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
 
 	elsif @user.sample == true
 
@@ -196,11 +198,11 @@ get '/sms' do
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
-			#REACTIVATE SUBSCRIPTION
-			@user.update(subscribed: true)
-			@user.update(next_index_in_series: nil)
+		#REACTIVATE SUBSCRIPTION
+		@user.update(subscribed: true)
+		@user.update(next_index_in_series: nil)
 
-			Helpers.text(RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.text(RESUBSCRIBE, RESUBSCRIBE, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
