@@ -182,7 +182,7 @@ get '/sms' do
 
 	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
 
-		@user.create(sample: true, phone: params[:From])
+		@user = User.create(sample: true, phone: params[:From])
 
 		FirstTextWorker.perform_async(SAMPLE, params[:From])
 
