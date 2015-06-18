@@ -116,16 +116,6 @@ get '/sms' do
 	@user = User.find_by_phone(params[:From])
 
 	
-	craig = "+16109520714"
-	joe = "+16105852565"
-
-		if @user != nil && (@user.phone == craig || @user.phone == joe)
-			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
-		   	end
-		    twiml.text
-		end
-
 
 	#first reply: new user, add her
 	if @user == nil 
@@ -136,6 +126,9 @@ get '/sms' do
 		joe = "+16105852565"
 
 		if (@user.phone == craig || @user.phone == joe)
+			
+			@user.update(subscribed: false)
+			
 			twiml = Twilio::TwiML::Response.new do |r|
 		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
 		   	end
