@@ -129,6 +129,7 @@ get '/sms' do
 			@user = User.create(phone: params[:From])
 		else
 			@user.update(sample: false)
+			@user.update(subscribed: true) 
 		end
 
 		craig = "+16109520714"
@@ -182,7 +183,7 @@ get '/sms' do
 
 	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
 
-		@user = User.create(sample: true, phone: params[:From])
+		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
 		FirstTextWorker.perform_async(SAMPLE, params[:From])
 
