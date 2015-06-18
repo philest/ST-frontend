@@ -193,7 +193,7 @@ class Helpers
 
 		else
 
-			mms_array.each do |mms|
+			mms_array.each_with_index do |mms, index|
 
 				if index + 1 == mms_array.length #last image
 				
