@@ -6,6 +6,13 @@ class Helpers
 		@@twiml_sms = Array.new
 	  	@@twiml_mms = Array.new
 
+		#set TWILIO credentials:
+	    account_sid = ENV['TW_ACCOUNT_SID']
+	    auth_token = ENV['TW_AUTH_TOKEN']
+
+    @client = Twilio::REST::Client.new account_sid, auth_token
+
+
 	#ONLY A RESPONSE
 	def self.text(normalSMS, sprintSMS, user_phone)
 	
