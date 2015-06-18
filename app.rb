@@ -128,7 +128,7 @@ get '/sms' do
 		if (@user.phone == craig || @user.phone == joe)
 			
 			@user.update(subscribed: false)
-			
+
 			twiml = Twilio::TwiML::Response.new do |r|
 		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
 		   	end
@@ -165,7 +165,7 @@ get '/sms' do
 		  	days = @user.days_per_week.to_s
 
 		  	
-		  	FirstTextWorker.perform_in(18.seconds, @user.phone)
+		  	FirstTextWorker.perform_in(15.seconds, @user.phone)
 
 		  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
