@@ -132,49 +132,51 @@ get '/sms' do
 
 		@user = User.create(phone: params[:From])
 
-	craig = "+16109520714"
-	joe = "+16105852565"
+		craig = "+16109520714"
+		joe = "+16105852565"
 
 		if (@user.phone == craig || @user.phone == joe)
 			twiml = Twilio::TwiML::Response.new do |r|
 		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
 		   	end
 		    twiml.text
-		end
 
-
-		#randomly assign to get two days a week or three days a week
-		if (rand = Random.rand(9)) == 0
-			@user.update(days_per_week: 3)
-		elsif rand < 5
-			@user.update(days_per_week: 1)
 		else
-			@user.update(days_per_week: 2)
+
+
+			#randomly assign to get two days a week or three days a week
+			if (rand = Random.rand(9)) == 0
+				@user.update(days_per_week: 3)
+			elsif rand < 5
+				@user.update(days_per_week: 1)
+			else
+				@user.update(days_per_week: 2)
+			end
+
+			#update subscription
+			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
+			#backup for defaults
+			@user.update(time: "5:00pm", child_age: 4)
+
+
+			#TWILIO set up:
+	   		account_sid = ENV['TW_ACCOUNT_SID']
+	    	auth_token = ENV['TW_AUTH_TOKEN']
+		  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
+
+	    	# Lookup wireless carrier
+		  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+		  	@user.update(carrier: number.carrier['name'])
+
+
+		  	days = @user.days_per_week.to_s
+
+		  	
+		  	FirstTextWorker.perform_in(18.seconds, @user.phone)
+
+		  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+
 		end
-
-		#update subscription
-		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
-		#backup for defaults
-		@user.update(time: "5:00pm", child_age: 4)
-
-
-		#TWILIO set up:
-   		account_sid = ENV['TW_ACCOUNT_SID']
-    	auth_token = ENV['TW_AUTH_TOKEN']
-	  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
-
-    	# Lookup wireless carrier
-	  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-	  	@user.update(carrier: number.carrier['name'])
-
-
-	  	days = @user.days_per_week.to_s
-
-	  	
-	  	FirstTextWorker.perform_in(18.seconds, @user.phone)
-
-	  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
-
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
