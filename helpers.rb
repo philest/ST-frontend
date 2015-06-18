@@ -28,13 +28,12 @@ class Helpers
 		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
 
 		twiml = Twilio::TwiML::Response.new do |r|
-	   		r.Message sprintSMS #SEND SPRINT MSG
+	   		r.Message msg #SEND SPRINT MSG
 	   	end
+	   	
 	    twiml.text
-
-		sleep 1
-
 	end  
+
 
 	#helper method to deliver sprint texts
 	def self.new_sprint_long_sms(long_sms, user_phone)
