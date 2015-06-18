@@ -96,7 +96,7 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 For help, reply HELP NOW."
 
 
-
+SAMPLE_GREET = 'StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)'
 
 
 get '/worker' do
@@ -116,11 +116,14 @@ get '/sms' do
 	@user = User.find_by_phone(params[:From])
 
 	
+	#first reply: new user texts in STORY
+	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample? == true)
 
-	#first reply: new user, add her
-	if @user == nil 
-
-		@user = User.create(phone: params[:From])
+		if @user == nil
+			@user = User.create(phone: params[:From])
+		else
+			@user.update(sample: false)
+		end
 
 		craig = "+16109520714"
 		joe = "+16105852565"
@@ -149,7 +152,7 @@ get '/sms' do
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
-			@user.update(time: "5:00pm", child_age: 4)
+			@user.update(time: "5:30pm", child_age: 4)
 
 
 			#TWILIO set up:
@@ -170,6 +173,19 @@ get '/sms' do
 		  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 		end
+
+	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
+
+		@user.create(sample: true, phone: params[:From])
+
+		FirstTextWorker.perform_in(15.seconds, params[:From])
+
+		Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
+
+
+	elsif @user == nil
+
+		#Didn't recognize that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample.
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
