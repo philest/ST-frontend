@@ -33,7 +33,7 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
-    new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+    Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
 
