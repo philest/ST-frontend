@@ -1,10 +1,30 @@
 
 
 class Helpers
-#testing goods
 
+
+#testing goods
+	def self.initialize_testing_vars
 		@@twiml_sms = Array.new
 	  	@@twiml_mms = Array.new
+	end
+
+	def self.getSMSarr
+		return @@twiml_sms
+	end
+
+	def self.getMMSarr
+		return @@twiml_mms
+	end
+
+	def self.addToSMSarr(elt)
+		return @@twml_sms.push elt
+	end
+
+	def self.addToMMSarr(elt)
+		return @@twml_mms.push elt
+	end
+
 
 		#set TWILIO credentials:
 	    account_sid = ENV['TW_ACCOUNT_SID']
@@ -19,7 +39,7 @@ class Helpers
  		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if @user.carrier == SPRINT
+		if @user == nil || @user.carrier == SPRINT
 			msg = sprintSMS 
 		else
 			msg = normalSMS
@@ -71,7 +91,7 @@ class Helpers
 
 		@user = User.find_by(phone: user_phone)
 
-		if @user.carrier == SPRINT && sms.length > 160
+		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
 
 			mms_array.each_with_index do |mms_url, index|
 				@@twiml_mms.push mms_url
@@ -97,7 +117,7 @@ class Helpers
 
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user.carrier == SPRINT && sms.length > 160
+		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
 
 			new_sprint_long_sms(sms, user_phone)
 
@@ -146,12 +166,12 @@ class Helpers
 		@user = User.find_by(phone: user_phone)
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user.carrier == SPRINT && sms.length > 160
+		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
 
 			test_new_sprint_long_sms(sms, user_phone)
 
-			mms_array.each_with_index do |mms_url, index|
-		          @@twiml_mms.push mms_url
+			mms_array.each_with_index do |mms, index|
+		          @@twiml_mms.push mms
 			end
 
 		else
@@ -159,7 +179,7 @@ class Helpers
 
 			@@twiml_sms.push sms
 
-			mms_array.each_with_index do |mms_url, index|
+			mms_array.each_with_index do |mms, index|
 				@@twiml_mms.push mms
 			end
 
@@ -175,7 +195,7 @@ class Helpers
 
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user.carrier == SPRINT && sms.length > 160
+		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
 
 			mms_array.each_with_index do |mms_url, index|
 
@@ -272,11 +292,11 @@ class Helpers
 		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if @user.carrier == SPRINT && sprintSMS.length > 160
+		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
 			test_new_sprint_long_sms(sprintSMS, user_phone)
 
-		elsif @user.carrier == SPRINT
+		elsif @user == nil || @user.carrier == SPRINT
 
 			@@twiml_sms.push sprintSMS 
 
@@ -299,11 +319,11 @@ class Helpers
 		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if @user.carrier == SPRINT && sprintSMS.length > 160
+		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
 			new_sprint_long_sms(sprintSMS, user_phone)
 
-		elsif @user.carrier == SPRINT
+		elsif @user == nil || @user.carrier == SPRINT
 
 			msg = sprintSMS 
 
@@ -336,7 +356,7 @@ class Helpers
  		@user = User.find_by(phone: user_phone)
 
 	 	#if sprint
-		if @user.carrier == SPRINT
+		if @user == nil || @user.carrier == SPRINT
 
 			@@twiml = sprintSMS
 			@@twiml_sms.push sprintSMS

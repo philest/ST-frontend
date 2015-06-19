@@ -125,7 +125,7 @@ get '/sms' do
 
 	
 	#first reply: new user texts in STORY
-	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample? == true)
+	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
 		if @user == nil
 			@user = User.create(phone: params[:From])
@@ -191,13 +191,13 @@ get '/sms' do
 
 		# Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
 
-	elsif @user.sample == true
-
-		Helpers.text(POST_SAMPLE, POST_SAMPLE, @user.phone)
-
 	elsif @user == nil
 
 		Helpers.text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+
+	elsif @user.sample == true
+
+		Helpers.text(POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
@@ -390,16 +390,30 @@ end
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 #THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
+
 
 	#check if new user
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 
 
 	#first reply: new user texts in STORY
-	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample? == true)
+	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
 		if @user == nil
 			@user = User.create(phone: params[:From])
@@ -437,22 +451,20 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(time: "5:30pm", child_age: 4)
 
 
-			#TWILIO set up:
-	   		account_sid = ENV['TW_ACCOUNT_SID']
-	    	auth_token = ENV['TW_AUTH_TOKEN']
-		  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
-	    	# Lookup wireless carrier
-		  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-		  	@user.update(carrier: number.carrier['name'])
+		  	@user.update(carrier: params[:Carrier])
+
+	    # 	# Lookup wireless carrier
+		  	# number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+		  	# @user.update(carrier: number.carrier['name'])
 
 
-		  	days = @user.days_per_week.to_s
+		  	# days = @user.days_per_week.to_s
 
 		  	
 		  	TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
 
-		  	Helpers.test_text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+		  	Helpers.test_text(START_SMS_1 + "2" + START_SMS_2, START_SPRINT_1 + "2" + START_SPRINT_2, @user.phone)	
 
 		end
 
@@ -464,13 +476,13 @@ get '/test/:From/:Body/:Carrier' do
 
 		# Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
 
-	elsif @user.sample == true
-
-		Helpers.test_text(POST_SAMPLE, POST_SAMPLE, @user.phone)
-
 	elsif @user == nil
 
 		Helpers.test_text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+
+	elsif @user.sample == true
+
+		Helpers.test_text(POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 

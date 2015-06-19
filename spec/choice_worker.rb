@@ -62,7 +62,7 @@ describe 'The StoryTime Workers' do
 
 		
 			it "updates everything properly when make good choice" do
-				get '/test/556/p/ATT'
+				get '/test/666/p/ATT'
 				@user.reload
 		 	 	expect(@user.series_choice).to eq("p")
 		 	 	expect(@user.next_index_in_series).to eq(0)
