@@ -122,7 +122,7 @@ class SomeWorker
           #a) their time, 
           #b) their third story, or every third one thereafter.
           #c) they're not in the middle of a series
-          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && (user.story_number + 1) % 3 == 0)) && next_index_in_series == nil)
+          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && (user.story_number + 1) % 3 == 0)) && user.next_index_in_series == nil)
 
             #get set for first in series
             user.update(next_index_in_series: 0)

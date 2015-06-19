@@ -95,8 +95,6 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 
 For help, reply HELP NOW."
 
-
-
 POST_SAMPLE = "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."
 
 NO_SIGNUP_MATCH = "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
@@ -348,7 +346,7 @@ get '/sms' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-				Helpers.text(good_time, good_time)
+					Helpers.test_text(good_time, good_time, @user.phone)
 			else
 			
 				Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
@@ -382,10 +380,6 @@ get '/sms' do
 	end
 
 end
-
-
-
-
 
 
 
@@ -565,7 +559,6 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(awaiting_choice: false)
 
 			TestChoiceWorker.perform_async(@user.phone)
-
 	 	else	 			
 			Helpers.test_text(BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
@@ -633,7 +626,7 @@ get '/test/:From/:Body/:Carrier' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-				Helpers.test_text(good_time, good_time)
+				Helpers.test_text(good_time, good_time, @user.phone)
 			else
 			
 				Helpers.test_text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
@@ -646,7 +639,7 @@ get '/test/:From/:Body/:Carrier' do
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
-					Helpers.test_text(good_time, good_time)
+					Helpers.test_text(good_time, good_time, @user.phone)
 
  				else
 					

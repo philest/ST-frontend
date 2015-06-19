@@ -41,7 +41,6 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
-
     if type == FIRST
       Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
     else

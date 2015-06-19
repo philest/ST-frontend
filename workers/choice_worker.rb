@@ -10,7 +10,6 @@ require_relative '../messageSeries'
 SPRINT_NAME_2 = "Sprint Spectrum, L.P."
 
 
-
 class ChoiceWorker
   include Sidekiq::Worker
 
@@ -39,16 +38,15 @@ class ChoiceWorker
 
     if @user.mms == true 
 
-      Helpers.new_sms_first_mms("Great, it's on the way!\n\n", story.getSMS, story.getMmsArr, @user.phone)
+      Helpers.new_mms(story.getSMS, story.getMmsArr, @user.phone)
 
     else 
-
-      Helpers.new_text("Great! Here it is.\n\n" + story.getPoemsSMS, story.getPoemsSMS, @user.phone )
-
+      Helpers.new_text(story.getPoemSMS, story.getPoemSMS, @user.phone)
+    
     end
 
     #prep for next
-    @user.update(next_index_in_series: next_index_in_series + 1)
+    @user.update(next_index_in_series: @user.next_index_in_series + 1)
 
   end
 

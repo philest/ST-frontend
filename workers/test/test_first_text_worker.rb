@@ -33,9 +33,6 @@ class TestFirstTextWorker
   def perform(type, phoneNum) #Send the User the first poem shortly after first signup
   	
 
-  # binding.pry
-
-
     @user = User.find_by(phone: phoneNum)
 
     if type == FIRST

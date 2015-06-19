@@ -33,22 +33,21 @@ class TestChoiceWorker
 
     story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-
     #Picture Messaging
   	#not SPRINT
 
     if @user.mms == true 
 
-      test_new_mms(story.getSMS, story.getMmsArr, @user.phone)
+      Helpers.test_new_mms(story.getSMS, story.getMmsArr, @user.phone)
 
     else 
 
-      test_new_text(story.getPoemsSMS, story.getPoemsSMS, @user.phone )
+      Helpers.test_new_text(story.getPoemSMS, story.getPoemSMS, @user.phone)
 
     end
 
     #prep for next
-    @user.update(next_index_in_series: next_index_in_series + 1)
+    @user.update(next_index_in_series: @user.next_index_in_series + 1)
 
   end
 

@@ -7,6 +7,11 @@ class Helpers
 	def self.initialize_testing_vars
 		@@twiml_sms = Array.new
 	  	@@twiml_mms = Array.new
+	  	@@twiml = ""
+	end
+
+	def self.getSimpleSMS
+		return @@twiml
 	end
 
 	def self.getSMSarr

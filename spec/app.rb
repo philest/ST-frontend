@@ -84,6 +84,11 @@ describe 'The StoryTime App' do
   end
 
 
+    before(:each) do
+      Helpers.initialize_testing_vars
+      @@twiml = Helpers.getSimpleSMS
+    end
+
 
   it "routes successfully home" do
     get '/'
@@ -130,8 +135,8 @@ describe 'The StoryTime App' do
            expect(@user.child_age).to eq(4)
         end
 
-        it "has proper default time of 5:00pm" do
-           expect(@user.time).to eq("5:00pm")
+        it "has proper default time of 5:30pm" do
+           expect(@user.time).to eq("5:30pm")
         end
 
   end 

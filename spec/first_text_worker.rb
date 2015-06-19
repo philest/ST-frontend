@@ -2,7 +2,6 @@ ENV['RACK_ENV'] = "test"
 
 require_relative "./spec_helper"
 
-
 require 'capybara/rspec'
 require 'rack/test'
 
@@ -12,8 +11,6 @@ require_relative '../helpers'
 # require_relative '../config/environments'
 
 puts ENV["REDISTOGO_URL"] + "\n\n\n\n"
-
-
 
 
 START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
@@ -30,7 +27,7 @@ describe 'The StoryTime Workers' do
   end
 
 
-   describe "FirstTextWoker" do
+   describe "FirstTextWorker" do
 
 
 		before(:each) do
