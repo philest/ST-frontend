@@ -105,6 +105,8 @@ SAMPLE = "SAMPLE"
 
 FIRST = "FIRST"
 
+
+
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
 	redirect to('/')
@@ -346,7 +348,7 @@ get '/sms' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-				text(good_time, good_time)
+				Helpers.text(good_time, good_time)
 			else
 			
 				Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
@@ -396,39 +398,91 @@ get '/test/:From/:Body/:Carrier' do
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From]) 
 
-	if @user != nil #if user exists
-		@user.update(carrier: params[:Carrier]) 
-	end
+	#first reply: new user texts in STORY
+	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample? == true)
 
-	if @user == nil
-		#2 days per week
-		@user = User.create(phone: params[:From], days_per_week: 2, carrier: params[:Carrier] )
+		if @user == nil
+			@user = User.create(phone: params[:From])
+		else
+			@user.update(sample: false)
+			@user.update(subscribed: true) 
+		end
 
-		#update subscription
-		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
-		#backup for defaults
-		@user.update(time: "5:00pm", child_age: 4)
+		craig = "+16109520714"
+		joe = "+16105852565"
 
-	  	days = @user.days_per_week.to_s
-	  	
-	  	@@twiml_sms = []
+		if (@user.phone == craig || @user.phone == joe)
+			
+			@user.update(subscribed: false)
+
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
+		   	end
+		    twiml.text
+
+		else
+
+			#randomly assign to get two days a week or three days a week
+			if (rand = Random.rand(9)) == 0
+				@user.update(days_per_week: 3)
+			elsif rand < 5
+				@user.update(days_per_week: 1)
+			else
+				@user.update(days_per_week: 2)
+			end
+
+			#update subscription
+			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
+			#backup for defaults
+			@user.update(time: "5:30pm", child_age: 4)
 
 
-	  	TestFirstTextWorker.perform_async(@user.phone)
+			#TWILIO set up:
+	   		account_sid = ENV['TW_ACCOUNT_SID']
+	    	auth_token = ENV['TW_AUTH_TOKEN']
+		  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
-	  	Helpers.test_text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+	    	# Lookup wireless carrier
+		  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+		  	@user.update(carrier: number.carrier['name'])
 
+
+		  	days = @user.days_per_week.to_s
+
+		  	
+		  	TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
+
+		  	Helpers.test_text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+
+		end
+
+	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
+
+		@user = User.create(sample: true, subscribed: false, phone: params[:From])
+
+		TestFirstTextWorker.perform_async(SAMPLE, params[:From])
+
+		# Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
+
+	elsif @user.sample == true
+
+		Helpers.test_text(POST_SAMPLE, POST_SAMPLE, @user.phone)
+
+	elsif @user == nil
+
+		Helpers.test_text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
-			#REACTIVATE SUBSCRIPTION
-			@user.update(subscribed: true)
-			@user.update(next_index_in_series: nil)
+		#REACTIVATE SUBSCRIPTION
+		@user.update(subscribed: true)
+		@user.update(next_index_in_series: nil)
 
-			Helpers.test_text(RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.test_text(RESUBSCRIBE, RESUBSCRIBE, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
+
 	  	#default 2 days a week
 	  	if @user.days_per_week == nil
 	  		@user.update(days_per_week: 2)
@@ -448,11 +502,12 @@ get '/test/:From/:Body/:Carrier' do
 
 	  	Helpers.test_text(HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
 
+
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
 		
 
 		#SAVE QUITTERS
-		# REDIS.set(@user.phone+":quit", "true") 
+		REDIS.set(@user.phone+":quit", "true") 
 			#update if the user quits
 			#EX: REDIS.zadd("+15612125831:quit", true)  
 
@@ -463,6 +518,7 @@ get '/test/:From/:Body/:Carrier' do
 
 	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option
 		
+
 		#change mms to sms
 		@user.update(mms: false)
 
@@ -490,16 +546,14 @@ get '/test/:From/:Body/:Carrier' do
         @user.update(next_index_in_series: 0)
 
 		#check if the choice is valid
-		if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
+		if MessageSeries.codeIsInHash( body + @user.series_number.to_s)
 	 			
 			#update the series choice
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
 
-			#send the choice text
-			# ChoiceWorker.perform_in(18.seconds, @user.phone)
+			TestChoiceWorker.perform_async(@user.phone)
 
-			# ChoiceWorker.perform_async(@user.phone)
 	 	else	 			
 			Helpers.test_text(BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
@@ -547,7 +601,7 @@ get '/test/:From/:Body/:Carrier' do
 	 		end
 
 	    else #not a valid format
-	  		test_text(WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
+	  		Helpers.test_text(WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
 		end 	
 
  	# Update TIME before (or after) third story
@@ -567,7 +621,7 @@ get '/test/:From/:Body/:Carrier' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-				Helpers.test_text(good_time, good_time, @user.phone)
+				Helpers.test_text(good_time, good_time)
 			else
 			
 				Helpers.test_text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
@@ -580,7 +634,7 @@ get '/test/:From/:Body/:Carrier' do
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
-					Helpers.test_text(good_time, good_time, @user.phone)
+					Helpers.test_text(good_time, good_time)
 
  				else
 					
@@ -598,6 +652,7 @@ get '/test/:From/:Body/:Carrier' do
 
 		Helpers.test_text(NO_OPTION, NO_OPTION, @user.phone)
 
-	end#end options
+	end
 
-end#end TEST get
+
+end
