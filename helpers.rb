@@ -149,13 +149,13 @@ class Helpers
 
 
 
-	def self.new_sms_sandwich_mms(sms, mms_array, user_phone)
+	def self.new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
+		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
 			new_sprint_long_sms(sms, user_phone)
 
@@ -176,7 +176,7 @@ class Helpers
 			message = @client.account.messages.create(
 	                  :to => @user.phone,     # Replace with your phone number
 	                  :from => "+17377778679",
-	                  :body => sms
+	                  :body => first_sms
 	                  )
 
 			sleep 13
@@ -193,7 +193,15 @@ class Helpers
 					 sleep 20
 			end
 
-			
+
+					#SMS first!
+			message = @client.account.messages.create(
+	                  :to => @user.phone,     # Replace with your phone number
+	                  :from => "+17377778679",
+	                  :body => last_sms
+	                  )
+
+			sleep 3
 
 		end
 
@@ -228,35 +236,6 @@ class Helpers
 
 
 
-
-
-
-
-	def self.test_new_sms_first_mms(sms, mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
-
-			test_new_sprint_long_sms(sms, user_phone)
-
-			mms_array.each_with_index do |mms, index|
-		          @@twiml_mms.push mms
-			end
-
-		else
-			#SMS first!
-
-			@@twiml_sms.push sms
-
-			mms_array.each_with_index do |mms, index|
-				@@twiml_mms.push mms
-			end
-
-		end
-
-	end
 
 
 
