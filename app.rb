@@ -185,7 +185,7 @@ get '/sms' do
 
 		  	days = @user.days_per_week.to_s
 
-		  	if mode == pro
+		  	if mode == PRO
 			  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
 			else
 				TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
@@ -198,7 +198,7 @@ get '/sms' do
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		if mode == pro
+		if mode == PRO
 			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
 		else
 			TextFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
