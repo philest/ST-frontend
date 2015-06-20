@@ -76,7 +76,7 @@ describe 'The StoryTime Workers' do
 			expect(TestFirstTextWorker.jobs.size).to eq(1)
 			TestFirstTextWorker.drain
 			expect(TestFirstTextWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([TestFirstTextWorker::SAMPLE_SMS])
+			expect(Helpers.getSMSarr).to eq([TestFirstTextWorker::GREET_SMS, TestFirstTextWorker::SAMPLE_SMS])
 		end		
 
 		it "has all the SAMPLE M-MS in right order" do
