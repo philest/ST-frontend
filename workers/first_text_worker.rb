@@ -18,10 +18,13 @@ FIRST_MMS = ["http://i.imgur.com/lLdB2zl.jpg", "http://i.imgur.com/msiTUwK.jpg"]
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
 
-SAMPLE_SMS = "Today, we talked about our favorite things to do outside. The kids all loved running. Keep sharing with tonight's story!\n-Ms. Wilson" 
+SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all loved racing. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
 
 
-GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
+EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
+
+
+
 
 
 SAMPLE = "SAMPLE"
@@ -52,7 +55,7 @@ class FirstTextWorker
     elsif type == SAMPLE
       Helpers.new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
     else
-      Helpers.new_just_mms(FIRST_MMS, @user.phone)
+      Helpers.new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
     end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"

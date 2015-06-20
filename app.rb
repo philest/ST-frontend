@@ -202,13 +202,10 @@ get '/sms' do
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
 		if mode == PRO
-			FirstTextWorker.perform_in(14.seconds, params[:Body].upcase, params[:From])
+			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
 		else
-			TextFirstTextWorker.perform_in(14.seconds, params[:Body].upcase, params[:From])
+			TextFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
 		end
-
-		text(mode, GREET_SMS, GREET_SMS, @user.phone)	
-
 
 	elsif @user == nil
 
