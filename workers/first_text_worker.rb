@@ -12,7 +12,8 @@ SPRINT_NAME = "Sprint Spectrum, L.P."
 
 FIRST = "FIRST"
 
-FIRST_MMS = ["http://i.imgur.com/tqzsIqt.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
+FIRST_MMS = ["http://i.imgur.com/lLdB2zl.jpg", "http://i.imgur.com/msiTUwK.jpg"]
+
 
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
