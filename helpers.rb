@@ -286,6 +286,34 @@ class Helpers
 	end
 
 
+	def self.new_just_mms(mms_array, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+			mms_array.each_with_index do |mms, index|
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :media_url => mms
+		                      )
+
+					 sleep 20
+			end
+	end
+
+
+	def self.test_new_just_mms(mms_array, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+			mms_array.each_with_index do |mms, index|
+				@@twiml_mms.push mms
+			end
+	end
+
+
+
 
 
 	def self.new_mms(sms, mms_array, user_phone)
@@ -294,7 +322,7 @@ class Helpers
 
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
+		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
 			mms_array.each_with_index do |mms_url, index|
 
@@ -322,7 +350,7 @@ class Helpers
 		                      :body => sms
 		                      )
 
-					 sleep 10
+					 sleep 3
 
 				else
 

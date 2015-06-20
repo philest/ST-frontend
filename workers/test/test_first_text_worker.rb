@@ -47,13 +47,15 @@ class TestFirstTextWorker
 
     @user = User.find_by(phone: phoneNum)
 
+
     if type == FIRST
       Helpers.test_new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
     elsif type == SAMPLE
-      Helpers.test_new_sms_sandwich_mms(GREET_SMS, SAMPLE_SMS, FIRST_MMS, @user.phone)
+      Helpers.test_new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
     else
-      Helpers.test_new_sms_first_mms(GREET_SMS, FIRST_MMS, @user.phone)
+      Helpers.test_new_just_mms(FIRST_MMS, @user.phone)
     end
+
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
 

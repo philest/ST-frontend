@@ -105,6 +105,8 @@ EXAMPLE = "EXAMPLE"
 
 FIRST = "FIRST"
 
+GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)"
+
 
 PRO = "production"
 TEST = "test"
@@ -199,10 +201,13 @@ get '/sms' do
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
 		if mode == PRO
-			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
+			FirstTextWorker.perform_in(14.seconds, params[:Body].upcase, params[:From])
 		else
-			TextFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
+			TextFirstTextWorker.perform_in(14.seconds, params[:Body].upcase, params[:From])
 		end
+
+		text(mode, GREET_SMS, GREET_SMS, @user.phone)	
+
 
 	elsif @user == nil
 
