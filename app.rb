@@ -124,18 +124,19 @@ end
 helpers do
 
 
-def text(mode, normal_sms, sprint_sms, user_phone)
+	def text(mode, normal_sms, sprint_sms, user_phone)
 
-	@user = User.find_by(phone: user_phone)
+		@user = User.find_by(phone: user_phone)
 
-	if mode == PRO
-		Helpers.text(normal_sms, sprint_sms, @user.phone)
-	else
-		Helpers.test_text(normal_sms, sprint_sms, @user.phone)
+		if mode == PRO
+			Helpers.text(normal_sms, sprint_sms, @user.phone)
+		else
+			Helpers.test_text(normal_sms, sprint_sms, @user.phone)
+		end
+
 	end
 
 end
-
 
 
 
@@ -670,4 +671,3 @@ get '/test/:From/:Body/:Carrier' do
 end
 
 
-end
