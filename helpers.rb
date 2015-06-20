@@ -184,6 +184,18 @@ class Helpers
 			mms_array.each_with_index do |mms_url, index|
 
 
+				if index + 1 == mms_array.length #send sms with mms on last story
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :media_url => mms_url,
+		                      :body => last_sms
+		                      )
+
+					 sleep 15
+				else
+
 					 message = @client.account.messages.create(
 		                      :to => @user.phone,     # Replace with your phone number
 		                      :from => "+17377778679",
@@ -191,17 +203,13 @@ class Helpers
 		                      )
 
 					 sleep 20
+				end
+
+
 			end
 
 
-					#SMS first!
-			message = @client.account.messages.create(
-	                  :to => @user.phone,     # Replace with your phone number
-	                  :from => "+17377778679",
-	                  :body => last_sms
-	                  )
 
-			sleep 3
 
 		end
 
