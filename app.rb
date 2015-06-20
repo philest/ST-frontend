@@ -105,7 +105,7 @@ EXAMPLE = "EXAMPLE"
 
 FIRST = "FIRST"
 
-GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)"
+GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
 
 
 PRO = "production"

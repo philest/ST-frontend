@@ -20,7 +20,7 @@ FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 SAMPLE_SMS = "Today, we talked about our favorite things to do outside. The kids all loved running. Keep sharing with tonight's story!\n-Ms. Wilson" 
 
 
-GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)"
+GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
 
 
 SAMPLE = "SAMPLE"
