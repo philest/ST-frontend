@@ -101,7 +101,7 @@ class Helpers
 			mms_array.each_with_index do |mms_url, index|
 				@@twiml_mms.push mms_url
 			end
-			test_new_sprint_long_sms(sms, user_phone)
+			Helpers.test_new_sprint_long_sms(sms, user_phone)
 		else
 
 			mms_array.each_with_index do |mms_url, index|
@@ -122,7 +122,7 @@ class Helpers
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			test_new_sprint_long_sms(sms, user_phone)
+			Helpers.test_new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms, index|
 		          @@twiml_mms.push mms
@@ -157,7 +157,7 @@ class Helpers
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			new_sprint_long_sms(sms, user_phone)
+			Helpers.new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms_url, index|
 
@@ -223,7 +223,7 @@ class Helpers
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			test_new_sprint_long_sms(sms, user_phone)
+			Helpers.test_new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms, index|
 		          @@twiml_mms.push mms
@@ -242,7 +242,48 @@ class Helpers
 	end
 
 
+	def self.new_sms_first_mms(sms, mms_array, user_phone)
 
+		@user = User.find_by(phone: user_phone)
+
+		#if long sprint mms + sms, send all images, then texts one-by-one
+		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
+
+			Helpers.new_sprint_long_sms(sms, user_phone)
+
+			mms_array.each_with_index do |mms, index|
+
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :media_url => mms
+		                      )
+
+					 sleep 20
+
+			end
+
+		else
+			#SMS first!
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :media_url => sms
+		                      )
+
+			sleep 13
+
+			mms_array.each_with_index do |mms, index|
+					 message = @client.account.messages.create(
+		                      :to => @user.phone,     # Replace with your phone number
+		                      :from => "+17377778679",
+		                      :media_url => mms
+		                      )
+			end
+
+		end
+
+	end
 
 
 
@@ -266,7 +307,7 @@ class Helpers
 					 sleep 20
 			end
 
-			new_sprint_long_sms(sms, user_phone)
+			Helpers.new_sprint_long_sms(sms, user_phone)
 
 		else
 
