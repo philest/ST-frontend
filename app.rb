@@ -101,9 +101,13 @@ NO_SIGNUP_MATCH = "StoryTime: Sorry, we didn't understand that. Text STORY to si
 
 SAMPLE = "SAMPLE"
 
+EXAMPLE = "EXAMPLE"
+
 FIRST = "FIRST"
 
 
+PRO = "production"
+TEST = "test"
 
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
@@ -115,13 +119,33 @@ get '/' do
 end
 
 
+helpers do
+
+
+def text(mode, normal_sms, sprint_sms, user_phone)
+
+	@user = User.find_by(phone: user_phone)
+
+	if mode == PRO
+		Helpers.text(normal_sms, sprint_sms, @user.phone)
+	else
+		Helpers.test_text(normal_sms, sprint_sms, @user.phone)
+	end
+
+end
+
+
+
+
+
 # register an incoming SMS
 get '/sms' do
 	#check if new user
 	#returns nil if not found
 	@user = User.find_by_phone(params[:From])
 
-	
+	mode = PRO
+
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
@@ -132,20 +156,7 @@ get '/sms' do
 			@user.update(subscribed: true) 
 		end
 
-		craig = "+16109520714"
-		joe = "+16105852565"
-
-		if (@user.phone == craig || @user.phone == joe)
-			
-			@user.update(subscribed: false)
-
-			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
-		   	end
-		    twiml.text
-
-		else
-
+		if mode == PRO #only relevant for production code
 
 			#randomly assign to get two days a week or three days a week
 			if (rand = Random.rand(9)) == 0
@@ -156,11 +167,12 @@ get '/sms' do
 				@user.update(days_per_week: 2)
 			end
 
+		end
+
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
 			@user.update(time: "5:30pm", child_age: 4)
-
 
 			#TWILIO set up:
 	   		account_sid = ENV['TW_ACCOUNT_SID']
@@ -171,31 +183,34 @@ get '/sms' do
 		  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
 		  	@user.update(carrier: number.carrier['name'])
 
-
 		  	days = @user.days_per_week.to_s
 
-		  	
-		  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
+		  	if mode == pro
+			  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
+			else
+				TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
+			end
 
-		  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+		  	text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
-		end
 
-	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
+	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		FirstTextWorker.perform_async(SAMPLE, params[:From])
-
-		# Helpers.text(SAMPLE_GREET, SAMPLE_GREET, params[:From])
+		if mode == pro
+			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
+		else
+			TextFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
+		end
 
 	elsif @user == nil
 
-		Helpers.text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+		text(mode, NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
 
 	elsif @user.sample == true
 
-		Helpers.text(POST_SAMPLE, POST_SAMPLE, @user.phone)
+		text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
@@ -203,11 +218,10 @@ get '/sms' do
 		@user.update(subscribed: true)
 		@user.update(next_index_in_series: nil)
 
-		Helpers.text(RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
-
 	  	#default 2 days a week
 	  	if @user.days_per_week == nil
 	  		@user.update(days_per_week: 2)
@@ -225,7 +239,7 @@ get '/sms' do
 	  		puts "ERR: invalid days of week"
 	  	end
 
-	  	Helpers.text(HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
+	  	text(mode, HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
 
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
@@ -239,20 +253,19 @@ get '/sms' do
 		#change subscription
 		@user.update(subscribed: false)
 
-		Helpers.text(STOPSMS, STOPSMS, @user.phone)
+		text(mode, STOPSMS, STOPSMS, @user.phone)
 
-	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option
-		
+	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option		
 
 		#change mms to sms
 		@user.update(mms: false)
 
-		Helpers.text(MMS_UPDATE, MMS_UPDATE, @user.phone)
+		text(mode, MMS_UPDATE, MMS_UPDATE, @user.phone)
 
 	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
 		#no need to manually undo birthdate
-		Helpers.text(REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
+		text(mode, REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
 
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
@@ -277,7 +290,11 @@ get '/sms' do
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
 
-			ChoiceWorker.perform_async(@user.phone)
+			if mode == PRO
+				ChoiceWorker.perform_async(@user.phone)
+			else 
+				TestChoiceWorker.perform_async(@user.phone)
+			end
 
 	 	else	 			
 			Helpers.text(BAD_CHOICE, BAD_CHOICE, @user.phone)
@@ -314,19 +331,19 @@ get '/sms' do
 
 					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
-					Helpers.text(time_sms, time_sms, @user.phone)
+					text(mode, time_sms, time_sms, @user.phone)
 
 	 		else #Wrong age rage
 
 	 			@user.update(subscribed: false)
 
 	 			#NOTE: Keep the real birthdate.
-	 			Helpers.text(TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
+	 			text(mode, TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
 
 	 		end
 
 	    else #not a valid format
-	  		Helpers.text(WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
+	  		text(mode, WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
 		end 	
 
  	# Update TIME before (or after) third story
@@ -346,10 +363,10 @@ get '/sms' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-					Helpers.test_text(good_time, good_time, @user.phone)
+					text(mode, good_time, good_time, @user.phone)
 			else
 			
-				Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+				text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 			end
 
 		when 2
@@ -359,23 +376,23 @@ get '/sms' do
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
-					Helpers.text(good_time, good_time)
+					text(mode, good_time, good_time)
 
  				else
 					
-					Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+					text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
  				end
  		else 
 		
-			Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+			text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
 		end
 
 	#response matches nothing
 	else
 
-		Helpers.text(NO_OPTION, NO_OPTION, @user.phone)
+		text(mode, NO_OPTION, NO_OPTION, @user.phone)
 
 	end
 
@@ -416,19 +433,6 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(subscribed: true) 
 		end
 
-		craig = "+16109520714"
-		joe = "+16105852565"
-
-		if (@user.phone == craig || @user.phone == joe)
-			
-			@user.update(subscribed: false)
-
-			twiml = Twilio::TwiML::Response.new do |r|
-		   		r.Message "StoryTime: Hi! You've received a sample message. To learn more, call our director, Phil, at 561-212-5831." #SEND SPRINT MSG
-		   	end
-		    twiml.text
-
-		else
 
 			#randomly assign to get two days a week or three days a week
 			if (rand = Random.rand(9)) == 0
@@ -460,7 +464,6 @@ get '/test/:From/:Body/:Carrier' do
 
 		  	Helpers.test_text(START_SMS_1 + "2" + START_SMS_2, START_SPRINT_1 + "2" + START_SPRINT_2, @user.phone)	
 
-		end
 
 	elsif @user == nil && params[:Body].casecmp("SAMPLE") == 0
 

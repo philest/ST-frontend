@@ -12,15 +12,20 @@ SPRINT_NAME = "Sprint Spectrum, L.P."
 
 FIRST = "FIRST"
 
-FIRST_MMS = ["http://i.imgur.com/FfGSHjw.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
+FIRST_MMS = ["http://i.imgur.com/tqzsIqt.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
 
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
 
+SAMPLE_SMS = "Today, we talked about our favorite things to do outside. The kids all loved running. Keep sharing with tonight's story!\n-Ms. Wilson" 
 
-SAMPLE_SMS = 'StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)'
+
+GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your sample story is on the way :)"
 
 
+SAMPLE = "SAMPLE"
+
+EXAMPLE = "EXAMPLE"
 
 class FirstTextWorker
   include Sidekiq::Worker
@@ -43,8 +48,10 @@ class FirstTextWorker
 
     if type == FIRST
       Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+    elsif type == SAMPLE
+      Helpers.new_sms_sandwich_mms(GREET_SMS, SAMPLE_SMS, FIRST_MMS, @user.phone)
     else
-      Helpers.new_sms_first_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
+      Helpers.new_sms_first_mms(GREET_SMS, FIRST_MMS, @user.phone)
     end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
