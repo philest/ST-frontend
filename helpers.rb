@@ -96,7 +96,7 @@ class Helpers
 
 		@user = User.find_by(phone: user_phone)
 
-		if @user == nil || (@user.carrier == SPRINT && sms.length > 160)
+		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
 			mms_array.each_with_index do |mms_url, index|
 				@@twiml_mms.push mms_url

@@ -141,6 +141,8 @@ end
 
 
 
+
+
 # register an incoming SMS
 get '/sms' do
 
@@ -194,12 +196,8 @@ get '/sms' do
 
 		  	days = @user.days_per_week.to_s
 
-		  	if mode == PRO
-			  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
-			else
-				TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
-			end
-
+			FirstTextWorker.perform_in(15.seconds, mode, FIRST, @user.phone)
+			
 		  	text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
@@ -207,11 +205,7 @@ get '/sms' do
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		if mode == PRO
-			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
-		else
-			TestFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
-		end
+		FirstTextWorker.perform_async(mode, params[:Body].upcase, params[:From])
 
 	elsif @user == nil
 
@@ -429,7 +423,7 @@ get '/test/:From/:Body/:Carrier' do
 	@user = User.find_by_phone(params[:From])
 
 	mode = TEST
-
+	
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
@@ -474,12 +468,8 @@ get '/test/:From/:Body/:Carrier' do
 
 		  	days = @user.days_per_week.to_s
 
-		  	if mode == PRO
-			  	FirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
-			else
-				TestFirstTextWorker.perform_in(15.seconds, FIRST, @user.phone)
-			end
-
+			FirstTextWorker.perform_in(15.seconds, mode, FIRST, @user.phone)
+			
 		  	text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
@@ -487,11 +477,7 @@ get '/test/:From/:Body/:Carrier' do
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		if mode == PRO
-			FirstTextWorker.perform_async(params[:Body].upcase, params[:From])
-		else
-			TestFirstTextWorker.perform_async(params[:Body].upcase, params[:From])
-		end
+		FirstTextWorker.perform_async(mode, params[:Body].upcase, params[:From])
 
 	elsif @user == nil
 
@@ -683,3 +669,4 @@ get '/test/:From/:Body/:Carrier' do
 	end
 
 end
+

@@ -10,6 +10,8 @@ require_relative '../messageSeries'
 SPRINT_NAME_2 = "Sprint Spectrum, L.P."
 
 
+PRO = "production"
+
 class ChoiceWorker
   include Sidekiq::Worker
 

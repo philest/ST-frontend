@@ -24,12 +24,12 @@ SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all 
 EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
 
 
-
-
-
 SAMPLE = "SAMPLE"
 
 EXAMPLE = "EXAMPLE"
+
+PRO = "production"
+
 
 class FirstTextWorker
   include Sidekiq::Worker
@@ -38,7 +38,7 @@ class FirstTextWorker
 
   sidekiq_options retry: false
 
-  def perform(type, phoneNum) #Send the User the first poem shortly after first signup
+  def perform(mode, type, phoneNum) #Send the User the first poem shortly after first signup
                               #if SAMPLE, send the text first and a different message
   	
     @user = User.find_by(phone: phoneNum)
@@ -49,13 +49,26 @@ class FirstTextWorker
 
     @client = Twilio::REST::Client.new account_sid, auth_token
 
+    if mode == PRO
 
-    if type == FIRST
-      Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
-    elsif type == SAMPLE
-      Helpers.new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
+      if type == FIRST
+        Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+      elsif type == SAMPLE
+        Helpers.new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
+      else
+        Helpers.new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
+      end
+
     else
-      Helpers.new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
+
+      if type == FIRST
+        Helpers.test_new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+      elsif type == SAMPLE
+        Helpers.test_new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
+      else
+        Helpers.test_new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
+      end
+
     end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
