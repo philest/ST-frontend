@@ -22,11 +22,9 @@ require_relative './workers/choice_worker'
 require_relative './helpers.rb'
 
 #require the testing workers
-configure :test, :development do
-	require_relative './workers/test/test_first_text_worker'
-	require_relative './workers/test/test_choice_worker'
-	require_relative './workers/test/test_some_worker'
-end
+# configure :test, :development do
+# 	require_relative './workers/test/test_some_worker'
+# end
 
 
 configure :production do

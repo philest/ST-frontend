@@ -95,6 +95,16 @@ describe 'The StoryTime Workers' do
 			expect(Helpers.getSMSarr).to eq([FirstTextWorker::EXAMPLE_SMS])
 		end
 
+
+		it "sends the example MMS well" do 
+			get '/test/556/EXAMPLE/ATT'
+			expect(FirstTextWorker.jobs.size).to eq(1)
+			FirstTextWorker.drain
+			expect(FirstTextWorker.jobs.size).to eq(0)
+			expect(Helpers.getMMSarr).to eq(FirstTextWorker::FIRST_MMS)
+		end
+
+
   end 
 
 end
