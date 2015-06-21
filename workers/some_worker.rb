@@ -54,11 +54,9 @@ class SomeWorker
   									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
 
 
-
-
-
-
   def perform(*args)
+
+    mode = ENV['RACK_ENV']
 
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
@@ -67,7 +65,6 @@ class SomeWorker
 
     #logging
     puts "\nSystemTime: " + SomeWorker.cleanSysTime + "\n"
-
 
     #logging
     puts "\nSend story?: \n"
