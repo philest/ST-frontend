@@ -44,6 +44,8 @@ class SomeWorker
 
   else #on the INTERNET
     UPDATE_TIME = "20:00" 
+    UPDATE_TIME_2 = "20:00"
+
   end
 
 	sidekiq_options retry: false #if fails, don't resent (multiple texts)
@@ -83,25 +85,22 @@ class SomeWorker
       end
 
       #UPDATE time
-      if user.set_time == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.total_messages == 2 #Customize time 
+      if user.set_time == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2)  && user.total_messages == 2 #Customize time 
           
         if user.carrier == SPRINT
 
-          Helpers.new_text(TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
-
-                sleep 10
-
-          Helpers.new_text(TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
+          Helpers.new_text(mode, TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
+          sleep 10
+          Helpers.new_text(mode, TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
 
         else #NORMAL carrier
 
-          Helpers.new_text(TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
+          Helpers.new_text(mode, TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
 
         end
 
       end
 
-     
 
 
       #UPDATE Birthdate! 
@@ -111,8 +110,6 @@ class SomeWorker
 
         Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
-        user.update(set_birthdate: true)
-
       end
 
 

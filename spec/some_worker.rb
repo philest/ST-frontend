@@ -11,6 +11,9 @@ require_relative '../messageSeries'
 
 SLEEP = (1.0 / 16.0) 
 
+SPRINT_CARRIER = "Sprint Spectrum, L.P."
+
+
 
 describe 'SomeWorker' do
   include Rack::Test::Methods
@@ -100,10 +103,60 @@ describe 'SomeWorker' do
       expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
     end
 
+    it "has set_birthdate as false before it sends out the text" do
+        @user = User.create(phone: "444", time: "5:30pm", total_messages: 4)
+      
+        Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
+
+        Timecop.scale(1920) #1/16 seconds now are two minutes
+
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(@user.set_birthdate).to be(false)
+    end
 
 
+    it "asks to update time when it should (non-sprint" do
+        @user = User.create(phone: "444", time: "5:30pm", total_messages: 2)
 
+        Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
+        Timecop.scale(1920) #1/16 seconds now are two minutes
+
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+    end
+
+  it "gets all the SPRINT to update time SMS pieces" do
+        @user = User.create(phone: "444", time: "5:30pm", total_messages: 2, carrier: SPRINT_CARRIER)
+
+        Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
+
+        Timecop.scale(1920) #1/16 seconds now are two minutes
+
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_SPRINT_1, SomeWorker::TIME_SMS_SPRINT_2])
+    end
 
 
 
