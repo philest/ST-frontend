@@ -308,7 +308,7 @@ get '/sms' do
   				@user.update(subscribed: true)
   				@user.update(set_birthdate: true)
 
-					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
 
 					Helpers.text(mode, time_sms, time_sms, @user.phone)
 
@@ -341,7 +341,7 @@ get '/sms' do
 		        @user.update(set_time: true)
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
-				
+
 					Helpers.text(mode, good_time, good_time, @user.phone)
 			else
 			
@@ -352,6 +352,10 @@ get '/sms' do
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					
  					@user.update(time: arr[0] + arr[1])
+
+ 					#They've set their own time, so don't ask again
+			        @user.update(set_time: true)
+
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
@@ -581,7 +585,7 @@ get '/test/:From/:Body/:Carrier' do
   				@user.update(subscribed: true)
   				@user.update(set_birthdate: true)
 
-					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
 
 					Helpers.text(mode, time_sms, time_sms, @user.phone)
 
@@ -625,6 +629,8 @@ get '/test/:From/:Body/:Carrier' do
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					
  					@user.update(time: arr[0] + arr[1])
+
+ 			        @user.update(set_time: true)
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
