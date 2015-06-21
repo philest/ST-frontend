@@ -275,7 +275,7 @@ describe 'The StoryTime App' do
     it "good text response" do
       get '/test/700/p/ATT'
       @user.reload
-      expect(@@twiml).to eq(GOOD_CHOICE)
+      expect(@@twiml).to_not eq(BAD_CHOICE)
     end
 
     it "doesn't register a letter weird choice" do
@@ -296,7 +296,7 @@ describe 'The StoryTime App' do
     it "works for uppercase" do
       get '/test/700/P/ATT'
       @user.reload
-      expect(@@twiml).to eq(GOOD_CHOICE)
+      expect(@@twiml).to_not eq(BAD_CHOICE)
     end
 
 

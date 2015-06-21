@@ -26,23 +26,23 @@ describe 'The StoryTime Workers' do
 
 
     before(:each) do
-        TestChoiceWorker.jobs.clear
+        ChoiceWorker.jobs.clear
         Helpers.initialize_testing_vars
         @user = User.create(phone: "555", awaiting_choice: true, series_number: 0)
     end
 
       it "properly enques a choiceWorker" do
       expect {
-          TestChoiceWorker.perform_async("+15612125831")
-      }.to change(TestChoiceWorker.jobs, :size).by(1)
+          ChoiceWorker.perform_async("+15612125831")
+      }.to change(ChoiceWorker.jobs, :size).by(1)
       end
 
 
 
       it "starts with none, then adds more one" do
-        expect(TestChoiceWorker.jobs.size).to eq(0)
-        TestChoiceWorker.perform_async("+15612125831")
-        expect(TestChoiceWorker.jobs.size).to eq(1)
+        expect(ChoiceWorker.jobs.size).to eq(0)
+        ChoiceWorker.perform_async("+15612125831")
+        expect(ChoiceWorker.jobs.size).to eq(1)
       end
 
       # SMS TESTS
@@ -53,14 +53,14 @@ describe 'The StoryTime Workers' do
     it "properly enques a choiceWorker" do 
      get '/test/555/p/ATT'
       expect {
-        TestChoiceWorker.jobs.size.to eq(1)
+        ChoiceWorker.jobs.size.to eq(1)
       }
     end
 
     it "properly doesn't enque a choiceWorker if bad choice" do 
      get '/test/555/z/ATT'
       expect {
-        TestChoiceWorker.jobs.size.to eq(0)
+        ChoiceWorker.jobs.size.to eq(0)
       }
     end
 
@@ -69,7 +69,7 @@ describe 'The StoryTime Workers' do
      @user.reload
      get '/test/555/p/ATT'
       expect {
-        TestChoiceWorker.jobs.size.to eq(0)
+        ChoiceWorker.jobs.size.to eq(0)
       }
     end
 
@@ -81,9 +81,9 @@ describe 'The StoryTime Workers' do
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-      expect(TestChoiceWorker.jobs.size).to eq(1)
-      TestChoiceWorker.drain
-      expect(TestChoiceWorker.jobs.size).to eq(0)
+      expect(ChoiceWorker.jobs.size).to eq(1)
+      ChoiceWorker.drain
+      expect(ChoiceWorker.jobs.size).to eq(0)
 
       expect(Helpers.getSMSarr).to eq([].push story.getSMS)
     end
@@ -95,9 +95,9 @@ describe 'The StoryTime Workers' do
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-      expect(TestChoiceWorker.jobs.size).to eq(1)
-      TestChoiceWorker.drain
-      expect(TestChoiceWorker.jobs.size).to eq(0)
+      expect(ChoiceWorker.jobs.size).to eq(1)
+      ChoiceWorker.drain
+      expect(ChoiceWorker.jobs.size).to eq(0)
 
       expect(Helpers.getMMSarr).to eq(story.getMmsArr)
       expect(Helpers.getMMSarr).not_to eq(nil)
@@ -115,35 +115,35 @@ describe 'The StoryTime Workers' do
 
     # it "has all the first_text Brandon S-MS in right order" do
     #   get '/test/556/STORY/ATT'
-    #   expect(TestChoiceWorker.jobs.size).to eq(1)
-    #   TestChoiceWorker.drain
-    #   expect(TestChoiceWorker.jobs.size).to eq(0)
-    #   expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2].push TestChoiceWorker::FIRST_SMS)
+    #   expect(ChoiceWorker.jobs.size).to eq(1)
+    #   ChoiceWorker.drain
+    #   expect(ChoiceWorker.jobs.size).to eq(0)
+    #   expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2].push ChoiceWorker::FIRST_SMS)
     # end
 
     # it "has all the first_text Brandon M-ms in right order" do
     #   get '/test/556/STORY/ATT'
-    #   expect(TestChoiceWorker.jobs.size).to eq(1)
-    #   TestChoiceWorker.drain
-    #   expect(TestChoiceWorker.jobs.size).to eq(0)
-    #   expect(Helpers.getMMSarr).to eq(TestChoiceWorker::FIRST_MMS)
+    #   expect(ChoiceWorker.jobs.size).to eq(1)
+    #   ChoiceWorker.drain
+    #   expect(ChoiceWorker.jobs.size).to eq(0)
+    #   expect(Helpers.getMMSarr).to eq(ChoiceWorker::FIRST_MMS)
     # end
 
     
     # it "has all the SAMPLE S-MS in right order" do
     #   get '/test/556/SAMPLE/ATT'
-    #   expect(TestChoiceWorker.jobs.size).to eq(1)
-    #   TestChoiceWorker.drain
-    #   expect(TestChoiceWorker.jobs.size).to eq(0)
-    #   expect(Helpers.getSMSarr).to eq([TestChoiceWorker::SAMPLE_SMS])
+    #   expect(ChoiceWorker.jobs.size).to eq(1)
+    #   ChoiceWorker.drain
+    #   expect(ChoiceWorker.jobs.size).to eq(0)
+    #   expect(Helpers.getSMSarr).to eq([ChoiceWorker::SAMPLE_SMS])
     # end   
 
     # it "has all the SAMPLE M-MS in right order" do
     #   get '/test/556/SAMPLE/ATT'
-    #   expect(TestChoiceWorker.jobs.size).to eq(1)
-    #   TestChoiceWorker.drain
-    #   expect(TestChoiceWorker.jobs.size).to eq(0)
-    #   expect(Helpers.getMMSarr).to eq(TestChoiceWorker::FIRST_MMS)
+    #   expect(ChoiceWorker.jobs.size).to eq(1)
+    #   ChoiceWorker.drain
+    #   expect(ChoiceWorker.jobs.size).to eq(0)
+    #   expect(Helpers.getMMSarr).to eq(ChoiceWorker::FIRST_MMS)
     # end   
 
 
