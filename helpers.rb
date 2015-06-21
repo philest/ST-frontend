@@ -31,6 +31,7 @@ class Helpers
 	end
 
 
+
 		#set TWILIO credentials:
 	    account_sid = ENV['TW_ACCOUNT_SID']
 	    auth_token = ENV['TW_AUTH_TOKEN']
@@ -38,8 +39,78 @@ class Helpers
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
+    #these methods route each 
+    def self.new_text(mode, normalSMS, sprintSMS, user_phone)
+
+    	if mode == "production"
+    		Helpers.real_new_text(normalSMS, sprintSMS, user_phone)
+    	else
+    		Helpers.test_new_text(normalSMS, sprintSMS, user_phone)
+    	end
+    end
+
+    def self.text(mode, normalSMS, sprintSMS, user_phone)
+
+    	if mode == "production"
+    		Helpers.real_text(normalSMS, sprintSMS, user_phone)
+    	else
+    		Helpers.test_text(normalSMS, sprintSMS, user_phone)
+    	end
+    end
+
+    def self.new_sprint_long_sms(mode, long_sms, user_phone)
+    	
+    	if mode == "production"
+    		Helpers.real_new_sprint_long_sms(long_sms, user_phone)
+    	else
+    		Helpers.test_new_sprint_long_sms(long_sms, user_phone)
+    	end
+    end
+
+    def self.new_mms(mode, sms, mms_array, user_phone) 
+
+    	if mode == "production"
+    		Helpers.real_new_mms(sms, mms_array, user_phone)
+    	else
+    		Helpers.test_new_mms(sms, mms_array, user_phone)
+    	end
+    end
+
+    def self.new_sms_sandwich_mms(mode, first_sms, last_sms, mms_array, user_phone)
+
+    	if mode == "production"
+    		Helpers.real_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
+    	else
+    		Helpers.test_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
+    	end
+    end
+
+    def self.new_sms_first_mms(mode, sms, mms_array, user_phone)
+    	
+    	if mode == "production"
+    		Helpers.real_new_sms_first_mms(sms, mms_array, user_phone)
+    	else
+    		Helpers.test_new_sms_first_mms(sms, mms_array, user_phone)
+    	end
+    end
+
+    def self.new_just_mms(mms_array, user_phone)
+    	if mode == "production"
+    		Helpers.real_new_just_mms(mms_array, user_phone)
+    	else
+    		Helpers.test_new_just_mms(mms_array, user_phone)
+    	end
+    end
+
+
+
+
+
+
+
+
 	#ONLY A RESPONSE
-	def self.text(normalSMS, sprintSMS, user_phone)
+	def self.real_text(normalSMS, sprintSMS, user_phone)
 	
  		@user = User.find_by(phone: user_phone)
 
@@ -61,7 +132,7 @@ class Helpers
 
 
 	#helper method to deliver sprint texts
-	def self.new_sprint_long_sms(long_sms, user_phone)
+	def self.real_new_sprint_long_sms(long_sms, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -149,7 +220,7 @@ class Helpers
 
 
 
-	def self.new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
+	def self.real_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -157,7 +228,7 @@ class Helpers
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			Helpers.real_new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms_url, index|
 
@@ -208,9 +279,6 @@ class Helpers
 
 			end
 
-
-
-
 		end
 
 	end
@@ -242,14 +310,14 @@ class Helpers
 	end
 
 
-	def self.new_sms_first_mms(sms, mms_array, user_phone)
+	def self.real_new_sms_first_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			Helpers.real_new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms, index|
 
@@ -286,7 +354,7 @@ class Helpers
 	end
 
 
-	def self.new_just_mms(mms_array, user_phone)
+	def self.real_new_just_mms(mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -316,7 +384,7 @@ class Helpers
 
 
 
-	def self.new_mms(sms, mms_array, user_phone)
+	def self.real_new_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -335,7 +403,7 @@ class Helpers
 					 sleep 20
 			end
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			Helpers.real_new_sprint_long_sms(sms, user_phone)
 
 		else
 
@@ -419,7 +487,7 @@ class Helpers
 		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+		if (@user != nil && @user.carrier == SPRINT) && sprintSMS.length > 160
 
 			test_new_sprint_long_sms(sprintSMS, user_phone)
 
@@ -433,7 +501,7 @@ class Helpers
 
 		end 
 
-		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+		puts "Sent message to #{@user.phone}:"
 
 	end  
 
@@ -441,14 +509,14 @@ class Helpers
 
 
 	#send a NEW, unprompted text-- NOT a response
-	def self.new_text(normalSMS, sprintSMS, user_phone)
+	def self.real_new_text(normalSMS, sprintSMS, user_phone)
 		
 		@user = User.find_by(phone: user_phone)
 
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			new_sprint_long_sms(sprintSMS, user_phone)
+			real_new_sprint_long_sms(sprintSMS, user_phone)
 
 		elsif @user == nil || @user.carrier == SPRINT
 

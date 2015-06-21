@@ -49,27 +49,15 @@ class FirstTextWorker
 
     @client = Twilio::REST::Client.new account_sid, auth_token
 
-    if mode == PRO
 
       if type == FIRST
-        Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+        Helpers.new_mms(mode, FIRST_SMS, FIRST_MMS, @user.phone)
       elsif type == SAMPLE
-        Helpers.new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
+        Helpers.new_mms(mode, SAMPLE_SMS, FIRST_MMS, @user.phone)
       else
-        Helpers.new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
+        Helpers.new_mms(mode, EXAMPLE_SMS, FIRST_MMS, @user.phone)
       end
 
-    else
-
-      if type == FIRST
-        Helpers.test_new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
-      elsif type == SAMPLE
-        Helpers.test_new_mms(SAMPLE_SMS, FIRST_MMS, @user.phone)
-      else
-        Helpers.test_new_mms(EXAMPLE_SMS, FIRST_MMS, @user.phone)
-      end
-
-    end
 
     puts "Sent Very First Story message to" + @user.phone + "\n\n"
 

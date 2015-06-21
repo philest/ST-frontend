@@ -119,25 +119,6 @@ get '/' do
 end
 
 
-helpers do
-
-
-	def text(mode, normal_sms, sprint_sms, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		if mode == PRO
-			Helpers.text(normal_sms, sprint_sms, @user.phone)
-		else
-			Helpers.test_text(normal_sms, sprint_sms, @user.phone)
-		end
-
-	end
-
-end
-
-
-
 
 
 
@@ -196,7 +177,7 @@ get '/sms' do
 
 			FirstTextWorker.perform_in(15.seconds, mode, FIRST, @user.phone)
 			
-		  	text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
@@ -207,11 +188,11 @@ get '/sms' do
 
 	elsif @user == nil
 
-		text(mode, NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+		Helpers.text(mode, NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
 
 	elsif @user.sample == true
 
-		text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
+		Helpers.text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
@@ -219,7 +200,7 @@ get '/sms' do
 		@user.update(subscribed: true)
 		@user.update(next_index_in_series: nil)
 
-		text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -240,7 +221,7 @@ get '/sms' do
 	  		puts "ERR: invalid days of week"
 	  	end
 
-	  	text(mode, HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
+	  	Helpers.text(mode, HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
 
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
@@ -255,19 +236,19 @@ get '/sms' do
 		#change subscription
 		@user.update(subscribed: false)
 
-		text(mode, STOPSMS, STOPSMS, @user.phone)
+		Helpers.text(mode, STOPSMS, STOPSMS, @user.phone)
 
 	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option		
 
 		#change mms to sms
 		@user.update(mms: false)
 
-		text(mode, MMS_UPDATE, MMS_UPDATE, @user.phone)
+		Helpers.text(mode, MMS_UPDATE, MMS_UPDATE, @user.phone)
 
 	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
 		#no need to manually undo birthdate
-		text(mode, REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
+		Helpers.text(mode, REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
 
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
@@ -295,7 +276,7 @@ get '/sms' do
 			ChoiceWorker.perform_async(mode, @user.phone)
 
 	 	else	 			
-			text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
+			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
 
 
@@ -329,19 +310,19 @@ get '/sms' do
 
 					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
-					text(mode, time_sms, time_sms, @user.phone)
+					Helpers.text(mode, time_sms, time_sms, @user.phone)
 
 	 		else #Wrong age rage
 
 	 			@user.update(subscribed: false)
 
 	 			#NOTE: Keep the real birthdate.
-	 			text(mode, TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
+	 			Helpers.text(mode, TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
 
 	 		end
 
 	    else #not a valid format
-	  		text(mode, WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
+	  		Helpers.text(mode, WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
 		end 	
 
  	# Update TIME before (or after) third story
@@ -361,10 +342,10 @@ get '/sms' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-					text(mode, good_time, good_time, @user.phone)
+					Helpers.text(mode, good_time, good_time, @user.phone)
 			else
 			
-				text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+				Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 			end
 
 		when 2
@@ -374,23 +355,23 @@ get '/sms' do
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
-					text(mode, good_time, good_time, @user.phone)
+					Helpers.text(mode, good_time, good_time, @user.phone)
 
  				else
 					
-					text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+					Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
  				end
  		else 
 		
-			text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+			Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
 		end
 
 	#response matches nothing
 	else
 
-		text(mode, NO_OPTION, NO_OPTION, @user.phone)
+		Helpers.text(mode, NO_OPTION, NO_OPTION, @user.phone)
 
 	end
 
@@ -421,6 +402,7 @@ get '/test/:From/:Body/:Carrier' do
 	@user = User.find_by_phone(params[:From])
 
 	mode = TEST
+	
 	
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
@@ -468,7 +450,7 @@ get '/test/:From/:Body/:Carrier' do
 
 			FirstTextWorker.perform_in(15.seconds, mode, FIRST, @user.phone)
 			
-		  	text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
@@ -479,11 +461,11 @@ get '/test/:From/:Body/:Carrier' do
 
 	elsif @user == nil
 
-		text(mode, NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+		Helpers.text(mode, NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
 
 	elsif @user.sample == true
 
-		text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
+		Helpers.text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
 
 	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
 
@@ -491,7 +473,7 @@ get '/test/:From/:Body/:Carrier' do
 		@user.update(subscribed: true)
 		@user.update(next_index_in_series: nil)
 
-		text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -512,7 +494,7 @@ get '/test/:From/:Body/:Carrier' do
 	  		puts "ERR: invalid days of week"
 	  	end
 
-	  	text(mode, HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
+	  	Helpers.text(mode, HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
 
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
@@ -527,19 +509,19 @@ get '/test/:From/:Body/:Carrier' do
 		#change subscription
 		@user.update(subscribed: false)
 
-		text(mode, STOPSMS, STOPSMS, @user.phone)
+		Helpers.text(mode, STOPSMS, STOPSMS, @user.phone)
 
 	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option		
 
 		#change mms to sms
 		@user.update(mms: false)
 
-		text(mode, MMS_UPDATE, MMS_UPDATE, @user.phone)
+		Helpers.text(mode, MMS_UPDATE, MMS_UPDATE, @user.phone)
 
 	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
 		#no need to manually undo birthdate
-		text(mode, REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
+		Helpers.text(mode, REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
 
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
@@ -567,7 +549,7 @@ get '/test/:From/:Body/:Carrier' do
 			ChoiceWorker.perform_async(mode, @user.phone)
 
 	 	else	 			
-			text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
+			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
 
 
@@ -601,19 +583,19 @@ get '/test/:From/:Body/:Carrier' do
 
 					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
 
-					text(mode, time_sms, time_sms, @user.phone)
+					Helpers.text(mode, time_sms, time_sms, @user.phone)
 
 	 		else #Wrong age rage
 
 	 			@user.update(subscribed: false)
 
 	 			#NOTE: Keep the real birthdate.
-	 			text(mode, TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
+	 			Helpers.text(mode, TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
 
 	 		end
 
 	    else #not a valid format
-	  		text(mode, WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
+	  		Helpers.text(mode, WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
 		end 	
 
  	# Update TIME before (or after) third story
@@ -633,10 +615,10 @@ get '/test/:From/:Body/:Carrier' do
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 				
-					text(mode, good_time, good_time, @user.phone)
+					Helpers.text(mode, good_time, good_time, @user.phone)
 			else
 			
-				text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+				Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 			end
 
 		when 2
@@ -646,25 +628,27 @@ get '/test/:From/:Body/:Carrier' do
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
-					text(mode, good_time, good_time, @user.phone)
+					Helpers.text(mode, good_time, good_time, @user.phone)
 
  				else
 					
-					text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+					Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
  				end
  		else 
 		
-			text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+			Helpers.text(mode, BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
 
 		end
 
 	#response matches nothing
 	else
 
-		text(mode, NO_OPTION, NO_OPTION, @user.phone)
+		Helpers.text(mode, NO_OPTION, NO_OPTION, @user.phone)
 
 	end
 
 end
+
+
 

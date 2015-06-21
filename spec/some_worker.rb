@@ -87,17 +87,17 @@ describe 'SomeWorker' do
     it "asks to update birthdate" do
       User.create(phone: "444", time: "5:30pm", total_messages: 4)
 
-
       Timecop.travel(2015, 9, 1, 15, 30, 0) #set Time.now to Sept, 1 2015, 15:30:00  (3:30 PM) at this instant, but allow to move forward
-
 
       Timecop.scale(1920) #1/16 seconds now are two minutes
 
       (1..30).each do 
         SomeWorker.perform_async
         SomeWorker.drain
+
+        sleep SLEEP
       end
-      expect(Helpers.getSMSarr).to eq(SomeWorker::BIRTHDATE_UPDATE)
+      expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
     end
 
 

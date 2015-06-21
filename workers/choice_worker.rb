@@ -39,31 +39,21 @@ class ChoiceWorker
   	#not SPRINT
 
 
-    if mode == PRO
       if @user.mms == true 
 
-        Helpers.new_mms(story.getSMS, story.getMmsArr, @user.phone)
+        Helpers.new_mms(mode, story.getSMS, story.getMmsArr, @user.phone)
 
       else 
-        Helpers.new_text(story.getPoemSMS, story.getPoemSMS, @user.phone)
+        Helpers.new_text(mode, story.getPoemSMS, story.getPoemSMS, @user.phone)
       
       end
 
-    else #test
-
-      if @user.mms == true 
-
-        Helpers.test_new_mms(story.getSMS, story.getMmsArr, @user.phone)
-
-      else 
-
-        Helpers.test_new_text(story.getPoemSMS, story.getPoemSMS, @user.phone)
-
-      end
-    end
 
     #prep for next
     @user.update(next_index_in_series: @user.next_index_in_series + 1)
+    
+    #total message count
+    @user.update(total_messages: @user.total_messages + 1)
 
   end
 

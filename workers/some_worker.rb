@@ -40,6 +40,7 @@ class SomeWorker
   #time for the birthdate and time updates: NOTE, EST set.
   if ENV['MY_MACHINE?'] == "true" #my machine
     UPDATE_TIME = "16:00"
+    UPDATE_TIME_2 = "16:01"
 
   else #on the INTERNET
     UPDATE_TIME = "20:00" 
@@ -82,7 +83,7 @@ class SomeWorker
       end
 
       #UPDATE time
-      if user.set_time == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 2 #Customize time 
+      if user.set_time == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.total_messages == 2 #Customize time 
           
         if user.carrier == SPRINT
 
@@ -100,11 +101,15 @@ class SomeWorker
 
       end
 
+     
+
 
       #UPDATE Birthdate! 
-      if user.set_birthdate == false && SomeWorker.cleanSysTime == UPDATE_TIME && user.story_number == 4 #Customize time 
+      if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 4 #Customize time 
 
-        Helpers.new_text(BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
+
+
+        Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
         user.update(set_birthdate: true)
 
@@ -186,6 +191,9 @@ class SomeWorker
               else
                 user.update(story_number: user.story_number + 1)
               end
+
+              #total message count
+              user.update(total_messages: user.total_messages + 1)
 
           end#end story_subpart
 
