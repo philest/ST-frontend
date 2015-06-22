@@ -114,13 +114,13 @@ class SomeWorker
 
 
       #UPDATE Birthdate! 
-      if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 5 #Customize time 
+      # if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 5 #Customize time 
 
-        user.update(set_birthdate: true)
+      #   user.update(set_birthdate: true)
 
-        Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
+      #   Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
-      end
+      # end
 
         if SomeWorker.sendStory?(user.phone) 
 
