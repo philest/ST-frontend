@@ -498,6 +498,9 @@ describe 'SomeWorker' do
       get 'test/900/STORY/ATT'
       @user = User.find_by(phone: "900")
       @user.reload
+      expect(@user.total_messages).to eq(1)
+
+
 
       Timecop.scale(1920) #1/16 seconds now are two minutes
       (1..25).each do 
@@ -507,6 +510,17 @@ describe 'SomeWorker' do
       end
       @user.reload
       expect(@user.story_number).to eq(0)
+      expect(@user.total_messages).to eq(1)
+
+
+
+    mmsSoFar = FirstTextWorker::FIRST_MMS
+    smsSoFar = ["StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!\n\nText HELP NOW for help, or STOP NOW to cancel.",
+ FirstTextWorker::FIRST_SMS]
+
+    expect(Helpers.getMMSarr).to eq(mmsSoFar)
+    expect(Helpers.getSMSarr).to eq(smsSoFar)
+
 
       
       Timecop.travel(2015, 6, 23, 17, 15, 0) #on TUESDAY.
@@ -518,10 +532,19 @@ describe 'SomeWorker' do
         sleep SLEEP
       end
       @user.reload 
-      expect(@user.total_messages).to eq(1)
+      expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
 
-      Timecop.travel(2015, 6, 24, 17, 15, 0) #on WED.
+    mmsSoFar.concat Message.getMessageArray[0].getMmsArr
+    smsSoFar.concat [Message.getMessageArray[0].getSMS]
+
+    expect(Helpers.getMMSarr).to eq(mmsSoFar)
+    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(Helpers.getMMSarr).not_to eq(nil)
+
+
+
+      Timecop.travel(2015, 6, 24, 15, 30, 0) #on WED. (3:30)
       Timecop.scale(1920) #1/16 seconds now are two minutes
 
       (1..20).each do 
@@ -530,7 +553,26 @@ describe 'SomeWorker' do
         sleep SLEEP
       end
       @user.reload 
-      expect(@user.total_messages).to eq(1)
+      expect(@user.total_messages).to eq(2)
+
+    #NO CHANGE
+
+    expect(Helpers.getMMSarr).to eq(mmsSoFar)
+    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(Helpers.getMMSarr).not_to eq(nil)
+
+
+      Timecop.travel(2015, 6, 25, 15, 30, 0) #on THURS. (3:30)
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload 
+
+      smsSoFar.concat 
 
       # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
       # Timecop.scale(1920) #1/16 seconds now are two minutes
