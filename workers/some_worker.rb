@@ -95,7 +95,7 @@ class SomeWorker
 
 
       #handling old users: convert give Time!
-      if user.time == nil
+      if user.time == nil || user.time.class == String
         user.update(time: DEFAULT_TIME)
       end
 
