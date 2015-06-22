@@ -293,7 +293,7 @@ get '/sms' do
 
 
     # second reply: update child's birthdate
-    elsif @user.set_birthdate == false && /[0-9]{4}/ =~ params[:Body]
+    elsif @user.set_birthdate == true && /[0-9]{4}/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
@@ -318,7 +318,6 @@ get '/sms' do
 
   				#redo subscription for parents who entered in bday wrongly
   				@user.update(subscribed: true)
-  				@user.update(set_birthdate: true)
 
 					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
 
@@ -338,7 +337,7 @@ get '/sms' do
 		end 	
 
  	# Update TIME before (or after) third story
- 	elsif @user.set_time == false && /(:|pm|am)/ =~ params[:Body]
+ 	elsif @user.set_time == true && /(:|pm|am)/ =~ params[:Body]
  		
  		response = params[:Body]
  		arr = response.split
@@ -349,8 +348,6 @@ get '/sms' do
 			if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
 				
 				@user.update(time: arr[0]) 
-		        #They've set their own time, so don't ask again
-		        @user.update(set_time: true)
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 
@@ -366,7 +363,6 @@ get '/sms' do
  					@user.update(time: arr[0] + arr[1])
 
  					#They've set their own time, so don't ask again
-			        @user.update(set_time: true)
 
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
@@ -418,8 +414,6 @@ get '/test/:From/:Body/:Carrier' do
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
-
-
 		if @user == nil
 			@user = User.create(phone: params[:From])
 		else
@@ -440,10 +434,11 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(days_per_week: 2)
 		end
 
-
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
+
+
 			@user.update(time: DEFAULT_TIME) #NEED THIS!
 			@user.update(child_age: 4)
 
@@ -477,6 +472,7 @@ get '/test/:From/:Body/:Carrier' do
 		FirstTextWorker.perform_in(17.seconds, mode, params[:Body].upcase, @user.phone)
 
 		Helpers.mms(mode, SomeWorker::FIRST_MMS[0], @user.phone) 
+
 
 	elsif @user == nil
 
@@ -573,7 +569,7 @@ get '/test/:From/:Body/:Carrier' do
 
 
     # second reply: update child's birthdate
-    elsif @user.set_birthdate == false && /[0-9]{4}/ =~ params[:Body]
+    elsif @user.set_birthdate == true && /[0-9]{4}/ =~ params[:Body]
    		
 		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
   			
@@ -598,7 +594,6 @@ get '/test/:From/:Body/:Carrier' do
 
   				#redo subscription for parents who entered in bday wrongly
   				@user.update(subscribed: true)
-  				@user.update(set_birthdate: true)
 
 					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
 
@@ -618,7 +613,7 @@ get '/test/:From/:Body/:Carrier' do
 		end 	
 
  	# Update TIME before (or after) third story
- 	elsif @user.set_time == false && /(:|pm|am)/ =~ params[:Body]
+ 	elsif @user.set_time == true && /(:|pm|am)/ =~ params[:Body]
  		
  		response = params[:Body]
  		arr = response.split
@@ -629,11 +624,9 @@ get '/test/:From/:Body/:Carrier' do
 			if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
 				
 				@user.update(time: arr[0]) 
-		        #They've set their own time, so don't ask again
-		        @user.update(set_time: true)
 
 				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
-				
+
 					Helpers.text(mode, good_time, good_time, @user.phone)
 			else
 			
@@ -644,8 +637,6 @@ get '/test/:From/:Body/:Carrier' do
  				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
  					
  					@user.update(time: arr[0] + arr[1])
-
- 			        @user.update(set_time: true)
 
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
@@ -670,6 +661,8 @@ get '/test/:From/:Body/:Carrier' do
 	end
 
 end
+
+
 
 
 

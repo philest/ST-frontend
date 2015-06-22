@@ -111,7 +111,7 @@ class SomeWorker
       end
 
       #UPDATE time
-      if user.set_time == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2)  && user.total_messages == 2 #Customize time 
+      if user.set_time == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2)  && user.total_messages == 3 #Customize time 
           
         if user.carrier == SPRINT
 
@@ -125,19 +125,21 @@ class SomeWorker
 
         end
 
+            #They've been asked to set their own time, so don't ask again
+            user.update(set_time: true)
+
       end
 
 
 
       #UPDATE Birthdate! 
-      if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 4 #Customize time 
+      if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 5 #Customize time 
+
+        user.update(set_birthdate: true)
 
         Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
       end
-
-      # require 'pry'
-      # binding.pry
 
         if SomeWorker.sendStory?(user.phone) 
 

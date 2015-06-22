@@ -91,7 +91,7 @@ describe 'SomeWorker' do
 
 
     it "asks to update birthdate" do
-      User.create(phone: "444", time: "5:30pm", total_messages: 4)
+      User.create(phone: "444", time: "5:30pm", total_messages: 5)
 
       Timecop.travel(2015, 9, 1, 15, 30, 0) #set Time.now to Sept, 1 2015, 15:30:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -107,7 +107,7 @@ describe 'SomeWorker' do
     end
 
     it "has set_birthdate as false before it sends out the text" do
-        @user = User.create(phone: "444", time: "5:30pm", total_messages: 4)
+        @user = User.create(phone: "444", time: "5:30pm", total_messages: 5)
       
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -121,12 +121,12 @@ describe 'SomeWorker' do
         end
         @user.reload 
 
-        expect(@user.set_birthdate).to be(false)
+        expect(@user.set_birthdate).to be(true)
     end
 
 
     it "asks to update time when it should (non-sprint" do
-        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -144,7 +144,7 @@ describe 'SomeWorker' do
     end
 
     it "gets all the SPRINT to update time SMS pieces" do
-        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2, carrier: SPRINT_CARRIER)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3, carrier: SPRINT_CARRIER)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -162,9 +162,10 @@ describe 'SomeWorker' do
     end
 
     it "doesn't send time update the next day... (sorry mom)" do
-        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2)
+        Timecop.travel(2015, 6, 22, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3)
 
-        Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
+        Timecop.travel(2015, 6, 23, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
         Timecop.scale(1920) #1/16 seconds now are two minutes
 
@@ -179,7 +180,9 @@ describe 'SomeWorker' do
         expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
 
 
-        Timecop.travel(2015, 9, 2, 15, 45, 0)
+        Timecop.travel(2015, 6, 24, 15, 45, 0)
+        Timecop.scale(1920) #1/16 seconds now are two minutes
+
        
         (1..20).each do 
           SomeWorker.perform_async
@@ -194,7 +197,7 @@ describe 'SomeWorker' do
     end
 
     it "doesn't send BIRTHDATE update the next day... (sorry mom)" do
-        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 4)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 5)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -490,6 +493,66 @@ describe 'SomeWorker' do
 
 
 
+    it "properly asks for the time on third story-- then never again! (even w/o response)" do
+      Timecop.travel(2015, 6, 22, 16, 15, 0) #on MONDAY!
+      get 'test/900/STORY/ATT'
+      @user = User.find_by(phone: "900")
+      @user.reload
+
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+      (1..25).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload
+      expect(@user.story_number).to eq(0)
+
+      
+      Timecop.travel(2015, 6, 23, 17, 15, 0) #on TUESDAY.
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload 
+      expect(@user.total_messages).to eq(1)
+      expect(@user.story_number).to eq(1)
+
+      Timecop.travel(2015, 6, 24, 17, 15, 0) #on WED.
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload 
+      expect(@user.total_messages).to eq(1)
+
+      # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
+      # Timecop.scale(1920) #1/16 seconds now are two minutes
+      # (1..20).each do 
+      #   SomeWorker.perform_async
+      #   SomeWorker.drain
+      #   sleep SLEEP
+      # end
+      # @user.reload 
+      # expect(@user.total_messages).to eq(2)
+
+
+      # Timecop.travel(2015, 6, 26, 17, 15, 0) #on Fri.
+      # Timecop.scale(1920) #1/16 seconds now are two minutes     
+      # (1..20).each do 
+      #   SomeWorker.perform_async
+      #   SomeWorker.drain
+      #   sleep SLEEP
+      # end
+      # @user.reload 
+      # expect(@user.total_messages).to eq(2)
+  end
 
 
 
