@@ -136,6 +136,8 @@ class SomeWorker
         
       end
 
+      # require 'pry'
+      # binding.pry
 
         if SomeWorker.sendStory?(user.phone) 
 

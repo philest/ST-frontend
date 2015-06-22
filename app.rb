@@ -404,10 +404,6 @@ end
 
 
 
-
-
-
-
 #THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
@@ -418,9 +414,11 @@ get '/test/:From/:Body/:Carrier' do
 
 	mode = TEST
 	
-	
+
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
+
+
 
 		if @user == nil
 			@user = User.create(phone: params[:From])

@@ -10,6 +10,7 @@ require 'active_support/all'
 require_relative '../helpers'
 require_relative '../message'
 require_relative '../messageSeries'
+require_relative '../workers/first_text_worker'
 
 SLEEP = (1.0 / 16.0) 
 
@@ -308,8 +309,9 @@ describe 'SomeWorker' do
       end
       @user.reload 
 
-      expect(Helpers.getSMSarr).to eq(Message.getMessageArray[0].getMmsArr)
+      expect(Helpers.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
       expect(Helpers.getSMSarr).not_to eq(nil)
+      expect(Helpers.getSMSarr).not_to eq([])
     end
 
 
@@ -397,7 +399,94 @@ describe 'SomeWorker' do
 
 
 
+    it "has total message count properly increasing" do
+      Timecop.travel(2015, 6, 22, 17, 15, 0) #on MONDAY!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      
 
+      Timecop.travel(2015, 6, 23, 17, 15, 0) #on TUESDAY.
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload 
+      expect(@user.total_messages).to eq(1)
+
+      Timecop.travel(2015, 6, 24, 17, 15, 0) #on WED.
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP
+      end
+      @user.reload 
+      expect(@user.total_messages).to eq(1)
+
+      # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
+      # Timecop.scale(1920) #1/16 seconds now are two minutes
+      # (1..20).each do 
+      #   SomeWorker.perform_async
+      #   SomeWorker.drain
+      #   sleep SLEEP
+      # end
+      # @user.reload 
+      # expect(@user.total_messages).to eq(2)
+
+
+      # Timecop.travel(2015, 6, 26, 17, 15, 0) #on Fri.
+      # Timecop.scale(1920) #1/16 seconds now are two minutes     
+      # (1..20).each do 
+      #   SomeWorker.perform_async
+      #   SomeWorker.drain
+      #   sleep SLEEP
+      # end
+      # @user.reload 
+      # expect(@user.total_messages).to eq(2)
+  end
+
+
+  #series choice
+  it "sends proper texts for first signup through first story!" do
+    Timecop.travel(2015, 6, 22, 16, 15, 0) #on MONDAY!
+    get 'test/900/STORY/ATT'
+    @user = User.find_by(phone: "900")
+    @user.reload
+
+    mmsSoFar = FirstTextWorker::FIRST_MMS
+    smsSoFar = ["StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!\n\nText HELP NOW for help, or STOP NOW to cancel.",
+ FirstTextWorker::FIRST_SMS]
+
+    FirstTextWorker.drain
+    # binding.pry
+
+    expect(Helpers.getMMSarr).to eq(mmsSoFar)
+    expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+    #it properly sends the MMS and SMS on TUES
+    Timecop.travel(2015, 6, 23, 17, 15, 0) #on tues!
+    Timecop.scale(1920) #1/16 seconds now are two minutes
+
+    (1..20).each do 
+      SomeWorker.perform_async
+      SomeWorker.drain
+      sleep SLEEP
+    end
+    @user.reload 
+
+    mmsSoFar.concat Message.getMessageArray[0].getMmsArr
+    smsSoFar.concat [Message.getMessageArray[0].getSMS]
+
+    expect(Helpers.getMMSarr).to eq(mmsSoFar)
+    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(Helpers.getMMSarr).not_to eq(nil)
+
+    puts mmsSoFar
+    puts smsSoFar
+  end
 
 
 
