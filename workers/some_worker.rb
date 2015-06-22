@@ -188,7 +188,7 @@ class SomeWorker
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
-                Helpers.new_mms(story.getSMS, story.getMmsArr, user.phone)
+                Helpers.new_mms(mode, story.getSMS, story.getMmsArr, user.phone)
 
             end#MMS or SMS
 

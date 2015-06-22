@@ -4,6 +4,8 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
+require 'time'
+require 'active_support/all'
 
 require_relative '../helpers'
 require_relative '../message'
@@ -241,18 +243,169 @@ describe 'SomeWorker' do
     it "has sendStory? rightly NOT working two minutes early" do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
-      Timecop.travel(2015, 6, 23, 17, 28, 0) #on Tuesday!
+      Timecop.travel(2016, 6, 23, 17, 28, 0) #on Tuesday!
       expect(SomeWorker.sendStory?("444")).to be(false)
     end
 
 
-    it "has sendStory? rightly  working one min early" do
+    it "has sendStory? rightly working one min early" do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
-      Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tuesday!
+      Timecop.travel(2016, 6, 23, 17, 29, 0) #on Tuesday!
 
       expect(SomeWorker.sendStory?("444")).to be(true)
     end
+
+
+    it "properly knows to send at next valid day after 24 hours " do 
+
+      Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+    end
+
+    it "doesn't send within 24 hours of creation " do 
+      Timecop.travel(2016, 6, 23, 16, 15, 0) #on TUESDAY!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+    end
+
+
+    it "sends your first story MMS." do
+      Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      Timecop.travel(2016, 6, 23, 17, 15, 0) #on TUESDAY.
+
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        sleep SLEEP
+      end
+      @user.reload 
+
+      expect(Helpers.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)
+      expect(Helpers.getMMSarr).not_to eq(nil)
+    end
+
+
+   it "sends your first story SMS." do
+      Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      Timecop.travel(2016, 6, 23, 17, 15, 0) #on TUESDAY.
+
+      Timecop.scale(1920) #1/16 seconds now are two minutes
+
+      (1..20).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        sleep SLEEP
+      end
+      @user.reload 
+
+      expect(Helpers.getSMSarr).to eq(Message.getMessageArray[0].getMmsArr)
+      expect(Helpers.getSMSarr).not_to eq(nil)
+    end
+
+
+    it "sends only on right days for T-TH schedule (2)" do
+
+      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      
+      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+  end
+
+  it "sends only on right days for M-W-F schedule (2)" do
+
+      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 3)
+      
+      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+  end
+
+
+    it "sends only on right days for W schedule (1)" do
+
+      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 1)
+      
+      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
+      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
+      expect(SomeWorker.sendStory?("444")).to be(false)
+  end
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
