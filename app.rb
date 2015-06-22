@@ -187,9 +187,11 @@ get '/sms' do
 		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
-	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
+	elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
 
-		@user = User.create(sample: true, subscribed: false, phone: params[:From])
+		if @user == nil
+			@user = User.create(sample: true, subscribed: false, phone: params[:From])
+		end
 
 		FirstTextWorker.perform_in(17.seconds, mode, params[:Body].upcase, @user.phone)
 
@@ -468,14 +470,15 @@ get '/test/:From/:Body/:Carrier' do
 		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
-	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
-		
-		@user = User.create(sample: true, subscribed: false, phone: params[:From])
+	elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
+
+		if @user == nil
+			@user = User.create(sample: true, subscribed: false, phone: params[:From])
+		end
 
 		FirstTextWorker.perform_in(17.seconds, mode, params[:Body].upcase, @user.phone)
 
 		Helpers.mms(mode, SomeWorker::FIRST_MMS[0], @user.phone) 
-
 
 	elsif @user == nil
 
