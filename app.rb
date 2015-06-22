@@ -191,10 +191,10 @@ get '/sms' do
 		
 		FirstTextWorker.perform_in(17.seconds, mode, "test", params[:From])
 
+		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
-		      m.Body "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your two page sample story, on the way!"
 		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
 		    end
 		  end

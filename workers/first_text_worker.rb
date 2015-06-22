@@ -55,7 +55,8 @@ class FirstTextWorker
       elsif type == SAMPLE
         Helpers.new_mms(mode, SAMPLE_SMS, FIRST_MMS, @user.phone)
       elsif type == "test"
-        Helpers.new_just_mms(mode, ["http://i.imgur.com/msiTUwK.jpg"], @user.phone)
+        Helpers.new_mms(mode, EXAMPLE_SMS, ["http://i.imgur.com/msiTUwK.jpg"], @user.phone)
+        # Helpers.new_just_mms(mode, ["http://i.imgur.com/msiTUwK.jpg"], phoneNum)
       else
         Helpers.new_mms(mode, EXAMPLE_SMS, FIRST_MMS, @user.phone)
       end
