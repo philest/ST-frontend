@@ -94,7 +94,7 @@ class Helpers
     	end
     end
 
-    def self.new_just_mms(mms_array, user_phone)
+    def self.new_just_mms(mode, mms_array, user_phone)
     	if mode == "production"
     		Helpers.real_new_just_mms(mms_array, user_phone)
     	else
