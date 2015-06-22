@@ -126,7 +126,6 @@ class Helpers
 		twiml = Twilio::TwiML::Response.new do |r|
 	   		r.Message msg #SEND SPRINT MSG
 	   	end
-	   	
 	    twiml.text
 	end  
 

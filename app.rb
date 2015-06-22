@@ -187,6 +187,19 @@ get '/sms' do
 		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
+	elsif params[:Body].casecmp("TEST") == 0
+
+
+		  twiml = Twilio::TwiML::Response.new do |r|
+		    r.Message do |m|
+		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
+		      m.Body "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
+		    end
+		  end
+		 
+		  twiml.text
+
+
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
