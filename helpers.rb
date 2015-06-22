@@ -39,6 +39,16 @@ class Helpers
     @client = Twilio::REST::Client.new account_sid, auth_token
 
 
+
+    def self.mms(mode, mms, user_phone)
+    	if mode == "production"
+    		Helpers.real_mms(mms, user_phone)
+    	else
+    		Helpers.test_mms(mms, user_phone)
+    	end
+    end
+
+
     #these methods route each 
     def self.new_text(mode, normalSMS, sprintSMS, user_phone)
 
@@ -105,7 +115,24 @@ class Helpers
 
 
 
+    def self.real_mms(mms, user_phone)
 
+    	@user = User.find_by(phone: user_phone)
+
+		  twiml = Twilio::TwiML::Response.new do |r|
+		    r.Message do |m|
+		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
+		    end
+		  end
+		  twiml.text
+	end
+
+	def self.test_mms(mms, user_phone)
+
+    	@user = User.find_by(phone: user_phone)
+
+	    @@twiml_mms.push mms
+	end
 
 
 

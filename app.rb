@@ -187,25 +187,14 @@ get '/sms' do
 		  	Helpers.text(mode, START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
-	elsif params[:Body].casecmp("TEST") == 0
-		
-		FirstTextWorker.perform_in(17.seconds, mode, "test", params[:From])
-
-		@user = User.create(sample: true, subscribed: false, phone: params[:From])
-
-		  twiml = Twilio::TwiML::Response.new do |r|
-		    r.Message do |m|
-		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
-		    end
-		  end
-		  twiml.text
-
-
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
 
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		FirstTextWorker.perform_async(mode, params[:Body].upcase, params[:From])
+		FirstTextWorker.perform_in(17.seconds, mode, params[:Body].upcase, @user.phone)
+
+		Helpers.mms(mode, SomeWorker::FIRST_MMS[0], @user.phone) 
+
 
 	elsif @user == nil
 
@@ -480,10 +469,13 @@ get '/test/:From/:Body/:Carrier' do
 
 
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
-
+		
 		@user = User.create(sample: true, subscribed: false, phone: params[:From])
 
-		FirstTextWorker.perform_async(mode, params[:Body].upcase, params[:From])
+		FirstTextWorker.perform_in(17.seconds, mode, params[:Body].upcase, @user.phone)
+
+		Helpers.mms(mode, SomeWorker::FIRST_MMS[0], @user.phone) 
+
 
 	elsif @user == nil
 
