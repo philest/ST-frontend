@@ -192,13 +192,13 @@ get '/sms' do
 
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
+		      m.Body "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your two page sample story, on the way!"
 		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
-		      m.Media "http://i.imgur.com/msiTUwK.jpg"
-		      m.Body "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
 		    end
 		  end
-		 
 		  twiml.text
+		  
+		  FirstTextWorker.perform_in(17.seconds, mode, )
 
 
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
