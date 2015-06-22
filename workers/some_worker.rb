@@ -93,9 +93,11 @@ class SomeWorker
     # only for subscribed
     User.where(subscribed: true).find_each do |user|
 
+  if user.time.class != String #LEGACY
+
 
       #handling old users: convert give Time!
-      if user.time == nil || user.time.class == String
+      if user.time == nil 
         user.update(time: DEFAULT_TIME)
       end
 
@@ -220,6 +222,7 @@ class SomeWorker
 
     end#end User.do
 
+  end#LEGACY STRING
         
     puts "doing hard work!!" + "\n\n" 
 
