@@ -188,6 +188,8 @@ get '/sms' do
 
 
 	elsif params[:Body].casecmp("TEST") == 0
+		
+		FirstTextWorker.perform_in(17.seconds, mode, "test", params[:From])
 
 
 		  twiml = Twilio::TwiML::Response.new do |r|
@@ -197,8 +199,6 @@ get '/sms' do
 		    end
 		  end
 		  twiml.text
-		  
-		  FirstTextWorker.perform_in(17.seconds, mode, )
 
 
 	elsif @user == nil && (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
