@@ -43,16 +43,24 @@ class SomeWorker
   TESTERS = ["+15612125831", "+15619008225"]
 
 
-  #time for the birthdate and time updates: NOTE, EST set.
-  if ENV['MY_MACHINE?'] == "true" #my machine
-    UPDATE_TIME = "16:00"
-    UPDATE_TIME_2 = "16:01"
+  DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-05:00") #Default Time: 17:30:00 (5:30PM), EST
 
-  else #on the INTERNET
-    UPDATE_TIME = "20:00" 
+
+  #time for the birthdate and time updates: NOTE, EST set.  
+  if ENV['RACK_ENV'] == production
+    UPDATE_TIME_1 = "20:00"
     UPDATE_TIME_2 = "20:00"
-
+  else
+    UPDATE_TIME_1 = "16:00"
+    UPDATE_TIME_2 = "16:01"
   end
+
+
+
+
+  UPDATE_TIME = Time.new(2015, 6, 21, 16, 0, 0, "-05:00") #Default Time: 16:00:00 (4:0PM), EST
+
+
 
 	sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
@@ -78,12 +86,25 @@ class SomeWorker
     #logging
     puts "\nSend story?: \n"
 
+
+
+
+
+
+
     # send Twilio message
     # only for subscribed
     User.where(subscribed: true).find_each do |user|
 
+
+      #handling old users: convert give Time!
+      if user.time == nil
+        user.update(time: DEFAULT_TIME)
+      end
+
+
       #logging info
-      puts  user.phone + " with time " + SomeWorker.convertTimeTo24(user.time) + ": "
+      puts  user.phone + " with time " + user.time.hour + ":" + user.time.minute + "  -> "
       if SomeWorker.sendStory?(user)
         puts 'YES!!'
       else
@@ -111,8 +132,6 @@ class SomeWorker
 
       #UPDATE Birthdate! 
       if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 4 #Customize time 
-
-
 
         Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
         
@@ -211,62 +230,6 @@ class SomeWorker
 
 
 
-  # converts one long 160+ character string into an array of <160 char strings
-  def self.sprint(story) 
-
-    sms = Array.new #array of texts to send seperately
-
-    storyLen = story.length #characters in story
-
-    totalChar = 0 #none counted so far
-
-    startIndex = 0 
-
-    smsNum = 1 #which sms you're on (starts with first)
-
-    while (totalChar < storyLen - 1) #haven't divided up entire message yet
-
-      if (totalChar + MAX_TEXT < storyLen) #if not on last message
-        endIndex = startIndex + MAX_TEXT  
-      else #if on last message
-        endIndex = storyLen - 1 #endIndex is last index of story
-      end
-
-        while (story[endIndex-1] != "\n" || endIndex-1 == startIndex) && endIndex != storyLen-1 do  #find the latest newline before endIndex
-          endIndex -= 1
-        end
-
-        if endIndex == startIndex #no newlines in block
-
-
-          endIndex = startIndex + MAX_TEXT #recharge endindex
-          
-          while story[endIndex-1] != " "
-          endIndex -= 1
-          end
-
-        end
-
-      smsLen = endIndex - startIndex #chars in sms
-
-      totalChar += smsLen #chars dealt with so far
-
-      sms.push "(#{smsNum}/X)"+story[startIndex, smsLen]
-
-      startIndex = endIndex
-
-      smsNum += 1 #on the next message
-
-    end
-
-    sms.each do |text|
-      text.gsub!(/[\/][X][)]/, "\/#{smsNum-1})")
-    end
-
-    return sms
-
-  end
-
 
 
   #makes a hash to use in struct
@@ -301,50 +264,36 @@ class SomeWorker
                                                                      #SEND TO US EVERYDAY
                                                                      #SEND IF ony valid day and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:30pm on a M or W
-      
+      currHour = Time.now.utc.hour
+      userHour = user.time.utc.hour 
 
-      currTime = SomeWorker.cleanSysTime
-      userTime = SomeWorker.convertTimeTo24(user.time)
+      currMin = Time.now.utc.min
+      userMin = Time.now.utc.min
 
-      currHour = currTime[0,2]   
-      userHour = userTime[0,2]
-
-      #CONVERTING FROM EASTERN TO UTC when not my machine!!!!
-      if ENV['MY_MACHINE?'] != "true"
-      userHour = ((userTime[0,2].to_i + 4) % 24).to_s
-      end
-
-
-      len = currTime.length 
-      # assert(currTime.length == userTime.length, "lengths differ")
-      # assert(len == 5, "lengths differ")
-
-        currMin = currTime[3, len]
-        userMin = userTime[3, len]
-
-        currMin = currMin.to_i
-        userMin = userMin.to_i    
-
-      if currHour.to_i == userHour.to_i #same hour (03 converts to 3)
-
-        if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #send the message
+      if currHour == userHour
+        
+        if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #if either now, or next minute
           return true
         else
           return false
         end
-      elsif (userHour.to_i == 1 + currHour.to_i) &&  
-            ((currMin == 58 && userMin == 0) || (currMin == 59 && userMin == 1)) #the 5:58 send the 6:00 message
-          return true
+
+      elsif currHour == userHour && (currMin == 59 && userMin == 1) #edge case
+      
+        return true
+      
       else
+      
         return false
-      end
+      
+      end#end currHour == userHour
 
     else
 
       return false
     
-    end#end weekday/first time
-
+    end#end ifvalid days
+    
   end#end sendStory?
 
 
@@ -353,9 +302,7 @@ class SomeWorker
   #ALWAYS IN UTC
   def self.cleanSysTime 
 
-    currTime = Time.now.utc.hour
-
-    
+    currTime = Time.now
 
     hours = currTime.hour
     min = currTime.min
@@ -374,24 +321,10 @@ class SomeWorker
 
     	cleanedTime = hours.to_s+":"+min.to_s 
 
-
     return cleanedTime
   end
 
 
-  # converts pm/am time into 24hour time 
-  def self.convertTimeTo24(oldTime)
-
-    return Time.parse(oldTime).strftime("%H:%M")
-
-  end
-
-
-
-
-
-
-  
 
 
 end  

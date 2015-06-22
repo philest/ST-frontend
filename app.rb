@@ -7,6 +7,8 @@ require 'sidekiq'
 require 'sidetiq'
 require 'redis'
 
+require 'time'
+
 #REDIS initialization
 require_relative './config/initializers/redis'
 
@@ -105,6 +107,9 @@ FIRST = "FIRST"
 
 GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
 
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-05:00") #Default Time: 17:30:00 (5:30PM), EST
+
+
 
 PRO = "production"
 TEST = "test"
@@ -157,7 +162,9 @@ get '/sms' do
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
-			@user.update(time: "5:30pm", child_age: 4)
+
+			@user.update(time: DEFAULT_TIME) #NEED THIS!
+			@user.update(child_age: 4)
 
 			if mode == PRO
 				#TWILIO set up:
@@ -434,7 +441,8 @@ get '/test/:From/:Body/:Carrier' do
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
-			@user.update(time: "5:30pm", child_age: 4)
+			@user.update(time: DEFAULT_TIME) #NEED THIS!
+			@user.update(child_age: 4)
 
 			if mode == PRO
 				#TWILIO set up:
