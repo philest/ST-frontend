@@ -193,6 +193,7 @@ get '/sms' do
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
 		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
+		      m.Media "http://i.imgur.com/msiTUwK.jpg"
 		      m.Body "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
 		    end
 		  end
