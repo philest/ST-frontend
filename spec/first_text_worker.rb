@@ -104,6 +104,22 @@ describe 'The StoryTime Workers' do
 			expect(Helpers.getMMSarr).to eq(FirstTextWorker::FIRST_MMS)
 		end
 
+		it "properly updates total_messages" do 
+			get '/test/556/STORY/ATT'
+			@user = User.find_by(phone: "556")
+			expect(@user.total_messages).to eq(0)
+			@user.reload 
+
+			expect(FirstTextWorker.jobs.size).to eq(1)
+			FirstTextWorker.drain
+			expect(FirstTextWorker.jobs.size).to eq(0)
+			@user.reload
+
+			expect(@user.total_messages).to eq(1)
+		end
+
+
+
 
   end 
 

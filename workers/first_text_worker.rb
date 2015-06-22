@@ -50,9 +50,9 @@ class FirstTextWorker
 
     @client = Twilio::REST::Client.new account_sid, auth_token
 
-
       if type == FIRST
         Helpers.new_mms(mode, FIRST_SMS, FIRST_MMS, @user.phone)
+        @user.update(total_messages: 1)
       elsif type == SAMPLE
         Helpers.new_mms(mode, SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
       else
