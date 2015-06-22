@@ -285,8 +285,19 @@ get '/sms' do
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
 
-			ChoiceWorker.perform_async(mode, @user.phone)
 
+		    messageSeriesHash = MessageSeries.getMessageSeriesHash
+		    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+
+			ChoiceWorker.perform_in(17.seconds, mode, @user.phone)
+
+			if @user.mms == true
+				Helpers.mms(mode, story.getMmsArr[0], @user.phone)
+			else
+		        Helpers.text(mode, story.getPoemSMS, story.getPoemSMS, @user.phone)      
+		    end
+		    
 	 	else	 			
 			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
@@ -561,7 +572,17 @@ get '/test/:From/:Body/:Carrier' do
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
 
-			ChoiceWorker.perform_async(mode, @user.phone)
+		    messageSeriesHash = MessageSeries.getMessageSeriesHash
+		    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+
+			ChoiceWorker.perform_in(17.seconds, mode, @user.phone)
+
+			if @user.mms == true
+				Helpers.mms(mode, story.getMmsArr[0], @user.phone)
+			else
+		        Helpers.text(mode, story.getPoemSMS, story.getPoemSMS, @user.phone)      
+		    end
 
 	 	else	 			
 			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)

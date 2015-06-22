@@ -40,14 +40,10 @@ class ChoiceWorker
 
 
       if @user.mms == true 
-
-        Helpers.new_mms(mode, story.getSMS, story.getMmsArr, @user.phone)
-
-      else 
-        Helpers.new_text(mode, story.getPoemSMS, story.getPoemSMS, @user.phone)
-      
+        Helpers.new_mms(mode, story.getSMS, story.getMmsArr[1..-1], @user.phone)
       end
 
+      #already responded with text only stuff!
 
     #prep for next
     @user.update(next_index_in_series: @user.next_index_in_series + 1)
