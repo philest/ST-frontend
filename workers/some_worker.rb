@@ -43,22 +43,19 @@ class SomeWorker
   TESTERS = ["+15612125831", "+15619008225"]
 
 
-  DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-05:00") #Default Time: 17:30:00 (5:30PM), EST
+  DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
   #time for the birthdate and time updates: NOTE, EST set.  
-  if ENV['RACK_ENV'] == production
-    UPDATE_TIME_1 = "20:00"
+  if ENV['RACK_ENV'] == "production"
+    UPDATE_TIME = "20:00"
     UPDATE_TIME_2 = "20:00"
   else
-    UPDATE_TIME_1 = "16:00"
+    UPDATE_TIME = "16:00"
     UPDATE_TIME_2 = "16:01"
   end
 
 
-
-
-  UPDATE_TIME = Time.new(2015, 6, 21, 16, 0, 0, "-05:00") #Default Time: 16:00:00 (4:0PM), EST
 
 
 
@@ -104,8 +101,8 @@ class SomeWorker
 
 
       #logging info
-      puts  user.phone + " with time " + user.time.hour + ":" + user.time.minute + "  -> "
-      if SomeWorker.sendStory?(user)
+      puts  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
+      if SomeWorker.sendStory?(user.phone)
         puts 'YES!!'
       else
         puts 'No.'
@@ -138,7 +135,7 @@ class SomeWorker
       end
 
 
-        if SomeWorker.sendStory?(user) 
+        if SomeWorker.sendStory?(user.phone) 
 
          #Should the user be asked to choose a series?
           #If it's all of these:
@@ -239,7 +236,6 @@ class SomeWorker
   end
 
   # helper methods
-
   # check if user's story time is this exact minute, or the next minute
   def self.sendStory?(user_phone) #don't know object as parameter
 
@@ -268,7 +264,7 @@ class SomeWorker
       userHour = user.time.utc.hour 
 
       currMin = Time.now.utc.min
-      userMin = Time.now.utc.min
+      userMin = user.time.utc.min
 
       if currHour == userHour
         

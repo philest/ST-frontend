@@ -107,7 +107,7 @@ FIRST = "FIRST"
 
 GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
 
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-05:00") #Default Time: 17:30:00 (5:30PM), EST
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
 
@@ -122,7 +122,6 @@ end
 get '/' do
 	erb :main
 end
-
 
 
 
@@ -162,6 +161,7 @@ get '/sms' do
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 			#backup for defaults
+
 
 			@user.update(time: DEFAULT_TIME) #NEED THIS!
 			@user.update(child_age: 4)
@@ -403,7 +403,6 @@ end
 
 
 
-
 #THIS IS SIMPLY FOR TESTING! UPDATED JUNE 12. 
 
 get '/test/:From/:Body/:Carrier' do
@@ -437,6 +436,7 @@ get '/test/:From/:Body/:Carrier' do
 		else
 			@user.update(days_per_week: 2)
 		end
+
 
 			#update subscription
 			@user.update(subscribed: true) #Subscription complete! (B/C defaults)

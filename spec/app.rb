@@ -73,6 +73,7 @@ BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter
 
 For help, reply HELP NOW."
 
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-05:00") #Default Time: 17:30:00 (5:30PM), EST
 
 
 
@@ -124,7 +125,7 @@ describe 'The StoryTime App' do
   describe "User" do
 
   	before(:each) do
- 	 	  @user = User.create(phone: "444")
+ 	 	  @user = User.create(phone: "444", time: DEFAULT_TIME)
   	end
 
       	it "has nil child birthdate value" do
@@ -135,9 +136,14 @@ describe 'The StoryTime App' do
            expect(@user.child_age).to eq(4)
         end
 
-        it "has proper default time of 5:30pm" do
-           expect(@user.time).to eq("5:30pm")
+        it "has proper default time" do
+           expect(@user.time).to eq(DEFAULT_TIME)
         end
+
+        it "has default time of 5:30" do
+           expect(@user.time.hour).to eq(17)
+           expect(@user.time.min).to eq(30)
+        end  
 
   end 
 
@@ -147,6 +153,20 @@ describe 'The StoryTime App' do
     before(:each) do
       @user = User.create(phone: "400")
     end
+
+
+    require 'pry'
+
+
+    #last time test
+    it "registers default time well" do 
+      get '/test/898/STORY/ATT'
+      @user = User.find_by(phone: 898)
+      @user.reload
+      expect(@user.time.hour).to eq(DEFAULT_TIME.utc.hour)
+      expect(@user.time.min).to eq(DEFAULT_TIME.utc.min)
+    end
+
 
 
     it "responds to HELP NOW" do
@@ -188,7 +208,7 @@ describe 'The StoryTime App' do
 
     it "registers a custom birthdate" do
       get '/test/500/0911/ATT'
-     TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
+     TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
       expect(@@twiml).to eq(TIME_SMS)
     end
 

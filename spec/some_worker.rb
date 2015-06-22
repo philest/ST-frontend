@@ -123,7 +123,7 @@ describe 'SomeWorker' do
 
 
     it "asks to update time when it should (non-sprint" do
-        @user = User.create(phone: "444", time: "5:30pm", total_messages: 2)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -141,7 +141,7 @@ describe 'SomeWorker' do
     end
 
     it "gets all the SPRINT to update time SMS pieces" do
-        @user = User.create(phone: "444", time: "5:30pm", total_messages: 2, carrier: SPRINT_CARRIER)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2, carrier: SPRINT_CARRIER)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -159,7 +159,7 @@ describe 'SomeWorker' do
     end
 
     it "doesn't send time update the next day... (sorry mom)" do
-        @user = User.create(phone: "444", time: "5:30pm", total_messages: 2)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 2)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -191,7 +191,7 @@ describe 'SomeWorker' do
     end
 
     it "doesn't send BIRTHDATE update the next day... (sorry mom)" do
-        @user = User.create(phone: "444", time: "5:30pm", total_messages: 4)
+        @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 4)
 
         Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -205,7 +205,7 @@ describe 'SomeWorker' do
         end
         @user.reload 
 
-        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+        expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
 
 
         Timecop.travel(2015, 9, 2, 15, 45, 0)
@@ -218,37 +218,36 @@ describe 'SomeWorker' do
         end
         @user.reload 
 
-        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+        expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE]) #not a second message
     end
 
 
     it "has sendStory? properly working when at time" do
-      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
-
       expect(SomeWorker.sendStory?("444")).to be(true)
     end
 
     it "has sendStory? rightly not working when past time by one minute" do
-      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
-
-      expect(SomeWorker.sendStory?("444")).to be(true)
-    end
-
-    it "has sendStory? rightly NOT working two minutes early" do
-      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
-        
-      Timecop.travel(2015, 6, 23, 17, 28, 0) #on Tuesday!
 
       expect(SomeWorker.sendStory?("444")).to be(false)
     end
 
 
+    it "has sendStory? rightly NOT working two minutes early" do
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 6, 23, 17, 28, 0) #on Tuesday!
+      expect(SomeWorker.sendStory?("444")).to be(false)
+    end
+
+
     it "has sendStory? rightly  working one min early" do
-      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tuesday!
 
