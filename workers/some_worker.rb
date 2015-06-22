@@ -111,25 +111,6 @@ class SomeWorker
       end
 
       #UPDATE time
-      if user.set_time == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2)  && user.total_messages == 3 #Customize time 
-          
-        if user.carrier == SPRINT
-
-          Helpers.new_text(mode, TIME_SMS_SPRINT_1, TIME_SMS_SPRINT_1, user.phone)
-          sleep 10
-          Helpers.new_text(mode, TIME_SMS_SPRINT_2, TIME_SMS_SPRINT_2, user.phone)
-
-        else #NORMAL carrier
-
-          Helpers.new_text(mode, TIME_SMS_NORMAL, TIME_SMS_NORMAL, user.phone)
-
-        end
-
-            #They've been asked to set their own time, so don't ask again
-            user.update(set_time: true)
-
-      end
-
 
 
       #UPDATE Birthdate! 
