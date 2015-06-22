@@ -6,6 +6,9 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
+require 'time'
+require 'active_support/all'
+
 require_relative '../sprint'
 require_relative '../message'
 require_relative '../messageSeries'
@@ -35,6 +38,9 @@ class SomeWorker
   DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
   SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
+
+
+  TESTERS = ["+15612125831", "+15619008225"]
 
 
   #time for the birthdate and time updates: NOTE, EST set.
@@ -271,18 +277,32 @@ class SomeWorker
 
   # helper methods
 
-  # check if user's story time is in the next two minutes
-  def self.sendStory?(user) #don't know object as parameter
+  # check if user's story time is this exact minute, or the next minute
+  def self.sendStory?(user_phone) #don't know object as parameter
 
-    weekday = Time.new.wday 
+    user = User.find_by(phone: user_phone)
+
+    this_weekday = Time.new.wday 
 
     one_day_age = Time.now - 1.day
 
-    
-    if (((user.days_per_week == 3 && (weekday == 1 || weekday == 3 || weekday == 5)) || (user.days_per_week == 1 && (weekday == 3)) || ((user.days_per_week == 2 || user.days_per_week == nil) && (weekday == 2 || weekday == 4))) && (user.created_at <= one_day_age)) ||
-      (user.phone == "+15612125831" || user.phone == "+15619008225") #SEND TO US EVERYDAY
-                                                                     #SEND IF TUES OR THURS and NOT created this past day!
-                                                                    #Note: this messes up if they created this past 5:00pm on a M or W
+    case user.days_per_week
+      when 3
+        valid_weekdays = [1, 3, 5]
+      when nil, 2
+        valid_weekdays = [2, 4]
+      when 1  
+        valid_weekdays = [3]
+      else
+       puts "ERR: invalid days of week"
+    end
+
+    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || TESTERS.include?(user.phone)
+                                                                     #SEND TO US EVERYDAY
+                                                                     #SEND IF ony valid day and NOT created this past day!
+                                                                    #Note: this messes up if they created this past 5:30pm on a M or W
+      
+
       currTime = SomeWorker.cleanSysTime
       userTime = SomeWorker.convertTimeTo24(user.time)
 
@@ -327,10 +347,15 @@ class SomeWorker
 
   end#end sendStory?
 
-  # returns a cleaned version of the current system time in 24 hour version
-  def self.cleanSysTime
 
-    currTime = Time.new
+
+  # returns a cleaned version of the current system time in 24 hour version
+  #ALWAYS IN UTC
+  def self.cleanSysTime 
+
+    currTime = Time.now.utc.hour
+
+    
 
     hours = currTime.hour
     min = currTime.min
@@ -353,51 +378,15 @@ class SomeWorker
     return cleanedTime
   end
 
+
   # converts pm/am time into 24hour time 
   def self.convertTimeTo24(oldTime)
 
-
-    len = oldTime.length
-    hoursEndIndex = oldTime.index(':')
-    
-    hours = oldTime[0,hoursEndIndex]
-
-    colonAndMinutes = oldTime[hoursEndIndex, 3] # [startIndex, length of substring]
-      cleanedTime= hours + colonAndMinutes
-
-
-
-    if oldTime[len-2,2] == "pm" && hours != "12" #if pm, add 12 to hours (unless noon)     
-
-      hours = (hours.to_i + 12).to_s 
-      cleanedTime = hours + colonAndMinutes
-
-    elsif oldTime[len-2,2] == "pm" && hours == "12"
-
-      cleanedTime = oldTime[0,len-2]
-
-    else  #am version   
-
-      cleanedTime = oldTime[0,len-2]
-
-      if hours.to_i < 10 #add zero if single digit hour
-        cleanedTime = "0" + cleanedTime
-      end
-
-      if hours == "12"   # 12:XXam convert to 00:XXam
-        cleanedTime = "00" + colonAndMinutes
-      end     
-
-    end
-
-    return cleanedTime
+    return Time.parse(oldTime).strftime("%H:%M")
 
   end
 
 
-end
-
-
 
 
 
@@ -405,5 +394,4 @@ end
   
 
 
-  
-
+end  

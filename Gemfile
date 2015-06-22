@@ -12,6 +12,8 @@ gem 'redis'
 gem 'unicorn'
 gem 'newrelic_rpm'
 gem 'rake'
+gem "activesupport", :require => "active_support"
+
 
 
 group :test do

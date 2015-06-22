@@ -174,7 +174,87 @@ describe 'SomeWorker' do
         @user.reload 
 
         expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+
+
+        Timecop.travel(2015, 9, 2, 15, 45, 0)
+       
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+
     end
+
+    it "doesn't send BIRTHDATE update the next day... (sorry mom)" do
+        @user = User.create(phone: "444", time: "5:30pm", total_messages: 4)
+
+        Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
+
+        Timecop.scale(1920) #1/16 seconds now are two minutes
+
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+
+
+        Timecop.travel(2015, 9, 2, 15, 45, 0)
+       
+        (1..20).each do 
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+          sleep SLEEP
+        end
+        @user.reload 
+
+        expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+    end
+
+
+    it "has sendStory? properly working when at time" do
+      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
+
+      expect(SomeWorker.sendStory?("444")).to be(true)
+    end
+
+    it "has sendStory? rightly not working when past time by one minute" do
+      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
+
+      expect(SomeWorker.sendStory?("444")).to be(true)
+    end
+
+    it "has sendStory? rightly NOT working two minutes early" do
+      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 6, 23, 17, 28, 0) #on Tuesday!
+
+      expect(SomeWorker.sendStory?("444")).to be(false)
+    end
+
+
+    it "has sendStory? rightly  working one min early" do
+      @user = User.create(phone: "444", time: "5:30pm", days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tuesday!
+
+      expect(SomeWorker.sendStory?("444")).to be(true)
+    end
+
 
 
 

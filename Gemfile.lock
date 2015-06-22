@@ -115,6 +115,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  activesupport
   capybara
   database_cleaner
   newrelic_rpm
