@@ -111,6 +111,7 @@ GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! 
 
 CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
+
 DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 

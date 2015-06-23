@@ -439,6 +439,9 @@ describe 'SomeWorker' do
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(960) #1/16 seconds now are two minutes
 
+      # require 'pry'
+      # binding.pry
+
       (1..15).each do 
         SomeWorker.perform_async
         SomeWorker.drain

@@ -3,6 +3,10 @@
 class Helpers
 
 
+SMS_HELPER = "SMS_HELPER"
+PRO = "production"
+TEST ="test"
+
 #testing goods
 	def self.initialize_testing_vars
 		@@twiml_sms = Array.new
@@ -112,7 +116,13 @@ class Helpers
     	end
     end
 
-
+    def self.new_sms_chain(mode, smsArr, user_phone)
+    	if mode == "production"
+    		Helpers.real_new_sms_chain(smsArr, user_phone)
+    	else
+    		Helpers.test_new_sms_chain(smsArr, user_phone)
+    	end
+    end
 
 
     def self.real_mms(mms, user_phone)
@@ -136,13 +146,26 @@ class Helpers
 
 
 
+
+
+
+
+
 	#ONLY A RESPONSE
 	def self.real_text(normalSMS, sprintSMS, user_phone)
 	
  		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if @user == nil || @user.carrier == SPRINT
+		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+
+			sprintArr = Sprint.chop(sprintSMS)
+
+			msg = sprintArr.shift #pop off first element
+
+			FirstTextWorker.perform_in(14.seconds, PRO, SMS_HELPER, @user.phone, sprintArr)
+
+		elsif @user == nil || @user.carrier == SPRINT
 			msg = sprintSMS 
 		else
 			msg = normalSMS
@@ -514,7 +537,7 @@ class Helpers
 		#if sprint
 		if (@user != nil && @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			test_new_sprint_long_sms(sprintSMS, user_phone)
+			Helpers.test_new_sprint_long_sms(sprintSMS, user_phone)
 
 		elsif @user == nil || @user.carrier == SPRINT
 
@@ -531,6 +554,30 @@ class Helpers
 	end  
 
 
+	def self.real_new_sms_chain(smsArr, user_phone)
+		@user = User.find_by(phone: user_phone)
+
+		smsArr.each do |sms|
+
+ 			message = @client.account.messages.create(
+                      :body => sms,
+                      :to => @user.phone,     # Replace with your phone number
+                      :from => "+17377778679")
+
+ 			sleep 13
+ 		end
+
+ 	end
+
+ 	def self.test_new_sms_chain(smsArr, user_phone)
+		@user = User.find_by(phone: user_phone)
+
+		smsArr.each do |sms|
+
+		@@twiml_sms.push sms
+ 		end
+ 		
+ 	end
 
 
 	#send a NEW, unprompted text-- NOT a response
@@ -541,7 +588,7 @@ class Helpers
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			real_new_sprint_long_sms(sprintSMS, user_phone)
+			Helpers.real_new_sprint_long_sms(sprintSMS, user_phone)
 
 		elsif @user == nil || @user.carrier == SPRINT
 
@@ -575,8 +622,21 @@ class Helpers
 
  		@user = User.find_by(phone: user_phone)
 
+
+		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+
+			sprintArr = Sprint.chop(sprintSMS)
+
+			@@twiml = "error: it's long and comes in array"
+			@@twiml_sms.push sprintArr.shift #pop off first element
+
+			#for the worker
+				require 'sidekiq/testing'
+				Sidekiq::Testing.inline! do
+					FirstTextWorker.perform_in(14.seconds, TEST, SMS_HELPER, @user.phone, sprintArr)
+				end
 	 	#if sprint
-		if @user == nil || @user.carrier == SPRINT
+		elsif @user == nil || @user.carrier == SPRINT
 
 			@@twiml = sprintSMS
 			@@twiml_sms.push sprintSMS

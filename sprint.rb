@@ -9,6 +9,8 @@ BREAK = "\n" #for Help Message
 
 class Sprint
 
+	#if just one message, no (1/X); otherwise, append it. 
+	#returns array of chunks, numbered on top
 	def self.chop(story) 
 
 		sms = Array.new #array of texts to send seperately
@@ -22,7 +24,7 @@ class Sprint
 		smsNum = 1 #which sms you're on (starts with first)
 
 		if storyLen <= 160
-			return story
+			return [story]
 
 		else
 
@@ -55,24 +57,6 @@ class Sprint
 
 				totalChar += smsLen #chars dealt with so far
 
-				
-				# if (story[endIndex - 1] == "\n") #if it ends with a newline...
-				# 	msg = story[startIndex, smsLen - 1] #...drop the last end character
-				# end	
-
-				# if (story[startIndex] != "\n") #if it doesn't start with a newline...
-				# 	sms.push "(#{smsNum}/X)\n"+ msg #...add one
-				# else
-				# 	sms.push "(#{smsNum}/X)"+ msg #...leave the one already in place
-				# end
-
-				# msg = story[startIndex, smsLen] #fencepost!
-				# toBite = 1
-
-				# while(story[endIndex - toBite, 1] == "\n")
-				# 	msg = story[startIndex, smsLen - toBite]
-				# end 
-
 				#keep on biting off the ending \n's 
 				if (story[endIndex - 1, 1] == "\n")
 					msg = story[startIndex, smsLen-1]
@@ -88,18 +72,6 @@ class Sprint
 				else
 					sms.push "(#{smsNum}/X)"+msg#...just add one
 				end
-
-
-
-
-				# if (story[startIndex] != "\n") #if it doesn't start with a newline...
-				
-				# 	sms.push "(#{smsNum}/X)\n"+story[startIndex, smsLen] #...add two
-
-				# 	else
-				# 	sms.push "(#{smsNum}/X)"+story[startIndex, smsLen]#...just add one
-				# 	end
-
 
 
 				startIndex = endIndex

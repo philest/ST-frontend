@@ -43,6 +43,11 @@ NO_NEW_LINES = "If you can't receive picture msgs, reply TEXT for text-only stor
 
 SMALL_NO_NEW_LINES = "If you can't receive picture msgs, reply TEXT for text-only stories. Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day."
 
+MIX = "If you can't receive picture msgs, reply TEXT for text-only stories. Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831.\nReply " + STOP + " to cancel."
+
+MIXIER = "If you can't receive picture msgs, reply TEXT for text-only stories.\nRemember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831.\nReply " + STOP + " to cancel."
+
+
 HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
 HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
@@ -387,7 +392,7 @@ describe 'The StoryTime App' do
         #SPRINT tests
 
         it "leaves a message intact if under 160" do
-          expect(Sprint.chop(STOPSMS)).to eq(STOPSMS)
+          expect(Sprint.chop(STOPSMS)).to eq([STOPSMS])
         end
 
         it "seperates a longer message into two texts" do
@@ -404,22 +409,57 @@ describe 'The StoryTime App' do
             puts Sprint.chop(SINGLE_SPACE_LONG)
         end
 
-        it "properly breaks up a huge chunk without newlines" do
+        it "properly breaks up a 160+ chunk without newlines" do
             puts "\n"
             puts "\n"
-
-            require 'pry'
-            binding.pry
-
             puts Sprint.chop(SMALL_NO_NEW_LINES)
         end
 
 
+        it "properly breaks up a MIX chunk without newlines" do
+            puts "\n"
+            puts "\n"
+            puts Sprint.chop(MIX)
+        end
+
+
+        it "properly breaks up a MIXIER chunk without newlines" do
+            puts "\n"
+            puts "\n"
+            puts Sprint.chop(MIXIER)
+        end
+
+      #SPRINT ACTION TESTS
+
+        it "properly sends this as a three piece text to SPRINT" do
+            @user = User.create(phone: "598", carrier: "Sprint Spectrum, L.P.")
+            puts "\n"
+            puts "\n"
+            Helpers.text("TEST", HELP_SMS_2, HELP_SMS_2, @user.phone)
+
+            expect(Helpers.getSMSarr.length).to eq(3)
+            puts Helpers.getSMSarr
       end
 
+        it "properly sends long poemSMS to Sprint users as many pieces" do
+          @user = User.create( phone: "101", carrier: "Sprint Spectrum, L.P.")
+            puts "\n"
+            puts "\n"
+
+            require_relative '../message'
+            require_relative '../messageSeries'
+
+            messageSeriesHash = MessageSeries.getMessageSeriesHash
+            story = messageSeriesHash["p"+ @user.series_number.to_s][0]
+
+            Helpers.text("TEST", story.getPoemSMS, story.getPoemSMS, @user.phone)
+
+            expect(Helpers.getSMSarr.length).to_not eq(1)
+            puts Helpers.getSMSarr
+        end
 
 
-
+  end
 
 
 

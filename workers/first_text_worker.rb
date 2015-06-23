@@ -30,7 +30,8 @@ SAMPLE = "SAMPLE"
 EXAMPLE = "EXAMPLE"
 
 PRO = "production"
-
+ 
+SMS_HELPER = "SMS_HELPER"
 
 class FirstTextWorker
   include Sidekiq::Worker
@@ -39,9 +40,12 @@ class FirstTextWorker
 
   sidekiq_options retry: false
 
-  def perform(mode, type, phoneNum) #Send the User the first poem shortly after first signup
+  def perform(mode, type, phoneNum, *smsArr) #Send the User the first poem shortly after first signup
                               #if SAMPLE, send the text first and a different message
-  	
+
+    raise ArgumentError, "Too many arguments" if smsArr.length > 1 
+    #allow for just a single sms. Used for sending delayed SMS with SMS_HELPER
+
     @user = User.find_by(phone: phoneNum)
 
     #set TWILIO credentials:
@@ -55,8 +59,10 @@ class FirstTextWorker
         @user.update(total_messages: 1)
       elsif type == SAMPLE
         Helpers.new_mms(mode, SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
-      else
+      elsif type == EXAMPLE
         Helpers.new_mms(mode, EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+      elsif type == SMS_HELPER
+        Helpers.new_sms_chain(mode, smsArr[0],  @user.phone)
       end
 
 
