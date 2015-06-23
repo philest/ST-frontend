@@ -2,6 +2,7 @@
 
 class Helpers
 
+SPRINT = "Sprint Spectrum, L.P."
 
 SMS_HELPER = "SMS_HELPER"
 PRO = "production"
