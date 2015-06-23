@@ -38,7 +38,9 @@ STOP = "STOP NOW"
 TEXT = "TEXT"
 
 
-RESUBSCRIBE = "StoryTime: Welcome back to StoryTime! Twice a week, we'll send you a new free story to read aloud-- continuing from where you left off!"
+RESUBSCRIBE_SHORT = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
+
+RESUBSCRIBE_LONG = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud, continuing from where you left off."
 
 WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
 
@@ -106,6 +108,8 @@ EXAMPLE = "EXAMPLE"
 FIRST = "FIRST"
 
 GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
+
+CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
 DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
@@ -205,14 +209,25 @@ get '/sms' do
 	elsif @user.sample == true
 
 		Helpers.text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
+	
+	#if auto-dropped (or if choose to drop mid-series), returning
+	elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp("STORY") == 0)
 
-	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
+		#REACTIVATE SUBSCRIPTION
+			@user.update(subscribed: true)
+			msg = RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
+
+			@user.update(next_index_in_series: 0)
+			@user.update(awaiting_choice: true)
+
+			Helpers.text(mode, msg, msg, @user.phone)
+
+	#if returning after manually stopping (not in mid - series)
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 
 
 		#REACTIVATE SUBSCRIPTION
 		@user.update(subscribed: true)
-		@user.update(next_index_in_series: nil)
-
-		Helpers.text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.text(mode, RESUBSCRIBE_LONG, RESUBSCRIBE_LONG, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -238,6 +253,7 @@ get '/sms' do
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
 		
+
 		if mode == PRO
 		#SAVE QUITTERS
 			REDIS.set(@user.phone+":quit", "true") 
@@ -247,7 +263,6 @@ get '/sms' do
 
 		#change subscription
 		@user.update(subscribed: false)
-
 		Helpers.text(mode, STOPSMS, STOPSMS, @user.phone)
 
 	elsif params[:Body].casecmp(TEXT) == 0 #TEXT option		
@@ -275,7 +290,7 @@ get '/sms' do
 
 		body.downcase!
 
-		#push back to zero incase this was changed to -1 to denote one 'day' after
+		#push back to zero incase this was changed to 999 to denote one 'day' after
         @user.update(next_index_in_series: 0)
 
 		#check if the choice is valid
@@ -296,12 +311,11 @@ get '/sms' do
 				Helpers.mms(mode, story.getMmsArr[0], @user.phone)
 			else
 		        Helpers.text(mode, story.getPoemSMS, story.getPoemSMS, @user.phone)      
-		    end
-		    
+			end
+
 	 	else	 			
 			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
-
 
     # second reply: update child's birthdate
     elsif @user.set_birthdate == true && /[0-9]{4}/ =~ params[:Body]
@@ -420,7 +434,7 @@ get '/test/:From/:Body/:Carrier' do
 	@user = User.find_by_phone(params[:From])
 
 	mode = TEST
-	
+
 
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
@@ -492,14 +506,25 @@ get '/test/:From/:Body/:Carrier' do
 	elsif @user.sample == true
 
 		Helpers.text(mode, POST_SAMPLE, POST_SAMPLE, @user.phone)
+	
+	#if auto-dropped (or if choose to drop mid-series), returning
+	elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp("STORY") == 0)
 
-	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 #if returning
+		#REACTIVATE SUBSCRIPTION
+			@user.update(subscribed: true)
+			msg = RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
+
+			@user.update(next_index_in_series: 0)
+			@user.update(awaiting_choice: true)
+
+			Helpers.text(mode, msg, msg, @user.phone)
+
+	#if returning after manually stopping (not in mid - series)
+	elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 
 
 		#REACTIVATE SUBSCRIPTION
 		@user.update(subscribed: true)
-		@user.update(next_index_in_series: nil)
-
-		Helpers.text(mode, RESUBSCRIBE, RESUBSCRIBE, @user.phone)
+		Helpers.text(mode, RESUBSCRIBE_LONG, RESUBSCRIBE_LONG, @user.phone)
 
 	elsif params[:Body].casecmp(HELP) == 0 #HELP option
 		
@@ -525,6 +550,7 @@ get '/test/:From/:Body/:Carrier' do
 
 	elsif params[:Body].casecmp(STOP) == 0 #STOP option
 		
+
 		if mode == PRO
 		#SAVE QUITTERS
 			REDIS.set(@user.phone+":quit", "true") 
@@ -562,7 +588,7 @@ get '/test/:From/:Body/:Carrier' do
 
 		body.downcase!
 
-		#push back to zero incase this was changed to -1 to denote one 'day' after
+		#push back to zero incase this was changed to 999 to denote one 'day' after
         @user.update(next_index_in_series: 0)
 
 		#check if the choice is valid
@@ -571,6 +597,7 @@ get '/test/:From/:Body/:Carrier' do
 			#update the series choice
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
+
 
 		    messageSeriesHash = MessageSeries.getMessageSeriesHash
 		    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
@@ -587,7 +614,6 @@ get '/test/:From/:Body/:Carrier' do
 	 	else	 			
 			Helpers.text(mode, BAD_CHOICE, BAD_CHOICE, @user.phone)
 	 	end				
-
 
     # second reply: update child's birthdate
     elsif @user.set_birthdate == true && /[0-9]{4}/ =~ params[:Body]
@@ -659,6 +685,9 @@ get '/test/:From/:Body/:Carrier' do
  					
  					@user.update(time: arr[0] + arr[1])
 
+ 					#They've set their own time, so don't ask again
+
+
 					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
 					
 					Helpers.text(mode, good_time, good_time, @user.phone)
@@ -682,6 +711,7 @@ get '/test/:From/:Body/:Carrier' do
 	end
 
 end
+
 
 
 

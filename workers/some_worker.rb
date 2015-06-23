@@ -33,11 +33,14 @@ class SomeWorker
 
   BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
-  DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story. To continue getting StoryTime stories, just reply \"yes\"\n\nThanks :)"
+  DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story."
 
+  
   DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
   SERIES_CHOICES = ["StoryTime: Hi! You can now choose new stories. Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
+
+  NO_GREET_CHOICES = ["Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
 
 
   TESTERS = ["+15612125831", "+15619008225"]
@@ -146,14 +149,17 @@ class SomeWorker
             Helpers.new_text(mode, SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
-          
-            Helpers.new_text(mode, DAY_LATE, DAY_LATE, user.phone)
+            
+            msg = DAY_LATE + " " + NO_GREET_CHOICES[user.series_number]
+
+            Helpers.new_text(mode, msg, msg, user.phone)
             user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
 
              user.update(subscribed: false)
-             Helpers.new_text(DROPPED, DROPPED, user.phone)
+             user.update(awaiting_choice: false)
+             Helpers.new_text(mode, DROPPED, DROPPED, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -174,7 +180,7 @@ class SomeWorker
             #JUST SMS MESSAGING!
             if user.mms == false
 
-                Helpers.new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
+                Helpers.new_text(mode, story.getPoemSMS, story.getPoemSMS, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
@@ -220,13 +226,6 @@ class SomeWorker
 
 
 
-
-
-  #makes a hash to use in struct
-  def self.makeHash(three, four, five)
-    hash = { 3 => three, 4 => four, 5 => five}
-    return hash
-  end
 
   # helper methods
   # check if user's story time is this exact minute, or the next minute

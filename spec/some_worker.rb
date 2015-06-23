@@ -628,7 +628,7 @@ describe 'SomeWorker' do
   end
 
 
-  it "properly sends out the message about not responding with choice (on next valid day)" do
+  it "properly sends out the message about not responding with choice (on next valid day), then drops if don't respond by next" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
 
@@ -668,12 +668,55 @@ describe 'SomeWorker' do
       end
       @user.reload
 
-      smsSoFar.push SomeWorker::DAY_LATE
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
       expect(@user.next_index_in_series).to eq(999)
+
+
+
+      #PROPERLY DROPS THE FOOL w/ no response
+
+      Timecop.travel(2015, 6, 26, 17, 24, 0) #on FRI.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+
+      Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+
+      smsSoFar.push SomeWorker::DROPPED
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(@user.subscribed).to eq(false)
+
 
       smsSoFar.each do |sms|
         puts sms
@@ -683,11 +726,266 @@ describe 'SomeWorker' do
 
 
 
+    it "properly delivers the next message in a series" do 
+      Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+      @user = User.create(phone: "100", story_number: 1, days_per_week: 2)
+
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUES. (3:52)
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload 
+
+      expect(@user.series_number).to eq(0)
+
+      #They're asked for their story choice during storyTime.
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
+      mmsSoFar = []
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      ##registers series text well!
+      expect(@user.awaiting_choice).to eq(true)
+      expect(@user.next_index_in_series).to eq(0)
+
+      get 'test/100/p/ATT'
+      @user.reload
+      ChoiceWorker.drain #OMG forgot this.
+
+      expect(@user.series_number).to eq(0)
+
+      expect(@user.awaiting_choice).to eq(false)
+      expect(@user.series_choice).to eq("p")
+
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
+      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+      smsSoFar.push story.getSMS
+      mmsSoFar.concat story.getMmsArr
+
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload 
+
+    # require 'pry'
+    # binding.pry
+
+    #SERIES ENDED, update user
+      expect(@user.series_number).to eq(1)
+      expect(@user.series_choice).to eq(nil)
+      expect(@user.next_index_in_series).to eq(nil)
+
+
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
+      story = messageSeriesHash["p" + "0"][1]
+
+      smsSoFar.push story.getSMS
+      mmsSoFar.concat story.getMmsArr
+
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      puts mmsSoFar
+      puts smsSoFar
+    end
 
 
 
+ it "properly signs back up after being dropped, then STORY-responding" do
+      Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
+
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+
+      #EXPECT A DAYLATE MSG when don't respond
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      
+      #valid things: 
+      expect(@user.next_index_in_series).to eq(999)
 
 
+
+      #PROPERLY DROPS THE FOOL w/ no response
+
+      Timecop.travel(2015, 6, 26, 17, 24, 0) #on FRI.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+
+      Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+
+      smsSoFar.push SomeWorker::DROPPED
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(@user.subscribed).to eq(false)
+
+
+      get 'test/555/STORY/ATT'
+      @user.reload
+
+      expect(@user.awaiting_choice).to be(true)
+      expect(@user.subscribed).to be(true)
+
+
+      #send the SERIES choice
+
+
+      #welcome back, with series choice
+      smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + SomeWorker::NO_GREET_CHOICES[0]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      smsSoFar.each do |sms|
+        puts sms
+      end
+
+      #ADD THE RESPONDING WITH STORY, CHECK THAT AWAITINGCHOICE: FALSE, AND SUBSCRIBED TRUE. THEN CHECK ACTUAL
+    end
+
+
+    it "re-offers choice after day-late" do
+            Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
+
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+
+      #EXPECT A DAYLATE MSG when don't respond
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      smsSoFar.push SomeWorker::DAY_LATE + " "+ SomeWorker::NO_GREET_CHOICES[0]
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      
+      #valid things: 
+      expect(@user.next_index_in_series).to eq(999)
+
+      #properly sends out story WHEN they respond
+      get 'test/555/p/ATT'
+      @user.reload
+      ChoiceWorker.drain #OMG forgot this.
+
+      expect(@user.series_number).to eq(0)
+
+      expect(@user.awaiting_choice).to eq(false)
+      expect(@user.series_choice).to eq("p")
+
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
+      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+      smsSoFar.push story.getSMS
+      mmsSoFar = story.getMmsArr
+
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+
+      smsSoFar.each do |sms|
+        puts sms
+      end
+    end
 
 
   # it "knows which user gets story next" do

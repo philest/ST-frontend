@@ -414,7 +414,6 @@ class Helpers
 
 		@user = User.find_by(phone: user_phone)
 
-
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
