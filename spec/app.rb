@@ -6,6 +6,7 @@ require_relative "./spec_helper"
 require 'capybara/rspec'
 require 'rack/test'
 
+require_relative '../sprint'
 
 #CONSTANTS
 
@@ -33,6 +34,12 @@ Remember that looking at screens within two hours of bedtime can delay children'
 
 Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
+
+SINGLE_SPACE_LONG = ". If you can't receive picture msgs, reply TEXT for text-only stories.
+Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day.
+Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+
 HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
 HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
@@ -56,8 +63,7 @@ TIMESMS = "StoryTime: Great, last question! When do you want to receive stories 
 
 Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
-BAD_TIME_SMS = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). 
-For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
+BAD_TIME_SMS = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm).\n\nFor questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
   
 BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). Reply " + HELP + "for help."
   
@@ -375,7 +381,29 @@ describe 'The StoryTime App' do
         end
 
 
+        #SPRINT tests
+
+        it "leaves a message intact if under 160" do
+          expect(Sprint.chop(STOPSMS)).to eq(STOPSMS)
+        end
+
+        it "seperates a longer message into two texts" do
+          expect(Sprint.chop(BAD_TIME_SMS).length).to eq(2)
+          puts Sprint.chop(BAD_TIME_SMS)
+        end
+
+        it "works for a long guy" do 
+            puts Sprint.chop(HELP_SMS_2)
+        end
+
+        it "works for single space long" do
+            puts "\n"
+            puts Sprint.chop(SINGLE_SPACE_LONG)
+        end
+
+
       end
+
 
 
 
