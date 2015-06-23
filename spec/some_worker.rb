@@ -628,7 +628,58 @@ describe 'SomeWorker' do
   end
 
 
+  it "properly sends out the message about not responding with choice (on next valid day)" do
+      Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
 
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+      
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+
+      #EXPECT A DAYLATE MSG when don't respond
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Timecop.scale(960) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_960
+      end
+      @user.reload
+
+      smsSoFar.push SomeWorker::DAY_LATE
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      
+      #valid things: 
+      expect(@user.next_index_in_series).to eq(999)
+
+      smsSoFar.each do |sms|
+        puts sms
+      end
+
+    end
 
 
 

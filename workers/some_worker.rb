@@ -147,8 +147,7 @@ class SomeWorker
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
           
-            
-            Helpers.new_text(DAY_LATE, DAY_LATE, user.phone)
+            Helpers.new_text(mode, DAY_LATE, DAY_LATE, user.phone)
             user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
