@@ -5,6 +5,9 @@ MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
 BREAK = "\n" #for Help Message
 
 
+require 'pry'
+
+
 class Sprint
 
 	def self.chop(story) 
@@ -32,18 +35,22 @@ class Sprint
 					endIndex = storyLen - 1 #endIndex is last index of story
 				end
 
-					while (story[endIndex-1] != BREAK || endIndex-1 == startIndex) && endIndex != storyLen-1 do  #find the latest newline before endIndex
+				just_spaces_end_index = endIndex #if there's no newlines, come back to this as starting endIndex
+
+				binding.pry
+
+					while (story[endIndex - 1] != BREAK || (endIndex - 1) == startIndex) && endIndex > startIndex && endIndex != storyLen-1 do  #find the latest newline before endIndex
 						endIndex -= 1
 					end
 
-					if endIndex == startIndex #no newlines in block
+					#there was no newLines
+					if endIndex == startIndex
+						#try again, looking for spaces
+						endIndex = just_spaces_end_index
 
-						endIndex = startIndex + MAX_TEXT #recharge endindex
-						
-						while story[endIndex-1] != " "
-						endIndex -= 1
+						while story[endIndex - 1] != " "
+							endIndex -= 1
 						end
-
 					end
 
 				smsLen = endIndex - startIndex #chars in sms
@@ -86,7 +93,7 @@ class Sprint
 
 
 
-
+				binding.pry
 
 				# if (story[startIndex] != "\n") #if it doesn't start with a newline...
 				

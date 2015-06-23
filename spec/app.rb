@@ -39,6 +39,9 @@ SINGLE_SPACE_LONG = ". If you can't receive picture msgs, reply TEXT for text-on
 Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day.
 Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
 
+NO_NEW_LINES = "If you can't receive picture msgs, reply TEXT for text-only stories. Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+SMALL_NO_NEW_LINES = "If you can't receive picture msgs, reply TEXT for text-only stories. Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day."
 
 HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
@@ -399,6 +402,16 @@ describe 'The StoryTime App' do
         it "works for single space long" do
             puts "\n"
             puts Sprint.chop(SINGLE_SPACE_LONG)
+        end
+
+        it "properly breaks up a huge chunk without newlines" do
+            puts "\n"
+            puts "\n"
+
+            require 'pry'
+            binding.pry
+
+            puts Sprint.chop(SMALL_NO_NEW_LINES)
         end
 
 
