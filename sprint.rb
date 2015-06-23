@@ -5,7 +5,6 @@ MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
 BREAK = "\n" #for Help Message
 
 
-require 'pry'
 
 
 class Sprint
@@ -37,7 +36,6 @@ class Sprint
 
 				just_spaces_end_index = endIndex #if there's no newlines, come back to this as starting endIndex
 
-				binding.pry
 
 					while (story[endIndex - 1] != BREAK || (endIndex - 1) == startIndex) && endIndex > startIndex && endIndex != storyLen-1 do  #find the latest newline before endIndex
 						endIndex -= 1
@@ -93,7 +91,6 @@ class Sprint
 
 
 
-				binding.pry
 
 				# if (story[startIndex] != "\n") #if it doesn't start with a newline...
 				
@@ -102,7 +99,6 @@ class Sprint
 				# 	else
 				# 	sms.push "(#{smsNum}/X)"+story[startIndex, smsLen]#...just add one
 				# 	end
-
 
 
 
