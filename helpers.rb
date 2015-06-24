@@ -232,9 +232,9 @@ SMS = "SMS"
 
     	@user = User.find_by(phone: user_phone)
 
-    	mmsRespond(mms, LAST)
-
     	puts "Sent pic to #{@user.phone}: " + mms 
+
+    	mmsRespond(mms, LAST)
 
 	end
 
