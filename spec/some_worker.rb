@@ -233,52 +233,64 @@ describe 'SomeWorker' do
 
 
     it "has sendStory? properly working when at time" do
-      Timecop.travel(2014, 6, 23, 17, 30, 0) #on Tuesday!
+      Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
-        
+      
+
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
-      expect(SomeWorker.sendStory?("444")).to be(true)
+
+      time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time)).to be(true)
     end
 
     it "has sendStory? rightly not working when past time by one minute" do
+            Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
-
-      expect(SomeWorker.sendStory?("444")).to be(false)
+      time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time)).to be(false)
     end
 
 
     it "has sendStory? rightly NOT working two minutes early" do
+         Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2016, 6, 23, 17, 28, 0) #on Tuesday!
-      expect(SomeWorker.sendStory?("444")).to be(false)
+
+      time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time)).to be(false)
     end
 
 
     it "has sendStory? rightly working one min early" do
+       Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
+
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on Tuesday!
-
-      expect(SomeWorker.sendStory?("444")).to be(true)
+      time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time)).to be(true)
     end
 
 
     it "properly knows to send at next valid day after 24 hours " do 
-
       Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+            time = Time.now.utc
+
+      expect(SomeWorker.sendStory?("444", time)).to be(true)
     end
 
     it "doesn't send within 24 hours of creation " do 
       Timecop.travel(2016, 6, 23, 16, 15, 0) #on TUESDAY!
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+            time = Time.now.utc
+
+      expect(SomeWorker.sendStory?("444", time)).to be(false)
     end
 
 
@@ -333,25 +345,32 @@ describe 'SomeWorker' do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+      Timecop.travel(2015, 6, 28, 17, 29, 0) #on sun.
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
   end
 
   it "sends only on right days for M-W-F schedule (2)" do
@@ -360,25 +379,32 @@ describe 'SomeWorker' do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 3)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
   end
 
 
@@ -388,25 +414,32 @@ describe 'SomeWorker' do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 1)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-      expect(SomeWorker.sendStory?("444")).to be(true)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
-      expect(SomeWorker.sendStory?("444")).to be(false)
+time = Time.now.utc
+      expect(SomeWorker.sendStory?("444", time )).to be(false)
   end
 
 
@@ -428,20 +461,12 @@ describe 'SomeWorker' do
       end
 
 
-          # require 'pry'
-          # binding.pry
-
-
       @user.reload 
       expect(@user.total_messages).to eq(1)
       expect(@user.story_number).to eq(1)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(960) #1/16 seconds now are two minutes
-
-      # require 'pry'
-      # binding.pry
-
       (1..15).each do 
         SomeWorker.perform_async
         SomeWorker.drain
@@ -485,7 +510,6 @@ describe 'SomeWorker' do
  FirstTextWorker::FIRST_SMS]
 
     FirstTextWorker.drain
-    # binding.pry
 
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -782,8 +806,6 @@ describe 'SomeWorker' do
       end
       @user.reload 
 
-    # require 'pry'
-    # binding.pry
 
     #SERIES ENDED, update user
       expect(@user.series_number).to eq(1)
@@ -919,7 +941,7 @@ describe 'SomeWorker' do
 
 
     it "re-offers choice after day-late" do
-            Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.

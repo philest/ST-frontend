@@ -233,9 +233,15 @@ class SomeWorker
 
   # helper methods
   # check if user's story time is this exact minute, or the next minute
-  def self.sendStory?(user_phone) #don't know object as parameter
+  def self.sendStory?(user_phone, *time) #don't know object as parameter  #time variable allows for testing, sending time.
 
     user = User.find_by(phone: user_phone)
+
+    if time[0] != nil && MODE == "test"
+      @@time_now = time[0]
+    end
+
+
 
     this_weekday = @@time_now.wday 
 
