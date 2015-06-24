@@ -101,7 +101,6 @@ describe 'The StoryTime App' do
 
     before(:each) do
       Helpers.initialize_testing_vars
-      @@twiml = Helpers.getSimpleSMS
     end
 
 
@@ -127,13 +126,16 @@ describe 'The StoryTime App' do
   end
 
   it "sends correct sign up sms" do
+    # require 'pry'
+    # binding.pry
+
   	get '/test/999/STORY/ATT'
-  	expect(@@twiml).to eq(START_SMS_1 + 2.to_s + START_SMS_2)
+  	expect(Helpers.getSimpleSMS).to eq(START_SMS_1 + 2.to_s + START_SMS_2)
   end
 
   it "sends correct sign up sms to Sprint users" do
     get '/test/998/STORY/' + SPRINT_QUERY_STRING
-    expect(@@twiml).to eq(START_SPRINT_1 + "2" + START_SPRINT_2)
+    expect(Helpers.getSimpleSMS).to eq(START_SPRINT_1 + "2" + START_SPRINT_2)
   end
 
   describe "User" do
@@ -184,12 +186,12 @@ describe 'The StoryTime App' do
 
     it "responds to HELP NOW" do
       get "/test/400/" + HELP_URL + "/ATT"
-      expect(@@twiml).to eq(HELP_SMS_1 + "Tues and Thurs" + HELP_SMS_2)
+      expect(Helpers.getSimpleSMS).to eq(HELP_SMS_1 + "Tues and Thurs" + HELP_SMS_2)
     end
 
     it "responds to 'help now' (non-sprint)" do
       get "/test/400/help%20now/ATT"
-      expect(@@twiml).to eq(HELP_SMS_1 + "Tues and Thurs" + HELP_SMS_2)
+      expect(Helpers.getSimpleSMS).to eq(HELP_SMS_1 + "Tues and Thurs" + HELP_SMS_2)
     end
 
 
@@ -200,7 +202,7 @@ describe 'The StoryTime App' do
 
         it "responds to HELP NOW from sprint" do
           get "/test/400/HELP%20NOW/" + SPRINT_QUERY_STRING
-          expect(@@twiml).to eq(HELP_SPRINT_1 + "Tues and Thurs" + HELP_SPRINT_2)
+          expect(Helpers.getSimpleSMS).to eq(HELP_SPRINT_1 + "Tues and Thurs" + HELP_SPRINT_2)
       end
 
     end
@@ -216,13 +218,13 @@ describe 'The StoryTime App' do
 
   #   it "should not register invalid birthdate" do
   #     get '/test/500/0912555/ATT'
-  #     expect(@@twiml).to eq(WRONG_BDAY_FORMAT)
+  #     expect(Helpers.getSimpleSMS).to eq(WRONG_BDAY_FORMAT)
   #   end
 
   #   it "registers a custom birthdate" do
   #     get '/test/500/0911/ATT'
   #    TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
-  #     expect(@@twiml).to eq(TIME_SMS)
+  #     expect(Helpers.getSimpleSMS).to eq(TIME_SMS)
   #   end
 
   #   it "correctly updates age" do
@@ -235,7 +237,7 @@ describe 'The StoryTime App' do
 
   #   it "too young shouldn't be allowed in" do
   #      get '/test/500/0914/ATT'
-  #     expect(@@twiml).to eq(TOO_YOUNG_SMS)
+  #     expect(Helpers.getSimpleSMS).to eq(TOO_YOUNG_SMS)
   #   end
 
 
@@ -255,7 +257,7 @@ describe 'The StoryTime App' do
   #     it "shouldn't register a birthday after it's been set" do
   #       get '/test/500/0911/ATT'
   #      TIME_SMS = "StoryTime: Great! Your child's birthdate is " + "09" + "/" + "11" + ". If not correct, reply STORY. If correct, enjoy your next age-appropriate story!"
-  #       expect(@@twiml).not_to eq(TIME_SMS)
+  #       expect(Helpers.getSimpleSMS).not_to eq(TIME_SMS)
   #     end
 
   #   end
@@ -271,13 +273,13 @@ describe 'The StoryTime App' do
   #     it "registers a custom time" do
   #       get '/test/600/6:00pm/ATT'
   #       @user.reload
-  #       expect(@@twiml).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!")
+  #       expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!")
   #     end
 
   #     it "registers a custom time in spaced format" do
   #       get '/test/600/6:00%20pm/ATT'
   #       @user.reload
-  #       expect(@@twiml).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!")
+  #       expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!")
   #     end
 
   #     describe "further time tests" do
@@ -287,7 +289,7 @@ describe 'The StoryTime App' do
 
   #     it "shouldn't register a time after it's been set" do
   #       get '/test/600/6:00pm/ATT'
-  #       expect(@@twiml).to eq(NO_OPTION)
+  #       expect(Helpers.getSimpleSMS).to eq(NO_OPTION)
   #     end
 
   #   end
@@ -308,13 +310,13 @@ describe 'The StoryTime App' do
     it "good text response" do
       get '/test/700/p/ATT'
       @user.reload
-      expect(@@twiml).to_not eq(BAD_CHOICE)
+      expect(Helpers.getSimpleSMS).to_not eq(BAD_CHOICE)
     end
 
     it "doesn't register a letter weird choice" do
       get '/test/700/X/ATT'
       @user.reload
-      expect(@@twiml).to eq(BAD_CHOICE)
+      expect(Helpers.getSimpleSMS).to eq(BAD_CHOICE)
     end
 
     it "doesn't register a letter on a diff day" do
@@ -322,14 +324,14 @@ describe 'The StoryTime App' do
       @user.reload
       get '/test/700/p/ATT'
       @user.reload
-      expect(@@twiml).to eq(BAD_CHOICE)
+      expect(Helpers.getSimpleSMS).to eq(BAD_CHOICE)
     end
 
 
     it "works for uppercase" do
       get '/test/700/P/ATT'
       @user.reload
-      expect(@@twiml).to_not eq(BAD_CHOICE)
+      expect(Helpers.getSimpleSMS).to_not eq(BAD_CHOICE)
     end
 
 
@@ -345,7 +347,7 @@ describe 'The StoryTime App' do
       @user.reload
       get '/test/700/p/ATT'
       @user.reload
-      expect(@@twiml).to eq(NO_OPTION)
+      expect(Helpers.getSimpleSMS).to eq(NO_OPTION)
     end
 
 
@@ -385,7 +387,7 @@ describe 'The StoryTime App' do
 
           get '/test/666/STORY/ATT'
           @user.reload
-          expect(@@twiml).to eq(RESUBSCRIBE_LONG)
+          expect(Helpers.getSimpleSMS).to eq(RESUBSCRIBE_LONG)
         end
 
 
@@ -435,7 +437,7 @@ describe 'The StoryTime App' do
             @user = User.create(phone: "598", carrier: "Sprint Spectrum, L.P.")
             puts "\n"
             puts "\n"
-            Helpers.text("TEST", HELP_SMS_2, HELP_SMS_2, @user.phone)
+            Helpers.text(HELP_SMS_2, HELP_SMS_2, @user.phone)
 
             expect(Helpers.getSMSarr.length).to eq(3)
             puts Helpers.getSMSarr
@@ -452,7 +454,7 @@ describe 'The StoryTime App' do
             messageSeriesHash = MessageSeries.getMessageSeriesHash
             story = messageSeriesHash["p"+ @user.series_number.to_s][0]
 
-            Helpers.text("TEST", story.getPoemSMS, story.getPoemSMS, @user.phone)
+            Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)
 
             expect(Helpers.getSMSarr.length).to_not eq(1)
             puts Helpers.getSMSarr
@@ -478,19 +480,19 @@ describe 'The StoryTime App' do
 #   it "registers numeric age" do
 #   	get '/test/111/STORY'
 #   	get '/test/111/091412'
-#   	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
+#   	expect(Helpers.getSimpleSMS).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
 #   end
 
 #   it "registers age in words" do
 #   	get '/test/222/STORY'
 #   	get '/test/222/011811'
-#   	expect(@@twiml).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
+#   	expect(Helpers.getSimpleSMS).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
 #   end
 
 #   it "rejects non-age" do
 #   	get '/test/1000/STORY'
 #   	get '/test/1000/badphone'
-#   	expect(@@twiml).to eq("We did not understand what you typed. Please reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
+#   	expect(Helpers.getSimpleSMS).to eq("We did not understand what you typed. Please reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
 #   end
 
 # # STAGE 3 TESTS
@@ -498,7 +500,7 @@ describe 'The StoryTime App' do
 # 		get '/test/833/STORY'
 # 		get '/test/833/091412'
 # 		get "/test/833/6:00pm"
-# 		expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
+# 		expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
 # 	end
 
 
@@ -506,7 +508,7 @@ describe 'The StoryTime App' do
 #     get '/test/844/STORY'
 #     get '/test/844/091412'
 #     get '/test/844/6:00%20pm'
-#     expect(@@twiml).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
+#     expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
 #   end
 
 
@@ -514,7 +516,7 @@ describe 'The StoryTime App' do
 # 		get '/test/633/STORY'
 # 		get '/test/633/091412'
 # 		get '/test/633/boo'
-# 		expect(@@twiml).to eq("(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm).")	
+# 		expect(Helpers.getSimpleSMS).to eq("(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm).")	
 # 	end
 
 
@@ -524,7 +526,7 @@ describe 'The StoryTime App' do
 # 		get '/test/488/091412'
 # 		get '/test/488/6:00pm'
 # 		get '/test/488/hello'
-# 		expect(@@twiml).to eq("This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
+# 		expect(Helpers.getSimpleSMS).to eq("This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
 # 	end
 
 end

@@ -40,7 +40,7 @@ class FirstTextWorker
 
   sidekiq_options retry: false
 
-  def perform(mode, type, phoneNum, *smsArr) #Send the User the first poem shortly after first signup
+  def perform(type, phoneNum, *smsArr) #Send the User the first poem shortly after first signup
                               #if SAMPLE, send the text first and a different message
 
     raise ArgumentError, "Too many arguments" if smsArr.length > 1 
@@ -55,14 +55,14 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
       if type == FIRST
-        Helpers.new_mms(mode, FIRST_SMS, FIRST_MMS, @user.phone)
+        Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
         @user.update(total_messages: 1)
       elsif type == SAMPLE
-        Helpers.new_mms(mode, SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+        Helpers.new_mms(SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
       elsif type == EXAMPLE
-        Helpers.new_mms(mode, EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+        Helpers.new_mms(EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
       elsif type == SMS_HELPER
-        Helpers.new_sms_chain(mode, smsArr[0],  @user.phone)
+        Helpers.new_sms_chain(smsArr[0],  @user.phone)
       end
 
 

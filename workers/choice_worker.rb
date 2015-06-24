@@ -19,7 +19,7 @@ class ChoiceWorker
 
   sidekiq_options retry: false
 
-  def perform(mode, phoneNum) #Send the User the first poem of their series just after choosing it
+  def perform(phoneNum) #Send the User the first poem of their series just after choosing it
   
   	@user = User.find_by(phone: phoneNum)
 
@@ -40,7 +40,7 @@ class ChoiceWorker
 
 
       if @user.mms == true 
-        Helpers.new_mms(mode, story.getSMS, story.getMmsArr[1..-1], @user.phone)
+        Helpers.new_mms(story.getSMS, story.getMmsArr[1..-1], @user.phone)
       end
 
       #already responded with text only stuff!

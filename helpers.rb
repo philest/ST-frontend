@@ -8,11 +8,28 @@ SMS_HELPER = "SMS_HELPER"
 PRO = "production"
 TEST ="test"
 
+
+LAST = "last"
+NORMAL = "normal"
+
+MODE = ENV['RACK_ENV']
+
+SMS_WAIT = 12
+
+LAST_WAIT = 1
+
+MMS_WAIT = 20
+
+MMS = "MMS"
+SMS = "SMS"
+
 #testing goods
 	def self.initialize_testing_vars
 		@@twiml_sms = Array.new
 	  	@@twiml_mms = Array.new
 	  	@@twiml = ""
+
+	  	@@test_sleep = false
 	end
 
 	def self.getSimpleSMS
@@ -35,125 +52,194 @@ TEST ="test"
 		return @@twml_mms.push elt
 	end
 
+	#turns on test_sleep so sleeps while running tests
+	def self.testSleep
+		@@test_sleep = true
+	end
 
+	def self.testSleepOff
+		@@test_sleep = false
+	end
+
+
+
+	#Helpers that simply twiml REST API
 
 		#set TWILIO credentials:
 	    account_sid = ENV['TW_ACCOUNT_SID']
 	    auth_token = ENV['TW_AUTH_TOKEN']
 
-    @client = Twilio::REST::Client.new account_sid, auth_token
+   		@client = Twilio::REST::Client.new account_sid, auth_token
 
 
 
-    def self.mms(mode, mms, user_phone)
-    	if mode == "production"
-    		Helpers.real_mms(mms, user_phone)
-    	else
-    		Helpers.test_mms(mms, user_phone)
-    	end
-    end
+
+   	def self.getSleep(order, type)
+   		if MODE == TEST
+   			if @@test_sleep && order == NORMAL
+
+   				if type == SMS
+   					return SMS_WAIT
+   				elsif type == MMS
+   					return MMS_WAIT
+   				end
+
+   			elsif @@test_sleep && order == LAST
+   				return LAST_WAIT
+   			else
+   				return 0 #nosleep if @@test_sleep is false
+   			end
+
+   		elsif MODE == PRO
+   			if order == NORMAL
+
+   				if type == SMS
+   					return SMS_WAIT
+   				elsif type == MMS
+   					return MMS_WAIT
+   				end
+
+   			elsif order == LAST
+   				return LAST_WAIT
+   			end
+   		end
+   	end
 
 
-    #these methods route each 
-    def self.new_text(mode, normalSMS, sprintSMS, user_phone)
+   	#BIG KAHUNA
+   	#takes care of sleeping (order-specific), and handles testing and normal
+	def self.smsRespond(body, order)
+   		if MODE == TEST
+   			@@twiml = body
+   			@@twiml_sms.push body
 
-    	if mode == "production"
-    		Helpers.real_new_text(normalSMS, sprintSMS, user_phone)
-    	else
-    		Helpers.test_new_text(normalSMS, sprintSMS, user_phone)
-    	end
-    end
+   		elsif MODE == PRO 
+   			
+   			smsRespondHelper(body)
+   		end
 
-    def self.text(mode, normalSMS, sprintSMS, user_phone)
+   		sleep Helpers.getSleep(order, SMS)
 
-    	if mode == "production"
-    		Helpers.real_text(normalSMS, sprintSMS, user_phone)
-    	else
-    		Helpers.test_text(normalSMS, sprintSMS, user_phone)
-    	end
-    end
+	end
 
-    def self.new_sprint_long_sms(mode, long_sms, user_phone)
-    	
-    	if mode == "production"
-    		Helpers.real_new_sprint_long_sms(long_sms, user_phone)
-    	else
-    		Helpers.test_new_sprint_long_sms(long_sms, user_phone)
-    	end
-    end
+	def self.mmsRespond(mms_url, order)
 
-    def self.new_mms(mode, sms, mms_array, user_phone) 
+		if MODE == TEST
+			@@twiml_mms.push mms_url
+		elsif MODE == PRO
+			mmsRespondHelper(mms_url)
+		end
 
-    	if mode == "production"
-    		Helpers.real_new_mms(sms, mms_array, user_phone)
-    	else
-    		Helpers.test_new_mms(sms, mms_array, user_phone)
-    	end
-    end
+   		sleep Helpers.getSleep(order, MMS)
 
-    def self.new_sms_sandwich_mms(mode, first_sms, last_sms, mms_array, user_phone)
+   	end
 
-    	if mode == "production"
-    		Helpers.real_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
-    	else
-    		Helpers.test_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
-    	end
-    end
+   	def self.smsSend(body, user_phone, order)
+		if MODE == TEST
+			@@twiml = body
+			@@twiml_sms.push body
+		elsif MODE == PRO
+			smsSendHelper(body, user_phone)
+		end
 
-    def self.new_sms_first_mms(mode, sms, mms_array, user_phone)
-    	
-    	if mode == "production"
-    		Helpers.real_new_sms_first_mms(sms, mms_array, user_phone)
-    	else
-    		Helpers.test_new_sms_first_mms(sms, mms_array, user_phone)
-    	end
-    end
+   		sleep Helpers.getSleep(order, SMS)
+   	end
 
-    def self.new_just_mms(mode, mms_array, user_phone)
-    	if mode == "production"
-    		Helpers.real_new_just_mms(mms_array, user_phone)
-    	else
-    		Helpers.test_new_just_mms(mms_array, user_phone)
-    	end
-    end
+   	def self.mmsSend(mms_url, user_phone, order)
+		if MODE == TEST
+			@@twiml_mms.push mms_url
+		elsif MODE == PRO
+			mmsSendHelper(mms_url, user_phone)
+		end
 
-    def self.new_sms_chain(mode, smsArr, user_phone)
-    	if mode == "production"
-    		Helpers.real_new_sms_chain(smsArr, user_phone)
-    	else
-    		Helpers.test_new_sms_chain(smsArr, user_phone)
-    	end
-    end
+   		sleep Helpers.getSleep(order, MMS)
+   	end
+
+   	def self.fullSend(body, mms_url, user_phone, order)
+
+		if MODE == TEST
+			@@twiml_mms.push mms_url
+			@@twiml_sms.push body
+		elsif MODE == PRO
+			fullSendHelper(body, mms_url, user_phone)
+		end
+
+   		sleep Helpers.getSleep(order, MMS)
+   	end
 
 
-    def self.real_mms(mms, user_phone)
 
-    	@user = User.find_by(phone: user_phone)
 
+   	##sending helpers!
+
+	def self.smsRespondHelper(body)
+			twiml = Twilio::TwiML::Response.new do |r|
+		   		r.Message body #SEND SPRINT MSG
+		   	end
+		    twiml.text
+	end
+
+	def self.mmsRespondHelper(mms_url)
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
-		      m.Media "http://i.imgur.com/lLdB2zl.jpg"
+		      m.Media mms_url
 		    end
 		  end
 		  twiml.text
 	end
 
-	def self.test_mms(mms, user_phone)
+	def self.smsSendHelper(body, user_phone)
+          message = @client.account.messages.create(
+            :body => body,
+            :to => user_phone,     # Replace with your phone number
+            :from => "+17377778679")   # Replace with your Twilio number
+
+    	puts "Sent sms to #{user_phone}: #{body[9, 18]}" 
+
+    end
+
+    def self.mmsSendHelper(mms_url, user_phone)
+          message = @client.account.messages.create(
+            :media_url => mms_url,
+            :to => user_phone,     # Replace with your phone number
+            :from => "+17377778679")   # Replace with your Twilio number
+
+    	puts "Sent mms to #{user_phone}: #{mms_url[18, -1]}"
+    end
+
+    def self.fullSendHelper(body, mms_url, user_phone)
+          message = @client.account.messages.create(
+            :body => body,
+            :media_url => mms_url,
+            :to => user_phone,     # Replace with your phone number
+            :from => "+17377778679")   # Replace with your Twilio number
+
+        puts "Sent sms + mms to #{user_phone}: #{mms_url[18, -1]}"
+    	puts "and sms to #{user_phone}: #{body[9, 18]}" 
+
+    end
+
+
+
+
+
+
+	#RESPONSE SMS texting
+
+	#ONLY A RESPONSE
+
+	def self.mms(mms, user_phone)
 
     	@user = User.find_by(phone: user_phone)
 
-	    @@twiml_mms.push mms
+    	mmsRespond(mms, LAST)
+
+    	puts "Sent pic to #{@user.phone}: " + mms 
+
 	end
 
 
-
-
-
-
-
-
-	#ONLY A RESPONSE
-	def self.real_text(normalSMS, sprintSMS, user_phone)
+	def self.text(normalSMS, sprintSMS, user_phone)
 	
  		@user = User.find_by(phone: user_phone)
 
@@ -164,7 +250,18 @@ TEST ="test"
 
 			msg = sprintArr.shift #pop off first element
 
-			FirstTextWorker.perform_in(14.seconds, PRO, SMS_HELPER, @user.phone, sprintArr)
+			if MODE == TEST
+
+				require 'sidekiq/testing'	#does this come out of order (no delay)?
+				Sidekiq::Testing.fake! do
+					FirstTextWorker.perform_in(14.seconds, SMS_HELPER, @user.phone, sprintArr)
+				end
+
+			else
+
+			FirstTextWorker.perform_in(14.seconds, SMS_HELPER, @user.phone, sprintArr)
+
+			end
 
 		elsif @user == nil || @user.carrier == SPRINT
 			msg = sprintSMS 
@@ -174,90 +271,72 @@ TEST ="test"
 
 		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
 
-		twiml = Twilio::TwiML::Response.new do |r|
-	   		r.Message msg #SEND SPRINT MSG
-	   	end
-	    twiml.text
+		smsRespond(msg, LAST)
+
 	end  
 
 
+
+
+
+	#RESPONSE Sprint SMS LONG
+
 	#helper method to deliver sprint texts
-	def self.real_new_sprint_long_sms(long_sms, user_phone)
+	def self.new_sprint_long_sms(long_sms, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
 		sprintArr = Sprint.chop(long_sms)
 
         sprintArr.each_with_index do |text, index|  
-          message = @client.account.messages.create(
-            :body => text,
-            :to => @user.phone,     # Replace with your phone number
-            :from => "+17377778679")   # Replace with your Twilio number
 
-          puts "Sent sms part #{index} to" + @user.phone + "\n\n"
+			if index + 1 != sprintArr.length
+        		smsSend(text, user_phone, NORMAL)
+	    	else
+        		smsSend(text, user_phone, LAST)
+			end
 
-          sleep 10
+			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
+
 
         end
 
 	end
 
-	#helper test method to deliver sprint texts
-	def self.test_new_sprint_long_sms(long_sms, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		Sprint.chop(long_sms).each_with_index do |text, index|  
-	        @@twiml_sms.push text
-        end
-
-	end
-
-	def self.test_new_mms(sms, mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
-
-			mms_array.each_with_index do |mms_url, index|
-				@@twiml_mms.push mms_url
-			end
-			Helpers.test_new_sprint_long_sms(sms, user_phone)
-		else
-
-			mms_array.each_with_index do |mms_url, index|
-				@@twiml_mms.push mms_url
-			end
-
-			@@twiml_sms.push sms
-
-		end
-
-	end
 
 
-	def self.test_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
+
+
+	def self.new_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.test_new_sprint_long_sms(sms, user_phone)
-
-			mms_array.each_with_index do |mms, index|
-		          @@twiml_mms.push mms
+			mms_array.each_with_index do |mms_url, index|
+					
+					mmsSend(mms_url, user_phone, NORMAL)
+		     	 	 #for all, because text follows
 			end
+
+			Helpers.new_sprint_long_sms(sms, user_phone)
 
 		else
-			#SMS first!
-			@@twiml_sms.push first_sms
 
 			mms_array.each_with_index do |mms, index|
-				@@twiml_mms.push mms
-			end
 
-			@@twiml_sms.push last_sms
+				if index + 1 == mms_array.length #last image comes w/ SMS
+				
+					fullSend(sms, mms, user_phone, LAST)
+
+				else
+
+					mmsSend(mms, user_phone, NORMAL)
+
+				end
+
+			end
 
 		end
 
@@ -267,10 +346,7 @@ TEST ="test"
 
 
 
-
-
-
-	def self.real_new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
+	def self.new_sms_sandwich_mms(first_sms, last_sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
@@ -278,52 +354,34 @@ TEST ="test"
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.real_new_sprint_long_sms(sms, user_phone)
+			Helpers.new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms_url, index|
 
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms_url
-		                      )
+				if index + 1 != mms_array.length
+				mmsSend(mms_url, user_phone, NORMAL)
+		    	else
+				mmsSend(mms_url, user_phone, LAST)
+				end
 
-					 sleep 20
 			end
-
 
 		else
 			#SMS first!
-			message = @client.account.messages.create(
-	                  :to => @user.phone,     # Replace with your phone number
-	                  :from => "+17377778679",
-	                  :body => first_sms
-	                  )
 
-			sleep 13
+			smsSend(first_sms, user_phone, NORMAL)
 
 			mms_array.each_with_index do |mms_url, index|
 
 
 				if index + 1 == mms_array.length #send sms with mms on last story
 
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms_url,
-		                      :body => last_sms
-		                      )
+					fullSend(last_sms, mms_url, user_phone, LAST)
 
-					 sleep 15
 				else
 
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms_url
-		                      )
+					mmsSend(mms_url, user_phone, NORMAL)
 
-					 sleep 20
 				end
 
 
@@ -334,150 +392,54 @@ TEST ="test"
 	end
 
 
-	def self.test_new_sms_first_mms(sms, mms_array, user_phone)
+
+
+
+
+
+
+
+
+
+
+
+
+	def self.new_sms_first_mms(sms, mms_array, user_phone)
 
 		@user = User.find_by(phone: user_phone)
 
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.test_new_sprint_long_sms(sms, user_phone)
+			Helpers.new_sprint_long_sms(sms, user_phone)
 
-			mms_array.each_with_index do |mms, index|
-		          @@twiml_mms.push mms
-			end
-
-		else
-			#SMS first!
-			@@twiml_sms.push sms
-
-			mms_array.each_with_index do |mms, index|
-				@@twiml_mms.push mms
-			end
-
-		end
-
-	end
-
-
-	def self.real_new_sms_first_mms(sms, mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
-
-			Helpers.real_new_sprint_long_sms(sms, user_phone)
+			sleep SMS_WAIT
 
 			mms_array.each_with_index do |mms, index|
 
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms
-		                      )
+				mmsSend(mms, user_phone)
 
-					 sleep 20
+				if index + 1 != mms_array.length
+
+					mmsSend(mms, user_phone, NORMAL)
+
+		    	else
+					mmsSend(mms, user_phone, LAST)
+				end
 
 			end
 
 		else
 			#SMS first!
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => sms
-		                      )
 
-			sleep 13
+			smsSend(sms, user_phone, NORMAL)
 
 			mms_array.each_with_index do |mms, index|
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms
-		                      )
-			end
-
-		end
-
-	end
-
-
-	def self.real_new_just_mms(mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-			mms_array.each_with_index do |mms, index|
-
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms
-		                      )
-
-					 sleep 20
-			end
-	end
-
-
-	def self.test_new_just_mms(mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-			mms_array.each_with_index do |mms, index|
-				@@twiml_mms.push mms
-			end
-	end
-
-
-
-
-
-	def self.real_new_mms(sms, mms_array, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		#if long sprint mms + sms, send all images, then texts one-by-one
-		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
-
-			mms_array.each_with_index do |mms_url, index|
-
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms_url
-		                      )
-
-					 sleep 20
-			end
-
-			Helpers.real_new_sprint_long_sms(sms, user_phone)
-
-		else
-
-			mms_array.each_with_index do |mms, index|
-
-				if index + 1 == mms_array.length #last image
-				
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms,
-		                      :body => sms
-		                      )
-
-					 sleep 3
-
-				else
-
-					 message = @client.account.messages.create(
-		                      :to => @user.phone,     # Replace with your phone number
-		                      :from => "+17377778679",
-		                      :media_url => mms
-		                      )
-
-					 sleep 20
+			
+				if index + 1 != mms_array.length
+					mmsSend(mms, user_phone, NORMAL)
+		    	else
+					mmsSend(mms, user_phone, LAST)
 				end
 
 			end
@@ -487,168 +449,75 @@ TEST ="test"
 	end
 
 
-	# def new_single_mms(sms, mms, user_phone)
-
-	# 	@user = User.find_by(phone: user_phone)
-		
-	# 	if @user.carrier == SPRINT && sms.length > 160
-
-	# 		sprintArr = Sprint.chop(sms)
- 		
- # 			message = @client.account.messages.create(
- #                      :to => @user.phone,     # Replace with your phone number
- #                      :from => "+17377778679",
- #                      :mms_url => mms
- #                      )
-
- # 			sleep 20
-
- # 			sprintArr.each do |sprint_chunk|
-
- # 			 message = @client.account.messages.create(
- #                      :to => @user.phone,     # Replace with your phone number
- #                      :from => "+17377778679",
- #                      :body => sprint_chunk
- #                      )
-
- # 			 sleep 10
-
- # 			end
-
- # 		else
-
- # 			message = @client.account.messages.create(
- #                      :to => @user.phone,     # Replace with your phone number
- #                      :from => "+17377778679",
- #                      :mms_url => mms,
- #                      :body => sms
- #                      )
-
- # 			sleep 10
-
- # 		end
-
- # 	end
 
 
-	def self.test_new_text(normalSMS, sprintSMS, user_phone)
-		
+
+
+
+	def self.new_just_mms(mms_array, user_phone)
+
 		@user = User.find_by(phone: user_phone)
 
-		#if sprint
-		if (@user != nil && @user.carrier == SPRINT) && sprintSMS.length > 160
-
-			Helpers.test_new_sprint_long_sms(sprintSMS, user_phone)
-
-		elsif @user == nil || @user.carrier == SPRINT
-
-			@@twiml_sms.push sprintSMS 
-
-		else #not Sprint
-
-			@@twiml_sms.push normalSMS 
-
-		end 
-
-		puts "Sent message to #{@user.phone}:"
-
-	end  
+			mms_array.each_with_index do |mms, index|
 
 
-	def self.real_new_sms_chain(smsArr, user_phone)
-		@user = User.find_by(phone: user_phone)
+				if index + 1 != mms_array.length
+					mmsSend(mms, user_phone, NORMAL)
+		    	else
+					mmsSend(mms, user_phone, LAST)
+				end
 
-		smsArr.each do |sms|
+			end
+	end
 
- 			message = @client.account.messages.create(
-                      :body => sms,
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679")
 
- 			sleep 13
- 		end
-
- 	end
-
- 	def self.test_new_sms_chain(smsArr, user_phone)
-		@user = User.find_by(phone: user_phone)
-
-		smsArr.each do |sms|
-
-		@@twiml_sms.push sms
- 		end
- 		
- 	end
 
 
 	#send a NEW, unprompted text-- NOT a response
-	def self.real_new_text(normalSMS, sprintSMS, user_phone)
+	def self.new_text(normalSMS, sprintSMS, user_phone)
 		
 		@user = User.find_by(phone: user_phone)
 
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			Helpers.real_new_sprint_long_sms(sprintSMS, user_phone)
+			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
 
-		elsif @user == nil || @user.carrier == SPRINT
+		
+		else
 
-			msg = sprintSMS 
+			if @user == nil || @user.carrier == SPRINT
+				msg = sprintSMS 
+			else #not Sprint
+				msg = normalSMS 
+			end 
 
- 			message = @client.account.messages.create(
-                      :body => msg,
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679")
+			smsSend(msg, user_phone, LAST)
 
-		else #not Sprint
+			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
 
-			msg = normalSMS 
-
- 			message = @client.account.messages.create(
-                      :body => msg,
-                      :to => @user.phone,     # Replace with your phone number
-                      :from => "+17377778679")
-		end 
-
-		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
-
-		sleep 1
-
+	 	end
 
 	end  
 
 
 
- 	def self.test_text(normalSMS, sprintSMS, user_phone)
 
- 		@user = User.find_by(phone: user_phone)
+	def self.new_sms_chain(smsArr, user_phone)
+		@user = User.find_by(phone: user_phone)
 
+		smsArr.each_with_index do |sms, index|
 
-		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
-
-			sprintArr = Sprint.chop(sprintSMS)
-
-			@@twiml = "error: it's long and comes in array"
-			@@twiml_sms.push sprintArr.shift #pop off first element
-
-			#for the worker
-				require 'sidekiq/testing'
-				Sidekiq::Testing.inline! do
-					FirstTextWorker.perform_in(14.seconds, TEST, SMS_HELPER, @user.phone, sprintArr)
+				if index + 1 != smsArr.length
+					smsSend(sms, user_phone, NORMAL)
+		    	else
+					smsSend(sms, user_phone, LAST)
 				end
-	 	#if sprint
-		elsif @user == nil || @user.carrier == SPRINT
+ 		end
 
-			@@twiml = sprintSMS
-			@@twiml_sms.push sprintSMS
+ 	end
 
-		else #not Sprint
-			@@twiml = normalSMS
-			@@twiml_sms.push normalSMS
 
-		end 
-
-	end
 
 
 end

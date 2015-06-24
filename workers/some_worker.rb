@@ -49,6 +49,9 @@ class SomeWorker
   DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
+  MODE = ENV['RACK_ENV']
+
+
   #time for the birthdate and time updates: NOTE, EST set.  
   if ENV['RACK_ENV'] == "production"
     UPDATE_TIME = "20:00"
@@ -73,8 +76,6 @@ class SomeWorker
 
   def perform(*args)
 
-    mode = ENV['RACK_ENV']
-
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
 
@@ -87,6 +88,10 @@ class SomeWorker
     puts "\nSend story?: \n"
 
 
+
+      #record this before diving into sending each user a message.
+      #the delay is long and thus it might be 5:33 before some users are checked. 
+    @@time_now = Time.now.utc
 
 
 
@@ -103,7 +108,6 @@ class SomeWorker
       if user.time == nil 
         user.update(time: DEFAULT_TIME)
       end
-
 
       #logging info
       puts  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
@@ -146,20 +150,20 @@ class SomeWorker
             # require 'pry'
             # binding.pry
 
-            Helpers.new_text(mode, SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
+            Helpers.new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
             
             msg = DAY_LATE + " " + NO_GREET_CHOICES[user.series_number]
 
-            Helpers.new_text(mode, msg, msg, user.phone)
+            Helpers.new_text(msg, msg, user.phone)
             user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
 
              user.update(subscribed: false)
              user.update(awaiting_choice: false)
-             Helpers.new_text(mode, DROPPED, DROPPED, user.phone)
+             Helpers.new_text(DROPPED, DROPPED, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -180,11 +184,11 @@ class SomeWorker
             #JUST SMS MESSAGING!
             if user.mms == false
 
-                Helpers.new_text(mode, story.getPoemSMS, story.getPoemSMS, user.phone)
+                Helpers.new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
-                Helpers.new_mms(mode, story.getSMS, story.getMmsArr, user.phone)
+                Helpers.new_mms(story.getSMS, story.getMmsArr, user.phone)
 
             end#MMS or SMS
 
@@ -233,9 +237,9 @@ class SomeWorker
 
     user = User.find_by(phone: user_phone)
 
-    this_weekday = Time.new.wday 
+    this_weekday = @@time_now.wday 
 
-    one_day_age = Time.now - 1.day
+    one_day_age = @@time_now - 1.day
 
     case user.days_per_week
       when 3
@@ -252,10 +256,10 @@ class SomeWorker
                                                                      #SEND TO US EVERYDAY
                                                                      #SEND IF ony valid day and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:30pm on a M or W
-      currHour = Time.now.utc.hour
+      currHour = @@time_now.hour
       userHour = user.time.utc.hour 
 
-      currMin = Time.now.utc.min
+      currMin =  @@time_now.min
       userMin = user.time.utc.min
 
       if currHour == userHour
