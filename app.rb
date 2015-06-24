@@ -180,7 +180,7 @@ helpers do
 
 
 				@user.update(time: DEFAULT_TIME) #NEED THIS!
-				@user.update(child_age: 4)
+				# @user.update(child_age: 4)
 
 				if MODE == PRO
 					#TWILIO set up:

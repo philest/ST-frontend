@@ -118,7 +118,7 @@ SMS = "SMS"
    			smsRespondHelper(body)
    		end
 
-   		sleep Helpers.getSleep(order, SMS)
+   		# sleep Helpers.getSleep(order, SMS)
 
 	end
 
@@ -130,7 +130,7 @@ SMS = "SMS"
 			mmsRespondHelper(mms_url)
 		end
 
-   		sleep Helpers.getSleep(order, MMS)
+   		# sleep Helpers.getSleep(order, MMS)
 
    	end
 

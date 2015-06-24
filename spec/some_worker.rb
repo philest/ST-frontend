@@ -1012,6 +1012,9 @@ time = Time.now.utc
       end
     end
 
+    #TODO
+    it "doesn't send story after you just text sample" do
+    end
 
 
   # it "knows which user gets story next" do
