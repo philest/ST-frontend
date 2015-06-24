@@ -14,6 +14,7 @@ NORMAL = "normal"
 
 MODE = ENV['RACK_ENV']
 
+
 SMS_WAIT = 12
 
 LAST_WAIT = 1
@@ -30,6 +31,7 @@ SMS = "SMS"
 	  	@@twiml = ""
 
 	  	@@test_sleep = false
+	  	@@test_cred = false
 	end
 
 	def self.getSimpleSMS
@@ -62,14 +64,39 @@ SMS = "SMS"
 	end
 
 
+	def self.testCred
+		@@test_cred = true
+
+	end
+
+	def self.testCredOff
+		@@test_cred = false
+	end
+
+	if ENV['RACK_ENV'] = 'test'		#test credentials for integration from SMS.
+		Helpers.initialize_testing_vars
+	end
+ 	
+
+
+
 
 	#Helpers that simply twiml REST API
+	if ENV['RACK_ENV'] = "production"
+			#set TWILIO credentials:
+		    account_sid = ENV['TW_ACCOUNT_SID']
+		    auth_token = ENV['TW_AUTH_TOKEN']
 
-		#set TWILIO credentials:
-	    account_sid = ENV['TW_ACCOUNT_SID']
-	    auth_token = ENV['TW_AUTH_TOKEN']
+	   		@client = Twilio::REST::Client.new account_sid, auth_token
 
-   		@client = Twilio::REST::Client.new account_sid, auth_token
+
+	elsif ENV['RACK_ENV'] = 'test'		#test credentials for integration from SMS.
+				#set TWILIO credentials:
+		    account_sid = ENV['TEST_TW_ACCOUNT_SID']
+		    auth_token = ENV['TEST_TW_AUTH_TOKEN']
+
+	   		@client = Twilio::REST::Client.new account_sid, auth_token
+	end
 
 
 
@@ -188,7 +215,7 @@ SMS = "SMS"
           message = @client.account.messages.create(
             :body => body,
             :to => user_phone,     # Replace with your phone number
-            :from => "+17377778679")   # Replace with your Twilio number
+            :from => "+12032023505")   # Replace with your Twilio number
 
     	puts "Sent sms to #{user_phone}: #{body[9, 18]}" 
 
@@ -198,7 +225,7 @@ SMS = "SMS"
           message = @client.account.messages.create(
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => "+17377778679")   # Replace with your Twilio number
+            :from => "+12032023505")   # Replace with your Twilio number
 
     	puts "Sent mms to #{user_phone}: #{mms_url[18, -1]}"
     end
@@ -208,7 +235,7 @@ SMS = "SMS"
             :body => body,
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => "+17377778679")   # Replace with your Twilio number
+            :from => "+12032023505")   # Replace with your Twilio number
 
         puts "Sent sms + mms to #{user_phone}: #{mms_url[18, -1]}"
     	puts "and sms to #{user_phone}: #{body[9, 18]}" 
