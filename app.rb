@@ -129,7 +129,9 @@ get '/' do
 	erb :main
 end
 
-
+get '/failed' do
+	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
+end
 
 
 # register an incoming SMS
