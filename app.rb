@@ -139,7 +139,7 @@ end
 
 get '/called' do
   Twilio::TwiML::Response.new do |r|
-    r.Say 'Thanks for calling StoryTime, free stories by text. To learn more, call our director Phil at 5 6 1, 2 1 2, 5 8 3 1. Thanks!'
+    r.Play "http://www.joinstorytime.com/mp3"
   end.text
 end
 
