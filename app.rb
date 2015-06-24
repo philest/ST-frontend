@@ -211,7 +211,7 @@ helpers do
 
 			FirstTextWorker.perform_in(17.seconds, params[:Body].upcase, @user.phone)
 
-			Helpers.mms(SomeWorker::FIRST_MMS[0], @user.phone) 
+			Helpers.mms(FirstTextWorker::FIRST_MMS[0], @user.phone) 
 
 
 		elsif @user == nil
