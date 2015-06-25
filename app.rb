@@ -134,9 +134,7 @@ get '/mp3' do
 end
 
 get '/failed' do
-
-	testHelpers
-	# Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
+	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
 end
 
 get '/called' do
@@ -161,12 +159,9 @@ end
 
 helpers do 
 
-	def testHelpers
-		Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
-		puts params[:From]
-	end
-
 	def workflow 
+
+
 		#check if new user
 		#returns nil if not found
 		@user = User.find_by_phone(params[:From])
@@ -201,6 +196,9 @@ helpers do
 
 				@user.update(time: DEFAULT_TIME) #NEED THIS!
 				# @user.update(child_age: 4)
+
+				    # require 'pry'
+				    # binding.pry
 
 				if MODE == PRO
 					#TWILIO set up:

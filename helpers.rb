@@ -1,4 +1,7 @@
 
+require 'sidekiq/testing'	#does this come out of order (no delay)?
+
+
 
 class Helpers
 
@@ -7,14 +10,17 @@ SPRINT = "Sprint Spectrum, L.P."
 SMS_HELPER = "SMS_HELPER"
 PRO = "production"
 TEST ="test"
+TEST_CRED = "test_cred"
 
-MY_TWILIO_NUMBER = "+17377778679"
+# @@my_twilio_number = "+17377778679"
 
 
 LAST = "last"
 NORMAL = "normal"
 
-MODE = ENV['RACK_ENV']
+@@mode = ENV['RACK_ENV']
+
+
 
 
 SMS_WAIT = 12
@@ -33,7 +39,6 @@ SMS = "SMS"
 	  	@@twiml = ""
 
 	  	@@test_sleep = false
-	  	@@test_cred = false
 	end
 
 	def self.getSimpleSMS
@@ -66,45 +71,44 @@ SMS = "SMS"
 	end
 
 
-	def self.testCred
-		@@test_cred = true
+	def self.testCred	
+		#set up test credentials
+	    account_sid = ENV['TEST_TW_ACCOUNT_SID']
+	    auth_token = ENV['TEST_TW_AUTH_TOKEN']
 
+   		@client = Twilio::REST::Client.new account_sid, auth_token
+
+   		@@my_twilio_number = "+15005550006"
+   		@@mode = TEST_CRED
 	end
 
 	def self.testCredOff
-		@@test_cred = false
+		@@mode = ENV['RACK_ENV']
 	end
+
+
 
 	if ENV['RACK_ENV'] = 'test'		#test credentials for integration from SMS.
 		Helpers.initialize_testing_vars
 	end
  	
-
-
-
-
 	#Helpers that simply twiml REST API
-	if ENV['RACK_ENV'] = "production"
+	if ENV['RACK_ENV'] == "production"
 			#set TWILIO credentials:
 		    account_sid = ENV['TW_ACCOUNT_SID']
 		    auth_token = ENV['TW_AUTH_TOKEN']
 
 	   		@client = Twilio::REST::Client.new account_sid, auth_token
-
-
-	elsif ENV['RACK_ENV'] = 'test'		#test credentials for integration from SMS.
-				#set TWILIO credentials:
-		    account_sid = ENV['TEST_TW_ACCOUNT_SID']
-		    auth_token = ENV['TEST_TW_AUTH_TOKEN']
-
-	   		@client = Twilio::REST::Client.new account_sid, auth_token
+			
+			@@my_twilio_number = "+17377778679"	   		
 	end
 
 
 
 
+
    	def self.getSleep(order, type)
-   		if MODE == TEST
+   		if @@mode == TEST || @@mode == TEST_CRED
    			if @@test_sleep && order == NORMAL
 
    				if type == SMS
@@ -119,7 +123,7 @@ SMS = "SMS"
    				return 0 #nosleep if @@test_sleep is false
    			end
 
-   		elsif MODE == PRO
+   		elsif @@mode == PRO
    			if order == NORMAL
 
    				if type == SMS
@@ -138,11 +142,11 @@ SMS = "SMS"
    	#BIG KAHUNA
    	#takes care of sleeping (order-specific), and handles testing and normal
 	def self.smsRespond(body, order)
-   		if MODE == TEST
+   		if @@mode == TEST
    			@@twiml = body
    			@@twiml_sms.push body
 
-   		elsif MODE == PRO 
+   		elsif @@mode == PRO || @@mode == TEST_CRED
    			
    			smsRespondHelper(body)
    		end
@@ -151,19 +155,25 @@ SMS = "SMS"
 
 	def self.mmsRespond(mms_url, order)
 
-		if MODE == TEST
+		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
-		elsif MODE == PRO
+		elsif @@mode == PRO
 			mmsRespondHelper(mms_url)
 		end
 
    	end
 
    	def self.smsSend(body, user_phone, order)
-		if MODE == TEST
+		if @@mode == TEST
 			@@twiml = body
 			@@twiml_sms.push body
-		elsif MODE == PRO
+
+			#turn on testcred
+			Helpers.testCred
+			#simulate actual REST api
+			smsSendHelper(body, user_phone)
+
+		elsif @@mode == PRO
 			smsSendHelper(body, user_phone)
 		end
 
@@ -171,9 +181,9 @@ SMS = "SMS"
    	end
 
    	def self.mmsSend(mms_url, user_phone, order)
-		if MODE == TEST
+		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
-		elsif MODE == PRO
+		elsif @@mode == PRO
 			mmsSendHelper(mms_url, user_phone)
 		end
 
@@ -182,10 +192,10 @@ SMS = "SMS"
 
    	def self.fullSend(body, mms_url, user_phone, order)
 
-		if MODE == TEST
+		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 			@@twiml_sms.push body
-		elsif MODE == PRO
+		elsif @@mode == PRO
 			fullSendHelper(body, mms_url, user_phone)
 		end
 
@@ -217,17 +227,23 @@ SMS = "SMS"
           message = @client.account.messages.create(
             :body => body,
             :to => user_phone,     # Replace with your phone number
-            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
+            :from => @@my_twilio_number)   # Replace with your Twilio number
 
-    	puts "Sent sms to #{user_phone}: #{body[9, 18]}" 
+        if @@mode == TEST_CRED 
+        	puts "TC: Sent sms to #{user_phone}: #{body[9, 18]}" 
+       	else
+    		puts "Sent sms to #{user_phone}: #{body[9, 18]}"
+    	end 
 
+		  #turn off testCred
+	      Helpers.testCredOff
     end
 
     def self.mmsSendHelper(mms_url, user_phone)
           message = @client.account.messages.create(
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
+            :from => @@my_twilio_number)   # Replace with your Twilio number
 
     	puts "Sent mms to #{user_phone}: #{mms_url[18, -1]}"
     end
@@ -237,7 +253,7 @@ SMS = "SMS"
             :body => body,
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
+            :from => @@my_twilio_number)   # Replace with your Twilio number
 
         puts "Sent sms + mms to #{user_phone}: #{mms_url[18, -1]}"
     	puts "and sms to #{user_phone}: #{body[9, 18]}" 
@@ -268,6 +284,8 @@ SMS = "SMS"
 	
  		@user = User.find_by(phone: user_phone)
 
+
+
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
@@ -275,18 +293,9 @@ SMS = "SMS"
 
 			msg = sprintArr.shift #pop off first element
 
-			if MODE == TEST
 
-				require 'sidekiq/testing'	#does this come out of order (no delay)?
-				Sidekiq::Testing.fake! do
-					FirstTextWorker.perform_in(14.seconds, SMS_HELPER, @user.phone, sprintArr)
-				end
+			FirstTextWorker.perform_in(14.seconds, SMS_HELPER, user_phone, sprintArr)
 
-			else
-
-			FirstTextWorker.perform_in(14.seconds, SMS_HELPER, @user.phone, sprintArr)
-
-			end
 
 		elsif @user == nil || @user.carrier == SPRINT
 			msg = sprintSMS 
@@ -294,8 +303,12 @@ SMS = "SMS"
 			msg = normalSMS
 		end
 
-		puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+		if (@@mode == TEST || @@mode == TEST_CRED) && ((@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160)
+			FirstTextWorker.drain
+		end
 
+		puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+		
 		smsRespond(msg, LAST)
 
 	end  

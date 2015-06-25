@@ -101,8 +101,8 @@ describe 'The StoryTime App' do
 
     before(:each) do
       Helpers.initialize_testing_vars
+      FirstTextWorker.jobs.clear
     end
-
 
   it "routes successfully home" do
     get '/'
@@ -126,12 +126,24 @@ describe 'The StoryTime App' do
   end
 
   it "sends correct sign up sms" do
+  	get '/test/999/STORY/ATT' 
+  	expect(Helpers.getSimpleSMS).to eq(START_SMS_1 + 2.to_s + START_SMS_2)
+  end
+
+  it "sends correct sign up sms" do
+    get '/test/999/STORY/ATT' 
     # require 'pry'
     # binding.pry
 
-  	get '/test/999/STORY/ATT'
-  	expect(Helpers.getSimpleSMS).to eq(START_SMS_1 + 2.to_s + START_SMS_2)
   end
+
+  it "sends new text properly using integration testing w/ credentials" do
+
+    Helpers.smsSend("Your Test Cred worked!", "+15612125831", "normal")
+
+  end
+
+
 
   it "sends correct sign up sms to Sprint users" do
     get '/test/998/STORY/' + SPRINT_QUERY_STRING
@@ -434,17 +446,20 @@ describe 'The StoryTime App' do
       #SPRINT ACTION TESTS
 
         it "properly sends this as a three piece text to SPRINT" do
-            @user = User.create(phone: "598", carrier: "Sprint Spectrum, L.P.")
+            @user = User.create(phone: "+15615422027", carrier: "Sprint Spectrum, L.P.")
             puts "\n"
             puts "\n"
+            
+
             Helpers.text(HELP_SMS_2, HELP_SMS_2, @user.phone)
+
 
             expect(Helpers.getSMSarr.length).to eq(3)
             puts Helpers.getSMSarr
       end
 
         it "properly sends long poemSMS to Sprint users as many pieces" do
-          @user = User.create( phone: "101", carrier: "Sprint Spectrum, L.P.")
+          @user = User.create( phone: "+5615422025", carrier: "Sprint Spectrum, L.P.")
             puts "\n"
             puts "\n"
 

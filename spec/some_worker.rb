@@ -18,6 +18,13 @@ SLEEP = (1.0 / 16.0)
 SLEEP_960 =  (1/ 8.0)
 
 
+SLEEP_SCALE = 860
+
+SLEEP_TIME = (1/ 8.0)
+
+
+
+
 SPRINT_CARRIER = "Sprint Spectrum, L.P."
 
 
@@ -501,8 +508,8 @@ time = Time.now.utc
   #series choice
   it "sends proper texts for first signup through first story and series choice!" do
     Timecop.travel(2015, 6, 22, 16, 15, 0) #on MONDAY!
-    get 'test/900/STORY/ATT'
-    @user = User.find_by(phone: "900")
+    get 'test/+15612129000/STORY/ATT'
+    @user = User.find_by(phone: "+15612129000")
     @user.reload
 
     mmsSoFar = FirstTextWorker::FIRST_MMS
@@ -516,12 +523,12 @@ time = Time.now.utc
 
     #it properly sends the MMS and SMS on TUES
     Timecop.travel(2015, 6, 23, 17, 15, 0) #on tues!
-    Timecop.scale(960) #1/16 seconds now are two minutes
+    Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
     (1..20).each do 
       SomeWorker.perform_async
       SomeWorker.drain
-      sleep SLEEP
+      sleep SLEEP_TIME
     end
     @user.reload 
 
@@ -540,8 +547,8 @@ time = Time.now.utc
 
     it "sends the right first weeks (first, then two stories) content" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      get 'test/900/STORY/ATT'
-      @user = User.find_by(phone: "900")
+      get 'test/+15612129000/STORY/ATT'
+      @user = User.find_by(phone: "+15612129000")
       FirstTextWorker.drain
       @user.reload
       expect(@user.total_messages).to eq(1)
@@ -628,7 +635,7 @@ time = Time.now.utc
       expect(@user.awaiting_choice).to eq(true)
       expect(@user.next_index_in_series).to eq(0)
 
-      get 'test/900/p/ATT'
+      get 'test/+15612129000/p/ATT'
       @user.reload
 
       ChoiceWorker.drain #OMG forgot this.
@@ -657,15 +664,15 @@ time = Time.now.utc
 
   it "properly sends out the message about not responding with choice (on next valid day), then drops if don't respond by next" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       
@@ -755,15 +762,15 @@ time = Time.now.utc
 
     it "properly delivers the next message in a series" do 
       Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
-      @user = User.create(phone: "100", story_number: 1, days_per_week: 2)
+      @user = User.create(phone: "+15002125833", story_number: 1, days_per_week: 2)
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUES. (3:52)
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload 
 
@@ -778,7 +785,7 @@ time = Time.now.utc
       expect(@user.awaiting_choice).to eq(true)
       expect(@user.next_index_in_series).to eq(0)
 
-      get 'test/100/p/ATT'
+      get 'test/+15002125833/p/ATT'
       @user.reload
       ChoiceWorker.drain #OMG forgot this.
 
@@ -830,15 +837,15 @@ time = Time.now.utc
 
  it "properly signs back up after being dropped, then STORY-responding" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       
@@ -918,7 +925,7 @@ time = Time.now.utc
       expect(@user.subscribed).to eq(false)
 
 
-      get 'test/555/STORY/ATT'
+      get 'test/+15615422025/STORY/ATT'
       @user.reload
 
       expect(@user.awaiting_choice).to be(true)
@@ -942,15 +949,15 @@ time = Time.now.utc
 
     it "re-offers choice after day-late" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      @user = User.create(phone: "555", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       
@@ -988,7 +995,7 @@ time = Time.now.utc
       expect(@user.next_index_in_series).to eq(999)
 
       #properly sends out story WHEN they respond
-      get 'test/555/p/ATT'
+      get 'test/+15615422025/p/ATT'
       @user.reload
       ChoiceWorker.drain #OMG forgot this.
 

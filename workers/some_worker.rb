@@ -147,9 +147,6 @@ class SomeWorker
             user.update(awaiting_choice: true)
             #choose a series
 
-            # require 'pry'
-            # binding.pry
-
             Helpers.new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded

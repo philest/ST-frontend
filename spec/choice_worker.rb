@@ -29,6 +29,11 @@ describe 'The StoryTime Workers' do
         ChoiceWorker.jobs.clear
         Helpers.initialize_testing_vars
         @user = User.create(phone: "555", awaiting_choice: true, series_number: 0)
+        Helpers.testCred
+    end
+
+    after(:each) do
+      Helpers.testCredOff
     end
 
       it "properly enques a choiceWorker" do
@@ -101,6 +106,7 @@ describe 'The StoryTime Workers' do
 
       expect(Helpers.getMMSarr).to eq(story.getMmsArr)
       expect(Helpers.getMMSarr).not_to eq(nil)
+
     end
 
 
