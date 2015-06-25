@@ -8,6 +8,8 @@ SMS_HELPER = "SMS_HELPER"
 PRO = "production"
 TEST ="test"
 
+MY_TWILIO_NUMBER = "+17377778679"
+
 
 LAST = "last"
 NORMAL = "normal"
@@ -215,7 +217,7 @@ SMS = "SMS"
           message = @client.account.messages.create(
             :body => body,
             :to => user_phone,     # Replace with your phone number
-            :from => "+12032023505")   # Replace with your Twilio number
+            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
 
     	puts "Sent sms to #{user_phone}: #{body[9, 18]}" 
 
@@ -225,7 +227,7 @@ SMS = "SMS"
           message = @client.account.messages.create(
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => "+12032023505")   # Replace with your Twilio number
+            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
 
     	puts "Sent mms to #{user_phone}: #{mms_url[18, -1]}"
     end
@@ -235,7 +237,7 @@ SMS = "SMS"
             :body => body,
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
-            :from => "+12032023505")   # Replace with your Twilio number
+            :from => MY_TWILIO_NUMBER)   # Replace with your Twilio number
 
         puts "Sent sms + mms to #{user_phone}: #{mms_url[18, -1]}"
     	puts "and sms to #{user_phone}: #{body[9, 18]}" 
