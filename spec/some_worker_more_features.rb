@@ -147,5 +147,12 @@ describe 'SomeWorker, with sleep,' do
 
 
 
+    it "handles a single mms" do
+      Helpers.new_just_mms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
+      expect(Helpers.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
+      expect(Helpers.getSMSarr.empty?).to be true
+    end
+
+
 
 end

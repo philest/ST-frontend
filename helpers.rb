@@ -494,6 +494,12 @@ SMS = "SMS"
 
 	def self.new_just_mms(mms_array, user_phone)
 
+		#handle just a single, String mms_url
+		if mms_array.class == String
+			mms_array = [mms_array]
+		end
+
+
 		@user = User.find_by(phone: user_phone)
 
 			mms_array.each_with_index do |mms, index|
