@@ -133,7 +133,7 @@ get '/mp3' do
 	send_file File.join(settings.public_folder, 'storytime_message.mp3')
 end
 
-post '/failed' do
+get '/failed' do
 	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
 end
 
@@ -146,7 +146,7 @@ end
 
 
 # register an incoming SMS
-post '/sms' do
+get '/sms' do
 	workflow
 end
 
