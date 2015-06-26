@@ -86,7 +86,7 @@ describe 'The NextMessageWorker' do
       expect(Helpers.getSMSarr).to eq [SMS]
     end
 
-    it "sends out a two SMS stack in the right order" do
+    it "sends out a two MMS stack in the right order" do
       mms_arr = ["one", "two"]
       NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
       puts "jobs: #{NextMessageWorker.jobs.size}"
@@ -103,6 +103,22 @@ describe 'The NextMessageWorker' do
 
     end
 
+    it "sends out a THREE MMS stack in the right order" do
+      mms_arr = ["one", "two", three]
+      NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
+      puts "jobs: #{NextMessageWorker.jobs.size}"
+      NextMessageWorker.drain
+      
+      # expect(NextMessageWorker.jobs.size).to eq 1
+      # expect(Helpers.getMMSarr).to eq ["one"]
+      # expect(Helpers.getSMSarr).to eq []
+
+      NextMessageWorker.drain #the recursive call.
+      expect(Helpers.getMMSarr).to eq ["one", "two", "three"]
+      expect(Helpers.getSMSarr).to eq [SMS]
+      expect(NextMessageWorker.jobs.size).to eq 0
+
+    end
 
 
       
