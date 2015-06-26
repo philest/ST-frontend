@@ -192,6 +192,11 @@ SMS = "SMS"
 
    	def self.fullSend(body, mms_url, user_phone, order)
 
+		#account for mms_url in arrays
+    	if mms_url.class == Array
+    		mms_url = mms_url[0]
+    	end
+
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 			@@twiml_sms.push body
@@ -249,6 +254,8 @@ SMS = "SMS"
     end
 
     def self.fullSendHelper(body, mms_url, user_phone)
+          
+
           message = @client.account.messages.create(
             :body => body,
             :media_url => mms_url,
