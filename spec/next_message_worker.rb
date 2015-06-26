@@ -95,7 +95,7 @@ describe 'The NextMessageWorker' do
       # expect(NextMessageWorker.jobs.size).to eq 1
       # expect(Helpers.getMMSarr).to eq ["one"]
       # expect(Helpers.getSMSarr).to eq []
-
+ 
       NextMessageWorker.drain #the recursive call.
       expect(Helpers.getMMSarr).to eq ["one", "two"]
       expect(Helpers.getSMSarr).to eq [SMS]
@@ -117,8 +117,71 @@ describe 'The NextMessageWorker' do
       expect(Helpers.getMMSarr).to eq ["one", "two", "three"]
       expect(Helpers.getSMSarr).to eq [SMS]
       expect(NextMessageWorker.jobs.size).to eq 0
+    end
+
+    it "works for 21 users!" do 
+      Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      users = []
+
+      Helpers.testSleep #turn on
+
+      (1..6).each do |number|
+        get 'test/1561212582'+number.to_s+"/STORY/ATT"#each signs up
+        user = User.find_by(phone: '1561212582'+number.to_s)
+
+        FirstTextWorker.jobs.clear
+        user.reload
+
+        @@twiml_sms = []
+        @@twiml_mms = []
+
+
+        expect(user.total_messages).to eq(0)
+        expect(user.story_number).to eq(0)
+
+        # expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2,
+        #                                 FirstTextWorker::FIRST_SMS])              
+        # expect(Helpers.getMMSarr).to eq(FIRST_MMS)
+
+        users.push user
+
+        @@twiml_sms = []
+        @@twiml_mms = []
+      end
+
+
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY!
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
+
+      #WORKS WIHOUT SLEEPING!
+      (1..10).each do 
+
+          SomeWorker.perform_async
+          SomeWorker.drain
+
+        sleep SLEEP_TIME
+      end
+
+      require 'pry'
+      binding.pry
+
+
+      expect(NextMessageWorker.jobs.size).to eq 6
+      NextMessageWorker.drain #send all
+
+
+      users.each do |user|
+        user.reload
+
+        expect(Helpers.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)              
+        expect(Helpers.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+        # expect(user.total_messages).to eq()
+        expect(user.story_number).to eq(1)
+        puts " "+ user.phone + "passed"
+      end
 
     end
+
 
 
       

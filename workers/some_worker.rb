@@ -13,6 +13,8 @@ require_relative '../sprint'
 require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../helpers'
+require_relative 'next_message_worker'
+
 
 class SomeWorker
   include Sidekiq::Worker
@@ -185,33 +187,10 @@ class SomeWorker
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
-                Helpers.new_mms(story.getSMS, story.getMmsArr, user.phone)
+                #start the MMS message stack
+                NextMessageWorker.perform_async(story.getSMS, story.getMmsArr, user.phone)  
 
             end#MMS or SMS
-
-              #updating story or series number
-              #next_index_in_series == nil (or series_choice == nil?) means that you're not in a series
-              if user.next_index_in_series != nil
-                user.update(next_index_in_series: (user.next_index_in_series + 1))
-
-                #exit series if time's up
-                if user.next_index_in_series == messageSeriesHash[user.series_choice + user.series_number.to_s].length
-
-                  ##return variable to nil: (nil, which means "you're asking the wrong question-- I'm not in a series")
-                  user.update(next_index_in_series: nil)
-                  user.update(series_choice: nil)
-
-                  #get ready for next series
-                  user.update(series_number: user.series_number + 1)
-
-                end
-
-              else
-                user.update(story_number: user.story_number + 1)
-              end
-
-              #total message count
-              user.update(total_messages: user.total_messages + 1)
 
           end#end story_subpart
 

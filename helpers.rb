@@ -70,6 +70,10 @@ SMS = "SMS"
 		@@test_sleep = false
 	end
 
+	def self.getTestSleep
+		return @@test_sleep
+	end
+
 
 	def self.testCred	
 		#set up test credentials
@@ -100,7 +104,7 @@ SMS = "SMS"
 
 	   		@client = Twilio::REST::Client.new account_sid, auth_token
 			
-			@@my_twilio_number = "+17377778679"	   		
+			@@my_twilio_number = "+12032023505"	   		
 	end
 
 
@@ -108,7 +112,7 @@ SMS = "SMS"
 
 
    	def self.getSleep(order, type)
-   		if @@mode == TEST || @@mode == TEST_CRED
+		if @@mode == TEST || @@mode == TEST_CRED
    			if @@test_sleep && order == NORMAL
 
    				if type == SMS
@@ -123,9 +127,9 @@ SMS = "SMS"
    				return 0 #nosleep if @@test_sleep is false
    			end
 
-   		elsif @@mode == PRO
+		elsif @@mode == PRO
+   			
    			if order == NORMAL
-
    				if type == SMS
    					return SMS_WAIT
    				elsif type == MMS
@@ -135,8 +139,11 @@ SMS = "SMS"
    			elsif order == LAST
    				return LAST_WAIT
    			end
-   		end
-   	end
+
+   		else 
+   			puts "ERROR: Invalid ENV mode!: #{@@mode}"
+		end
+	end
 
 
    	#BIG KAHUNA

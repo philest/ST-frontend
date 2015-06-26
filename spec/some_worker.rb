@@ -39,6 +39,7 @@ describe 'SomeWorker' do
 
     before(:each) do
         SomeWorker.jobs.clear
+        NextMessageWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
     end
@@ -306,14 +307,16 @@ describe 'SomeWorker' do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 24, 0) #on TUESDAY.
 
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
 
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
+
+      NextMessageWorker.drain
 
       @user.reload 
 
@@ -329,14 +332,17 @@ describe 'SomeWorker' do
       @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 24, 0) #on TUESDAY.
 
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
 
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
+
+      NextMessageWorker.drain
+
       @user.reload 
 
 
@@ -457,27 +463,28 @@ time = Time.now.utc
       
 
       Timecop.travel(2015, 6, 23, 17, 20, 0) #on TUESDAY.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
 
 
       (1..15).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
 
+      NextMessageWorker.drain
 
       @user.reload 
       expect(@user.total_messages).to eq(1)
       expect(@user.story_number).to eq(1)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(960) #1/16 seconds now are two minutes
-      (1..15).each do 
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+      (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload 
       expect(@user.total_messages).to eq(1)
@@ -522,14 +529,17 @@ time = Time.now.utc
     expect(Helpers.getSMSarr).to eq(smsSoFar)
 
     #it properly sends the MMS and SMS on TUES
-    Timecop.travel(2015, 6, 23, 17, 15, 0) #on tues!
+    Timecop.travel(2015, 6, 23, 17, 24, 0) #on tues!
     Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-    (1..20).each do 
+    (1..10).each do 
       SomeWorker.perform_async
       SomeWorker.drain
       sleep SLEEP_TIME
     end
+   
+    NextMessageWorker.drain
+
     @user.reload 
 
     mmsSoFar.concat Message.getMessageArray[0].getMmsArr
@@ -561,6 +571,9 @@ time = Time.now.utc
         SomeWorker.drain
         sleep SLEEP_960
       end
+     
+      NextMessageWorker.drain
+
       @user.reload
       expect(@user.story_number).to eq(0)
       expect(@user.total_messages).to eq(1)
@@ -584,6 +597,9 @@ time = Time.now.utc
         SomeWorker.drain
         sleep SLEEP_960
       end
+
+      NextMessageWorker.drain
+     
       @user.reload 
       expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
@@ -804,13 +820,16 @@ time = Time.now.utc
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
+
+      NextMessageWorker.drain
+
       @user.reload 
 
 

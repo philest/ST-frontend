@@ -11,6 +11,7 @@ require_relative '../helpers'
 require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../workers/first_text_worker'
+require_relative '../workers/next_message_worker'
 
 SLEEP_SCALE = 860
 
@@ -35,6 +36,7 @@ describe 'SomeWorker, with sleep,' do
 
 
     before(:each) do
+        NextMessageWorker.jobs.clear
         SomeWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
@@ -116,25 +118,26 @@ describe 'SomeWorker, with sleep,' do
                                         FirstTextWorker::FIRST_SMS])              
         expect(Helpers.getMMSarr).to eq(FIRST_MMS)
 
+        expect(user.total_messages).to eq 1
+
         users.push user
 
         @@twiml_sms = []
         @@twiml_mms = []
       end
 
-      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY!
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       Helpers.testSleep
       # require 'pry'
       # binding.pry 
 
-      #WORKS WIHOUT SLEEPING!
-      (1..10).each do 
+      Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
+      # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
+
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_TIME
-      end
+
+        NextMessageWorker.drain
 
       users.each do |user|
         user.reload
