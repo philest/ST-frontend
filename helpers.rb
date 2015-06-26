@@ -183,6 +183,7 @@ SMS = "SMS"
    	def self.mmsSend(mms_url, user_phone, order)
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
+			puts "Sent #{mms_url}"
 		elsif @@mode == PRO
 			mmsSendHelper(mms_url, user_phone)
 		end
@@ -200,6 +201,8 @@ SMS = "SMS"
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 			@@twiml_sms.push body
+			puts "Sent #{mms_url}, #{body}"
+
 		elsif @@mode == PRO
 			fullSendHelper(body, mms_url, user_phone)
 		end
