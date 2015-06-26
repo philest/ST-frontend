@@ -10,6 +10,8 @@ require 'active_support/all'
 require_relative '../helpers'
 require_relative '../message'
 require_relative '../messageSeries'
+
+require_relative '../workers/next_message_worker'
 # require_relative '../workers/first_text_worker'
 
 SLEEP_SCALE = 860
@@ -53,7 +55,7 @@ describe 'The NextMessageWorker' do
     it "properly adds jobs after calling NextMessageWorker" do
       expect(NextMessageWorker.jobs.size).to eq 0
       NextMessageWorker.perform_in(20.seconds, MMS_ARR, SMS)
-      expect(NextMessageWorker.jobs.size).to_not eq 0
+      expect(NextMessageWorker.jobs.size).to eq 1 
       puts "jobs: #{NextMessageWorker.jobs.size}"
     end
 
