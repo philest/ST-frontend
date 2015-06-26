@@ -31,6 +31,8 @@ MMS_ARR = ["http://i.imgur.com/CG1DxZd.jpg", "http://i.imgur.com/GEc0dhT.jpg"]
 
 SMS = "This is a test SMS"
 
+PHONE = "+15612125832"
+
 describe 'The NextMessageWorker' do
   include Rack::Test::Methods
 
@@ -40,7 +42,7 @@ describe 'The NextMessageWorker' do
 
 
     before(:each) do
-        SomeWorker.jobs.clear
+        NextMessageWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
         Helpers.testSleep
@@ -54,7 +56,7 @@ describe 'The NextMessageWorker' do
 
     it "properly adds jobs after calling NextMessageWorker" do
       expect(NextMessageWorker.jobs.size).to eq 0
-      NextMessageWorker.perform_in(20.seconds, MMS_ARR, SMS)
+      NextMessageWorker.perform_in(20.seconds, SMS, MMS_ARR, "+15612125832")
       expect(NextMessageWorker.jobs.size).to eq 1 
       puts "jobs: #{NextMessageWorker.jobs.size}"
     end
@@ -67,6 +69,17 @@ describe 'The NextMessageWorker' do
       expect(Helpers.getMMSarr).to eq arr
       expect(Helpers.getSMSarr).to eq [SMS]
     end
+
+    it "properly sends out a single MMS w/ SMS" do
+      mms = ["http::image.com"] 
+      NextMessageWorker.perform_in(20.seconds, SMS, mms, PHONE)
+      expect(NextMessageWorker.jobs.size).to eq 1 
+      NextMessageWorker.drain
+
+      expect(Helpers.getMMSarr).to eq mms
+      expect(Helpers.getSMSarr).to eq [SMS]
+    end
+
       
 
 

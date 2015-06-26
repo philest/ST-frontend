@@ -19,7 +19,7 @@ class NextMessageWorker
 
   	@user = User.find_by(phone: user_phone)
 
-  	if mms_arr.length == 1 #if last MMS, send with SMS
+  	if mms_arr.length == 1#if last MMS, send with SMS
   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, LAST)
   	else #not last MMS...
   		NextMessageWorker.perform_in(20.seconds, sms, mms_arr, @user.phone, NORMAL)
