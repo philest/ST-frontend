@@ -104,7 +104,7 @@ describe 'The NextMessageWorker' do
     end
 
     it "sends out a THREE MMS stack in the right order" do
-      mms_arr = ["one", "two", three]
+      mms_arr = ["one", "two", 'three']
       NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
       puts "jobs: #{NextMessageWorker.jobs.size}"
       NextMessageWorker.drain
