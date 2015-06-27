@@ -77,7 +77,7 @@ SMS = "SMS"
 	    account_sid = ENV['TEST_TW_ACCOUNT_SID']
 	    auth_token = ENV['TEST_TW_AUTH_TOKEN']
 
-   		@client = Twilio::REST::Client.new account_sid, auth_token
+	   	@client = Twilio::REST::Client.new account_sid, auth_token
 
    		@@my_twilio_number = "+15005550006"
    		@@mode = TEST_CRED
@@ -87,20 +87,24 @@ SMS = "SMS"
 		@@mode = ENV['RACK_ENV']
 	end
 
-	if ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
+
+	if ENV['RACK_ENV'] == "production"
+		@@my_twilio_number = "+12032023505"	   		
+
+	elsif ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
 		Helpers.initialize_testing_vars
 	end
  	
-	#Helpers that simply twiml REST API
-	if ENV['RACK_ENV'] == "production"
-			#set TWILIO credentials:
-		    account_sid = ENV['TW_ACCOUNT_SID']
-		    auth_token = ENV['TW_AUTH_TOKEN']
+	# #Helpers that simply twiml REST API
+	# if ENV['RACK_ENV'] == "production"
+	# 		#set TWILIO credentials:
+		    # account_sid = ENV['TW_ACCOUNT_SID']
+		    # auth_token = ENV['TW_AUTH_TOKEN']
 
-	   		@client = Twilio::REST::Client.new account_sid, auth_token
+	   		# @client = Twilio::REST::Client.new account_sid, auth_token
 			
-			@@my_twilio_number = "+12032023505"	   		
-	end
+	# 		@@my_twilio_number = "+12032023505"	   		
+	# end
 
 
 
@@ -234,6 +238,13 @@ SMS = "SMS"
 	end
 
 	def self.smsSendHelper(body, user_phone)
+
+   		if @@mode == PRO
+		    account_sid = ENV['TW_ACCOUNT_SID']
+		    auth_token = ENV['TW_AUTH_TOKEN']
+			@client = Twilio::REST::Client.new account_sid, auth_token
+		end
+
           message = @client.account.messages.create(
             :body => body,
             :to => user_phone,     # Replace with your phone number
@@ -250,6 +261,13 @@ SMS = "SMS"
     end
 
     def self.mmsSendHelper(mms_url, user_phone)
+   		
+   		if @@mode == PRO
+		    account_sid = ENV['TW_ACCOUNT_SID']
+		    auth_token = ENV['TW_AUTH_TOKEN']
+			@client = Twilio::REST::Client.new account_sid, auth_token
+		end
+
           message = @client.account.messages.create(
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
@@ -259,16 +277,21 @@ SMS = "SMS"
     end
 
     def self.fullSendHelper(body, mms_url, user_phone)
+  
+   		if @@mode == PRO
+		    account_sid = ENV['TW_ACCOUNT_SID']
+		    auth_token = ENV['TW_AUTH_TOKEN']
+			@client = Twilio::REST::Client.new account_sid, auth_token
+		end
           
-
           message = @client.account.messages.create(
             :body => body,
             :media_url => mms_url,
             :to => user_phone,     # Replace with your phone number
             :from => @@my_twilio_number)   # Replace with your Twilio number
 
-        puts "Sent sms + mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
-    	puts "and sms to #{user_phone}: #{body[9, 18]}" 
+        puts "Sent mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
+    	puts "along with sms: #{body[9, 18]}" 
 
     end
 
@@ -295,7 +318,6 @@ SMS = "SMS"
 	def self.text(normalSMS, sprintSMS, user_phone)
 	
  		@user = User.find_by(phone: user_phone)
-
 
 
 		#if sprint

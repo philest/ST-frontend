@@ -19,10 +19,10 @@ class NextMessageWorker
 
   	@user = User.find_by(phone: user_phone)
 
-  	#testing
-  	if ENV['RACK_ENV'] == 'test'
-  		@user ||= User.create(phone: user_phone)
-  	end
+  	# #testing
+  	# if ENV['RACK_ENV'] == 'test'
+  	# 	@user ||= User.create(phone: user_phone)
+  	# end
 
   	messageSeriesHash = MessageSeries.getMessageSeriesHash
 
