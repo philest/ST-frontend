@@ -134,6 +134,11 @@ get '/debug' do
     User.where(subscribed: true).find_each do |user|
 
     	puts user.phone
+    	if user.time.class == String
+    		puts "String"
+    	else
+    		puts "not!"
+    	end
     end
 end
 
