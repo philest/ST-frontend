@@ -13,7 +13,7 @@ require_relative '../sprint'
 require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../helpers'
-require_relative 'next_message_worker'
+require_relative './next_message_worker'
 
 
 class SomeWorker
