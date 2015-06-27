@@ -185,7 +185,7 @@ SMS = "SMS"
    	def self.mmsSend(mms_url, user_phone, order)
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
-			puts "Sent #{mms_url}"
+			puts "Sent #{mms_url[18, mms_url.length]}"
 		elsif @@mode == PRO
 			mmsSendHelper(mms_url, user_phone)
 		end
@@ -203,7 +203,7 @@ SMS = "SMS"
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 			@@twiml_sms.push body
-			puts "Sent #{mms_url}, #{body}"
+			puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
 
 		elsif @@mode == PRO
 			fullSendHelper(body, mms_url, user_phone)
@@ -255,7 +255,7 @@ SMS = "SMS"
             :to => user_phone,     # Replace with your phone number
             :from => @@my_twilio_number)   # Replace with your Twilio number
 
-    	puts "Sent mms to #{user_phone}: #{mms_url[18, -1]}"
+    	puts "Sent mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
     end
 
     def self.fullSendHelper(body, mms_url, user_phone)
@@ -267,7 +267,7 @@ SMS = "SMS"
             :to => user_phone,     # Replace with your phone number
             :from => @@my_twilio_number)   # Replace with your Twilio number
 
-        puts "Sent sms + mms to #{user_phone}: #{mms_url[18, -1]}"
+        puts "Sent sms + mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
     	puts "and sms to #{user_phone}: #{body[9, 18]}" 
 
     end
@@ -285,7 +285,7 @@ SMS = "SMS"
 
     	@user = User.find_by(phone: user_phone)
 
-    	puts "Sent pic to #{@user.phone}: " + mms 
+    	puts "Sent to #{@user.phone}: #{mms[18, mms.length]}" 
 
     	mmsRespond(mms, LAST)
 
@@ -549,8 +549,6 @@ SMS = "SMS"
 			end 
 
 			smsSend(msg, user_phone, LAST)
-
-			puts "Sent message to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
 
 	 	end
 
