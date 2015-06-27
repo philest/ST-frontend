@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627171556) do
+ActiveRecord::Schema.define(version: 20150627174401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 20150627171556) do
     t.boolean  "awaiting_choice",      default: false
     t.boolean  "sample",               default: false
     t.integer  "total_messages",       default: 0
-    t.string   "time"
   end
 
 end
