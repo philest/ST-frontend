@@ -112,7 +112,7 @@ class SomeWorker
       end
 
       #logging info
-      puts  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
+      print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
       if SomeWorker.sendStory?(user.phone)
         puts 'YES!!'
       else
