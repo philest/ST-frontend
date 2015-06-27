@@ -87,7 +87,7 @@ SMS = "SMS"
 		@@mode = ENV['RACK_ENV']
 	end
 
-	if ENV['RACK_ENV'] = 'test'		#test credentials for integration from SMS.
+	if ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
 		Helpers.initialize_testing_vars
 	end
  	
