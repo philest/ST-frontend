@@ -129,6 +129,15 @@ get '/' do
 	erb :main
 end
 
+
+get '/debug' do
+    User.where(subscribed: true).find_each do |user|
+
+    	puts user.phone
+    end
+end
+
+
 get '/mp3' do
 	send_file File.join(settings.public_folder, 'storytime_message.mp3')
 end
