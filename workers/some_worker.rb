@@ -6,6 +6,9 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
+
+require_relative './config/environments' #database configuration
+
 require 'time'
 require 'active_support/all'
 
