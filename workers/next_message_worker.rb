@@ -31,7 +31,6 @@ class NextMessageWorker
   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, LAST)
   		puts "finished the message stack: #{@user.phone}"
 
-
       #updating story or series number after last part.
       #next_index_in_series == nil (or series_choice == nil?) means that you're not in a series
       if @user.next_index_in_series != nil

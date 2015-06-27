@@ -48,9 +48,6 @@ class FirstTextWorker
 
     @user = User.find_by(phone: phoneNum)
 
-    if ENV['RACK_ENV'] == 'test'
-     @user ||= User.create(phone: phoneNum)
-    end
 
     #set TWILIO credentials:
     account_sid = ENV['TW_ACCOUNT_SID']
