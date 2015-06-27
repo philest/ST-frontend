@@ -214,6 +214,8 @@ helpers do
 
 			  	days = @user.days_per_week.to_s
 
+			  	# NextMessageWorker.perform_in(13.seconds,)
+
 				FirstTextWorker.perform_in(13.seconds, FIRST, @user.phone)
 				
 			  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	

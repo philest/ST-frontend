@@ -56,7 +56,7 @@ class NextMessageWorker
 
   	else #not last MMS...
   		Helpers.new_just_mms(mms_arr.shift, @user.phone)
-  		NextMessageWorker.perform_in(20.seconds, sms, mms_arr, @user.phone)
+  		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
   	end
 
 
