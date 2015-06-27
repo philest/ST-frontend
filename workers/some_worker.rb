@@ -188,7 +188,9 @@ class SomeWorker
             else #MULTIMEDIA MESSAGING (MMS)!
 
                 #start the MMS message stack
-                NextMessageWorker.perform_async(story.getSMS, story.getMmsArr, user.phone)  
+                # NextMessageWorker.perform_async(story.getSMS, story.getMmsArr, user.phone)  
+
+                puts "a-okay."
 
             end#MMS or SMS
 
