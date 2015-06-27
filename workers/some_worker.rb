@@ -7,7 +7,7 @@ require 'sidekiq'
 require 'sidetiq'
 
 
-require_relative './config/environments' #database configuration
+require_relative '../config/environments' #database configuration
 
 require 'time'
 require 'active_support/all'
