@@ -155,6 +155,20 @@ get '/called' do
   end.text
 end
 
+get '/three' do 
+
+	arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
+	twiml = Twilio::TwiML::Response.new do |r|
+	    r.Message do |m|
+	      m.Media arr[0]
+	      m.Media arr[1]
+		  m.Media arr[2]
+	    end
+	  end
+	  twiml.text
+end
+
+
 
 
 # register an incoming SMS

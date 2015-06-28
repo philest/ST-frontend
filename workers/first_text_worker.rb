@@ -21,7 +21,6 @@ FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
 SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all loved racing. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
 
-
 EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
 
 
