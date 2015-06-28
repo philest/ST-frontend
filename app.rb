@@ -65,9 +65,9 @@ START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You’ll get "
 
 START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help.\nNormal text rates may apply."
 
-START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You’ll get "
+START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to quit, or HELP NOW for help.\nNormal text rates may apply."
+START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to end, or HELP NOW for help.\nNormal text rates may apply."
 
 HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
 
