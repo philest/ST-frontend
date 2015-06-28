@@ -12,6 +12,8 @@ require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../workers/first_text_worker'
 
+require_relative '../constants'
+
 SLEEP = (1.0 / 16.0) 
 
 
@@ -30,6 +32,7 @@ SPRINT_CARRIER = "Sprint Spectrum, L.P."
 
 describe 'SomeWorker' do
   include Rack::Test::Methods
+  include Text
 
   def app
     Sinatra::Application
@@ -520,9 +523,8 @@ time = Time.now.utc
     @user = User.find_by(phone: "+15612129000")
     @user.reload
 
-    mmsSoFar = FirstTextWorker::FIRST_MMS
-    smsSoFar = ["StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!\n\nText HELP NOW for help, or STOP NOW to cancel.",
- FirstTextWorker::FIRST_SMS]
+    mmsSoFar = Text::FIRST_MMS
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
 
     NextMessageWorker.drain
 
@@ -584,9 +586,9 @@ time = Time.now.utc
 
 
 
-    mmsSoFar = FirstTextWorker::FIRST_MMS
-    smsSoFar = ["StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!\n\nText HELP NOW for help, or STOP NOW to cancel.",
- FirstTextWorker::FIRST_SMS]
+    mmsSoFar = Text::FIRST_MMS
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+
 
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -660,7 +662,7 @@ time = Time.now.utc
       get 'test/+15612129000/p/ATT'
       @user.reload
 
-      ChoiceWorker.drain #OMG forgot this.
+      NextMessageWorker.drain #OMG forgot this.
 
       expect(@user.awaiting_choice).to eq(false)
       expect(@user.series_choice).to eq("p")
@@ -814,7 +816,7 @@ time = Time.now.utc
 
       get 'test/+15002125833/p/ATT'
       @user.reload
-      ChoiceWorker.drain #OMG forgot this.
+      NextMessageWorker.drain #OMG forgot this.
 
       expect(@user.series_number).to eq(0)
 
@@ -1026,7 +1028,7 @@ time = Time.now.utc
       #properly sends out story WHEN they respond
       get 'test/+15615422025/p/ATT'
       @user.reload
-      ChoiceWorker.drain #OMG forgot this.
+      NextMessageWorker.drain #OMG forgot this.
 
       expect(@user.series_number).to eq(0)
 

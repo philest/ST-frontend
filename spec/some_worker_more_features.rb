@@ -13,6 +13,8 @@ require_relative '../messageSeries'
 require_relative '../workers/first_text_worker'
 require_relative '../workers/next_message_worker'
 
+require_relative '../constants'
+
 SLEEP_SCALE = 860
 
 SLEEP_TIME = (1/ 8.0)
@@ -21,14 +23,10 @@ SLEEP_TIME = (1/ 8.0)
 
 SPRINT_CARRIER = "Sprint Spectrum, L.P."
 
-START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
-
-
 
 describe 'SomeWorker, with sleep,' do
   include Rack::Test::Methods
+  include Text
 
   def app
     Sinatra::Application
@@ -64,9 +62,9 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2,
-                                        FirstTextWorker::FIRST_SMS])              
-        expect(Helpers.getMMSarr).to eq(FIRST_MMS)
+        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
+                                        Text::FIRST_SMS])              
+        expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 
         users.push user
 
@@ -114,9 +112,9 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2,
-                                        FirstTextWorker::FIRST_SMS])              
-        expect(Helpers.getMMSarr).to eq(FIRST_MMS)
+        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
+                                        Text::FIRST_SMS])              
+        expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 
         expect(user.total_messages).to eq 1
 
@@ -173,7 +171,7 @@ describe 'SomeWorker, with sleep,' do
     #     expect(user.total_messages).to eq(1)
     #     expect(user.story_number).to eq(0)
 
-    #     expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2,
+    #     expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
     #                                     FirstTextWorker::FIRST_SMS])              
     #     expect(Helpers.getMMSarr).to eq(FIRST_MMS)
 

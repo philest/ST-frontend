@@ -203,7 +203,7 @@ helpers do
 
 			#REACTIVATE SUBSCRIPTION
 				@user.update(subscribed: true)
-				msg = Text::RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::Text::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
+				msg = Text::RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
 
 				@user.update(next_index_in_series: 0)
 				@user.update(awaiting_choice: true)

@@ -44,7 +44,6 @@ class SomeWorker
 
   NO_GREET_CHOICES = ["Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
 
-
   TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649"]
 
 
@@ -154,7 +153,7 @@ class SomeWorker
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
             
-            msg = DAY_LATE + " " + NO_GREET_CHOICES[user.series_number]
+            msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
 
             Helpers.new_text(msg, msg, user.phone)
             user.update(next_index_in_series: 999)  
