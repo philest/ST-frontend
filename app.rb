@@ -170,10 +170,18 @@ end
 
 get '/three_send' do 
 		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
+   		
+		    account_sid = ENV['TW_ACCOUNT_SID']
+		    auth_token = ENV['TW_AUTH_TOKEN']
+			@client = Twilio::REST::Client.new account_sid, auth_token
+		
 
-	Helpers.new_mms("He", arr[0], "+15619008225")
-	Helpers.new_mms("He", arr[1], "+15619008225")
-	Helpers.new_mms("He", arr[2], "+15619008225")
+          message = @client.account.messages.create(
+            :media_url => arr[0],
+            :media_url => arr[1],
+            :media_url => arr[2],
+            :to => "+15619008225",     # Replace with your phone number
+            :from => "+12032023505")   # Replace with your Twilio number
 end
 
 
