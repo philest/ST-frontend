@@ -214,7 +214,7 @@ describe 'The StoryTime App' do
 
         it "responds to HELP NOW from sprint" do
           get "/test/400/HELP%20NOW/" + SPRINT_QUERY_STRING
-          expect(Helpers.getSimpleSMS).to eq(HELP_SPRINT_1 + "Tues and Thurs" + HELP_SPRINT_2)
+          expect(Helpers.getSimpleSMS).to eq(HELP_SPRINT_1 + "Tues/Th" + HELP_SPRINT_2)
       end
 
     end

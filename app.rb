@@ -48,29 +48,42 @@ TOO_YOUNG_SMS = "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 
 
 MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this helps!"
 
-HELP_SMS_1 =  "StoryTime texts free kids' stories on "
+HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
 
-HELP_SMS_2 = ". If you can't receive picture msgs, reply TEXT for text-only stories.
+HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 hours before bedtime can carry health risks, so read earlier.\nIf pics show poorly, reply TEXT for text-only stories. Reply STOP to quit."
 
-Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. 
+HELP_SPRINT_1 = "StoryTime sends stories on "
 
-Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\nReply TEXT for no-pic stories, STOP to end."
 
-HELP_SPRINT_1 = "StoryTime texts free kids' stories on "
 
-HELP_SPRINT_2 = ". For help or feedback, contact our director, Phil, at 561-212-5831. Reply " + STOP + " to cancel."
+
+
+#LATEST EDITED
+
+START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You’ll get "
+
+START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help.\nNormal text rates may apply."
+
+START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You’ll get "
+
+START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to quit, or HELP NOW for help.\nNormal text rates may apply."
+
+HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
+
+HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 hours before bedtime can carry health risks, so read earlier.\nIf pics show poorly, reply TEXT for text-only stories. Reply STOP to quit."
+
+HELP_SPRINT_1 = "StoryTime sends stories on "
+
+HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\nReply TEXT for no-pic stories, STOP to end."
+
+
+
+
+
 
 
 STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
-
-START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
-
-START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SPRINT_2 = " stories/week-- the 1st is on the way!\n\nFor help, reply HELP NOW."
-
 
 TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
 
@@ -174,13 +187,13 @@ get '/three_send' do
 		    account_sid = ENV['TW_ACCOUNT_SID']
 		    auth_token = ENV['TW_AUTH_TOKEN']
 			@client = Twilio::REST::Client.new account_sid, auth_token
-		
+			
+			pe = "+15612125831"
+			jz = "+15619008225"
 
           message = @client.account.messages.create(
-            :media_url => arr[0],
-            :media_url => arr[1],
-            :media_url => arr[2],
-            :to => "+15619008225",     # Replace with your phone number
+            :media_url => arr,
+            :to => jz,     # Replace with your phone number
             :from => "+12032023505")   # Replace with your Twilio number
 end
 
@@ -310,11 +323,20 @@ helpers do
 		  	#find the day names
 		  	case @user.days_per_week
 		  	when 1
-		  		dayNames = "Wed"
+		  			dayNames = "Wed"
+
 		  	when 2, nil
-		  		dayNames = "Tues and Thurs"
+		  		if @user.carrier == SPRINT
+		  			dayNames = "Tues/Th"
+		  		else           
+		  			dayNames = "Tues and Thurs"
+		  		end
 		  	when 3
-		  		dayNames = "Mon Wed & Fri"
+		  		if @user.carrier == SPRINT
+		  			dayNames = "M-W-F"
+		  		else           
+		  			dayNames = "Mon/Wed/Fri"
+		  		end
 		  	else
 		  		puts "ERR: invalid days of week"
 		  	end
