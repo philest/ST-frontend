@@ -16,6 +16,9 @@ require 'sidekiq/api'
 require_relative './sprint'
 require_relative './age'
 
+	
+require_relative './constants'
+
 require_relative './message'
 require_relative './messageSeries'
 require_relative './workers/some_worker'
@@ -33,109 +36,6 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-HELP = "HELP NOW"
-STOP = "STOP NOW"
-TEXT = "TEXT"
-
-
-RESUBSCRIBE_SHORT = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
-
-RESUBSCRIBE_LONG = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud, continuing from where you left off."
-
-WRONG_BDAY_FORMAT = "We did not understand what you typed. Reply with child's birthdate in MMDDYY format. For questions, reply " + HELP + ". To cancel, reply " + STOP + "."
-
-TOO_YOUNG_SMS = "StoryTime: Sorry, for now we only have msgs for kids ages 3 to 5. We'll contact you when we expand soon! Or reply with birthdate in MMYY format."
-
-MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this helps!"
-
-HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
-
-HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 hours before bedtime can carry health risks, so read earlier.\nIf pics show poorly, reply TEXT for text-only stories. Reply STOP to quit."
-
-HELP_SPRINT_1 = "StoryTime sends stories on "
-
-HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\nReply TEXT for no-pic stories, STOP to end."
-
-
-
-
-#LATEST EDITED
-
-START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
-
-START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
-
-START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
-
-START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
-
-HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
-
-HELP_SMS_2 = ". For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nSTOP to cancel"
-
-HELP_SPRINT_1 = "StoryTime sends stories on "
-
-HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
- 
-NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
-
-
-
-
-
-
-STOPSMS = "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
-
-TIME_SPRINT = "ST: Great, last question! When do you want to get stories (e.g. 5:00pm)? 
-
-Screentime w/in 2hrs before bedtime can carry health risks, so please read earlier."
-
-TIMESMS = "StoryTime: Great, last question! When do you want to receive stories (e.g. 5:00pm)? 
-
-Screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
-
-BAD_TIME_SMS = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). 
-For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
-	
-BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your preferred time to get stories (e.g. 5:00pm). Reply " + HELP + "for help."
-	
-REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
-
-SPRINT = "Sprint Spectrum, L.P."
-
-GOOD_CHOICE = "Great, it's on the way!"
-
-BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.
-
-For help, reply HELP NOW."
-
-POST_SAMPLE = "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."
-
-NO_SIGNUP_MATCH = "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
-
-SAMPLE = "SAMPLE"
-
-EXAMPLE = "EXAMPLE"
-
-FIRST = "FIRST"
-
-GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
-
-CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
-
-
-
-FIRST_MMS = ["http://i.imgur.com/OtpTZgM.jpg", "http://i.imgur.com/Gzzatre.jpg"]
-
-THE_FINAL_MMS = "http://i.imgur.com/Gzzatre.jpg"
-
-FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
-
-SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all loved racing. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
-
-EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
-
-
 DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
 
 
@@ -143,6 +43,11 @@ MODE = ENV['RACK_ENV']
 
 PRO = "production"
 TEST = "test"
+
+
+
+include Text
+
 
 get '/worker' do
 	SomeWorker.perform_async #begin sidetiq recurrring background tasks
@@ -265,9 +170,9 @@ helpers do
 
 			  	days = @user.days_per_week.to_s
 
-				NextMessageWorker.perform_in(13.seconds, FIRST_SMS, FIRST_MMS, @user.phone)
+				NextMessageWorker.perform_in(13.seconds, Text::FIRST_SMS, Text::FIRST_MMS, @user.phone)
 
-			  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
+			  	Helpers.text(Text::START_SMS_1 + days + Text::START_SMS_2, Text::START_SPRINT_1 + days + Text::START_SPRINT_2, @user.phone)	
 
 
 		elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
@@ -277,28 +182,28 @@ helpers do
 			end
 
 			if params[:Body].casecmp("SAMPLE") == 0 
-				NextMessageWorker.perform_in(17.seconds, SAMPLE_SMS, THE_FINAL_MMS, @user.phone)
+				NextMessageWorker.perform_in(17.seconds, Text::SAMPLE_SMS, Text::THE_FINAL_MMS, @user.phone)
 			else #EXAMPLE
-				NextMessageWorker.perform_in(17.seconds, EXAMPLE_SMS, THE_FINAL_MMS, @user.phone)
+				NextMessageWorker.perform_in(17.seconds, Text::EXAMPLE_SMS, Text::THE_FINAL_MMS, @user.phone)
 			end
 
-			Helpers.mms(FIRST_MMS[0], @user.phone) 
+			Helpers.mms(Text::FIRST_MMS[0], @user.phone) 
 
 
 		elsif @user == nil
 
-			Helpers.text(NO_SIGNUP_MATCH, NO_SIGNUP_MATCH, params[:From])
+			Helpers.text(Text::Text::NO_SIGNUP_MATCH, Text::Text::NO_SIGNUP_MATCH, params[:From])
 
 		elsif @user.sample == true
 
-			Helpers.text(POST_SAMPLE, POST_SAMPLE, @user.phone)
+			Helpers.text(Text::POST_SAMPLE, Text::POST_SAMPLE, @user.phone)
 		
 		#if auto-dropped (or if choose to drop mid-series), returning
 		elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp("STORY") == 0)
 
 			#REACTIVATE SUBSCRIPTION
 				@user.update(subscribed: true)
-				msg = RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
+				msg = Text::RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::Text::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
 
 				@user.update(next_index_in_series: 0)
 				@user.update(awaiting_choice: true)
@@ -310,9 +215,9 @@ helpers do
 
 			#REACTIVATE SUBSCRIPTION
 			@user.update(subscribed: true)
-			Helpers.text(RESUBSCRIBE_LONG, RESUBSCRIBE_LONG, @user.phone)
+			Helpers.text(Text::RESUBSCRIBE_LONG, Text::RESUBSCRIBE_LONG, @user.phone)
 
-		elsif params[:Body].casecmp(HELP) == 0 #HELP option
+		elsif params[:Body].casecmp(Text::HELP) == 0 #Text::HELP option
 			
 		  	#default 2 days a week
 		  	if @user.days_per_week == nil
@@ -340,10 +245,10 @@ helpers do
 		  		puts "ERR: invalid days of week"
 		  	end
 
-		  	Helpers.text(HELP_SMS_1 + dayNames + HELP_SMS_2, HELP_SPRINT_1 + dayNames + HELP_SPRINT_2, @user.phone)
+		  	Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
 
 
-		elsif params[:Body].casecmp(STOP) == 0 #STOP option
+		elsif params[:Body].casecmp("STOP NOW") == 0 #STOP option
 			
 
 			if MODE == PRO
@@ -355,19 +260,19 @@ helpers do
 
 			#change subscription
 			@user.update(subscribed: false)
-			Helpers.text(STOPSMS, STOPSMS, @user.phone)
+			Helpers.text(Text::STOPSMS, Text::STOPSMS, @user.phone)
 
-		elsif params[:Body].casecmp(TEXT) == 0 #TEXT option		
+		elsif params[:Body].casecmp(Text::TEXT) == 0 #TEXT option		
 
 			#change mms to sms
 			@user.update(mms: false)
 
-			Helpers.text(MMS_UPDATE, MMS_UPDATE, @user.phone)
+			Helpers.text(Text::MMS_UPDATE, Text::MMS_UPDATE, @user.phone)
 
 		elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
 			#no need to manually undo birthdate
-			Helpers.text(REDO_BIRTHDATE, REDO_BIRTHDATE, @user.phone)
+			Helpers.text(Text::REDO_BIRTHDATE, Text::REDO_BIRTHDATE, @user.phone)
 
 		#Responds with a letter when prompted to choose a series
 		#Account for quotations
@@ -397,16 +302,17 @@ helpers do
 			    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
 
-				ChoiceWorker.perform_in(17.seconds, @user.phone)
 
 				if @user.mms == true
+					NextMessageWorker.perform_in(17.seconds, story.getSMS, story.getMmsArr[1..-1], @user.phone)
+
 					Helpers.mms(story.getMmsArr[0], @user.phone)
 				else
 			        Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)      
 				end
 
 		 	else	 			
-				Helpers.text(BAD_CHOICE, BAD_CHOICE, @user.phone)
+				Helpers.text(Text::BAD_CHOICE, Text::BAD_CHOICE, @user.phone)
 		 	end				
 
 	    # second reply: update child's birthdate
@@ -445,12 +351,12 @@ helpers do
 		 			@user.update(subscribed: false)
 
 		 			#NOTE: Keep the real birthdate.
-		 			Helpers.text(TOO_YOUNG_SMS, TOO_YOUNG_SMS, @user.phone)
+		 			Helpers.text(Text::TOO_YOUNG_SMS, Text::TOO_YOUNG_SMS, @user.phone)
 
 		 		end
 
 		    else #not a valid format
-		  		Helpers.text(WRONG_BDAY_FORMAT, WRONG_BDAY_FORMAT, @user.phone)
+		  		Helpers.text(Text::WRONG_BDAY_FORMAT, Text::WRONG_BDAY_FORMAT, @user.phone)
 			end 	
 
 	 	# Update TIME before (or after) third story
@@ -471,7 +377,7 @@ helpers do
 						Helpers.text(good_time, good_time, @user.phone)
 				else
 				
-					Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+					Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
 				end
 
 			when 2
@@ -488,19 +394,19 @@ helpers do
 
 	 				else
 						
-						Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+						Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
 
 	 				end
 	 		else 
 			
-				Helpers.text(BAD_TIME_SMS, BAD_TIME_SPRINT, @user.phone)
+				Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
 
 			end
 
 		#response matches nothing
 		else
 
-			Helpers.text(NO_OPTION, NO_OPTION, @user.phone)
+			Helpers.text(Text::NO_OPTION, Text::NO_OPTION, @user.phone)
 
 		end#signup flow
 

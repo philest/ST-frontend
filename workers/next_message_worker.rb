@@ -6,14 +6,13 @@ require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../helpers'
 
-LAST = "last"
-NORMAL = "normal"
+require_relative '../constants'
 
-FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
 
 class NextMessageWorker
   include Sidekiq::Worker
+  include Text
     
     sidekiq_options :queue => :critical
     sidekiq_options retry: false #if fails, don't resent (multiple texts)
@@ -38,7 +37,7 @@ class NextMessageWorker
 
 
   	if mms_arr.length == 1#if last MMS, send with SMS
-  		Helpers.fullSend(sms, mms_arr.shift, @user.phone, LAST)
+  		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::LAST)
   		puts "finished the message stack: #{@user.phone}"
 
       #updating story or series number after last part.
@@ -58,7 +57,7 @@ class NextMessageWorker
 
       else
 
-        if sms != FIRST_SMS
+        if sms != Text::FIRST_SMS
         @user.update(story_number: @user.story_number + 1)
         end
         

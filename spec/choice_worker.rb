@@ -7,8 +7,6 @@ require 'rack/test'
 
 require_relative '../helpers'
 
-require 'pry'
-
 # require_relative '../config/environments'
 
 puts ENV["REDISTOGO_URL"] + "\n\n\n\n"
@@ -27,6 +25,7 @@ describe 'The StoryTime Workers' do
 
     before(:each) do
         ChoiceWorker.jobs.clear
+        NextMessageWorker.jobs.clear
         Helpers.initialize_testing_vars
         @user = User.create(phone: "555", awaiting_choice: true, series_number: 0)
         Helpers.testCred
@@ -58,14 +57,14 @@ describe 'The StoryTime Workers' do
     it "properly enques a choiceWorker" do 
      get '/test/555/p/ATT'
       expect {
-        ChoiceWorker.jobs.size.to eq(1)
+        NextMessageWorker.jobs.size.to eq(1)
       }
     end
 
     it "properly doesn't enque a choiceWorker if bad choice" do 
      get '/test/555/z/ATT'
       expect {
-        ChoiceWorker.jobs.size.to eq(0)
+        NextMessageWorker.jobs.size.to eq(0)
       }
     end
 
@@ -74,7 +73,7 @@ describe 'The StoryTime Workers' do
      @user.reload
      get '/test/555/p/ATT'
       expect {
-        ChoiceWorker.jobs.size.to eq(0)
+        NextMessageWorker.jobs.size.to eq(0)
       }
     end
 
@@ -86,9 +85,9 @@ describe 'The StoryTime Workers' do
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-      expect(ChoiceWorker.jobs.size).to eq(1)
-      ChoiceWorker.drain
-      expect(ChoiceWorker.jobs.size).to eq(0)
+      expect(NextMessageWorker.jobs.size).to eq(1)
+      NextMessageWorker.drain
+      expect(NextMessageWorker.jobs.size).to eq(0)
 
       expect(Helpers.getSMSarr).to eq([].push story.getSMS)
     end
@@ -100,9 +99,9 @@ describe 'The StoryTime Workers' do
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-      expect(ChoiceWorker.jobs.size).to eq(1)
-      ChoiceWorker.drain
-      expect(ChoiceWorker.jobs.size).to eq(0)
+      expect(NextMessageWorker.jobs.size).to eq(1)
+      NextMessageWorker.drain
+      expect(NextMessageWorker.jobs.size).to eq(0)
 
       expect(Helpers.getMMSarr).to eq(story.getMmsArr)
       expect(Helpers.getMMSarr).not_to eq(nil)

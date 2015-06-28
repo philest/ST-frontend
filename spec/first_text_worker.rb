@@ -6,18 +6,17 @@ require 'capybara/rspec'
 require 'rack/test'
 
 require_relative '../helpers'
+require_relative '../constants'
 
 
 # require_relative '../config/environments'
 
 puts ENV["REDISTOGO_URL"] + "\n\n\n\n"
 
-
-START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
-
 SPRINT = "Sprint Spectrum, L.P."
+
+
+include Text
 
 describe 'The StoryTime Workers' do
   include Rack::Test::Methods
@@ -60,7 +59,7 @@ describe 'The StoryTime Workers' do
 			expect(NextMessageWorker.jobs.size).to eq(1)
 			NextMessageWorker.drain
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2].push FirstTextWorker::FIRST_SMS)
+			expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2].push FirstTextWorker::FIRST_SMS)
 		end
 
 		it "has all the first_text Brandon M-ms in right order" do
