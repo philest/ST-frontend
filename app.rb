@@ -76,7 +76,8 @@ HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 h
 HELP_SPRINT_1 = "StoryTime sends stories on "
 
 HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\nReply TEXT for no-pic stories, STOP to end."
-
+ 
+NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that. Reply HELP NOW for questions, or STOP NOW to cancel"
 
 
 
@@ -101,8 +102,6 @@ BAD_TIME_SPRINT = "We did not understand what you typed. Reply with your preferr
 REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
 
 SPRINT = "Sprint Spectrum, L.P."
-
-NO_OPTION = "StoryTime: This service is automatic. We didn't understand what you typed. For questions about StoryTime, reply " + HELP + ". To stop messages, reply " + STOP + "."
 
 GOOD_CHOICE = "Great, it's on the way!"
 
