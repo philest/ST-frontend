@@ -61,23 +61,23 @@ HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health
 
 #LATEST EDITED
 
-START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You’ll get "
+START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help.\nNormal text rates may apply."
+START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
 
 START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to end, or HELP NOW for help.\nNormal text rates may apply."
+START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
 
 HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
 
-HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 hours before bedtime can carry health risks, so read earlier.\nIf pics show poorly, reply TEXT for text-only stories. Reply STOP to quit."
+HELP_SMS_2 = ". For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nSTOP to cancel"
 
 HELP_SPRINT_1 = "StoryTime sends stories on "
 
-HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply TEXT for no-pic stories, STOP to end."
+HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may carry health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
  
-NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that. Reply HELP NOW for questions, or STOP NOW to cancel"
+NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
 
 
 
@@ -328,7 +328,7 @@ helpers do
 		  		if @user.carrier == SPRINT
 		  			dayNames = "Tue/Th"
 		  		else           
-		  			dayNames = "Tues and Thurs"
+		  			dayNames = "Tues & Thurs"
 		  		end
 		  	when 3
 		  		if @user.carrier == SPRINT
