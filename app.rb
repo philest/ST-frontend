@@ -112,6 +112,18 @@ GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! 
 CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
 
+
+FIRST_MMS = ["http://i.imgur.com/lLdB2zl.jpg", "http://i.imgur.com/msiTUwK.jpg"]
+
+THE_FINAL_MMS = "http://i.imgur.com/msiTUwK.jpg"
+
+FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
+
+SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all loved racing. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
+
+EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
+
+
 DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
 
 
@@ -195,8 +207,6 @@ helpers do
 				@user.update(time: DEFAULT_TIME) #NEED THIS!
 				# @user.update(child_age: 4)
 
-				    # require 'pry'
-				    # binding.pry
 
 				if MODE == PRO
 					#TWILIO set up:
@@ -214,10 +224,8 @@ helpers do
 
 			  	days = @user.days_per_week.to_s
 
-			  	# NextMessageWorker.perform_in(13.seconds,)
+				NextMessageWorker.perform_in(13.seconds, FIRST_SMS, FIRST_MMS, @user.phone)
 
-				FirstTextWorker.perform_in(13.seconds, FIRST, @user.phone)
-				
 			  	Helpers.text(START_SMS_1 + days + START_SMS_2, START_SPRINT_1 + days + START_SPRINT_2, @user.phone)	
 
 
@@ -227,9 +235,13 @@ helpers do
 				@user = User.create(sample: true, subscribed: false, phone: params[:From])
 			end
 
-			FirstTextWorker.perform_in(17.seconds, params[:Body].upcase, @user.phone)
+			if params[:Body].casecmp("SAMPLE") == 0 
+				NextMessageWorker.perform_in(17.seconds, SAMPLE_SMS, THE_FINAL_MMS, @user.phone)
+			else #EXAMPLE
+				NextMessageWorker.perform_in(17.seconds, EXAMPLE_SMS, THE_FINAL_MMS, @user.phone)
+			end
 
-			Helpers.mms(FirstTextWorker::FIRST_MMS[0], @user.phone) 
+			Helpers.mms(FIRST_MMS[0], @user.phone) 
 
 
 		elsif @user == nil

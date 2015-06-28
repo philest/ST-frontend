@@ -58,7 +58,7 @@ describe 'SomeWorker, with sleep,' do
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
         user = User.find_by(phone: number)
 
-        FirstTextWorker.drain
+        NextMessageWorker.drain
         user.reload
 
         expect(user.total_messages).to eq(1)
@@ -108,7 +108,7 @@ describe 'SomeWorker, with sleep,' do
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
         user = User.find_by(phone: number)
 
-        FirstTextWorker.drain
+        NextMessageWorker.drain
         user.reload
 
         expect(user.total_messages).to eq(1)

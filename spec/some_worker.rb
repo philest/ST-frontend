@@ -15,7 +15,6 @@ require_relative '../workers/first_text_worker'
 SLEEP = (1.0 / 16.0) 
 
 
-SLEEP_960 =  (1/ 8.0)
 
 
 SLEEP_SCALE = 860
@@ -40,11 +39,13 @@ describe 'SomeWorker' do
     before(:each) do
         SomeWorker.jobs.clear
         NextMessageWorker.jobs.clear
+        FirstTextWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
     end
 
     after(:each) do
+      NextMessageWorker.jobs.clear
       Timecop.return
     end
 
@@ -523,7 +524,7 @@ time = Time.now.utc
     smsSoFar = ["StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get 2 stories/week-- the first is on the way!\n\nText HELP NOW for help, or STOP NOW to cancel.",
  FirstTextWorker::FIRST_SMS]
 
-    FirstTextWorker.drain
+    NextMessageWorker.drain
 
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -531,6 +532,8 @@ time = Time.now.utc
     #it properly sends the MMS and SMS on TUES
     Timecop.travel(2015, 6, 23, 17, 24, 0) #on tues!
     Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+
+    Helpers.testCred
 
     (1..10).each do 
       SomeWorker.perform_async
@@ -559,17 +562,18 @@ time = Time.now.utc
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       get 'test/+15612129000/STORY/ATT'
       @user = User.find_by(phone: "+15612129000")
-      FirstTextWorker.drain
+      NextMessageWorker.drain
       @user.reload
       expect(@user.total_messages).to eq(1)
 
 
 
-      Timecop.scale(960) #1/16 seconds now are two minutes
+
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
      
       NextMessageWorker.drain
@@ -590,13 +594,15 @@ time = Time.now.utc
 
       
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
+
 
       NextMessageWorker.drain
      
@@ -614,12 +620,12 @@ time = Time.now.utc
 
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED. (3:30)
-      Timecop.scale(1920) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload 
       expect(@user.total_messages).to eq(2)
@@ -633,12 +639,12 @@ time = Time.now.utc
 
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload 
 
@@ -692,16 +698,18 @@ time = Time.now.utc
       end
       @user.reload
       
+      NextMessageWorker.drain
+
       smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -709,12 +717,12 @@ time = Time.now.utc
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -730,35 +738,35 @@ time = Time.now.utc
       #PROPERLY DROPS THE FOOL w/ no response
 
       Timecop.travel(2015, 6, 26, 17, 24, 0) #on FRI.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -788,6 +796,9 @@ time = Time.now.utc
         SomeWorker.drain
         sleep SLEEP_TIME
       end
+      @user.reload 
+
+      NextMessageWorker.drain
       @user.reload 
 
       expect(@user.series_number).to eq(0)
@@ -872,12 +883,12 @@ time = Time.now.utc
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -885,12 +896,12 @@ time = Time.now.utc
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -906,35 +917,35 @@ time = Time.now.utc
       #PROPERLY DROPS THE FOOL w/ no response
 
       Timecop.travel(2015, 6, 26, 17, 24, 0) #on FRI.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -952,7 +963,6 @@ time = Time.now.utc
 
 
       #send the SERIES choice
-
 
       #welcome back, with series choice
       smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + SomeWorker::NO_GREET_CHOICES[0]
@@ -984,12 +994,12 @@ time = Time.now.utc
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(960) #1/16 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 
@@ -997,12 +1007,12 @@ time = Time.now.utc
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Timecop.scale(960) #1/8 seconds now are two minutes
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
         SomeWorker.perform_async
         SomeWorker.drain
-        sleep SLEEP_960
+        sleep SLEEP_TIME
       end
       @user.reload
 

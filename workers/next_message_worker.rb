@@ -9,6 +9,9 @@ require_relative '../helpers'
 LAST = "last"
 NORMAL = "normal"
 
+FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
+
+
 class NextMessageWorker
   include Sidekiq::Worker
     
@@ -18,6 +21,13 @@ class NextMessageWorker
   def perform(sms, mms_arr, user_phone)
 
   	@user = User.find_by(phone: user_phone)
+
+
+    #handle strings
+    if mms_arr.class == String
+      mms_arr = [mms_arr]
+    end
+
 
   	# #testing
   	# if ENV['RACK_ENV'] == 'test'
@@ -47,7 +57,11 @@ class NextMessageWorker
         end
 
       else
+
+        if sms != FIRST_SMS
         @user.update(story_number: @user.story_number + 1)
+        end
+        
       end
 
       #total message count

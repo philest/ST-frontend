@@ -129,7 +129,7 @@ describe 'The NextMessageWorker' do
         get 'test/1561212582'+number.to_s+"/STORY/ATT"#each signs up
         user = User.find_by(phone: '1561212582'+number.to_s)
 
-        FirstTextWorker.jobs.clear
+        NextMessageWorker.jobs.clear
         user.reload
 
         @@twiml_sms = []
@@ -161,9 +161,6 @@ describe 'The NextMessageWorker' do
 
         sleep SLEEP_TIME
       end
-
-      require 'pry'
-      binding.pry
 
 
       expect(NextMessageWorker.jobs.size).to eq 6

@@ -142,6 +142,7 @@ class SomeWorker
           # require 'pry'
           # binding.pry
 
+
           if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && (user.story_number + 1) % 3 == 0)) && user.next_index_in_series == nil)
 
             #get set for first in series

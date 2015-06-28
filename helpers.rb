@@ -170,7 +170,7 @@ SMS = "SMS"
    	end
 
    	def self.smsSend(body, user_phone, order)
-		if @@mode == TEST
+		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml = body
 			@@twiml_sms.push body
 
