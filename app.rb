@@ -168,6 +168,13 @@ get '/three' do
 	  twiml.text
 end
 
+get '/three_send' do 
+		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
+
+	Helpers.new_mms("He", arr[0], "+15619008225")
+	Helpers.new_mms("He", arr[1], "+15619008225")
+	Helpers.new_mms("He", arr[2], "+15619008225")
+end
 
 
 
