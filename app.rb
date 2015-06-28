@@ -125,9 +125,9 @@ CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
 
 
-FIRST_MMS = ["http://i.imgur.com/lLdB2zl.jpg", "http://i.imgur.com/msiTUwK.jpg"]
+FIRST_MMS = ["http://i.imgur.com/OtpTZgM.jpg", "http://i.imgur.com/Gzzatre.jpg"]
 
-THE_FINAL_MMS = "http://i.imgur.com/msiTUwK.jpg"
+THE_FINAL_MMS = "http://i.imgur.com/Gzzatre.jpg"
 
 FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
 
