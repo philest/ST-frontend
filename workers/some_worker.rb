@@ -44,7 +44,7 @@ class SomeWorker
 
   NO_GREET_CHOICES = ["Do you want stories about Marley the puppy or about Bruce the moose?\n\nReply \"p\" for puppy or \"m\" for moose."]
 
-  TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649"]
+  TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649", "+19417243442", "+12022518772" ,"+15614796303", "+17722330863", "+12392735883", "+15614796303", "+13522226913", "+1615734535"]
 
 
   DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
