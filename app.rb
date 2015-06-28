@@ -75,7 +75,7 @@ HELP_SMS_2 = ". For help, call us at 561-212-5831. Remember that screen-time 2 h
 
 HELP_SPRINT_1 = "StoryTime sends stories on "
 
-HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\nReply TEXT for no-pic stories, STOP to end."
+HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply TEXT for no-pic stories, STOP to end."
  
 NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that. Reply HELP NOW for questions, or STOP NOW to cancel"
 
@@ -326,7 +326,7 @@ helpers do
 
 		  	when 2, nil
 		  		if @user.carrier == SPRINT
-		  			dayNames = "Tues/Th"
+		  			dayNames = "Tue/Th"
 		  		else           
 		  			dayNames = "Tues and Thurs"
 		  		end
