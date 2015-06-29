@@ -117,8 +117,10 @@ describe 'The StoryTime App' do
         end
 
         it "has default time of 5:30" do
-           expect(@user.time.hour).to eq(17)
+           expect(@user.time.hour).to eq(21)
            expect(@user.time.min).to eq(30)
+           expect(@user.time.zone).to eq("UTC")
+
         end  
 
   end 
