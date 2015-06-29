@@ -149,6 +149,9 @@ helpers do
 				@user.update(subscribed: true) #Subscription complete! (B/C defaults)
 				#backup for defaults
 
+				require 'pry'
+				binding.pry
+
 
 				@user.update(time: DEFAULT_TIME) #NEED THIS!
 				# @user.update(child_age: 4)
