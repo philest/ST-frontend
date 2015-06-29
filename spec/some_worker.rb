@@ -1054,6 +1054,59 @@ time = Time.now.utc
     it "doesn't send story after you just text sample" do
     end
 
+    it "properly assigns the first 10 then 20-300 peeps" do
+      
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+
+      SomeWorker.perform_async
+      SomeWorker.drain
+
+
+      (1..20).each do |num|
+       expect(wait = SomeWorker.getWait()).to eq(num)
+       puts wait
+      end
+
+      (21..40).each do |num|
+
+
+       expect(wait = SomeWorker.getWait()).to eq(num + Helpers::MMS_WAIT*2 )
+       expect(wait).to eq(num + 40 )
+       puts wait
+
+      end
+
+      (41..60).each do |num|
+       expect(wait = SomeWorker.getWait()).to eq(num + Helpers::MMS_WAIT*4 )
+       expect(wait).to eq(num + 80 )
+       puts wait
+      end
+
+
+      SomeWorker.perform_async
+      SomeWorker.drain
+
+      time_sent = []
+
+      (1..400).each do |num|
+       expect(time_sent.include? (wait = SomeWorker.getWait)).to be false
+        time_sent.push wait
+
+        expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
+        time_sent.push wait + Helpers::MMS_WAIT
+
+        expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
+        time_sent.push wait + Helpers::MMS_WAIT*2
+      end
+
+      puts time_sent.sort
+
+
+
+    end
+
+
+
 
   # it "knows which user gets story next" do
   # 	User.create(name: "Bob", time: "5:30pm", phone: "898")

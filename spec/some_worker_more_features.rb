@@ -72,7 +72,7 @@ describe 'SomeWorker, with sleep,' do
         @@twiml_mms = []
       end
 
-      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY!
+      Timecop.travel(2015, 6, 23, 17, 26, 0) #on TUESDAY!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       # Helpers.testSleep
@@ -84,7 +84,9 @@ describe 'SomeWorker, with sleep,' do
         SomeWorker.perform_async
         SomeWorker.drain
         sleep SLEEP_TIME
-      end
+      end 
+
+      NextMessageWorker.drain
 
       users.each do |user|
         user.reload

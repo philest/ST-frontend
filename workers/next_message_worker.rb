@@ -37,7 +37,7 @@ class NextMessageWorker
 
 
   	if mms_arr.length == 1#if last MMS, send with SMS
-  		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::LAST)
+  		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
   		puts "finished the message stack: #{@user.phone}"
 
       #updating story or series number after last part.
@@ -68,7 +68,7 @@ class NextMessageWorker
 
 
   	else #not last MMS...
-  		Helpers.new_just_mms(mms_arr.shift, @user.phone)
+  		Helpers.new_just_mms_no_wait(mms_arr.shift, @user.phone)
   		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
   	end
 

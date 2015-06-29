@@ -15,6 +15,8 @@ TEST_CRED = "test_cred"
 LAST = "last"
 NORMAL = "normal"
 
+NO_WAIT = "no wait"
+
 @@mode = ENV['RACK_ENV']
 
 
@@ -137,8 +139,10 @@ SMS = "SMS"
 
    			elsif order == LAST
    				return LAST_WAIT
+   			
+   			elsif order == NO_WAIT
+   				return 0
    			end
-
    		else 
    			puts "ERROR: Invalid ENV mode!: #{@@mode}"
 		end
@@ -547,6 +551,31 @@ SMS = "SMS"
 
 			end
 	end
+
+
+
+	def self.new_just_mms_no_wait(mms_array, user_phone)
+
+		#handle just a single, String mms_url
+		if mms_array.class == String
+			mms_array = [mms_array]
+		end
+
+
+		@user = User.find_by(phone: user_phone)
+
+			mms_array.each_with_index do |mms, index|
+
+
+				if index + 1 != mms_array.length
+					mmsSend(mms, user_phone, NORMAL)
+		    	else
+					mmsSend(mms, user_phone, NO_WAIT)
+				end
+
+			end
+	end
+
 
 
 

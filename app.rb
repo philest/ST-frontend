@@ -248,7 +248,7 @@ helpers do
 		  	Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
 
 
-		elsif params[:Body].casecmp("STOP NOW") == 0 #STOP option
+		elsif params[:Body].casecmp("STOP NOW") == 0 || params[:Body].casecmp("STOP") == 0#STOP option
 			
 
 			if MODE == PRO

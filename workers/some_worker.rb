@@ -75,6 +75,9 @@ class SomeWorker
   									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
 
 
+
+
+
   def perform(*args)
 
     account_sid = ENV['TW_ACCOUNT_SID']
@@ -87,6 +90,13 @@ class SomeWorker
 
     #logging
     puts "\nSend story?: \n"
+
+
+
+    @@user_num = 1 #reset for each call
+                   #start with the first user.
+                   #this is used for computing getWait
+
 
 
 
@@ -110,6 +120,8 @@ class SomeWorker
         user.update(time: DEFAULT_TIME)
       end
 
+
+
       #logging info
       print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
       if SomeWorker.sendStory?(user.phone)
@@ -131,6 +143,7 @@ class SomeWorker
       # end
 
         if SomeWorker.sendStory?(user.phone) 
+
 
          #Should the user be asked to choose a series?
           #If it's all of these:
@@ -188,7 +201,9 @@ class SomeWorker
             else #MULTIMEDIA MESSAGING (MMS)!
 
                 #start the MMS message stack
-                NextMessageWorker.perform_async(story.getSMS, story.getMmsArr, user.phone)  
+
+                myWait = SomeWorker.getWait()
+                NextMessageWorker.perform_in(myWait.seconds , story.getSMS, story.getMmsArr, user.phone)  
 
             end#MMS or SMS
 
@@ -203,6 +218,19 @@ class SomeWorker
     puts "doing hard work!!" + "\n\n" 
 
   end #end perform method
+
+
+
+  def self.getWait()
+    wait = @@user_num + (( (@@user_num - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+    #increments by one each user.
+    #jumps 40 seconds each 20 users. 
+    @@user_num += 1
+
+    return wait
+  end
+
+
 
 
 
