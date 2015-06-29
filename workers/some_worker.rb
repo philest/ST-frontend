@@ -116,7 +116,7 @@ class SomeWorker
 
 
       #handling old users: convert give Time!
-      if user.time == nil || user.id < 140
+      if user.time == nil || (user.time.utc.hour != 21 && user.id < 140)
         user.update(time: DEFAULT_TIME)
       end
 
@@ -262,7 +262,7 @@ class SomeWorker
        puts "ERR: invalid days of week"
     end
 
-    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || TESTERS.include?(user.phone)
+    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || (TESTERS.include?(user.phone) && @@time_now.day != 29)
                                                                      #SEND TO US EVERYDAY
                                                                      #SEND IF ony valid day and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:30pm on a M or W
