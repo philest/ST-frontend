@@ -116,7 +116,7 @@ class SomeWorker
 
 
       #handling old users: convert give Time!
-      if user.time == nil || user.id < 35
+      if user.time == nil || user.id < 140
         user.update(time: DEFAULT_TIME)
       end
 
