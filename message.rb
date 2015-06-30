@@ -156,13 +156,11 @@ In dog language, it’s \"Happy Birthday\" that they’re saying!")
 
 	bruceMoose.push Message.new(["http://i.imgur.com/hnIkGzH.jpg"],
 	"StoryTime: Well... we were hoping you chose Charlie. We haven't illustrated Bruce yet. Enjoy this for now!",
-	"Bruce is the best trumpet player I know. You should hear Bruce blast and blow.\n\nHis cheeks puff out like two balloons. Bruce and the band know hundreds of tunes.\n\nBut there’s a sound that’s even more grand! It’s his mom in the crowd clapping her hands."
-	)
+	"Bruce is the best trumpet player I know. You should hear Bruce blast and blow.\n\nHis cheeks puff out like two balloons. Bruce and the band know hundreds of tunes.\n\nBut there’s a sound that’s even more grand! It’s his mom in the crowd clapping her hands.")
 
 	bruceMoose.push Message.new(["http://i.imgur.com/QiKUiAv.jpg"],
 	"StoryTime: This is embarassing... here's another unillustrated Bruce poem!\n\n...we warned you this was testing!",
-	"Bruce the Moose is on the loose. He\'s riding in a train\'s caboose.\n\nTo escape the Canada cold. He took everything he could hold.\n\nHe\'s bringing his trumpet and his Mama too. Bruce yells, \"To the warm Miami zoo!\""
-	)
+	"Bruce the Moose is on the loose. He\'s riding in a train\'s caboose.\n\nTo escape the Canada cold. He took everything he could hold.\n\nHe\'s bringing his trumpet and his Mama too. Bruce yells, \"To the warm Miami zoo!\"")
 
 
 

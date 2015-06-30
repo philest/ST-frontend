@@ -312,7 +312,6 @@ helpers do
 					else
 						#TODO Refactor this!!!
 
-						Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone)
 
 						#because not IN nextMessageWorker...
 						 @user.update(next_index_in_series: (@user.next_index_in_series + 1))
@@ -329,6 +328,9 @@ helpers do
 				      #total message count
 				      @user.update(total_messages: @user.total_messages + 1)
 
+
+
+						Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone)
 				    end
 
 				else # just SMS
