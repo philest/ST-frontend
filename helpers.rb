@@ -263,7 +263,6 @@ SMS = "SMS"
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
 		      m.Media mms_url
-		      m.Body body
 		    end
 		  end
 		  twiml.text
