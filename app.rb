@@ -76,6 +76,7 @@ get '/three' do
 
 	arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
 	twiml = Twilio::TwiML::Response.new do |r|
+
 	    r.Message do |m|
 	      m.Media arr[0]
 	      m.Media arr[1]
@@ -84,6 +85,7 @@ get '/three' do
 	  end
 	  twiml.text
 end
+
 
 get '/three_send' do 
 		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
@@ -302,12 +304,34 @@ helpers do
 			    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
 
-
 				if @user.mms == true
-					NextMessageWorker.perform_in(17.seconds, story.getSMS, story.getMmsArr[1..-1], @user.phone)
 
-					Helpers.mms(story.getMmsArr[0], @user.phone)
-				else
+					if story.getMmsArr.length > 1 #don't need to send stack if it's a one-pager.
+						NextMessageWorker.perform_in(17.seconds, story.getSMS, story.getMmsArr[1..-1], @user.phone)
+						Helpers.mms(story.getMmsArr[0], @user.phone)
+					else
+						#TODO Refactor this!!!
+
+						Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone)
+
+						#because not IN nextMessageWorker...
+						 @user.update(next_index_in_series: (@user.next_index_in_series + 1))
+				        #exit series if time's up
+				        if @user.next_index_in_series == messageSeriesHash[@user.series_choice + @user.series_number.to_s].length
+
+				          ##return variable to nil: (nil, which means "you're asking the wrong question-- I'm not in a series")
+				          @user.update(next_index_in_series: nil)
+				          @user.update(series_choice: nil)
+				          #get ready for next series
+				          @user.update(series_number: @user.series_number + 1)
+				        end
+
+				      #total message count
+				      @user.update(total_messages: @user.total_messages + 1)
+
+				    end
+
+				else # just SMS
 			        Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)      
 				end
 

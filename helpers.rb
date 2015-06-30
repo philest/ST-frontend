@@ -158,7 +158,7 @@ SMS = "SMS"
 
    		elsif @@mode == PRO || @@mode == TEST_CRED
    			
-   			smsRespondHelper(body)
+   			Helpers.smsRespondHelper(body)
    		end
 
 	end
@@ -168,10 +168,28 @@ SMS = "SMS"
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 		elsif @@mode == PRO
-			mmsRespondHelper(mms_url)
+			Helpers.mmsRespondHelper(mms_url)
 		end
 
    	end
+
+   	def self.fullRespond(body, mms_url, order)
+
+
+   		if mms_url.class == Array
+   			mms_url = mms_url.shift
+   		end
+
+   		if @@mode == TEST || @@mode == TEST_CRED
+			@@twiml_mms.push mms_url
+			@@twiml_sms.push body
+		elsif @@mode == PRO
+			Helpers.fullRespondHelper(body, mms_url)
+		end
+
+	end
+
+
 
    	def self.smsSend(body, user_phone, order)
 		if @@mode == TEST || @@mode == TEST_CRED
@@ -181,10 +199,10 @@ SMS = "SMS"
 			#turn on testcred
 			Helpers.testCred
 			#simulate actual REST api
-			smsSendHelper(body, user_phone)
+			Helpers.smsSendHelper(body, user_phone)
 
 		elsif @@mode == PRO
-			smsSendHelper(body, user_phone)
+			Helpers.smsSendHelper(body, user_phone)
 		end
 
    		sleep Helpers.getSleep(order, SMS)
@@ -195,7 +213,7 @@ SMS = "SMS"
 			@@twiml_mms.push mms_url
 			puts "Sent #{mms_url[18, mms_url.length]}"
 		elsif @@mode == PRO
-			mmsSendHelper(mms_url, user_phone)
+			Helpers.mmsSendHelper(mms_url, user_phone)
 		end
 
    		sleep Helpers.getSleep(order, MMS)
@@ -214,7 +232,7 @@ SMS = "SMS"
 			puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
 
 		elsif @@mode == PRO
-			fullSendHelper(body, mms_url, user_phone)
+			Helpers.fullSendHelper(body, mms_url, user_phone)
 		end
 
    		sleep Helpers.getSleep(order, MMS)
@@ -240,6 +258,20 @@ SMS = "SMS"
 		  end
 		  twiml.text
 	end
+
+	def self.fullRespondHelper(body, mms_url)
+		  twiml = Twilio::TwiML::Response.new do |r|
+		    r.Message do |m|
+		      m.Media mms_url
+		      m.Body body
+		    end
+		  end
+		  twiml.text
+	end
+
+
+
+
 
 	def self.smsSendHelper(body, user_phone)
 
@@ -308,13 +340,25 @@ SMS = "SMS"
 
 	#ONLY A RESPONSE
 
+	def self.text_and_mms(body, mms_url, user_phone)
+
+
+		@user = User.find_by(phone: user_phone)
+
+    	puts "Sent full to #{@user.phone}}" 
+
+    	Helpers.fullRespond(body, mms_url, LAST)
+    end
+
+
+
 	def self.mms(mms, user_phone)
 
     	@user = User.find_by(phone: user_phone)
 
     	puts "Sent to #{@user.phone}: #{mms[18, mms.length]}" 
 
-    	mmsRespond(mms, LAST)
+    	Helpers.mmsRespond(mms, LAST)
 
 	end
 
@@ -347,7 +391,7 @@ SMS = "SMS"
 
 		puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
 		
-		smsRespond(msg, LAST)
+		Helpers.smsRespond(msg, LAST)
 
 	end  
 
@@ -367,9 +411,9 @@ SMS = "SMS"
         sprintArr.each_with_index do |text, index|  
 
 			if index + 1 != sprintArr.length
-        		smsSend(text, user_phone, NORMAL)
+        		Helpers.smsSend(text, user_phone, NORMAL)
 	    	else
-        		smsSend(text, user_phone, LAST)
+        		Helpers.smsSend(text, user_phone, LAST)
 			end
 
 			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
@@ -389,9 +433,9 @@ SMS = "SMS"
         sprintArr.each_with_index do |text, index|  
 
 			if index + 1 != sprintArr.length
-        		smsSend(text, user_phone, NORMAL)
+        		Helpers.smsSend(text, user_phone, NORMAL)
 	    	else
-        		smsSend(text, user_phone, NO_WAIT)
+        		Helpers.smsSend(text, user_phone, NO_WAIT)
 			end
 
 			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
@@ -415,7 +459,7 @@ SMS = "SMS"
 
 			mms_array.each_with_index do |mms_url, index|
 					
-					mmsSend(mms_url, user_phone, NORMAL)
+					Helpers.mmsSend(mms_url, user_phone, NORMAL)
 		     	 	 #for all, because text follows
 			end
 
@@ -427,11 +471,11 @@ SMS = "SMS"
 
 				if index + 1 == mms_array.length #last image comes w/ SMS
 				
-					fullSend(sms, mms, user_phone, LAST)
+					Helpers.fullSend(sms, mms, user_phone, LAST)
 
 				else
 
-					mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone, NORMAL)
 
 				end
 
@@ -458,9 +502,9 @@ SMS = "SMS"
 			mms_array.each_with_index do |mms_url, index|
 
 				if index + 1 != mms_array.length
-				mmsSend(mms_url, user_phone, NORMAL)
+				Helpers.mmsSend(mms_url, user_phone, NORMAL)
 		    	else
-				mmsSend(mms_url, user_phone, LAST)
+				Helpers.mmsSend(mms_url, user_phone, LAST)
 				end
 
 			end
@@ -468,18 +512,18 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			smsSend(first_sms, user_phone, NORMAL)
+			Helpers.smsSend(first_sms, user_phone, NORMAL)
 
-			mms_array.each_with_index do |mms_url, index|
+			Helpers.mms_array.each_with_index do |mms_url, index|
 
 
 				if index + 1 == mms_array.length #send sms with mms on last story
 
-					fullSend(last_sms, mms_url, user_phone, LAST)
+					Helpers.fullSend(last_sms, mms_url, user_phone, LAST)
 
 				else
 
-					mmsSend(mms_url, user_phone, NORMAL)
+					Helpers.mmsSend(mms_url, user_phone, NORMAL)
 
 				end
 
@@ -516,14 +560,14 @@ SMS = "SMS"
 
 			mms_array.each_with_index do |mms, index|
 
-				mmsSend(mms, user_phone)
+				Helpers.mmsSend(mms, user_phone)
 
 				if index + 1 != mms_array.length
 
-					mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone, NORMAL)
 
 		    	else
-					mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone, LAST)
 				end
 
 			end
@@ -531,14 +575,14 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			smsSend(sms, user_phone, NORMAL)
+			Helpers.smsSend(sms, user_phone, NORMAL)
 
 			mms_array.each_with_index do |mms, index|
 			
 				if index + 1 != mms_array.length
-					mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone, NORMAL)
 		    	else
-					mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone, LAST)
 				end
 
 			end
@@ -567,9 +611,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone, NORMAL)
 		    	else
-					mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone, LAST)
 				end
 
 			end
@@ -591,9 +635,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone, NORMAL)
 		    	else
-					mmsSend(mms, user_phone, NO_WAIT)
+					Helpers.mmsSend(mms, user_phone, NO_WAIT)
 				end
 
 			end
@@ -621,7 +665,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			smsSend(msg, user_phone, LAST)
+			Helpers.smsSend(msg, user_phone, LAST)
 
 	 	end
 
@@ -645,7 +689,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			smsSend(msg, user_phone, NO_WAIT)
+			Helpers.smsSend(msg, user_phone, NO_WAIT)
 
 	 	end
 
@@ -660,9 +704,9 @@ SMS = "SMS"
 		smsArr.each_with_index do |sms, index|
 
 				if index + 1 != smsArr.length
-					smsSend(sms, user_phone, NORMAL)
+					Helpers.smsSend(sms, user_phone, NORMAL)
 		    	else
-					smsSend(sms, user_phone, LAST)
+					Helpers.smsSend(sms, user_phone, LAST)
 				end
  		end
 

@@ -429,6 +429,42 @@ describe 'The StoryTime App' do
   end
 
 
+    describe "Full Respond Helper" do
+
+      before(:each) do
+        User.create(phone: "+15612125833", carrier: "ATT")
+        @user = User.find_by_phone "+15612125833"
+      end
+
+      it "properly fullResponds" do
+        @user.reload
+
+        Helpers.fullRespond("Here's the SMS part!", ["imgur:://http: IMAGE 1"], "last")
+        expect(Helpers.getSMSarr).to eq ["Here's the SMS part!"]
+        expect(Helpers.getMMSarr).to eq ["imgur:://http: IMAGE 1"]
+
+        puts Helpers.getSMSarr
+        puts Helpers.getMMSarr
+
+      end
+
+      it "properly responds through wrapper (fullrespond)" do
+        Helpers.text_and_mms("BODY!", "imgur:://http lastest Image", "+15612125833")
+
+        expect(Helpers.getSMSarr).to eq ["BODY!"]
+        expect(Helpers.getMMSarr).to eq ["imgur:://http lastest Image"]
+
+        puts Helpers.getSMSarr
+        puts Helpers.getMMSarr
+
+      end
+
+
+    end
+
+
+
+
 
 
 

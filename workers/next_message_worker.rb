@@ -35,7 +35,11 @@ class NextMessageWorker
   	messageSeriesHash = MessageSeries.getMessageSeriesHash
 
 
-    if mms_arr.length == 1#if last MMS, send with SMS
+    if mms_arr.empty? 
+
+      puts "Something Broke: This shouldn't ever be empty."
+
+    elsif mms_arr.length == 1#if last MMS, send with SMS
   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
   		puts "finished the message stack: #{@user.phone}"
 
