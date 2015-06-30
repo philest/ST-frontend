@@ -2,7 +2,7 @@ module Text
 
 HELP = "HELP NOW"
 STOP = "STOP"
-TEXT = "TEXT"
+TEXT_CMD = "TEXT"
 
 
 RESUBSCRIBE_SHORT = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."

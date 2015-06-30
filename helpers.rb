@@ -380,6 +380,29 @@ SMS = "SMS"
 	end
 
 
+	def self.new_sprint_long_sms_no_wait(long_sms, user_phone)
+
+		@user = User.find_by(phone: user_phone)
+
+		sprintArr = Sprint.chop(long_sms)
+
+        sprintArr.each_with_index do |text, index|  
+
+			if index + 1 != sprintArr.length
+        		smsSend(text, user_phone, NORMAL)
+	    	else
+        		smsSend(text, user_phone, NO_WAIT)
+			end
+
+			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
+
+
+        end
+
+	end
+
+
+
 
 
 
@@ -589,7 +612,6 @@ SMS = "SMS"
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
 			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
-
 		
 		else
 
@@ -600,6 +622,30 @@ SMS = "SMS"
 			end 
 
 			smsSend(msg, user_phone, LAST)
+
+	 	end
+
+	end  
+
+	#doesn't sleep; relies on bkg worker async call in X seconds. 
+	def self.new_text_no_wait(normalSMS, sprintSMS, user_phone)
+		
+		@user = User.find_by(phone: user_phone)
+
+		#if sprint
+		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+
+			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+
+		else
+
+			if @user == nil || @user.carrier == SPRINT
+				msg = sprintSMS 
+			else #not Sprint
+				msg = normalSMS 
+			end 
+
+			smsSend(msg, user_phone, NO_WAIT)
 
 	 	end
 

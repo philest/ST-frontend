@@ -192,7 +192,7 @@ helpers do
 
 		elsif @user == nil
 
-			Helpers.text(Text::Text::NO_SIGNUP_MATCH, Text::Text::NO_SIGNUP_MATCH, params[:From])
+			Helpers.text(Text::NO_SIGNUP_MATCH, Text::NO_SIGNUP_MATCH, params[:From])
 
 		elsif @user.sample == true
 
@@ -262,7 +262,7 @@ helpers do
 			@user.update(subscribed: false)
 			Helpers.text(Text::STOPSMS, Text::STOPSMS, @user.phone)
 
-		elsif params[:Body].casecmp(Text::TEXT) == 0 #TEXT option		
+		elsif params[:Body].casecmp(Text::TEXT_CMD) == 0 #TEXT option		
 
 			#change mms to sms
 			@user.update(mms: false)

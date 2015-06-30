@@ -12,6 +12,9 @@ require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../workers/first_text_worker'
 
+require_relative '../workers/some_worker'
+require_relative '../workers/new_text_worker'
+
 require_relative '../constants'
 
 SLEEP = (1.0 / 16.0) 
@@ -42,6 +45,7 @@ describe 'SomeWorker' do
     before(:each) do
         SomeWorker.jobs.clear
         NextMessageWorker.jobs.clear
+        NewTextWorker.jobs.clear
         FirstTextWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
@@ -569,6 +573,8 @@ time = Time.now.utc
       expect(@user.total_messages).to eq(1)
 
 
+      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -590,6 +596,8 @@ time = Time.now.utc
     smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
 
 
+    NewTextWorker.drain
+
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -607,6 +615,8 @@ time = Time.now.utc
 
 
       NextMessageWorker.drain
+          NewTextWorker.drain
+
      
       @user.reload 
       expect(@user.total_messages).to eq(2)
@@ -633,7 +643,13 @@ time = Time.now.utc
       expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
 
+
     #NO CHANGE
+
+
+    NewTextWorker.drain
+
+
 
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -651,6 +667,9 @@ time = Time.now.utc
       @user.reload 
 
 
+    NewTextWorker.drain
+
+
       #They're asked for their story choice during storyTime.
       smsSoFar.push SomeWorker::SERIES_CHOICES[0]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -658,6 +677,8 @@ time = Time.now.utc
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
       expect(@user.next_index_in_series).to eq(0)
+
+      
 
       get 'test/+15612129000/p/ATT'
       @user.reload
@@ -700,6 +721,8 @@ time = Time.now.utc
       end
       @user.reload
       
+      NewTextWorker.drain
+
       NextMessageWorker.drain
 
       smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
@@ -715,6 +738,9 @@ time = Time.now.utc
       end
       @user.reload
 
+    NewTextWorker.drain
+
+
       expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
 
       #EXPECT A DAYLATE MSG when don't respond
@@ -727,6 +753,9 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+          NewTextWorker.drain
+
 
       smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
@@ -748,6 +777,10 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+    NewTextWorker.drain
+
+
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
@@ -760,6 +793,10 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+    NewTextWorker.drain
+
+
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
@@ -771,6 +808,9 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+          NewTextWorker.drain
+
 
 
       smsSoFar.push SomeWorker::DROPPED
@@ -801,7 +841,10 @@ time = Time.now.utc
       @user.reload 
 
       NextMessageWorker.drain
+      NewTextWorker.drain
+
       @user.reload 
+
 
       expect(@user.series_number).to eq(0)
 
@@ -813,6 +856,9 @@ time = Time.now.utc
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
       expect(@user.next_index_in_series).to eq(0)
+
+      NewTextWorker.drain
+
 
       get 'test/+15002125833/p/ATT'
       @user.reload
@@ -867,9 +913,9 @@ time = Time.now.utc
 
 
 
- it "properly signs back up after being dropped, then STORY-responding" do
+ it "properly sends SPRINT phones story-choices that are over 160+ in many chunks" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1, carrier: SPRINT_CARRIER) #ready to receive story choice
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -880,6 +926,9 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+      NewTextWorker.drain
+
       
       smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -909,6 +958,68 @@ time = Time.now.utc
 
       smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
+    NewTextWorker.drain
+
+
+      expect(Helpers.getSMSarr.last).to_not eq(smsSoFar.last)
+
+      puts Helpers.getSMSarr
+  end
+
+
+
+
+
+
+
+ it "properly signs back up after being dropped, then STORY-responding" do
+      Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
+
+      Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_TIME
+      end
+      @user.reload
+
+      NewTextWorker.drain
+
+      
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
+
+      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_TIME
+      end
+      @user.reload
+
+      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+
+      #EXPECT A DAYLATE MSG when don't respond
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
+
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_TIME
+      end
+      @user.reload
+
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
+
+    NewTextWorker.drain
+
+
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
@@ -926,6 +1037,9 @@ time = Time.now.utc
         SomeWorker.drain
         sleep SLEEP_TIME
       end
+    NewTextWorker.drain
+
+
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -938,6 +1052,9 @@ time = Time.now.utc
         SomeWorker.drain
         sleep SLEEP_TIME
       end
+
+          NewTextWorker.drain
+
       @user.reload
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -950,6 +1067,8 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload
+
+    NewTextWorker.drain
 
 
       smsSoFar.push SomeWorker::DROPPED
@@ -992,6 +1111,8 @@ time = Time.now.utc
       end
       @user.reload
       
+            NewTextWorker.drain
+
       smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -1018,12 +1139,18 @@ time = Time.now.utc
       end
       @user.reload
 
+          NewTextWorker.drain
+
+
       smsSoFar.push SomeWorker::DAY_LATE + " "+ SomeWorker::NO_GREET_CHOICES[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
       expect(@user.next_index_in_series).to eq(999)
+
+       NewTextWorker.drain
+
 
       #properly sends out story WHEN they respond
       get 'test/+15615422025/p/ATT'
@@ -1063,21 +1190,21 @@ time = Time.now.utc
 
 
       (1..20).each do |num|
-       expect(wait = SomeWorker.getWait()).to eq(num)
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num)
        puts wait
       end
 
       (21..40).each do |num|
 
 
-       expect(wait = SomeWorker.getWait()).to eq(num + Helpers::MMS_WAIT*2 )
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*2 )
        expect(wait).to eq(num + 40 )
        puts wait
 
       end
 
       (41..60).each do |num|
-       expect(wait = SomeWorker.getWait()).to eq(num + Helpers::MMS_WAIT*4 )
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*4 )
        expect(wait).to eq(num + 80 )
        puts wait
       end
@@ -1088,8 +1215,8 @@ time = Time.now.utc
 
       time_sent = []
 
-      (1..400).each do |num|
-       expect(time_sent.include? (wait = SomeWorker.getWait)).to be false
+      (1..800).each do |num|
+       expect(time_sent.include? (wait = SomeWorker.getWait(SomeWorker::STORY))).to be false
         time_sent.push wait
 
         expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
@@ -1105,6 +1232,78 @@ time = Time.now.utc
 
     end
 
+
+
+    it "properly assigns the first 10 then 20-300 peeps" do
+      
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+
+      SomeWorker.perform_async
+      SomeWorker.drain
+
+
+      (1..20).each do |num|
+       expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num )
+       puts wait
+      end
+
+      (1..20).each do |num|
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(Helpers::MMS_WAIT*2 + num + 20)
+       puts wait
+      end
+
+      (21..40).each do |num|
+        expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(20 + num + Helpers::MMS_WAIT*4) 
+        puts wait
+      end
+
+      (21..40).each do |num|
+        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(40 + num + Helpers::MMS_WAIT*6) 
+        puts wait
+      end
+
+
+      # (41..60).each do |num|
+      #  expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num + Helpers::MMS_WAIT*4 )
+      #  expect(wait).to eq(num + 80 )
+      #  puts wait
+      # end
+
+
+      SomeWorker.perform_async
+      SomeWorker.drain
+
+      time_sent = []
+
+      puts '400 trial'
+
+      (1..400).each do |num|
+
+        if num % 2 == 0
+          type = SomeWorker::STORY
+        else
+          type = SomeWorker::TEXT
+        end
+
+
+       expect(time_sent.include? (wait = SomeWorker.getWait(type))).to be false
+        time_sent.push wait
+
+        if type == SomeWorker::STORY
+          expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
+          time_sent.push wait + Helpers::MMS_WAIT
+
+          expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
+          time_sent.push wait + Helpers::MMS_WAIT*2
+        end
+
+        puts wait
+      end
+
+      puts time_sent.sort
+
+
+    end
 
 
 

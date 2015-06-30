@@ -9,7 +9,6 @@ require_relative '../helpers'
 require_relative '../constants'
 
 
-
 class NextMessageWorker
   include Sidekiq::Worker
   include Text
@@ -36,7 +35,7 @@ class NextMessageWorker
   	messageSeriesHash = MessageSeries.getMessageSeriesHash
 
 
-  	if mms_arr.length == 1#if last MMS, send with SMS
+    if mms_arr.length == 1#if last MMS, send with SMS
   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
   		puts "finished the message stack: #{@user.phone}"
 
@@ -70,7 +69,7 @@ class NextMessageWorker
   	else #not last MMS...
   		Helpers.new_just_mms_no_wait(mms_arr.shift, @user.phone)
   		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
-  	end
+    end
 
 
 

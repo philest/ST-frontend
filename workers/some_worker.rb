@@ -14,6 +14,9 @@ require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../helpers'
 require_relative './next_message_worker'
+require_relative './new_text_worker'
+
+
 
 
 class SomeWorker
@@ -48,6 +51,12 @@ class SomeWorker
 
 
   DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
+
+ #set flags for getWait
+ STORY = 1
+ TEXT = 2
+
+
 
 
   MODE = ENV['RACK_ENV']
@@ -93,9 +102,12 @@ class SomeWorker
 
 
 
-    @@user_num = 1 #reset for each call
+    @@user_num_story = 1 #reset for each call
                    #start with the first user.
-                   #this is used for computing getWait
+                   #this is used for computing getWait (updated for each STORY)
+
+    @@user_num_text = 0 #this is used for computing getWait (updated for each TEXT)
+
 
 
 
@@ -130,17 +142,6 @@ class SomeWorker
         puts 'No.'
       end
 
-      #UPDATE time
-
-
-      #UPDATE Birthdate! 
-      # if user.set_birthdate == false && (SomeWorker.cleanSysTime == UPDATE_TIME || SomeWorker.cleanSysTime == UPDATE_TIME_2) && user.total_messages == 5 #Customize time 
-
-      #   user.update(set_birthdate: true)
-
-      #   Helpers.new_text(mode, BIRTHDATE_UPDATE, BIRTHDATE_UPDATE, user.phone)
-        
-      # end
 
         if SomeWorker.sendStory?(user.phone) 
 
@@ -162,20 +163,25 @@ class SomeWorker
             user.update(awaiting_choice: true)
             #choose a series
 
-            Helpers.new_text(SERIES_CHOICES[user.series_number], SERIES_CHOICES[user.series_number], user.phone)
+            myWait = SomeWorker.getWait(TEXT)
+            NewTextWorker.perform_in(myWait.seconds, SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
             
             msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
 
-            Helpers.new_text(msg, msg, user.phone)
+            myWait = SomeWorker.getWait(TEXT)
+            NewTextWorker.perform_in(myWait.seconds, msg, user.phone)
+
             user.update(next_index_in_series: 999)  
 
           elsif user.next_index_in_series == 999 #the second time they haven't responded
 
              user.update(subscribed: false)
              user.update(awaiting_choice: false)
-             Helpers.new_text(DROPPED, DROPPED, user.phone)
+
+            myWait = SomeWorker.getWait(TEXT)
+            NewTextWorker.perform_in(myWait.seconds, DROPPED, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -196,14 +202,15 @@ class SomeWorker
             #JUST SMS MESSAGING!
             if user.mms == false
 
-                Helpers.new_text(story.getPoemSMS, story.getPoemSMS, user.phone)
+                myWait = SomeWorker.getWait(TEXT)
+                NewTextWorker.perform_in(myWait.seconds, DROPPED, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 
                 #start the MMS message stack
 
-                myWait = SomeWorker.getWait()
-                NextMessageWorker.perform_in(myWait.seconds , story.getSMS, story.getMmsArr, user.phone)  
+                myWait = SomeWorker.getWait(STORY)
+                NextMessageWorker.perform_in(myWait.seconds, story.getSMS, story.getMmsArr, user.phone)  
 
             end#MMS or SMS
 
@@ -221,13 +228,24 @@ class SomeWorker
 
 
 
-  def self.getWait()
-    wait = @@user_num + (( (@@user_num - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+  #gets and updates wait, for sending Stories AND Texts (choose your story, notify lateness, etc.)
+  #ensures that no more than one message per second is sent.
+  def self.getWait(type)
+
+      total_first_msgs = @@user_num_story + @@user_num_text
+
+      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+
     #increments by one each user.
     #jumps 40 seconds each 20 users. 
-    @@user_num += 1
+    if type == STORY
+      @@user_num_story += 1
+    elsif type == TEXT
+      @@user_num_text += 1 
+    end      
 
     return wait
+
   end
 
 
