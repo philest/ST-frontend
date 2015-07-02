@@ -72,36 +72,17 @@ get '/called' do
   end.text
 end
 
-# get '/three' do 
+get '/time_test' do 
 
-# 	arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
-# 	twiml = Twilio::TwiML::Response.new do |r|
+	require_relative './workers/time_test'
+		myWait = 1
+		(1..25).each do |num|
+	        myWait += 1
+	        TimeTest.perform_in(myWait.seconds, {'start_time' => Time.now})
+	    end
+	    puts "done"
 
-# 	    r.Message do |m|
-# 	      m.Media arr[0]
-# 	      m.Media arr[1]
-# 		  m.Media arr[2]
-# 	    end
-# 	  end
-# 	  twiml.text
-# end
-
-
-# get '/three_send' do 
-# 		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
-   		
-# 		    account_sid = ENV['TW_ACCOUNT_SID']
-# 		    auth_token = ENV['TW_AUTH_TOKEN']
-# 			@client = Twilio::REST::Client.new account_sid, auth_token
-			
-# 			pe = "+15612125831"
-# 			jz = "+15619008225"
-
-#           message = @client.account.messages.create(
-#             :media_url => arr,
-#             :to => jz,     # Replace with your phone number
-#             :from => "+12032023505")   # Replace with your Twilio number
-# end
+end
 
 
 
@@ -109,7 +90,6 @@ end
 get '/sms' do
 	workflow
 end
-
 
 # mock entrypoint for testing
 get '/test/:From/:Body/:Carrier' do
