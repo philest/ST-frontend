@@ -6,7 +6,7 @@ require 'twilio-ruby'
 require 'sidekiq'
 require 'sidetiq'
 require 'redis'
-
+require 'sidekiq/web'
 require 'time'
 
 #REDIS initialization
@@ -72,36 +72,36 @@ get '/called' do
   end.text
 end
 
-get '/three' do 
+# get '/three' do 
 
-	arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
-	twiml = Twilio::TwiML::Response.new do |r|
+# 	arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
+# 	twiml = Twilio::TwiML::Response.new do |r|
 
-	    r.Message do |m|
-	      m.Media arr[0]
-	      m.Media arr[1]
-		  m.Media arr[2]
-	    end
-	  end
-	  twiml.text
-end
+# 	    r.Message do |m|
+# 	      m.Media arr[0]
+# 	      m.Media arr[1]
+# 		  m.Media arr[2]
+# 	    end
+# 	  end
+# 	  twiml.text
+# end
 
 
-get '/three_send' do 
-		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
+# get '/three_send' do 
+# 		arr = ["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/tNSDIZf.jpg"]
    		
-		    account_sid = ENV['TW_ACCOUNT_SID']
-		    auth_token = ENV['TW_AUTH_TOKEN']
-			@client = Twilio::REST::Client.new account_sid, auth_token
+# 		    account_sid = ENV['TW_ACCOUNT_SID']
+# 		    auth_token = ENV['TW_AUTH_TOKEN']
+# 			@client = Twilio::REST::Client.new account_sid, auth_token
 			
-			pe = "+15612125831"
-			jz = "+15619008225"
+# 			pe = "+15612125831"
+# 			jz = "+15619008225"
 
-          message = @client.account.messages.create(
-            :media_url => arr,
-            :to => jz,     # Replace with your phone number
-            :from => "+12032023505")   # Replace with your Twilio number
-end
+#           message = @client.account.messages.create(
+#             :media_url => arr,
+#             :to => jz,     # Replace with your phone number
+#             :from => "+12032023505")   # Replace with your Twilio number
+# end
 
 
 

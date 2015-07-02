@@ -133,6 +133,8 @@ describe 'SomeWorker, with sleep,' do
         SomeWorker.perform_async
         SomeWorker.drain
 
+
+
         NextMessageWorker.drain
 
       users.each do |user|
@@ -151,6 +153,8 @@ describe 'SomeWorker, with sleep,' do
       expect(Helpers.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
       expect(Helpers.getSMSarr.empty?).to be true
     end
+
+
 
 
     it "properly walks through Bruce" do
@@ -302,6 +306,15 @@ describe 'SomeWorker, with sleep,' do
 
 
 
+
+
+
+
+
+
+
+
+
     # it "blocks properly: sending the second message to the 1st person BEFORE the 1st message to 21st person." do
     #         Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
     #   users = []
@@ -352,6 +365,76 @@ describe 'SomeWorker, with sleep,' do
     # end
 
     
+
+    #It works for 
+    it "properly sends out messages to 10 users (sleep!)" do
+    Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+    users = []
+
+    Helpers.testSleepOff
+
+    (1..20).each do |number|
+      get 'test/'+number.to_s+"/STORY/ATT"#each signs up
+      user = User.find_by(phone: number)
+
+      NextMessageWorker.drain
+      user.reload
+
+      expect(user.total_messages).to eq(1)
+      expect(user.story_number).to eq(0)
+
+      expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
+                                      Text::FIRST_SMS])              
+      expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+
+      expect(user.total_messages).to eq 1
+
+      users.push user
+
+      @@twiml_sms = []
+      @@twiml_mms = []
+
+      #prime to get text choice
+      user.update(story_number: 1)
+
+    end
+
+
+    Helpers.testSleep
+
+    Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
+    # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
+
+
+
+      SomeWorker.perform_async
+      SomeWorker.drain
+
+
+
+      require 'pry'
+      binding.pry
+
+      NewTextWorker.drain
+
+      NextMessageWorker.drain
+
+binding.pry
+
+
+    users.each do |user|
+      user.reload
+      expect(user.total_messages).to eq(2)
+      expect(user.story_number).to eq(1)
+      puts " "+ user.phone + "passed"
+    end
+
+  end
+
+
+
+
+
 
 
 

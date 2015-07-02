@@ -100,6 +100,7 @@ class SomeWorker
     #logging
     puts "\nSend story?: \n"
 
+    @@times = []
 
 
     @@user_num_story = 1 #reset for each call
@@ -161,7 +162,12 @@ class SomeWorker
             user.update(awaiting_choice: true)
             #choose a series
 
+
+
             myWait = SomeWorker.getWait(TEXT)
+
+            SomeWorker.test_push_wait myWait
+
             NewTextWorker.perform_in(myWait.seconds, SERIES_CHOICES[user.series_number], user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
@@ -208,6 +214,10 @@ class SomeWorker
                 #start the MMS message stack
 
                 myWait = SomeWorker.getWait(STORY)
+
+            SomeWorker.test_push_wait myWait
+
+
                 NextMessageWorker.perform_in(myWait.seconds, story.getSMS, story.getMmsArr, user.phone)  
 
             end#MMS or SMS
@@ -247,6 +257,25 @@ class SomeWorker
   end
 
 
+
+
+  def self.test_get_wait()
+
+      total_first_msgs = @@user_num_story + @@user_num_text
+
+      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+
+      return wait
+  end
+
+  def self.test_push_wait(time) 
+    @@times.push time 
+  end
+
+
+  def self.test_get_wait_times()
+    return @@times
+  end
 
 
 
