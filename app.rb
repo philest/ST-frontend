@@ -285,6 +285,7 @@ helpers do
 				    end
 
 				else # just SMS
+			        NextMessageWorker.updateUser(@user.phone, story.getPoemSMS)
 			        Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)      
 				end
 
