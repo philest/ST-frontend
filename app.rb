@@ -72,19 +72,6 @@ get '/called' do
   end.text
 end
 
-get '/time_test' do 
-
-	require_relative './workers/time_test'
-		myWait = 1
-		(1..25).each do |num|
-	        myWait += 1
-	        TimeTest.perform_in(myWait.seconds, {'start_time' => Time.now})
-	    end
-	    puts "done"
-
-end
-
-
 
 # register an incoming SMS
 get '/sms' do
