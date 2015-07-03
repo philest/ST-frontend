@@ -95,6 +95,8 @@ get '/test_it' do
  	SomeWorker.perform_in(wait.seconds)
  end 
 
+end
+
 
 
 helpers do 
