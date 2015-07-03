@@ -84,19 +84,6 @@ get '/test/:From/:Body/:Carrier' do
 end
 
 
-get '/test_it' do 
-
- wait = 1 
-
- (1..45).each do 
-
- 	wait += 1 
-
- 	SomeWorker.perform_in(wait.seconds)
- end 
-
-end
-
 
 
 helpers do 
