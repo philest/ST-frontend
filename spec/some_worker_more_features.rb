@@ -373,9 +373,9 @@ describe 'SomeWorker, with sleep,' do
 
     Helpers.testSleepOff
 
-    (1..20).each do |number|
-      get 'test/'+number.to_s+"/STORY/ATT"#each signs up
-      user = User.find_by(phone: number)
+    (11..20).each do |number|
+      get 'test/'+"+156121258"+number.to_s+"/STORY/ATT"#each signs up
+      user = User.find_by(phone: "+156121258"+number.to_s)
 
       NextMessageWorker.drain
       user.reload
@@ -412,19 +412,16 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-      require 'pry'
-      binding.pry
 
       NewTextWorker.drain
 
       NextMessageWorker.drain
 
-binding.pry
 
 
     users.each do |user|
       user.reload
-      expect(user.total_messages).to eq(2)
+      expect(user.total_messages).to eq(1) #haven't responded
       expect(user.story_number).to eq(1)
       puts " "+ user.phone + "passed"
     end
