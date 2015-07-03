@@ -154,7 +154,7 @@ class SomeWorker
           #c) they're not in the middle of a series
 
 
-          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && (user.story_number + 1) % 3 == 0)) && user.next_index_in_series == nil)
+          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
             #get set for first in series
             user.update(next_index_in_series: 0)
@@ -165,14 +165,14 @@ class SomeWorker
 
             myWait = SomeWorker.getWait(TEXT)
 
-            NewTextWorker.perform_in(myWait.seconds, SERIES_CHOICES[user.series_number], user.phone)
+            NewTextWorker.perform_in(myWait.seconds, SERIES_CHOICES[user.series_number], NewTextWorker::NOT_STORY, user.phone)
 
           elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
             
             msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
 
             myWait = SomeWorker.getWait(TEXT)
-            NewTextWorker.perform_in(myWait.seconds, msg, user.phone)
+            NewTextWorker.perform_in(myWait.seconds, msg, NewTextWorker::NOT_STORY, user.phone)
 
             user.update(next_index_in_series: 999)  
 
@@ -182,7 +182,7 @@ class SomeWorker
              user.update(awaiting_choice: false)
 
             myWait = SomeWorker.getWait(TEXT)
-            NewTextWorker.perform_in(myWait.seconds, DROPPED, user.phone)
+            NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::NOT_STORY, user.phone)
 
           #send STORY or SERIES, but not if awaiting series response
           elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -204,7 +204,7 @@ class SomeWorker
             if user.mms == false
 
                 myWait = SomeWorker.getWait(TEXT)
-                NewTextWorker.perform_in(myWait.seconds, DROPPED, user.phone)
+                NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::STORY, user.phone)
 
             else #MULTIMEDIA MESSAGING (MMS)!
 

@@ -9,6 +9,12 @@ require_relative '../helpers'
 require_relative '../constants'
 require_relative '../sprint'
 
+require_relative './next_message_worker'
+
+STORY = "story"
+
+NOT_STORY  = "not story"
+
 
 class NewTextWorker
   include Sidekiq::Worker
@@ -24,7 +30,7 @@ class NewTextWorker
     sidekiq_options :queue => :critical
     sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
-  def perform(sms, user_phone)
+  def perform(sms, type, user_phone)
 
   	@user = User.find_by(phone: user_phone)
 
@@ -39,10 +45,15 @@ class NewTextWorker
   	if sms.class == Array && sms.length == 1 #transformed to Sprint array AND it's the last text
   		msg = sms.shift
   		Helpers.new_text_no_wait(msg, msg, @user.phone)
+
+      if type == STORY
+        NextMessageWorker.updateUser(@user.phone, sms) #update user info
+      end
+      
   	elsif sms.class == Array && sms.length > 1  #not the last text
   		msg = sms.shift
   		Helpers.new_text_no_wait(msg, msg, @user.phone)
-  		NewTextWorker.perform_in(Helpers::SMS_WAIT, sms, @user.phone)
+  		NewTextWorker.perform_in(Helpers::SMS_WAIT, sms, NOT_STORY, @user.phone)
   	end
 
 

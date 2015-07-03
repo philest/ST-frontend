@@ -36,21 +36,29 @@ class NextMessageWorker
     end
 
 
-  	# #testing
-  	# if ENV['RACK_ENV'] == 'test'
-  	# 	@user ||= User.create(phone: user_phone)
-  	# end
-
-  	messageSeriesHash = MessageSeries.getMessageSeriesHash
-
-
     if mms_arr.empty? 
-
-      puts "Something Broke: This shouldn't ever be empty."
+      puts "finished one-pic stack!"
+      NextMessageWorker.updateUser(@user.phone, sms)
 
     elsif mms_arr.length == 1#if last MMS, send with SMS
   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
   		puts "finished the message stack: #{@user.phone}"
+      NextMessageWorker.updateUser(@user.phone, sms)
+
+  	else #not last MMS...
+  		Helpers.new_just_mms_no_wait(mms_arr.shift, @user.phone)
+  		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
+    end
+
+
+  end
+
+  #updates what story, series, choice, total_message, or index User is on.
+  def self.updateUser(user_phone, sms)
+
+      @user = User.find_by(phone: user_phone)
+
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
 
       #updating story or series number after last part.
       #next_index_in_series == nil (or series_choice == nil?) means that you're not in a series
@@ -65,11 +73,13 @@ class NextMessageWorker
           @user.update(series_choice: nil)
           #get ready for next series
           @user.update(series_number: @user.series_number + 1)
+
+          @user.update(story_number: @user.story_number + 1) #update to get next story after finishing series
         end
 
       else
 
-        if sms != Text::FIRST_SMS
+        if sms != Text::FIRST_SMS #don't increment for this first story (sent on-signup)
         @user.update(story_number: @user.story_number + 1)
         end
         
@@ -77,15 +87,6 @@ class NextMessageWorker
 
       #total message count
       @user.update(total_messages: @user.total_messages + 1)
-
-
-  	else #not last MMS...
-  		Helpers.new_just_mms_no_wait(mms_arr.shift, @user.phone)
-  		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
-    end
-
-
-
   end
 
 
