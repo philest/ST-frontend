@@ -88,7 +88,7 @@ get '/test_it' do
 
  wait = 1 
 
- (1.45).each do 
+ (1..45).each do 
 
  	wait += 1 
 
