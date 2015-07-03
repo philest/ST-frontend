@@ -25,7 +25,6 @@ class SomeWorker
   
   sidekiq_options :queue => :default
 
-
   MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
   
   TIME_SMS_NORMAL = "StoryTime: Hey there! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?

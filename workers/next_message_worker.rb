@@ -16,6 +16,15 @@ class NextMessageWorker
     sidekiq_options :queue => :critical
     sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
+    #Poll more often, so peeps rightly get their messages 
+    Sidekiq.configure_server do |config|
+      config.average_scheduled_poll_interval = 2
+    end
+
+
+
+
+
   def perform(sms, mms_arr, user_phone)
 
   	@user = User.find_by(phone: user_phone)
