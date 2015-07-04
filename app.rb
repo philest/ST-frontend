@@ -141,9 +141,14 @@ helpers do
 
 			  	days = @user.days_per_week.to_s
 
-				NextMessageWorker.perform_in(13.seconds, Text::FIRST_SMS, Text::FIRST_MMS, @user.phone)
+			  	#update total message count
+			  	@user.update(total_messages: 1)
 
-			  	Helpers.text(Text::START_SMS_1 + days + Text::START_SMS_2, Text::START_SPRINT_1 + days + Text::START_SPRINT_2, @user.phone)	
+			  	if @user.carrier == Text::SPRINT
+			  		Helpers.text_and_mms(Text::START_SPRINT_1 + days + Text::START_SPRINT_2, Text::FIRST_MMS[0], @user.phone)
+			  	else
+			  		Helpers.text_and_mms(Text::START_SMS_1 + days + Text::START_SMS_2, Text::FIRST_MMS[0], @user.phone)
+			  	end
 
 
 		elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
@@ -153,13 +158,10 @@ helpers do
 			end
 
 			if params[:Body].casecmp("SAMPLE") == 0 
-				NextMessageWorker.perform_in(17.seconds, Text::SAMPLE_SMS, Text::THE_FINAL_MMS, @user.phone)
-			else #EXAMPLE
-				NextMessageWorker.perform_in(17.seconds, Text::EXAMPLE_SMS, Text::THE_FINAL_MMS, @user.phone)
+				Helpers.text_and_mms(Text::SAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 
+			else 
+				Helpers.text_and_mms(Text::EXAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 
 			end
-
-			Helpers.mms(Text::FIRST_MMS[0], @user.phone) 
-
 
 		elsif @user == nil
 

@@ -79,9 +79,7 @@ class NextMessageWorker
 
       else
 
-        if sms != Text::FIRST_SMS #don't increment for this first story (sent on-signup)
         @user.update(story_number: @user.story_number + 1)
-        end
         
       end
 

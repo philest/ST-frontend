@@ -22,11 +22,11 @@ MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this he
 
 START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SMS_2 = " stories/week… and the 1st is on the way!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
+START_SMS_2 = " stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
 
 START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SPRINT_2 = " stories/week, starting now.\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
+START_SPRINT_2 = " stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
 
 HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
 
@@ -84,15 +84,13 @@ CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
 
 
-FIRST_MMS = ["http://i.imgur.com/OtpTZgM.jpg", "http://i.imgur.com/Gzzatre.jpg"]
+FIRST_MMS = ["http://joinstorytime.org/images/devon_final.jpg"]
 
-THE_FINAL_MMS = "http://i.imgur.com/Gzzatre.jpg"
+THE_FINAL_MMS = "http://joinstorytime.org/images/devon_final.jpg"
 
-FIRST_SMS = "StoryTime: Enjoy your first story about Brandon!"
+SAMPLE_SMS = "Today in class, we talked about the moon and space explorers. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
 
-SAMPLE_SMS = "In class, we talked about our favorite recess games. The kids all loved racing. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
-
-EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Brandon the Runner!"
+EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 
 
 

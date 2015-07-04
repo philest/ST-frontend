@@ -75,7 +75,7 @@ describe 'The StoryTime App' do
 
   it "sends correct sign up sms" do
   	get '/test/999/STORY/ATT' 
-  	expect(Helpers.getSimpleSMS).to eq(Text::START_SMS_1 + 2.to_s + Text::START_SMS_2)
+  	expect(Helpers.getSMSarr[0]).to eq(Text::START_SMS_1 + 2.to_s + Text::START_SMS_2)
   end
 
   it "sends correct sign up sms" do
@@ -95,7 +95,7 @@ describe 'The StoryTime App' do
 
   it "sends correct sign up sms to Sprint users" do
     get '/test/998/STORY/' + SPRINT_QUERY_STRING
-    expect(Helpers.getSimpleSMS).to eq(Text::START_SPRINT_1 + "2" + Text::START_SPRINT_2)
+    expect(Helpers.getSMSarr[0]).to eq(Text::START_SPRINT_1 + "2" + Text::START_SPRINT_2)
   end
 
   describe "User" do

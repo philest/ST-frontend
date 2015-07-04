@@ -342,7 +342,6 @@ SMS = "SMS"
 
 	def self.text_and_mms(body, mms_url, user_phone)
 
-
 		@user = User.find_by(phone: user_phone)
 
     	puts "Sent full to #{@user.phone}}" 

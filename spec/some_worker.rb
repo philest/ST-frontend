@@ -528,7 +528,7 @@ time = Time.now.utc
     @user.reload
 
     mmsSoFar = Text::FIRST_MMS
-    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
     NextMessageWorker.drain
 
@@ -573,7 +573,7 @@ time = Time.now.utc
       expect(@user.total_messages).to eq(1)
 
 
-      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
@@ -593,7 +593,7 @@ time = Time.now.utc
 
 
     mmsSoFar = Text::FIRST_MMS
-    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
 
     NewTextWorker.drain
