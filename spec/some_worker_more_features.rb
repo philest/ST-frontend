@@ -45,6 +45,8 @@ describe 'SomeWorker, with sleep,' do
 
     after(:each) do
       Timecop.return
+      Helpers.initialize_testing_vars
+
     end
 
 
@@ -65,7 +67,7 @@ describe 'SomeWorker, with sleep,' do
         expect(user.story_number).to eq(0)
 
         expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-        expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+        expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
         users.push user
 
@@ -114,7 +116,7 @@ describe 'SomeWorker, with sleep,' do
         expect(user.story_number).to eq(0)
 
         expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-        expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+        expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
         expect(user.total_messages).to eq 1
 
@@ -185,7 +187,7 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-    mmsSoFar = Text::FIRST_MMS
+    mmsSoFar = [Text::THE_FINAL_MMS]
     smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
 
@@ -373,9 +375,14 @@ describe 'SomeWorker, with sleep,' do
 
     Helpers.testSleepOff
 
+
+
     (11..20).each do |number|
       get 'test/'+"+156121258"+number.to_s+"/STORY/ATT"#each signs up
       user = User.find_by(phone: "+156121258"+number.to_s)
+
+
+
 
       NextMessageWorker.drain
       user.reload
@@ -383,8 +390,12 @@ describe 'SomeWorker, with sleep,' do
       expect(user.total_messages).to eq(1)
       expect(user.story_number).to eq(0)
 
+
+
+
+
       expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-      expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+      expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
       expect(user.total_messages).to eq 1
 
@@ -458,7 +469,7 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-    mmsSoFar = Text::FIRST_MMS
+    mmsSoFar = [Text::THE_FINAL_MMS]
     smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
 

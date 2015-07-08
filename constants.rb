@@ -83,7 +83,6 @@ GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! 
 CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
 
-
 FIRST_MMS = ["http://joinstorytime.org/images/devon_final.jpg"]
 
 THE_FINAL_MMS = "http://joinstorytime.org/images/devon_final.jpg"
