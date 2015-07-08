@@ -73,6 +73,20 @@ describe 'The StoryTime Workers' do
 			puts Text::SAMPLE_SMS
 		end		
 
+		it "registers SAMPLE with whitespace" do
+			get '/test/556/%20SAMPLE%20%0A/ATT'
+			expect(NextMessageWorker.jobs.size).to eq(0)
+			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+			puts Text::SAMPLE_SMS
+		end		
+
+		it "sends the example with whitespace well" do 
+			get '/test/556/%20%0AEXAMPLE%20%0A/ATT'
+			expect(NextMessageWorker.jobs.size).to eq(0)
+			expect(Helpers.getSMSarr).to eq([Text::EXAMPLE_SMS])
+		end
+
+
 		it "has all the SAMPLE M-MS in right order" do
 			get '/test/556/SAMPLE/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)

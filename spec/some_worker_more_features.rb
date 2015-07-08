@@ -1,3 +1,4 @@
+
 require_relative "./spec_helper"
 
 require 'capybara/rspec'
@@ -63,8 +64,7 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
-                                        Text::FIRST_SMS])              
+        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
         expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 
         users.push user
@@ -113,8 +113,7 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
-                                        Text::FIRST_SMS])              
+        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
         expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 
         expect(user.total_messages).to eq 1
@@ -167,7 +166,7 @@ describe 'SomeWorker, with sleep,' do
       expect(@user.total_messages).to eq(1)
 
 
-      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
@@ -187,7 +186,7 @@ describe 'SomeWorker, with sleep,' do
 
 
     mmsSoFar = Text::FIRST_MMS
-    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
 
     NewTextWorker.drain
@@ -384,8 +383,7 @@ describe 'SomeWorker, with sleep,' do
       expect(user.total_messages).to eq(1)
       expect(user.story_number).to eq(0)
 
-      expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
-                                      Text::FIRST_SMS])              
+      expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
       expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 
       expect(user.total_messages).to eq 1
@@ -441,7 +439,7 @@ describe 'SomeWorker, with sleep,' do
       expect(@user.total_messages).to eq(1)
 
 
-      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+      smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
@@ -461,7 +459,7 @@ describe 'SomeWorker, with sleep,' do
 
 
     mmsSoFar = Text::FIRST_MMS
-    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2, Text::FIRST_SMS]
+    smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
 
 
     NewTextWorker.drain

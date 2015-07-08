@@ -95,6 +95,9 @@ helpers do
 		#returns nil if not found
 		@user = User.find_by_phone(params[:From])
 		
+		#strip whitespace (trailing and leading)
+		params[:Body] = params[:Body].strip
+
 		#first reply: new user texts in STORY
 		if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
@@ -156,6 +159,7 @@ helpers do
 			if @user == nil
 				@user = User.create(sample: true, subscribed: false, phone: params[:From])
 			end
+
 
 			if params[:Body].casecmp("SAMPLE") == 0 
 				Helpers.text_and_mms(Text::SAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 

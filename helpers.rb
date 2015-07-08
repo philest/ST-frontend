@@ -344,7 +344,11 @@ SMS = "SMS"
 
 		@user = User.find_by(phone: user_phone)
 
-    	puts "Sent full to #{@user.phone}}" 
+		if @user == nil
+    		puts "Sent full to new user"
+    	else
+			puts "Sent full to #{@user.phone}}" 
+  		end
 
     	Helpers.fullRespond(body, mms_url, LAST)
     end
@@ -354,8 +358,13 @@ SMS = "SMS"
 	def self.mms(mms, user_phone)
 
     	@user = User.find_by(phone: user_phone)
+		
+		if @user == nil
+    		puts "Sent mms to new user"
+    	else
+    		puts "Sent to #{@user.phone}: #{mms[18, mms.length]}" 
+  		end
 
-    	puts "Sent to #{@user.phone}: #{mms[18, mms.length]}" 
 
     	Helpers.mmsRespond(mms, LAST)
 
@@ -365,6 +374,7 @@ SMS = "SMS"
 	def self.text(normalSMS, sprintSMS, user_phone)
 	
  		@user = User.find_by(phone: user_phone)
+
 
 
 		#if sprint
@@ -384,11 +394,16 @@ SMS = "SMS"
 			msg = normalSMS
 		end
 
+
 		if (@@mode == TEST || @@mode == TEST_CRED) && ((@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160)
 			FirstTextWorker.drain
 		end
 
-		puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+		if @user == nil
+    		puts "Sent full to new user"
+    	else
+			puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+  		end
 		
 		Helpers.smsRespond(msg, LAST)
 
