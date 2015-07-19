@@ -3,7 +3,14 @@ module Text
 HELP = "HELP NOW"
 STOP = "STOP"
 TEXT_CMD = "TEXT"
+BREAK = "BREAK"
 
+
+BREAK_LENGTH = 14
+
+START_BREAK = "StoryTime: You got it. We'll message you again in 2 weeks."
+
+END_BREAK = "StoryTime: It's been two week on break, now you're back on StoryTime!"
 
 RESUBSCRIBE_SHORT = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
 
@@ -81,6 +88,10 @@ FIRST = "FIRST"
 GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! Your two page sample story is on the way :)"
 
 CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
+
+
+
+IMAGE_URL = "http://joinstorytime.org/images/"
 
 
 FIRST_MMS = ["http://joinstorytime.org/images/devon_final.jpg"]

@@ -5,6 +5,7 @@ require_relative "./spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
+require 'timecop'
 
 require_relative '../constants'
 require_relative '../sprint'
@@ -468,8 +469,138 @@ describe 'The StoryTime App' do
 
 
 
+    describe "the BREAK command" do
 
-# end
+      before(:each) do
+        Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+        User.create(phone: "+15612125833", carrier: "ATT")
+        @user = User.find_by_phone "+15612125833"
+      end
+
+      it "won't send you a story that week if you're on break" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        expect(Helpers.getSMSarr).to eq Text::START_BREAK
+
+
+        Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr).to be_empty
+
+        Timecop.travel(2015, 6, 25, 17, 30, 0) #on Thurs!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr).to be_empty
+
+      end
+
+
+      it "won't send you a story the next week if you're on break" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        Timecop.travel(2015, 6, 30, 17, 30, 0) #on next Tuesday!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr).to be_empty
+
+        Timecop.travel(2015, 7, 2, 17, 30, 0) #on next Thurs!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr).to be_empty
+
+      end
+
+      it "WILL send you a story the third week AFTER break" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        Timecop.travel(2015, 7, 7, 17, 30, 0) #on next Tuesday!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to_not be_empty
+        expect(Helpers.getSMSarr).to_not be_empty
+
+        Timecop.travel(2015, 7, 9, 17, 30, 0) #on next Thurs!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to_not be_empty
+        expect(Helpers.getSMSarr).to_not be_empty
+
+      end
+
+
+
+        it "will include the StoryTime \'back after break \' message the first time, not the second" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        Timecop.travel(2015, 7, 7, 17, 30, 0) #on next Tuesday!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        # to include Text::BREAK_END
+
+        # expect(Helpers.getMMSarr).to_not be_empty
+        # expect(Helpers.getSMSarr).to_not be_empty
+
+        Timecop.travel(2015, 7, 9, 17, 30, 0) #on next Thurs!
+
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        # to not include Text::BREAK_END
+
+        # expect(Helpers.getMMSarr).to_not be_empty
+        # expect(Helpers.getSMSarr).to_not be_empty
+
+      end
+ 
+
+
+    end
+
+
+
 
 
 

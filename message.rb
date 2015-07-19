@@ -1,4 +1,5 @@
 require_relative './messageSeries'
+require_relative './constants'
 
 class Message
 
@@ -39,66 +40,78 @@ class Message
 
 		@@messageArray = Array.new
 
-		@@messageArray.push Message.new(["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/iSVBGu4.jpg"],
-	      "StoryTime: Here's your new story... beware of hungry crocodiles!",
-	      "The biggest crocodile
-	in the grocery aisle
 
-	Has a tail so long
-	it reaches the pickle pile
+		@@messageArray.push Message.new([Text::IMAGE_URL+"bb1.jpg", Text::IMAGE_URL+"bb2.jpg"],
+		"StoryTime: Talking grows your child's brain! When you see an orange bubble, point to the picture and ask \'what's this?\' or \'what's going on here?\'",
+		"Jasmine baked banana bread.\n\nIt was bigger than her head\n\nand huger than a hippo-potamus\n\nand larger than a giant octopus!\n\nJasmine thinks it's only fair\n\nfor her and all her friends to share.")
 
-	He strolls past pepper
-	with a sharp-tooth smile
-
-	But pepper makes the gator sneeze
-	He yells: \" need a tissue, please!\"
-
-	The cashier says, \"That\’s aisle three,
-	around the corner, next to the peas.\"")
+		@@messageArray.push Message.new([Text::IMAGE_URL+"chomp1.jpg", Text::IMAGE_URL+"chomp2.jpg"],
+		"StoryTime: Here's tonights story about a croc eating brocolli!",
+		"There's a huge hungry croc\n\n in the grocery shop\n\nand I think he's coming to chomp me!\n\n\nHe licks his big lips,\n\nand swings his big hips,\n\nbut this croc only wants broccoli!")
 
 
-		@@messageArray.push Message.new(["http://i.imgur.com/Bnji4mo.jpg", "http://i.imgur.com/0I9irBy.jpg"],
-			"StoryTime: Here’s your new story. After you read each line, let your child repeat it after you!",
-			"Builder, Builder, build me a house.
-
-	A sweet little house for a sweet little mouse.
-
-	A sweet little mouse and a family too.
-
-	We know that you can and we hope that you __.
-
-	Build it of brick so it's cozy and warm,
-
-	to keep us from harm in a cold winter _____.
-
-	Builder, builder, build our house please.
-
-	As soon as you finish, we'll pay you with cheese!")
 
 
-		@@messageArray.push Message.new( ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"],
-			"StoryTime: This poem's full of rhymes, which help your child build reading skills. Enjoy!",
-			"I can tell you a lot about elephants,
-	If you want to learn.
+	# 	@@messageArray.push Message.new(["http://i.imgur.com/gNPKPSs.jpg", "http://i.imgur.com/SRDF3II.jpg", "http://i.imgur.com/iSVBGu4.jpg"],
+	#       "StoryTime: Here's your new story... beware of hungry crocodiles!",
+	#       "The biggest crocodile
+	# in the grocery aisle
 
-	Like—- did you know that elephants
-	can get a bad sunburn?
+	# Has a tail so long
+	# it reaches the pickle pile
 
-	An elephant can live to be 86 years old,
-	And elephants do not forget anything,
-	If I remember what I’m told!
+	# He strolls past pepper
+	# with a sharp-tooth smile
 
-	An elephant purrs like a cat,
-	if you listen to him,
+	# But pepper makes the gator sneeze
+	# He yells: \" need a tissue, please!\"
 
-	And even though he’s big and ___,
-	An elephant can swim!
+	# The cashier says, \"That\’s aisle three,
+	# around the corner, next to the peas.\"")
 
-	An elephant has floppy ears,
-	But hears things with his feet!
 
-	He finds lots of plants
-	And green healthy things to ___!")
+	# 	@@messageArray.push Message.new(["http://i.imgur.com/Bnji4mo.jpg", "http://i.imgur.com/0I9irBy.jpg"],
+	# 		"StoryTime: Here’s your new story. After you read each line, let your child repeat it after you!",
+	# 		"Builder, Builder, build me a house.
+
+	# A sweet little house for a sweet little mouse.
+
+	# A sweet little mouse and a family too.
+
+	# We know that you can and we hope that you __.
+
+	# Build it of brick so it's cozy and warm,
+
+	# to keep us from harm in a cold winter _____.
+
+	# Builder, builder, build our house please.
+
+	# As soon as you finish, we'll pay you with cheese!")
+
+
+	# 	@@messageArray.push Message.new( ["http://i.imgur.com/gbRc8Ur.jpg", "http://i.imgur.com/ouqIZgr.jpg"],
+	# 		"StoryTime: This poem's full of rhymes, which help your child build reading skills. Enjoy!",
+	# 		"I can tell you a lot about elephants,
+	# If you want to learn.
+
+	# Like—- did you know that elephants
+	# can get a bad sunburn?
+
+	# An elephant can live to be 86 years old,
+	# And elephants do not forget anything,
+	# If I remember what I’m told!
+
+	# An elephant purrs like a cat,
+	# if you listen to him,
+
+	# And even though he’s big and ___,
+	# An elephant can swim!
+
+	# An elephant has floppy ears,
+	# But hears things with his feet!
+
+	# He finds lots of plants
+	# And green healthy things to ___!")
 		
 
 

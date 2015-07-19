@@ -90,7 +90,6 @@ helpers do
 
 	def workflow 
 
-
 		#check if new user
 		#returns nil if not found
 		@user = User.find_by_phone(params[:From])
@@ -174,6 +173,7 @@ helpers do
 		elsif @user.sample == true
 
 			Helpers.text(Text::POST_SAMPLE, Text::POST_SAMPLE, @user.phone)
+
 		
 		#if auto-dropped (or if choose to drop mid-series), returning
 		elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp("STORY") == 0)
