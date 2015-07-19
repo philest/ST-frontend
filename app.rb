@@ -237,7 +237,10 @@ helpers do
 
 			#change subscription
 			@user.update(subscribed: false)
-			Helpers.text(Text::STOPSMS, Text::STOPSMS, @user.phone)
+
+			note = params[:From].to_s + "quit StoryTime."
+			Helpers.new_text(note, note, "+15612125831")
+			# Helpers.text(Text::STOPSMS, Text::STOPSMS, @user.phone)
 
 		elsif params[:Body].casecmp(Text::TEXT_CMD) == 0 #TEXT option		
 
