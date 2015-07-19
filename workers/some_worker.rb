@@ -146,77 +146,99 @@ class SomeWorker
         if SomeWorker.sendStory?(user.phone) 
 
 
-         #Should the user be asked to choose a series?
-          #If it's all of these:
-          #0) not awaiting chioce
-          #a) their time, 
-          #b) their third story, or every third one thereafter.
-          #c) they're not in the middle of a series
 
+          if user.on_break
 
-          if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
-
-            #get set for first in series
-            user.update(next_index_in_series: 0)
-            user.update(awaiting_choice: true)
-            #choose a series
-
-
-
-            myWait = SomeWorker.getWait(TEXT)
-
-            NewTextWorker.perform_in(myWait.seconds, SERIES_CHOICES[user.series_number], NewTextWorker::NOT_STORY, user.phone)
-
-          elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
-            
-            msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
-
-            myWait = SomeWorker.getWait(TEXT)
-            NewTextWorker.perform_in(myWait.seconds, msg, NewTextWorker::NOT_STORY, user.phone)
-
-            user.update(next_index_in_series: 999)  
-
-          elsif user.next_index_in_series == 999 #the second time they haven't responded
-
-             user.update(subscribed: false)
-             user.update(awaiting_choice: false)
-
-            myWait = SomeWorker.getWait(TEXT)
-            NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::NOT_STORY, user.phone)
-
-          #send STORY or SERIES, but not if awaiting series response
-          elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
-
-            #get the story and series structures
-            messageArr = Message.getMessageArray
-            messageSeriesHash = MessageSeries.getMessageSeriesHash
-
-            #SERIES
-            if user.series_choice != nil
-              story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
-            #STORY
+            if user.days_left_on_break > 1 
+              user.update(days_left_on_break: user.days_left_on_break - 1)
             else 
-              story = messageArr[user.story_number]
-            end 
-          
+              user.update(days_left_on_break: 0) #remembers that just finished break last time.
+              user.update(on_break: false)
+            end
 
-            #JUST SMS MESSAGING!
-            if user.mms == false
+          else
 
-                myWait = SomeWorker.getWait(TEXT)
-                NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::STORY, user.phone)
+            #just finished break last time -> include note.
+            if user.days_left_on_break == 0 
+              note = Text::END_BREAK #note to append
+              user.update(days_left_on_break: nil) #set back to normal
+            else
+              note = ''
+            end
 
-            else #MULTIMEDIA MESSAGING (MMS)!
 
-                #start the MMS message stack
 
-                myWait = SomeWorker.getWait(STORY)
+           #Should the user be asked to choose a series?
+            #If it's all of these:
+            #0) not awaiting chioce
+            #a) their time, 
+            #b) their third story, or every third one thereafter.
+            #c) they're not in the middle of a series
+            if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
-                NextMessageWorker.perform_in(myWait.seconds, story.getSMS, story.getMmsArr, user.phone)  
+              #get set for first in series
+              user.update(next_index_in_series: 0)
+              user.update(awaiting_choice: true)
+              #choose a series
 
-            end#MMS or SMS
 
-          end#end story_subpart
+
+              myWait = SomeWorker.getWait(TEXT)
+
+              NewTextWorker.perform_in(myWait.seconds, note + SERIES_CHOICES[user.series_number], NewTextWorker::NOT_STORY, user.phone)
+
+            elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
+              
+              msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
+
+              myWait = SomeWorker.getWait(TEXT)
+              NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
+
+              user.update(next_index_in_series: 999)  
+
+            elsif user.next_index_in_series == 999 #the second time they haven't responded
+
+               user.update(subscribed: false)
+               user.update(awaiting_choice: false)
+
+              myWait = SomeWorker.getWait(TEXT)
+              NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::NOT_STORY, user.phone)
+
+            #send STORY or SERIES, but not if awaiting series response
+            elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
+
+              #get the story and series structures
+              messageArr = Message.getMessageArray
+              messageSeriesHash = MessageSeries.getMessageSeriesHash
+
+              #SERIES
+              if user.series_choice != nil
+                story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
+              #STORY
+              else 
+                story = messageArr[user.story_number]
+              end 
+            
+
+              #JUST SMS MESSAGING!
+              if user.mms == false
+
+                  myWait = SomeWorker.getWait(TEXT)
+                  NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::STORY, user.phone)
+
+              else #MULTIMEDIA MESSAGING (MMS)!
+
+                  #start the MMS message stack
+
+                  myWait = SomeWorker.getWait(STORY)
+
+                  NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
+
+              end#MMS or SMS
+
+            end#end story_subpart
+
+          end #non-break user
 
         end#end sendStory? large
 

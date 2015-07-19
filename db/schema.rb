@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627180559) do
+ActiveRecord::Schema.define(version: 20150719195243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(version: 20150627180559) do
     t.boolean  "sample",               default: false
     t.integer  "total_messages",       default: 0
     t.time     "time"
+    t.boolean  "on_break",             default: false
+    t.integer  "days_left_on_break"
   end
 
 end

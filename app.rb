@@ -96,6 +96,7 @@ helpers do
 		
 		#strip whitespace (trailing and leading)
 		params[:Body] = params[:Body].strip
+		params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 
 		#first reply: new user texts in STORY
 		if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
@@ -240,7 +241,14 @@ helpers do
 
 			note = params[:From].to_s + "quit StoryTime."
 			Helpers.new_text(note, note, "+15612125831")
-			# Helpers.text(Text::STOPSMS, Text::STOPSMS, @user.phone)
+
+
+		elsif params[:Body].casecmp("BREAK") == 0
+
+			@user.update(on_break: true)
+			@user.update(days_left_on_break: Text::BREAK_LENGTH)
+
+			Helpers.text(Text::START_BREAK, Text::START_BREAK, @user.phone)
 
 		elsif params[:Body].casecmp(Text::TEXT_CMD) == 0 #TEXT option		
 

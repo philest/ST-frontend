@@ -51,6 +51,8 @@ describe 'The StoryTime App' do
     before(:each) do
       Helpers.initialize_testing_vars
       FirstTextWorker.jobs.clear
+      NextMessageWorker.jobs.clear
+      NewTextWorker.jobs.clear
     end
 
   it "routes successfully home" do
@@ -482,7 +484,7 @@ describe 'The StoryTime App' do
         expect(@user.subscribed).to eq true
         get '/test/+15612125833/'+Text::BREAK+"/ATT"
 
-        expect(Helpers.getSMSarr).to eq Text::START_BREAK
+        expect(Helpers.getSMSarr).to include(Text::START_BREAK)
 
 
         Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
@@ -492,8 +494,9 @@ describe 'The StoryTime App' do
 
         NextMessageWorker.drain
 
+
         expect(Helpers.getMMSarr).to be_empty
-        expect(Helpers.getSMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
 
         Timecop.travel(2015, 6, 25, 17, 30, 0) #on Thurs!
 
@@ -502,8 +505,9 @@ describe 'The StoryTime App' do
 
         NextMessageWorker.drain
 
+
         expect(Helpers.getMMSarr).to be_empty
-        expect(Helpers.getSMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
 
       end
 
@@ -521,7 +525,7 @@ describe 'The StoryTime App' do
         NextMessageWorker.drain
 
         expect(Helpers.getMMSarr).to be_empty
-        expect(Helpers.getSMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
 
         Timecop.travel(2015, 7, 2, 17, 30, 0) #on next Thurs!
 
@@ -531,34 +535,98 @@ describe 'The StoryTime App' do
         NextMessageWorker.drain
 
         expect(Helpers.getMMSarr).to be_empty
-        expect(Helpers.getSMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
 
       end
 
       it "WILL send you a story the third week AFTER break" do
         @user.reload
         expect(@user.subscribed).to eq true
+        Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
+
         get '/test/+15612125833/'+Text::BREAK+"/ATT"
 
-        Timecop.travel(2015, 7, 7, 17, 30, 0) #on next Tuesday!
+        Timecop.travel(2015, 6, 23, 17, 30, 0) #on that Tuesday!
+      
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
+
+        Timecop.travel(2015, 6, 25, 17, 30, 0) #on that Thursday!
+      
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
+
+
+
+        Timecop.travel(2015, 6, 30, 17, 30, 0) #on the 2nd Tues!
+      
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
+
+
+        Timecop.travel(2015, 7, 2, 17, 30, 0) #on the 2nd Thurs!
+      
+        SomeWorker.perform_async
+        SomeWorker.drain
+
+        NextMessageWorker.drain
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr[1..-1]).to be_empty
+
+
+
+
+
+        Timecop.travel(2015, 7, 7, 17, 30, 0) #on the third Tuesday!
 
         SomeWorker.perform_async
         SomeWorker.drain
 
         NextMessageWorker.drain
 
-        expect(Helpers.getMMSarr).to_not be_empty
-        expect(Helpers.getSMSarr).to_not be_empty
+        NewTextWorker.drain
 
-        Timecop.travel(2015, 7, 9, 17, 30, 0) #on next Thurs!
+        expect(Helpers.getMMSarr).to_not be_empty
+        expect(Helpers.getSMSarr[1..-1]).to_not be_empty
+        expect(Helpers.getSMSarr.last).to include(Text::END_BREAK)
+
+        puts "here it is 1: " + Helpers.getSMSarr.last
+
+
+        Timecop.travel(2015, 7, 9, 17, 30, 0) #on third Thurs!
 
         SomeWorker.perform_async
         SomeWorker.drain
 
         NextMessageWorker.drain
+        NewTextWorker.drain
+
+
+        puts "here it is 2: " + Helpers.getSMSarr.last
+
 
         expect(Helpers.getMMSarr).to_not be_empty
-        expect(Helpers.getSMSarr).to_not be_empty
+        expect(Helpers.getSMSarr[1..-1]).to_not be_empty
+        expect(Helpers.getSMSarr.last).to_not include(Text::END_BREAK)
+
+
+        puts Helpers.getSMSarr
 
       end
 
@@ -594,6 +662,37 @@ describe 'The StoryTime App' do
         # expect(Helpers.getSMSarr).to_not be_empty
 
       end
+
+
+      it "sends the StoryTime \'start break \' message" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        # to include Text::BREAK_END
+
+        expect(Helpers.getMMSarr).to be_empty
+        expect(Helpers.getSMSarr).to eq [Text::START_BREAK]
+
+      end
+
+      it "properly updates ON_BREAK and DAYS_LEFT_ON_BREAK after break cmd" do
+        @user.reload
+        expect(@user.subscribed).to eq true
+
+        expect(@user.on_break).to eq false
+        expect(@user.days_left_on_break).to eq nil
+        get '/test/+15612125833/'+Text::BREAK+"/ATT"
+
+        @user.reload
+
+        expect(@user.on_break).to eq true
+        expect(@user.days_left_on_break).to eq Text::BREAK_LENGTH
+        expect(@user.days_left_on_break).to eq 4
+
+      end
+
+
  
 
 

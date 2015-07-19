@@ -6,11 +6,12 @@ TEXT_CMD = "TEXT"
 BREAK = "BREAK"
 
 
-BREAK_LENGTH = 14
+#number of stories to skip
+BREAK_LENGTH = 4
 
 START_BREAK = "StoryTime: You got it. We'll message you again in 2 weeks."
 
-END_BREAK = "StoryTime: It's been two week on break, now you're back on StoryTime!"
+END_BREAK = "StoryTime: It's been two weeks on break, now welcome back! When you need to, you can always reply BREAK again.\n\n"
 
 RESUBSCRIBE_SHORT = "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
 
