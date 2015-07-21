@@ -95,9 +95,9 @@ CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 IMAGE_URL = "http://joinstorytime.org/images/"
 
 
-FIRST_MMS = ["http://joinstorytime.org/images/devon_final.jpg"]
+FIRST_MMS = ["http://joinstorytime.org/images/d1.jpg"]
 
-THE_FINAL_MMS = "http://joinstorytime.org/images/devon_final.jpg"
+THE_FINAL_MMS = "http://joinstorytime.org/images/d1.jpg"
 
 SAMPLE_SMS = "Today in class, we talked about the moon and space explorers. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
 
