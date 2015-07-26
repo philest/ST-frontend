@@ -69,6 +69,9 @@ REDO_BIRTHDATE = "When was your child born? For age appropriate stories, reply w
 
 SPRINT = "Sprint Spectrum, L.P."
 
+SPRINT_QUERY_STRING = 'Sprint%20Spectrum%2C%20L%2EP%2E'
+
+
 GOOD_CHOICE = "Great, it's on the way!"
 
 BAD_CHOICE = "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.
@@ -98,7 +101,9 @@ FIRST_MMS = ["http://joinstorytime.org/images/devon_final.jpg"]
 
 THE_FINAL_MMS = "http://joinstorytime.org/images/devon_final.jpg"
 
-SAMPLE_SMS = "Today in class, we talked about the moon and space explorers. Keep learning with this story!\n-Ms. Wilson\n\nThanks for trying out StoryTime!"
+SAMPLE_SMS = "Today in class, we talked about the moon and space. When you see orange bubbles in tonight's story, point and ask \"what's this?\" or \"what's going on here?\"\n-Ms. Wilson\n\nThanks for trying StoryTime!"
+
+SAMPLE_SPRINT_SMS = "Today in class, we talked about the moon. As you read and see orange bubbles, point and ask \"what's going on here?\"\n-Ms. Wilson\n\nThanks for trying StoryTime!"
 
 EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 

@@ -482,7 +482,7 @@ describe 'The StoryTime App' do
         expect(@user.subscribed).to eq true
         get '/test/+15612125833/'+Text::BREAK+"/ATT"
 
-        expect(Helpers.getSMSarr).to eq Text::START_BREAK
+        expect(Helpers.getSMSarr[0]).to eq Text::START_BREAK
 
 
         Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
