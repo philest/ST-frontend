@@ -95,7 +95,7 @@ helpers do
 		@user = User.find_by_phone(params[:From])
 		
 		#strip whitespace (trailing and leading)
-		params[:Body] = params[:Body].strip
+ 		params[:Body] = params[:Body].strip
 		params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 
 		#first reply: new user texts in STORY
@@ -134,9 +134,11 @@ helpers do
 			    	auth_token = ENV['TW_AUTH_TOKEN']
 				  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
 
-			    	# Lookup wireless carrier
-				  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-				  	@user.update(carrier: number.carrier['name'])
+			    	# Lookup wireless carrier if it hasn't already been done in SAMPLE
+			    	if @user.carrier == nil
+					  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+					  	@user.update(carrier: number.carrier['name'])
+					 end
 			  	else
 			  		@user.update(carrier: params[:Carrier])
 			  	end
@@ -162,7 +164,26 @@ helpers do
 
 
 			if params[:Body].casecmp("SAMPLE") == 0 
-				Helpers.text_and_mms(Text::SAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 
+
+				if MODE == PRO
+					#TWILIO set up:
+			   		account_sid = ENV['TW_ACCOUNT_SID']
+			    	auth_token = ENV['TW_AUTH_TOKEN']
+				  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
+
+			    	# Lookup wireless carrier
+				  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+				  	@user.update(carrier: number.carrier['name'])
+			  	else
+			  		@user.update(carrier: params[:Carrier])
+			  	end
+
+			  	if @user.carrier == Text::SPRINT
+					Helpers.text_and_mms(Text::SAMPLE_SPRINT_SMS, Text::FIRST_MMS[0], @user.phone)
+				else
+					Helpers.text_and_mms(Text::SAMPLE_SMS, Text::FIRST_MMS[0], @user.phone)
+				end
+
 			else 
 				Helpers.text_and_mms(Text::EXAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 
 			end
@@ -225,6 +246,13 @@ helpers do
 
 		  	Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
 
+		elsif params[:Body].casecmp("BREAK") == 0
+
+			@user.update(on_break: true)
+			@user.update(days_left_on_break: Text::BREAK_LENGTH)
+
+			Helpers.text(Text::START_BREAK, Text::START_BREAK, @user.phone)
+
 
 		elsif params[:Body].casecmp("STOP NOW") == 0 || params[:Body].casecmp("STOP") == 0#STOP option
 			
@@ -238,7 +266,6 @@ helpers do
 
 			#change subscription
 			@user.update(subscribed: false)
-
 			note = params[:From].to_s + "quit StoryTime."
 			Helpers.new_text(note, note, "+15612125831")
 

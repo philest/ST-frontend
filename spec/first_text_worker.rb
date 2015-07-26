@@ -80,6 +80,13 @@ describe 'The StoryTime Workers' do
 			puts Text::SAMPLE_SMS
 		end		
 
+		it "sends Sprint-Sample to sprint phones" do
+			get '/test/556/%20SAMPLE%20%0A/'+Text::SPRINT_QUERY_STRING
+			expect(NextMessageWorker.jobs.size).to eq(0)
+			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SPRINT_SMS])
+			puts Text::SAMPLE_SPRINT_SMS
+		end
+
 		it "sends the example with whitespace well" do 
 			get '/test/556/%20%0AEXAMPLE%20%0A/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
