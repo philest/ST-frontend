@@ -136,12 +136,9 @@ describe 'The NextMessageWorker' do
         @@twiml_mms = []
 
 
-        expect(user.total_messages).to eq(0)
+        expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        # expect(Helpers.getSMSarr).to eq([START_SMS_1 + "2" + START_SMS_2,
-        #                                 FirstTextWorker::FIRST_SMS])              
-        # expect(Helpers.getMMSarr).to eq(FIRST_MMS)
 
         users.push user
 

@@ -599,6 +599,7 @@ time = Time.now.utc
     NewTextWorker.drain
     NextMessageWorker.drain
 
+
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
 

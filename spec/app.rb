@@ -67,7 +67,9 @@ describe 'The StoryTime App' do
 
   it "signs up" do
   	get '/test/555/STORY/ATT'
-  	expect(User.find_by_phone("555").phone).to eq("555")
+    @user = User.find_by_phone("555")
+    @user.reload
+  	expect(@user.phone).to eq("555")
   end
 
 
@@ -153,12 +155,13 @@ describe 'The StoryTime App' do
 
     it "responds to HELP NOW" do
       get "/test/400/" + HELP_URL + "/ATT"
-      expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues & Thurs" + Text::HELP_SMS_2)
+      @user.reload
+      expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues/Thurs" + Text::HELP_SMS_2)
     end
 
     it "responds to 'help now' (non-sprint)" do
       get "/test/400/help%20now/ATT"
-      expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues & Thurs" + Text::HELP_SMS_2)
+      expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues/Thurs" + Text::HELP_SMS_2)
     end
 
 

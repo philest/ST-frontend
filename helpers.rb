@@ -1,4 +1,4 @@
-
+require 'sinatra/r18n'
 
 class Helpers
 
@@ -152,6 +152,7 @@ SMS = "SMS"
    	#BIG KAHUNA
    	#takes care of sleeping (order-specific), and handles testing and normal
 	def self.smsRespond(body, order)
+
    		if @@mode == TEST
    			@@twiml = body
    			@@twiml_sms.push body
@@ -376,9 +377,9 @@ SMS = "SMS"
  		@user = User.find_by(phone: user_phone)
 
 
-
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+
 
 			sprintArr = Sprint.chop(sprintSMS)
 

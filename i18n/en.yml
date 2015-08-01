@@ -1,7 +1,11 @@
-commmands:
+commands:
   help: HELP NOW
   stop: STOP
   text: TEXT
+  story: STORY
+  sample: SAMPLE
+  example: EXAMPLE
+  break: BREAK
 
 break:
   start: "StoryTime: You got it. We'll message you again in 2 weeks."
@@ -11,3 +15,60 @@ break:
 start:
   normal: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
   sprint: "Welcome to StoryTime, free pre-k stories by text! You\'ll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
+
+stop:
+  resubscribe:
+    short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
+    long: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud, continuing from where you left off."
+  stopped: "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
+  continuing: "StoryTime: Great, we'll keep sending you free stories!"
+
+mms_update: "Okay, you'll now receive just the text of each story. Hope this helps!"
+
+help:
+  normal: "StoryTime texts free pre-k stories on %1. For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nBREAK for 2 week break\nSTOP to cancel"
+  sprint: "StoryTime sends stories on %1. For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
+
+error:
+  no_option: "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
+  no_signup_match: "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
+  bad_choice: "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.\n\nFor help, reply HELP NOW."
+
+first_mms: "http://joinstorytime.org/images/d1.jpg"
+
+example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
+
+choice:
+  greet:
+    - "StoryTime: Hi! Ask you child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."
+  no_greet:
+    - "Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."
+
+weekday:
+  mon: Mon
+  wed: Wed
+  fri: Fri
+  sprint:
+    tue: Tue
+    th: Th
+  normal:
+    tue: Tues
+    th: Thurs
+  letters:
+    M: M
+    T: T
+    W: W
+    Th: Th
+    F: F
+    Sat: Sat
+    Sun: Sun
+
+sample:
+  post: "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."
+  normal: "Today in class, we talked about the moon and space. When you see orange bubbles in tonight's story, point and ask 'what's this?' or 'what's going on here?'\n-Ms. Wilson\n\nThanks for trying StoryTime!"
+  sprint: "Today in class, we talked about the moon. As you read and see orange bubbles, point and ask 'what's going on here?'\n-Ms. Wilson\n\nThanks for trying StoryTime!"
+
+
+
+
+

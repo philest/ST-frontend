@@ -46,7 +46,7 @@ module ApplicationHelper
 		@user = User.find_by_phone(user_phone) #check if already registered.
 
 		if @user == nil
-			@user = User.create(phone: params[:From])
+			@user = User.create(phone: user_phone)
 		else
 			@user.update(sample: false)
 			@user.update(subscribed: true) 
@@ -116,18 +116,19 @@ module ApplicationHelper
 		@user = User.find_by_phone(params[:From]) #check if already registered.
 
 		#first reply: new user texts in STORY
-		if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
+
+		if params[:Body].casecmp(R18n.t.commands.story) == 0 && (@user == nil || @user.sample == true)
 
 		ApplicationHelper.enroll(params, params[:From], locale)
 
-		elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
+		elsif (params[:Body].casecmp(R18n.t.commands.sample) == 0 || params[:Body].casecmp(R18n.t.commands.example) == 0)
 
 			if @user == nil
 				@user = User.create(sample: true, subscribed: false, phone: params[:From])
 			end
 
 
-			if params[:Body].casecmp("SAMPLE") == 0 
+			if params[:Body].casecmp(R18n.t.commands.sample) == 0 
 
 				if MODE == PRO
 					#TWILIO set up:
@@ -143,30 +144,30 @@ module ApplicationHelper
 			  	end
 
 			  	if @user.carrier == Text::SPRINT
-					Helpers.text_and_mms(Text::SAMPLE_SPRINT_SMS, Text::FIRST_MMS[0], @user.phone)
+					Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms, @user.phone)
 				else
-					Helpers.text_and_mms(Text::SAMPLE_SMS, Text::FIRST_MMS[0], @user.phone)
+					Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms, @user.phone)
 				end
 
 			else 
-				Helpers.text_and_mms(Text::EXAMPLE_SMS, Text::FIRST_MMS[0], @user.phone) 
+				Helpers.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
 			end
 
 		elsif @user == nil
 
-			Helpers.text(Text::NO_SIGNUP_MATCH, Text::NO_SIGNUP_MATCH, params[:From])
+			Helpers.text(R18n.t.no_signup_match, R18n.t.no_signup_match, params[:From])
 
 		elsif @user.sample == true
 
-			Helpers.text(Text::POST_SAMPLE, Text::POST_SAMPLE, @user.phone)
+			Helpers.text(R18n.t.sample.post, R18n.t.sample.post, @user.phone)
 
 		
 		#if auto-dropped (or if choose to drop mid-series), returning
-		elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp("STORY") == 0)
+		elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp(R18n.t.commands.story) == 0)
 
 			#REACTIVATE SUBSCRIPTION
 				@user.update(subscribed: true)
-				msg = Text::RESUBSCRIBE_SHORT + "\n\n" + SomeWorker::NO_GREET_CHOICES[@user.series_number] #longer message, give more newlines
+				msg = R18n.t.stop.resubscribe.short + "\n\n" + R18n.t.choice.no_greet[@user.series_number] #longer message, give more newlines
 
 				@user.update(next_index_in_series: 0)
 				@user.update(awaiting_choice: true)
@@ -174,13 +175,13 @@ module ApplicationHelper
 				Helpers.text(msg, msg, @user.phone)
 
 		#if returning after manually stopping (not in mid - series)
-		elsif @user.subscribed == false && params[:Body].casecmp("STORY") == 0 
+		elsif @user.subscribed == false && params[:Body].casecmp(R18n.t.commands.story) == 0 
 
 			#REACTIVATE SUBSCRIPTION
 			@user.update(subscribed: true)
-			Helpers.text(Text::RESUBSCRIBE_LONG, Text::RESUBSCRIBE_LONG, @user.phone)
+			Helpers.text(R18n.t.stop.resubscribe.long, R18n.t.stop.resubscribe.long, @user.phone)
 
-		elsif params[:Body].casecmp(Text::HELP) == 0 #Text::HELP option
+		elsif params[:Body].casecmp(R18n.t.commands.help) == 0 #Text::HELP option
 			
 		  	#default 2 days a week
 		  	if @user.days_per_week == nil
@@ -190,35 +191,37 @@ module ApplicationHelper
 		  	#find the day names
 		  	case @user.days_per_week
 		  	when 1
-		  			dayNames = "Wed"
+		  			dayNames = R18n.t.weekday.wed
 
 		  	when 2, nil
 		  		if @user.carrier == SPRINT
-		  			dayNames = "Tue/Th"
+		  			dayNames =  R18n.t.weekday.sprint.tue + "/" + R18n.t.weekday.sprint.th
 		  		else           
-		  			dayNames = "Tues & Thurs"
+		  			dayNames = R18n.t.weekday.normal.tue + "/" + R18n.t.weekday.normal.th
 		  		end
 		  	when 3
 		  		if @user.carrier == SPRINT
-		  			dayNames = "M-W-F"
+		  			dayNames = R18n.t.weekday.letters.M + "-" + R18n.t.weekday.letters.W + "-" + R18n.t.weekday.letters.F
 		  		else           
-		  			dayNames = "Mon/Wed/Fri"
+		  			dayNames = R18n.t.weekday.mon + "/" + R18n.t.weekday.wed + "/" + R18n.t.weekday.fri
 		  		end
 		  	else
 		  		puts "ERR: invalid days of week"
 		  	end
 
-		  	Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
+			  	# Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
 
-		elsif params[:Body].casecmp("BREAK") == 0
+		  	Helpers.text(R18n.t.help.normal(dayNames).to_s, R18n.t.help.sprint(dayNames).to_s, @user.phone)
+
+		elsif params[:Body].casecmp(R18n.t.commands.break) == 0
 
 			@user.update(on_break: true)
 			@user.update(days_left_on_break: Text::BREAK_LENGTH)
 
-			Helpers.text(Text::START_BREAK, Text::START_BREAK, @user.phone)
+			Helpers.text(R18n.t.break.start, R18n.t.break.start, @user.phone)
 
 
-		elsif params[:Body].casecmp("STOP NOW") == 0 || params[:Body].casecmp("STOP") == 0#STOP option
+		elsif params[:Body].casecmp("STOP NOW") == 0 || params[:Body].casecmp(R18n.t.commands.stop) == 0#STOP option
 			
 
 			if MODE == PRO
@@ -234,19 +237,12 @@ module ApplicationHelper
 			Helpers.new_text(note, note, "+15612125831")
 
 
-		elsif params[:Body].casecmp("BREAK") == 0
-
-			@user.update(on_break: true)
-			@user.update(days_left_on_break: Text::BREAK_LENGTH)
-
-			Helpers.text(Text::START_BREAK, Text::START_BREAK, @user.phone)
-
-		elsif params[:Body].casecmp(Text::TEXT_CMD) == 0 #TEXT option		
+		elsif params[:Body].casecmp(R18n.t.commands.text) == 0 #TEXT option		
 
 			#change mms to sms
 			@user.update(mms: false)
 
-			Helpers.text(Text::MMS_UPDATE, Text::MMS_UPDATE, @user.phone)
+			Helpers.text(R18n.t.mms_update, R18n.t.mms_update, @user.phone)
 
 		elsif params[:Body].casecmp("REDO") == 0 #texted STORY
 
@@ -298,7 +294,7 @@ module ApplicationHelper
 				end
 
 		 	else	 			
-				Helpers.text(Text::BAD_CHOICE, Text::BAD_CHOICE, @user.phone)
+				Helpers.text(R18n.t.error.bad_choice, R18n.t.error.bad_choice, @user.phone)
 		 	end				
 
 	    # second reply: update child's birthdate
@@ -392,7 +388,7 @@ module ApplicationHelper
 		#response matches nothing
 		else
 
-			Helpers.text(Text::NO_OPTION, Text::NO_OPTION, @user.phone)
+			Helpers.text(R18n.t.error.no_option, R18n.t.error.no_option, @user.phone)
 
 		end#signup flow
 

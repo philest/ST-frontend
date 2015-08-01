@@ -106,9 +106,9 @@ FIRST_MMS = ["http://joinstorytime.org/images/d1.jpg"]
 
 THE_FINAL_MMS = "http://joinstorytime.org/images/d1.jpg"
 
-SAMPLE_SMS = "Today in class, we talked about the moon and space. When you see orange bubbles in tonight's story, point and ask \"what's this?\" or \"what's going on here?\"\n-Ms. Wilson\n\nThanks for trying StoryTime!"
+SAMPLE_SMS = "Today in class, we talked about the moon and space. When you see orange bubbles in tonight's story, point and ask 'what's this?' or 'what's going on here?'\n-Ms. Wilson\n\nThanks for trying StoryTime!"
 
-SAMPLE_SPRINT_SMS = "Today in class, we talked about the moon. As you read and see orange bubbles, point and ask \"what's going on here?\"\n-Ms. Wilson\n\nThanks for trying StoryTime!"
+SAMPLE_SPRINT_SMS = "Today in class, we talked about the moon. As you read and see orange bubbles, point and ask 'what's going on here?'\n-Ms. Wilson\n\nThanks for trying StoryTime!"
 
 EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 

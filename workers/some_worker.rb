@@ -42,9 +42,9 @@ class SomeWorker
   
   DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
-  SERIES_CHOICES = ["StoryTime: Hi! Ask you child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply \"p\" for puppy or \"m\" for moose."]
+  SERIES_CHOICES = ["StoryTime: Hi! Ask you child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."]
 
-  NO_GREET_CHOICES = ["Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply \"p\" for puppy or \"m\" for moose."]
+  NO_GREET_CHOICES = ["Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."]
 
   TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649", "+19417243442", "+12022518772" ,"+15614796303", "+17722330863", "+12392735883", "+15614796303", "+13522226913", "+1615734535", "+19735448685", "+15133166064", "+18186897323", "+15617083233", "+14847063250", "+18456711380", "+15613056454", "+15618668227", "+15617893548", "+15615422027"]
 
