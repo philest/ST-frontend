@@ -4,13 +4,8 @@ require 'siantra/activerecord'
 require_relative './config/environments' #database configuration
 require_relative './models/user' #add the user model
 
-SPRINT = "Sprint Spectrum, L.P."
-
 account_sid = ENV['TW_ACCOUNT_SID']
 auth_token = ENV['TW_AUTH_TOKEN']
-
-MMSARR = ["http://i.imgur.com/FfGSHjw.jpg", "http://i.imgur.com/f9x3lnN.jpg"]
-
 
 @client = Twilio::REST::Client.new account_sid, auth_token
 

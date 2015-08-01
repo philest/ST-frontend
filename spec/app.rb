@@ -73,7 +73,9 @@ describe 'The StoryTime App' do
 
   it "signs up different numbers" do
   	get '/test/888/STORY/ATT'
-  	expect(User.find_by_phone("888").phone).to eq("888")
+    @user = User.find_by_phone("888")
+    @user.reload
+  	expect(@user.phone).to eq("888")
   end
 
   it "sends correct sign up sms" do

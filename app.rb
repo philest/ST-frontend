@@ -8,6 +8,11 @@ require 'sidetiq'
 require 'redis'
 require 'sidekiq/web'
 require 'time'
+require 'sinatra/r18n'
+
+#set default locale to english
+R18n::I18n.default = 'en'
+
 
 #REDIS initialization
 require_relative './config/initializers/redis'
@@ -32,129 +37,88 @@ require_relative './helpers.rb'
 # end
 
 
-configure :production do
-  require 'newrelic_rpm'
-end
+module ApplicationHelper
 
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
+	#This enrolls the phoneNumber for stories in that language
+	#lang defaults to English.
+	def ApplicationHelper.enroll(params, user_phone, locale) 
 
+		@user = User.find_by_phone(user_phone) #check if already registered.
 
-MODE = ENV['RACK_ENV']
+		if @user == nil
+			@user = User.create(phone: params[:From])
+		else
+			@user.update(sample: false)
+			@user.update(subscribed: true) 
+		end
 
-PRO = "production"
-TEST = "test"
+		if MODE == PRO #only relevant for production code
+			#randomly assign to get two days a week or three days a week
+			if (rand = Random.rand(9)) == 0
+				@user.update(days_per_week: 1)
+			else
+				@user.update(days_per_week: 2)
+			end
+		else
+			@user.update(days_per_week: 2)
+		end
 
-
-
-include Text
-
-
-get '/worker' do
-	SomeWorker.perform_async #begin sidetiq recurrring background tasks
-	redirect to('/')
-end
-
-get '/' do
-	erb :main
-end
-
-get '/mp3' do
-	send_file File.join(settings.public_folder, 'storytime_message.mp3')
-end
-
-get '/failed' do
-	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
-end
-
-get '/called' do
-  Twilio::TwiML::Response.new do |r|
-    r.Play "http://www.joinstorytime.com/mp3"
-  end.text
-end
+		#update subscription
+		@user.update(subscribed: true) #Subscription complete! (B/C defaults)
+		#backup for defaults
 
 
-# register an incoming SMS
-get '/sms' do
-	workflow
-end
-
-# mock entrypoint for testing
-get '/test/:From/:Body/:Carrier' do
-	workflow
-end
+		@user.update(time: DEFAULT_TIME) #NEED THIS!
+		# @user.update(child_age: 4)
 
 
+		if MODE == PRO
+			#TWILIO set up:
+	   		account_sid = ENV['TW_ACCOUNT_SID']
+	    	auth_token = ENV['TW_AUTH_TOKEN']
+		  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
+
+	    	# Lookup wireless carrier if it hasn't already been done in SAMPLE
+	    	if @user.carrier == nil
+			  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
+			  	@user.update(carrier: number.carrier['name'])
+			 end
+	  	else
+	  		@user.update(carrier: params[:Carrier])
+	  	end
 
 
-helpers do 
+	  	days = @user.days_per_week.to_s
 
-	def workflow 
+	  	#update total message count
+	  	@user.update(total_messages: 1)
 
-		#check if new user
-		#returns nil if not found
-		@user = User.find_by_phone(params[:From])
-		
+	  	if locale != nil
+			R18n.set(locale) 
+		end
+
+		  	if @user.carrier == Text::SPRINT
+		  		Helpers.text_and_mms(R18n.t.start.sprint(days), Text::FIRST_MMS[0], @user.phone)
+		  	else
+		  		Helpers.text_and_mms(R18n.t.start.normal(days), Text::FIRST_MMS[0], @user.phone)
+		  	end
+
+	end
+
+	#manages entire registration workflow, keyword-selecting
+	#defaults to English.
+	def ApplicationHelper.workflow(params, locale)
+
 		#strip whitespace (trailing and leading)
  		params[:Body] = params[:Body].strip
 		params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 
+		@user = User.find_by_phone(params[:From]) #check if already registered.
+
 		#first reply: new user texts in STORY
 		if params[:Body].casecmp("STORY") == 0 && (@user == nil || @user.sample == true)
 
-			if @user == nil
-				@user = User.create(phone: params[:From])
-			else
-				@user.update(sample: false)
-				@user.update(subscribed: true) 
-			end
-
-			if MODE == PRO #only relevant for production code
-				#randomly assign to get two days a week or three days a week
-				if (rand = Random.rand(9)) == 0
-					@user.update(days_per_week: 1)
-				else
-					@user.update(days_per_week: 2)
-				end
-			else
-				@user.update(days_per_week: 2)
-			end
-
-				#update subscription
-				@user.update(subscribed: true) #Subscription complete! (B/C defaults)
-				#backup for defaults
-
-
-				@user.update(time: DEFAULT_TIME) #NEED THIS!
-				# @user.update(child_age: 4)
-
-
-				if MODE == PRO
-					#TWILIO set up:
-			   		account_sid = ENV['TW_ACCOUNT_SID']
-			    	auth_token = ENV['TW_AUTH_TOKEN']
-				  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
-
-			    	# Lookup wireless carrier if it hasn't already been done in SAMPLE
-			    	if @user.carrier == nil
-					  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
-					  	@user.update(carrier: number.carrier['name'])
-					 end
-			  	else
-			  		@user.update(carrier: params[:Carrier])
-			  	end
-
-
-			  	days = @user.days_per_week.to_s
-
-			  	#update total message count
-			  	@user.update(total_messages: 1)
-
-			  	if @user.carrier == Text::SPRINT
-			  		Helpers.text_and_mms(Text::START_SPRINT_1 + days + Text::START_SPRINT_2, Text::FIRST_MMS[0], @user.phone)
-			  	else
-			  		Helpers.text_and_mms(Text::START_SMS_1 + days + Text::START_SMS_2, Text::FIRST_MMS[0], @user.phone)
-			  	end
-
+		ApplicationHelper.enroll(params, params[:From], locale)
 
 		elsif (params[:Body].casecmp("SAMPLE") == 0 || params[:Body].casecmp("EXAMPLE") == 0)
 
@@ -432,8 +396,84 @@ helpers do
 
 		end#signup flow
 
-	end#workflow method
+	end
 
-end#helpers
+end
+
+
+
+configure :production do
+  require 'newrelic_rpm'
+end
+
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
+
+
+MODE = ENV['RACK_ENV']
+
+PRO = "production"
+TEST = "test"
+
+
+
+include Text
+
+
+helpers ApplicationHelper
+
+
+
+get '/worker' do
+	SomeWorker.perform_async #begin sidetiq recurrring background tasks
+	redirect to('/')
+end
+
+get '/' do
+	erb :main
+end
+
+get '/mp3' do
+	send_file File.join(settings.public_folder, 'storytime_message.mp3')
+end
+
+get '/failed' do
+	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
+end
+
+get '/called' do
+  Twilio::TwiML::Response.new do |r|
+    r.Play "http://www.joinstorytime.com/mp3"
+  end.text
+end
+
+
+# register an incoming SMS
+get '/sms' do
+
+	if params[:locale] == nil
+		locale = 'en'
+	else
+		locale = params[:locale]
+	end
+
+	ApplicationHelper.workflow(params, locale)
+end
+
+# mock entrypoint for testing
+get '/test/:From/:Body/:Carrier' do
+
+	if params[:locale] == nil
+		locale = 'en'
+	else
+		locale = params[:locale]
+	end
+
+	ApplicationHelper.workflow(params, locale)
+end
+
+
+
+
+
 
 

@@ -28,6 +28,7 @@ MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this he
 
 #LATEST EDITED
 
+
 START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
 START_SMS_2 = " stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
@@ -38,7 +39,7 @@ START_SPRINT_2 = " stories/week, starting now!\n\nText STOP to end, or HELP NOW 
 
 HELP_SMS_1 =  "StoryTime texts free pre-k stories on "
 
-HELP_SMS_2 = ". For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nSTOP to cancel"
+HELP_SMS_2 = ". For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nBREAK for 2 week break\nSTOP to cancel"
 
 HELP_SPRINT_1 = "StoryTime sends stories on "
 
@@ -93,6 +94,9 @@ GREET_SMS  = "StoryTime: Thanks for trying out StoryTime, free stories by text! 
 
 CONFIRMED_STICKING = "StoryTime: Great, we'll keep sending you free stories!"
 
+SPANISH = "SP"
+
+ENGLISH = "EN"
 
 
 IMAGE_URL = "http://joinstorytime.org/images/"

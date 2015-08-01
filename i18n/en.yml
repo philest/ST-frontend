@@ -1,0 +1,13 @@
+commmands:
+  help: HELP NOW
+  stop: STOP
+  text: TEXT
+
+break:
+  start: "StoryTime: You got it. We'll message you again in 2 weeks."
+  end: "StoryTime: It's been two weeks on break, now welcome back! When you need to, you can always reply BREAK again.\n\n"
+#newlines added because this prepends a new story message. 
+
+start:
+  normal: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
+  sprint: "Welcome to StoryTime, free pre-k stories by text! You\'ll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
