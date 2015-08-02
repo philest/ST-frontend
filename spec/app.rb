@@ -9,7 +9,7 @@ require 'timecop'
 
 require_relative '../constants'
 require_relative '../sprint'
-
+require_relative '../auto-signup'
 #CONSTANTS
 
 #NOTE: THE CARRIER PARAMA DOES NOTHING!!!! IT'S A HOAX
@@ -698,12 +698,58 @@ describe 'The StoryTime App' do
       end
 
 
- 
-
-
     end
 
 
+
+    describe 'Autosignup' do
+
+
+      it "properly saves locale info" do
+        @user = User.find_by_phone("+15612125831")
+        expect(@user).to be nil 
+        
+        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        @user = User.find_by_phone("+15612125831")
+        @user.reload
+        expect(@user).to_not be nil
+
+        expect(@user.locale).to eq 'en'
+      end
+
+       it "works for es" do
+        @user = User.find_by_phone("+15612125831")
+        expect(@user).to be nil 
+        
+        Signup.enroll(["+15612125831"], 'es', {Carrier: "ATT"})
+        @user = User.find_by_phone("+15612125831")
+        @user.reload
+        expect(@user).to_not be nil
+
+        expect(@user.locale).to eq 'es'
+        expect(Helpers.getSMSarr[0]).to_not eq Text::START_SMS_1 + "2" +Text::START_SMS_2
+        puts Helpers.getSMSarr[0]
+      end
+
+      it "has getWait giving values every 2 seconds." do 
+        Signup.initialize_user_count()
+       
+        (0..40).each do |num|
+         expect(wait = Signup.getWait).to eq(num*2)
+         
+         if num == 0 || num == 40
+          puts wait
+         elsif num == 1
+          puts '...'
+         end
+
+
+        end
+
+      end
+
+
+    end
 
 
 

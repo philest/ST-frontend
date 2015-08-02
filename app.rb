@@ -41,15 +41,18 @@ module ApplicationHelper
 
 	#This enrolls the phoneNumber for stories in that language
 	#lang defaults to English.
-	def ApplicationHelper.enroll(params, user_phone, locale) 
+	#wait_time is how long until the async call to send the message.
+	def ApplicationHelper.enroll(params, user_phone, locale, *wait_time) 
+
 
 		@user = User.find_by_phone(user_phone) #check if already registered.
 
 		if @user == nil
-			@user = User.create(phone: user_phone)
+			@user = User.create(phone: user_phone, locale: locale)
 		else
 			@user.update(sample: false)
 			@user.update(subscribed: true) 
+			@user.update(locale: locale)
 		end
 
 		if MODE == PRO #only relevant for production code
@@ -83,25 +86,41 @@ module ApplicationHelper
 			  	number = @client.phone_numbers.get(@user.phone, type: 'carrier')
 			  	@user.update(carrier: number.carrier['name'])
 			 end
-	  	else
+	  	elsif MODE == TEST
 	  		@user.update(carrier: params[:Carrier])
 	  	end
 
 
 	  	days = @user.days_per_week.to_s
 
-	  	#update total message count
-	  	@user.update(total_messages: 1)
 
 	  	if locale != nil
 			R18n.set(locale) 
 		end
 
+		#They texted to signup, so RESPOND.
+		if params != nil && params[:Body] != nil
 		  	if @user.carrier == Text::SPRINT
-		  		Helpers.text_and_mms(R18n.t.start.sprint(days), Text::FIRST_MMS[0], @user.phone)
+		  		Helpers.text_and_mms(R18n.t.start.sprint(days), R18n.t.first_mms, @user.phone)
 		  	else
-		  		Helpers.text_and_mms(R18n.t.start.normal(days), Text::FIRST_MMS[0], @user.phone)
+		  		Helpers.text_and_mms(R18n.t.start.normal(days), R18n.t.first_mms, @user.phone)
 		  	end
+
+		  	#update total message count #NOTE: This is done within NextMessageWorker for auto-enrolled.
+		  	@user.update(total_messages: 1)
+
+
+		#They were auto-enrolled, so SEND NEW.
+		else
+			wait_time = wait_time.shift
+
+			if @user.carrier == Text::SPRINT
+		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.sprint(days), R18n.t.first_mms, @user.phone)
+		  	else
+		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.normal(days), R18n.t.first_mms, @user.phone)
+		  	end
+		end
+
 
 	end
 
@@ -114,6 +133,11 @@ module ApplicationHelper
 		params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 
 		@user = User.find_by_phone(params[:From]) #check if already registered.
+
+		#PRO, set locale for returning user 
+		if locale != nil && @user != nil
+			R18n.set(@user.locale) #set the locale for that user
+		end
 
 		#first reply: new user texts in STORY
 

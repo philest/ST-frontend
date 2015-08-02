@@ -469,6 +469,12 @@ SMS = "SMS"
 
 		@user = User.find_by(phone: user_phone)
 
+		##account for single mms as string
+		if mms_array.class == String
+			mms_array = [mms_array]
+		end
+
+
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 

@@ -7,6 +7,7 @@ require_relative '../messageSeries'
 require_relative '../helpers'
 
 require_relative '../constants'
+require 'sinatra/r18n'
 
 
 class NextMessageWorker
@@ -79,7 +80,10 @@ class NextMessageWorker
 
       else
 
-        @user.update(story_number: @user.story_number + 1)
+        #note first enrollment message
+        if @user.total_messages > 0
+           @user.update(story_number: @user.story_number + 1)
+        end
         
       end
 
