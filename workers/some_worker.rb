@@ -323,7 +323,7 @@ class SomeWorker
        puts "ERR: invalid days of week"
     end
 
-    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || (TESTERS.include?(user.phone) && @@time_now.day != 29)
+    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || (TESTERS.include?(user.phone))
                                                                      #SEND TO US EVERYDAY
                                                                      #SEND IF ony valid day and NOT created this past day!
                                                                     #Note: this messes up if they created this past 5:30pm on a M or W

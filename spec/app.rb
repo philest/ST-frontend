@@ -3,6 +3,8 @@ ENV['RACK_ENV'] = "test"
 require_relative "./spec_helper"
 
 
+require 'sinatra/r18n'
+
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
@@ -747,6 +749,19 @@ describe 'The StoryTime App' do
         end
 
       end
+
+
+
+      it "properly sends the no_signup_match message" do
+        get '/test/555/sample%20STORY%20request/ATT' #improper sample request
+        R18n.set('en')
+        expect(R18n.t.error.no_signup_match).to_not eq nil
+        expect(Helpers.getSMSarr[0]).to eq R18n.t.error.no_signup_match
+        puts  Helpers.getSMSarr[0]
+      end
+
+
+
 
 
     end

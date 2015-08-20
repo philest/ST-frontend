@@ -36,6 +36,9 @@ require_relative './helpers.rb'
 # 	require_relative './workers/test/test_some_worker'
 # end
 
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
+
+
 
 module ApplicationHelper
 
@@ -179,7 +182,7 @@ module ApplicationHelper
 
 		elsif @user == nil
 
-			Helpers.text(R18n.t.no_signup_match, R18n.t.no_signup_match, params[:From])
+			Helpers.text(R18n.t.error.no_signup_match, R18n.t.error.no_signup_match, params[:From])
 
 		elsif @user.sample == true
 
@@ -426,7 +429,6 @@ configure :production do
   require 'newrelic_rpm'
 end
 
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
 
 
 MODE = ENV['RACK_ENV']
