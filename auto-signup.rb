@@ -18,7 +18,7 @@ class Signup
 		@@user_num_story = 0
 	end
 
-
+	#params are for TEST commands
 	def self.enroll(phone_nums, locale, *params)
 
 		Signup.initialize_user_count()

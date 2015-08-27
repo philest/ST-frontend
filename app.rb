@@ -36,7 +36,7 @@ require_relative './helpers.rb'
 # 	require_relative './workers/test/test_some_worker'
 # end
 
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0) #Default Time: 17:30:00 (5:30PM), EST
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
 
@@ -45,6 +45,7 @@ module ApplicationHelper
 	#This enrolls the phoneNumber for stories in that language
 	#lang defaults to English.
 	#wait_time is how long until the async call to send the message.
+	#params are for TEST-mode commands
 	def ApplicationHelper.enroll(params, user_phone, locale, *wait_time) 
 
 

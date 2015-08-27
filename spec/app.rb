@@ -760,6 +760,17 @@ describe 'The StoryTime App' do
         puts  Helpers.getSMSarr[0]
       end
 
+      it "enrolls with time 21:30 UTC (17:30 EST)" do
+        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        @user = User.find_by_phone("+15612125831")
+
+        expect(@user.time.zone).to eq "UTC"
+        expect(@user.time.hour).to eq 21
+        expect(@user.time.min).to eq 30
+        puts @user.time
+      end
+
+
 
 
 
