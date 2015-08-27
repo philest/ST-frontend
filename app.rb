@@ -104,9 +104,9 @@ module ApplicationHelper
 		#They texted to signup, so RESPOND.
 		if params != nil && params[:Body] != nil
 		  	if @user.carrier == Text::SPRINT
-		  		Helpers.text_and_mms(R18n.t.start.sprint(days), R18n.t.first_mms, @user.phone)
+		  		Helpers.text_and_mms(R18n.t.start.sprint(days), R18n.t.first_mms.to_s, @user.phone)
 		  	else
-		  		Helpers.text_and_mms(R18n.t.start.normal(days), R18n.t.first_mms, @user.phone)
+		  		Helpers.text_and_mms(R18n.t.start.normal(days), R18n.t.first_mms.to_s, @user.phone)
 		  	end
 
 		  	#update total message count #NOTE: This is done within NextMessageWorker for auto-enrolled.
@@ -118,9 +118,9 @@ module ApplicationHelper
 			wait_time = wait_time.shift
 
 			if @user.carrier == Text::SPRINT
-		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.sprint(days), R18n.t.first_mms, @user.phone)
+		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.sprint(days), R18n.t.first_mms.to_s, @user.phone)
 		  	else
-		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.normal(days), R18n.t.first_mms, @user.phone)
+		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.normal(days), R18n.t.first_mms.to_s, @user.phone)
 		  	end
 		end
 
@@ -171,9 +171,9 @@ module ApplicationHelper
 			  	end
 
 			  	if @user.carrier == Text::SPRINT
-					Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms, @user.phone)
+					Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
 				else
-					Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms, @user.phone)
+					Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
 				end
 
 			else 
