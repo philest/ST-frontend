@@ -1,11 +1,11 @@
 commands:
-  help: HELP NOW
-  stop: STOP
-  text: TEXT
-  story: STORY
-  sample: SAMPLE
-  example: EXAMPLE
-  break: BREAK
+  help: AYUDA AHORA
+  stop: PARA
+  text: TEXTO
+  story: CUENTO
+  sample: MUESTRA
+  example: EJEMPLO
+  break: PAUSA
 
 break:
   start: "StoryTime: You got it. We'll message you again in 2 weeks."
@@ -13,9 +13,8 @@ break:
 #newlines added because this prepends a new story message. 
 
 start:
-  normal: "Bienvenidos a StoryTime, free pre-k stories by text! You'll get %1 stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
-  sprint: "Bienvenidos a StoryTime, free pre-k stories by text! You\'ll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
-
+  normal: "¡Bienvenidos a la Hora de Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana.\n\nResponda PARA para terminar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
+  sprint: "¡Bienvenidos a la Hora de Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana… Empezando ahora!\n\nResponda PARA para terminar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
 stop:
   resubscribe:
     short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."

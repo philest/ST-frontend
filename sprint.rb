@@ -84,6 +84,17 @@ class Sprint
 				text.gsub!(/[\/][X][)]/, "\/#{smsNum-1})")
 			end
 
+			#if last char is newline, delete it. 
+			sms.each_with_index do |text, index|
+			   lastChar = text[text.length - 1]
+
+
+			   if lastChar == "\n" 
+			   	sms[index] = text[0..-2] #delete last char (by replacing the elt with a truncated version)
+			   end
+
+			end
+
 			return sms
 
 		end #160 or under char
