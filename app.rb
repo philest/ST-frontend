@@ -36,8 +36,7 @@ require_relative './helpers.rb'
 # 	require_relative './workers/test/test_some_worker'
 # end
 
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
-
+DEFAULT_TIME = Time.utc(2015, 6, 21, 21, 30, 0) #21:30 UTC (17:30 EST --> 5:30 PM on East Coast)
 
 
 module ApplicationHelper
