@@ -758,7 +758,11 @@ describe 'The StoryTime App' do
 
       it "properly sends the no_signup_match message" do
         get '/test/555/sample%20STORY%20request/ATT' #improper sample request
-        R18n.set :en
+       
+        i18n = R18n::I18n.new('en', ::R18n.default_places)
+        R18n.thread_set(i18n)
+
+        R18n.set 'en'
         expect(R18n.t.error.no_signup_match).to_not eq nil
         expect(Helpers.getSMSarr[0]).to eq R18n.t.error.no_signup_match
         puts  Helpers.getSMSarr[0]
@@ -775,12 +779,17 @@ describe 'The StoryTime App' do
       end
 
       it "sends a sprint-chopped long message for ES on signup" do
+
+        i18n = R18n::I18n.new('es', ::R18n.default_places) #this chunk seems to create a new R18n thread
+        R18n.thread_set(i18n)
+
+        R18n.set 'es'
+
         Sidekiq::Testing.inline! do
           Signup.enroll(["+15612125832"], 'es', {Carrier: Text::SPRINT})
         end
         @user = User.find_by_phone("+15612125832")
 
-        R18n.thread_set 'es'
 
 
         expect(Helpers.getSMSarr.length).to eq 2
@@ -790,12 +799,15 @@ describe 'The StoryTime App' do
       end
 
       it "doesn't chop long message for non-sprint ES on signup" do
+        i18n = R18n::I18n.new('es', ::R18n.default_places)
+        R18n.thread_set(i18n)
+        R18n.set 'es'
+
         Sidekiq::Testing.inline! do
           Signup.enroll(["+15612125831"], 'es', {Carrier: "ATT"})
         end
         @user = User.find_by_phone("+15612125831")
       
-        R18n.thread_set 'es'
 
         expect(Helpers.getSMSarr.length).to eq 1
         expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
@@ -804,7 +816,9 @@ describe 'The StoryTime App' do
       end
 
       it "has different spanish/english responses" do 
-        R18n.thread_set 'es'
+        i18n = R18n::I18n.new('es', ::R18n.default_places)
+        R18n.thread_set(i18n)
+        R18n.set 'es'
 
 
         span_arr = [] #array of spanish commands
@@ -831,7 +845,9 @@ describe 'The StoryTime App' do
 
         span_arr.push R18n.t.first_mms.to_s
 
-        R18n.thread_set 'en'
+        i18n = R18n::I18n.new('en', ::R18n.default_places)
+        R18n.thread_set(i18n)
+        R18n.set 'en'
         engl_arr = [] #array of english commands
 
         #load array with commands
