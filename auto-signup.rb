@@ -18,7 +18,7 @@ class Signup
 		@@user_num_story = 0
 	end
 
-	#params are for TEST commands
+	#params are a hasht that mimic the params in Application Enroll (eg params[:Carrier] -> Sprint
 	def self.enroll(phone_nums, locale, *params)
 
 		Signup.initialize_user_count()

@@ -112,6 +112,9 @@ SAMPLE_SPRINT_SMS = "Today in class, we talked about the moon. As you read and s
 
 EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 
+#types for new_text_worker
+STORY = "story"
+NOT_STORY = "not_story"
 
 
 end

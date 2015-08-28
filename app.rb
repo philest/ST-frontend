@@ -96,12 +96,12 @@ module ApplicationHelper
 
 	  	days = @user.days_per_week.to_s
 
-
 	  	if locale != nil
 			R18n.set(locale) 
 		end
 
 		#They texted to signup, so RESPOND.
+		#NOTE! TODO This isn't configured for spanish, which require a two page Sprint response! 
 		if params != nil && params[:Body] != nil
 		  	if @user.carrier == Text::SPRINT
 		  		Helpers.text_and_mms(R18n.t.start.sprint(days), R18n.t.first_mms.to_s, @user.phone)

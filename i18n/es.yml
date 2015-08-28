@@ -13,8 +13,9 @@ break:
 #newlines added because this prepends a new story message. 
 
 start:
-  normal: "¡Bienvenidos a la Hora de Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana.\n\nResponda PARA para terminar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
-  sprint: "¡Bienvenidos a la Hora de Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana… Empezando ahora!\n\nResponda PARA para terminar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
+  normal: "¡Bienvenidos a la Hora del Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana.\n\nResponda PARA para cancelar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
+  sprint: "¡Bienvenidos a la Hora del Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana… Empezando ahora!\n\nResponda PARA para cancelar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
+
 stop:
   resubscribe:
     short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
@@ -25,15 +26,15 @@ stop:
 mms_update: "Okay, you'll now receive just the text of each story. Hope this helps!"
 
 help:
-  normal: "StoryTime texts free pre-k stories on %1. For help, call us at 561-212-5831.\n\nScreen-time before bed may carry health risks, so read earlier.\n\nReply:\nTEXT for no-pic stories\nBREAK for 2 week break\nSTOP to cancel"
-  sprint: "StoryTime sends stories on %1. For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
+  normal: "HC: Cuentos gratis para pre kínder en %1. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
+  sprint: "HC: Cuentos gratis en %1. Para ayuda: 561-212-5831.\n\nResponder:\nPARA para cancelar.\nTEXTO para cuentos sin picturas"
 
 error:
-  no_option: "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
+  no_option: "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
   no_signup_match: "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
-  bad_choice: "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.\n\nFor help, reply HELP NOW."
+  bad_choice: "Hora del Cuento: Lo sentimos, nosotros no entendíamos eso. Responda con la letra del cuento que usted quiere.\n\nPara ayuda, responda AYUDA AHORA"
 
-first_mms: "http://joinstorytime.org/images/d1.jpg"
+first_mms: "http://www.joinstorytime.org/images/d_sp.jpg"
 
 example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 
@@ -44,23 +45,23 @@ choice:
     - "Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."
 
 weekday:
-  mon: Mon
-  wed: Wed
-  fri: Fri
+  mon: Lu
+  wed: Mx
+  fri: Vi
   sprint:
-    tue: Tue
-    th: Th
+    tue: Lu
+    th: Ju
   normal:
-    tue: Tues
-    th: Thurs
+    tue: Mar.
+    th: Jue.
   letters:
-    M: M
-    T: T
-    W: W
-    Th: Th
-    F: F
-    Sat: Sat
-    Sun: Sun
+    M: L
+    T: Ma
+    W: Mx
+    Th: J
+    F: V
+    Sat: S
+    Sun: D
 
 sample:
   post: "StoryTime: Hi! StoryTime's an automated service, but, if you want to learn more, contact our director, Phil, at 561-212-5831."

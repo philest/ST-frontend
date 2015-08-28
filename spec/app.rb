@@ -770,6 +770,33 @@ describe 'The StoryTime App' do
         puts @user.time
       end
 
+      it "sends a sprint-chopped long message for ES on signup" do
+        Sidekiq::Testing.inline! do
+          Signup.enroll(["+15612125831"], 'es', {Carrier: Text::SPRINT})
+        end
+        @user = User.find_by_phone("+15612125831")
+      
+        R18n.set('es')
+
+        expect(Helpers.getSMSarr.length).to eq 2
+        expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+
+        puts Helpers.getSMSarr
+      end
+
+      it "doesn't chop long message for non-sprint ES on signup" do
+        Sidekiq::Testing.inline! do
+          Signup.enroll(["+15612125831"], 'es', {Carrier: "ATT"})
+        end
+        @user = User.find_by_phone("+15612125831")
+      
+        R18n.set('es')
+
+        expect(Helpers.getSMSarr.length).to eq 1
+        expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+
+        puts Helpers.getSMSarr
+      end
 
 
 

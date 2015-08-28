@@ -1,4 +1,5 @@
 require 'sinatra/r18n'
+require './workers/new_text_worker'
 
 class Helpers
 
@@ -205,8 +206,6 @@ SMS = "SMS"
 		elsif @@mode == PRO
 			Helpers.smsSendHelper(body, user_phone)
 		end
-
-   		sleep Helpers.getSleep(order, SMS)
    	end
 
    	def self.mmsSend(mms_url, user_phone, order)
@@ -216,27 +215,17 @@ SMS = "SMS"
 		elsif @@mode == PRO
 			Helpers.mmsSendHelper(mms_url, user_phone)
 		end
-
-   		sleep Helpers.getSleep(order, MMS)
    	end
 
    	def self.fullSend(body, mms_url, user_phone, order)
+
 
 		#account for mms_url in arrays
     	if mms_url.class == Array
     		mms_url = mms_url[0]
     	end
-
-		if @@mode == TEST || @@mode == TEST_CRED
-			@@twiml_mms.push mms_url
-			@@twiml_sms.push body
-			puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
-
-		elsif @@mode == PRO
-			Helpers.fullSendHelper(body, mms_url, user_phone)
-		end
-
-   		sleep Helpers.getSleep(order, MMS)
+		
+		Helpers.fullSendHelper(body, mms_url, user_phone)
    	end
 
 
@@ -261,6 +250,7 @@ SMS = "SMS"
 	end
 
 	def self.fullRespondHelper(body, mms_url)
+
 		  twiml = Twilio::TwiML::Response.new do |r|
 		    r.Message do |m|
 		      m.Media mms_url
@@ -321,11 +311,44 @@ SMS = "SMS"
 			@client = Twilio::REST::Client.new account_sid, auth_token
 		end
           
-          message = @client.account.messages.create(
-            :body => body,
-            :media_url => mms_url,
-            :to => user_phone,     # Replace with your phone number
-            :from => @@my_twilio_number)   # Replace with your Twilio number
+		#get user
+		@user = User.find_by_phone(user_phone)
+
+		#chop up if a long message to a sprint user.
+		if body.length >= 160 && @user.carrier == Text::SPRINT 
+		    
+			if @@mode == TEST || @@mode == TEST_CRED
+			
+				@@twiml_mms.push mms_url
+			else
+				#send mms
+				message = @client.account.messages.create(
+	            :media_url => mms_url,
+	            :to => user_phone,    
+	            :from => @@my_twilio_number)
+			end 
+
+    		#send chopped sms
+    		Helpers.new_sprint_long_sms(body, user_phone)
+			puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
+
+
+        else
+
+			if @@mode == TEST || @@mode == TEST_CRED
+				@@twiml_mms.push mms_url
+				@@twiml_sms.push body
+				puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
+
+	        else
+	           message = @client.account.messages.create(
+	            :body => body,
+	            :media_url => mms_url,
+	            :to => user_phone,     # Replace with your phone number
+	            :from => @@my_twilio_number)   # Replace with your Twilio number
+			end
+
+		end
 
         puts "Sent mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
     	puts "along with sms: #{body[9, 18]}" 
@@ -421,44 +444,17 @@ SMS = "SMS"
 
 		@user = User.find_by(phone: user_phone)
 
-		sprintArr = Sprint.chop(long_sms)
+		#find if it's first story or not
+		if @user.total_messages < 1
+			type = NewTextWorker::STORY
+		else
+			type = NewTextWorker::NOT_STORY
+		end
 
-        sprintArr.each_with_index do |text, index|  
-
-			if index + 1 != sprintArr.length
-        		Helpers.smsSend(text, user_phone, NORMAL)
-	    	else
-        		Helpers.smsSend(text, user_phone, LAST)
-			end
-
-			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
-
-
-        end
+		NewTextWorker.perform_async(long_sms, type, user_phone)
 
 	end
 
-
-	def self.new_sprint_long_sms_no_wait(long_sms, user_phone)
-
-		@user = User.find_by(phone: user_phone)
-
-		sprintArr = Sprint.chop(long_sms)
-
-        sprintArr.each_with_index do |text, index|  
-
-			if index + 1 != sprintArr.length
-        		Helpers.smsSend(text, user_phone, NORMAL)
-	    	else
-        		Helpers.smsSend(text, user_phone, NO_WAIT)
-			end
-
-			puts "Sent sms part #{index} to" + @user.phone + "\n\n"
-
-
-        end
-
-	end
 
 
 
