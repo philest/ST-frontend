@@ -219,7 +219,6 @@ SMS = "SMS"
 
    	def self.fullSend(body, mms_url, user_phone, order)
 
-
 		#account for mms_url in arrays
     	if mms_url.class == Array
     		mms_url = mms_url[0]

@@ -55,7 +55,13 @@ describe 'The StoryTime App' do
       FirstTextWorker.jobs.clear
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
+      Sidekiq::Worker.clear_all
     end
+
+    after(:each) do
+      Sidekiq::Worker.clear_all
+    end
+
 
   it "routes successfully home" do
     get '/'
@@ -89,8 +95,6 @@ describe 'The StoryTime App' do
 
   it "sends correct sign up sms" do
     get '/test/999/STORY/ATT' 
-    # require 'pry'
-    # binding.pry
 
   end
 
@@ -754,7 +758,7 @@ describe 'The StoryTime App' do
 
       it "properly sends the no_signup_match message" do
         get '/test/555/sample%20STORY%20request/ATT' #improper sample request
-        R18n.set('en')
+        R18n.set :en
         expect(R18n.t.error.no_signup_match).to_not eq nil
         expect(Helpers.getSMSarr[0]).to eq R18n.t.error.no_signup_match
         puts  Helpers.getSMSarr[0]
@@ -772,11 +776,12 @@ describe 'The StoryTime App' do
 
       it "sends a sprint-chopped long message for ES on signup" do
         Sidekiq::Testing.inline! do
-          Signup.enroll(["+15612125831"], 'es', {Carrier: Text::SPRINT})
+          Signup.enroll(["+15612125832"], 'es', {Carrier: Text::SPRINT})
         end
-        @user = User.find_by_phone("+15612125831")
-      
-        R18n.set('es')
+        @user = User.find_by_phone("+15612125832")
+
+        R18n.thread_set 'es'
+
 
         expect(Helpers.getSMSarr.length).to eq 2
         expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
@@ -790,13 +795,76 @@ describe 'The StoryTime App' do
         end
         @user = User.find_by_phone("+15612125831")
       
-        R18n.set('es')
+        R18n.thread_set 'es'
 
         expect(Helpers.getSMSarr.length).to eq 1
         expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
 
         puts Helpers.getSMSarr
       end
+
+      it "has different spanish/english responses" do 
+        R18n.thread_set 'es'
+
+
+        span_arr = [] #array of spanish commands
+
+        #load array with commands
+        span_arr.push R18n.t.commands.help.to_s
+        span_arr.push R18n.t.commands.stop.to_s
+        span_arr.push R18n.t.commands.text.to_s
+        span_arr.push R18n.t.commands.story.to_s
+        span_arr.push R18n.t.commands.sample.to_s
+        span_arr.push R18n.t.commands.example.to_s
+        span_arr.push R18n.t.commands.break.to_s
+
+        span_arr.push R18n.t.start.normal.to_s
+        span_arr.push R18n.t.start.sprint.to_s
+
+        span_arr.push R18n.t.mms_update.to_s
+
+        span_arr.push R18n.t.help.normal.to_s
+        span_arr.push R18n.t.help.sprint.to_s
+
+        span_arr.push R18n.t.error.no_option.to_s
+        span_arr.push R18n.t.error.bad_choice.to_s
+
+        span_arr.push R18n.t.first_mms.to_s
+
+        R18n.thread_set 'en'
+        engl_arr = [] #array of english commands
+
+        #load array with commands
+        engl_arr.push R18n.t.commands.help.to_s
+        engl_arr.push R18n.t.commands.stop.to_s
+        engl_arr.push R18n.t.commands.text.to_s
+        engl_arr.push R18n.t.commands.story.to_s
+        engl_arr.push R18n.t.commands.sample.to_s
+        engl_arr.push R18n.t.commands.example.to_s
+        engl_arr.push R18n.t.commands.break.to_s
+
+        engl_arr.push R18n.t.start.normal.to_s
+        engl_arr.push R18n.t.start.sprint.to_s
+
+        engl_arr.push R18n.t.mms_update.to_s
+
+        engl_arr.push R18n.t.help.normal.to_s
+        engl_arr.push R18n.t.help.sprint.to_s
+
+        engl_arr.push R18n.t.error.no_option.to_s
+        engl_arr.push R18n.t.error.bad_choice.to_s
+
+        engl_arr.push R18n.t.first_mms.to_s
+
+        engl_arr.each_with_index do |engl, i|
+          expect(engl).to_not eq span_arr[i] #the commands shouldn't be the same
+          puts "#{engl} != #{span_arr[i]}"
+        end  
+      end
+
+
+
+
 
 
 

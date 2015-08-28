@@ -23,7 +23,7 @@ stop:
   stopped: "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
   continuing: "StoryTime: Great, we'll keep sending you free stories!"
 
-mms_update: "Okay, you'll now receive just the text of each story. Hope this helps!"
+mms_update: "HC: Bien, usted ahora recibe solo el texto de cada historia. ¡Espero esto ayude!"
 
 help:
   normal: "HC: Cuentos gratis para pre kínder en %1. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
