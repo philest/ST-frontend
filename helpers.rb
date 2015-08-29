@@ -207,7 +207,7 @@ SMS = "SMS"
    	end
 
 
-   	def self.mmsSend(mms_url, user_phone, order)
+   	def self.mmsSend(mms_url, user_phone)
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 			puts "Sent #{mms_url[18, mms_url.length]}"
@@ -481,7 +481,7 @@ SMS = "SMS"
 
 			mms_array.each_with_index do |mms_url, index|
 					
-					Helpers.mmsSend(mms_url, user_phone, NORMAL)
+					Helpers.mmsSend(mms_url, user_phone)
 		     	 	 #for all, because text follows
 			end
 
@@ -497,7 +497,7 @@ SMS = "SMS"
 
 				else
 
-					Helpers.mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone)
 
 				end
 
@@ -524,9 +524,9 @@ SMS = "SMS"
 			mms_array.each_with_index do |mms_url, index|
 
 				if index + 1 != mms_array.length
-				Helpers.mmsSend(mms_url, user_phone, NORMAL)
+				Helpers.mmsSend(mms_url, user_phone)
 		    	else
-				Helpers.mmsSend(mms_url, user_phone, LAST)
+				Helpers.mmsSend(mms_url, user_phone)
 				end
 
 			end
@@ -545,7 +545,7 @@ SMS = "SMS"
 
 				else
 
-					Helpers.mmsSend(mms_url, user_phone, NORMAL)
+					Helpers.mmsSend(mms_url, user_phone)
 
 				end
 
@@ -586,10 +586,10 @@ SMS = "SMS"
 
 				if index + 1 != mms_array.length
 
-					Helpers.mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone)
 
 		    	else
-					Helpers.mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -602,9 +602,9 @@ SMS = "SMS"
 			mms_array.each_with_index do |mms, index|
 			
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -633,9 +633,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone, LAST)
+					Helpers.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -657,9 +657,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone, NORMAL)
+					Helpers.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone, NO_WAIT)
+					Helpers.mmsSend(mms, user_phone)
 				end
 
 			end

@@ -27,7 +27,7 @@ class NextMessageWorker
 
 
   def perform(sms, mms_arr, user_phone)
-
+    
   	@user = User.find_by(phone: user_phone)
 
 
@@ -47,7 +47,7 @@ class NextMessageWorker
       NextMessageWorker.updateUser(@user.phone, sms)
 
   	else #not last MMS...
-  		Helpers.new_just_mms_no_wait(mms_arr.shift, @user.phone)
+  		Helpers.mmsSend(mms_arr.shift, @user.phone)
   		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
     end
 

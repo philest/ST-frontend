@@ -7,6 +7,8 @@ require 'timecop'
 require 'time'
 require 'active_support/all'
 
+require_relative '../auto-signup'
+
 require_relative '../helpers'
 require_relative '../message'
 require_relative '../messageSeries'
@@ -466,25 +468,40 @@ time = Time.now.utc
 
 
     it "has total message count properly increasing" do
+      Sidekiq::Testing.inline!
       Timecop.travel(2015, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      # @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
       
+      Signup.enroll(["444"], 'en', {Carrier: "ATT"})
+      @user = User.find_by_phone "444"
+      @user.reload
+
+      expect(@user.total_messages).to eq(1)
+      expect(@user.story_number).to eq(0)
+
+
 
       Timecop.travel(2015, 6, 23, 17, 20, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
 
+      Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
+      
+      SomeWorker.perform_async
+      SomeWorker.drain
 
-      (1..15).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
-        sleep SLEEP_TIME
-      end
+
+      # (1..15).each do 
+      #   SomeWorker.perform_async
+      #   SomeWorker.drain
+      #   sleep SLEEP_TIME
+      # end
 
       NextMessageWorker.drain
+      NewTextWorker.drain
 
       @user.reload 
-      expect(@user.total_messages).to eq(1)
+      expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -495,7 +512,7 @@ time = Time.now.utc
         sleep SLEEP_TIME
       end
       @user.reload 
-      expect(@user.total_messages).to eq(1)
+      expect(@user.total_messages).to eq(2)
 
       # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
       # Timecop.scale(1920) #1/16 seconds now are two minutes

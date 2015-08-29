@@ -117,9 +117,6 @@ class SomeWorker
     @@time_now = Time.now.utc
 
 
-
-
-
     # send Twilio message
     # only for subscribed
     User.where(subscribed: true).find_each do |user|
@@ -131,7 +128,6 @@ class SomeWorker
       if user.time == nil || (user.time.utc.hour != 21 && user.id < 140)
         user.update(time: DEFAULT_TIME)
       end
-
 
 
       #logging info
@@ -231,7 +227,6 @@ class SomeWorker
                   #start the MMS message stack
 
                   myWait = SomeWorker.getWait(STORY)
-
                   NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
 
               end#MMS or SMS
