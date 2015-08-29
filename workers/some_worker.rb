@@ -253,7 +253,7 @@ class SomeWorker
 
       total_first_msgs = @@user_num_story + @@user_num_text
 
-      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 1))
+      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
 
     #increments by one each user.
     #jumps 40 seconds each 20 users. 
@@ -270,14 +270,14 @@ class SomeWorker
 
 
 
-  def self.test_get_wait()
+  # def self.test_get_wait()
 
-      total_first_msgs = @@user_num_story + @@user_num_text
+  #     total_first_msgs = @@user_num_story + @@user_num_text
 
-      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+  #     wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
 
-      return wait
-  end
+  #     return wait
+  # end
 
   def self.test_push_wait(time) 
     @@times.push time 

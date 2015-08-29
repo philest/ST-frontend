@@ -633,10 +633,11 @@ time = Time.now.utc
       end
 
 
+
       NextMessageWorker.drain
           NewTextWorker.drain
 
-     
+
       @user.reload 
       expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
@@ -1214,7 +1215,6 @@ time = Time.now.utc
       end
 
       (21..40).each do |num|
-
 
        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*2 )
        expect(wait).to eq(num + 40 )
