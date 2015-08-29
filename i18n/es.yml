@@ -14,7 +14,7 @@ break:
 
 start:
   normal: "¡Bienvenidos a la Hora del Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana.\n\nResponda PARA para cancelar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
-  sprint: "¡Bienvenidos a la Hora del Cuento, cuentos gratis para pre-kínder por texto! Usted obtendrá %1 cuentos por semana… Empezando ahora!\n\nResponda PARA para cancelar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
+  sprint: "Bienvenidos a la Hora del Cuento, cuentos gratis para pre-kinder por texto! Usted obtendra %1 cuentos por semana… Empezando ahora!\n\nResponda PARA para cancelar, AYUDA AHORA para ayuda. Se pueden aplicar tarifas para texto normales."
 
 stop:
   resubscribe:

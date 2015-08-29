@@ -193,20 +193,19 @@ SMS = "SMS"
 
 
 
-   	def self.smsSend(body, user_phone, order)
+   	def self.smsSend(body, user_phone)
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml = body
 			@@twiml_sms.push body
 
 			#turn on testcred
 			Helpers.testCred
-			#simulate actual REST api
-			Helpers.smsSendHelper(body, user_phone)
-
-		elsif @@mode == PRO
-			Helpers.smsSendHelper(body, user_phone)
 		end
+			#for Test_Cred: simulate actual REST api
+			Helpers.smsSendHelper(body, user_phone)
+		
    	end
+
 
    	def self.mmsSend(mms_url, user_phone, order)
 		if @@mode == TEST || @@mode == TEST_CRED
@@ -316,23 +315,30 @@ SMS = "SMS"
 		#chop up if a long message to a sprint user.
 		if body.length >= 160 && @user.carrier == Text::SPRINT 
 		    
+			sprint_arr = Sprint.chop(body)
+
 			if @@mode == TEST || @@mode == TEST_CRED
 			
 				@@twiml_mms.push mms_url
+				@@twiml_sms.push sprint_arr.shift #add first part
+
 			else
-				#send mms
+
+				#send mms with first part of sms series
 				message = @client.account.messages.create(
 	            :media_url => mms_url,
+	            :body => sprint_arr.shift,
 	            :to => user_phone,    
 	            :from => @@my_twilio_number)
+
 			end 
 
-    		#send chopped sms
-    		Helpers.new_sprint_long_sms(body, user_phone)
-			puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
+			puts "Sent #{mms_url[18, mms_url.length]} and sms part 1"
 
+			#send the rest of sms series
+            NewTextWorker.perform_in(MMS_WAIT.seconds, sprint_arr, NewTextWorker::NOT_STORY, user_phone)
 
-        else
+        else #not long-sprint
 
 			if @@mode == TEST || @@mode == TEST_CRED
 				@@twiml_mms.push mms_url
@@ -528,7 +534,7 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			Helpers.smsSend(first_sms, user_phone, NORMAL)
+			Helpers.smsSend(first_sms, user_phone)
 
 			Helpers.mms_array.each_with_index do |mms_url, index|
 
@@ -591,7 +597,7 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			Helpers.smsSend(sms, user_phone, NORMAL)
+			Helpers.smsSend(sms, user_phone)
 
 			mms_array.each_with_index do |mms, index|
 			
@@ -681,7 +687,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			Helpers.smsSend(msg, user_phone, LAST)
+			Helpers.smsSend(msg, user_phone)
 
 	 	end
 
@@ -705,7 +711,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			Helpers.smsSend(msg, user_phone, NO_WAIT)
+			Helpers.smsSend(msg, user_phone)
 
 	 	end
 
@@ -720,9 +726,9 @@ SMS = "SMS"
 		smsArr.each_with_index do |sms, index|
 
 				if index + 1 != smsArr.length
-					Helpers.smsSend(sms, user_phone, NORMAL)
+					Helpers.smsSend(sms, user_phone)
 		    	else
-					Helpers.smsSend(sms, user_phone, LAST)
+					Helpers.smsSend(sms, user_phone)
 				end
  		end
 

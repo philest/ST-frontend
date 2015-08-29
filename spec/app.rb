@@ -100,7 +100,7 @@ describe 'The StoryTime App' do
 
   it "sends new text properly using integration testing w/ credentials" do
 
-    Helpers.smsSend("Your Test Cred worked!", "+15612125831", "normal")
+    Helpers.smsSend("Your Test Cred worked!", "+15612125831",)
 
   end
 

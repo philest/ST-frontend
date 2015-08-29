@@ -38,7 +38,7 @@ class NewTextWorker
   	if sms.class == String && sms.length >= 160 && @user.carrier == Text::SPRINT
   		sms = Sprint.chop(sms)
   	elsif sms.class == String
-  		Helpers.new_text_no_wait(sms, sms, @user.phone)  #send out normal text
+  		Helpers.smsSend(sms, @user.phone)  #send out normal text
   	end
 
 
