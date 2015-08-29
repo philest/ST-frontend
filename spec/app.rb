@@ -56,6 +56,7 @@ describe 'The StoryTime App' do
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
       Sidekiq::Worker.clear_all
+      Sidekiq::Testing.inline!
     end
 
     after(:each) do
@@ -878,7 +879,23 @@ describe 'The StoryTime App' do
         end  
       end
 
+      it "recognizes Sprint v. Nonsprint" do
 
+
+        # i18n = R18n::I18n.new('en', ::R18n.default_places)
+        # R18n.thread_set(i18n)
+        # R18n.set 'es'
+
+        Signup.enroll(["+12032223333"], 'es', {Carrier: Text::SPRINT})
+        Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
+
+        expect(Helpers.getSMSarr.length).to eq 3 
+        puts "Sp Part 1: #{Helpers.getSMSarr[0]}"
+        puts "Sp Part 2: #{Helpers.getSMSarr[1]}"
+
+        puts "Norm:  #{Helpers.getSMSarr[2]}"
+
+      end
 
 
 

@@ -251,6 +251,7 @@ class SomeWorker
   #ensures that no more than one message per second is sent.
   def self.getWait(type)
 
+      
       total_first_msgs = @@user_num_story + @@user_num_text
 
       wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))

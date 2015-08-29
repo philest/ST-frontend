@@ -115,6 +115,7 @@ module ApplicationHelper
 
 		#They were auto-enrolled, so SEND NEW.
 		else
+
 			wait_time = wait_time.shift
 
 			if @user.carrier == Text::SPRINT
