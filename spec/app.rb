@@ -897,6 +897,23 @@ describe 'The StoryTime App' do
 
       end
 
+      it "recognizes Spanish commands" do
+
+        Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
+
+        
+        i18n = R18n::I18n.new('es', ::R18n.default_places)
+        R18n.thread_set(i18n)
+
+        @user = User.find_by_phone "+14445556666" 
+        @user.reload
+
+        get '/test/+14445556666/AYUDA%20AHORA/ATT'
+
+        expect(Helpers.getSMSarr.last).to eq R18n.t.help.normal("Mar/Jue").to_s
+        expect(Helpers.getSMSarr.last).to eq "HC: Cuentos gratis para pre kínder en Mar/Jue. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
+
+      end
 
 
 

@@ -52,8 +52,8 @@ weekday:
     tue: Lu
     th: Ju
   normal:
-    tue: Mar.
-    th: Jue.
+    tue: Mar
+    th: Jue
   letters:
     M: L
     T: Ma

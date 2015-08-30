@@ -97,7 +97,8 @@ module ApplicationHelper
 	  	days = @user.days_per_week.to_s
 
 	  	if locale != nil
-			R18n.set(locale) 
+			i18n = R18n::I18n.new(locale, ::R18n.default_places)
+	        R18n.thread_set(i18n)
 		end
 
 		#They texted to signup, so RESPOND.
@@ -140,7 +141,9 @@ module ApplicationHelper
 
 		#PRO, set locale for returning user 
 		if locale != nil && @user != nil
-			R18n.set(@user.locale) #set the locale for that user
+			i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
+	        R18n.thread_set(i18n)
+		 	#set the locale for that user, w/in this thread
 		end
 
 		#first reply: new user texts in STORY
@@ -489,6 +492,12 @@ get '/test/:From/:Body/:Carrier' do
 		locale = 'en'
 	else
 		locale = params[:locale]
+	end
+
+	#find locale for existing user
+	@user = User.find_by_phone params[:From]
+	if @user != nil
+		locale = @user.locale
 	end
 
 	ApplicationHelper.workflow(params, locale)
