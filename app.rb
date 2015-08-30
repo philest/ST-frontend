@@ -425,6 +425,24 @@ module ApplicationHelper
 
 	end
 
+	def ApplicationHelper.start(params) 
+		
+		if params[:locale] == nil
+			locale = 'en'
+		else
+			locale = params[:locale]
+		end
+
+		#find locale for existing user
+		@user = User.find_by_phone params[:From]
+		if @user != nil
+			locale = @user.locale
+		end
+
+		ApplicationHelper.workflow(params, locale)
+	end
+
+
 end
 
 
@@ -475,32 +493,12 @@ end
 
 # register an incoming SMS
 get '/sms' do
-
-	if params[:locale] == nil
-		locale = 'en'
-	else
-		locale = params[:locale]
-	end
-
-	ApplicationHelper.workflow(params, locale)
+	ApplicationHelper.start(params)
 end
 
 # mock entrypoint for testing
 get '/test/:From/:Body/:Carrier' do
-
-	if params[:locale] == nil
-		locale = 'en'
-	else
-		locale = params[:locale]
-	end
-
-	#find locale for existing user
-	@user = User.find_by_phone params[:From]
-	if @user != nil
-		locale = @user.locale
-	end
-
-	ApplicationHelper.workflow(params, locale)
+	ApplicationHelper.start(params)
 end
 
 

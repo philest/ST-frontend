@@ -912,6 +912,15 @@ describe 'The StoryTime App' do
 
         expect(Helpers.getSMSarr.last).to eq R18n.t.help.normal("Mar/Jue").to_s
         expect(Helpers.getSMSarr.last).to eq "HC: Cuentos gratis para pre kínder en Mar/Jue. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
+        
+        expect(@user.subscribed).to be true 
+        get '/test/+14445556666/PARA/ATT'
+        @user.reload
+        expect(@user.subscribed).to be false 
+
+
+
+
 
       end
 
