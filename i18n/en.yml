@@ -44,6 +44,11 @@ choice:
   no_greet:
     - "Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."
 
+no_reply:
+  day_late: "StoryTime: Hi! We noticed you didn't choose your last story."
+  dropped: "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
+
+
 weekday:
   mon: Mon
   wed: Wed

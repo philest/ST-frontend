@@ -742,7 +742,7 @@ describe 'The StoryTime App' do
         Signup.initialize_user_count()
        
         (0..40).each do |num|
-         expect(wait = Signup.getWait).to eq(num*2)
+         expect(wait = Signup.getWait).to eq(num*8)
          
          if num == 0 || num == 40
           puts wait

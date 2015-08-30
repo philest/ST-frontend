@@ -43,7 +43,7 @@ class Signup
 
 		wait = @@user_num_story
 
-    	@@user_num_story += 2
+    	@@user_num_story += 8
 
     	return wait
 
