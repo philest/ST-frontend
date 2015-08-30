@@ -931,7 +931,15 @@ describe 'The StoryTime App' do
       end
 
 
+    end
 
+
+    describe "Images" do
+
+
+      it "are all uploaded properly"
+
+      end
 
 
 

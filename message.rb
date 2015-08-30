@@ -40,14 +40,28 @@ class Message
 
 		@@messageArray = Array.new
 
-
+		#banana bread
 		@@messageArray.push Message.new([Text::IMAGE_URL+"bb1.jpg", Text::IMAGE_URL+"bb2.jpg"],
 		"StoryTime: Talking grows your child's brain! When you see an orange bubble, point to the picture and ask \'what's this?\' or \'what's going on here?\'",
 		"Jasmine baked banana bread.\n\nIt was bigger than her head\n\nand huger than a hippo-potamus\n\nand larger than a giant octopus!\n\nJasmine thinks it's only fair\n\nfor her and all her friends to share.")
 
+		#croc in grocery shop
 		@@messageArray.push Message.new([Text::IMAGE_URL+"chomp1.jpg", Text::IMAGE_URL+"chomp2.jpg"],
-		"StoryTime: Here's tonights story about a croc eating brocolli!",
-		"There's a huge hungry croc\n\n in the grocery shop\n\nand I think he's coming to chomp me!\n\n\nHe licks his big lips,\n\nand swings his big hips,\n\nbut this croc only wants broccoli!")
+		"StoryTime: Here's tonight's story about a croc eating brocolli!",
+		"There's a huge hungry croc\n\nin the grocery shop\n\nand I think he's coming to chomp me!\n\n\nHe licks his big lips,\n\nand swings his big hips,\n\nbut this croc only wants broccoli!")
+		
+		#superheroes
+		@@messageArray.push Message.new([Text::IMAGE_URL+"hero1.jpg", Text::IMAGE_URL+"hero2.jpg"],
+		"StoryTime: Enjoy tonight's superhero story!",
+		"SuperSarah can break a brick wall\n\nwith her pinky finger.\n\nSuperSam can run to China\n\nand be back before dinner.\n\n\nMy superpower is telling funny jokes\n\nuntil you fall down.\n\nI'll make you laugh so much,\n\nyou'll be rolling on the ground!")
+
+		#babooon in pocket
+		@@messageArray.push Message.new([Text::IMAGE_URL+"baboon1.jpg", Text::IMAGE_URL+"baboon2.jpg"],
+		"StoryTime: Tim stuffs a lot in his pocket! Your child loves being silly. Take turns saying the silly things you could find in your pocket.",
+		"Tim's mom told him\n\nto clean his room.\n\nUnder his bed, he found a baboon.\n\n\nTim's mom told him\n\nto clean his pocket.\n\nHe found a hippo, two tacos,\n\nand a space rocket!")
+
+
+
 
 
 
