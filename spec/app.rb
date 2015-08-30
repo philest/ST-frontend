@@ -897,7 +897,7 @@ describe 'The StoryTime App' do
 
       end
 
-      it "recognizes Spanish commands" do
+      it "recognizes Spanish non-sprint commands" do
 
         Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
 
@@ -917,10 +917,16 @@ describe 'The StoryTime App' do
         get '/test/+14445556666/PARA/ATT'
         @user.reload
         expect(@user.subscribed).to be false 
+        
 
+        get '/test/+14445556666/FAKECMD/ATT'
+        expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option.to_s
+        expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
 
-
-
+        get '/test/+14445556666/TEXTO/ATT'
+        @user.reload
+        expect(Helpers.getSMSarr.last).to eq "HC: Bien, usted ahora recibe solo el texto de cada historia. ¡Espero esto ayude!"
+        expect(Helpers.getSMSarr.last).to eq R18n.t.mms_update
 
       end
 
