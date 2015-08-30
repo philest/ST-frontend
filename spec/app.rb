@@ -937,7 +937,7 @@ describe 'The StoryTime App' do
     describe "Images" do
 
 
-      it "are all uploaded properly"
+      it "are all uploaded properly" do
 
       end
 
