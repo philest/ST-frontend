@@ -939,6 +939,41 @@ describe 'The StoryTime App' do
 
       it "are all uploaded properly" do
 
+        get '/images/d1.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/d_sp.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/bb1.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/bb2.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/chomp1.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/chomp2.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/hero1.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/hero2.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/baboon1.jpg'
+        expect(last_response).to be_ok
+
+        get '/images/baboon2.jpg'
+        expect(last_response).to be_ok
+
+        #fake
+        get '/images/nothinghere'
+        expect(last_response).to_not be_ok
+
+
       end
 
 
