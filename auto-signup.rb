@@ -26,6 +26,8 @@ class Signup
 		#retrieve from array
 		if params != nil
 			params = params.shift
+		else #no params
+			params = {Carrier: "ATT"}
 		end
 
 		phone_nums.each do |phone|
