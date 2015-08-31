@@ -40,12 +40,12 @@ example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy y
 
 choice:
   greet:
-    - "StoryTime: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+    - "Hora del Cuento: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
   no_greet:
     - "Ask your child if they want stories about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
 no_reply:
-  day_late: "StoryTime: Hi! We noticed you didn't choose your last story."
+  day_late: "Hora del Cuento: Hi! We noticed you didn't choose your last story."
   dropped: "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
 

@@ -121,7 +121,7 @@ class SomeWorker
     end
 
     #set this thread's locale as user's locale
-    i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
+    i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
     R18n.thread_set(i18n)
 
 
@@ -167,13 +167,14 @@ class SomeWorker
             end
 
 
-
            #Should the user be asked to choose a series?
             #If it's all of these:
             #0) not awaiting chioce
             #a) their time, 
             #b) their third story, or every third one thereafter.
             #c) they're not in the middle of a series
+
+
             if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
               #get set for first in series
