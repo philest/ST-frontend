@@ -6,6 +6,8 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
+require 'sinatra/r18n'
+
 require 'time'
 require 'active_support/all'
 
@@ -36,16 +38,7 @@ class SomeWorker
   TIME_SMS_SPRINT_2 = "(2/2)\nRememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
 
   BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
-
-  DAY_LATE = "StoryTime: Hi! We noticed you didn't choose your last story."
-
   
-  DROPPED = "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
-
-  SERIES_CHOICES = ["StoryTime: Hi! Ask you child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."]
-
-  NO_GREET_CHOICES = ["Ask your child if they want stories about Marley the puppy or about Bruce the moose.\n\nReply 'p' for puppy or 'm' for moose."]
-
   TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649", "+19417243442", "+12022518772" ,"+15614796303", "+17722330863", "+12392735883", "+15614796303", "+13522226913", "+1615734535", "+19735448685", "+15133166064", "+18186897323", "+15617083233", "+14847063250", "+18456711380", "+15613056454", "+15618668227", "+15617893548", "+15615422027"]
 
 
@@ -121,7 +114,18 @@ class SomeWorker
     # only for subscribed
     User.where(subscribed: true).find_each do |user|
 
-  if user.time.class != String #LEGACY
+    
+    #LEGACY: set default locale.
+    if user.locale == nil 
+      user.update(locale: 'en')
+    end
+
+    #set this thread's locale as user's locale
+    i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
+    R18n.thread_set(i18n)
+
+
+    if user.time.class != String #LEGACY
 
 
       #handling old users: convert give Time!
@@ -163,13 +167,14 @@ class SomeWorker
             end
 
 
-
            #Should the user be asked to choose a series?
             #If it's all of these:
             #0) not awaiting chioce
             #a) their time, 
             #b) their third story, or every third one thereafter.
             #c) they're not in the middle of a series
+
+
             if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
               #get set for first in series
@@ -181,11 +186,11 @@ class SomeWorker
 
               myWait = SomeWorker.getWait(TEXT)
 
-              NewTextWorker.perform_in(myWait.seconds, note + SERIES_CHOICES[user.series_number], NewTextWorker::NOT_STORY, user.phone)
+              NewTextWorker.perform_in(myWait.seconds, note + R18n.t.choice.greet[user.series_number], NewTextWorker::NOT_STORY, user.phone)
 
             elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
               
-              msg = DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[user.series_number]
+              msg = R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[user.series_number]
 
               myWait = SomeWorker.getWait(TEXT)
               NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
@@ -198,7 +203,7 @@ class SomeWorker
                user.update(awaiting_choice: false)
 
               myWait = SomeWorker.getWait(TEXT)
-              NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::NOT_STORY, user.phone)
+              NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::NOT_STORY, user.phone)
 
             #send STORY or SERIES, but not if awaiting series response
             elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -220,7 +225,7 @@ class SomeWorker
               if user.mms == false
 
                   myWait = SomeWorker.getWait(TEXT)
-                  NewTextWorker.perform_in(myWait.seconds, DROPPED, NewTextWorker::STORY, user.phone)
+                  NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::STORY, user.phone)
 
               else #MULTIMEDIA MESSAGING (MMS)!
 

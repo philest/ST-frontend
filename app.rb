@@ -283,7 +283,7 @@ module ApplicationHelper
 		#Responds with a letter when prompted to choose a series
 		#Account for quotations
 		elsif @user.awaiting_choice == true && /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
-			
+
 			body = params[:Body]
 
 			#has quotations => extract the juicy part
@@ -310,13 +310,15 @@ module ApplicationHelper
 
 				if @user.mms == true
 					
-					#incase of just one photo, this updates user-info.
+
+					#incase of just one photo, this also updates user-info.
+					#sends last photo in advance
 					NextMessageWorker.perform_in(17.seconds, story.getSMS, story.getMmsArr[1..-1], @user.phone)
 
 					if story.getMmsArr.length > 1 #don't need to send stack if it's a one-pager.
-						Helpers.mms(story.getMmsArr[0], @user.phone)
+						Helpers.mms(story.getMmsArr[0], @user.phone) #replies with first photo immediately
 					else
-						Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone)
+						Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone) #if just one photo, replies w/ photo and sms
 				    end
 
 				else # just SMS
