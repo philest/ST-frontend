@@ -56,7 +56,6 @@ describe 'The StoryTime App' do
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
       Sidekiq::Worker.clear_all
-      Sidekiq::Testing.inline!
     end
 
     after(:each) do
@@ -274,29 +273,40 @@ describe 'The StoryTime App' do
 
 
     describe "Series" do
-      before(:each) do
-        @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
-      end
 
     it "updates series_choice" do
-      get '/test/700/p/ATT'
+      Signup.enroll(["5612125839"], 'en', {Carrier: "ATT"})
+      NextMessageWorker.drain
+
+      @user = User.find_by_phone "5612125839"
+      @user.update(story_number: 3, awaiting_choice: true, series_number: 0)
       @user.reload
-      expect(@user.series_choice).to eq("p")
+
+      get '/test/5612125839/t/ATT'
+
+      @user.reload
+
+      expect(@user.series_choice).to eq("t")
     end
 
     it "good text response" do
-      get '/test/700/p/ATT'
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
+      get '/test/700/d/ATT'
       @user.reload
+
+
       expect(Helpers.getSimpleSMS).to_not eq(Text::BAD_CHOICE)
     end
 
     it "doesn't register a letter weird choice" do
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
       get '/test/700/X/ATT'
       @user.reload
       expect(Helpers.getSimpleSMS).to eq(Text::BAD_CHOICE)
     end
 
     it "doesn't register a letter on a diff day" do
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
       @user.update(series_number: 1)
       @user.reload
       get '/test/700/p/ATT'
@@ -306,20 +316,31 @@ describe 'The StoryTime App' do
 
 
     it "works for uppercase" do
-      get '/test/700/P/ATT'
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
+      get '/test/700/T/ATT'
+
+      NextMessageWorker.drain
+      @user.reload
+
       @user.reload
       expect(Helpers.getSimpleSMS).to_not eq(Text::BAD_CHOICE)
     end
 
 
     it "updates awaiting choice" do
-      get '/test/700/P/ATT'
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
+      get '/test/700/D/ATT'
       @user.reload
+
+      NextMessageWorker.drain
+      @user.reload
+
       expect(@user.awaiting_choice).to eq(false)
     end
 
 
     it "updates awaiting choice" do
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
       @user.update(awaiting_choice: false)
       @user.reload
       get '/test/700/p/ATT'
@@ -432,7 +453,7 @@ describe 'The StoryTime App' do
             require_relative '../messageSeries'
 
             messageSeriesHash = MessageSeries.getMessageSeriesHash
-            story = messageSeriesHash["p"+ @user.series_number.to_s][0]
+            story = messageSeriesHash["d"+ @user.series_number.to_s][0]
 
             Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)
 
@@ -742,7 +763,7 @@ describe 'The StoryTime App' do
         Signup.initialize_user_count()
        
         (0..40).each do |num|
-         expect(wait = Signup.getWait).to eq(num*2)
+         expect(wait = Signup.getWait).to eq(num*8)
          
          if num == 0 || num == 40
           puts wait
@@ -881,7 +902,7 @@ describe 'The StoryTime App' do
 
       it "recognizes Sprint v. Nonsprint" do
 
-
+        Sidekiq::Testing.inline!
         # i18n = R18n::I18n.new('en', ::R18n.default_places)
         # R18n.thread_set(i18n)
         # R18n.set 'es'

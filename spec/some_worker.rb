@@ -4,6 +4,7 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
+require 'sinatra/r18n'
 require 'time'
 require 'active_support/all'
 
@@ -51,6 +52,7 @@ describe 'SomeWorker' do
         FirstTextWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
+        Sidekiq::Testing.inline!
     end
 
     after(:each) do
@@ -777,7 +779,7 @@ time = Time.now.utc
           NewTextWorker.drain
 
 
-      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
+      smsSoFar.push SomeWorker::DAY_LATE + " " + R18n.t.choice.no_greet[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
@@ -1321,8 +1323,90 @@ time = Time.now.utc
 
       puts time_sent.sort
 
+    end
+
+    it "registers locale and sends correct translation" do 
+
+      Sidekiq::Testing.inline!
+
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Signup.enroll(["+15612125833"], 'es', {Carrier: "ATT"})
+
+      @user = User.find_by_phone "+15612125833"
+      
+
+
+      #set up for "no_reply" message
+      @user.update(awaiting_choice: false)
+      @user.update(story_number: 1)
+      @user.update(next_index_in_series: nil)
+
+      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received (THURSDAY!).
+
+      SomeWorker.perform_async
+
+
+      #set as English
+      i18n = R18n::I18n.new('en', ::R18n.default_places)
+      R18n.thread_set(i18n)
+
+
+      expect(Helpers.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
+      expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+
+
+      ######### Spanish
+     
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Signup.enroll(["+15612125834"], 'es', {Carrier: "ATT"})
+
+      @user = User.find_by_phone "+15612125834"
+
+              #set up for "greet choice" message
+      @user.update(awaiting_choice: false)
+      @user.update(story_number: 1)
+      @user.update(next_index_in_series: nil)
+
+      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
+  
+      SomeWorker.perform_async
+
+
+      #set as Spanish
+      i18n = R18n::I18n.new('es', ::R18n.default_places)
+      R18n.thread_set(i18n)
+
+      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
+
+
+      #it works for a different locale 
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
+      Signup.enroll(["+15612125835"], 'en', {Carrier: "ATT"})
+
+      @user = User.find_by_phone "+15612125835"
+
+              #set up for "greet choice" message
+      @user.update(awaiting_choice: false)
+      @user.update(story_number: 1)
+      @user.update(next_index_in_series: nil)
+
+      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
+  
+      SomeWorker.perform_async
+
+      #set as English
+      i18n = R18n::I18n.new('en', ::R18n.default_places)
+      R18n.thread_set(i18n)
+
+      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
+      expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
     end
+
+
+
+
+
 
 
 
