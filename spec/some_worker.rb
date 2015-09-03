@@ -4,7 +4,6 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require 'sinatra/r18n'
 require 'time'
 require 'active_support/all'
 
@@ -52,19 +51,15 @@ describe 'SomeWorker' do
         FirstTextWorker.jobs.clear
         Helpers.initialize_testing_vars
         Timecop.return
-        Sidekiq::Testing.inline!
     end
 
     after(:each) do
       NextMessageWorker.jobs.clear
       Timecop.return
-      Sidekiq::Worker.clear_all
-
     end
 
 
     it "properly enques a SomeWorker" do
-      Sidekiq::Testing.fake!
       expect(SomeWorker.jobs.size).to eq(0)
       SomeWorker.perform_async
       expect(SomeWorker.jobs.size).to eq(1)
@@ -89,7 +84,6 @@ describe 'SomeWorker' do
 
 
     it "recurrs" do
-      Sidekiq::Testing.fake!
 
       Timecop.travel(2015, 9, 1, 10, 0, 0) #set Time.now to Sept, 1 2015, 10:00:00 AM at this instant, but allow to move forward
 
@@ -622,6 +616,7 @@ time = Time.now.utc
     NewTextWorker.drain
     NextMessageWorker.drain
 
+
     expect(Helpers.getMMSarr).to eq(mmsSoFar)
     expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -696,32 +691,22 @@ time = Time.now.utc
 
 
       #They're asked for their story choice during storyTime.
-      smsSoFar.push R18n.t.choice.greet[0]
+      smsSoFar.push SomeWorker::SERIES_CHOICES[0]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
       expect(@user.next_index_in_series).to eq(0)
 
+      
 
-      get 'test/+15612129000/d/ATT'
+      get 'test/+15612129000/p/ATT'
       @user.reload
-
-
 
       NextMessageWorker.drain #OMG forgot this.
 
       expect(@user.awaiting_choice).to eq(false)
-
-      messageSeriesHash = MessageSeries.getMessageSeriesHash
-      
-      #because it's just ONE night of a "series"
-      if messageSeriesHash["d0"].length != 1
-        expect(@user.series_choice).to eq("d")
-      else
-        expect(@user.series_choice).to eq(nil)
-      end
-
+      expect(@user.series_choice).to eq("p")
 
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
@@ -760,7 +745,7 @@ time = Time.now.utc
 
       NextMessageWorker.drain
 
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -792,7 +777,7 @@ time = Time.now.utc
           NewTextWorker.drain
 
 
-      smsSoFar.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
@@ -848,7 +833,7 @@ time = Time.now.utc
 
 
 
-      smsSoFar.push R18n.t.no_reply.dropped
+      smsSoFar.push SomeWorker::DROPPED
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       expect(@user.subscribed).to eq(false)
 
@@ -884,7 +869,7 @@ time = Time.now.utc
       expect(@user.series_number).to eq(0)
 
       #They're asked for their story choice during storyTime.
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       mmsSoFar = []
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
@@ -895,38 +880,36 @@ time = Time.now.utc
       NewTextWorker.drain
 
 
-      get 'test/+15002125833/d/ATT'
+      get 'test/+15002125833/p/ATT'
       @user.reload
+      NextMessageWorker.drain #OMG forgot this.
 
-      #NOT RELEVANT: Because series is no just one-pager
-      # NextMessageWorker.drain #OMG forgot this.
+      expect(@user.series_number).to eq(0)
 
-      # expect(@user.series_number).to eq(0)
+      expect(@user.awaiting_choice).to eq(false)
+      expect(@user.series_choice).to eq("p")
 
-      # expect(@user.awaiting_choice).to eq(false)
-      # expect(@user.series_choice).to eq("d")
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
+      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
-      # messageSeriesHash = MessageSeries.getMessageSeriesHash
-      # story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+      smsSoFar.push story.getSMS
+      mmsSoFar.concat story.getMmsArr
 
-      # smsSoFar.push story.getSMS
-      # mmsSoFar.concat story.getMmsArr
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
 
-      # expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      # expect(Helpers.getSMSarr).to eq(smsSoFar)
+      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
+      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-      # Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
-      # Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+      (1..10).each do 
+        SomeWorker.perform_async
+        SomeWorker.drain
+        sleep SLEEP_TIME
+      end
 
-      # (1..10).each do 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
-      #   sleep SLEEP_TIME
-      # end
+      NextMessageWorker.drain
 
-      # NextMessageWorker.drain
-
-      # @user.reload 
+      @user.reload 
 
 
     #SERIES ENDED, update user
@@ -936,15 +919,12 @@ time = Time.now.utc
 
 
       messageSeriesHash = MessageSeries.getMessageSeriesHash
-      # story = messageSeriesHash["d" + "0"][1]   #NOT RELEVANT: One-page series now.
-      story = messageSeriesHash["d" + "0"][0]
+      story = messageSeriesHash["p" + "0"][1]
+
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
 
-      # expect(Helpers.getMMSarr).to include(mmsSoFar.first)
-      # expect(Helpers.getMMSarr).to include(mmsSoFar.last)
-      expect(Helpers.getMMSarr.length).to eq (mmsSoFar.length)
-
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       puts mmsSoFar
@@ -970,7 +950,7 @@ time = Time.now.utc
       NewTextWorker.drain
 
       
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -996,7 +976,7 @@ time = Time.now.utc
       end
       @user.reload
 
-      smsSoFar.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
     NewTextWorker.drain
 
@@ -1029,7 +1009,7 @@ time = Time.now.utc
       NewTextWorker.drain
 
       
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -1055,7 +1035,7 @@ time = Time.now.utc
       end
       @user.reload
 
-      smsSoFar.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
+      smsSoFar.push SomeWorker::DAY_LATE + " " + SomeWorker::NO_GREET_CHOICES[0]
 
     NewTextWorker.drain
 
@@ -1111,7 +1091,7 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      smsSoFar.push R18n.t.no_reply.dropped
+      smsSoFar.push SomeWorker::DROPPED
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       expect(@user.subscribed).to eq(false)
 
@@ -1126,7 +1106,7 @@ time = Time.now.utc
       #send the SERIES choice
 
       #welcome back, with series choice
-      smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + R18n.t.choice.no_greet[0]
+      smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + SomeWorker::NO_GREET_CHOICES[0]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       smsSoFar.each do |sms|
@@ -1153,7 +1133,7 @@ time = Time.now.utc
       
             NewTextWorker.drain
 
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [SomeWorker::SERIES_CHOICES[0]]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -1182,7 +1162,7 @@ time = Time.now.utc
           NewTextWorker.drain
 
 
-      smsSoFar.push R18n.t.no_reply.day_late + " "+ R18n.t.choice.no_greet[0]
+      smsSoFar.push SomeWorker::DAY_LATE + " "+ SomeWorker::NO_GREET_CHOICES[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
@@ -1193,26 +1173,23 @@ time = Time.now.utc
 
 
       #properly sends out story WHEN they respond
-      get 'test/+15615422025/d/ATT'
+      get 'test/+15615422025/p/ATT'
       @user.reload
       NextMessageWorker.drain #OMG forgot this.
 
-      # expect(@user.series_number).to eq(0)
-      expect(@user.series_number).to eq(1)
-
+      expect(@user.series_number).to eq(0)
 
       expect(@user.awaiting_choice).to eq(false)
-      expect(@user.series_choice).to eq(nil)
+      expect(@user.series_choice).to eq("p")
 
       messageSeriesHash = MessageSeries.getMessageSeriesHash
-      story = messageSeriesHash["d0"][0]
+      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
       smsSoFar.push story.getSMS
       mmsSoFar = story.getMmsArr
 
-      # expect(Helpers.getMMSarr).to include(mmsSoFar.first)
-      # expect(Helpers.getMMSarr).to include(mmsSoFar.last)
-      expect(Helpers.getMMSarr.length).to eq (mmsSoFar.length)
+      expect(Helpers.getMMSarr).to eq(mmsSoFar)
+      expect(Helpers.getSMSarr).to eq(smsSoFar)
 
 
       smsSoFar.each do |sms|
@@ -1344,101 +1321,19 @@ time = Time.now.utc
 
       puts time_sent.sort
 
-    end
-
-    it "registers locale and sends correct translation" do 
-
-      Sidekiq::Testing.inline!
-
-      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125833"], 'es', {Carrier: "ATT"})
-
-      @user = User.find_by_phone "+15612125833"
-      
-
-
-      #set up for "no_reply" message
-      @user.update(awaiting_choice: false)
-      @user.update(story_number: 1)
-      @user.update(next_index_in_series: nil)
-
-      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received (THURSDAY!).
-
-      SomeWorker.perform_async
-
-
-      #set as English
-      i18n = R18n::I18n.new('en', ::R18n.default_places)
-      R18n.thread_set(i18n)
-
-
-      expect(Helpers.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
-
-
-      ######### Spanish
-     
-      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125834"], 'es', {Carrier: "ATT"})
-
-      @user = User.find_by_phone "+15612125834"
-
-              #set up for "greet choice" message
-      @user.update(awaiting_choice: false)
-      @user.update(story_number: 1)
-      @user.update(next_index_in_series: nil)
-
-      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
-  
-      SomeWorker.perform_async
-
-
-      #set as Spanish
-      i18n = R18n::I18n.new('es', ::R18n.default_places)
-      R18n.thread_set(i18n)
-
-      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
-
-
-      #it works for a different locale 
-      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125835"], 'en', {Carrier: "ATT"})
-
-      @user = User.find_by_phone "+15612125835"
-
-              #set up for "greet choice" message
-      @user.update(awaiting_choice: false)
-      @user.update(story_number: 1)
-      @user.update(next_index_in_series: nil)
-
-      Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
-  
-      SomeWorker.perform_async
-
-      #set as English
-      i18n = R18n::I18n.new('en', ::R18n.default_places)
-      R18n.thread_set(i18n)
-
-      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
     end
-
-
-
-
-
 
 
 
   # it "knows which user gets story next" do
-  #   User.create(name: "Bob", time: "5:30pm", phone: "898")
-  #   User.create(name: "Loria", time: "6:30pm", phone: "798")
-  #   User.create(name: "Jessica", time: "6:30am", phone: "698")
+  # 	User.create(name: "Bob", time: "5:30pm", phone: "898")
+  # 	User.create(name: "Loria", time: "6:30pm", phone: "798")
+  # 	User.create(name: "Jessica", time: "6:30am", phone: "698")
 
-  #   @user = User.find_by_name("Bob")
+  # 	@user = User.find_by_name("Bob")
 
-  #   SomeWorker.sendStory?(@user, "12:30pm")
+  # 	SomeWorker.sendStory?(@user, "12:30pm")
   # end
 
 

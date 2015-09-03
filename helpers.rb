@@ -165,7 +165,7 @@ SMS = "SMS"
 
 	end
 
-	def self.mmsRespond(mms_url)
+	def self.mmsRespond(mms_url, order)
 
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
@@ -385,16 +385,17 @@ SMS = "SMS"
 
 
 	def self.mms(mms, user_phone)
-    	 
+
+    	@user = User.find_by(phone: user_phone)
 		
-		if (user = User.find_by(phone: user_phone)) == nil
+		if @user == nil
     		puts "Sent mms to new user"
     	else
-    		puts "Sent to #{user.phone}: #{mms[18, mms.length]}" 
+    		puts "Sent to #{@user.phone}: #{mms[18, mms.length]}" 
   		end
 
 
-    	Helpers.mmsRespond(mms)
+    	Helpers.mmsRespond(mms, LAST)
 
 	end
 

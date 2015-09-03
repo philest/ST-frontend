@@ -66,7 +66,6 @@ class NextMessageWorker
       if @user.next_index_in_series != nil
         @user.update(next_index_in_series: (@user.next_index_in_series + 1))
 
-        
         #exit series if time's up
         if @user.next_index_in_series == messageSeriesHash[@user.series_choice + @user.series_number.to_s].length
 

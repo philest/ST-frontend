@@ -26,8 +26,6 @@ class Signup
 		#retrieve from array
 		if params != nil
 			params = params.shift
-		else #no params
-			params = {Carrier: "ATT"}
 		end
 
 		phone_nums.each do |phone|
@@ -45,7 +43,7 @@ class Signup
 
 		wait = @@user_num_story
 
-    	@@user_num_story += 8
+    	@@user_num_story += 2
 
     	return wait
 
