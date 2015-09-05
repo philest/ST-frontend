@@ -51,7 +51,7 @@ class Message
 		"Jasmine baked banana bread.\n\nIt was bigger than her head\n\nand huger than a hippo-potamus\n\nand larger than a giant octopus!\n\nJasmine thinks it's only fair\n\nfor her and all her friends to share.")
 
 		#croc in grocery shop
-		@@messageArray.push Message.new([Text::IMAGE_URL+"chomp1.jpg", Text::IMAGE_URL+"chomp2.jpg"],
+		@@messageArray.push Message.new([Text::IMAGE_URL+"ch1.jpg", Text::IMAGE_URL+"ch2.jpg"],
 		"StoryTime: Here's tonight's story about a croc eating brocolli!",
 		"There's a huge hungry croc\n\nin the grocery shop\n\nand I think he's coming to chomp me!\n\n\nHe licks his big lips,\n\nand swings his big hips,\n\nbut this croc only wants broccoli!")
 		
@@ -67,7 +67,7 @@ class Message
 		dino = Array.new
 
 		#babooon in pocket
-		baboon.push Message.new([Text::IMAGE_URL+"baboon1.jpg", Text::IMAGE_URL+"baboon2.jpg"],
+		baboon.push Message.new([Text::IMAGE_URL+"b1.jpg", Text::IMAGE_URL+"b2.jpg"],
 		"StoryTime: Tim stuffs a lot in his pocket! Your child loves being silly. Take turns saying the silly things you could find in your pocket.",
 		"Tim's mom told him\n\nto clean his room.\n\nUnder his bed, he found a baboon.\n\n\nTim's mom told him\n\nto clean his pocket.\n\nHe found a hippo, two tacos,\n\nand a space rocket!")
 	

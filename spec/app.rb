@@ -972,10 +972,10 @@ describe 'The StoryTime App' do
         get '/images/bb2.jpg'
         expect(last_response).to be_ok
 
-        get '/images/chomp1.jpg'
+        get '/images/ch1.jpg'
         expect(last_response).to be_ok
 
-        get '/images/chomp2.jpg'
+        get '/images/ch2.jpg'
         expect(last_response).to be_ok
 
         get '/images/hero1.jpg'
@@ -984,10 +984,10 @@ describe 'The StoryTime App' do
         get '/images/hero2.jpg'
         expect(last_response).to be_ok
 
-        get '/images/baboon1.jpg'
+        get '/images/b1.jpg'
         expect(last_response).to be_ok
 
-        get '/images/baboon2.jpg'
+        get '/images/b2.jpg'
         expect(last_response).to be_ok
 
         #fake
