@@ -31,10 +31,6 @@ require_relative './workers/first_text_worker'
 require_relative './workers/choice_worker'
 require_relative './helpers.rb'
 
-#require the testing workers
-# configure :test, :development do
-# 	require_relative './workers/test/test_some_worker'
-# end
 
 DEFAULT_TIME = Time.utc(2015, 6, 21, 21, 30, 0) #21:30 UTC (17:30 EST --> 5:30 PM on East Coast)
 
