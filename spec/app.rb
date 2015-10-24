@@ -994,6 +994,10 @@ describe 'The StoryTime App' do
         get '/images/nothinghere'
         expect(last_response).to_not be_ok
 
+        get '/images/sofake.jpg'
+        expect(last_response).to_not be_ok
+
+
 
       end
 
