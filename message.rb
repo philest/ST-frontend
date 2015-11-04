@@ -40,11 +40,6 @@ class Message
 
 		@@messageArray = Array.new
 
-		#superheroes
-		@@messageArray.push Message.new([Text::IMAGE_URL+"hero1.jpg", Text::IMAGE_URL+"hero2.jpg"],
-		"StoryTime: Enjoy tonight's superhero story!",
-		"SuperSarah can break a brick wall\n\nwith her pinky finger.\n\nSuperSam can run to China\n\nand be back before dinner.\n\n\nMy superpower is telling funny jokes\n\nuntil you fall down.\n\nI'll make you laugh so much,\n\nyou'll be rolling on the ground!")
-
 		#banana bread
 		@@messageArray.push Message.new([Text::IMAGE_URL+"bb1.jpg", Text::IMAGE_URL+"bb2.jpg"],
 		"StoryTime: Talking grows your child's brain! When you see an orange bubble, point to the picture and ask \'what's this?\' or \'what's going on here?\'",
@@ -52,8 +47,13 @@ class Message
 
 		#croc in grocery shop
 		@@messageArray.push Message.new([Text::IMAGE_URL+"ch1.jpg", Text::IMAGE_URL+"ch2.jpg"],
-		"StoryTime: Here's tonight's story about a croc eating brocolli!",
+		"StoryTime: Here's tonight's story about a croc who shops! See if your child can tell you what's going on in each page.",
 		"There's a huge hungry croc\n\nin the grocery shop\n\nand I think he's coming to chomp me!\n\n\nHe licks his big lips,\n\nand swings his big hips,\n\nbut this croc only wants broccoli!")
+
+		#superheroes
+		@@messageArray.push Message.new([Text::IMAGE_URL+"hero1.jpg", Text::IMAGE_URL+"hero2.jpg"],
+		"StoryTime: Enjoy tonight's superhero story!",
+		"SuperSarah can break a brick wall\n\nwith her pinky finger.\n\nSuperSam can run to China\n\nand be back before dinner.\n\n\nMy superpower is telling funny jokes\n\nuntil you fall down.\n\nI'll make you laugh so much,\n\nyou'll be rolling on the ground!")
 		
 		#pizza aliens
 		@@messageArray.push Message.new([Text::IMAGE_URL+"pizza1.jpg", Text::IMAGE_URL+"pizza2.jpg"],
