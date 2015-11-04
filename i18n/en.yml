@@ -40,7 +40,7 @@ example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy y
 
 choice:
   greet:
-    - "StoryTime: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+    - "StoryTime: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
   no_greet:
     - "Ask your child if they want stories about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
