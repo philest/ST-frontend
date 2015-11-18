@@ -1096,12 +1096,6 @@ time = Time.now.utc
       expect(@user.subscribed).to be(true)
 
 
-      require 'pry'
-
-      binding.pry
-
-
-
       #send the SERIES choice
 
       #welcome back, with series choice
@@ -1163,7 +1157,7 @@ time = Time.now.utc
           NewTextWorker.drain
 
 
-      smsSoFar.push R18n.t.no_reply.day_late + " "+ R18n.t.no_reply.day_late[0]
+      smsSoFar.push R18n.t.no_reply.day_late + " "+ R18n.t.choice.no_greet[0]
 
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       
@@ -1351,7 +1345,7 @@ time = Time.now.utc
 
 
       expect(Helpers.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+      expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
 
       ######### Spanish
@@ -1398,7 +1392,7 @@ time = Time.now.utc
       R18n.thread_set(i18n)
 
       expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask you child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+      expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
     end
 
