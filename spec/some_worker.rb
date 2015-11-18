@@ -1002,8 +1002,7 @@ time = Time.now.utc
 
       NewTextWorker.drain
 
-      
-      smsSoFar = [R18n.t.choice.greet[0]]
+      smsSoFar = [(R18n.t.choice.greet[0]).to_s]
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
@@ -1085,7 +1084,7 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      smsSoFar.push R18n.t.no_reply.dropped
+      smsSoFar.push R18n.t.no_reply.dropped.to_str
       expect(Helpers.getSMSarr).to eq(smsSoFar)
       expect(@user.subscribed).to eq(false)
 
@@ -1097,10 +1096,18 @@ time = Time.now.utc
       expect(@user.subscribed).to be(true)
 
 
+      require 'pry'
+
+      binding.pry
+
+
+
       #send the SERIES choice
 
       #welcome back, with series choice
-      smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + R18n.t.no_reply.day_late[0]
+      smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + R18n.t.choice.no_greet[0].to_s
+     
+
       expect(Helpers.getSMSarr).to eq(smsSoFar)
 
       smsSoFar.each do |sms|
