@@ -1,5 +1,6 @@
- # require '.config/environments'
 require 'rubygems'
+require 'bundler/setup'
+
 require 'twilio-ruby'
 require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
