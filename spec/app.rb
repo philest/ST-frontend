@@ -737,12 +737,18 @@ describe 'The StoryTime App' do
         @user = User.find_by_phone("+15612125831")
         expect(@user).to be nil 
         
-        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        Sidekiq::Testing.inline! do
+          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        end
+
         @user = User.find_by_phone("+15612125831")
         @user.reload
         expect(@user).to_not be nil
 
         expect(@user.locale).to eq 'en'
+
+        expect(Helpers.getMMSarr).to_not eq nil
+
       end
 
        it "works for es" do

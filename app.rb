@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'sinatra'
 require 'sinatra/activerecord'
 require_relative './config/environments' #database configuration
@@ -116,6 +119,8 @@ module ApplicationHelper
 			wait_time = wait_time.shift
 
 			if @user.carrier == Text::SPRINT
+				puts "LOOK HERE" + R18n.t.first_mms.to_s
+				
 		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.sprint(days), R18n.t.first_mms.to_s, @user.phone)
 		  	else
 		  		NextMessageWorker.perform_in(wait_time.seconds, R18n.t.start.normal(days), R18n.t.first_mms.to_s, @user.phone)
