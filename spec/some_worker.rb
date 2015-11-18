@@ -697,13 +697,13 @@ time = Time.now.utc
         expect(@user.awaiting_choice).to eq(true)
         expect(@user.next_index_in_series).to eq(0)
 
-        get 'test/+15612129000/p/ATT'
+        get 'test/+15612129000/d/ATT'
         @user.reload
 
         NextMessageWorker.drain #OMG forgot this.
 
         expect(@user.awaiting_choice).to eq(false)
-        expect(@user.series_choice).to eq("p")
+        expect(@user.series_choice).to eq("d")
 
         messageSeriesHash = MessageSeries.getMessageSeriesHash
         story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
@@ -717,7 +717,7 @@ time = Time.now.utc
         @user.reload
         #properly update after choice_worker
 
-        expect(@user.next_index_in_series).to eq(1)
+        expect(@user.next_index_in_series).to eq(nil) #no series
         expect(@user.total_messages).to eq(3)
   end
 
@@ -841,6 +841,7 @@ time = Time.now.utc
 
 
     it "properly delivers the next message in a series" do 
+      Sidekiq::Testing.fake!
       Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
       @user = User.create(phone: "+15002125833", story_number: 1, days_per_week: 2)
 
@@ -874,17 +875,23 @@ time = Time.now.utc
       NewTextWorker.drain
 
 
-      get 'test/+15002125833/p/ATT'
+      get 'test/+15002125833/t/ATT'
       @user.reload
-      NextMessageWorker.drain #OMG forgot this.
+      @user.reload
 
-      expect(@user.series_number).to eq(0)
+      expect(@user.series_number).to eq(0) #no series
 
       expect(@user.awaiting_choice).to eq(false)
-      expect(@user.series_choice).to eq("p")
+      expect(@user.series_choice).to eq("t")
 
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+      NextMessageWorker.drain #OMG forgot this.
+
+      @user.reload
+      expect(@user.series_number).to eq(1) #no series
+
 
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
@@ -911,12 +918,18 @@ time = Time.now.utc
       expect(@user.series_choice).to eq(nil)
       expect(@user.next_index_in_series).to eq(nil)
 
+      # messageSeriesHash = MessageSeries.getMessageSeriesHash
+      # story = messageSeriesHash["t" + "0"][1]
 
-      messageSeriesHash = MessageSeries.getMessageSeriesHash
-      story = messageSeriesHash["p" + "0"][1]
+      # smsSoFar.push story.getSMS
+      # mmsSoFar.concat story.getMmsArr
 
-      smsSoFar.push story.getSMS
-      mmsSoFar.concat story.getMmsArr
+
+      #because one pager, hero stories
+      mmsSoFar.concat ["http://joinstorytime.org/images/hero1.jpg", 
+              "http://joinstorytime.org/images/hero2.jpg"]
+      smsSoFar.concat ["StoryTime: Enjoy tonight's superhero story! Whenever you talk or play with your child, you're helping her grow into a super-reader!"]
+
 
       expect(Helpers.getMMSarr).to eq(mmsSoFar)
       expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -1113,6 +1126,7 @@ time = Time.now.utc
 
 
     it "re-offers choice after day-late" do
+      Sidekiq::Testing.fake!
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
 
@@ -1168,17 +1182,21 @@ time = Time.now.utc
 
 
       #properly sends out story WHEN they respond
-      get 'test/+15615422025/p/ATT'
+      get 'test/+15615422025/d/ATT'
       @user.reload
-      NextMessageWorker.drain #OMG forgot this.
-
-      expect(@user.series_number).to eq(0)
-
-      expect(@user.awaiting_choice).to eq(false)
-      expect(@user.series_choice).to eq("p")
+      expect(@user.series_choice).to eq("d")
 
       messageSeriesHash = MessageSeries.getMessageSeriesHash
       story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+
+      NextMessageWorker.drain #OMG forgot this.
+      @user.reload
+      expect(@user.series_number).to eq(1) #no series
+
+      expect(@user.awaiting_choice).to eq(false)
+      expect(@user.series_choice).to eq(nil)
+
+      messageSeriesHash = MessageSeries.getMessageSeriesHash
 
       smsSoFar.push story.getSMS
       mmsSoFar = story.getMmsArr

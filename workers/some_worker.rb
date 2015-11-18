@@ -128,7 +128,7 @@ class SomeWorker
     if user.time.class != String #LEGACY
 
 
-      #handling old users: convert give Time!
+      # handling old users: convert give Time!
       if user.time == nil || (user.time.utc.hour != 21 && user.id < 140)
         user.update(time: DEFAULT_TIME)
       end
