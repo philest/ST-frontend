@@ -14,12 +14,12 @@ auth_token = '716e0547bbd82c179b9aae8ebfef0e95'
 # sprintArr = Sprint.chop(SMS)
 
 phone = "+15612125831" 
-        require 'pry'
-    binding.pry
-
 
             R18n.default_places = './i18n/'
 
+
+            require 'pry'
+            binding.pry
 
             i18n = R18n::I18n.new('en', ::R18n.default_places)
             R18n.thread_set(i18n)
@@ -32,7 +32,7 @@ phone = "+15612125831"
             message = @client.account.messages.create(
                 :to => phone,     # Replace with your phone number
                 :from => "+12032023505",
-                :body => R18n.t.error.no_option)
+                :body => R18n.t.error.no_option.to_s)
 
 
             puts "sent!"
