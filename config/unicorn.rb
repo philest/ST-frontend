@@ -3,7 +3,7 @@ worker_processes 3
 timeout 30
 
 
-app_path = File.expand_path(File.dirname(__FILE__) + '/..')
+app_path = File.expand_path(File.dirname(__FILE__) + '../app/')
 
 preload_app true # important for newrelic gem
 
