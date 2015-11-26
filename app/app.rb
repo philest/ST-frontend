@@ -3,8 +3,6 @@
 #  Main control structure for receiving, responding to SMS. 
 #  --------------------------------------------------------
 
-
-
 ## DEPENDENCIES ## 
 
 #config the load path 
@@ -77,51 +75,52 @@ def app_workflow(params, locale)
 
 	@user = User.find_by_phone(params[:From]) #check if already registered.
 
-	#PRO, set locale for returning user 
+	#PRO, set locale for returning user, w/in thread 
 	if locale != nil && @user != nil
 		i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
         R18n.thread_set(i18n)
-	 	#set the locale for that user, w/in this thread
 	end
 
 	#first reply: new user texts in STORY
-
-	if params[:Body].casecmp(R18n.t.commands.story) == 0 && (@user == nil || @user.sample == true)
+	if params[:Body].casecmp(R18n.t.commands.story) == 0 && 
+			(@user == nil || @user.sample == true)
 		app_enroll(params, params[:From], locale, STORY)
 
-	elsif (params[:Body].casecmp(R18n.t.commands.sample) == 0 || params[:Body].casecmp(R18n.t.commands.example) == 0)
+	elsif params[:Body].casecmp(R18n.t.commands.sample) == 0 ||
+			params[:Body].casecmp(R18n.t.commands.example) == 0
 		app_enroll(params, params[:From], locale, SAMPLE)
 
 	elsif @user == nil
-
-		Helpers.text(R18n.t.error.no_signup_match, R18n.t.error.no_signup_match, params[:From])
-
+		Helpers.text(R18n.t.error.no_signup_match, 
+			R18n.t.error.no_signup_match, params[:From])
 	elsif @user.sample == true
-
-		Helpers.text(R18n.t.sample.post, R18n.t.sample.post, @user.phone)
-
-	
+		Helpers.text(R18n.t.sample.post, R18n.t.sample.post,
+											    @user.phone)
 	#if auto-dropped (or if choose to drop mid-series), returning
-	elsif (@user.next_index_in_series == 999 || @user.awaiting_choice == true) && (@user.subscribed == false && params[:Body].casecmp(R18n.t.commands.story) == 0)
+	elsif (@user.next_index_in_series == 999 || 
+				 @user.awaiting_choice == true) &&
+		  (@user.subscribed == false && 
+		  		 params[:Body].casecmp(R18n.t.commands.story) == 0)
 
 		#REACTIVATE SUBSCRIPTION
 			@user.update(subscribed: true)
-			msg = R18n.t.stop.resubscribe.short + "\n\n" + R18n.t.choice.no_greet[@user.series_number] #longer message, give more newlines
+			msg = R18n.t.stop.resubscribe.short + 
+				"\n\n" + R18n.t.choice.no_greet[@user.series_number]
+					 #longer message, give more newlines
 
 			@user.update(next_index_in_series: 0)
 			@user.update(awaiting_choice: true)
 
 			Helpers.text(msg, msg, @user.phone)
-
 	#if returning after manually stopping (not in mid - series)
-	elsif @user.subscribed == false && params[:Body].casecmp(R18n.t.commands.story) == 0 
-
+	elsif @user.subscribed == false && 
+			params[:Body].casecmp(R18n.t.commands.story) == 0 
 		#REACTIVATE SUBSCRIPTION
 		@user.update(subscribed: true)
-		Helpers.text(R18n.t.stop.resubscribe.long, R18n.t.stop.resubscribe.long, @user.phone)
+		Helpers.text(R18n.t.stop.resubscribe.long, 
+			R18n.t.stop.resubscribe.long, @user.phone)
 
 	elsif params[:Body].casecmp(R18n.t.commands.help) == 0 #Text::HELP option
-		
 	  	#default 2 days a week
 	  	if @user.days_per_week == nil
 	  		@user.update(days_per_week: 2)
@@ -134,34 +133,38 @@ def app_workflow(params, locale)
 
 	  	when 2, nil
 	  		if @user.carrier == SPRINT
-	  			dayNames =  R18n.t.weekday.sprint.tue + "/" + R18n.t.weekday.sprint.th
+	  			dayNames =  R18n.t.weekday.sprint.tue +
+	  			 "/" + R18n.t.weekday.sprint.th
 	  		else           
-	  			dayNames = R18n.t.weekday.normal.tue + "/" + R18n.t.weekday.normal.th
+	  			dayNames = R18n.t.weekday.normal.tue +
+	  			 "/" + R18n.t.weekday.normal.th
 	  		end
 	  	when 3
 	  		if @user.carrier == SPRINT
-	  			dayNames = R18n.t.weekday.letters.M + "-" + R18n.t.weekday.letters.W + "-" + R18n.t.weekday.letters.F
+	  			dayNames = R18n.t.weekday.letters.M + 
+	  				 "-" + R18n.t.weekday.letters.W + 
+	  				 "-" + R18n.t.weekday.letters.F
 	  		else           
-	  			dayNames = R18n.t.weekday.mon + "/" + R18n.t.weekday.wed + "/" + R18n.t.weekday.fri
+	  			dayNames = R18n.t.weekday.mon + 
+	  			     "/" + R18n.t.weekday.wed +
+	  			     "/" + R18n.t.weekday.fri
 	  		end
 	  	else
 	  		puts "ERR: invalid days of week"
 	  	end
 
-		  	# Helpers.text(Text::HELP_SMS_1 + dayNames + Text::HELP_SMS_2, Text::HELP_SPRINT_1 + dayNames + Text::HELP_SPRINT_2, @user.phone)
-
-	  	Helpers.text(R18n.t.help.normal(dayNames).to_s, R18n.t.help.sprint(dayNames).to_s, @user.phone)
+	  	Helpers.text(R18n.t.help.normal(dayNames).to_s,
+	  		 R18n.t.help.sprint(dayNames).to_s, @user.phone)
 
 	elsif params[:Body].casecmp(R18n.t.commands.break) == 0
-
 		@user.update(on_break: true)
 		@user.update(days_left_on_break: Text::BREAK_LENGTH)
 
-		Helpers.text(R18n.t.break.start, R18n.t.break.start, @user.phone)
+		Helpers.text(R18n.t.break.start, R18n.t.break.start,
+											    @user.phone)
 
-
-	elsif params[:Body].casecmp("STOP NOW") == 0 || params[:Body].casecmp(R18n.t.commands.stop) == 0#STOP option
-		
+	elsif params[:Body].casecmp("STOP NOW") == 0 ||
+		  params[:Body].casecmp(R18n.t.commands.stop) == 0#STOP option
 
 		if MODE == PRO
 		#SAVE QUITTERS
@@ -169,7 +172,6 @@ def app_workflow(params, locale)
 			#update if the user quits
 			#EX: REDIS.zadd("+15612125831:quit", true)  
 		end
-
 		#change subscription
 		@user.update(subscribed: false)
 		note = params[:From].to_s + "quit StoryTime."
@@ -177,163 +179,80 @@ def app_workflow(params, locale)
 
 
 	elsif params[:Body].casecmp(R18n.t.commands.text) == 0 #TEXT option		
-
 		#change mms to sms
 		@user.update(mms: false)
-
-		Helpers.text(R18n.t.mms_update, R18n.t.mms_update, @user.phone)
-
+		Helpers.text(R18n.t.mms_update, R18n.t.mms_update,
+											  @user.phone)
 	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
-
 		#no need to manually undo birthdate
-		Helpers.text(Text::REDO_BIRTHDATE, Text::REDO_BIRTHDATE, @user.phone)
-
+		Helpers.text(Text::REDO_BIRTHDATE, Text::REDO_BIRTHDATE,
+												    @user.phone)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
-	elsif @user.awaiting_choice == true && /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
+	elsif @user.awaiting_choice == true &&
+	   /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
 
 		body = params[:Body]
-
 		#has quotations => extract the juicy part
 		if  !(/\A[a-zA-Z]\z/ =~ params[:Body])
 			body = params[:Body][1,1]
 		end
-
 		body.downcase!
 
-		#push back to zero incase this was changed to 999 to denote one 'day' after
+		#push back to zero incase 
+		#changed to 999 to denote one 'day' after
         @user.update(next_index_in_series: 0)
 
-		#check if the choice is valid
-		if MessageSeries.codeIsInHash( body + @user.series_number.to_s)
+		#check if valid choice
+		if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
 	 			
 			#update the series choice
 			@user.update(series_choice: body)
 			@user.update(awaiting_choice: false)
 
-
-		    messageSeriesHash = MessageSeries.getMessageSeriesHash
-		    story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
-
-
+		    messageSeriesHash = MessageSeries.
+		    						getMessageSeriesHash
+		    story = messageSeriesHash[@user.series_choice +
+		    						  @user.series_number.to_s][0]
 			if @user.mms == true
-				
-
 				#incase of just one photo, this also updates user-info.
 				#sends last photo in advance
-				NextMessageWorker.perform_in(17.seconds, story.getSMS, story.getMmsArr[1..-1], @user.phone)
-
-				if story.getMmsArr.length > 1 #don't need to send stack if it's a one-pager.
-					Helpers.mms(story.getMmsArr[0], @user.phone) #replies with first photo immediately
+				NextMessageWorker.perform_in(17.seconds, story.getSMS,
+								  story.getMmsArr[1..-1], @user.phone)
+				 #don't need to send stack 
+				 #if a one-pager.
+				if story.getMmsArr.length > 1
+					 #replies with first photo immediately
+					Helpers.mms(story.getMmsArr[0], @user.phone)
 				else
-					Helpers.text_and_mms(story.getSMS, story.getMmsArr[0], @user.phone) #if just one photo, replies w/ photo and sms
+					#if just one photo, replies
+					#w/ photo and sms
+					Helpers.text_and_mms(story.getSMS,
+					  story.getMmsArr[0], @user.phone)
 			    end
 
 			else # just SMS
-		        NextMessageWorker.updateUser(@user.phone, story.getPoemSMS)
-		        Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)      
+		        NextMessageWorker.updateUser(@user.phone,
+		        					    story.getPoemSMS)
+		        Helpers.text(story.getPoemSMS, story.getPoemSMS,
+		        								    @user.phone)      
 			end
-
 	 	else	 			
-			Helpers.text(R18n.t.error.bad_choice, R18n.t.error.bad_choice, @user.phone)
+			Helpers.text(R18n.t.error.bad_choice, 
+				R18n.t.error.bad_choice, @user.phone)
 	 	end				
-
-    # second reply: update child's birthdate
-    elsif @user.set_birthdate == true && /[0-9]{4}/ =~ params[:Body]
-   		
-		if /\A[0-9]{4}\z/ =~ params[:Body] #it's a stringified integer in proper MMYY format
-  			
-  			@user.update(child_birthdate: params[:Body])
-
-  			#add child's age
-  			ageFloat = Age.InYears(@user.child_birthdate)
-
-  			if ageFloat < 3 && ageFloat >= 2.8 #let the older two's in.
-  				ageFloat = 3
-  			end
-
-  			@user.update(child_age: ageFloat.to_i)
-
-   			# allow six year olds
- 			if @user.child_age == 6 
-  				@user.update(child_age: 5)
- 			end
-
-  			#check if in right age range
-  			if @user.child_age <= 5 && @user.child_age >= 3 
-
-  				#redo subscription for parents who entered in bday wrongly
-  				@user.update(subscribed: true)
-
-					time_sms = "StoryTime: Great! Your child's birthdate is " + params[:Body][0,2] + "/" + params[:Body][2,2] + ". If not correct, reply REDO. If correct, enjoy your next age-appropriate story!"
-
-					Helpers.text(time_sms, time_sms, @user.phone)
-
-	 		else #Wrong age rage
-
-	 			@user.update(subscribed: false)
-
-	 			#NOTE: Keep the real birthdate.
-	 			Helpers.text(Text::TOO_YOUNG_SMS, Text::TOO_YOUNG_SMS, @user.phone)
-
-	 		end
-
-	    else #not a valid format
-	  		Helpers.text(Text::WRONG_BDAY_FORMAT, Text::WRONG_BDAY_FORMAT, @user.phone)
-		end 	
-
- 	# Update TIME before (or after) third story
- 	elsif @user.set_time == true && /(:|pm|am)/ =~ params[:Body]
- 		
- 		response = params[:Body]
- 		arr = response.split
-
- 		case arr.length
- 		when 1
-
-			if /\A[0-9]{1,2}[:][0-9]{2}[ap][m]\z/ =~ arr[0]
-				
-				@user.update(time: arr[0]) 
-
-				good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
-
-					Helpers.text(good_time, good_time, @user.phone)
-			else
-			
-				Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
-			end
-
-		when 2
- 				if /\A[0-9]{1,2}[:][0-9]{2}\z/ =~ arr[0] && /\A[ap][m]\z/ =~ arr[1]
- 					
- 					@user.update(time: arr[0] + arr[1])
-
- 					#They've set their own time, so don't ask again
-
-
-					good_time = "StoryTime: Sounds good! Your new story time is #{@user.time}. Enjoy!"
-					
-					Helpers.text(good_time, good_time, @user.phone)
-
- 				else
-					
-					Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
-
- 				end
- 		else 
-		
-			Helpers.text(Text::BAD_TIME_SMS, Text::BAD_TIME_SPRINT, @user.phone)
-
-		end
 
 	#response matches nothing
 	else
-
-		Helpers.text(R18n.t.error.no_option, R18n.t.error.no_option, @user.phone)
+		Helpers.text(R18n.t.error.no_option, 
+			R18n.t.error.no_option, @user.phone)
 
 	end#signup flow
 
 end
+
+
+
 
 def app_start(params) 
 	
