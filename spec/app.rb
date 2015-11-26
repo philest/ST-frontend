@@ -52,7 +52,6 @@ describe 'The StoryTime App' do
 
     before(:each) do
       Helpers.initialize_testing_vars
-      FirstTextWorker.jobs.clear
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
       Sidekiq::Worker.clear_all
@@ -623,10 +622,7 @@ describe 'The StoryTime App' do
         expect(Helpers.getSMSarr[1..-1]).to be_empty
 
 
-
-
-
-        Timecop.travel(2015, 7, 7, 17, 30, 0) #on the third Tuesday!
+        Timecop.travel(2015, 7, 7, 17, 30, 0) #DST on the third Tuesday!
 
         SomeWorker.perform_async
         SomeWorker.drain

@@ -1,39 +1,40 @@
-require 'rubygems'
+#config the load path 
 require 'bundler/setup'
 
+#siantra dependencies 
 require 'sinatra'
-require 'sinatra/activerecord'
-require_relative './config/environments' #database configuration
-require_relative './models/user' #add the user model
-require 'twilio-ruby'
+require 'sinatra/activerecord' #sinatra w/ DB
+require_relative './config/environments' #DB configuration
+require_relative './models/user' #add User model
+
+#scheduled background jobs 
 require 'sidekiq'
 require 'sidetiq'
-require 'redis'
 require 'sidekiq/web'
-require 'time'
+require 'sidekiq/api' 
+
+#twilio texting API
+require 'twilio-ruby'
+
+#internationalization
 require 'sinatra/r18n'
-
-#set default locale to english
-R18n::I18n.default = 'en'
-
-
-#REDIS initialization
-require_relative './config/initializers/redis'
-
-require 'sidekiq/api'
-require_relative './sprint'
-require_relative './age'
-
-	
+#temp: constants not yet translated
 require_relative './constants'
 
+#misc
+require 'redis'
+require_relative './config/initializers/redis'
+require 'time'
+
+#sending mmessages 
 require_relative './message'
 require_relative './messageSeries'
 require_relative './workers/some_worker'
-require_relative './workers/first_text_worker'
-require_relative './workers/choice_worker'
 require_relative './helpers.rb'
 
+
+#set default locale to english
+R18n::I18n.default = 'en'
 
 #EST TIME
 est_time = Time.new(Time.now.year, Time.now.month, Time.now.day,
