@@ -3,7 +3,7 @@ worker_processes 3
 timeout 30
 
 
-app_path = File.expand_path(File.dirname(__FILE__) + '/../app/')
+app_path = File.expand_path(File.dirname(__FILE__) + '/..')
 
 preload_app true # important for newrelic gem
 
@@ -18,7 +18,7 @@ listen app_path + '/tmp/unicorn.sock', backlog: 64
 
 
 before_fork do |server, worker|
-   @sidekiq_pid ||= spawn("bundle exec sidekiq -q critical -q default -c 15 -v -r ./app.rb")
+   @sidekiq_pid ||= spawn("bundle exec sidekiq -q critical -q default -c 15 -v -r ./app/app.rb")
 end
 
 # # If using ActiveRecord, disconnect (from the database) before forking.
