@@ -19,7 +19,7 @@ require_relative '../helpers'
 require_relative './next_message_worker'
 require_relative './new_text_worker'
 
-
+require_relative '../lib/set_time'
 
 
 class SomeWorker
@@ -41,17 +41,6 @@ class SomeWorker
   BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
   
   TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649", "+19417243442", "+12022518772" ,"+15614796303", "+17722330863", "+12392735883", "+15614796303", "+13522226913", "+1615734535", "+19735448685", "+15133166064", "+18186897323", "+15617083233", "+14847063250", "+18456711380", "+15613056454", "+15618668227", "+15617893548", "+15615422027"]
-
-
-#EST TIME
-est_time = Time.new(Time.now.year, Time.now.month, Time.now.day,
-   Time.now.hour, Time.now.min, Time.now.sec, "-05:00")
-
-if est_time.dst? == true              #daylight savings time
-  DEFAULT_TIME = Time.utc(2015, 6, 21, 21, 30, 0) #21:30 UTC (17:30 EST --> 5:30 PM on East Coast)
-else                        #no DST
-  DEFAULT_TIME = Time.utc(2015, 6, 21, 22, 30, 0) #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
-end
 
 
 
@@ -139,8 +128,8 @@ end
     if user.time.class != String #LEGACY
 
 
-      # handling old users: convert give Time!
-      if user.time == nil || (user.time.utc.hour != 21 && user.id < 140)
+      # handling test users: convert give Time!
+      if user.time == nil && ENV['RACK_ENV'] == 'test'
         user.update(time: DEFAULT_TIME)
       end
 

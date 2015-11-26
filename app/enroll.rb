@@ -31,9 +31,6 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 	 	#set the locale for that user, w/in this thread
 	end
 
-
-
-
 	if type == STORY
 		@user.update(sample: false)
 		@user.update(subscribed: true) 

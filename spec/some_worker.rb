@@ -151,7 +151,7 @@ describe 'SomeWorker' do
 
 
     # it "asks to update time when it should (non-sprint" do
-    #     @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3)
+    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3)
 
     #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -169,7 +169,7 @@ describe 'SomeWorker' do
     # end
 
     # it "gets all the SPRINT to update time SMS pieces" do
-    #     @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3, carrier: SPRINT_CARRIER)
+    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3, carrier: SPRINT_CARRIER)
 
     #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -188,7 +188,7 @@ describe 'SomeWorker' do
 
     # it "doesn't send time update the next day... (sorry mom)" do
     #     Timecop.travel(2015, 6, 22, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-    #     @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 3)
+    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3)
 
     #     Timecop.travel(2015, 6, 23, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -222,7 +222,7 @@ describe 'SomeWorker' do
     # end
 
     # it "doesn't send BIRTHDATE update the next day... (sorry mom)" do
-    #     @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, total_messages: 5)
+    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 5)
 
     #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
 
@@ -255,7 +255,7 @@ describe 'SomeWorker' do
 
     it "has sendStory? properly working when at time" do
       Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
       
 
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
@@ -266,7 +266,7 @@ describe 'SomeWorker' do
 
     it "has sendStory? rightly not working when past time by one minute" do
             Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
       time = Time.now.utc
@@ -276,7 +276,7 @@ describe 'SomeWorker' do
 
     it "has sendStory? rightly NOT working two minutes early" do
          Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2016, 6, 23, 17, 28, 0) #on Tuesday!
 
@@ -288,7 +288,7 @@ describe 'SomeWorker' do
     it "has sendStory? rightly working one min early" do
        Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
 
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2, total_messages: 4)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
         
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on Tuesday!
       time = Time.now.utc
@@ -298,7 +298,7 @@ describe 'SomeWorker' do
 
     it "properly knows to send at next valid day after 24 hours " do 
       Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
             time = Time.now.utc
 
@@ -307,7 +307,7 @@ describe 'SomeWorker' do
 
     it "doesn't send within 24 hours of creation " do 
       Timecop.travel(2016, 6, 23, 16, 15, 0) #on TUESDAY!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
             time = Time.now.utc
 
@@ -317,7 +317,7 @@ describe 'SomeWorker' do
 
     it "sends your first story MMS." do
       Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 24, 0) #on TUESDAY.
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -342,7 +342,7 @@ describe 'SomeWorker' do
 
    it "sends your first story SMS." do
       Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       Timecop.travel(2016, 6, 23, 17, 24, 0) #on TUESDAY.
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -368,7 +368,7 @@ describe 'SomeWorker' do
     it "sends only on right days for T-TH schedule (2)" do
 
       Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
@@ -402,7 +402,7 @@ time = Time.now.utc
   it "sends only on right days for M-W-F schedule (2)" do
 
       Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 3)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 3)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
@@ -437,7 +437,7 @@ time = Time.now.utc
     it "sends only on right days for W schedule (1)" do
 
       Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 1)
+      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 1)
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
@@ -472,8 +472,9 @@ time = Time.now.utc
 
     it "has total message count properly increasing" do
       Sidekiq::Testing.inline!
+
       Timecop.travel(2015, 6, 22, 17, 15, 0) #on MONDAY!
-      # @user = User.create(phone: "444", time: SomeWorker::DEFAULT_TIME, days_per_week: 2)
+      # @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       
       Signup.enroll(["444"], 'en', {Carrier: "ATT"})
       @user = User.find_by_phone "444"
@@ -1414,7 +1415,21 @@ time = Time.now.utc
 
     end
 
+    describe "when NON DST" do 
 
+      it "sends at right EST time" do 
+      Timecop.travel(2015, 11, 21, 17, 30, 0) #on prev Sun!
+
+      @user = User.create(phone: "444", time: TIME_NO_DST, days_per_week: 2, total_messages: 4)
+        
+      Timecop.travel(2015, 11, 24, 17, 29, 0) #on Tuesday!
+      time = Time.now.utc
+
+      expect(SomeWorker.sendStory?("444", time)).to be(true)
+
+      end 
+
+    end
 
 
 
