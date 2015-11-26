@@ -24,7 +24,6 @@ require_relative './constants'
 #misc
 require 'redis'
 require_relative './config/initializers/redis'
-require 'time'
 
 #sending mmessages 
 require_relative './message'
@@ -32,19 +31,11 @@ require_relative './messageSeries'
 require_relative './workers/some_worker'
 require_relative './helpers.rb'
 
+#timing
+require_relative './lib/set_time'
 
 #set default locale to english
 R18n::I18n.default = 'en'
-
-#EST TIME
-est_time = Time.new(Time.now.year, Time.now.month, Time.now.day,
-	 Time.now.hour, Time.now.min, Time.now.sec, "-05:00")
-
-if est_time.dst? == true							#daylight savings time
-	DEFAULT_TIME = Time.utc(2015, 6, 21, 21, 30, 0) #21:30 UTC (17:30 EST --> 5:30 PM on East Coast)
-else 												#no DST
-	DEFAULT_TIME = Time.utc(2015, 6, 21, 22, 30, 0) #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
-end
 
 
 module ApplicationHelper

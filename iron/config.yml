@@ -1,7 +1,0 @@
-twilio:
-  sid: ACea17e0bba30660770f62b1e28e126944
-  token: 716e0547bbd82c179b9aae8ebfef0e95
-  from: +17377778679
-
-# for testing:
-to: +15612125831
