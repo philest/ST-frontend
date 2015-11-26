@@ -3,7 +3,7 @@
 #  Main control structure for receiving, responding to SMS. 
 #  --------------------------------------------------------
 
-## DEPENDENCIES ## 
+#########  DEPENDENCIES  #########
 
 #config the load path 
 require 'bundler/setup'
@@ -55,7 +55,6 @@ require_relative './enroll'
 #set default locale to english
 R18n::I18n.default = 'en'
 
-
 #set mode (production or test)
 MODE = ENV['RACK_ENV']
 
@@ -64,6 +63,62 @@ TEST = "test"
 
 #constants (untranslated)
 include Text
+
+
+#########  ROUTES  #########
+
+#root
+get '/' do
+	erb :main
+end
+
+#twilio failed
+get '/failed' do
+	Helpers.smsRespondHelper("StoryTime: Hi! " + 
+		"We're updating StoryTime now and are offline, " +
+		     "but check back in the next day!")
+end
+
+#voice call
+get '/called' do
+  Twilio::TwiML::Response.new do |r|
+    r.Play "http://www.joinstorytime.com/mp3"
+  end.text
+end
+
+# register an incoming SMS
+get '/sms' do
+	app_start(params)
+end
+
+# mock entrypoint for testing
+get '/test/:From/:Body/:Carrier' do
+	app_start(params)
+end
+
+
+
+#########  WORKFLOW  ######### 
+
+# Set locale, then enter response workflow.
+#	@param params => fake user data:
+# 	  [Carrier: "ATT", Body: "BREAK"] etc. 
+#   	-(For TEST mode. Normally given by Twilio.)	
+def app_start(params) 
+	#1. Set locale.	
+	@user = User.find_by_phone params[:From]
+	
+	if @user
+		locale = @user.locale
+	elsif params[:locale]
+		locale = params[:locale]
+	else
+		locale = "en"
+	end
+	#2. Workflow. 
+	app_workflow(params, locale)
+end
+
 
 #manages entire registration workflow, keyword-selecting
 #defaults to English.
@@ -254,57 +309,18 @@ end
 
 
 
-def app_start(params) 
-	
-	if params[:locale] == nil
-		locale = 'en'
-	else
-		locale = params[:locale]
-	end
-
-	#find locale for existing user
-	@user = User.find_by_phone params[:From]
-	if @user != nil
-		locale = @user.locale
-	end
-
-	app_workflow(params, locale)
-end
-
-
+#begin sidetiq recurrence bkg tasks
 get '/worker' do
-	SomeWorker.perform_async #begin sidetiq recurrring background tasks
+	SomeWorker.perform_async 
 	redirect to('/')
 end
 
-get '/' do
-	erb :main
-end
-
 get '/mp3' do
-	send_file File.join(settings.public_folder, 'storytime_message.mp3')
-end
-
-get '/failed' do
-	Helpers.smsRespondHelper("StoryTime: Hi! We're updating StoryTime now and are offline, but be sure to check back in the next day!")
-end
-
-get '/called' do
-  Twilio::TwiML::Response.new do |r|
-    r.Play "http://www.joinstorytime.com/mp3"
-  end.text
+	send_file File.join(settings.public_folder, 
+							'storytime_message.mp3')
 end
 
 
-# register an incoming SMS
-get '/sms' do
-	app_start(params)
-end
-
-# mock entrypoint for testing
-get '/test/:From/:Body/:Carrier' do
-	app_start(params)
-end
 
 
 
