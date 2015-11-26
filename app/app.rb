@@ -53,6 +53,7 @@ end
 require_relative './enroll'
 
 #set default locale to english
+# R18n.default_places = '../i18n/'
 R18n::I18n.default = 'en'
 
 #set mode (production or test)
@@ -299,13 +300,12 @@ def app_workflow(params, locale)
 
 	#response matches nothing
 	else
-		Helpers.text(R18n.t.error.no_option, 
-			R18n.t.error.no_option, @user.phone)
+		Helpers.text(R18n.t.error.no_option.to_str, 
+			R18n.t.error.no_option.to_str, @user.phone)
 
 	end#signup flow
 
 end
-
 
 
 

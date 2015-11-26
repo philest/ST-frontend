@@ -340,8 +340,22 @@ describe 'The StoryTime App' do
 
     it "updates awaiting choice" do
       @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
+      get '/test/700/t/ATT'
+      @user.reload
+
+      NextMessageWorker.drain
+      @user.reload
+
+      expect(@user.awaiting_choice).to eq(false)
+    end
+
+
+
+    it "updates awaiting choice" do
+      @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
       @user.update(awaiting_choice: false)
       @user.reload
+
       get '/test/700/p/ATT'
       @user.reload
       expect(Helpers.getSimpleSMS).to eq(Text::NO_OPTION)
