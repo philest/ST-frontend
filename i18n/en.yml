@@ -30,7 +30,7 @@ help:
   sprint: "StoryTime sends stories on %1. For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
 
 error:
-  no_option: "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
+  no_option: "StoryTime: Sorry, this service is automatic. We didn't understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
   no_signup_match: "StoryTime: Sorry, we didn't understand that. Text SAMPLE to receive a sample"
   bad_choice: "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.\n\nFor help, reply HELP NOW."
 

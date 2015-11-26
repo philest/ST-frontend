@@ -300,7 +300,7 @@ def app_workflow(params, locale)
 
 	#response matches nothing
 	else
-		Helpers.text(R18n.t.error.no_option.to_str, 
+		Helpers.text(R18n.t.error.no_option.to_s, 
 			R18n.t.error.no_option.to_str, @user.phone)
 
 	end#signup flow
