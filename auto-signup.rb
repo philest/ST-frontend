@@ -1,6 +1,6 @@
 require 'twilio-ruby'
 
-require_relative './app'
+require_relative './app/enroll'
 
 account_sid = ENV['TW_ACCOUNT_SID']
 auth_token = ENV['TW_AUTH_TOKEN']
@@ -30,7 +30,7 @@ class Signup
 
 		phone_nums.each do |phone|
 
-			app_enroll(params, phone, locale, Signup.getWait)
+			app_enroll(params, phone, locale, STORY, Signup.getWait)
 			puts "enrolled #{phone}"
 		end
 
