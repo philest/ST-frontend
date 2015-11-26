@@ -1,3 +1,10 @@
+#  app.rb 	                                  Phil Esterman		
+# 
+#  Main control structure for receiving, responding to SMS. 
+#  --------------------------------------------------------
+
+
+
 #config the load path 
 require 'bundler/setup'
 
@@ -32,19 +39,19 @@ require_relative './workers/some_worker'
 require_relative './helpers.rb'
 
 #timing
+require 'time'
 require_relative './lib/set_time'
 
 #set default locale to english
 R18n::I18n.default = 'en'
 
-
-module ApplicationHelper
+module AppHelper
 
 	#This enrolls the phoneNumber for stories in that language
 	#lang defaults to English.
 	#wait_time is how long until the async call to send the message.
 	#params are for TEST-mode commands
-	def ApplicationHelper.enroll(params, user_phone, locale, *wait_time) 
+	def AppHelper.enroll(params, user_phone, locale, *wait_time) 
 
 
 		@user = User.find_by_phone(user_phone) #check if already registered.
@@ -130,7 +137,7 @@ module ApplicationHelper
 
 	#manages entire registration workflow, keyword-selecting
 	#defaults to English.
-	def ApplicationHelper.workflow(params, locale)
+	def AppHelper.workflow(params, locale)
 
 		#strip whitespace (trailing and leading)
  		params[:Body] = params[:Body].strip
@@ -149,7 +156,7 @@ module ApplicationHelper
 
 		if params[:Body].casecmp(R18n.t.commands.story) == 0 && (@user == nil || @user.sample == true)
 
-		ApplicationHelper.enroll(params, params[:From], locale)
+		AppHelper.enroll(params, params[:From], locale)
 
 		elsif (params[:Body].casecmp(R18n.t.commands.sample) == 0 || params[:Body].casecmp(R18n.t.commands.example) == 0)
 
@@ -426,7 +433,7 @@ module ApplicationHelper
 
 	end
 
-	def ApplicationHelper.start(params) 
+	def AppHelper.start(params) 
 		
 		if params[:locale] == nil
 			locale = 'en'
@@ -440,7 +447,7 @@ module ApplicationHelper
 			locale = @user.locale
 		end
 
-		ApplicationHelper.workflow(params, locale)
+		AppHelper.workflow(params, locale)
 	end
 
 
@@ -464,7 +471,7 @@ TEST = "test"
 include Text
 
 
-helpers ApplicationHelper
+helpers AppHelper
 
 
 
@@ -494,12 +501,12 @@ end
 
 # register an incoming SMS
 get '/sms' do
-	ApplicationHelper.start(params)
+	AppHelper.start(params)
 end
 
 # mock entrypoint for testing
 get '/test/:From/:Body/:Carrier' do
-	ApplicationHelper.start(params)
+	AppHelper.start(params)
 end
 
 
