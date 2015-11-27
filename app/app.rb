@@ -133,8 +133,8 @@ def app_workflow(params, locale)
 	params[:Body] = params[:Body].strip
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 
-	session["last_message"] = params[:Body]
 	puts session["last_message"]
+	session["last_message"] = params[:Body]
 
 	@user = User.find_by_phone(params[:From]) #check if already registered.
 
