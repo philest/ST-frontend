@@ -593,7 +593,7 @@ time = Time.now.utc
         NextMessageWorker.drain
         @user.reload
         expect(@user.total_messages).to eq(1)
-
+        expect(@user.awaiting_choice).to eq false
 
         smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
         expect(Helpers.getSMSarr).to eq(smsSoFar)
@@ -698,7 +698,7 @@ time = Time.now.utc
         expect(@user.awaiting_choice).to eq(true)
         expect(@user.next_index_in_series).to eq(0)
 
-        get 'test/+15612129000/d/ATT'
+        get 'test/+15612129000/D/ATT'
         @user.reload
 
         NextMessageWorker.drain #OMG forgot this.

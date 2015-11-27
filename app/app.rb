@@ -125,6 +125,7 @@ end
 #defaults to English.
 def app_workflow(params, locale)
 
+
 	#strip whitespace (trailing and leading)
 	params[:Body] = params[:Body].strip
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
@@ -300,8 +301,26 @@ def app_workflow(params, locale)
 
 	#response matches nothing
 	else
-		Helpers.text(R18n.t.error.no_option.to_s, 
-			R18n.t.error.no_option.to_str, @user.phone)
+		
+		message = get_last_message(params[:From])
+
+		#repeated same SMS just sent?
+		repeat = false
+		if message
+			message = message.strip
+			message.gsub!(/[\.\,\!]/, '')
+			if message.body.casecmp(params[:Body]) == 0 &&
+			 	(Time.now.utc - 100) < Time.parse(message.date) 
+				
+				repeat = true
+			end
+		end
+
+
+		if not repeat
+			Helpers.text(R18n.t.error.no_option.to_s, 
+				R18n.t.error.no_option.to_str, @user.phone)
+		end
 
 	end#signup flow
 
@@ -318,6 +337,25 @@ end
 get '/mp3' do
 	send_file File.join(settings.public_folder, 
 							'storytime_message.mp3')
+end
+
+
+
+## HELPERS ##
+
+def get_last_message(phone)
+	account_sid = ENV['TW_ACCOUNT_SID']
+    auth_token = ENV['TW_AUTH_TOKEN']
+	@client = Twilio::REST::Client.new account_sid, auth_token
+
+
+	@client.messages.list.each do |message|
+		if message.from == phone
+			return message
+		end
+	end
+
+	return nil
 end
 
 

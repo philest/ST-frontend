@@ -45,7 +45,7 @@ HELP_SPRINT_1 = "StoryTime sends stories on "
 
 HELP_SPRINT_2 = ". For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
  
-NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn’t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
+NO_OPTION = "StoryTime: Sorry, this service is automatic. We didn\'t understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
 
 
 
