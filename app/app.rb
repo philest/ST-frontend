@@ -306,14 +306,16 @@ def app_workflow(params, locale)
 
 		#repeated same SMS just sent?
 		repeat = false
-		if message
-			mesasge_text = message.body.strip
-			mesasge_text.gsub!(/[\.\,\!]/, '')
-			if mesasge_text.casecmp(params[:Body]) == 0 &&
+		if message && message.body && message.date_sent
+			message_text = message.body.strip
+			message_text.gsub!(/[\.\,\!]/, '')
+			if message_text.casecmp(params[:Body]) == 0 &&
 			 	(Time.now.utc - 100) < Time.parse(message.date_sent).utc 
 				
 				repeat = true
 			end
+		elsif message && message.date_sent == nil
+			puts "STRANGE ERROR: no date_sent for #{message_text}"
 		end
 
 
