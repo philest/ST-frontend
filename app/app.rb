@@ -128,13 +128,18 @@ enable :sessions
 
 def app_workflow(params, locale)
 
-	session["last_message"] ||= nil
 	#strip whitespace (trailing and leading)
 	params[:Body] = params[:Body].strip
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
+	
+	#new become old
+	sessions["prev_body"] = sessions["new_body"] 
+	sessions["prev_time"] = session["new_time"]
 
-	puts session["last_message"]
-	session["last_message"] = params[:Body]
+	#reset the new
+	sessions["new_body"] = params[:Body].strip
+	session["new_time"] = Time.now.utc
+
 
 	@user = User.find_by_phone(params[:From]) #check if already registered.
 
@@ -307,26 +312,14 @@ def app_workflow(params, locale)
 
 	#response matches nothing
 	else
-
-		message = get_last_message(params[:From])
-		message_text = String.new
-
-		#repeated same SMS just sent?
 		repeat = false
-		if message && message.body && message.date_sent
-			message_text = message.body.strip
-			message_text.gsub!(/[\.\,\!]/, '')
-			if message_text.casecmp(params[:Body]) == 0 &&
-			 	(Time.now.utc - 100) < Time.parse(message.date_sent).utc 
-				
+
+		if sessions["prev_body"]
+			if sessions["prev_body"].casecmp(params[:Body]) == 0 &&
+				sessions["prev_time"] - 100 < Time.now.utc
 				repeat = true
 			end
-		elsif message && message.date_sent == nil
-			puts "STRANGE ERROR: no date_sent for #{message_text}"
-			puts "body: #{message.body} msg: #{message} to: #{message.to} from: #{message.from}"
-			puts "message.date_sent: #{message.date_sent}"
 		end
-
 
 		if not repeat
 			Helpers.text(R18n.t.error.no_option.to_s, 
@@ -354,20 +347,20 @@ end
 
 ## HELPERS ##
 
-def get_last_message(phone)
-	account_sid = ENV['TW_ACCOUNT_SID']
-    auth_token = ENV['TW_AUTH_TOKEN']
-	@client = Twilio::REST::Client.new account_sid, auth_token
+# def get_last_message(phone)
+# 	account_sid = ENV['TW_ACCOUNT_SID']
+#     auth_token = ENV['TW_AUTH_TOKEN']
+# 	@client = Twilio::REST::Client.new account_sid, auth_token
 
 
-	@client.messages.list.each do |message|
-		if message.from == phone
-			return message
-		end
-	end
+# 	@client.messages.list.each do |message|
+# 		if message.from == phone
+# 			return message
+# 		end
+# 	end
 
-	return nil
-end
+# 	return nil
+# end
 
 
 
