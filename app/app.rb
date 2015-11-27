@@ -310,7 +310,7 @@ def app_workflow(params, locale)
 			mesasge_text = message.body.strip
 			mesasge_text.gsub!(/[\.\,\!]/, '')
 			if mesasge_text.casecmp(params[:Body]) == 0 &&
-			 	(Time.now.utc - 100) < Time.parse(message.date) 
+			 	(Time.now.utc - 100) < Time.parse(message.date_sent).utc 
 				
 				repeat = true
 			end
