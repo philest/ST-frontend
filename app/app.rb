@@ -303,7 +303,8 @@ def app_workflow(params, locale)
 	else
 
 		message = get_last_message(params[:From])
-
+		message_text = String.new
+		
 		#repeated same SMS just sent?
 		repeat = false
 		if message && message.body && message.date_sent
@@ -317,6 +318,7 @@ def app_workflow(params, locale)
 		elsif message && message.date_sent == nil
 			puts "STRANGE ERROR: no date_sent for #{message_text}"
 			puts "body: #{message.body} msg: #{message} to: #{message.to} from: #{message.from}"
+			puts "message.date_sent: #{message.date_sent}"
 		end
 
 
