@@ -351,15 +351,20 @@ describe 'The StoryTime App' do
 
 
 
+
+
+
     it "updates awaiting choice" do
       @user = User.create(phone: "700", story_number: 3, awaiting_choice: true, series_number: 0)
-      @user.update(awaiting_choice: false)
       @user.reload
 
       get '/test/700/p/ATT'
       @user.reload
-      expect(Helpers.getSimpleSMS).to eq(Text::NO_OPTION)
+      expect(Helpers.getSimpleSMS).to eq(R18n.t.error.bad_choice)
+      puts Helpers.getSimpleSMS
     end
+
+
 
 
   end
@@ -1020,6 +1025,20 @@ describe 'The StoryTime App' do
 
 
     end
+
+    # it "gets a last message" do 
+    #     @user = User.find_by_phone("+15612125831")
+    #     expect(@user).to be nil 
+        
+    #     Sidekiq::Testing.inline! do
+    #       Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+    #     end
+
+    #     get '/test/+15612125831/fakecmd/ATT'
+    #     expect(get_last_message("+15612125831")).to_eq "fakecmd"
+    #   end
+
+
 
 
 
