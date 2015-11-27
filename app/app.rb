@@ -123,12 +123,18 @@ end
 
 #manages entire registration workflow, keyword-selecting
 #defaults to English.
+
+enable :sessions
+
 def app_workflow(params, locale)
 
-
+	session["last_message"] ||= nil
 	#strip whitespace (trailing and leading)
 	params[:Body] = params[:Body].strip
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
+
+	session["last_message"] = params[:Body]
+	puts session["last_message"]
 
 	@user = User.find_by_phone(params[:From]) #check if already registered.
 
@@ -304,7 +310,7 @@ def app_workflow(params, locale)
 
 		message = get_last_message(params[:From])
 		message_text = String.new
-		
+
 		#repeated same SMS just sent?
 		repeat = false
 		if message && message.body && message.date_sent
