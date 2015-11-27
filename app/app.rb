@@ -301,15 +301,15 @@ def app_workflow(params, locale)
 
 	#response matches nothing
 	else
-		
+
 		message = get_last_message(params[:From])
 
 		#repeated same SMS just sent?
 		repeat = false
 		if message
-			message = message.strip
-			message.gsub!(/[\.\,\!]/, '')
-			if message.body.casecmp(params[:Body]) == 0 &&
+			mesasge_text = message.body.strip
+			mesasge_text.gsub!(/[\.\,\!]/, '')
+			if mesasge_text.casecmp(params[:Body]) == 0 &&
 			 	(Time.now.utc - 100) < Time.parse(message.date) 
 				
 				repeat = true
