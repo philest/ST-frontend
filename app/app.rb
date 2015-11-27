@@ -324,8 +324,10 @@ def app_workflow(params, locale)
 		if not repeat
 			Helpers.text(R18n.t.error.no_option.to_s, 
 				R18n.t.error.no_option.to_str, @user.phone)
+		else
+			puts "DONT send repeat: message #{session["prev_body"]} was sent already"
 		end
-
+		
 	end#signup flow
 
 end
