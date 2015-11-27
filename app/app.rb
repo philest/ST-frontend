@@ -316,6 +316,7 @@ def app_workflow(params, locale)
 			end
 		elsif message && message.date_sent == nil
 			puts "STRANGE ERROR: no date_sent for #{message_text}"
+			puts "body: #{message.body} msg: #{message} to: #{message.to} from: #{message.from}"
 		end
 
 
