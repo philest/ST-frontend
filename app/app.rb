@@ -133,11 +133,11 @@ def app_workflow(params, locale)
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
 	
 	#new become old
-	sessions["prev_body"] = sessions["new_body"] 
-	sessions["prev_time"] = session["new_time"]
+	session["prev_body"] = session["new_body"] 
+	session["prev_time"] = session["new_time"]
 
 	#reset the new
-	sessions["new_body"] = params[:Body].strip
+	session["new_body"] = params[:Body].strip
 	session["new_time"] = Time.now.utc
 
 
@@ -314,9 +314,9 @@ def app_workflow(params, locale)
 	else
 		repeat = false
 
-		if sessions["prev_body"]
-			if sessions["prev_body"].casecmp(params[:Body]) == 0 &&
-				sessions["prev_time"] - 100 < Time.now.utc
+		if session["prev_body"]
+			if session["prev_body"].casecmp(params[:Body]) == 0 &&
+				session["prev_time"] - 100 < Time.now.utc
 				repeat = true
 			end
 		end
