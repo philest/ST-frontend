@@ -15,11 +15,11 @@ auth_token = '716e0547bbd82c179b9aae8ebfef0e95'
 
 phone = "+15612125831" 
 
-            R18n.default_places = './i18n/'
+            # R18n.default_places = './i18n/'
 
 
-            require 'pry'
-            binding.pry
+            # require 'pry'
+            # binding.pry
 
             i18n = R18n::I18n.new('en', ::R18n.default_places)
             R18n.thread_set(i18n)
