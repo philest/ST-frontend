@@ -13,7 +13,12 @@ R18n.default_places { '../i18n' }
 
 #temp: constants not yet translated
 require_relative '../constants'
+#constants (untranslated)
+include Text
 
+#timing
+require 'time'
+require_relative '../lib/set_time'
 
 SAMPLE = "sample"
 STORY = "story"

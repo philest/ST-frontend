@@ -16,7 +16,6 @@ require_relative '../models/user' #add User model
 
 set :root, File.join(File.dirname(__FILE__), '../')
 
-
 #scheduled background jobs 
 require 'sidekiq'
 require 'sidetiq'
@@ -28,8 +27,6 @@ require 'twilio-ruby'
 
 #internationalization
 require 'sinatra/r18n'
-#temp: constants not yet translated
-require_relative '../constants'
 
 #misc
 require 'redis'
@@ -52,6 +49,11 @@ end
 #enrollment
 require_relative './enroll'
 
+#temp: constants not yet translated
+require_relative '../constants'
+#constants (untranslated)
+include Text
+
 #set default locale to english
 # R18n.default_places = '../i18n/'
 R18n::I18n.default = 'en'
@@ -61,8 +63,6 @@ MODE ||= ENV['RACK_ENV']
 PRO ||= "production"
 TEST ||= "test"
 
-#constants (untranslated)
-include Text
 
 
 #########  ROUTES  #########
