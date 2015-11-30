@@ -125,7 +125,7 @@ class SomeWorker
     R18n.thread_set(i18n)
 
 
-    if user.time.class != String #LEGACY
+    if user.time && user.time.class != String #LEGACY
 
 
       # handling test users: convert give Time!

@@ -9,6 +9,7 @@ require 'sinatra/r18n'
 # R18n.default_places = '../i18n/'
 R18n::I18n.default = 'en'
 
+R18n.default_places { '../i18n' }
 
 SAMPLE = "sample"
 STORY = "story"
