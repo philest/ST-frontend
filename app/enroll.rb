@@ -14,6 +14,8 @@ R18n.default_places { '../i18n' }
 SAMPLE = "sample"
 STORY = "story"
 
+MODE ||= ENV['RACK_ENV']
+
 # Enroll the user for stories.
 #	@param params => fake user data:
 # 	  [Carrier: "ATT", Body: "BREAK"] etc. 
