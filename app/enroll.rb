@@ -3,6 +3,8 @@
 #  Enroll the user for stories. 
 #  --------------------------------------------------------
 
+require 'twilio-ruby'
+
 #internationalization
 require 'sinatra/r18n'
 #set default locale to english
@@ -20,12 +22,22 @@ include Text
 require 'time'
 require_relative '../lib/set_time'
 
+#sending messages
+require_relative '../workers/next_message_worker'
+require_relative '../helpers.rb'
+
+
 SAMPLE = "sample"
 STORY = "story"
 
 MODE ||= ENV['RACK_ENV']
 PRO ||= "production"
 TEST ||= "test"
+
+#configure Twilio
+account_sid ||= ENV['TW_ACCOUNT_SID']
+auth_token ||= ENV['TW_AUTH_TOKEN']
+@client ||= Twilio::REST::Client.new account_sid, auth_token
 
 
 # Enroll the user for stories.
