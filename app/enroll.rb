@@ -11,7 +11,8 @@ require 'sinatra/r18n'
 # R18n.default_places = '../i18n/'
 R18n::I18n.default = 'en'
 
-R18n.default_places { '../i18n' }
+translations_path = File.expand_path(File.dirname(__FILE__) + '/../i18n')
+R18n.default_places { translations_path }
 
 #temp: constants not yet translated
 require_relative '../constants'
