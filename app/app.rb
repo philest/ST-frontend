@@ -57,10 +57,9 @@ require_relative './enroll'
 R18n::I18n.default = 'en'
 
 #set mode (production or test)
-MODE = ENV['RACK_ENV']
-
-PRO = "production"
-TEST = "test"
+MODE ||= ENV['RACK_ENV']
+PRO ||= "production"
+TEST ||= "test"
 
 #constants (untranslated)
 include Text
