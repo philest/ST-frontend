@@ -3,6 +3,13 @@
 #  Enroll the user for stories. 
 #  --------------------------------------------------------
 
+#internationalization
+require 'sinatra/r18n'
+#set default locale to english
+# R18n.default_places = '../i18n/'
+R18n::I18n.default = 'en'
+
+
 SAMPLE = "sample"
 STORY = "story"
 
