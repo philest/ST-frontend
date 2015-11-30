@@ -11,10 +11,17 @@ R18n::I18n.default = 'en'
 
 R18n.default_places { '../i18n' }
 
+#temp: constants not yet translated
+require_relative '../constants'
+
+
 SAMPLE = "sample"
 STORY = "story"
 
 MODE ||= ENV['RACK_ENV']
+PRO ||= "production"
+TEST ||= "test"
+
 
 # Enroll the user for stories.
 #	@param params => fake user data:
