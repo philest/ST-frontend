@@ -38,10 +38,6 @@ require_relative '../messageSeries'
 require_relative '../workers/some_worker'
 require_relative '../helpers.rb'
 
-#timing
-require 'time'
-require_relative '../lib/set_time'
-
 configure :production do
   require 'newrelic_rpm'
 end
@@ -62,8 +58,6 @@ R18n::I18n.default = 'en'
 MODE ||= ENV['RACK_ENV']
 PRO ||= "production"
 TEST ||= "test"
-
-
 
 #########  ROUTES  #########
 

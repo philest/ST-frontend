@@ -8,8 +8,8 @@ class Helpers
 SPRINT = "Sprint Spectrum, L.P."
 
 SMS_HELPER = "SMS_HELPER"
-PRO = "production"
-TEST ="test"
+PRO ||= "production"
+TEST ||="test"
 TEST_CRED = "test_cred"
 
 # @@my_twilio_number = "+17377778679"
