@@ -1,9 +1,6 @@
 ENV['RACK_ENV'] = "test"
 require_relative "./spec_helper"
 
-require_relative '../app/app.rb'
-
-
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
