@@ -744,6 +744,61 @@ describe 'The StoryTime App' do
 
     end
 
+    describe "Signup" do 
+
+      it "properly sends the no_signup_match message" do
+      
+        get '/test/555/thisisjunk/ATT' #improper sample request
+       
+        i18n = R18n::I18n.new('en', ::R18n.default_places)
+        R18n.thread_set(i18n)
+
+        R18n.set 'en'
+        
+        expect(R18n.t.error.no_signup_match).to_not eq nil
+        expect(Helpers.getSMSarr[0]).to eq R18n.t.error.no_signup_match
+        puts  Helpers.getSMSarr[0]
+      end
+
+      describe "Spanish" do 
+
+        it "recognizes Spanish non-sprint commands" do
+
+        Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
+
+        
+        i18n = R18n::I18n.new('es', ::R18n.default_places)
+        R18n.thread_set(i18n)
+
+        @user = User.find_by_phone "+14445556666" 
+        @user.reload
+
+        get '/test/+14445556666/AYUDA%20AHORA/ATT'
+
+        expect(Helpers.getSMSarr.last).to eq R18n.t.help.normal("Mar/Jue").to_s
+        expect(Helpers.getSMSarr.last).to eq "HC: Cuentos gratis para pre kínder en Mar/Jue. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
+        
+        expect(@user.subscribed).to be true 
+        get '/test/+14445556666/PARA/ATT'
+        @user.reload
+        expect(@user.subscribed).to be false 
+        
+
+        get '/test/+14445556666/FAKECMD/ATT'
+        expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option.to_s
+        expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
+
+        get '/test/+14445556666/TEXTO/ATT'
+        @user.reload
+        expect(Helpers.getSMSarr.last).to eq "HC: Bien, usted ahora recibe solo el texto de cada historia. ¡Espero esto ayude!"
+        expect(Helpers.getSMSarr.last).to eq R18n.t.mms_update
+
+        end
+      end
+    end
+
+
+
 
 
     describe "Images" do
