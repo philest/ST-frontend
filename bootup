@@ -1,3 +1,22 @@
 require 'sinatra/activerecord'
 require './models/user'
 require './auto-signup'
+
+
+
+
+#create time 5:12
+t = Time.new(2002, 10, 31, 17, 12).utc
+
+
+#find me 
+me = User.find_by_phone("+15612125831")
+
+
+irb(main):038:0> new_users.each do |user|
+irb(main):039:1* user.update(subscribed: false)
+irb(main):040:1> end
+
+#get latest users
+t = Time.new(2015, 10, 5, 17, 12).utc
+User.where("created_at > ?", t)
