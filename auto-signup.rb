@@ -1,12 +1,5 @@
-require 'twilio-ruby'
 
 require_relative './app/enroll'
-
-account_sid = ENV['TW_ACCOUNT_SID']
-auth_token = ENV['TW_AUTH_TOKEN']
-
-@client = Twilio::REST::Client.new account_sid, auth_token
-
 
 #sends the signup story and text to the list of parents with given language
 class Signup
