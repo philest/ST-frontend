@@ -82,13 +82,7 @@ end
 
 # register an incoming SMS
 get '/sms' do
-  twiml = Twilio::TwiML::Response.new do |r|
-    r.Message do |m|
-      m.Media "http://www.joinstorytime.com/images/b1.jpg"
-    end
-  end
-  twiml.text
-	# app_start(params)
+	app_start(params)
 end
 
 # mock entrypoint for testing
