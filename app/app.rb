@@ -157,7 +157,16 @@ def app_workflow(params, locale)
 
 	elsif @user == nil
 		#send us email about problem
+		if MODE == PRO
+			Pony.mail(:to => 'phil.esterman@yale.edu',
+					  :cc => 'henok.addis@yale.edu',
+					  :from => 'phil.esterman@yale.edu',
+					  :subject => 'StoryTime: an unexpected SMS (non-user)',
+					  :body => "An unregistered user texted in an unknown response. 
 
+					  			From: #{params[:From]}
+					  			Body: #{params[:Body]} .")
+		end
 
 		Helpers.text(R18n.t.error.no_signup_match, 
 			R18n.t.error.no_signup_match, params[:From])
@@ -320,6 +329,19 @@ def app_workflow(params, locale)
 				repeat = true
 			end
 		end
+
+		##report this to us by email
+		if MODE == PRO
+			Pony.mail(:to => 'phil.esterman@yale.edu',
+					  :cc => 'henok.addis@yale.edu',
+					  :from => 'phil.esterman@yale.edu',
+					  :subject => 'StoryTime: an unexpected SMS (user)',
+					  :body => "A registered user texted in an unknown response. 
+
+					  			From: #{params[:From]}
+					  			Body: #{params[:Body]} .")
+		end
+
 
 		if not repeat
 			Helpers.text(R18n.t.error.no_option.to_s, 
