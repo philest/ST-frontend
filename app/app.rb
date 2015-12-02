@@ -81,15 +81,8 @@ get '/called' do
 end
 
 # register an incoming SMS
-get '/sms' do
-	  twiml = Twilio::TwiML::Response.new do |r|
-	    r.Message do |m|
-	      m.Media Text::IMAGE_URL + "b1.jpg"
-	    end
-	  end
-	  twiml.text
-
-	# app_start(params)
+get '/sms' do	
+	app_start(params)
 end
 
 
