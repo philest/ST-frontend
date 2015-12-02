@@ -82,24 +82,9 @@ end
 
 # register an incoming SMS
 get '/sms' do
-	  twiml = Twilio::TwiML::Response.new do |r|
-	    r.Message do |m|
-	      m.Media mms_url
-	    end
-	  end
-	  twiml.text
-
-	# app_start(params)
+	app_start(params)
 end
 
-get '/reply' do
-	  twiml = Twilio::TwiML::Response.new do |r|
-	    r.Message do |m|
-	      m.Media mms_url
-	    end
-	  end
-	  twiml.text
-end
 
 # mock entrypoint for testing
 get '/test/:From/:Body/:Carrier' do
