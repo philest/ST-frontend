@@ -25,6 +25,10 @@ require 'sidekiq/api'
 #twilio texting API
 require 'twilio-ruby'
 
+#email, to learn of failurs
+require 'pony'
+require_relative '../config/pony'
+
 #internationalization
 require 'sinatra/r18n'
 
@@ -152,6 +156,9 @@ def app_workflow(params, locale)
 		app_enroll(params, params[:From], locale, SAMPLE)
 
 	elsif @user == nil
+		#send us email about problem
+
+
 		Helpers.text(R18n.t.error.no_signup_match, 
 			R18n.t.error.no_signup_match, params[:From])
 	elsif @user.sample == true
