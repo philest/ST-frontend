@@ -98,13 +98,13 @@ SPANISH = "SP"
 
 ENGLISH = "EN"
 
+URL = "http://joinstorytime.herokuapp.com/"
 
-IMAGE_URL = "http://joinstorytime.org/images/"
+IMAGE_URL = "http://joinstorytime.herokuapp.com/images/"
 
+FIRST_MMS = ["http://www.joinstorytime.herokuapp.com/images/d1.jpg"]
 
-FIRST_MMS = ["http://www.joinstorytime.org/images/d1.jpg"]
-
-THE_FINAL_MMS = "http://www.joinstorytime.org/images/d1.jpg"
+THE_FINAL_MMS = "http://www.joinstorytime.herokuapp.com/images/d1.jpg"
 
 SAMPLE_SMS = "Today in class, we talked about the moon and space. When you see orange bubbles in tonight's story, point and ask 'what's this?' or 'what's going on here?'\n-Ms. Wilson\n\nThanks for trying StoryTime!"
 
