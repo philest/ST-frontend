@@ -14,8 +14,12 @@ gem 'newrelic_rpm'
 gem 'rake'
 gem "activesupport", :require => "active_support"
 gem "sinatra-r18n"
+gem "pony"
 
 
+group :development do
+  gem "better_errors"
+end
 
 group :test do
 	gem 'rspec'
