@@ -246,9 +246,21 @@ def app_workflow(params, locale)
 		if MODE == PRO
 		#SAVE QUITTERS
 			REDIS.set(@user.phone+":quit", "true") 
-			#update if the user quits
-			#EX: REDIS.zadd("+15612125831:quit", true)  
+		#Report quitters to us by email
+			Pony.mail(:to => 'phil.esterman@yale.edu',
+					  :cc => 'henok.addis@yale.edu',
+					  :from => 'phil.esterman@yale.edu',
+					  :subject => 'StoryTime: A user quit.',
+					  :body => "A user texted STOP. 
+
+					  			From: #{params[:From]}
+					  			Body: #{params[:Body]}
+					  			Message #: #{@user.total_messages}
+					  			
+								Body of prev text: #{session["prev_body"]}
+								Time of prev text: #{session["prev_time"]}")
 		end
+
 		#change subscription
 		@user.update(subscribed: false)
 		note = params[:From].to_s + "quit StoryTime."
