@@ -21,6 +21,9 @@ require_relative './new_text_worker'
 
 require_relative '../lib/set_time'
 
+#email, to learn of failurs
+require 'pony'
+require_relative '../config/pony'
 
 class SomeWorker
   include Sidekiq::Worker
@@ -109,144 +112,162 @@ class SomeWorker
       #the delay is long and thus it might be 5:33 before some users are checked. 
     @@time_now = Time.now.utc
 
+    #Remember all the people who have quit! 
+    quitters = Array.new 
 
     # send Twilio message
     # only for subscribed
     User.where(subscribed: true).find_each do |user|
 
-    
-    #LEGACY: set default locale.
-    if user.locale == nil 
-      user.update(locale: 'en')
-    end
-
-    #set this thread's locale as user's locale
-    i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
-    R18n.thread_set(i18n)
-
-
-    if user.time && user.time.class != String #LEGACY
-
-
-      # handling test users: convert give Time!
-      if user.time == nil && ENV['RACK_ENV'] == 'test'
-        user.update(time: DEFAULT_TIME)
+      
+      #LEGACY: set default locale.
+      if user.locale == nil 
+        user.update(locale: 'en')
       end
 
-
-      #logging info
-      print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
-      if SomeWorker.sendStory?(user.phone)
-        puts 'YES!!'
-      else
-        puts 'No.'
-      end
+      #set this thread's locale as user's locale
+      i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
+      R18n.thread_set(i18n)
 
 
-        if SomeWorker.sendStory?(user.phone) 
+      if user.time && user.time.class != String #LEGACY
 
 
-
-          if user.on_break
-
-            if user.days_left_on_break > 1 
-              user.update(days_left_on_break: user.days_left_on_break - 1)
-            else 
-              user.update(days_left_on_break: 0) #remembers that just finished break last time.
-              user.update(on_break: false)
-            end
-
-          else
-
-            #just finished break last time -> include note.
-            if user.days_left_on_break == 0 
-              note = Text::END_BREAK #note to append
-              user.update(days_left_on_break: nil) #set back to normal
-            else
-              note = ''
-            end
+        # handling test users: convert give Time!
+        if user.time == nil && ENV['RACK_ENV'] == 'test'
+          user.update(time: DEFAULT_TIME)
+        end
 
 
-           #Should the user be asked to choose a series?
-            #If it's all of these:
-            #0) not awaiting chioce
-            #a) their time, 
-            #b) their third story, or every third one thereafter.
-            #c) they're not in the middle of a series
+        #logging info
+        print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
+        if SomeWorker.sendStory?(user.phone)
+          puts 'YES!!'
+        else
+          puts 'No.'
+        end
 
 
-            if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
-
-              #get set for first in series
-              user.update(next_index_in_series: 0)
-              user.update(awaiting_choice: true)
-              #choose a series
+          if SomeWorker.sendStory?(user.phone) 
 
 
 
-              myWait = SomeWorker.getWait(TEXT)
+            if user.on_break
 
-              NewTextWorker.perform_in(myWait.seconds, note + R18n.t.choice.greet[user.series_number], NewTextWorker::NOT_STORY, user.phone)
-
-            elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
-              
-              msg = R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[user.series_number]
-
-              myWait = SomeWorker.getWait(TEXT)
-              NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
-
-              user.update(next_index_in_series: 999)  
-
-            elsif user.next_index_in_series == 999 #the second time they haven't responded
-
-               user.update(subscribed: false)
-               user.update(awaiting_choice: false)
-
-              myWait = SomeWorker.getWait(TEXT)
-              NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::NOT_STORY, user.phone)
-
-            #send STORY or SERIES, but not if awaiting series response
-            elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
-
-              #get the story and series structures
-              messageArr = Message.getMessageArray
-              messageSeriesHash = MessageSeries.getMessageSeriesHash
-
-              #SERIES
-              if user.series_choice != nil
-                story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
-              #STORY
+              if user.days_left_on_break > 1 
+                user.update(days_left_on_break: user.days_left_on_break - 1)
               else 
-                story = messageArr[user.story_number]
-              end 
-            
+                user.update(days_left_on_break: 0) #remembers that just finished break last time.
+                user.update(on_break: false)
+              end
 
-              #JUST SMS MESSAGING!
-              if user.mms == false
+            else
 
-                  myWait = SomeWorker.getWait(TEXT)
-                  NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::STORY, user.phone)
+              #just finished break last time -> include note.
+              if user.days_left_on_break == 0 
+                note = Text::END_BREAK #note to append
+                user.update(days_left_on_break: nil) #set back to normal
+              else
+                note = ''
+              end
 
-              else #MULTIMEDIA MESSAGING (MMS)!
 
-                  #start the MMS message stack
+             #Should the user be asked to choose a series?
+              #If it's all of these:
+              #0) not awaiting chioce
+              #a) their time, 
+              #b) their third story, or every third one thereafter.
+              #c) they're not in the middle of a series
 
-                  myWait = SomeWorker.getWait(STORY)
-                  NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
 
-              end#MMS or SMS
+              if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
-            end#end story_subpart
+                #get set for first in series
+                user.update(next_index_in_series: 0)
+                user.update(awaiting_choice: true)
+                #choose a series
 
-          end #non-break user
 
-        end#end sendStory? large
 
-    end#end User.do
+                myWait = SomeWorker.getWait(TEXT)
 
-  end#LEGACY STRING
+                NewTextWorker.perform_in(myWait.seconds, note + R18n.t.choice.greet[user.series_number], NewTextWorker::NOT_STORY, user.phone)
+
+              elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
+                
+                msg = R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[user.series_number]
+
+                myWait = SomeWorker.getWait(TEXT)
+                NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
+
+                user.update(next_index_in_series: 999)  
+
+              elsif user.next_index_in_series == 999 #the second time they haven't responded
+
+                user.update(subscribed: false)
+                user.update(awaiting_choice: false)
+
+                quitters.push user.phone
+
+                myWait = SomeWorker.getWait(TEXT)
+                NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::NOT_STORY, user.phone)
+
+              #send STORY or SERIES, but not if awaiting series response
+              elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
+
+                #get the story and series structures
+                messageArr = Message.getMessageArray
+                messageSeriesHash = MessageSeries.getMessageSeriesHash
+
+                #SERIES
+                if user.series_choice != nil
+                  story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
+                #STORY
+                else 
+                  story = messageArr[user.story_number]
+                end 
+              
+
+                #JUST SMS MESSAGING!
+                if user.mms == false
+
+                    myWait = SomeWorker.getWait(TEXT)
+                    NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::STORY, user.phone)
+
+                else #MULTIMEDIA MESSAGING (MMS)!
+
+                    #start the MMS message stack
+
+                    myWait = SomeWorker.getWait(STORY)
+                    NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
+
+                end#MMS or SMS
+
+              end#end story_subpart
+
+            end #non-break user
+
+          end#end sendStory? large
+
+      end  #LEGACT STRING 
+
+    end #User.do
         
     puts "doing hard work!!" + "\n\n" 
+
+    #email us about the quitters
+
+    if not quitters.empty? 
+      Pony.mail(:to => 'phil.esterman@yale.edu',
+            :cc => 'henok.addis@yale.edu',
+            :from => 'phil.esterman@yale.edu',
+            :subject => 'StoryTime: Users were dropped.',
+            :body => "#{quitters.length} users never responeded, so were dropped.
+
+                      Here are the bad guys:
+                      #{quitters}")
+    end
+
 
   end #end perform method
 
@@ -391,4 +412,4 @@ class SomeWorker
 
 
 
-end  
+end  #end class

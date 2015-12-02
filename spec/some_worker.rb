@@ -8,6 +8,9 @@ require 'sinatra/r18n'
 require 'time'
 require 'active_support/all'
 
+#TEMPORARY 
+require_relative '../app/app.rb'
+
 require_relative '../auto-signup'
 
 require_relative '../helpers'
