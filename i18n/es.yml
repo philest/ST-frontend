@@ -48,6 +48,13 @@ no_reply:
   day_late: "Hora del Cuento: Hi! We noticed you didn't choose your last story."
   dropped: "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
+misc:
+  sms:
+    thanks: "Thanks"
+    thank_you: "Thank you"
+  reply:
+    sure: "StoryTime: Sure thing! :-)"
+
 
 weekday:
   mon: Lu

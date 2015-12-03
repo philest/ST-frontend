@@ -125,6 +125,7 @@ enable :sessions
 
 def app_workflow(params, locale)
 
+
 	#strip whitespace (trailing and leading)
 	params[:Body] = params[:Body].strip
 	params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
@@ -146,6 +147,7 @@ def app_workflow(params, locale)
         R18n.thread_set(i18n)
 	end
 
+
 	#first reply: new user texts in STORY
 	if params[:Body].casecmp(R18n.t.commands.story) == 0 && 
 			(@user == nil || @user.sample == true)
@@ -157,11 +159,11 @@ def app_workflow(params, locale)
 
 	elsif @user == nil
 		#send us email about problem
-		if MODE == PRO
+		if MODE == PRO and params[:From] != "+15612125831"
 			Pony.mail(:to => 'phil.esterman@yale.edu',
 					  :cc => 'henok.addis@yale.edu',
 					  :from => 'phil.esterman@yale.edu',
-					  :subject => 'StoryTime: an unexpected SMS (non-user)',
+					  :subject => 'StoryTime: an unknown SMS (non-user)',
 					  :body => "An unregistered user texted in an unknown response. 
 
 					  			From: #{params[:From]}
@@ -267,15 +269,11 @@ def app_workflow(params, locale)
 		Helpers.new_text(note, note, "+15612125831")
 
 
-	elsif params[:Body].casecmp(R18n.t.commands.text) == 0 #TEXT option		
+	elsif params[:Body].casecmp(R18n.t.commands.text.to_s) == 0 #TEXT option		
 		#change mms to sms
 		@user.update(mms: false)
 		Helpers.text(R18n.t.mms_update, R18n.t.mms_update,
 											  @user.phone)
-	elsif params[:Body].casecmp("REDO") == 0 #texted STORY
-		#no need to manually undo birthdate
-		Helpers.text(Text::REDO_BIRTHDATE, Text::REDO_BIRTHDATE,
-												    @user.phone)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
 	elsif @user.awaiting_choice == true &&
@@ -331,6 +329,12 @@ def app_workflow(params, locale)
 				R18n.t.error.bad_choice, @user.phone)
 	 	end				
 
+	 	#thanks or thank you
+	elsif params[:Body].casecmp(R18n.t.misc.sms.thanks.to_s) == 0 ||
+		  params[:Body].casecmp(R18n.t.misc.sms.thank_you.to_s) == 0
+			
+		Helpers.text(R18n.t.misc.reply.sure,
+					 R18n.t.misc.reply.sure, @user.phone)
 	#response matches nothing
 	else
 		repeat = false
@@ -343,15 +347,16 @@ def app_workflow(params, locale)
 		end
 
 		##report this to us by email
-		if MODE == PRO
+		if MODE == PRO and params[:From] != "+15612125831"
 			Pony.mail(:to => 'phil.esterman@yale.edu',
 					  :cc => 'henok.addis@yale.edu',
 					  :from => 'phil.esterman@yale.edu',
-					  :subject => 'StoryTime: an unexpected SMS (user)',
+					  :subject => 'StoryTime: an unknown SMS (user)',
 					  :body => "A registered user texted in an unknown response. 
 
 					  			From: #{params[:From]}
 					  			Body: #{params[:Body]} .")
+		
 		end
 
 

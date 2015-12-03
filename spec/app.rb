@@ -395,7 +395,7 @@ describe 'The StoryTime App' do
         end
 
         it "send good resubscription msg" do
-       @user = User.create(phone: "666")
+          @user = User.create(phone: "666")
 
 
           get "/test/666/" + STOP_URL + "/ATT"
@@ -850,6 +850,41 @@ describe 'The StoryTime App' do
 
 
     end
+
+    describe "Miscellaneous SMS" do
+
+      it 'responds to thanks' do
+
+        # i18n = R18n::I18n.new('en', ::R18n.default_places)
+        # R18n.thread_set(i18n)
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/ATT'
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        #get thanks, respond sure
+        get '/test/+156122233333/thanks/ATT'
+
+        expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
+      end
+
+
+      it 'responds to thank you' do
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/ATT'
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        #get thanks, respond sure
+        get '/test/+156122233333/thank%20you/ATT'
+        expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
+      end
+
+
+    end
+
 
     # it "gets a last message" do 
     #     @user = User.find_by_phone("+15612125831")
