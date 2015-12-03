@@ -882,6 +882,33 @@ describe 'The StoryTime App' do
         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
       end
 
+      it "responds to 'who's this' " do
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/ATT'
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        #get thanks, respond sure
+        get '/test/+156122233333/who%27s%20this/ATT'
+        expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
+      end
+
+      it "responds to 'who is this' " do
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/ATT'
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        #get thanks, respond sure
+        get '/test/+156122233333/who%20is%20this/ATT'
+        expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
+      end
+
+
+
+
 
     end
 

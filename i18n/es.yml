@@ -52,9 +52,11 @@ misc:
   sms:
     thanks: "Thanks"
     thank_you: "Thank you"
+    whos_this: "who\'s this"
+    who_is_this: "who is this"
   reply:
     sure: "StoryTime: Sure thing! :-)"
-
+    who_we_are: "StoryTime: We work with your child\'s school to send free stories by text. You\'ll get %1 a week!\n\nReply HELP for more info, STOP to quit."
 
 weekday:
   mon: Lu
