@@ -1,7 +1,0 @@
-			#TWILIO set up:
-	   		account_sid = ENV['TW_ACCOUNT_SID']
-	    	auth_token = ENV['TW_AUTH_TOKEN']
-		  	@client = Twilio::REST::LookupsClient.new account_sid, auth_token
-		  	
-		  	number = @client.phone_numbers.get("+15612125831", type: 'carrier')
-		  	puts number.carrier['name']

@@ -34,7 +34,7 @@ error:
   no_signup_match: "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
   bad_choice: "Hora del Cuento: Lo sentimos, nosotros no entendíamos eso. Responda con la letra del cuento que usted quiere.\n\nPara ayuda, responda AYUDA AHORA"
 
-first_mms: "http://www.joinstorytime.org/images/d_sp.jpg"
+first_mms: "http://www.joinstorytime.herokuapp.com/images/d_sp.jpg"
 
 example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 
