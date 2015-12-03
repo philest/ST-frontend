@@ -1,3 +1,6 @@
+### NOT updated for DST yet.
+
+
 require_relative "./spec_helper"
 
 require 'capybara/rspec'
@@ -5,7 +8,10 @@ require 'rack/test'
 require 'timecop'
 
 require 'sinatra/r18n'
+
 require 'time'
+require_relative '../lib/set_time'
+
 require 'active_support/all'
 
 #TEMPORARY 
@@ -36,6 +42,8 @@ SLEEP_TIME = (1/ 8.0)
 
 
 SPRINT_CARRIER = "Sprint Spectrum, L.P."
+
+DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
 
@@ -595,6 +603,7 @@ time = Time.now.utc
         @user = User.find_by(phone: "+15612129000")
         NextMessageWorker.drain
         @user.reload
+        @user.update(time: DEFAULT_TIME)
         expect(@user.total_messages).to eq(1)
         expect(@user.awaiting_choice).to eq false
 
@@ -729,6 +738,7 @@ time = Time.now.utc
   it "properly sends out the message about not responding with choice (on next valid day), then drops if don't respond by next" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user.update(time: DEFAULT_TIME)
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -740,6 +750,8 @@ time = Time.now.utc
       end
       @user.reload
       
+
+
       NewTextWorker.drain
 
       NextMessageWorker.drain
@@ -848,6 +860,7 @@ time = Time.now.utc
       Sidekiq::Testing.fake!
       Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
       @user = User.create(phone: "+15002125833", story_number: 1, days_per_week: 2)
+      @user.update(time: DEFAULT_TIME)
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUES. (3:52)
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -930,8 +943,8 @@ time = Time.now.utc
 
 
       #because one pager, hero stories
-      mmsSoFar.concat ["http://joinstorytime.org/images/hero1.jpg", 
-              "http://joinstorytime.org/images/hero2.jpg"]
+      mmsSoFar.concat ["http://joinstorytime.herokuapp.com/images/hero1.jpg", 
+              "http://joinstorytime.herokuapp.com/images/hero2.jpg"]
       smsSoFar.concat ["StoryTime: Enjoy tonight's superhero story! Whenever you talk or play with your child, you're helping her grow into a super-reader!"]
 
 
@@ -947,7 +960,7 @@ time = Time.now.utc
  it "properly sends SPRINT phones story-choices that are over 160+ in many chunks" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1, carrier: SPRINT_CARRIER) #ready to receive story choice
-
+      @user.update(time: DEFAULT_TIME)
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
@@ -1006,6 +1019,7 @@ time = Time.now.utc
  it "properly signs back up after being dropped, then STORY-responding" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user.update(time: DEFAULT_TIME)
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -1133,6 +1147,7 @@ time = Time.now.utc
       Sidekiq::Testing.fake!
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
+      @user.update(time: DEFAULT_TIME)
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes

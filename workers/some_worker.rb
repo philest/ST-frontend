@@ -178,7 +178,7 @@ class SomeWorker
               #a) their time, 
               #b) their third story, or every third one thereafter.
               #c) they're not in the middle of a series
-
+  
 
               if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
@@ -257,7 +257,7 @@ class SomeWorker
 
     #email us about the quitters
 
-    if not quitters.empty? 
+    if not quitters.empty? and MODE == "production"
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'henok.addis@yale.edu',
             :from => 'phil.esterman@yale.edu',
