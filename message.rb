@@ -52,7 +52,7 @@ class Message
 
 		#superheroes
 		@@messageArray.push Message.new([Text::IMAGE_URL+"hero1.jpg", Text::IMAGE_URL+"hero2.jpg"],
-		"StoryTime: Enjoy tonight's superhero story! Whenever you talk or play with your child, you're helping her grow into a super-reader!",
+		"StoryTime: Enjoy tonight's superhero story!\n\nWhenever you talk or play with your child, you're helping her grow into a super-reader!",
 		"SuperSarah can break a brick wall\n\nwith her pinky finger.\n\nSuperSam can run to China\n\nand be back before dinner.\n\n\nMy superpower is telling funny jokes\n\nuntil you fall down.\n\nI'll make you laugh so much,\n\nyou'll be rolling on the ground!")
 		
 		#pizza aliens
