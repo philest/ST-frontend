@@ -276,16 +276,46 @@ def app_workflow(params, locale)
 											  @user.phone)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
-	elsif @user.awaiting_choice == true &&  #parses for first isolated letter.
-	    	(body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
+	elsif @user.awaiting_choice == true  #parses for first isolated letter.
 
-	   	body = body.to_s #convert from Match group to first match.
+		messageSeriesHash = MessageSeries.
+		    		  getMessageSeriesHash
 
-	   	#isolate the letter from space and quotes
-	   	body = /[a-zA-z]/.match(body)
-	   	body = body.to_s
+		require 'pry'
+		binding.pry
 
-		body.downcase!
+
+			#isolated letter
+	   	if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
+		   	body = body.to_s #convert from Match group to first match.
+		   	#isolate the letter from space and quotes
+		   	body = /[a-zA-z]/.match(body)
+		   	body = body.to_s
+			body.downcase!
+
+			#first letter of word-- IF first letter is valid!!!
+		elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) and 
+			 		     MessageSeries.codeIsInHash(body.to_s +
+			   			           	  @user.series_number.to_s)
+			body = body.to_s
+			body.downcase!
+		else #default to first one.
+			
+			if MODE == PRO && @user.phone != "+15612125831" 
+				Pony.mail(:to => 'phil.esterman@yale.edu',
+				  :cc => 'henok.addis@yale.edu',
+				  :from => 'phil.esterman@yale.edu',
+				  :subject => 'StoryTime: an unknown series choice',
+				  :body => "A user texted in an unknown choice
+				  			on series #{@user.series_number.to_s}. 
+
+				  			From: #{params[:From]}
+				  			Body: #{params[:Body]} .")
+			end
+
+			body = messageSeriesHash.keys[@user.series_number * 2] #t0
+			body = body[0] #t
+		end
 
 		#push back to zero incase 
 		#changed to 999 to denote one 'day' after
