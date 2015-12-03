@@ -276,7 +276,7 @@ def app_workflow(params, locale)
 											  @user.phone)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
-	elsif @user.awaiting_choice == true &&
+	elsif @user.awaiting_choice == true &&  #parses for first isolated letter.
 	    	(body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
 
 	   	body = body.to_s #convert from Match group to first match.
