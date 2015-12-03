@@ -335,6 +335,13 @@ def app_workflow(params, locale)
 			
 		Helpers.text(R18n.t.misc.reply.sure,
 					 R18n.t.misc.reply.sure, @user.phone)
+	elsif params[:Body].casecmp(R18n.t.misc.sms.whos_this.to_s) == 0 ||
+	  params[:Body].casecmp(R18n.t.misc.sms.who_is_this.to_s) == 0
+		
+		Helpers.text(R18n.t.misc.reply.
+						 who_we_are(@user.days_per_week).to_s,
+			R18n.t.misc.reply.who_we_are(@user.days_per_week).
+											to_s, @user.phone)
 	#response matches nothing
 	else
 		repeat = false
