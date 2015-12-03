@@ -1449,20 +1449,103 @@ time = Time.now.utc
 
     end
 
+    describe "Series choice parsing" do 
+
+      it 'recognizes "t for Tim" as choice t' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/t%20for%20Tim/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("t")
+
+      end
+
+      it 'recognizes "\'t\' for Tim" as choice t' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/%27t%27%20for%20Tim/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("t")
+
+      end
+
+      it 'recognizes "t" for Tim" as choice t' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/%22t%22%20for%20Tim/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("t")
+
+      end
+
+
+      it 'recognizes "dino" as choice d' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/dino/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("d")
+
+      end
+
+      it 'sends default story for unexpected choice' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/okay/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("t")
+
+      end
 
 
 
 
-
-  # it "knows which user gets story next" do
-  # 	User.create(name: "Bob", time: "5:30pm", phone: "898")
-  # 	User.create(name: "Loria", time: "6:30pm", phone: "798")
-  # 	User.create(name: "Jessica", time: "6:30am", phone: "698")
-
-  # 	@user = User.find_by_name("Bob")
-
-  # 	SomeWorker.sendStory?(@user, "12:30pm")
-  # end
+    end
 
 
 end
