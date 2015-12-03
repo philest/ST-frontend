@@ -277,13 +277,14 @@ def app_workflow(params, locale)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
 	elsif @user.awaiting_choice == true &&
-	   /\A[']{0,1}["]{0,1}[a-zA-Z][']{0,1}["]{0,1}\z/ =~ params[:Body]			
+	    	(body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
 
-		body = params[:Body]
-		#has quotations => extract the juicy part
-		if  !(/\A[a-zA-Z]\z/ =~ params[:Body])
-			body = params[:Body][1,1]
-		end
+	   	body = body.to_s #convert from Match group to first match.
+
+	   	#isolate the letter from space and quotes
+	   	body = /[a-zA-z]/.match(body)
+	   	body = body.to_s
+
 		body.downcase!
 
 		#push back to zero incase 
