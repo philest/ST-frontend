@@ -945,7 +945,7 @@ time = Time.now.utc
       #because one pager, hero stories
       mmsSoFar.concat ["http://joinstorytime.herokuapp.com/images/hero1.jpg", 
               "http://joinstorytime.herokuapp.com/images/hero2.jpg"]
-      smsSoFar.concat ["StoryTime: Enjoy tonight's superhero story! Whenever you talk or play with your child, you're helping her grow into a super-reader!"]
+      smsSoFar.concat ["StoryTime: Enjoy tonight's superhero story!\n\nWhenever you talk or play with your child, you're helping her grow into a super-reader!"]
 
 
       expect(Helpers.getMMSarr).to eq(mmsSoFar)
