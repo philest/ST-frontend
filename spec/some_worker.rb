@@ -1505,7 +1505,7 @@ time = Time.now.utc
 
       end
 
-
+        
       it 'recognizes "dino" as choice d' do
         Sidekiq::Testing.fake!
         Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)

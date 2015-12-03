@@ -281,10 +281,6 @@ def app_workflow(params, locale)
 		messageSeriesHash = MessageSeries.
 		    		  getMessageSeriesHash
 
-		require 'pry'
-		binding.pry
-
-
 			#isolated letter
 	   	if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
 		   	body = body.to_s #convert from Match group to first match.
