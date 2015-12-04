@@ -276,10 +276,18 @@ def app_workflow(params, locale)
 											  @user.phone)
 	#Responds with a letter when prompted to choose a series
 	#Account for quotations
-	elsif @user.awaiting_choice == true  #parses for first isolated letter.
+	elsif @user.awaiting_choice == true or
+		  (@user.subscribed == false and   #dropped user choosing
+		  /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body])) 
 
 		messageSeriesHash = MessageSeries.
 		    		  getMessageSeriesHash
+
+		if not @user.subscribed
+			@user.update(subscribed: true)
+			@user.update(next_index_in_series: 0)
+		end
+
 
 			#isolated letter
 	   	if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))

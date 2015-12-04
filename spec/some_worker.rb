@@ -1542,6 +1542,64 @@ time = Time.now.utc
 
       end
 
+      it 'sends default story for unexpected choice' do
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+        @user = User.create(phone: "+15002125833", story_number: 1, 
+                           awaiting_choice: true, days_per_week: 2,
+                                           next_index_in_series: 0)
+        @user.update(time: DEFAULT_TIME)
+
+        get 'test/+15002125833/okay/ATT'
+        @user.reload
+
+        expect(@user.series_number).to eq(0) #no series
+
+        expect(@user.awaiting_choice).to eq(false)
+        expect(@user.series_choice).to eq("t")
+
+      end
+
+      it 'registers dropped user who texts choice' do 
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+
+        #just DROPPED. 
+        @user = User.create(phone: "+15002125833", subscribed: false,
+                             story_number: 1, awaiting_choice: false,
+                         days_per_week: 2, next_index_in_series: 999)
+
+        get 'test/+15002125833/D/ATT'
+        @user.reload
+        expect(@user.subscribed).to be true
+
+        expect(@user.awaiting_choice).to be false
+        expect(@user.next_index_in_series).to eq 0
+        expect(@user.series_choice).to eq 'd'
+      end
+
+      it 'sends story dropped user who texts choice' do 
+        Sidekiq::Testing.fake!
+        Timecop.travel(2015, 6, 22, 17, 20, 0) #on MON. (3:52)
+
+        #just DROPPED. 
+        @user = User.create(phone: "+15002125833", subscribed: false,
+                             story_number: 1, awaiting_choice: false,
+                         days_per_week: 2, next_index_in_series: 999)
+
+        get 'test/+15002125833/D/ATT'
+        @user.reload
+
+        mmsSoFar = []
+
+        messageSeriesHash = MessageSeries.getMessageSeriesHash
+        story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+        mmsSoFar.concat story.getMmsArr
+
+        NextMessageWorker.drain
+        expect(Helpers.getMMSarr).to eq mmsSoFar
+      end
+
 
 
 
