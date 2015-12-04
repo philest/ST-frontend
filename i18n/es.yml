@@ -29,10 +29,15 @@ help:
   normal: "HC: Cuentos gratis para pre kínder en %1. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
   sprint: "HC: Cuentos gratis en %1. Para ayuda: 561-212-5831.\n\nResponder:\nPARA para cancelar.\nTEXTO para cuentos sin picturas"
 
+
 error:
-  no_option: "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
-  no_signup_match: "StoryTime: Sorry, we didn't understand that. Text STORY to signup for free stories by text, or text SAMPLE to receive a sample"
+  no_signup_match: "StoryTime: Sorry, we didn't understand that. Text SAMPLE to receive a sample"
   bad_choice: "Hora del Cuento: Lo sentimos, nosotros no entendíamos eso. Responda con la letra del cuento que usted quiere.\n\nPara ayuda, responda AYUDA AHORA"
+  no_option: "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
+  no_option_sprint: "StoryTime: Sorry, we didn't understand that. Something may have gone wrong.\n\nReply to leave our team a message. Or HELP NOW for info."
+
+to_us:
+  thanks: "Thanks! We've sent your message along."
 
 first_mms: "http://www.joinstorytime.herokuapp.com/images/d_sp.jpg"
 
