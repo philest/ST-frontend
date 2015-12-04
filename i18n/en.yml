@@ -14,13 +14,13 @@ break:
 
 start:
   normal: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
-  sprint: "Welcome to StoryTime, free pre-k stories by text! You\'ll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
+  sprint: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
 
 stop:
   resubscribe:
     short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
     long: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud, continuing from where you left off."
-  stopped: "Okay, we\'ll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
+  stopped: "Okay, we'll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
   continuing: "StoryTime: Great, we'll keep sending you free stories!"
 
 mms_update: "Okay, you'll now receive just the text of each story. Hope this helps!"
@@ -30,9 +30,13 @@ help:
   sprint: "StoryTime sends stories on %1. For help: 561-212-5831.\n\nScreens before bed may have health risks, so read early.\n\nReply:\nTEXT for no-pic stories\nSTOP to end"
 
 error:
-  no_option: "StoryTime: Sorry, this service is automatic. We didn't understand that.\n\nReply:\nHELP NOW for questions\nSTOP to cancel"
   no_signup_match: "StoryTime: Sorry, we didn't understand that. Text SAMPLE to receive a sample"
   bad_choice: "StoryTime: Sorry, we didn't understand that. Reply with the letter of the story you want.\n\nFor help, reply HELP NOW."
+  no_option: "StoryTime: Sorry, we didn't understand that.\n\nStoryTime is automatic and something may have gone wrong.\n\nReply to leave our team a message. Or text HELP NOW for info."
+  no_option_sprint: "StoryTime: Sorry, we didn't understand that. Something may have gone wrong.\n\nReply to leave our team a message. Or HELP NOW for info."
+
+to_us:
+  thanks: "Thanks! We've sent your message along."
 
 first_mms: "http://www.joinstorytime.herokuapp.com/images/d1.jpg"
 
@@ -52,11 +56,11 @@ misc:
   sms:
     thanks: "Thanks"
     thank_you: "Thank you"
-    whos_this: "who\'s this"
+    whos_this: "who's this"
     who_is_this: "who is this"
   reply:
     sure: "StoryTime: Sure thing! :-)"
-    who_we_are: "StoryTime: We work with your child\'s school to send free stories by text. You\'ll get %1 a week!\n\nReply HELP for more info, STOP to quit."
+    who_we_are: "StoryTime: We work with your child's school to send free stories by text. You'll get %1 a week!\n\nReply HELP for more info, STOP to quit."
 
 
 weekday:

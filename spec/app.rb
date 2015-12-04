@@ -908,6 +908,36 @@ describe 'The StoryTime App' do
 
     end
 
+    describe "no option" do 
+
+      it "registers no option" do 
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/ATT'
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        get '/test/+156122233333/randomSMS/ATT'
+
+        expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option.to_s
+
+      end
+
+      it "registers SPRINT no option" do 
+        R18n.set 'en'
+
+        get '/test/+156122233333/STORY/' + SPRINT_QUERY_STRING
+        @user = User.find_by_phone "+156122233333" 
+        @user.reload
+
+        get '/test/+156122233333/randomSMS/ATT'
+
+        expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option_sprint.to_s
+
+      end
+
+
+    end
 
     # it "gets a last message" do 
     #     @user = User.find_by_phone("+15612125831")

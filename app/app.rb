@@ -133,11 +133,12 @@ def app_workflow(params, locale)
 	#new become old
 	session["prev_body"] = session["new_body"] 
 	session["prev_time"] = session["new_time"]
+	session["now_for_us"] = session["next_for_us"]
 
 	#reset the new
 	session["new_body"] = params[:Body].strip
 	session["new_time"] = Time.now.utc
-
+	session["next_for_us"] = false #default: don't send us their response.
 
 	@user = User.find_by_phone(params[:From]) #check if already registered.
 
@@ -234,6 +235,13 @@ def app_workflow(params, locale)
 
 	  	Helpers.text(R18n.t.help.normal(dayNames).to_s,
 	  		 R18n.t.help.sprint(dayNames).to_s, @user.phone)
+	elsif session["now_for_us"]
+			#send it to us.
+			Helpers.new_text("#{@user.phone} sent: #{params[:Body]}")
+			
+			Helpers.text(R18n.t.to_us.thanks.to_s, 
+		                 R18n.t.to_us.thanks.to_s,
+		                              @user.phone)
 
 	elsif params[:Body].casecmp(R18n.t.commands.break) == 0
 		@user.update(on_break: true)
@@ -382,29 +390,34 @@ def app_workflow(params, locale)
 		repeat = false
 
 		if session["prev_body"]
-			if session["prev_body"].casecmp(params[:Body]) == 0 &&
-				session["prev_time"] - 100 < Time.now.utc
+			if session["prev_body"].casecmp(params[:Body]) == 0 and
+				      session["prev_time"] - 100 < Time.now.utc and
+				                              @user.awaiting_choice 
 				repeat = true
 			end
 		end
 
-		##report this to us by email
+		##report this to us by email (and text)
 		if MODE == PRO and params[:From] != "+15612125831"
+			note = "A registered user texted in an unknown response. 
+
+					  			From: #{params[:From]}
+					  			Body: #{params[:Body]} ."
+
 			Pony.mail(:to => 'phil.esterman@yale.edu',
 					  :cc => 'henok.addis@yale.edu',
 					  :from => 'phil.esterman@yale.edu',
 					  :subject => 'StoryTime: an unknown SMS (user)',
-					  :body => "A registered user texted in an unknown response. 
-
-					  			From: #{params[:From]}
-					  			Body: #{params[:Body]} .")
-		
+					  :body => note)
+			#send me text too
+			Helpers.new_text(note, note, "+15612125831")
 		end
 
 
 		if not repeat
 			Helpers.text(R18n.t.error.no_option.to_s, 
-				R18n.t.error.no_option.to_str, @user.phone)
+			   	  R18n.t.error.no_option_sprint.to_s,
+										 @user.phone)
 		else
 			puts "DONT send repeat: message #{session["prev_body"]} was sent already"
 		end
