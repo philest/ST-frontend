@@ -40,7 +40,37 @@ describe 'A/B experiments' do
 
    		it 'exists' do 
    			@experiment = Experiment.create()
-   			expect(@user).to_not be nil 
+   			expect(@experiment).to_not be nil 
+   		end
+
+   		it 'has a Variation' do
+   			@experiment = Experiment.create()
+   			@experiment.variations.create(option: "test")
+   			expect(@experiment.variations.count).to eq 1 
+   			puts "experiment's count of variations: " + \
+   					    "#{@experiment.variations.count}"
+   		end
+
+   		it 'has many Variations' do
+   			@experiment = Experiment.create()
+   			@experiment.variations.create(option: "one")
+   			@experiment.variations.create(option: "two")
+   			@experiment.variations.create(option: "three")
+   			expect(@experiment.variations.count).to eq 3 
+   			puts "experiment's count of variations: " + \
+   					    "#{@experiment.variations.count}"
+   		end
+
+
+
+
+    end
+
+    describe 'the Variations model' do 
+
+   		it 'exists' do 
+   			@variation = Variation.create()
+   			expect(@variation).to_not be nil 
    		end
 
     end
