@@ -28,5 +28,6 @@ group :test do
 	gem 'pry', "= 0.10.0"
 	gem 'pry-nav'
 	gem 'timecop'
+	gem 'factory_girl'
 end
 

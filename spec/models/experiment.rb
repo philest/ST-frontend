@@ -7,18 +7,18 @@
 ENV['RACK_ENV'] = "test"
 
 # DEPENDENCIES 
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
 #add experiment & variation models
-require_relative '../models/experiment'
-require_relative '../models/variation'
+require_relative '../../models/experiment'
+require_relative '../../models/variation'
 
 #testing helpers
-require_relative '../helpers.rb'
+require_relative '../../helpers.rb'
 
 
 describe 'A/B experiments' do
@@ -61,22 +61,37 @@ describe 'A/B experiments' do
    					    "#{@experiment.variations.count}"
    		end
 
-
-
-
-    end
-
-    describe 'the Variations model' do 
-
-   		it 'exists' do 
-   			@variation = Variation.create()
-   			expect(@variation).to_not be nil 
+   		it "is created by a factory" do 
+			user = create(:user)
+			expect(user).to_not be nil
    		end
 
+   		it "is created by a factory" do 
+			experiment = create(:experiment)
+			expect(experiment).to_not be nil
+   		end
+
+   		it "is created by a factory" do 
+			variation = create(:variation_with_experiment)
+			expect(variation.experiment).to_not be nil
+   		end
+
+   		it "is created by a factory" do 
+			variation = create(:variation_with_user)
+			expect(variation.user).to_not be nil
+   		end
+
+   		it "can access variation from user" do
+   			variation = create(:variation_with_user)
+   			user = variation.user
+   			expect(user.variations.count).to eq 1
+   		end
+
+
+
+
+
     end
-
-
-
 
 
 
