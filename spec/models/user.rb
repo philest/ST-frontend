@@ -45,23 +45,25 @@ describe 'User' do
    		it "can access variation" do
    			variation = create(:variation_with_user)
    			user = variation.user
-   			expect(user.variations.count).to eq 1
+   			expect(user.variation).to_not be nil
    		end
 
    		it "can assign variation to user" do
    			user = create(:user)
    			variation = create(:variation)
-   # 			user.variations = variation 
-   # 			puts user.variations
-			# expect(user.variations).to_not be nil
+   			user.variation = variation
+			expect(user.variation).to_not be nil
    		end
 
+   		it "can access experiment through variation" do
+   			user = create(:user)
+   			variation = create(:variation)
+   			experiment = create(:experiment)
 
-   		# it "can access experiment through variation" do
-   		# 	user = create(:user)
-   		# 	variation = create(variation)
-   		# 	user.variations.first = variation 
+   			experiment.variations.push variation
+   			user.variation = variation
+   			expect(user.experiment).to eq experiment
+   		end
 
-   		# end
 end
 

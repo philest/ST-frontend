@@ -61,10 +61,6 @@ describe 'A/B experiments' do
    					    "#{@experiment.variations.count}"
    		end
 
-   		it "is created by a factory" do 
-			user = create(:user)
-			expect(user).to_not be nil
-   		end
 
    		it "is created by a factory" do 
 			experiment = create(:experiment)
@@ -76,16 +72,21 @@ describe 'A/B experiments' do
 			expect(variation.experiment).to_not be nil
    		end
 
-   		it "is created by a factory" do 
-			variation = create(:variation_with_user)
-			expect(variation.user).to_not be nil
-   		end
+      it "accesses users through variations" do
+        user_list = create_list(:user, 10) 
+        var_list = create_list(:variation, 10)
+        exper = create(:experiment)
 
-   		it "can access variation from user" do
-   			variation = create(:variation_with_user)
-   			user = variation.user
-   			expect(user.variations.count).to eq 1
-   		end
+        #assign each user a variation 
+        user_list.zip(var_list).each do |user, var|
+          user.variation = var
+        end
+        #assign every variation to the experiment
+        var_list.each do |var|
+          exper.variations.push var
+        end
+        expect(exper.users.count).to eq 10
+      end
 
 
 
