@@ -6,8 +6,9 @@ configure :development, :production do
  db = URI.parse(ENV['DATABASE_URL'] || 'postgres://postgres:sharlach1@localhost/development')
 
 
-#adding development REDIS config
-ENV["REDISTOGO_URL"] = "redis://redistogo:120075187f5e39ba84e429f311eb69a5@hammerjaw.redistogo.com:9787/"
+# conditionally config Redis for development,
+# if not set for Production
+ENV["REDISTOGO_URL"] ||= "redis://@localhost"
  
 	ActiveRecord::Base.establish_connection(
 			:adapter => db.scheme == 'postgres' ? 'postgresql' : db.scheme,
