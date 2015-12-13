@@ -51,6 +51,11 @@ describe 'the Variation model' do
 			expect(variation.user).to_not be nil
    		end
 
+      it "can access variation from user" do
+        variation = create(:variation_with_user)
+        user = variation.user
+        expect(user.variation).to_not be nil
+      end
 
 
 end
