@@ -39,8 +39,13 @@ describe 'User' do
    		it "is created by a factory" do 
 			user = create(:user)
 			expect(user).to_not be nil
-
    		end
+
+   		it "is created with attributes by a factory" do 
+			user = create(:user, phone: "+1555")
+			expect(user.phone).to eq "+1555"
+   		end
+
 
    		it "can access variation" do
    			variation = create(:variation_with_user)
@@ -63,6 +68,16 @@ describe 'User' do
    			experiment.variations.push variation
    			user.variation = variation
    			expect(user.experiment).to eq experiment
+   		end
+
+   		it "can access variable from experiment" do
+   			user = create(:user)
+   			variation = create(:variation)
+   			experiment = create(:experiment, variable: "time")
+
+   			experiment.variations.push variation
+   			user.variation = variation
+   			expect(user.experiment.variable).to eq "time"
    		end
 
 end

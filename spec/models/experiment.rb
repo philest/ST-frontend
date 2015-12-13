@@ -13,9 +13,7 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-#add experiment & variation models
-require_relative '../../models/experiment'
-require_relative '../../models/variation'
+require_relative "../../experiment/create_experiment"
 
 #testing helpers
 require_relative '../../helpers.rb'
@@ -88,8 +86,31 @@ describe 'A/B experiments' do
         expect(exper.users.count).to eq 10
       end
 
+      describe "Creation" do
+
+        # clean local Redis storage. 
+        before(:each) do
+          REDIS.del DAYS_FOR_EXPERIMENT 
+        end
+
+        it "makes an experiment" do 
+          create_experiment("time", [Time.now], 25, 20)
+          expect(Experiment.all.first).to_not be nil
+        end 
+
+        it "stores the days in Redis" do 
+          create_experiment("time", [Time.now], 25, 20)
+          expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1).
+                  first.to_i).to eq 20
+        end 
+
+        it "cleans Redis" do 
+          expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1)).to be_empty
+        end 
 
 
+
+      end
 
 
     end
