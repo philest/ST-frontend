@@ -7,18 +7,20 @@ require 'rack/test'
 
 require_relative '../helpers'
 require_relative '../constants'
-
+require_relative '../app/app'
 
 # require_relative '../config/environments'
 
 puts ENV["REDISTOGO_URL"] + "\n\n\n\n"
 
 SPRINT = "Sprint Spectrum, L.P."
+ 
+Sidekiq::Testing.inline!
 
 
 include Text
 
-describe 'The StoryTime Workers' do
+describe 'First Text Message' do
   include Rack::Test::Methods
 
   def app
@@ -26,43 +28,18 @@ describe 'The StoryTime Workers' do
   end
 
 
-   describe "First Text Message" do
-
 
 		before(:each) do
   			FirstTextWorker.jobs.clear
   			Helpers.initialize_testing_vars
   			NextMessageWorker.jobs.clear
+  			Sidekiq::Testing.inline!
 		end
 
-   		it "properly enques a Text" do
-   		expect {
-   		# assert_equal 0, HardWorker.jobs.size
-   				NextMessageWorker.perform_async("SMS", ["a", "b"], "+15612125831")
-   				# assert_equal 1, HardWorker.jobs.size
-   		}.to change(NextMessageWorker.jobs, :size).by(1)
-   		end
-
-   		it "starts with none, then adds more one" do
-   			expect(NextMessageWorker.jobs.size).to eq(0)
-   			NextMessageWorker.perform_async("+15612125831")
-   			expect(NextMessageWorker.jobs.size).to eq(1)
-   		end
 
 		  # SMS TESTS
 		it "isn't there before" do
 	 	  expect(User.find_by_phone("555")).to eq(nil)
-		end
-
-		it "has all the first_text Brandon S-MS in right order" do
-			get '/test/556/STORY/ATT'
-			expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])
-		end
-
-		it "has all the first_text Brandon M-ms in right order" do
-			get '/test/556/STORY/ATT'
-			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
 		end
 
 		
@@ -127,7 +104,6 @@ describe 'The StoryTime Workers' do
 
 
 
-  end 
 
 end
 
