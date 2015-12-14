@@ -41,7 +41,15 @@ def create_experiment(variable,
 	REDIS.lpush DAYS_FOR_EXPERIMENT, days
 
 
-	Experiment.create(variable: variable,
-					  users_to_assign: users)
+	exper = Experiment.create(variable: variable,
+					          users_to_assign: users)
+
+	# Every option is a varation. 
+	options_arr.each do |option| 
+		var = Variation.create(option: option.to_s)
+		# set it as part of experiment. 
+		exper.variations.push var
+	end
+
 
 end
