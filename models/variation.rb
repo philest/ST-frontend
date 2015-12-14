@@ -8,6 +8,7 @@
 #  --------------------------------------------------------
 
 class Variation < ActiveRecord::Base
+	has_many :users
 	belongs_to :experiment
 	belongs_to :user
 end

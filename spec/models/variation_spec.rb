@@ -58,9 +58,8 @@ describe 'the Variation model' do
 
       it "can access users from variation" do 
         variation = create(:variation)
-        require 'pry'
-        binding.pry
-
+        user = create(:user)
+        variation.users.push user
       end
 
 
