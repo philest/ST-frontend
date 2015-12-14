@@ -56,6 +56,13 @@ describe 'the Variation model' do
         expect(user.variation).to_not be nil
       end
 
+      it "can access users from variation" do 
+        variation = create(:variation)
+        require 'pry'
+        binding.pry
+
+      end
+
 
 end
 
