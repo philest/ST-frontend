@@ -10,12 +10,11 @@ require_relative '../models/variation'
 require 'sinatra'
 require 'sinatra/activerecord' #sinatra w/ DB
 
-require 'as-duration'
-
 #redis
 require 'redis'
 require_relative '../config/environments'
 require_relative '../config/initializers/redis'
+
 
 #the number of days until report results
 DAYS_FOR_EXPERIMENT = "days_for_experiment"

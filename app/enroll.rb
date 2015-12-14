@@ -1,4 +1,4 @@
-#  enroll.rb 	                              Phil Esterman		
+#  app/enroll.rb 	                          Phil Esterman		
 # 
 #  Enroll the user for stories. 
 #  --------------------------------------------------------
