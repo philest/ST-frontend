@@ -13,9 +13,8 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-#add experiment & variation models
-require_relative '../../models/experiment'
-require_relative '../../models/variation'
+require_relative "../../models/experiment"
+require_relative "../../models/variation"
 
 #testing helpers
 require_relative '../../helpers.rb'

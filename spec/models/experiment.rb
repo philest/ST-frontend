@@ -1,4 +1,4 @@
-#  spec/experiment.rb 	                          Phil Esterman		
+#  spec/models/experiment.rb 	                Phil Esterman		
 # 
 #  A series of tests for A/B experiments and variations. 
 #  --------------------------------------------------------
@@ -13,7 +13,9 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require_relative "../../experiment/create_experiment"
+require_relative "../../models/experiment"
+require_relative "../../models/variation"
+
 
 #testing helpers
 require_relative '../../helpers.rb'
@@ -70,45 +72,33 @@ describe 'A/B experiments' do
 			expect(variation.experiment).to_not be nil
    		end
 
-      it "accesses users through variations" do
-        user_list = create_list(:user, 10) 
-        var_list = create_list(:variation, 10)
-        exper = create(:experiment)
+      context "Users Enrolled" do 
 
-        #assign each user a variation 
-        user_list.zip(var_list).each do |user, var|
-          user.variation = var
-        end
-        #assign every variation to the experiment
-        var_list.each do |var|
-          exper.variations.push var
-        end
-        expect(exper.users.count).to eq 10
-      end
-
-      describe "Creation" do
-
-        # clean local Redis storage. 
+        #enroll and assign users to variations/exper
         before(:each) do
-          REDIS.del DAYS_FOR_EXPERIMENT 
+          @user_list = create_list(:user, 10) 
+          var_list = create_list(:variation, 10)
+          @exper = create(:experiment)
+
+          #assign each user a variation 
+          @user_list.zip(var_list).each do |user, var|
+            user.variation = var
+          end
+          #assign every variation to the experiment
+          var_list.each do |var|
+            @exper.variations.push var
+          end
         end
 
-        it "makes an experiment" do 
-          create_experiment("time", [Time.now], 25, 20)
-          expect(Experiment.all.first).to_not be nil
-        end 
+        it "accesses users through variations" do
+          expect(@exper.users.count).to eq 10
+        end
 
-        it "stores the days in Redis" do 
-          create_experiment("time", [Time.now], 25, 20)
-          expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1).
-                  first.to_i).to eq 20
-        end 
-
-        it "cleans Redis" do 
-          expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1)).to be_empty
-        end 
-
-
+        it "doesn't delete users when deleted" do
+          expect(@user_list).to_not be nil
+          @exper.destroy 
+          expect(@user_list).to_not be nil
+        end
 
       end
 
