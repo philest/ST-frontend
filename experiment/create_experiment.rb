@@ -21,7 +21,16 @@ require_relative '../lib/set_time'
 #the number of days until report results
 DAYS_FOR_EXPERIMENT = "days_for_experiment"
 
-TIME_FLAG = "TIME"
+#Flags for valid variables to experiment on 
+
+#time to receive story
+TIME_FLAG = "TIME" 
+#how many days/week, to start
+DAYS_TO_START_FLAG = "DAYS TO START"
+
+
+#added to pm times to get 24-hour clock time
+TO_24_HOUR_OFFSET = 12
 
 # Create an experiment, along with all it's associatied
 # variations. 
@@ -29,7 +38,7 @@ TIME_FLAG = "TIME"
 # variable    - the String of what to experiment on
 # options_arr - the Array of what values the variable should take.
 #             			For time: [HH,MM] pairs. E.g. [06,30]
-# 						for 6:30 EST					
+# 						for 6:30PM EST (12-hour clock, assumes PM)					
 # users       - the Integer num of next users who will be enrolled
 # 						in the experiment.
 # days		  - the Integer number of days experiment should wait
@@ -78,7 +87,10 @@ def create_experiment(variable,
 			end
 
 			#convert the time [5,30] to UTC by adding the offset
-			t = Time.utc(2015, 1, 1, option.first + est_to_utc_offset, option.last, 0)
+			t = Time.utc(2015, Time.now.month, Time.now.day, option.first +
+									 est_to_utc_offset + 
+									 TO_24_HOUR_OFFSET, 
+									 option.last, 0)
 			
 			var = Variation.create(date_option: t, option: t.to_s) 
 		else
