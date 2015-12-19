@@ -260,11 +260,15 @@ describe 'A/B experiments' do
 
       end
 
-      describe "date_option" do
+      describe "TIME: date_option" do
 
         context "NOT daylight savings" do 
           
           before(:each) do
+            #delete previous experiments
+            Experiment.all.to_a.each do |exper|
+              exper.destroy
+            end
             #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
             #-05:00
             Timecop.travel(Time.new(2015, 12, 15, 17, 30, 0))
@@ -276,21 +280,32 @@ describe 'A/B experiments' do
           end
 
           it "has string version" do 
-            expect(Experiment.first.variations.first.option).to eq Time.utc(2015, 12, 15, 22, 30, 0).TIME_FLAG         end
+            expect(Experiment.first.variations.first.option).to eq Time.utc(2015, 12, 15, 22, 30, 0).to_s
+          end
 
         end
 
         context "daylight savings" do 
           
           before(:each) do
+            #delete previous experiments
+            Experiment.all.to_a.each do |exper|
+              exper.destroy
+            end
             #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
             #-05:00
-            Timecop.travel(Time.new(2015, 12, 15, 17, 30, 0))
+            Timecop.travel(Time.new(2015, 6, 15, 17, 30, 0))
             create_experiment(TIME_FLAG, [[5,30], [6,30], [6,0], [05,45]], 10, 20)
           end
 
           it "converts [hour,min] (EST) to option (UTC)" do
-            expect(Experiment.first.variations.first.date_option).to eq Time.utc(2015, 12, 15, 21, 30, 0)
+            expect(Experiment
+                            .first
+                            .variations
+                            .first.date_option)
+                            .to eq( 
+                            Time.utc(2015, Time.now.month,
+                                     Time.now.day, 21, 30, 0)) 
           end
 
         end
@@ -312,13 +327,13 @@ describe 'A/B experiments' do
 
           it "raises exception for too large times (min)" do
             expect{
-              create_experiment("time", [[6,65]], 10, 20)
+              create_experiment(TIME_FLAG, [[6,65]], 10, 20)
             }.to raise_error(ArgumentError)
           end
 
           it "raises exception for wrong count of option args" do
             expect{
-              create_experiment("time", [[6,30,1]], 10, 20)
+              create_experiment(TIME_FLAG, [[6,30,1]], 10, 20)
             }.to raise_error(ArgumentError)
           end
 
@@ -327,6 +342,10 @@ describe 'A/B experiments' do
 
 
       end 
+
+      describe "DAYS_TO_START" do
+
+      end
 
 
       #experiment deleted?/sends report after running out of days
