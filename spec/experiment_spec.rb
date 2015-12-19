@@ -222,10 +222,112 @@ describe 'A/B experiments' do
         end
 
         it "decrements that experiments users_to_assign" do 
-          expect(@user.experiment.variable).to eq "time4"
+          expect(@user.experiment.users_to_assign).to eq 19
         end
 
       end 
+
+      context "Earlier experiments just completed signup" do 
+        
+        before(:each) do
+          Experiment.all.first.destroy 
+          @num_users = 20
+          create_experiment("time1", ["6", "7", "8"], 1, 20)
+          create_experiment("time2", ["9", "10", "11"], 1, 20)
+          create_experiment("time3", ["12", "13", "14"], 1, 20)
+          REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
+          create_experiment("time4", ["15", "16", "17"], @num_users, 20)
+         
+          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          @user1 = User.find_by_phone("+15612125831")
+          Signup.enroll(["+1"], 'en', {Carrier: "ATT"})
+          @user2 = User.find_by_phone("+1")
+          Signup.enroll(["+2"], 'en', {Carrier: "ATT"})
+          @user3 = User.find_by_phone("+2")
+        end
+
+        it "enrolls first user to first" do 
+          expect(@user1.experiment.variable).to eq "time1"
+        end
+
+        it "enrolls second user to second" do 
+          expect(@user2.experiment.variable).to eq "time2"
+        end
+
+        it "enrolls third user to third" do 
+          expect(@user3.experiment.variable).to eq "time3"
+        end
+
+      end
+
+      describe "date_option" do
+
+        context "NOT daylight savings" do 
+          
+          before(:each) do
+            #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
+            #-05:00
+            Timecop.travel(Time.new(2015, 12, 15, 17, 30, 0))
+            create_experiment(TIME_FLAG, [[5,30], [6,30], [6,0], [05,45]], 10, 20)
+          end
+
+          it "converts [hour,min] (EST) to option (UTC)" do
+            expect(Experiment.first.variations.first.date_option).to eq Time.utc(2015, 12, 15, 22, 30, 0)
+          end
+
+          it "has string version" do 
+            expect(Experiment.first.variations.first.option).to eq Time.utc(2015, 12, 15, 22, 30, 0).TIME_FLAG         end
+
+        end
+
+        context "daylight savings" do 
+          
+          before(:each) do
+            #22:30 UTC (17:30 EST --> 5:30 PM on East Coast)
+            #-05:00
+            Timecop.travel(Time.new(2015, 12, 15, 17, 30, 0))
+            create_experiment(TIME_FLAG, [[5,30], [6,30], [6,0], [05,45]], 10, 20)
+          end
+
+          it "converts [hour,min] (EST) to option (UTC)" do
+            expect(Experiment.first.variations.first.date_option).to eq Time.utc(2015, 12, 15, 21, 30, 0)
+          end
+
+        end
+
+
+        describe "exceptions" do
+
+          it "raises exception for non-Fixnum times" do
+            expect{
+              create_experiment(TIME_FLAG, [[5.5,30]], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+          it "raises exception for too large times (hour)" do
+            expect{
+              create_experiment(TIME_FLAG, [[15,30]], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+          it "raises exception for too large times (min)" do
+            expect{
+              create_experiment("time", [[6,65]], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+          it "raises exception for wrong count of option args" do
+            expect{
+              create_experiment("time", [[6,30,1]], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+
+        end
+
+
+      end 
+
 
       #experiment deleted?/sends report after running out of days
 
