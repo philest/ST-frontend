@@ -77,6 +77,9 @@ describe 'User' do
 
    			experiment.variations.push variation
    			user.variation = variation
+        require 'pry'
+        binding.pry
+        
    			expect(user.experiment.variable).to eq "time"
    		end
 

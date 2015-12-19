@@ -115,10 +115,10 @@ describe 'A/B experiments' do
      
       before(:each) do
         #set current time to Sept, 1 2015, 10:00:00 AM
-        Timecop.travel(2015, 9, 1, 10, 0, 0)
+        Timecop.travel(Time.utc(2015, 9, 1, 10, 0, 0))
         REDIS.del DAYS_FOR_EXPERIMENT 
         @num_users = 25 #original users
-        create_experiment("time", ["6", "7", "8"], @num_users, 20)
+        create_experiment("time", ["6", "7", "8"], @num_users, 15)
         Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
 
@@ -139,7 +139,7 @@ describe 'A/B experiments' do
       it "gives a variation a user" do
         user_count = 0 
         #sum all the variation's users
-        Experiment.all.first.variations do |var|
+        Experiment.all.first.variations.to_a.each do |var|
           user_count = user_count + var.users.count 
         end
         expect(user_count).to eq 1
@@ -158,15 +158,31 @@ describe 'A/B experiments' do
                             .count).to eq 0
       end
 
-      it "pops off the one date from Redis" do 
-        expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1)
-                            .count).to eq 0
-      end
-
-      it "sets experiment end_date to DAYS ahead" do
-        expect(Experiment.all.first.end_date).to eq 
-               Time.new(2015, 9, 16, 10, 0, 0)
+      it "if nil, sets experiment end_date to DAYS ahead" do
+        expect(Time.at(Experiment.all.first.end_date.to_i)).to eq Time.utc(2015, 9, 16, 10, 0, 0)
       end 
+
+      context "experiment has a date" do 
+       
+        before(:each) do
+          Experiment.all.first.destroy 
+          Timecop.travel(Time.utc(2015, 9, 1, 10, 0, 0))
+          REDIS.del DAYS_FOR_EXPERIMENT 
+          @num_users = 25 #original users
+          create_experiment("time", ["6", "7", "8"], @num_users, 20)
+          #set date
+          Experiment.all.first.update(end_date: Time.now)
+        end
+
+        it "doesn't update date" do
+          Timecop.travel(Time.utc(2015, 9, 20, 10, 0, 0))
+          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          #discount miliseconds 
+          expect(Time.at(Experiment.first.end_date.to_i))
+                  .to eq Time.at(Time.utc(2015, 9, 1, 10, 0, 0).to_i)
+        end
+
+      end
 
       it "has one less user to assign" do 
         expect(Experiment
@@ -175,6 +191,43 @@ describe 'A/B experiments' do
                          .users_to_assign)
                          .to eq (@num_users - 1)
       end
+
+      it "variations only has +/- 1 user difference" do 
+        vars = Experiment.all.first.variations
+       
+        vars.each do |var1|
+          vars.each do |var2|
+            expect((var1.users.count - var2.users.count).abs).to be <= 1   
+          end
+        end
+      end
+
+      context "Earlier experiment with no users to assign" do 
+        before(:each) do
+          Experiment.all.first.destroy 
+          @num_users = 20
+          create_experiment("time1", ["6", "7", "8"], 0, 20)
+          create_experiment("time2", ["9", "10", "11"], 0, 20)
+          create_experiment("time3", ["12", "13", "14"], 0, 20)
+          REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
+          create_experiment("time4", ["15", "16", "17"], @num_users, 20)
+          
+          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          @user = User.find_by_phone("+15612125831")
+        end
+
+          ## Skipping the experiment with zero users_to_assign
+        it "enrolls user to first open experiment" do 
+          expect(@user.experiment.variable).to eq "time4"
+        end
+
+        it "decrements that experiments users_to_assign" do 
+          expect(@user.experiment.variable).to eq "time4"
+        end
+
+      end 
+
+      #experiment deleted?/sends report after running out of days
 
 
 

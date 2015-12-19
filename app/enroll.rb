@@ -23,9 +23,21 @@ include Text
 require 'time'
 require_relative '../lib/set_time'
 
+
 #sending messages
 require_relative '../workers/next_message_worker'
 require_relative '../helpers.rb'
+
+
+#redis, for getting the experiment date
+require 'redis'
+require_relative '../config/environments'
+require_relative '../config/initializers/redis'
+
+#the models
+require_relative '../models/user' #add User model
+require_relative '../models/experiment' #add User model
+require_relative '../models/variation' #add User model
 
 
 SAMPLE = "sample"
@@ -65,6 +77,47 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
         R18n.thread_set(i18n)
 	 	#set the locale for that user, w/in this thread
 	end
+
+	## ASSIGN TO EXPERIMENT VARIATION
+	#  -get first experiment
+	#  -assign user to one of its variation
+	#  -alternate variations using modulo
+	#
+	if type == STORY    #grab first experiment with users left to assign
+		if Experiment.count != 0 &&
+		  (our_experiment = Experiment.where("users_to_assign != '0'").first)
+
+			users_to_assign = our_experiment.users_to_assign
+
+			#get valid variations from first experiment
+			variations = our_experiment.variations
+
+			#user-count used to alternate which variation chosen
+			#Eg. with three variations:
+			# u1 -> v1, u2 -> v2 ... u4 -> v1, u5 - > v2
+			var = variations[users_to_assign % variations.count]
+			@user.variation = var #give user the variation
+			var.users.push @user #give variation the user
+
+			#save to DB (TODO: necessary?)
+			@user.save
+			var.save
+
+			#update time by popping off REDIS last days set
+			if our_experiment.end_date == nil 
+				our_experiment.update(end_date: Time.now.utc + 
+								        REDIS
+								       .rpop(DAYS_FOR_EXPERIMENT)
+								       .to_i
+								       .days)
+			end
+
+			#one more user was assigned
+			our_experiment.update(users_to_assign: users_to_assign - 1)
+		end
+
+	end
+
 
 	if type == STORY
 		@user.update(sample: false)
