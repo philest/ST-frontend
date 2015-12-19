@@ -13,6 +13,9 @@ require 'timecop'
 require_relative '../constants'
 require_relative '../sprint'
 require_relative '../auto-signup'
+
++ Time.zone_offset('EST')
+
 #CONSTANTS
 
 #NOTE: THE CARRIER PARAMA DOES NOTHING!!!! IT'S A HOAX
@@ -938,6 +941,35 @@ describe 'The StoryTime App' do
 
 
     end
+
+    describe "lib/set_time" do
+
+      context "is DST" do
+        
+        before(:each) do
+          Timecop.travel(Time.new(2015, 6, 15, 17, 30, 0, 0) \
+               + Time.zone_offset('EST'))
+        end
+        
+        it "knows it is DST" do
+          expect(is_dst?).to be true 
+        end
+      
+      end
+
+      context "is not DST" do
+        before(:each) do
+          Timecop.travel(Time.new(2015, 12, 15, 17, 30, 0)\
+               + Time.zone_offset('EST'))
+        end
+        
+        it "knows it's not DST" do
+          expect(is_dst?).to be false 
+        end
+      
+      end
+
+    end 
 
     # it "gets a last message" do 
     #     @user = User.find_by_phone("+15612125831")

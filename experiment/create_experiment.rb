@@ -15,15 +15,21 @@ require 'redis'
 require_relative '../config/environments'
 require_relative '../config/initializers/redis'
 
+#dst info
+require_relative '../lib/set_time'
 
 #the number of days until report results
 DAYS_FOR_EXPERIMENT = "days_for_experiment"
+
+TIME_FLAG = "TIME"
 
 # Create an experiment, along with all it's associatied
 # variations. 
 # 
 # variable    - the String of what to experiment on
-# options_arr - the Array of what values the variable should take
+# options_arr - the Array of what values the variable should take.
+#             			For time: [HH,MM] pairs. E.g. [06,30]
+# 						for 6:30 EST					
 # users       - the Integer num of next users who will be enrolled
 # 						in the experiment.
 # days		  - the Integer number of days experiment should wait
@@ -45,7 +51,40 @@ def create_experiment(variable,
 
 	# Every option is a varation. 
 	options_arr.each do |option| 
-		var = Variation.create(option: option.to_s)
+
+		if variable == "TIME"
+
+			unless (option.first.is_a? Fixnum) &&
+				   (option.last.is_a? Fixnum)
+
+				raise ArgumentError.new('[HH,MM] must a Fixnums.')
+			end
+
+			unless (option.first < 12 && option.first > 0) &&
+				   (option.last < 60 && option.first >= 0)
+			
+				raise ArgumentError.new('Time must be between 1 and 11:59pm')
+			end
+
+			unless option.count == 2
+				raise ArgumentError.new('Must have 2 values in array.')
+			end
+
+
+			if is_dst?
+				est_to_utc_offset = 4
+			else
+				est_to_utc_offset = 5
+			end
+
+			#convert the time [5,30] to UTC by adding the offset
+			t = Time.utc(2015, 1, 1, option.first + est_to_utc_offset, option.last, 0)
+			
+			var = Variation.create(date_option: t, option: t.to_s) 
+		else
+			var = Variation.create(option: option.to_s)
+		end
+
 		# set it as part of experiment. 
 		exper.variations.push var
 	end
