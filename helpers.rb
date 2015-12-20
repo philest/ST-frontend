@@ -1,5 +1,5 @@
 require 'sinatra/r18n'
-require './workers/new_text_worker'
+require_relative './workers/new_text_worker'
 
 require_relative './workers/first_text_worker'
 

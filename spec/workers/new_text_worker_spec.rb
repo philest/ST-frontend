@@ -1,4 +1,4 @@
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
@@ -7,12 +7,12 @@ require 'timecop'
 require 'time'
 require 'active_support/all'
 
-require_relative '../helpers'
-require_relative '../message'
-require_relative '../messageSeries'
-require_relative '../constants'
+require_relative '../../helpers'
+require_relative '../../message'
+require_relative '../../messageSeries'
+require_relative '../../constants'
 
-require_relative '../workers/new_text_worker'
+require_relative '../../workers/new_text_worker'
 # require_relative '../workers/first_text_worker'
 
 SLEEP_SCALE = 860
@@ -20,6 +20,8 @@ SLEEP_SCALE = 860
 SLEEP_TIME = (1/ 8.0)
 
 
+HELP = "help now"
+STOP = "stop now"
 
 SPRINT_CARRIER = "Sprint Spectrum, L.P."
 
@@ -70,14 +72,14 @@ describe 'The NextMessageWorker' do
 
     it "properly adds jobs after calling NextMessageWorker" do
       expect(NewTextWorker.jobs.size).to eq 0
-      NewTextWorker.perform_in(20.seconds, SMS, "+15612125832")
+      NewTextWorker.perform_in(20.seconds, SMS, NOT_STORY, "+15612125832")
       expect(NewTextWorker.jobs.size).to eq 1 
       puts "jobs: #{NewTextWorker.jobs.size}"
     end
 
     it "properly sends out a single  SMS" do
       sms = "This is a test!" 
-      NewTextWorker.perform_in(20.seconds, sms, "+15612125834")
+      NewTextWorker.perform_in(20.seconds, sms, NOT_STORY, "+15612125834")
       expect(NewTextWorker.jobs.size).to eq 1 
       NewTextWorker.drain
 
@@ -86,11 +88,14 @@ describe 'The NextMessageWorker' do
     end
 
     it "sends out a long SMS to Sprint in the seperate chunks" do
-        get 'test/' + SP_PHONE + "/STORY/"+SPRINT_QUERY_STRING
-        @user = User.find_by_phone SP_PHONE
-        @user.reload
+        # get 'test/' + SP_PHONE + "/STORY/"+SPRINT_QUERY_STRING
+        # @user = User.find_by_phone SP_PHONE
+        # @user.reload
 
-        NewTextWorker.perform_async(SINGLE_SPACE_LONG, @user.phone)
+        @user = create(:user)
+        @user.update(carrier: SPRINT_CARRIER)
+
+        NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
 
       expect(Helpers.getSMSarr.size).to_not eq 1
@@ -102,17 +107,16 @@ describe 'The NextMessageWorker' do
 
 
     it "Concatenates a long SMS to NON-SPrint in one piece" do
-        get 'test/' + "+15612797798" + "/STORY/" + "ATT"
-        @user = User.find_by_phone "+15612797798"
-        @user.reload
+        @user = create(:user)
+        @user.update(carrier: "ATT")
 
-        NewTextWorker.perform_async(SINGLE_SPACE_LONG, @user.phone)
+        NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
 
       # expect(Helpers.getSMSarr.size).to eq 1
 
-      expect(Helpers.getSMSarr[1]).to eq SINGLE_SPACE_LONG
-      expect(Helpers.getSMSarr.size).to eq 2
+        expect(Helpers.getSMSarr[1]).to eq SINGLE_SPACE_LONG
+        expect(Helpers.getSMSarr.size).to eq 2
     end
 
     it "sends a 1 piece SMS to sprint in... one piece (160 char), w/o numbering" do
@@ -120,7 +124,7 @@ describe 'The NextMessageWorker' do
       @user = User.find_by_phone "+15612797798"
       @user.reload
 
-      NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, @user.phone)
+      NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, NOT_STORY, @user.phone)
       NewTextWorker.drain
 
       # expect(Helpers.getSMSarr.size).to eq 1

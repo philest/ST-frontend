@@ -1,7 +1,7 @@
 ### NOT updated for DST yet.
 
 
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
@@ -10,24 +10,24 @@ require 'timecop'
 require 'sinatra/r18n'
 
 require 'time'
-require_relative '../lib/set_time'
+require_relative '../../lib/set_time'
 
 require 'active_support/all'
 
 #TEMPORARY 
-require_relative '../app/app.rb'
+require_relative '../../app/app.rb'
 
-require_relative '../auto-signup'
+require_relative '../../auto-signup'
 
-require_relative '../helpers'
-require_relative '../message'
-require_relative '../messageSeries'
-require_relative '../workers/first_text_worker'
+require_relative '../../helpers'
+require_relative '../../message'
+require_relative '../../messageSeries'
+require_relative '../../workers/first_text_worker'
 
-require_relative '../workers/some_worker'
-require_relative '../workers/new_text_worker'
+require_relative '../../workers/some_worker'
+require_relative '../../workers/new_text_worker'
 
-require_relative '../constants'
+require_relative '../../constants'
 
 SLEEP = (1.0 / 16.0) 
 
