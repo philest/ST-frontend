@@ -87,10 +87,6 @@ get '/' do
 	erb :main
 end
 
-require 'action_view' # for Rails form helpers
-# for Rails form helpers
-helpers ActionView::Helpers::FormTagHelper
-
 get '/admin' do
 	protected!
 	erb :experiment_dashboard
