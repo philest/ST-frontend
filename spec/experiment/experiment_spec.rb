@@ -1,4 +1,4 @@
-#  spec/models/experiment.rb 	                Phil Esterman		
+#  spec/experiment/experiment_spec.rb 	                Phil Esterman		
 # 
 #  A series of tests for A/B experiments and variations. 
 #  --------------------------------------------------------
@@ -7,18 +7,18 @@
 ENV['RACK_ENV'] = "test"
 
 # DEPENDENCIES 
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require_relative '../auto-signup'
+require_relative '../../auto-signup'
 
-require_relative "../experiment/create_experiment"
+require_relative "../../experiment/create_experiment"
 
 #testing helpers
-require_relative '../helpers.rb'
+require_relative '../../helpers.rb'
 
 
 describe 'A/B experiments' do
