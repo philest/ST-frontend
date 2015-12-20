@@ -377,7 +377,7 @@ describe 'A/B experiments' do
             create_experiment(DAYS_TO_START_FLAG, [1,2], 10, 20)
             expect(Experiment
                             .last
-                            .vartiations
+                            .variations
                             .first.option).to eq "1"
           end
 
