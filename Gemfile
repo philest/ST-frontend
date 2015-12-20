@@ -16,9 +16,11 @@ gem "activesupport", :require => "active_support"
 gem "sinatra-r18n"
 gem "pony"
 gem "as-duration"
+gem "actionview"
 
 group :development do
   gem "better_errors"
+  gem "sinatra-contrib"
 end
 
 group :test do
