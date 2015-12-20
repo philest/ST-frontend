@@ -11,6 +11,8 @@ require 'bundler/setup'
 #siantra dependencies 
 require 'sinatra'
 require 'sinatra/activerecord' #sinatra w/ DB
+require "sinatra/reloader" if development?
+
 require_relative '../config/environments' #DB configuration
 require_relative '../models/user' #add User model
 
@@ -85,10 +87,13 @@ get '/' do
 	erb :main
 end
 
+require 'action_view' # for Rails form helpers
+# for Rails form helpers
+helpers ActionView::Helpers::FormTagHelper
+
 get '/admin' do
 	protected!
-	"Welcome, authenticated client"
-	# erb :main
+	erb :experiment_dashboard
 end
 
 
