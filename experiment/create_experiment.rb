@@ -28,6 +28,7 @@ TIME_FLAG = "TIME"
 #how many days/week, to start
 DAYS_TO_START_FLAG = "DAYS TO START"
 
+VALID_FLAGS = [TIME_FLAG, DAYS_TO_START_FLAG]
 
 #added to pm times to get 24-hour clock time
 TO_24_HOUR_OFFSET = 12
@@ -48,6 +49,18 @@ def create_experiment(variable,
 					  options_arr,
 					  users,
 					  days)
+	
+	if !VALID_FLAGS.include? variable
+		raise ArgumentError.new("Must experiment with a valid option.")
+	end
+
+
+	#check that Array isn't empty.
+	if (options_arr.is_a? Array) &&
+	   (options_arr.empty?)
+
+		raise ArgumentError.new("options_arr must not be empty.")
+	end
 
 	# store the number of days in a queue,
 	# to set end_date for DAYS time ahead

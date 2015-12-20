@@ -44,12 +44,12 @@ describe 'A/B experiments' do
       end
 
       it "makes an experiment" do 
-        create_experiment("time", [Time.now], 25, 20)
+        create_experiment(TIME_FLAG, [[6,40]], 25, 20)
         expect(Experiment.all.first).to_not be nil
       end 
 
       it "stores the days in Redis" do 
-        create_experiment("time", [Time.now], 25, 20)
+        create_experiment(TIME_FLAG, [[6,40]], 25, 20)
         expect(REDIS.lrange(DAYS_FOR_EXPERIMENT, 0, -1).
                 first.to_i).to eq 20
       end 
@@ -59,17 +59,17 @@ describe 'A/B experiments' do
       end 
 
       it "has a variable name" do
-        create_experiment("time", [Time.now], 25, 20)
-        expect(Experiment.all.first.variable).to eq "time"
+        create_experiment(TIME_FLAG, [[6,40]], 25, 20)
+        expect(Experiment.all.first.variable).to eq TIME_FLAG
       end
 
       it "has a users_to_assign" do
-        create_experiment("time", [Time.now], 25, 20)
+        create_experiment(TIME_FLAG, [[6,40]], 25, 20)
         expect(Experiment.all.first.users_to_assign).to eq 25
       end
 
       it "creates the right # of variations" do
-        create_experiment("time", ["6", "7", "8"], 25, 20)
+        create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 25, 20)
         expect(Experiment.first
                          .variations
                          .count)
@@ -77,7 +77,7 @@ describe 'A/B experiments' do
       end
 
       it "starts with a nil end_date" do
-        create_experiment("time", ["6", "7", "8"], 25, 20)
+        create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 25, 20)
         expect(Experiment.first.end_date).to be nil
       end
 
@@ -91,9 +91,9 @@ describe 'A/B experiments' do
       describe "Redis" do 
 
         before(:each) do
-          create_experiment("time", ["6", "7", "8"], 25, 10)
-          create_experiment("time", ["6", "7", "8"], 25, 15)
-          create_experiment("time", ["6", "7", "8"], 25, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 25, 10)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 25, 15)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 25, 20)
         end
 
         it "has equal REDIS dates <-> experiments" do
@@ -118,7 +118,7 @@ describe 'A/B experiments' do
         Timecop.travel(Time.utc(2015, 9, 1, 10, 0, 0))
         REDIS.del DAYS_FOR_EXPERIMENT 
         @num_users = 25 #original users
-        create_experiment("time", ["6", "7", "8"], @num_users, 15)
+        create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], @num_users, 15)
         Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
 
@@ -169,7 +169,7 @@ describe 'A/B experiments' do
           Timecop.travel(Time.utc(2015, 9, 1, 10, 0, 0))
           REDIS.del DAYS_FOR_EXPERIMENT 
           @num_users = 25 #original users
-          create_experiment("time", ["6", "7", "8"], @num_users, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], @num_users, 20)
           #set date
           Experiment.all.first.update(end_date: Time.now)
         end
@@ -200,17 +200,33 @@ describe 'A/B experiments' do
             expect((var1.users.count - var2.users.count).abs).to be <= 1   
           end
         end
+
       end
+
+
+      it "raises exception if options_arr is empty" do
+        expect{
+          create_experiment(DAYS_TO_START_FLAG, [], 10, 20)
+        }.to raise_error(ArgumentError)
+      end
+
+      it "raises exception if option isn't recognized" do
+        expect{
+          create_experiment("fake_flag", [1,2], 10, 20)
+        }.to raise_error(ArgumentError)
+      end
+
+
 
       context "Earlier experiment with no users to assign" do 
         before(:each) do
           Experiment.all.first.destroy 
           @num_users = 20
-          create_experiment("time1", ["6", "7", "8"], 0, 20)
-          create_experiment("time2", ["9", "10", "11"], 0, 20)
-          create_experiment("time3", ["12", "13", "14"], 0, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 0, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 0, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 0, 20)
           REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
-          create_experiment("time4", ["15", "16", "17"], @num_users, 20)
+          create_experiment(DAYS_TO_START_FLAG, [1,2,3], @num_users, 20)
           
           Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
           @user = User.find_by_phone("+15612125831")
@@ -218,7 +234,7 @@ describe 'A/B experiments' do
 
           ## Skipping the experiment with zero users_to_assign
         it "enrolls user to first open experiment" do 
-          expect(@user.experiment.variable).to eq "time4"
+          expect(@user.experiment.variable).to eq DAYS_TO_START_FLAG
         end
 
         it "decrements that experiments users_to_assign" do 
@@ -232,11 +248,11 @@ describe 'A/B experiments' do
         before(:each) do
           Experiment.all.first.destroy 
           @num_users = 20
-          create_experiment("time1", ["6", "7", "8"], 1, 20)
-          create_experiment("time2", ["9", "10", "11"], 1, 20)
-          create_experiment("time3", ["12", "13", "14"], 1, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 1, 20)
+          create_experiment(DAYS_TO_START_FLAG, [1,2,3], 1, 20)
+          create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], 1, 20)
           REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
-          create_experiment("time4", ["15", "16", "17"], @num_users, 20)
+          create_experiment(DAYS_TO_START_FLAG, [1,2,3], @num_users, 20)
          
           Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
           @user1 = User.find_by_phone("+15612125831")
@@ -247,15 +263,15 @@ describe 'A/B experiments' do
         end
 
         it "enrolls first user to first" do 
-          expect(@user1.experiment.variable).to eq "time1"
+          expect(@user1.experiment.variable).to eq TIME_FLAG
         end
 
         it "enrolls second user to second" do 
-          expect(@user2.experiment.variable).to eq "time2"
+          expect(@user2.experiment.variable).to eq DAYS_TO_START_FLAG
         end
 
         it "enrolls third user to third" do 
-          expect(@user3.experiment.variable).to eq "time3"
+          expect(@user3.experiment.variable).to eq TIME_FLAG
         end
 
       end
@@ -344,6 +360,31 @@ describe 'A/B experiments' do
       end 
 
       describe "DAYS_TO_START" do
+
+          it "raises exception if days isn't positive" do
+            expect{
+              create_experiment(DAYS_TO_START_FLAG, [1,2,0], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+          it "raises exception if days isn't integer" do
+            expect{
+              create_experiment(DAYS_TO_START_FLAG, [1,2,1.5], 10, 20)
+            }.to raise_error(ArgumentError)
+          end
+
+          it "saves option as string integer" do
+            create_experiment(DAYS_TO_START_FLAG, [1,2], 10, 20)
+            expect(Experiment
+                            .last
+                            .vartiations
+                            .first.option).to eq "1"
+          end
+
+
+
+
+
 
       end
 
