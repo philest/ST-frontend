@@ -1,11 +1,11 @@
 ENV['RACK_ENV'] = "test"
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require_relative '../auto-signup'
+require_relative '../../auto-signup'
 
 #set default locale to english
 # R18n.default_places = '../i18n/'
