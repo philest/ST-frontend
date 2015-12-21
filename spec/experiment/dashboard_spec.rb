@@ -199,6 +199,8 @@ describe 'Experiment Dashboard' do
       before :each do
         REDIS.del DAYS_FOR_EXPERIMENT 
 
+        
+
         visit @admin_path
         page.choose('time_radio')
         page.select('5:30', from: 'time_option_1')
@@ -223,7 +225,8 @@ describe 'Experiment Dashboard' do
       end
 
       # it "creates the right variations" do
-      #   expect(Experiment)
+      #   expect(Experiment.variations.count).to eq 3
+      #   expect(Experiment.variations.first.option).to_eq  
 
       # end
 
