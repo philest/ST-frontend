@@ -53,8 +53,11 @@ require_relative './enroll'
 
 #temp: constants not yet translated
 require_relative '../constants'
+require_relative '../experiment/experiment_constants'
+
 #constants (untranslated)
 include Text
+include ExperimentConstants
 
 #set default locale to english
 # R18n.default_places = '../i18n/'
@@ -95,6 +98,16 @@ end
 post '/form_success' do
     require 'pry'
     binding.pry
+
+    options_arr = []
+
+    case params[:variable]
+    when TIME_FLAG
+    when DAYS_TO_START_FLAG
+        options_arr.push(params[:days_option_1],
+                         params[:days_option_2],
+                         params[:days_option_3])
+
 
     
 
