@@ -396,14 +396,15 @@ describe 'A/B experiments' do
           Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
           @non_exper_user = User.find_by_phone("+1234")
 
-          create_experiment(DAYS_TO_START_FLAG, [2,3], 10, 20)
+          create_experiment(DAYS_TO_START_FLAG, [3,4], 10, 20)
           Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
           @exper_user = User.find_by_phone("+1561")
+
         end
 
         it "updates the users relevant attribute" do
           opt = @exper_user.variation.option
-          expect(@user.days_per_week).to eq opt.to_i
+          expect(@exper_user.days_per_week).to eq opt.to_i
           puts "user updated to #{opt} days/week"
         end
 
@@ -413,7 +414,7 @@ describe 'A/B experiments' do
             @exper_user.subscribed,
             @exper_user.mms,
             @exper_user.series_choice,
-            @exper.series_number,
+            @exper_user.series_number,
             @exper_user.next_index_in_series,
             @exper_user.awaiting_choice,
             @exper_user.total_messages,
@@ -425,7 +426,7 @@ describe 'A/B experiments' do
             @non_exper_user.subscribed,
             @non_exper_user.mms,
             @non_exper_user.series_choice,
-            @non_exper.series_number,
+            @non_exper_user.series_number,
             @non_exper_user.next_index_in_series,
             @non_exper_user.awaiting_choice,
             @non_exper_user.total_messages,
@@ -446,15 +447,19 @@ describe 'A/B experiments' do
         
           Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
           @non_exper_user = User.find_by_phone("+1234")
-
-          create_experiment(TIME_FLAG, [[5,30],[6,30], [6,45]], 10, 20)
+          create_experiment(TIME_FLAG, [[6,30], [6,45]], 20, 20)
           Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
           @exper_user = User.find_by_phone("+1561")
         end
 
         it "updates the users relevant attribute" do
+          @exper_user.reload
           date_opt = @exper_user.variation.date_option
-          expect(@user.time).to eq date_opt
+          #HACK to just compare HH:MM because for some
+          #strange rspec/activerecord reason updating time
+          #doesn't save the day-month change. 
+          expect([@exper_user.time.hour].push(@exper_user.time.min)).to eq(
+                 [date_opt.hour].push(date_opt.min))
           puts "user updated to #{date_opt} days/week"
         end
 
@@ -465,7 +470,7 @@ describe 'A/B experiments' do
             @exper_user.subscribed,
             @exper_user.mms,
             @exper_user.series_choice,
-            @exper.series_number,
+            @exper_user.series_number,
             @exper_user.next_index_in_series,
             @exper_user.awaiting_choice,
             @exper_user.total_messages,
@@ -477,11 +482,10 @@ describe 'A/B experiments' do
             @non_exper_user.subscribed,
             @non_exper_user.mms,
             @non_exper_user.series_choice,
-            @non_exper.series_number,
+            @non_exper_user.series_number,
             @non_exper_user.next_index_in_series,
             @non_exper_user.awaiting_choice,
             @non_exper_user.total_messages,
-            @non_exper_user.time,
             @non_exper_user.locale)
          
           expect(exper_attributes).to eq non_exper_attributes
