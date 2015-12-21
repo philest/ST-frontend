@@ -72,6 +72,12 @@ describe 'A/B experiments' do
 			expect(variation.experiment).to_not be nil
    		end
 
+      it "has a notes field" do
+        experiment = create(:experiment)
+        experiment.update(notes: "Here's a thought.")
+        expect(experiment.notes).to eq  "Here's a thought."
+      end
+
       context "Users Enrolled" do 
 
         #enroll and assign users to variations/exper
@@ -101,6 +107,8 @@ describe 'A/B experiments' do
         end
 
       end
+
+
 
 
     end
