@@ -196,39 +196,109 @@ describe 'Experiment Dashboard' do
 
     describe "create_experiment interfacing" do      
 
-      before :each do
-        REDIS.del DAYS_FOR_EXPERIMENT 
+      context "TIME experiment" do
+        before :each do
+          REDIS.del DAYS_FOR_EXPERIMENT 
+          visit @admin_path
+          page.choose('time_radio')
+          page.select('5:30', from: 'time_option_1')
+          page.select('6:30', from: 'time_option_2')
+          page.select('6:45', from: 'time_option_3')
 
-        
+          page.select('40', from: 'users')
+          page.select('5', from: 'weeks')
+          page.fill_in('notes', with: "Here's the experiment!")
+          click_button('create') 
+        end
 
-        visit @admin_path
-        page.choose('time_radio')
-        page.select('5:30', from: 'time_option_1')
-        page.select('6:30', from: 'time_option_2')
-        page.select('6:45', from: 'time_option_3')
+        it "creates an experiment" do
+          expect(Experiment.first).to_not be nil
+          expect(Experiment.first.variable).to eq TIME_FLAG
+        end
 
-        page.select('40', from: 'users')
-        page.select('5', from: 'weeks')
-        page.fill_in('notes', with: "Here's the experiment!")
-        click_button('create') 
+        it "gives proper attributes " do
+          expect(Experiment.first.users_to_assign).to eq 40
+          expect(Experiment.first.variable).to eq TIME_FLAG
+        end
+
+        it "pushes right days to REDIS" do
+          expect(REDIS.rpop(DAYS_FOR_EXPERIMENT)).to eq "35" 
+        end
+
+        it "creates the right TIME variations" do
+          expect(Experiment.first.variations.count).to eq 3
+          expect(Experiment
+                          .first 
+                          .variations
+                          .first.date_option)
+                          .to eq(Time.utc(2015,
+                                          Time.now.month,
+                                          Time.now.day,
+                                          22, 30, 0)) 
+          expect(Experiment
+                          .first 
+                          .variations
+                          .second.date_option)
+                          .to eq(Time.utc(2015,
+                                          Time.now.month,
+                                          Time.now.day,
+                                          23, 30, 0)) 
+          expect(Experiment
+                          .first 
+                          .variations
+                          .third.date_option)
+                          .to eq(Time.utc(2015,
+                                          Time.now.month,
+                                          Time.now.day,
+                                          23, 45, 0)) 
+        end
+
       end
 
-      it "creates an experiment" do
-        expect(Experiment.first).to_not be nil
-        expect(Experiment.first.variable).to eq TIME_FLAG
+      context "DAYS experiment" do
+        before :each do
+          REDIS.del DAYS_FOR_EXPERIMENT 
+          visit @admin_path
+          page.choose('days_radio')
+          page.select('1', from: 'days_option_1')
+          page.select('2', from: 'days_option_2')
+          page.select('3', from: 'days_option_3')
+
+          page.select('40', from: 'users')
+          page.select('5', from: 'weeks')
+          page.fill_in('notes', with: "Here's the experiment!")
+          click_button('create') 
+        end
+
+        it "creates an experiment" do
+          expect(Experiment.first).to_not be nil
+          expect(Experiment.first.variable).to eq(
+                  ExperimentConstants::DAYS_TO_START_FLAG)
+        end
+
+        it "creates the right variations" do
+          expect(Experiment.first.variations.count).to eq 3
+          expect(Experiment
+                          .first 
+                          .variations
+                          .first.option)
+                          .to eq('1') 
+          expect(Experiment
+                          .first 
+                          .variations
+                          .second.option)
+                          .to eq('2') 
+
+          expect(Experiment
+                          .first 
+                          .variations
+                          .third.option)
+                          .to eq('3')
+        end
       end
 
-      it "gives proper attributes " do
-        expect(Experiment.first.users_to_assign).to eq 40
-        expect(Experiment.first.variable).to eq TIME_FLAG
-        expect(REDIS.rpop(DAYS_FOR_EXPERIMENT)).to eq "35" 
-      end
 
-      # it "creates the right variations" do
-      #   expect(Experiment.variations.count).to eq 3
-      #   expect(Experiment.variations.first.option).to_eq  
 
-      # end
 
     end
 
