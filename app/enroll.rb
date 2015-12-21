@@ -39,6 +39,8 @@ require_relative '../models/user' #add User model
 require_relative '../models/experiment' #add User model
 require_relative '../models/variation' #add User model
 
+require_relative '../experiment/experiment_constants'
+
 
 SAMPLE = "sample"
 STORY = "story"
@@ -78,11 +80,30 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 	 	#set the locale for that user, w/in this thread
 	end
 
+	if type == STORY
+		@user.update(sample: false)
+		@user.update(subscribed: true) 
+		@user.update(locale: locale)
+	elsif type == SAMPLE
+		@user.update(sample: true)
+		@user.update(subscribed: false)
+	end
+
+	if type == STORY
+		@user.update(days_per_week: 2)
+	end
+
+	#must manually set default time.
+	@user.update(time: DEFAULT_TIME)
+
+
 	## ASSIGN TO EXPERIMENT VARIATION
 	#  -get first experiment
 	#  -assign user to one of its variation
 	#  -alternate variations using modulo
 	#
+
+
 	if type == STORY    #grab first experiment with users left to assign
 		if Experiment.count != 0 &&
 		  (our_experiment = Experiment.where("users_to_assign != '0'").first)
@@ -100,10 +121,17 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 			var.users.push @user #give variation the user
 
 			#save to DB (TODO: necessary?)
-			@user.save
-			var.save
+			#update user with experiment variation
 
-			#update time by popping off REDIS last days set
+
+			case our_experiment.variable
+			when ExperimentConstants::TIME_FLAG
+				 @user.update(time: var.date_option)
+			when ExperimentConstants::DAYS_TO_START_FLAG
+				 @user.update(days_per_week: var.option.to_i)
+			end
+
+			#update exp time by popping off REDIS last days set
 			if our_experiment.end_date == nil 
 				our_experiment.update(end_date: Time.now.utc + 
 								        REDIS
@@ -112,32 +140,18 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 								       .days)
 			end
 
+
 			#one more user was assigned
 			our_experiment.update(users_to_assign: users_to_assign - 1)
+		
+			@user.save
+			var.save
+			our_experiment.save
+
+
 		end
 
 	end
-
-
-	if type == STORY
-		@user.update(sample: false)
-		@user.update(subscribed: true) 
-		@user.update(locale: locale)
-	elsif type == SAMPLE
-		@user.update(sample: true)
-		@user.update(subscribed: false)
-	end
-
-	if type == STORY
-		@user.update(days_per_week: 2)
-	end
-
-	# #update subscription
-	# @user.update(subscribed: true) #Subscription complete! (B/C defaults)
-	# #backup for defaults
-
-	#must manually set default time.
-	@user.update(time: DEFAULT_TIME)
 
 
 	if MODE == PRO
