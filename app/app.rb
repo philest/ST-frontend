@@ -92,6 +92,9 @@ get '/admin' do
 	erb :experiment_dashboard
 end
 
+post '/form_success' do 
+  "You said '#{params[:variable]}'"
+end
 
 
 #twilio failed
