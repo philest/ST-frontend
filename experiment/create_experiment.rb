@@ -6,6 +6,7 @@
 #add experiment & variation models
 require_relative '../models/experiment'
 require_relative '../models/variation'
+require_relative './experiment_constants'
 
 require 'sinatra'
 require 'sinatra/activerecord' #sinatra w/ DB
@@ -21,17 +22,11 @@ require_relative '../lib/set_time'
 #the number of days until report results
 DAYS_FOR_EXPERIMENT = "days_for_experiment"
 
-#Flags for valid variables to experiment on 
-
-#time to receive story
-TIME_FLAG = "TIME" 
-#how many days/week, to start
-DAYS_TO_START_FLAG = "DAYS TO START"
-
-VALID_FLAGS = [TIME_FLAG, DAYS_TO_START_FLAG]
-
 #added to pm times to get 24-hour clock time
 TO_24_HOUR_OFFSET = 12
+
+include ExperimentConstants
+
 
 # Create an experiment, along with all it's associatied
 # variations. 
@@ -50,7 +45,7 @@ def create_experiment(variable,
                       users,
                       days)
     
-  if !VALID_FLAGS.include? variable
+  if !ExperimentConstants::VALID_FLAGS.include? variable
     raise ArgumentError.new("Must experiment with a valid option.")
   end
 
@@ -76,7 +71,7 @@ def create_experiment(variable,
 
     case variable 
 
-    when TIME_FLAG
+    when ExperimentConstants::TIME_FLAG
 
       unless (option.first.is_a? Fixnum) &&
              (option.last.is_a? Fixnum) 
@@ -109,7 +104,7 @@ def create_experiment(variable,
       
       var = Variation.create(date_option: t, option: t.to_s) 
   
-    when DAYS_TO_START_FLAG
+    when ExperimentConstants::DAYS_TO_START_FLAG
 
       if !(option.is_a? Fixnum) || (option <= 0)
         raise ArgumentError.new("Days_to_start must be positive integer.") 
