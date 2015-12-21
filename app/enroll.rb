@@ -129,14 +129,7 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 	end
 
 	if type == STORY
-		if MODE == PRO #only relevant for production code
-			#randomly assign to get two days a week or three days a week
-			if (rand = Random.rand(9)) == 0
-				@user.update(days_per_week: 1)
-			else @user.update(days_per_week: 2)
-			end
-		else @user.update(days_per_week: 2)
-		end
+		@user.update(days_per_week: 2)
 	end
 
 	# #update subscription

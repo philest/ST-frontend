@@ -381,12 +381,117 @@ describe 'A/B experiments' do
                             .first.option).to eq "1"
           end
 
+      end
 
 
+    describe "User enrollment" do 
 
+      context "DAYS_TO_START_FLAG" do
 
+        before(:each) do
+          Experiment.all.to_a.each do |exper|
+            exper.destroy
+          end
+        
+          Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
+          @non_exper_user = User.find_by_phone("+1234")
+
+          create_experiment(DAYS_TO_START_FLAG, [2,3], 10, 20)
+          Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
+          @exper_user = User.find_by_phone("+1561")
+        end
+
+        it "updates the users relevant attribute" do
+          opt = @exper_user.variation.option
+          expect(@user.days_per_week).to eq opt.to_i
+          puts "user updated to #{opt} days/week"
+        end
+
+        it "keeps the users other attributes" do
+          exper_attributes = [].push(
+            @exper_user.story_number,
+            @exper_user.subscribed,
+            @exper_user.mms,
+            @exper_user.series_choice,
+            @exper.series_number,
+            @exper_user.next_index_in_series,
+            @exper_user.awaiting_choice,
+            @exper_user.total_messages,
+            @exper_user.time,
+            @exper_user.locale)
+
+          non_exper_attributes = [].push(
+            @non_exper_user.story_number,
+            @non_exper_user.subscribed,
+            @non_exper_user.mms,
+            @non_exper_user.series_choice,
+            @non_exper.series_number,
+            @non_exper_user.next_index_in_series,
+            @non_exper_user.awaiting_choice,
+            @non_exper_user.total_messages,
+            @non_exper_user.time,
+            @non_exper_user.locale)
+         
+          expect(exper_attributes).to eq non_exper_attributes
+        end
 
       end
+
+      context "TIME_FLAG" do
+
+        before(:each) do
+          Experiment.all.to_a.each do |exper|
+            exper.destroy
+          end
+        
+          Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
+          @non_exper_user = User.find_by_phone("+1234")
+
+          create_experiment(TIME_FLAG, [[5,30],[6,30], [6,45]], 10, 20)
+          Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
+          @exper_user = User.find_by_phone("+1561")
+        end
+
+        it "updates the users relevant attribute" do
+          date_opt = @exper_user.variation.date_option
+          expect(@user.time).to eq date_opt
+          puts "user updated to #{date_opt} days/week"
+        end
+
+        it "keeps the users other attributes" do
+          exper_attributes = [].push(
+            @exper_user.days_per_week,
+            @exper_user.story_number,
+            @exper_user.subscribed,
+            @exper_user.mms,
+            @exper_user.series_choice,
+            @exper.series_number,
+            @exper_user.next_index_in_series,
+            @exper_user.awaiting_choice,
+            @exper_user.total_messages,
+            @exper_user.locale)
+
+          non_exper_attributes = [].push(
+            @non_exper_user.days_per_week,
+            @non_exper_user.story_number,
+            @non_exper_user.subscribed,
+            @non_exper_user.mms,
+            @non_exper_user.series_choice,
+            @non_exper.series_number,
+            @non_exper_user.next_index_in_series,
+            @non_exper_user.awaiting_choice,
+            @non_exper_user.total_messages,
+            @non_exper_user.time,
+            @non_exper_user.locale)
+         
+          expect(exper_attributes).to eq non_exper_attributes
+        end
+
+      end
+
+
+
+    end
 
 
       #experiment deleted?/sends report after running out of days
