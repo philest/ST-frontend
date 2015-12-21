@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151219033940) do
+ActiveRecord::Schema.define(version: 20151221031722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20151219033940) do
     t.datetime "end_date"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.text     "notes"
   end
 
   create_table "users", force: :cascade do |t|
@@ -61,10 +62,12 @@ ActiveRecord::Schema.define(version: 20151219033940) do
     t.string   "option"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.integer  "users_id"
     t.datetime "date_option"
   end
 
   add_index "variations", ["experiment_id"], name: "index_variations_on_experiment_id", using: :btree
   add_index "variations", ["user_id"], name: "index_variations_on_user_id", using: :btree
+  add_index "variations", ["users_id"], name: "index_variations_on_users_id", using: :btree
 
 end
