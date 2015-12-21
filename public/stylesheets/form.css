@@ -36,7 +36,8 @@ label {
     text-align: right;
 }
 
-#option_1, #option_2, #option_3 {
+#time_option_1, #time_option_2, #time_option_3
+#days_option_1, #days_option_2, #days_option_3 {
 	width: 100px;
 
 }

@@ -11,8 +11,11 @@ ENV['RACK_ENV'] = "test"
 require_relative "../spec_helper"
 
 require 'capybara/rspec'
+require 'capybara/dsl'
 require 'rack/test'
 require 'timecop'
+
+Capybara.app = Sinatra::Application
 
 #for routes to work
 require_relative '../../app/app.rb'
@@ -23,6 +26,7 @@ require_relative "../../experiment/create_experiment"
 
 #testing helpers
 require_relative '../../helpers.rb'
+
 
 
 describe 'Experiment Dashboard' do
@@ -72,7 +76,29 @@ describe 'Experiment Dashboard' do
 
     end
 
+  end
 
+  describe "Creating Experiment", :type => :feature, :js => :true do
+   
+    before :each do 
+      #configure HTTP header to authenticate
+      visit '/'
+      @url = current_url
+      @tablica = @url.split("http://")
+      @correct_url = @tablica[1]
+      @admin_selenium_path = "http://admin:ST@#{@correct_url}admin"
+    end
+  
+    it 'loads homepage' do
+      visit '/'
+      expect(page).to have_content "info@joinstorytime.com"
+      expect(page).to_not have_content "early literacy sucks"
+    end
+
+    it 'loads authenticated page' do
+      visit @admin_selenium_path
+      expect(page).to have_content "Create Experiment"
+    end
 
   end
 
