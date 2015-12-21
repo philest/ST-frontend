@@ -144,17 +144,15 @@ post '/form_success' do
 
         "Great, the experiment's set!"
     rescue ArgumentError => e 
-        puts "Experiment not created.\n\nError: #{e}!"
-        puts "\n\nBacktrace:\n\n"
-        e.backtrace.each do |level|
-            puts level
-        end
+        $stderr.print "Experiment not created!\n\nArgumentError: #{e}"
+        $stderr.print  "\n\nBacktrace:\n\n"
+        (1..12).each { $stderr.print e.backtrace.shift }
+        "Experiment not created!\n\nArgumentError: #{e}\n\n Backtrace #{e.backtrace}"
     rescue NoMethodError => e
-        puts "Experiment not created.\n\nError: #{e}!"
-        puts "\n\nBacktrace:\n\n"
-        e.backtrace.each do |level|
-            puts level
-        end
+        $stderr.print "Experiment not created!\n\nNoMethodError: #{e}"
+        $stderr.print  "\n\nBacktrace:\n\n"
+        (1..12).each { $stderr.print e.backtrace.shift }
+        "Experiment not created!\n\nNoMethodError: #{e}\n\n Backtrace #{e.backtrace}"
     end
 
 end
