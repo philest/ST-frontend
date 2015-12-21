@@ -2,9 +2,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/fonts.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/form.css" type="text/css" />
     <link href='http://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
-        <title>StoryTime Create Experiment Dashbaord</title>
+        <title>StoryTime Create Experiment Dashboard</title>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+      <script type="text/javascript">
+
+        //start by hiding daysoptions
+        $(document).ready(function() {
+          $('#days_option').hide()
+        })
+
+        // hacky check to update options based on which
+        // radio button is checked.            
+        window.setInterval(function(){
+          
+          if($('#time_radio').is(':checked'))
+            { $('#days_option').hide()
+              $('#time_option').show()
+            }
+          else
+            {
+              $('#time_option').hide()
+              $('#days_option').show()
+            } 
+          /// call your function here
+        }, 200);
+
+      </script>
+
+
+
   </head>
 
 
@@ -12,11 +44,127 @@
     
     <h1>Create Experiment</h1>
 
-<%= form_tag("/search", method: "get") do %>
-  <%= label_tag(:q, "Search for:") %>
-  <%= text_field_tag(:q) %>
-  <%= submit_tag("Search") %>
-<% end %>
+  <form action="/form_success" method="post">
+      <div>
+        <label for="variable">Variable:</label>
+        <div>
+        <input id="time_radio" type="radio" name="variable" value="TIME" checked> Time
+        <br>
+        <input id="days_radio" type="radio" name="variable" value="DAYS_TO_START"> Days/week
+        </div>
+<!--          <input type="text" id="variable" name="variable"/>
+ -->      </div>
+      <div id="days_option">
+        <label for="option_1">Option 1:</label>
+        <select name="option_1">
+          <option selected="selected" disabled="disabled">Select days</option>
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+        </select>
+        
+        <label for="option_2">Option 2:</label>
+        <select name="option_2">
+          <option selected="selected" disabled="disabled">Select days</option>
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+        </select>
+
+        <label for="option_3">Option 2:</label>
+        <select name="option_3">
+          <option selected="selected" disabled="disabled">Select days</option>
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+        </select>
+
+<!-- 
+
+
+          <label for="option_1">Option 1:</label>
+          <input type="text" id="option_1" />
+          <label for="option_2">Option 2:</label>
+          <input type="text" id="option_2"/>
+          <label for="option_3">Option 3:</label>
+          <input type="text" id="option_3"/>
+ -->      </div>
+      <div id="time_option">
+        <label for="option_1">Option 1:</label>
+        <select name="option_1">
+          <option selected="selected" disabled="disabled">Select time</option>
+         <option value="4:0">4:00pm</option>
+          <option value="4:15">4:15pm</option>
+          <option value="4:30">4:30pm</option>
+          <option value="4:45">4:45pm</option>
+        
+          <option value="5:0">5:00pm</option>
+          <option value="5:15">5:15pm</option>
+          <option value="5:30">5:30pm</option>
+          <option value="5:45">5:45pm</option>
+
+          <option value="6:0">6:00pm</option>
+          <option value="6:15">6:15pm</option>
+          <option value="6:30">6:30pm</option>
+          <option value="6:45">6:45pm</option>
+          
+          <option value="7:0">7:00pm</option>
+        </select>
+        
+        <label for="option_2">Option 2:</label>
+
+        <select name="option_2">
+          <option selected="selected" disabled="disabled">Select time</option>
+          <option value="4:0">4:00pm</option>
+          <option value="4:15">4:15pm</option>
+          <option value="4:30">4:30pm</option>
+          <option value="4:45">4:45pm</option>
+
+          <option value="5:0">5:00pm</option>
+          <option value="5:15">5:15pm</option>
+          <option value="5:30">5:30pm</option>
+          <option value="5:45">5:45pm</option>
+
+          <option value="6:0">6:00pm</option>
+          <option value="6:15">6:15pm</option>
+          <option value="6:30">6:30pm</option>
+          <option value="6:45">6:45pm</option>
+          
+          <option value="7:0">7:00pm</option>
+          </select>
+
+        <label for="option_3">Option 3:</label>
+
+        <select name="option_3">
+          <option selected="selected" disabled="disabled">Select time</option>
+          <option value="4:0">4:00pm</option>
+          <option value="4:15">4:15pm</option>
+          <option value="4:30">4:30pm</option>
+          <option value="4:45">4:45pm</option>
+
+          <option value="5:0">5:00pm</option>
+          <option value="5:15">5:15pm</option>
+          <option value="5:30">5:30pm</option>
+          <option value="5:45">5:45pm</option>
+
+          <option value="6:0">6:00pm</option>
+          <option value="6:15">6:15pm</option>
+          <option value="6:30">6:30pm</option>
+          <option value="6:45">6:45pm</option>
+          
+          <option value="7:0">7:00pm</option>
+
+        </select>
+      </div>
+
+      <div>
+          <label for="msg">Message:</label>
+          <textarea id="msg"></textarea>
+      </div>
+      <div class="button">
+          <button type="submit">Send your message</button>
+      </div>
+  </form>
 
     
   </body>
