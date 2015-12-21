@@ -39,11 +39,13 @@ include ExperimentConstants
 #                       in the experiment.
 # days        - the Integer number of days experiment should wait
 #                       until sending results.
+# *notes      - the String of comments on experiment or hypothesis
 #
 def create_experiment(variable,
                       options_arr,
                       users,
-                      days)
+                      days,
+                      *notes)
     
   if !ExperimentConstants::VALID_FLAGS.include? variable
     raise ArgumentError.new("Must experiment with a valid option.")
@@ -65,6 +67,10 @@ def create_experiment(variable,
 
   exper = Experiment.create(variable: variable,
                             users_to_assign: users)
+  #inlude notes, if given
+  if !notes.empty?
+    exper.update(notes: notes.pop)
+  end
 
   # Every option is a varation. 
   options_arr.each do |option| 
