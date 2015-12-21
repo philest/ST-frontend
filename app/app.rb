@@ -93,7 +93,7 @@ get '/admin' do
 end
 
 post '/form_success' do 
-  "You said '#{params[:variable]}'"
+  "Great, the experiment's set!"
 end
 
 

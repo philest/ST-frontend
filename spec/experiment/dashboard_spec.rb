@@ -86,7 +86,7 @@ describe 'Experiment Dashboard' do
       @url = current_url
       @tablica = @url.split("http://")
       @correct_url = @tablica[1]
-      @admin_selenium_path = "http://admin:ST@#{@correct_url}admin"
+      @admin_path = "http://admin:ST@#{@correct_url}admin"
     end
   
     it 'loads homepage' do
@@ -96,8 +96,24 @@ describe 'Experiment Dashboard' do
     end
 
     it 'loads authenticated page' do
-      visit @admin_selenium_path
+      visit @admin_path
       expect(page).to have_content "Create Experiment"
+    end
+
+    it "Creates Time experiment" do
+      visit @admin_path
+      page.choose('time_radio')
+      page.select('5:30', from: 'time_option_1')
+      page.select('6:30', from: 'time_option_2')
+      page.select('6:45', from: 'time_option_3')
+
+      page.select('40', from: 'users')
+      page.select('5', from: 'weeks')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to have_content "Great, the experiment's set!"
     end
 
   end
