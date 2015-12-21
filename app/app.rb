@@ -96,24 +96,67 @@ get '/admin' do
 end
 
 post '/form_success' do
-    require 'pry'
-    binding.pry
 
     options_arr = []
 
     case params[:variable]
     when TIME_FLAG
+        options_arr.push(params[:time_option_1],
+                         params[:time_option_2],
+                         params[:time_option_3])
+        #clean out nil's
+        options_arr.delete(nil)
+
+        #split '5:30' into ['5', '30']  
+        options_arr.map! do |opt|
+            opt.split(':')
+        end
+        #convert to ints
+        options_arr.map! do |first, second|
+            [].push(first.to_i, second.to_i)
+        end
+
     when DAYS_TO_START_FLAG
         options_arr.push(params[:days_option_1],
                          params[:days_option_2],
                          params[:days_option_3])
+        #clean out nil's
+        options_arr.delete(nil)
+        #string->int ['1', '2'] -> [1,2]
+        options_arr.map! { |opt| opt.to_i}
+    end
 
 
-    
+    begin 
+        # convert weeks to days, convert to int.
+        if params[:notes] == nil 
+            create_experiment(params[:variable],
+                              options_arr,
+                              params[:users].to_i,
+                              7*params[:weeks].to_i)
+        else
+            create_experiment(params[:variable],
+                              options_arr,
+                              params[:users].to_i,
+                              7*params[:weeks].to_i,
+                              [params[:notes]])
+        end
 
+        "Great, the experiment's set!"
+    rescue ArgumentError => e 
+        puts "Experiment not created.\n\nError: #{e}!"
+        puts "\n\nBacktrace:\n\n"
+        e.backtrace.each do |level|
+            puts level
+        end
+    rescue NoMethodError => e
+        puts "Experiment not created.\n\nError: #{e}!"
+        puts "\n\nBacktrace:\n\n"
+        e.backtrace.each do |level|
+            puts level
+        end
+    end
 
-
-  "Great, the experiment's set!"
 end
 
 

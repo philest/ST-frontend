@@ -36,6 +36,12 @@ describe 'Experiment Dashboard' do
     Sinatra::Application
   end
 
+  before(:each) do
+    Experiment.all.to_a.each do |exper|
+      exper.destroy
+    end
+  end 
+
   describe "controller" do 
 
     it "can access a normal page" do
@@ -100,7 +106,7 @@ describe 'Experiment Dashboard' do
       expect(page).to have_content "Create Experiment"
     end
 
-    it "Creates Time experiment" do
+    it "submits Time experiment" do
       visit @admin_path
       page.choose('time_radio')
       page.select('5:30', from: 'time_option_1')
@@ -116,7 +122,7 @@ describe 'Experiment Dashboard' do
       expect(page).to have_content "Great, the experiment's set!"
     end
 
-    it "Creates Days experiment" do
+    it "submits Days experiment" do
       visit @admin_path
       page.choose('days_radio')
       page.select('1', from: 'days_option_1')
@@ -130,6 +136,97 @@ describe 'Experiment Dashboard' do
       click_button('create')
 
       expect(page).to have_content "Great, the experiment's set!"
+    end
+
+    it "submits for two options" do
+      visit @admin_path
+      page.choose('days_radio')
+      page.select('1', from: 'days_option_1')
+      page.select('2', from: 'days_option_2')
+
+      page.select('30', from: 'users')
+      page.select('4', from: 'weeks')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to have_content "Great, the experiment's set!"
+    end
+
+    it "fails if don't specify users and weeks" do
+      visit @admin_path
+      page.choose('days_radio')
+      page.select('1', from: 'days_option_1')
+      page.select('2', from: 'days_option_2')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to_not have_content "Great, the experiment's set!"
+    end
+
+    it "fails if don't specify day_start options" do
+      visit @admin_path
+      page.choose('days_radio')
+
+      page.select('40', from: 'users')
+      page.select('5', from: 'weeks')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to_not have_content "Great, the experiment's set!"
+    end
+
+    it "fails if don't specify time options" do
+      visit @admin_path
+      page.choose('time_radio')
+
+      page.select('40', from: 'users')
+      page.select('5', from: 'weeks')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to_not have_content "Great, the experiment's set!"
+    end
+
+
+
+
+    describe "create_experiment interfacing" do      
+
+      before :each do
+        REDIS.del DAYS_FOR_EXPERIMENT 
+
+        visit @admin_path
+        page.choose('time_radio')
+        page.select('5:30', from: 'time_option_1')
+        page.select('6:30', from: 'time_option_2')
+        page.select('6:45', from: 'time_option_3')
+
+        page.select('40', from: 'users')
+        page.select('5', from: 'weeks')
+        page.fill_in('notes', with: "Here's the experiment!")
+        click_button('create') 
+      end
+
+      it "creates an experiment" do
+        expect(Experiment.first).to_not be nil
+        expect(Experiment.first.variable).to eq TIME_FLAG
+      end
+
+      it "gives proper attributes " do
+        expect(Experiment.first.users_to_assign).to eq 40
+        expect(Experiment.first.variable).to eq TIME_FLAG
+        expect(REDIS.rpop(DAYS_FOR_EXPERIMENT)).to eq "35" 
+      end
+
+      # it "creates the right variations" do
+      #   expect(Experiment)
+
+      # end
+
     end
 
 
