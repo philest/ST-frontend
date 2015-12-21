@@ -116,6 +116,23 @@ describe 'Experiment Dashboard' do
       expect(page).to have_content "Great, the experiment's set!"
     end
 
+    it "Creates Days experiment" do
+      visit @admin_path
+      page.choose('days_radio')
+      page.select('1', from: 'days_option_1')
+      page.select('2', from: 'days_option_2')
+      page.select('3', from: 'days_option_3')
+
+      page.select('30', from: 'users')
+      page.select('4', from: 'weeks')
+
+      page.fill_in('notes', with: "Here's the experiment!")
+      click_button('create')
+
+      expect(page).to have_content "Great, the experiment's set!"
+    end
+
+
   end
 
 
