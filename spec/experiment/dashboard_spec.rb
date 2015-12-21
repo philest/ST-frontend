@@ -295,9 +295,11 @@ describe 'Experiment Dashboard' do
                           .third.option)
                           .to eq('3')
         end
+
+  
+
+
       end
-
-
 
 
     end
