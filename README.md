@@ -5,7 +5,63 @@ Phil Esterman, CS458
 ##NOTES
 This project relies on a suite of environment dependent tools— including a Postgres database and Redis data structure server. It also involves a extensive libraries not installed on the zoo (27, with a total of 98 dependencies). 
 
+#### Ruby Library Main Dependencies
+
+As specified in `Gemfile.rb`, here are the main dependencies:
+
+```ruby
+gem "sinatra"
+gem "activerecord"
+gem "sinatra-activerecord"
+gem "twilio-ruby"
+gem 'pg'
+gem 'numbers_in_words'
+gem 'sidekiq'
+gem 'sidetiq'
+gem 'redis'
+gem 'unicorn'
+gem 'newrelic_rpm'
+gem 'rake'
+gem "activesupport", :require => "active_support"
+gem "sinatra-r18n"
+gem "pony"
+gem "as-duration"
+gem 'statsample'
+gem 'descriptive_statistics'
+
+group :development do
+  gem "better_errors"
+  gem "sinatra-contrib"
+end
+
+group :test do
+	gem 'rspec'
+	gem 'capybara'
+	gem 'selenium-webdriver'
+	gem 'database_cleaner'
+	gem 'pry', "= 0.10.0"
+	gem 'pry-nav'
+	gem 'timecop'
+	gem 'factory_girl'
+end
+```
+
 The only way to “see” the code working without having to enroll real families is in testing and development. For this, the code relies on Postgres and Redis to be properly configured and running locally. 
+
+That means that:
+ 
+ - a local Redis server must be running
+ - a local test postgres database must be created, with login details then set to PG USER and PG PASS. 
+
+ Several other environment variables must be configured with appropriate login details, including:
+ 
+- TW ACCOUNT SID
+- TW AUTH TOKEN
+- TEST TW ACCOUNT SID
+- TEST TW AUTH TOKEN
+- SENDGRID USERNAME
+- SENDGRID PASSWORD
+
 
 ####Not Running on Zoo
 
