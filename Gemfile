@@ -16,6 +16,8 @@ gem "activesupport", :require => "active_support"
 gem "sinatra-r18n"
 gem "pony"
 gem "as-duration"
+gem 'statsample'
+gem 'descriptive_statistics'
 
 group :development do
   gem "better_errors"

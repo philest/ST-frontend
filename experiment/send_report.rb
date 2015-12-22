@@ -12,6 +12,8 @@ require_relative '../models/user'
 require 'pony'
 require_relative '../config/pony'
 
+require 'statsample'
+require 'descriptive_statistics'
 
 SEC_IN_DAY = 86400.0
 
@@ -63,16 +65,33 @@ def send_report(experiment_id)
 		end
 			puts "\n\n"
 		
+
+		#arrays of 0 or 1 --> 0 for quit, 1 for continuing
+		a_scores = {name: 'A (1)', scores: []}
+		b_scores = {name: 'B (2)', scores: []}
+		c_scores = {name: 'C (3)', scores: []}
+		scores = [a_scores, b_scores, c_scores]
+
+
 		#Label
 		exper.variations.each do |var|
 			print "%-30s" % ["Continuing:"]
 		end
 		print "\n"
 		#Continuing
-		exper.variations.each do |var|
+		exper.variations.each_with_index do |var, i|
 			continuing = var.users.where("subscribed = true")
 			print "%-30s" % [continuing.count]
+			
+			# add a 1 for each continuing, 0 for each dropoff
+			continuing.count.times do
+				scores[i][:scores].push 1
+			end
+			(var.users.count - continuing.count).times do
+				scores[i][:scores].push 0
+			end
 		end
+
 
 		puts "\n\n"
 
@@ -87,6 +106,8 @@ def send_report(experiment_id)
 		end
 		print "\n\n"
 
+
+		percents = []
 		#Label
 		exper.variations.each do |var|
 			print "%-30s" % ["Percent continuing (%):"]
@@ -95,8 +116,13 @@ def send_report(experiment_id)
 		#Total
 		exper.variations.each_with_index do |var, i|
 			continuing = var.users.where("subscribed = true")
-
-			print "%-30f" % [100 * (continuing.count * 1.0) / var.users.count]
+			percent = 100 * (continuing.count * 1.0) / var.users.count
+			print "%-30f" % [percent]
+			percents.push( 
+				{
+				 variation: i+1, percent: percent
+				}
+			)
 		end
 
 		print "\n\n"
@@ -106,6 +132,76 @@ def send_report(experiment_id)
 			puts exper.notes
 			print "\n"
 		end
+
+		print "\n\n"
+
+
+		combos = scores.combination(2).to_a
+		t_scores = []
+		combos.each do |a,b|
+			a_name = a[:name]
+			b_name = b[:name] 
+
+			a = a[:scores]
+			b = b[:scores]
+			
+
+			#plus 0.01 to SD to avoid division by zero
+			t_scores.push(
+
+				{ pair: "#{a_name} and #{b_name}",
+
+				  t_score: Statsample::Test::T.two_sample_independent(a.mean, b.mean,  
+			    a.standard_deviation + 0.01, b.standard_deviation + 0.01, a.count, b.count)
+				}
+			)
+		end
+
+		print "\n\n\n"
+
+		print "Analysis:\n\n"
+
+		#Label
+		t_scores.each do |t|
+			print "%-30s" % ["#{t[:pair]} T-score:"]
+		end
+		print "\n"
+		#T-score
+		t_scores.each do |t|
+			print "%-30s" % ["#{t[:t_score]}"]
+		end
+
+		print "\n\n"
+
+		#get the highest values of percent continuing
+		current_highest = percents.first
+		percents.each do |percent_hash|
+			if percent_hash[:percent] > current_highest[:percent]
+				current_highest = percent_hash
+			end
+		end
+
+		highest = []
+		#find multiples 
+		percents.each do |percent_hash|
+			if percent_hash[:percent] = current_highest[:percent]
+				highest.push(percent_hash)
+			end
+		end
+
+		puts "Moving forward, it looks like the strongest variations are:"
+		highest.each { |high| print "Variation #{high[:variation]}   " }
+		print "\n\n"
+		puts "This had the highet percent of parents continuing: #{current_highest[:percent]}%"
+		print "\n"
+		puts "But-- given the t-score calculated-- this may be due to chance. Refer to the t-table in the link below to see the probability the result is meaningful."
+		print "\n"
+		puts "t-table: http://www.sjsu.edu/faculty/gerstman/StatPrimer/t-table.pdf"
+
+
+
+		print "\n\n"
+
 
 		exper.update(active: false)
 	}
