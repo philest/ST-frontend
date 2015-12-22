@@ -13,6 +13,9 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
+#for testing send_report
+require_relative '../../workers/some_worker'
+
 require_relative '../../auto-signup'
 
 require_relative "../../experiment/create_experiment"
@@ -502,6 +505,7 @@ describe 'A/B experiments' do
     describe "Report" do
       
       before :each do 
+        SomeWorker.jobs.clear
         Timecop.travel(Time.utc(2015,1,1,17,30))
 
         #delete all experiments and users
@@ -515,6 +519,8 @@ describe 'A/B experiments' do
       context "curr_date slightly < end_date" do
         before :each do
           Timecop.travel(Time.utc(2015,1,8,17,29))
+          SomeWorker.perform_async
+          SomeWorker.drain
         end
 
         it "still has experiment just before end_date" do
@@ -526,6 +532,8 @@ describe 'A/B experiments' do
       context "curr_date > end_date" do
         before :each do
           Timecop.travel(Time.utc(2015,1,8,17,31))
+          SomeWorker.perform_async
+          SomeWorker.drain
         end
 
         it "deactivates experiment" do

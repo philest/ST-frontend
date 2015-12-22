@@ -25,6 +25,9 @@ require_relative '../lib/set_time'
 require 'pony'
 require_relative '../config/pony'
 
+require_relative '../models/experiment'
+require_relative '../experiment/send_report'
+
 class SomeWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
@@ -88,6 +91,15 @@ class SomeWorker
     auth_token = ENV['TW_AUTH_TOKEN']
 
     @client = Twilio::REST::Client.new account_sid, auth_token
+
+
+    #Experiment: Send report if completed-->i.e. past end_date! 
+    Experiment.where("active = true").to_a.each do |exper|
+      if (exper.end_date && Time.now > exper.end_date)
+        send_report(exper.id)
+      end
+    end
+
 
     #logging
     puts "\nSystemTime: " + SomeWorker.cleanSysTime + "\n"
