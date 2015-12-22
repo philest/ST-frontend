@@ -2,6 +2,21 @@
 Phil Esterman, CS458
 
 
+##NOTES
+This project relies on a suite of environment dependent tools— including a Postgres database and Redis data structure server. It also involves a extensive libraries not installed on the zoo (27, with a total of 98 dependencies). 
+
+The only way to “see” the code working without having to enroll real families is in testing and development. For this, the code relies on Postgres and Redis to be properly configured and running locally. 
+
+####Not Running on Zoo
+
+After a full day of attempts, I have been unable to get the local databases and suite of libraries installed and working on the zoo.
+
+####Specs to replace
+
+To instead show functionally, I've written an extensive suite of tests that I've run locally and passed. I've included that output from passing tests-- along with extensive documentation-- below, to compensate for the code not running on the zoo.
+
+To get a better sense of the code's feautures, look at the tests in `spec/experiment/`.
+
 
 ##Why
 
@@ -12,7 +27,7 @@ I implemented a V1 of an interface to automate this A/B testing.
 
 
 ##Background
-The interface is for a personal project called [StoryTime](https://www.dropbox.com/s/7fuxc0xum6bv59o/About_StoryTime.pdf?dl=0). We’re a nonprofit scaling literacy for low-income families: to do it, we send illustrated kid’s stories by text message to families without books at home.
+The interface is for-- and an extension of--  an existing personal project called [StoryTime](https://www.dropbox.com/s/7fuxc0xum6bv59o/About_StoryTime.pdf?dl=0). We’re a nonprofit scaling literacy for low-income families: to do it, we send illustrated kid’s stories by text message to families without books at home.
 
 
 
