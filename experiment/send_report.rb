@@ -7,14 +7,14 @@
 #add experiment & variation models
 require_relative '../models/experiment'
 require_relative '../models/variation'
-require_relative './experiment_constants'
+require_relative '../models/user'
 
-include ExperimentConstants
 
 def send_report(experiment_id)
 
 	exper = Experiment.find(experiment_id)
 
-	
+
+	exper.update(active: false)
 
 end 
