@@ -102,11 +102,9 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
 	#  -assign user to one of its variation
 	#  -alternate variations using modulo
 	#
-
-
 	if type == STORY    #grab first experiment with users left to assign
-		if Experiment.count != 0 &&
-		  (our_experiment = Experiment.where("users_to_assign != '0'").first)
+		if Experiment.where("active = true").count != 0 &&
+		  (our_experiment = Experiment.where("active = true AND users_to_assign != '0'").first)
 
 			users_to_assign = our_experiment.users_to_assign
 

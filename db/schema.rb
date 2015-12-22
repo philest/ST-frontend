@@ -63,12 +63,10 @@ ActiveRecord::Schema.define(version: 20151222002125) do
     t.string   "option"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "users_id"
     t.datetime "date_option"
   end
 
   add_index "variations", ["experiment_id"], name: "index_variations_on_experiment_id", using: :btree
   add_index "variations", ["user_id"], name: "index_variations_on_user_id", using: :btree
-  add_index "variations", ["users_id"], name: "index_variations_on_users_id", using: :btree
 
 end
