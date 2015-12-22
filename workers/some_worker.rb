@@ -92,18 +92,18 @@ class SomeWorker
 
     @client = Twilio::REST::Client.new account_sid, auth_token
 
-    begin
+    # begin
       #Experiment: Send report if completed-->i.e. past end_date! 
       Experiment.where("active = true").to_a.each do |exper|
         if (exper.end_date && Time.now > exper.end_date)
           send_report(exper.id)
         end
       end
-    rescue StandardError => e
-        $stderr.print "Experiment report not sent.\n\nError: #{e}"
-        $stderr.print  "\n\nBacktrace:\n\n"
-        (1..20).each { $stderr.print e.backtrace.shift }
-    end
+    # rescue StandardError => e
+    #     $stderr.print "Experiment report not sent.\n\nError: #{e}"
+    #     $stderr.print  "\n\nBacktrace:\n\n"
+    #     (1..30).each { $stderr.print e.backtrace.shift }
+    # end
 
 
     #logging
