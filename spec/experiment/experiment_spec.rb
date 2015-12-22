@@ -519,6 +519,7 @@ describe 'A/B experiments' do
 
         it "still has experiment just before end_date" do
           expect(Experiment.count).to eq 1 
+          expect(Experiment.first.active).to be true
         end
       end
 
@@ -527,8 +528,8 @@ describe 'A/B experiments' do
           Timecop.travel(Time.utc(2015,1,8,17,31))
         end
 
-        it "deletes experiment" do
-          expect(Experiment.count).to eq 0 
+        it "deactivates experiment" do
+          expect(Experiment.first.active).to be false
         end
 
       end
