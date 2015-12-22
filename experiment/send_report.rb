@@ -67,9 +67,9 @@ def send_report(experiment_id)
 		
 
 		#arrays of 0 or 1 --> 0 for quit, 1 for continuing
-		a_scores = {name: 'A (1)', scores: []}
-		b_scores = {name: 'B (2)', scores: []}
-		c_scores = {name: 'C (3)', scores: []}
+		a_scores = {name: 'Var 1', scores: []}
+		b_scores = {name: 'Var 2', scores: []}
+		c_scores = {name: 'Var 3', scores: []}
 		scores = [a_scores, b_scores, c_scores]
 
 
@@ -157,7 +157,7 @@ def send_report(experiment_id)
 			)
 		end
 
-		print "\n\n\n"
+		print "\n"
 
 		print "Analysis:\n\n"
 
@@ -189,10 +189,20 @@ def send_report(experiment_id)
 			end
 		end
 
-		puts "Moving forward, it looks like the strongest variations are:"
+		print "Moving forward, it looks like the strongest "
+		if highest.count == 1
+			puts "variation is: "
+		else
+			puts "variations are: "
+		end
 		highest.each { |high| print "Variation #{high[:variation]}   " }
 		print "\n\n"
-		puts "This had the highet percent of parents continuing: #{current_highest[:percent]}%"
+		if highest.count == 1
+			print "This "
+		else
+			print "These "
+		end
+		puts "had the highest percent of parents continuing: #{current_highest[:percent]}%"
 		print "\n"
 		puts "But-- given the t-score calculated-- this may be due to chance. Refer to the t-table in the link below to see the probability the result is meaningful."
 		print "\n"
