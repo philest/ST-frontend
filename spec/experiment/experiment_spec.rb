@@ -497,21 +497,50 @@ describe 'A/B experiments' do
 
     end
 
-
-      #experiment deleted?/sends report after running out of days
-
-
-
-
-
-
-
-
-
-
-
-
     end
+
+    describe "Report" do
+      
+      before :each do 
+        Timecop.travel(Time.utc(2015,1,1,17,30))
+
+        #delete all experiments and users
+        Experiment.all.to_a.each { |exper| exper.destroy }
+        User.all.to_a.each { |user| user.destroy }
+
+        create_experiment(TIME_FLAG, [[5,45], [6,30], [6,45]], 5, 7)
+        Signup.enroll(["1","2","3","4","5"], 'en', {Carrier: "ATT"})
+      end
+
+      context "curr_date slightly < end_date" do
+        before :each do
+          Timecop.travel(Time.utc(2015,1,8,17,29))
+        end
+
+        it "still has experiment just before end_date" do
+          expect(Experiment.count).to eq 1 
+        end
+      end
+
+      context "curr_date > end_date" do
+        before :each do
+          Timecop.travel(Time.utc(2015,1,8,17,31))
+        end
+
+        it "deletes experiment" do
+          expect(Experiment.count).to eq 0 
+        end
+
+      end
+
+
+    end  
+
+
+
+
+     #experiment deleted?/sends report after running out of days
+
 
 
 
