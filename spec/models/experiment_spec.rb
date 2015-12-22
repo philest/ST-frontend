@@ -78,6 +78,11 @@ describe 'A/B experiments' do
         expect(experiment.notes).to eq  "Here's a thought."
       end
 
+      it "is active by default" do
+        experiment = create(:experiment)
+        expect(experiment.active).to be true
+      end
+
       context "Users Enrolled" do 
 
         #enroll and assign users to variations/exper
