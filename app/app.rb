@@ -15,6 +15,8 @@ require "sinatra/reloader" if development?
 
 require_relative '../config/environments' #DB configuration
 require_relative '../models/user' #add User model
+require_relative '../models/experiment' #add User model
+
 
 set :root, File.join(File.dirname(__FILE__), '../')
 
@@ -92,6 +94,9 @@ end
 
 get '/admin' do
     protected!
+    #pull up current experiments
+    @active_experiments = Experiment.where("active = true")
+    @inactive_experiments = Experiment.where("active = false")
     erb :experiment_dashboard
 end
 
