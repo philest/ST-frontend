@@ -209,6 +209,105 @@
       </div>
   </form>
 
+
+  <!-- Show the active and not active experiments -->
+    
+
+    <h2> There's <%= @active_experiments.count %> active experiments </h3>
+    
+      <% for @exper in @active_experiments %>
+        <div class ="experiment">
+          <h3>
+              <%if @exper.variable == ExperimentConstants::TIME_FLAG%>
+                 Time
+              <%elsif @exper.variable == ExperimentConstants::DAYS_TO_START_FLAG%>
+                 Days per Week
+              <%else %>
+                 Nil
+              <%end%>
+          </h3>
+          
+           <!-- get total users -->
+           <% users = 0 %>
+           <% for var in @exper.variations%>
+              <% users = users + var.users.count%>
+           <%end%>
+          <h4> Users: <%= users %> </h4>
+
+          <%if @exper.end_date && @exper.created_at%>
+            <h4>Days left: <%=(@exper.end_date - @exper.created_at).to_i -  ((Time.now - @exper.created_at). / 86400).to_i%></h4>
+          <%end%>
+
+          <h4>End date: <%= @exper.end_date.to_s.split.first%></h4>
+
+
+          <%if @exper.users_to_assign != nil && @exper.users_to_assign > 0%> 
+            <h4> Still need <%= @exper.users_to_assign %> users.</h4>
+          <%end%>
+
+         <% for var in @exper.variations%>
+            <h6> Variation: <%= var.option%> </h6>
+            <h6> Users: <%= users = var.users.count%> </h6>
+            <h6> Continuing: <%= cont = var.users.where("subscribed = true").count%> </h6>
+            <% if var.users.count != 0 %>
+             <h6>Percent Continuing: <%= cont / users * 100%> </h6>
+             <%end%>
+
+         <%end%>
+
+
+       
+          <%if @exper.notes %> 
+            <h4> Notes: <%= @exper.notes %> </h4>
+          <%end%>
+
+        </div>
+      <% end %>
+
+
+    <h2> There's <%= @inactive_experiments.count %> finished experiments </h3>
+      <% for @exper in @inactive_experiments %>
+        <div class ="experiment">
+          <h3>
+              <%if @exper.variable == ExperimentConstants::TIME_FLAG%>
+                 Time
+              <%elsif @exper.variable == ExperimentConstants::DAYS_TO_START_FLAG%>
+                 Days per Week
+              <%else %>
+                 Nil
+              <%end%>
+          </h3>
+          
+           <!-- get total users -->
+           <% users = 0 %>
+           <% for var in @exper.variations%>
+              <% users = users + var.users.count%>
+           <%end%>
+          <h4> Users: <%= users %> </h4>
+          
+          <%if @exper.end_date %> 
+          <h4>End date: <%= @exper.end_date.to_s.split.first%></h4>
+         <%end%>
+
+         <% for var in @exper.variations%>
+            <h6> Variation: <%= var.option%> </h6>
+            <h6> Users: <%= users = var.users.count%> </h6>
+            <h6> Continuing: <%= cont = var.users.where("subscribed = true").count%> </h6>
+            <% if var.users.count != 0 %>
+             <h6>Percent Continuing: <%= cont / users * 100%> </h6>
+             <%end%>
+
+         <%end%>
+
+
+       
+          <%if @exper.notes %> 
+            <h4> Notes: <%= @exper.notes %> </h4>
+          <%end%>
+
+        </div>
+      <% end %>
+
     
   </body>
 </html>

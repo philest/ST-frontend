@@ -4,6 +4,22 @@ h1{
     text-align: center;
 }
 
+h2, h3, h4, h5, h6{
+    font-family: Nunito;
+
+}
+
+div.experiment{
+  width: 200px;
+    padding: 1em;
+    border: 1px solid #CCC;
+    border-radius: 1em;
+    display: inline-block;
+    margin: 20px;
+}
+
+
+
 form {
 	    font-family: Nunito;
 
