@@ -82,8 +82,10 @@ module SMSResponseHelper
   #   - "en"
   def reply(params, locale)
 
+    # STANDARDIZE SMS # 
     #strip whitespace (trailing and leading)
     params[:Body] = params[:Body].strip
+    params[:Body].downcase!
     #rid of punctuation
     params[:Body].gsub!(/[\.\,\!]/, '')
     
@@ -96,15 +98,18 @@ module SMSResponseHelper
         R18n.thread_set(i18n)
     end
 
+    ### REPLY WORKFLOW ###
     #STORY
-    if params[:Body].casecmp(R18n.t.commands.story) == 0 && 
+    if params[:Body] == R18n.t.commands.story && 
             (@user == nil || @user.sample == true)
-        enroll(params, params[:From], locale, STORY)
+
+        app_enroll(params, params[:From], locale, STORY)
 
     #SAMPLE or EXAMPLE
-    elsif params[:Body].casecmp(R18n.t.commands.sample) == 0 ||
-            params[:Body].casecmp(R18n.t.commands.example) == 0
-        enroll(params, params[:From], locale, SAMPLE)
+    elsif params[:Body] == R18n.t.commands.sample ||
+            params[:Body] == R18n.t.commands.example
+
+        app_enroll(params, params[:From], locale, SAMPLE)
 
     #new user...but not SAMPLE or STORY. 
     elsif @user == nil
@@ -130,7 +135,7 @@ module SMSResponseHelper
     elsif (@user.next_index_in_series == 999 || 
                  @user.awaiting_choice == true) &&
           (@user.subscribed == false && 
-                 params[:Body].casecmp(R18n.t.commands.story) == 0)
+                 params[:Body] == R18n.t.commands.story)
 
         #REACTIVATE SUBSCRIPTION
             @user.update(subscribed: true)
@@ -144,13 +149,13 @@ module SMSResponseHelper
             Helpers.text(msg, msg, @user.phone)
     #if returning after manually stopping (not in mid - series)
     elsif @user.subscribed == false && 
-            params[:Body].casecmp(R18n.t.commands.story) == 0 
+            params[:Body] == R18n.t.commands.story 
         #REACTIVATE SUBSCRIPTION
         @user.update(subscribed: true)
         Helpers.text(R18n.t.stop.resubscribe.long, 
             R18n.t.stop.resubscribe.long, @user.phone)
 
-    elsif params[:Body].casecmp(R18n.t.commands.help) == 0 #Text::HELP option
+    elsif params[:Body] == R18n.t.commands.help #Text::HELP option
         #default 2 days a week
         if @user.days_per_week == nil
             @user.update(days_per_week: 2)
@@ -193,15 +198,15 @@ module SMSResponseHelper
                          R18n.t.to_us.thanks.to_s,
                                       @user.phone)
 
-    elsif params[:Body].casecmp(R18n.t.commands.break) == 0
+    elsif params[:Body] == R18n.t.commands.break
         @user.update(on_break: true)
         @user.update(days_left_on_break: Text::BREAK_LENGTH)
 
         Helpers.text(R18n.t.break.start, R18n.t.break.start,
                                                 @user.phone)
 
-    elsif params[:Body].casecmp("STOP NOW") == 0 ||
-          params[:Body].casecmp(R18n.t.commands.stop) == 0#STOP option
+    elsif params[:Body] == "stop now" ||
+          params[:Body] == R18n.t.commands.stop #STOP option
 
         if MODE == PRO
         #SAVE QUITTERS
@@ -227,7 +232,7 @@ module SMSResponseHelper
         Helpers.new_text(note, note, "+15612125831")
 
 
-    elsif params[:Body].casecmp(R18n.t.commands.text.to_s) == 0 #TEXT option        
+    elsif params[:Body] == R18n.t.commands.text.to_s #TEXT option        
         #change mms to sms
         @user.update(mms: false)
         Helpers.text(R18n.t.mms_update, R18n.t.mms_update,
@@ -322,14 +327,15 @@ module SMSResponseHelper
                 R18n.t.error.bad_choice, @user.phone)
         end             
 
+
         #thanks or thank you
-    elsif params[:Body].casecmp(R18n.t.misc.sms.thanks.to_s) == 0 ||
-          params[:Body].casecmp(R18n.t.misc.sms.thank_you.to_s) == 0
+    elsif params[:Body] == R18n.t.misc.sms.thanks.to_s ||
+          params[:Body] == R18n.t.misc.sms.thank_you.to_s
             
         Helpers.text(R18n.t.misc.reply.sure,
                      R18n.t.misc.reply.sure, @user.phone)
-    elsif params[:Body].casecmp(R18n.t.misc.sms.whos_this.to_s) == 0 ||
-      params[:Body].casecmp(R18n.t.misc.sms.who_is_this.to_s) == 0
+    elsif params[:Body] == R18n.t.misc.sms.whos_this.to_s ||
+      params[:Body] == R18n.t.misc.sms.who_is_this.to_s
         
         Helpers.text(R18n.t.misc.reply.
                          who_we_are(@user.days_per_week).to_s,
@@ -340,7 +346,7 @@ module SMSResponseHelper
         repeat = false
 
         if session["prev_body"]
-            if session["prev_body"].casecmp(params[:Body]) == 0 and
+            if session["prev_body"] == params[:Body] and
                       session["prev_time"] - 100 < Time.now.utc and
                                               @user.awaiting_choice 
                 repeat = true
