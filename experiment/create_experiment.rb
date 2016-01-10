@@ -68,7 +68,7 @@ def create_experiment(variable,
   exper = Experiment.create(variable: variable,
                             users_to_assign: users)
   #inlude notes, if given
-  if !notes.empty?
+  if !notes.empty? && notes.first != nil
     exper.update(notes: notes.pop)
   end
 
