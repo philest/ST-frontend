@@ -1,3 +1,9 @@
+#  helpers/sms_repsonse_helper.rb            Phil Esterman   
+# 
+#  Helpers to reply to an SMS. 
+#  --------------------------------------------------------
+
+
 #enrollment
 require_relative '../app/enroll'
 
@@ -38,8 +44,8 @@ module SMSResponseHelper
   #   - {Carrier: "ATT", Body: "STORY"} etc.
   #
   def config_sessions(params)
-    ## Remeber last response and time ##
-    #new becomes old
+  ## Remeber last response and time ##
+  #new becomes old
     session["prev_body"] = session["new_body"] 
     session["prev_time"] = session["new_time"]
     session["now_for_us"] = session["next_for_us"]
@@ -49,30 +55,80 @@ module SMSResponseHelper
     session["next_for_us"] = false #default: don't send us their response.
   end
 
+  ##
+  # Was the user in the midst of a series when
+  # dropped?
+  #
+  def in_series?(user_phone)
+    user = User.find_by_phone user_phone
+    
+    user.next_index_in_series == 999 || 
+      user.awaiting_choice == true
+  end
+
+  ##
+  # Return String of story weekdays for reply,
+  # with abbreviations for Sprint.
+  #
+  # Schedule depends on days/week:  
+  # 1: Mon
+  # 2: Tues, Thurs
+  # 3: Mon, Wed, Fri
+  def get_day_names(days_per_week, carrier)
+    day_names = ''
+    case days_per_week
+    when 1
+        day_names = R18n.t.weekday.wed
+    when 2, nil
+      if carrier == SPRINT
+        day_names =  R18n.t.weekday.sprint.tue +
+         "/" + R18n.t.weekday.sprint.th
+      else       
+        day_names = R18n.t.weekday.normal.tue +
+         "/" + R18n.t.weekday.normal.th
+      end
+    when 3
+      if carrier == SPRINT
+        day_names = R18n.t.weekday.letters.M + 
+           "-" + R18n.t.weekday.letters.W + 
+           "-" + R18n.t.weekday.letters.F
+      else       
+        day_names = R18n.t.weekday.mon + 
+           "/" + R18n.t.weekday.wed +
+           "/" + R18n.t.weekday.fri
+      end
+    else
+      puts "ERR: invalid days of week"
+    end
+
+    day_names
+  end
+
+
+  ##
   # Set locale, then reply.
   #   - defaults to English 
   #  
   # [parmams] fake user data
-  #    - {Carrier: "ATT", Body: "STORY"} etc.
-  #    - Mocked in testing; normally given by Twilio
-  def config_reply(params) 
-     
-      #1. Set locale. 
-      @user = User.find_by_phone params[:From]
-      
-      if @user
-          locale = @user.locale
-      elsif params[:locale]
-          locale = params[:locale]
-      else
-          locale = "en"
-      end
+  #  - {Carrier: "ATT", Body: "STORY"} etc.
+  #  - Mocked in testing; normally given by Twilio
+  def config_reply(params)  
+    #1. Set locale. 
+    @user = User.find_by_phone params[:From]
+    
+    if @user
+      locale = @user.locale
+    elsif params[:locale]
+      locale = params[:locale]
+    else
+      locale = "en"
+    end
 
-      #2. Reply. 
-      reply(params, locale)
+    #2. Reply. 
+    reply(params, locale)
   end
 
-
+  ##
   # Reply to an incoming text 
   # (or enroll the user, if appropriate)
   # 
@@ -83,177 +139,201 @@ module SMSResponseHelper
   def reply(params, locale)
 
     # STANDARDIZE SMS # 
-    #strip whitespace (trailing and leading)
+    # strip whitespace (trailing and leading)
     params[:Body] = params[:Body].strip
     params[:Body].downcase!
-    #rid of punctuation
+    # rid of punctuation
     params[:Body].gsub!(/[\.\,\!]/, '')
     
     config_sessions params
-    @user = User.find_by_phone(params[:From]) #check if already registered.
+    @user = User.find_by_phone(params[:From]) # check if already registered.
 
-    #set this thread's locale.  
-    if locale != nil && @user != nil
-        i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
-        R18n.thread_set(i18n)
+    # set this thread's locale.  
+    if locale != nil && 
+      @user != nil
+
+      i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
+      R18n.thread_set(i18n)
     end
 
-    ### REPLY WORKFLOW ###
-    #STORY
-    if params[:Body] == R18n.t.commands.story && 
-            (@user == nil || @user.sample == true)
+    # unknown user; no signup/sample text. 
+    if @user == nil && 
+         params[:Body] != R18n.t.commands.story &&
+         params[:Body] != R18n.t.commands.sample &&
+         params[:Body] != R18n.t.commands.example
+     
+      #email us about problem
+      if MODE == PRO &&
+          params[:From] != "+15612125831"
 
-        app_enroll(params, params[:From], locale, STORY)
+        Pony.mail(:to => 'phil.esterman@yale.edu',
+              :cc => 'henok.addis@yale.edu',
+              :from => 'phil.esterman@yale.edu',
+              :subject => 'StoryTime: an unknown SMS (non-user)',
+              :body => "An unregistered user texted in an unknown response. 
 
-    #SAMPLE or EXAMPLE
-    elsif params[:Body] == R18n.t.commands.sample ||
-            params[:Body] == R18n.t.commands.example
+                  From: #{params[:From]}
+                  Body: #{params[:Body]} .")
+      end
+
+      Helpers.text(R18n.t.error.no_signup_match, 
+                   R18n.t.error.no_signup_match,
+                   params[:From])
+
+
+    # Someone replied to SAMPLE text.
+    elsif @user &&
+            @user.sample &&
+            params[:Body] != R18n.t.commands.story
+      
+      Helpers.text(R18n.t.sample.post,
+                   R18n.t.sample.post,
+                   @user.phone)
+    # send us their SMS
+    elsif session["now_for_us"] &&
+            params[:Body] != R18n.t.commands.help
+
+        #send it to us.
+        Helpers.new_text("#{@user.phone} sent: #{params[:Body]}")
+        Helpers.text(R18n.t.to_us.thanks.to_s, 
+                     R18n.t.to_us.thanks.to_s,
+                     @user.phone)
+    else
+
+      case params[:Body]
+
+      # STORY
+      when R18n.t.commands.story
+        # Enroll new user. 
+        if @user == nil ||
+             @user.sample == true
+
+          app_enroll(params, params[:From], locale, STORY)
+        # Autodropped from series, now re-subscribing.
+        elsif @user.subscribed == false && 
+                in_series?(@user.phone)
+
+          # Resubscribe. 
+          @user.update(subscribed: true)
+          msg = R18n.t.stop.resubscribe.short + "\n\n" +
+                R18n.t.choice.no_greet[@user.series_number]
+                #longer message, give more newlines
+          @user.update(next_index_in_series: 0)
+          @user.update(awaiting_choice: true)
+
+          Helpers.text(msg, msg, @user.phone)
+
+        # Dropped manually, out of series
+        elsif @user.subscribed == false 
+          # Resubscribe. 
+          @user.update(subscribed: true)
+          Helpers.text(R18n.t.stop.resubscribe.long, 
+                       R18n.t.stop.resubscribe.long,
+                       @user.phone)
+        end
+
+      # SAMPLE or EXAMPLE
+      when R18n.t.commands.sample,
+           R18n.t.commands.example
 
         app_enroll(params, params[:From], locale, SAMPLE)
 
-    #new user...but not SAMPLE or STORY. 
-    elsif @user == nil
-        #send us email about problem
-        if MODE == PRO and params[:From] != "+15612125831"
-            Pony.mail(:to => 'phil.esterman@yale.edu',
-                      :cc => 'henok.addis@yale.edu',
-                      :from => 'phil.esterman@yale.edu',
-                      :subject => 'StoryTime: an unknown SMS (non-user)',
-                      :body => "An unregistered user texted in an unknown response. 
-
-                                From: #{params[:From]}
-                                Body: #{params[:Body]} .")
-        end
-
-        Helpers.text(R18n.t.error.no_signup_match, 
-            R18n.t.error.no_signup_match, params[:From])
-    #post-SAMPLE (if replied to SAMPLE)    
-    elsif @user.sample == true
-        Helpers.text(R18n.t.sample.post, R18n.t.sample.post,
-                                                @user.phone)
-    #if auto-dropped (or if choose to drop mid-series), returning
-    elsif (@user.next_index_in_series == 999 || 
-                 @user.awaiting_choice == true) &&
-          (@user.subscribed == false && 
-                 params[:Body] == R18n.t.commands.story)
-
-        #REACTIVATE SUBSCRIPTION
-            @user.update(subscribed: true)
-            msg = R18n.t.stop.resubscribe.short + 
-                "\n\n" + R18n.t.choice.no_greet[@user.series_number]
-                     #longer message, give more newlines
-
-            @user.update(next_index_in_series: 0)
-            @user.update(awaiting_choice: true)
-
-            Helpers.text(msg, msg, @user.phone)
-    #if returning after manually stopping (not in mid - series)
-    elsif @user.subscribed == false && 
-            params[:Body] == R18n.t.commands.story 
-        #REACTIVATE SUBSCRIPTION
-        @user.update(subscribed: true)
-        Helpers.text(R18n.t.stop.resubscribe.long, 
-            R18n.t.stop.resubscribe.long, @user.phone)
-
-    elsif params[:Body] == R18n.t.commands.help #Text::HELP option
-        #default 2 days a week
+      # HELP
+      when R18n.t.commands.help
+        # TODO delete if passing tests without
+        # legacy users: give 2 days a week
         if @user.days_per_week == nil
-            @user.update(days_per_week: 2)
+          @user.update(days_per_week: 2)
         end
 
-        #find the day names
-        case @user.days_per_week
-        when 1
-                dayNames = R18n.t.weekday.wed
+        # Get string of weekdays for reply.
+        day_names = get_day_names(@user.days_per_week,
+                                 @user.carrier)
+        Helpers.text(R18n.t.help.normal(day_names).to_s,
+                     R18n.t.help.sprint(day_names).to_s,
+                     @user.phone)
 
-        when 2, nil
-            if @user.carrier == SPRINT
-                dayNames =  R18n.t.weekday.sprint.tue +
-                 "/" + R18n.t.weekday.sprint.th
-            else           
-                dayNames = R18n.t.weekday.normal.tue +
-                 "/" + R18n.t.weekday.normal.th
-            end
-        when 3
-            if @user.carrier == SPRINT
-                dayNames = R18n.t.weekday.letters.M + 
-                     "-" + R18n.t.weekday.letters.W + 
-                     "-" + R18n.t.weekday.letters.F
-            else           
-                dayNames = R18n.t.weekday.mon + 
-                     "/" + R18n.t.weekday.wed +
-                     "/" + R18n.t.weekday.fri
-            end
-        else
-            puts "ERR: invalid days of week"
-        end
-
-        Helpers.text(R18n.t.help.normal(dayNames).to_s,
-             R18n.t.help.sprint(dayNames).to_s, @user.phone)
-    elsif session["now_for_us"]
-            #send it to us.
-            Helpers.new_text("#{@user.phone} sent: #{params[:Body]}")
-            
-            Helpers.text(R18n.t.to_us.thanks.to_s, 
-                         R18n.t.to_us.thanks.to_s,
-                                      @user.phone)
-
-    elsif params[:Body] == R18n.t.commands.break
+      # BREAK
+      when R18n.t.commands.break
         @user.update(on_break: true)
         @user.update(days_left_on_break: Text::BREAK_LENGTH)
 
-        Helpers.text(R18n.t.break.start, R18n.t.break.start,
-                                                @user.phone)
+        Helpers.text(R18n.t.break.start,
+                     R18n.t.break.start,
+                     @user.phone)
 
-    elsif params[:Body] == "stop now" ||
-          params[:Body] == R18n.t.commands.stop #STOP option
+      # STOP
+      when R18n.t.commands.stop,
+           "stop now"
 
         if MODE == PRO
-        #SAVE QUITTERS
-            REDIS.set(@user.phone+":quit", "true") 
-        #Report quitters to us by email
-            Pony.mail(:to => 'phil.esterman@yale.edu',
-                      :cc => 'henok.addis@yale.edu',
-                      :from => 'phil.esterman@yale.edu',
-                      :subject => 'StoryTime: A user quit.',
-                      :body => "A user texted STOP. 
+        # TODO Add to list in Redis. 
+        # Report quitters to us by email.
+          Pony.mail(:to => 'phil.esterman@yale.edu',
+                :cc => 'henok.addis@yale.edu',
+                :from => 'phil.esterman@yale.edu',
+                :subject => 'StoryTime: A user quit.',
+                :body => "A user texted STOP. 
 
-                                From: #{params[:From]}
-                                Body: #{params[:Body]}
-                                Message #: #{@user.total_messages}
-                                
-                                Body of prev text: #{session["prev_body"]}
-                                Time of prev text: #{session["prev_time"]}")
+                    From: #{params[:From]}
+                    Body: #{params[:Body]}
+                    Message #: #{@user.total_messages}
+                    
+                    Body of prev text: #{session["prev_body"]}
+                    Time of prev text: #{session["prev_time"]}")
         end
 
-        #change subscription
+        #change subscription, then text us. 
         @user.update(subscribed: false)
         note = params[:From].to_s + "quit StoryTime."
         Helpers.new_text(note, note, "+15612125831")
 
-
-    elsif params[:Body] == R18n.t.commands.text.to_s #TEXT option        
+      # TEXT
+      when R18n.t.commands.text.to_s
         #change mms to sms
         @user.update(mms: false)
-        Helpers.text(R18n.t.mms_update, R18n.t.mms_update,
-                                              @user.phone)
-    #Responds with a letter when prompted to choose a series
-    #Account for quotations
-    elsif @user.awaiting_choice == true or
-          (@user.subscribed == false and   #dropped user choosing
-          /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body])) 
+        Helpers.text(R18n.t.mms_update,
+                     R18n.t.mms_update,
+                     @user.phone)
 
-        messageSeriesHash = MessageSeries.
-                      getMessageSeriesHash
+      # THANKS or THANK YOU 
+      when R18n.t.misc.sms.thanks.to_s,
+           R18n.t.misc.sms.thank_you.to_s
 
-        if not @user.subscribed
+        Helpers.text(R18n.t.misc.reply.sure,
+                     R18n.t.misc.reply.sure,
+                     @user.phone)
+
+      # WHO IS THIS or WHO'S THIS
+      when R18n.t.misc.sms.whos_this.to_s,
+           R18n.t.misc.sms.who_is_this.to_s
+
+        Helpers.text(R18n.t.misc.reply.
+                        who_we_are(@user.days_per_week).to_s,
+                     R18n.t.misc.reply.
+                        who_we_are(@user.days_per_week).to_s,
+                     @user.phone)
+
+      else
+
+        ### A Series Choice ### 
+        if @user.awaiting_choice ||
+              (!@user.subscribed &&
+               /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.
+               match(params[:Body]))
+               # 2nd condition: A dropped user's choice. 
+
+          messageSeriesHash = MessageSeries.
+                  getMessageSeriesHash
+
+          if not @user.subscribed
             @user.update(subscribed: true)
             @user.update(next_index_in_series: 0)
-        end
+          end
 
 
             #isolated letter
-        if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
+          if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
             body = body.to_s #convert from Match group to first match.
             #isolate the letter from space and quotes
             body = /[a-zA-z]/.match(body)
@@ -261,125 +341,117 @@ module SMSResponseHelper
             body.downcase!
 
             #first letter of word-- IF first letter is valid!!!
-        elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) and 
-                         MessageSeries.codeIsInHash(body.to_s +
-                                      @user.series_number.to_s)
+          elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) and 
+                   MessageSeries.codeIsInHash(body.to_s +
+                          @user.series_number.to_s)
             body = body.to_s
             body.downcase!
-        else #default to first one.
+          else #default to first one.
             
             if MODE == PRO && @user.phone != "+15612125831" 
-                Pony.mail(:to => 'phil.esterman@yale.edu',
-                  :cc => 'henok.addis@yale.edu',
-                  :from => 'phil.esterman@yale.edu',
-                  :subject => 'StoryTime: an unknown series choice',
-                  :body => "A user texted in an unknown choice
-                            on series #{@user.series_number.to_s}. 
+              Pony.mail(:to => 'phil.esterman@yale.edu',
+                :cc => 'henok.addis@yale.edu',
+                :from => 'phil.esterman@yale.edu',
+                :subject => 'StoryTime: an unknown series choice',
+                :body => "A user texted in an unknown choice
+                    on series #{@user.series_number.to_s}. 
 
-                            From: #{params[:From]}
-                            Body: #{params[:Body]} .")
+                    From: #{params[:From]}
+                    Body: #{params[:Body]} .")
             end
 
             body = messageSeriesHash.keys[@user.series_number * 2] #t0
             body = body[0] #t
-        end
+          end
 
-        #push back to zero incase 
-        #changed to 999 to denote one 'day' after
-        @user.update(next_index_in_series: 0)
+          #push back to zero incase 
+          #changed to 999 to denote one 'day' after
+          @user.update(next_index_in_series: 0)
 
-        #check if valid choice
-        if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
-                
+          #check if valid choice
+          if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
+              
             #update the series choice
             @user.update(series_choice: body)
             @user.update(awaiting_choice: false)
 
             messageSeriesHash = MessageSeries.
-                                    getMessageSeriesHash
+                        getMessageSeriesHash
             story = messageSeriesHash[@user.series_choice +
-                                      @user.series_number.to_s][0]
+                          @user.series_number.to_s][0]
             if @user.mms == true
-                #incase of just one photo, this also updates user-info.
-                #sends last photo in advance
-                NextMessageWorker.perform_in(17.seconds, story.getSMS,
-                                  story.getMmsArr[1..-1], @user.phone)
-                 #don't need to send stack 
-                 #if a one-pager.
-                if story.getMmsArr.length > 1
-                     #replies with first photo immediately
-                    Helpers.mms(story.getMmsArr[0], @user.phone)
-                else
-                    #if just one photo, replies
-                    #w/ photo and sms
-                    Helpers.text_and_mms(story.getSMS,
-                      story.getMmsArr[0], @user.phone)
-                end
+              #incase of just one photo, this also updates user-info.
+              #sends last photo in advance
+              NextMessageWorker.perform_in(17.seconds, story.getSMS,
+                        story.getMmsArr[1..-1], @user.phone)
+               #don't need to send stack 
+               #if a one-pager.
+              if story.getMmsArr.length > 1
+                 #replies with first photo immediately
+                Helpers.mms(story.getMmsArr[0], @user.phone)
+              else
+                #if just one photo, replies
+                #w/ photo and sms
+                Helpers.text_and_mms(story.getSMS,
+                  story.getMmsArr[0], @user.phone)
+              end
 
             else # just SMS
-                NextMessageWorker.updateUser(@user.phone,
-                                        story.getPoemSMS)
-                Helpers.text(story.getPoemSMS, story.getPoemSMS,
-                                                    @user.phone)      
+              NextMessageWorker.updateUser(@user.phone,
+                          story.getPoemSMS)
+              Helpers.text(story.getPoemSMS, story.getPoemSMS,
+                                @user.phone)    
             end
-        else                
+          else        
             Helpers.text(R18n.t.error.bad_choice, 
-                R18n.t.error.bad_choice, @user.phone)
-        end             
+              R18n.t.error.bad_choice, @user.phone)
+          end
 
+         ## Response Not Recognized ## 
+        else 
 
-        #thanks or thank you
-    elsif params[:Body] == R18n.t.misc.sms.thanks.to_s ||
-          params[:Body] == R18n.t.misc.sms.thank_you.to_s
-            
-        Helpers.text(R18n.t.misc.reply.sure,
-                     R18n.t.misc.reply.sure, @user.phone)
-    elsif params[:Body] == R18n.t.misc.sms.whos_this.to_s ||
-      params[:Body] == R18n.t.misc.sms.who_is_this.to_s
-        
-        Helpers.text(R18n.t.misc.reply.
-                         who_we_are(@user.days_per_week).to_s,
-            R18n.t.misc.reply.who_we_are(@user.days_per_week).
-                                            to_s, @user.phone)
-    #response matches nothing
-    else
-        repeat = false
+          repeat = false
 
-        if session["prev_body"]
+          if session["prev_body"]
             if session["prev_body"] == params[:Body] and
-                      session["prev_time"] - 100 < Time.now.utc and
-                                              @user.awaiting_choice 
-                repeat = true
+                  session["prev_time"] - 100 < Time.now.utc and
+                              @user.awaiting_choice 
+              repeat = true
             end
-        end
+          end
 
-        ##report this to us by email (and text)
-        if MODE == PRO and params[:From] != "+15612125831"
+          ##report this to us by email (and text)
+          if MODE == PRO and params[:From] != "+15612125831"
             note = "A registered user texted in an unknown response. 
 
-                                From: #{params[:From]}
-                                Body: #{params[:Body]} ."
+                      From: #{params[:From]}
+                      Body: #{params[:Body]} ."
 
             Pony.mail(:to => 'phil.esterman@yale.edu',
-                      :cc => 'henok.addis@yale.edu',
-                      :from => 'phil.esterman@yale.edu',
-                      :subject => 'StoryTime: an unknown SMS (user)',
-                      :body => note)
+                  :cc => 'henok.addis@yale.edu',
+                  :from => 'phil.esterman@yale.edu',
+                  :subject => 'StoryTime: an unknown SMS (user)',
+                  :body => note)
             #send me text too
             Helpers.new_text(note, note, "+15612125831")
-        end
+          end
 
 
-        if not repeat
+          if not repeat
             Helpers.text(R18n.t.error.no_option.to_s, 
-                  R18n.t.error.no_option_sprint.to_s,
-                                         @user.phone)
-        else
+                R18n.t.error.no_option_sprint.to_s,
+                           @user.phone)
+          else
             puts "DONT send repeat: message #{session["prev_body"]} was sent already"
+          end
+
         end
-        
-    end#signup flow
+         
+      end
+
+    end
 
   end
 
 end
+
