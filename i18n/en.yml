@@ -1,11 +1,11 @@
 commands:
-  help: HELP NOW
-  stop: STOP
-  text: TEXT
-  story: STORY
-  sample: SAMPLE
-  example: EXAMPLE
-  break: BREAK
+  help: help now
+  stop: stop
+  text: text
+  story: story
+  sample: sample
+  example: example
+  break: break
 
 break:
   start: "StoryTime: You got it. We'll message you again in 2 weeks."
@@ -54,8 +54,8 @@ no_reply:
 
 misc:
   sms:
-    thanks: "Thanks"
-    thank_you: "Thank you"
+    thanks: "thanks"
+    thank_you: "thank you"
     whos_this: "who's this"
     who_is_this: "who is this"
   reply:

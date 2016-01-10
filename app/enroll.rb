@@ -68,7 +68,7 @@ auth_token ||= ENV['TW_AUTH_TOKEN']
 #   wait_time) => async wait to send: [14]
 # 		-(for manual signup)
 #
-def enroll(params, user_phone, locale, type, *wait_time) 
+def app_enroll(params, user_phone, locale, type, *wait_time) 
 
 	@user = User.find_by_phone(user_phone) #check if already registered.
 

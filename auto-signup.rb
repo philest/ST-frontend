@@ -4,7 +4,6 @@ require_relative './app/enroll'
 #sends the signup story and text to the list of parents with given language
 class Signup
 
-
 	def self.initialize_user_count()
 		@@user_num_story = 0
 	end
