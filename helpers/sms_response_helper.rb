@@ -30,6 +30,25 @@ include Text
 
 module SMSResponseHelper
 
+  ##
+  # Configure the sessions to record the last 
+  # response and time, reset the new. 
+  #
+  # [params] user data
+  #   - {Carrier: "ATT", Body: "STORY"} etc.
+  #
+  def config_sessions(params)
+    ## Remeber last response and time ##
+    #new becomes old
+    session["prev_body"] = session["new_body"] 
+    session["prev_time"] = session["new_time"]
+    session["now_for_us"] = session["next_for_us"]
+    #reset the new
+    session["new_body"] = params[:Body].strip
+    session["new_time"] = Time.now.utc
+    session["next_for_us"] = false #default: don't send us their response.
+  end
+
   # Set locale, then reply.
   #   - defaults to English 
   #  
@@ -53,6 +72,7 @@ module SMSResponseHelper
       reply(params, locale)
   end
 
+
   # Reply to an incoming text 
   # (or enroll the user, if appropriate)
   # 
@@ -60,41 +80,33 @@ module SMSResponseHelper
   #   - {Carrier: "ATT", Body: "STORY"} etc.
   # [locale] the user's locale
   #   - "en"
-
   def reply(params, locale)
 
     #strip whitespace (trailing and leading)
     params[:Body] = params[:Body].strip
-    params[:Body].gsub!(/[\.\,\!]/, '') #rid of periods, commas, exclamation points
+    #rid of punctuation
+    params[:Body].gsub!(/[\.\,\!]/, '')
     
-    #new become old
-    session["prev_body"] = session["new_body"] 
-    session["prev_time"] = session["new_time"]
-    session["now_for_us"] = session["next_for_us"]
-
-    #reset the new
-    session["new_body"] = params[:Body].strip
-    session["new_time"] = Time.now.utc
-    session["next_for_us"] = false #default: don't send us their response.
-
+    config_sessions params
     @user = User.find_by_phone(params[:From]) #check if already registered.
 
-    #PRO, set locale for returning user, w/in thread 
+    #set this thread's locale.  
     if locale != nil && @user != nil
         i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
         R18n.thread_set(i18n)
     end
 
-
-    #first reply: new user texts in STORY
+    #STORY
     if params[:Body].casecmp(R18n.t.commands.story) == 0 && 
             (@user == nil || @user.sample == true)
-        app_enroll(params, params[:From], locale, STORY)
+        enroll(params, params[:From], locale, STORY)
 
+    #SAMPLE or EXAMPLE
     elsif params[:Body].casecmp(R18n.t.commands.sample) == 0 ||
             params[:Body].casecmp(R18n.t.commands.example) == 0
-        app_enroll(params, params[:From], locale, SAMPLE)
+        enroll(params, params[:From], locale, SAMPLE)
 
+    #new user...but not SAMPLE or STORY. 
     elsif @user == nil
         #send us email about problem
         if MODE == PRO and params[:From] != "+15612125831"
@@ -110,6 +122,7 @@ module SMSResponseHelper
 
         Helpers.text(R18n.t.error.no_signup_match, 
             R18n.t.error.no_signup_match, params[:From])
+    #post-SAMPLE (if replied to SAMPLE)    
     elsif @user.sample == true
         Helpers.text(R18n.t.sample.post, R18n.t.sample.post,
                                                 @user.phone)

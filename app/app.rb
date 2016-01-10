@@ -50,7 +50,6 @@ TEST ||= "test"
 helpers RoutesHelper
 helpers SMSResponseHelper
 
-
 enable :sessions
 
 #root
@@ -72,7 +71,6 @@ post '/form_success' do
 	form_success()
 end
 
-
 #twilio failed: no valid response for sms.
 get '/failed' do
     Helpers.smsRespondHelper("StoryTime: Hi! " + 
@@ -92,12 +90,10 @@ get '/sms' do
     config_reply(params)
 end
 
-
 # Testing: mock a received SMS
 get '/test/:From/:Body/:Carrier' do
     config_reply(params)
 end
-
  
 get '/mp3' do
     send_file File.join(settings.public_folder, 

@@ -55,17 +55,20 @@ auth_token ||= ENV['TW_AUTH_TOKEN']
 @client ||= Twilio::REST::Client.new account_sid, auth_token
 
 
-# Enroll the user for stories.
-#	@param params => fake user data:
+# Enroll the user for stories, sending first
+# story and text. Alternatively, used
+# to send a sample story.  
+#	
+#   params => fake user data:
 # 	  [Carrier: "ATT", Body: "BREAK"] etc. 
 #   	-(For TEST mode. Normally given by Twilio.)	
-#   @param user_phone => phone number: "+15614449999"
-#   @param locale => language: "en"
-# 	@param type => sample or story: SAMPLE
-#   @param (wait_time) => async wait to send: [14]
+#   user_phone => phone number: "+15614449999"
+#   locale => language: "en"
+# 	type => sample or story: SAMPLE
+#   wait_time) => async wait to send: [14]
 # 		-(for manual signup)
-
-def app_enroll(params, user_phone, locale, type, *wait_time) 
+#
+def enroll(params, user_phone, locale, type, *wait_time) 
 
 	@user = User.find_by_phone(user_phone) #check if already registered.
 
