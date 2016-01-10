@@ -13,8 +13,10 @@ require 'timecop'
 require_relative '../../constants'
 require_relative '../../sprint'
 require_relative '../../auto-signup'
+require_relative '../../workers/some_worker'
 
-+ Time.zone_offset('EST')
+
+Time.zone_offset('EST')
 
 #CONSTANTS
 
