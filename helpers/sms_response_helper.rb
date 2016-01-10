@@ -1,6 +1,33 @@
 #enrollment
 require_relative '../app/enroll'
 
+#misc: remember who quits
+require 'redis'
+require_relative '../config/initializers/redis'
+
+#email, to learn of failures
+require 'pony'
+require_relative '../config/pony'
+
+#twilio texting API
+require 'twilio-ruby'
+
+#internationalization
+require 'sinatra/r18n'
+#set default locale to english
+# R18n.default_places = '../i18n/'
+R18n::I18n.default = 'en'
+
+#sending mmessages 
+require_relative '../message'
+require_relative '../messageSeries'
+require_relative '../workers/some_worker'
+require_relative '../helpers.rb'
+
+#temp: constants not yet translated
+require_relative '../constants'
+include Text
+
 module SMSResponseHelper
 
   # Set locale, then reply.

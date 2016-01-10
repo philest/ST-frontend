@@ -13,10 +13,12 @@ require 'sinatra'
 require 'sinatra/activerecord' #sinatra w/ DB
 require "sinatra/reloader" if development?
 
+#for access in views
 require_relative '../config/environments' #DB configuration
 require_relative '../models/user' #add User model
-require_relative '../models/experiment' #add User model
+require_relative '../models/experiment' #add Experiment model
 
+#helpers
 require_relative '../helpers/routes_helper'
 require_relative '../helpers/sms_response_helper'
 
@@ -28,44 +30,14 @@ require 'sidetiq'
 require 'sidekiq/web'
 require 'sidekiq/api' 
 
-#twilio texting API
-require 'twilio-ruby'
-
-#email, to learn of failurs
-require 'pony'
-require_relative '../config/pony'
-
-#internationalization
-require 'sinatra/r18n'
-
-#misc
-require 'redis'
-require_relative '../config/initializers/redis'
-
-#sending mmessages 
-require_relative '../message'
-require_relative '../messageSeries'
-require_relative '../workers/some_worker'
-require_relative '../helpers.rb'
-
 configure :production do
   require 'newrelic_rpm'
 end
 
-
-#temp: constants not yet translated
-require_relative '../constants'
 require_relative '../experiment/experiment_constants'
-
 require_relative '../experiment/form_success'
 
-#constants (untranslated)
-include Text
 include ExperimentConstants
-
-#set default locale to english
-# R18n.default_places = '../i18n/'
-R18n::I18n.default = 'en'
 
 #set mode (production or test)
 MODE ||= ENV['RACK_ENV']
@@ -76,10 +48,10 @@ TEST ||= "test"
 
 # Admin authentication, from Sinatra.
 helpers RoutesHelper
+helpers SMSResponseHelper
+
 
 enable :sessions
-
-helpers SMSResponseHelper
 
 #root
 get '/' do
@@ -126,13 +98,7 @@ get '/test/:From/:Body/:Carrier' do
     config_reply(params)
 end
 
-
-#begin sidetiq recurrence bkg tasks
-get '/worker' do
-    SomeWorker.perform_async 
-    redirect to('/')
-end
-
+ 
 get '/mp3' do
     send_file File.join(settings.public_folder, 
                             'storytime_message.mp3')
