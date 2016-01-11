@@ -4,6 +4,11 @@ require_relative '../../app/app.rb'
 
 require_relative "../spec_helper"
 
+configure do
+  enable :sessions
+end
+
+
 require 'sinatra/r18n'
 
 require 'capybara/rspec'
@@ -956,19 +961,95 @@ describe 'The StoryTime App' do
     end 
 
     describe "Session" do 
-      before(:each) do
-        get '/test/+15613334444/STORY/ATT'
-        get '/test/+15613334444/who%20is%20this?/'
-        @user = User.find_by_phone "+15613334444" 
-        @user.reload
+
+      describe 'basics' do 
+        before(:each) do
+          get '/test/+15613334444/STORY/ATT'
+          @user = User.find_by_phone "+15613334444" 
+          get '/test/+15613334444/who%20is%20this/ATT'
+          @user.reload
+        end
+
+        it "works" do
+          expect(session).to_not be nil
+        end
+
+        it "has prev_body" do 
+          expect(session['prev_body']).to eq "story"
+          expect(session['new_body']).to eq 'who is this'
+        end
       end
 
-      it "has session hash working" do
-        expect(session).to_not be nil
+
+
+      context "Repeat a series choice" do
+
+        before :each do 
+          Sidekiq::Testing.inline!
+          @user = create(:user, 
+                         phone: "123",
+                         awaiting_choice: true,
+                         series_choice: nil)
+          @user.reload
+        end 
+
+        it "ignores the repeat" do
+          get '/test/123/d/ATT'
+          get '/test/123/d/ATT'
+          expect(Helpers.getSMSarr.count).to eq 1
+        end
+
+        it "ignores two repeats" do 
+          get '/test/123/d/ATT'
+          get '/test/123/d/ATT'
+          get '/test/123/d/ATT'
+          expect(Helpers.getSMSarr.count).to eq 1
+        end 
+
+      end
+
+      context "Get an unrecognized SMS" do
+        before :each do 
+          Sidekiq::Testing.inline!
+          @user = create(:user, phone: "123", 
+                         days_per_week: 2)
+          @user.reload
+          get '/test/123/who%20is%20doing%20this/ATT'
+        end 
+
+
+        context "next SMS is HELP command" do 
+          before :each do 
+            get '/test/123/HELP%20NOW/ATT'
+          end
+
+          it 'replies normally' do
+            expect(Helpers.getSMSarr.last).to eq(
+                                   R18n.t.help.normal("Tues/Thurs").to_s)
+          end
+        end 
+
+        context "SMS is not HELP command" do
+          before :each do 
+            get '/test/123/how%20do%20i%20use%20this/ATT'
+          end
+
+          it "reply thanking user" do
+            expect(Helpers.getSMSarr.last).to eq R18n.t.to_us.thanks
+          end
+
+          it "sends us an SMS" do
+            # Hacky. Just looking in message list for text 
+            # forwarded to us: 
+            require 'pry'
+            binding.pry
+            expect(Helpers.getSMSarr[1]).to include "sent"
+          end
+        end
+
       end
 
     end
-
     #it "gets a last message" do 
     #     @user = User.find_by_phone("+15612125831")
     #     expect(@user).to be nil 
