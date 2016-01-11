@@ -36,6 +36,9 @@ require 'factory_girl'
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+def session
+  last_request.env['rack.session']
+end
 
 FactoryGirl.definition_file_paths = %w{./factories ./test/factories ./spec/factories}
 FactoryGirl.find_definitions

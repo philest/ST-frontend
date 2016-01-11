@@ -36,7 +36,7 @@ error:
   no_option_sprint: "StoryTime: Sorry, we didn't understand that. Something may have gone wrong.\n\nReply to leave our team a message. Or HELP NOW for info."
 
 to_us:
-  thanks: "Thanks! We've sent your message along."
+  thanks: "Thanks! We have your message and will text back soon!"
 
 first_mms: "http://www.joinstorytime.herokuapp.com/images/d1.jpg"
 

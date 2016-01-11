@@ -67,25 +67,23 @@ module SMSResponseHelper
   ##
   # Return whether to skip a repeat. Repeat when:
   #   - 1) the same response had been sent 
-  #   - 2) in the previous 100 seconds 
-  #   - 3) for a series choice
+  #   - 2) in the previous 55 seconds 
   #
-  def repeat?(body, awaiting_choice)
+  def repeat?(body)
     if session["prev_body"] &&
          session["prev_body"] == body &&
-         session["prev_time"] - 100 < Time.now.utc &&
-         awaiting_choice 
+         session["prev_time"] - 55 < Time.now.utc
 
       repeat = true
     else 
       repeat = false 
     end
-  end
-
-
   ##
   # Return String of story weekdays for reply,
   # with abbreviations for Sprint.
+  end
+
+
   #
   # Schedule depends on days/week:  
   # 1: Mon
@@ -184,7 +182,6 @@ module SMSResponseHelper
       R18n.thread_set(i18n)
     end
 
-
     case params[:Body]
 
     # STORY
@@ -225,7 +222,6 @@ module SMSResponseHelper
 
     # HELP
     when R18n.t.commands.help
-
       # Get string of weekdays for reply.
       day_names = get_day_names(@user.days_per_week,
                                @user.carrier)
@@ -330,7 +326,9 @@ module SMSResponseHelper
 
       # Send the message to us. 
       elsif session["now_for_us"]
-        Helpers.new_text("#{@user.phone} sent: #{params[:Body]}")
+        Helpers.new_text("#{@user.phone} sent: #{params[:Body]}",
+                         "#{@user.phone} sent: #{params[:Body]}",
+                         "+15612125831")
         Helpers.text(R18n.t.to_us.thanks.to_s, 
                      R18n.t.to_us.thanks.to_s,
                      @user.phone)
@@ -363,15 +361,15 @@ module SMSResponseHelper
           Helpers.new_text(note, note, "+15612125831")
         end
 
-        # Forward their next text to us. 
-        session["next_for_us"] = true 
-
            # Skip a repeated text.
-        if repeat?(params[:Body], @user.awaiting_choice) 
+        if repeat?(params[:Body]) 
           puts "DONT send this repeat: message"\
                " #{session["prev_body"]}"\
                " was sent already"
         else
+          # Forward their next text to us. 
+          session["next_for_us"] = true 
+
           Helpers.text(R18n.t.error.no_option.to_s, 
                        R18n.t.error.no_option_sprint.to_s,
                        @user.phone)
