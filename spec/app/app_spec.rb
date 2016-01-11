@@ -858,16 +858,15 @@ describe 'The StoryTime App' do
 
     describe "Miscellaneous SMS" do
 
-      it 'responds to thanks' do
-
-        # i18n = R18n::I18n.new('en', ::R18n.default_places)
-        # R18n.thread_set(i18n)
+      before(:each) do 
         R18n.set 'en'
 
         get '/test/+156122233333/STORY/ATT'
         @user = User.find_by_phone "+156122233333" 
         @user.reload
+      end 
 
+      it 'responds to thanks' do
         #get thanks, respond sure
         get '/test/+156122233333/thanks/ATT'
 
@@ -876,39 +875,22 @@ describe 'The StoryTime App' do
 
 
       it 'responds to thank you' do
-        R18n.set 'en'
-
-        get '/test/+156122233333/STORY/ATT'
-        @user = User.find_by_phone "+156122233333" 
-        @user.reload
-
-        #get thanks, respond sure
         get '/test/+156122233333/thank%20you/ATT'
         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
       end
 
       it "responds to 'who's this' " do
-        R18n.set 'en'
-
-        get '/test/+156122233333/STORY/ATT'
-        @user = User.find_by_phone "+156122233333" 
-        @user.reload
-
-        #get thanks, respond sure
         get '/test/+156122233333/who%27s%20this/ATT'
         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
       end
 
       it "responds to 'who is this' " do
-        R18n.set 'en'
-
-        get '/test/+156122233333/STORY/ATT'
-        @user = User.find_by_phone "+156122233333" 
-        @user.reload
-
-        #get thanks, respond sure
         get '/test/+156122233333/who%20is%20this/ATT'
         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
+      end
+
+      it "responds to 'whos this??' (qmark, apostrophe)" do 
+        get '/test/+156122233333/whos%20this%3F%3F/ATT'
       end
 
     end
@@ -973,7 +955,21 @@ describe 'The StoryTime App' do
 
     end 
 
-    # it "gets a last message" do 
+    describe "Session" do 
+      before(:each) do
+        get '/test/+15613334444/STORY/ATT'
+        get '/test/+15613334444/who%20is%20this?/'
+        @user = User.find_by_phone "+15613334444" 
+        @user.reload
+      end
+
+      it "has session hash working" do
+        expect(session).to_not be nil
+      end
+
+    end
+
+    #it "gets a last message" do 
     #     @user = User.find_by_phone("+15612125831")
     #     expect(@user).to be nil 
         
@@ -984,68 +980,6 @@ describe 'The StoryTime App' do
     #     get '/test/+15612125831/fakecmd/ATT'
     #     expect(get_last_message("+15612125831")).to_eq "fakecmd"
     #   end
-
-
-
-
-
-
-
-
-
-
-# STAGE 2 TESTS 
-#   it "registers numeric age" do
-#   	get '/test/111/STORY'
-#   	get '/test/111/091412'
-#   	expect(Helpers.getSimpleSMS).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
-#   end
-
-#   it "registers age in words" do
-#   	get '/test/222/STORY'
-#   	get '/test/222/011811'
-#   	expect(Helpers.getSimpleSMS).to eq("StoryTime: Great! You've got free nightly stories. Reply with your preferred time to receive stories (e.g. 6:30pm)")
-#   end
-
-#   it "rejects non-age" do
-#   	get '/test/1000/STORY'
-#   	get '/test/1000/badphone'
-#   	expect(Helpers.getSimpleSMS).to eq("We did not understand what you typed. Please reply with your child's birthdate in MMDDYY format. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
-#   end
-
-# # STAGE 3 TESTS
-# 	it "registers timepm" do
-# 		get '/test/833/STORY'
-# 		get '/test/833/091412'
-# 		get "/test/833/6:00pm"
-# 		expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
-# 	end
-
-
-#   it "registers time then pm" do
-#     get '/test/844/STORY'
-#     get '/test/844/091412'
-#     get '/test/844/6:00%20pm'
-#     expect(Helpers.getSimpleSMS).to eq("StoryTime: Sounds good! We'll send you and your child a new story each night at 6:00pm.")
-#   end
-
-
-# 	it "rejects a bad time registration" do
-# 		get '/test/633/STORY'
-# 		get '/test/633/091412'
-# 		get '/test/633/boo'
-# 		expect(Helpers.getSimpleSMS).to eq("(1/2)We did not understand what you typed. Reply with your child's preferred time to receive stories (e.g. 6:30pm).")	
-# 	end
-
-
-# # PASSED ALL STAGES TESTS
-# 	it "doesn't recognize further commands" do
-# 		get '/test/488/STORY'
-# 		get '/test/488/091412'
-# 		get '/test/488/6:00pm'
-# 		get '/test/488/hello'
-# 		expect(Helpers.getSimpleSMS).to eq("This service is automatic. We did not understand what you typed. For questions about StoryTime, reply HELP. To Stop messages, reply STOP.")
-# 	end
 
 end
 

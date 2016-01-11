@@ -36,33 +36,41 @@ require_relative '../models/user' #add User model
 def series_choice(user_id, params)
 
   @user = User.find(user_id)
-  
+
+  # Get hash of story series.
   messageSeriesHash = MessageSeries.
                         getMessageSeriesHash
-
+  # Resubscribe, if dropped.
   if !@user.subscribed
     @user.update(subscribed: true)
     @user.update(next_index_in_series: 0)
   end
 
-
-  # isolated letter
+  # Gave an isolated letter choice.
   if (body = /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.match(params[:Body]))
-    body = body.to_s #convert from Match group to first match.
-    #isolate the letter from space and quotes
+    # Convert from Match group to first match.
+    body = body.to_s
+    # Grab the letter.
     body = /[a-zA-z]/.match(body)
     body = body.to_s
     body.downcase!
 
-    #first letter of word-- IF first letter is valid!!!
-  elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) and 
+  # Gave the word.
+  # (Its first letter matches a series choice.)
+  elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) && 
            MessageSeries.codeIsInHash(body.to_s +
-                  @user.series_number.to_s)
+             @user.series_number.to_s)
+
     body = body.to_s
     body.downcase!
-  else #default to first one.
+
+  # No valid choice: default to first story. 
+  else
     
-    if MODE == PRO && @user.phone != "+15612125831" 
+    # Email us, so we avoid this. 
+    if MODE == PRO &&
+         @user.phone != "+15612125831"
+
       Pony.mail(:to => 'phil.esterman@yale.edu',
         :cc => 'henok.addis@yale.edu',
         :from => 'phil.esterman@yale.edu',
@@ -73,52 +81,57 @@ def series_choice(user_id, params)
             From: #{params[:From]}
             Body: #{params[:Body]} .")
     end
-
+    # Two choices for each series,
+    # so take twice the current series number
+    # to get default.
     body = messageSeriesHash.keys[@user.series_number * 2] #t0
     body = body[0] #t
   end
 
-  #push back to zero incase 
-  #changed to 999 to denote one 'day' after
+  # Push back to zero in case 
+  # changed to 999 to denote one 'day' after
   @user.update(next_index_in_series: 0)
 
-  #check if valid choice
+  # A valid choice.
   if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
       
-    #update the series choice
+    # Update the series choice.
     @user.update(series_choice: body)
     @user.update(awaiting_choice: false)
 
-    messageSeriesHash = MessageSeries.
-                getMessageSeriesHash
+    # Grab stories from the series hash. 
     story = messageSeriesHash[@user.series_choice +
-                  @user.series_number.to_s][0]
+                               @user.series_number.to_s][0]
     if @user.mms == true
-      #incase of just one photo, this also updates user-info.
-      #sends last photo in advance
+      # In case of just one photo, this also updates user-info.
+      # Sends last photo in advance
       NextMessageWorker.perform_in(17.seconds, story.getSMS,
                 story.getMmsArr[1..-1], @user.phone)
-       #don't need to send stack 
-       #if a one-pager.
+      
+       # Don't need to send stack 
+       # if a one-pager.
       if story.getMmsArr.length > 1
-         #replies with first photo immediately
+        # Reply with first photo immediately
         Helpers.mms(story.getMmsArr[0], @user.phone)
       else
-        #if just one photo, replies
-        #w/ photo and sms
+        # If just one photo, reply
+        # with MMS and SMS joint. 
         Helpers.text_and_mms(story.getSMS,
           story.getMmsArr[0], @user.phone)
       end
 
-    else # just SMS
+    else # Just SMS.
       NextMessageWorker.updateUser(@user.phone,
-                  story.getPoemSMS)
-      Helpers.text(story.getPoemSMS, story.getPoemSMS,
-                        @user.phone)    
+                                   story.getPoemSMS)
+      Helpers.text(story.getPoemSMS,
+                   story.getPoemSMS,
+                   @user.phone)    
     end
+  # An invalid choice. 
   else        
     Helpers.text(R18n.t.error.bad_choice, 
-      R18n.t.error.bad_choice, @user.phone)
+                 R18n.t.error.bad_choice,
+                 @user.phone)
   end
 
 end
