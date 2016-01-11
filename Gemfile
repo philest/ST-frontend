@@ -35,5 +35,6 @@ group :test do
 	gem 'pry-nav'
 	gem 'timecop'
 	gem 'factory_girl'
+	gem 'fuubar'
 end
 
