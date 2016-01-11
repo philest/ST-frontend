@@ -65,6 +65,25 @@ module SMSResponseHelper
   end
 
   ##
+  # Return whether to skip a repeat. Repeat when:
+  #   - 1) the same response had been sent 
+  #   - 2) in the previous 100 seconds 
+  #   - 3) for a series choice
+  #
+  def repeat?(body, awaiting_choice)
+    if session["prev_body"] &&
+         session["prev_body"] == body &&
+         session["prev_time"] - 100 < Time.now.utc &&
+         awaiting_choice 
+
+      repeat = true
+    else 
+      repeat = false 
+    end
+  end
+
+
+  ##
   # Return String of story weekdays for reply,
   # with abbreviations for Sprint.
   #
@@ -136,7 +155,7 @@ module SMSResponseHelper
   def clean_str(str)
     str = str.strip
     str.downcase!
-    str.gsub!(/[\.\,\!]/, '')
+    str.gsub!(/[\.\,\!\?\']/, '')
     str
   end
 
@@ -206,11 +225,6 @@ module SMSResponseHelper
 
     # HELP
     when R18n.t.commands.help
-      # TODO delete if passing tests without
-      # legacy users: give 2 days a week
-      if @user.days_per_week == nil
-        @user.update(days_per_week: 2)
-      end
 
       # Get string of weekdays for reply.
       day_names = get_day_names(@user.days_per_week,
@@ -280,7 +294,9 @@ module SMSResponseHelper
                       who_we_are(@user.days_per_week).to_s,
                    @user.phone)
 
-    else
+    else  
+
+      ### NOT STANDARD RESPONSE ### 
 
       # Someone replied to the SAMPLE text.
       if @user &&
@@ -319,7 +335,7 @@ module SMSResponseHelper
                      R18n.t.to_us.thanks.to_s,
                      @user.phone)
        
-      ### A Series Choice ### 
+      # A Series Choice.  
       elsif @user.awaiting_choice ||
               (!@user.subscribed &&
                /(\s|\A|'|")[a-zA-z](\s|\z|'|")/.
@@ -328,43 +344,38 @@ module SMSResponseHelper
 
         series_choice(@user.id, params)
 
-       ## Response Not Recognized ## 
+      ## Response Not Recognized  
       else 
 
-        repeat = false
-
-        if session["prev_body"]
-          if session["prev_body"] == params[:Body] and
-                session["prev_time"] - 100 < Time.now.utc and
-                            @user.awaiting_choice 
-            repeat = true
-          end
-        end
-
-        ##report this to us by email (and text)
-        if MODE == PRO and params[:From] != "+15612125831"
-          note = "A registered user texted in an unknown response. 
-
-                    From: #{params[:From]}
-                    Body: #{params[:Body]} ."
+        ## Report this to us by email (and SMS)
+        if MODE == PRO &&
+             params[:From] != "+15612125831"
 
           Pony.mail(:to => 'phil.esterman@yale.edu',
                 :cc => 'henok.addis@yale.edu',
                 :from => 'phil.esterman@yale.edu',
                 :subject => 'StoryTime: an unknown SMS (user)',
-                :body => note)
-          #send me text too
+                :body => (note = "A registered user texted in"\
+                                 " an unknown response."\
+                                 "\n\nFrom: #{params[:From]}"\
+                                 "\nBody: #{params[:Body]} ."))
+          # Send us text, too.
           Helpers.new_text(note, note, "+15612125831")
         end
 
+        # Forward their next text to us. 
+        session["next_for_us"] = true 
 
-        if not repeat
-          Helpers.text(R18n.t.error.no_option.to_s, 
-              R18n.t.error.no_option_sprint.to_s,
-                         @user.phone)
+           # Skip a repeated text.
+        if repeat?(params[:Body], @user.awaiting_choice) 
+          puts "DONT send this repeat: message"\
+               " #{session["prev_body"]}"\
+               " was sent already"
         else
-          puts "DONT send repeat: message #{session["prev_body"]} was sent already"
-        end
+          Helpers.text(R18n.t.error.no_option.to_s, 
+                       R18n.t.error.no_option_sprint.to_s,
+                       @user.phone)
+        end 
 
       end # list of abnormal responses 
          

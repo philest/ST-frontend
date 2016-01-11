@@ -56,7 +56,7 @@ misc:
   sms:
     thanks: "thanks"
     thank_you: "thank you"
-    whos_this: "who's this"
+    whos_this: "whos this"
     who_is_this: "who is this"
   reply:
     sure: "StoryTime: Sure thing! :-)"
