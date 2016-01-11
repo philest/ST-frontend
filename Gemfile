@@ -19,9 +19,11 @@ gem "as-duration"
 gem 'statsample'
 gem 'descriptive_statistics'
 
+
 group :development do
   gem "better_errors"
   gem "sinatra-contrib"
+  gem 'guard-rspec', require: false
 end
 
 group :test do
