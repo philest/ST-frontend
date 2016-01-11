@@ -1041,13 +1041,12 @@ describe 'The StoryTime App' do
           it "sends us an SMS" do
             # Hacky. Just looking in message list for text 
             # forwarded to us: 
-            require 'pry'
-            binding.pry
             expect(Helpers.getSMSarr[1]).to include "sent"
           end
         end
 
       end
+      #this is a tests
 
     end
     #it "gets a last message" do 
