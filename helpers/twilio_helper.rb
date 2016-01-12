@@ -7,8 +7,11 @@
 require 'sinatra/r18n'
 require_relative '../workers/new_text_worker'
 
-require_relative '../workers/first_text_worker'
+#set Twilio credentials:
+account_sid = ENV['TW_ACCOUNT_SID']
+auth_token = ENV['TW_AUTH_TOKEN']
 
+@client = Twilio::REST::Client.new account_sid, auth_token
 
 
 class TwilioHelper
@@ -414,16 +417,18 @@ SMS = "SMS"
  		@user = User.find_by(phone: user_phone)
 
 		#if sprint
-		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
-
+		if (@user == nil || @user.carrier == SPRINT) &&
+				sprintSMS.length > 160
 
 			sprintArr = Sprint.chop(sprintSMS)
+			msg = sprintArr.shift # pop off first element
+								  # and send as immediate reply.
 
-			msg = sprintArr.shift #pop off first element
-
-
-			FirstTextWorker.perform_in(14.seconds, SMS_HELPER, user_phone, sprintArr)
-
+			# Send all but first SMS asynchronously. 
+			NewTextWorker.perform_in(14.seconds,
+								     sprintArr,
+								     NewTextWorker::NOT_STORY,
+								     @user.phone)
 
 		elsif @user == nil || @user.carrier == SPRINT
 			msg = sprintSMS 
@@ -431,9 +436,8 @@ SMS = "SMS"
 			msg = normalSMS
 		end
 
-
 		if (@@mode == TEST || @@mode == TEST_CRED) && ((@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160)
-			FirstTextWorker.drain
+			NewTextWorker.drain
 		end
 
 		if @user == nil

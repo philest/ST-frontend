@@ -12,7 +12,6 @@ require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 
 require_relative '../../workers/next_message_worker'
-# require_relative '../workers/first_text_worker'
 
 SLEEP_SCALE = 860
 

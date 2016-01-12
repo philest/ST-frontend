@@ -12,13 +12,10 @@ require_relative '../helpers/sprint_helper'
 require_relative './next_message_worker'
 
 ## Types 
-# For a lone SMS, update story details. 
+# For a lone SMS, and update user info. 
 STORY = "story"
 # For a lone SMS
 NOT_STORY  = "not story"
-# For a lone MMS.
-MMS_ONLY = 'mms only'
-
 
 class NewTextWorker
   include Sidekiq::Worker
@@ -59,10 +56,9 @@ class NewTextWorker
   		TwilioHelper.new_text_no_wait(msg, msg, @user.phone)
   		NewTextWorker.perform_in(TwilioHelper::SMS_WAIT, sms, NOT_STORY, @user.phone)
   	end
-
-
  
   end
+
 
 
 

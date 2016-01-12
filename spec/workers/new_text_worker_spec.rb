@@ -13,7 +13,6 @@ require_relative '../../stories/storySeries'
 require_relative '../../i18n/constants'
 
 require_relative '../../workers/new_text_worker'
-# require_relative '../workers/first_text_worker'
 
 SLEEP_SCALE = 860
 
@@ -88,12 +87,8 @@ describe 'The NewTextWorker' do
     end
 
     it "sends out a long SMS to Sprint in the seperate chunks" do
-        # get 'test/' + SP_PHONE + "/STORY/"+SPRINT_QUERY_STRING
-        # @user = User.find_by_phone SP_PHONE
-        # @user.reload
 
-        @user = create(:user)
-        @user.update(carrier: SPRINT_CARRIER)
+        @user = create(:user, carrier: SPRINT_CARRIER)
 
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
