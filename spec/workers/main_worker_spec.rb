@@ -598,13 +598,11 @@ time = Time.now.utc
     puts smsSoFar
   end
 
-
-
     it "sends the right first weeks (first, then two stories) content" do
         Sidekiq::Testing.fake! 
         Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-        get 'test/+15559991111/STORY/ATT'
-        @user = User.find_by(phone: "+15559991111")
+        get 'test/+15612129000/STORY/ATT'
+        @user = User.find_by(phone: "+15612129000")
         NextMessageWorker.drain
         @user.reload
         @user.update(time: DEFAULT_TIME)
