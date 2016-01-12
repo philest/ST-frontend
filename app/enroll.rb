@@ -28,7 +28,7 @@ require_relative '../lib/set_time'
 
 #sending messages
 require_relative '../workers/next_message_worker'
-require_relative '../helpers.rb'
+require_relative '../helpers/twilio_helper.rb'
 
 
 #redis, for getting the experiment date
@@ -223,10 +223,10 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
   if type == STORY
     if params && params[:Body] != nil
         if @user.carrier == Text::SPRINT
-          Helpers.text_and_mms(R18n.t.start.sprint(days),
+          TwilioHelper.text_and_mms(R18n.t.start.sprint(days),
             R18n.t.first_mms.to_s, @user.phone)
         else
-          Helpers.text_and_mms(R18n.t.start.normal(days),
+          TwilioHelper.text_and_mms(R18n.t.start.normal(days),
             R18n.t.first_mms.to_s, @user.phone)
         end
         #update total message count 
@@ -247,12 +247,12 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
   elsif type == SAMPLE
     if params[:Body].casecmp(R18n.t.commands.sample) == 0 
         if @user.carrier == Text::SPRINT
-        Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
+        TwilioHelper.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
       else
-        Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
+        TwilioHelper.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
       end
     elsif params[:Body].casecmp(R18n.t.commands.example) == 0 
-      Helpers.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
+      TwilioHelper.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
     end
   end
 

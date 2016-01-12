@@ -7,7 +7,7 @@ require 'timecop'
 require 'time'
 require 'active_support/all'
 
-require_relative '../../helpers'
+require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 require_relative '../../i18n/constants'
@@ -59,9 +59,9 @@ describe 'The NextMessageWorker' do
     before(:each) do
         User.create(phone: "+15612125834")
         NewTextWorker.jobs.clear
-        Helpers.initialize_testing_vars
+        TwilioHelper.initialize_testing_vars
         Timecop.return
-        Helpers.testSleep
+        TwilioHelper.testSleep
         User.create(phone: "+15612125832")
     end
 
@@ -83,8 +83,8 @@ describe 'The NextMessageWorker' do
       expect(NewTextWorker.jobs.size).to eq 1 
       NewTextWorker.drain
 
-      expect(Helpers.getSMSarr).to eq [sms]
-      expect(Helpers.getMMSarr).to eq []
+      expect(TwilioHelper.getSMSarr).to eq [sms]
+      expect(TwilioHelper.getMMSarr).to eq []
     end
 
     it "sends out a long SMS to Sprint in the seperate chunks" do
@@ -98,10 +98,10 @@ describe 'The NextMessageWorker' do
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
 
-      expect(Helpers.getSMSarr.size).to_not eq 1
-      expect(Helpers.getSMSarr.size).to_not eq 0
+      expect(TwilioHelper.getSMSarr.size).to_not eq 1
+      expect(TwilioHelper.getSMSarr.size).to_not eq 0
 
-      puts Helpers.getSMSarr
+      puts TwilioHelper.getSMSarr
 
     end
 
@@ -113,10 +113,10 @@ describe 'The NextMessageWorker' do
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
 
-      # expect(Helpers.getSMSarr.size).to eq 1
+      # expect(TwilioHelper.getSMSarr.size).to eq 1
 
-        expect(Helpers.getSMSarr[1]).to eq SINGLE_SPACE_LONG
-        expect(Helpers.getSMSarr.size).to eq 2
+        expect(TwilioHelper.getSMSarr[1]).to eq SINGLE_SPACE_LONG
+        expect(TwilioHelper.getSMSarr.size).to eq 2
     end
 
     it "sends a 1 piece SMS to sprint in... one piece (160 char), w/o numbering" do
@@ -127,12 +127,12 @@ describe 'The NextMessageWorker' do
       NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, NOT_STORY, @user.phone)
       NewTextWorker.drain
 
-      # expect(Helpers.getSMSarr.size).to eq 1
+      # expect(TwilioHelper.getSMSarr.size).to eq 1
 
-      expect(Helpers.getSMSarr[1]).to eq Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2
-      expect(Helpers.getSMSarr.size).to eq 2
+      expect(TwilioHelper.getSMSarr[1]).to eq Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2
+      expect(TwilioHelper.getSMSarr.size).to eq 2
 
-      puts Helpers.getSMSarr[1]
+      puts TwilioHelper.getSMSarr[1]
     end
 
 

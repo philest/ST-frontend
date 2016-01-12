@@ -15,7 +15,7 @@ require 'active_support/all'
 require_relative '../sprint'
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
-require_relative '../helpers'
+require_relative '../helpers/twilio_helper'
 require_relative './next_message_worker'
 require_relative './new_text_worker'
 
@@ -297,7 +297,7 @@ class SomeWorker
       
       total_first_msgs = @@user_num_story + @@user_num_text
 
-      wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+      wait = total_first_msgs + (((total_first_msgs - 1) / TwilioHelper::MMS_WAIT) * (TwilioHelper::MMS_WAIT * 2))
 
     #increments by one each user.
     #jumps 40 seconds each 20 users. 
@@ -318,7 +318,7 @@ class SomeWorker
 
   #     total_first_msgs = @@user_num_story + @@user_num_text
 
-  #     wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+  #     wait = total_first_msgs + (((total_first_msgs - 1) / TwilioHelper::MMS_WAIT) * (TwilioHelper::MMS_WAIT * 2))
 
   #     return wait
   # end

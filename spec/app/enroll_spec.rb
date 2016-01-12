@@ -26,7 +26,7 @@ describe 'The StoryTime App' do
   end
 
     before(:each) do
-      Helpers.initialize_testing_vars
+      TwilioHelper.initialize_testing_vars
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
       Sidekiq::Worker.clear_all
@@ -55,7 +55,7 @@ describe 'The StoryTime App' do
 
         expect(@user.locale).to eq 'en'
 
-        expect(Helpers.getMMSarr).to_not eq nil
+        expect(TwilioHelper.getMMSarr).to_not eq nil
 
       end
 
@@ -69,8 +69,8 @@ describe 'The StoryTime App' do
         expect(@user).to_not be nil
 
         expect(@user.locale).to eq 'es'
-        expect(Helpers.getSMSarr[0]).to_not eq Text::START_SMS_1 + "2" +Text::START_SMS_2
-        puts Helpers.getSMSarr[0]
+        expect(TwilioHelper.getSMSarr[0]).to_not eq Text::START_SMS_1 + "2" +Text::START_SMS_2
+        puts TwilioHelper.getSMSarr[0]
       end
 
       it "has getWait giving values every 2 seconds." do 
@@ -114,10 +114,10 @@ describe 'The StoryTime App' do
 
 
 
-        expect(Helpers.getSMSarr.length).to eq 2
-        expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+        expect(TwilioHelper.getSMSarr.length).to eq 2
+        expect(TwilioHelper.getMMSarr.first).to eq R18n.t.first_mms
 
-        puts Helpers.getSMSarr
+        puts TwilioHelper.getSMSarr
       end
 
       it "doesn't chop long message for non-sprint ES on signup" do
@@ -131,10 +131,10 @@ describe 'The StoryTime App' do
         @user = User.find_by_phone("+15612125831")
       
 
-        expect(Helpers.getSMSarr.length).to eq 1
-        expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+        expect(TwilioHelper.getSMSarr.length).to eq 1
+        expect(TwilioHelper.getMMSarr.first).to eq R18n.t.first_mms
 
-        puts Helpers.getSMSarr
+        puts TwilioHelper.getSMSarr
       end
 
       it "has different spanish/english responses" do 
@@ -210,11 +210,11 @@ describe 'The StoryTime App' do
         app_enroll_many(["+12032223333"], 'es', {Carrier: Text::SPRINT})
         app_enroll_many(["+14445556666"], 'es', {Carrier: "ATT"})
 
-        expect(Helpers.getSMSarr.length).to eq 3 
-        puts "Sp Part 1: #{Helpers.getSMSarr[0]}"
-        puts "Sp Part 2: #{Helpers.getSMSarr[1]}"
+        expect(TwilioHelper.getSMSarr.length).to eq 3 
+        puts "Sp Part 1: #{TwilioHelper.getSMSarr[0]}"
+        puts "Sp Part 2: #{TwilioHelper.getSMSarr[1]}"
 
-        puts "Norm:  #{Helpers.getSMSarr[2]}"
+        puts "Norm:  #{TwilioHelper.getSMSarr[2]}"
 
       end
 

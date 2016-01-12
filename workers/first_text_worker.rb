@@ -5,7 +5,7 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 
 require_relative '../sprint'
-require_relative '../helpers'
+require_relative '../helpers/twilio_helper'
 
 
 SPRINT_NAME = "Sprint Spectrum, L.P."
@@ -55,14 +55,14 @@ class FirstTextWorker
     @client = Twilio::REST::Client.new account_sid, auth_token
 
       if type == FIRST
-        Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+        TwilioHelper.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
         @user.update(total_messages: 1)
       elsif type == SAMPLE
-        Helpers.new_mms(SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+        TwilioHelper.new_mms(SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
       elsif type == EXAMPLE
-        Helpers.new_mms(EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+        TwilioHelper.new_mms(EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
       elsif type == SMS_HELPER
-        Helpers.new_sms_chain(smsArr[0],  @user.phone)
+        TwilioHelper.new_sms_chain(smsArr[0],  @user.phone)
       end
 
 

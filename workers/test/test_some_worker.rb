@@ -9,7 +9,7 @@ require 'sidetiq'
 require_relative '../../sprint'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
-require_relative '../../helpers'
+require_relative '../../helpers/twilio_helper'
 
 class SomeWorker
   include Sidekiq::Worker

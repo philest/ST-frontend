@@ -8,7 +8,7 @@ require 'timecop'
 require 'time'
 require 'active_support/all'
 
-require_relative '../../helpers'
+require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 require_relative '../../workers/first_text_worker'
@@ -38,14 +38,14 @@ describe 'SomeWorker, with sleep,' do
     before(:each) do
         NextMessageWorker.jobs.clear
         SomeWorker.jobs.clear
-        Helpers.initialize_testing_vars
+        TwilioHelper.initialize_testing_vars
         Timecop.return
-        Helpers.testSleep
+        TwilioHelper.testSleep
     end
 
     after(:each) do
       Timecop.return
-      Helpers.initialize_testing_vars
+      TwilioHelper.initialize_testing_vars
 
     end
 
@@ -54,7 +54,7 @@ describe 'SomeWorker, with sleep,' do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       users = []
 
-      Helpers.testSleepOff
+      TwilioHelper.testSleepOff
 
       (1..10).each do |number|
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -66,8 +66,8 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-        expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+        expect(TwilioHelper.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+        expect(TwilioHelper.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
         users.push user
 
@@ -78,7 +78,7 @@ describe 'SomeWorker, with sleep,' do
       Timecop.travel(2015, 6, 23, 17, 26, 0) #on TUESDAY!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
-      # Helpers.testSleep
+      # TwilioHelper.testSleep
 
       #WORKS WIHOUT SLEEPING!
       (1..10).each do 
@@ -103,7 +103,7 @@ describe 'SomeWorker, with sleep,' do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       users = []
 
-      Helpers.testSleepOff
+      TwilioHelper.testSleepOff
 
       (1..10).each do |number|
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -115,8 +115,8 @@ describe 'SomeWorker, with sleep,' do
         expect(user.total_messages).to eq(1)
         expect(user.story_number).to eq(0)
 
-        expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-        expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+        expect(TwilioHelper.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+        expect(TwilioHelper.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
         expect(user.total_messages).to eq 1
 
@@ -127,7 +127,7 @@ describe 'SomeWorker, with sleep,' do
       end
 
 
-      Helpers.testSleep
+      TwilioHelper.testSleep
 
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
       # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
@@ -151,9 +151,9 @@ describe 'SomeWorker, with sleep,' do
 
 
     it "handles a single mms" do
-      Helpers.new_just_mms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
-      expect(Helpers.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
-      expect(Helpers.getSMSarr.empty?).to be true
+      TwilioHelper.new_just_mms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
+      expect(TwilioHelper.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
+      expect(TwilioHelper.getSMSarr.empty?).to be true
     end
 
 
@@ -169,7 +169,7 @@ describe 'SomeWorker, with sleep,' do
 
 
       smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -193,8 +193,8 @@ describe 'SomeWorker, with sleep,' do
 
     NewTextWorker.drain
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       
@@ -220,9 +220,9 @@ describe 'SomeWorker, with sleep,' do
     mmsSoFar.concat Message.getMessageArray[0].getMmsArr
     smsSoFar.concat [Message.getMessageArray[0].getSMS]
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
-    expect(Helpers.getMMSarr).not_to eq(nil)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
 
@@ -246,9 +246,9 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
-    expect(Helpers.getMMSarr).not_to eq(nil)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
@@ -267,7 +267,7 @@ describe 'SomeWorker, with sleep,' do
 
       #They're asked for their story choice during storyTime.
       smsSoFar.push SomeWorker::SERIES_CHOICES[0]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
@@ -291,8 +291,8 @@ describe 'SomeWorker, with sleep,' do
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
 
-      expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       @user.reload
       #properly update after choice_worker
@@ -300,8 +300,8 @@ describe 'SomeWorker, with sleep,' do
       expect(@user.next_index_in_series).to eq(1)
       expect(@user.total_messages).to eq(3)
 
-      puts Helpers.getMMSarr 
-      puts Helpers.getSMSarr 
+      puts TwilioHelper.getMMSarr 
+      puts TwilioHelper.getSMSarr 
 
   end
 
@@ -321,7 +321,7 @@ describe 'SomeWorker, with sleep,' do
     #         Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
     #   users = []
 
-    #   Helpers.testSleepOff
+    #   TwilioHelper.testSleepOff
 
     #   (1..25).each do |number|
     #     get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -333,9 +333,9 @@ describe 'SomeWorker, with sleep,' do
     #     expect(user.total_messages).to eq(1)
     #     expect(user.story_number).to eq(0)
 
-    #     expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
+    #     expect(TwilioHelper.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
     #                                     FirstTextWorker::FIRST_SMS])              
-    #     expect(Helpers.getMMSarr).to eq(FIRST_MMS)
+    #     expect(TwilioHelper.getMMSarr).to eq(FIRST_MMS)
 
     #     expect(user.total_messages).to eq 1
 
@@ -346,7 +346,7 @@ describe 'SomeWorker, with sleep,' do
     #   end
 
 
-    #   Helpers.testSleep
+    #   TwilioHelper.testSleep
     #   # require 'pry'
     #   # binding.pry 
 
@@ -373,7 +373,7 @@ describe 'SomeWorker, with sleep,' do
     Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
     users = []
 
-    Helpers.testSleepOff
+    TwilioHelper.testSleepOff
 
 
 
@@ -394,8 +394,8 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-      expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
-      expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+      expect(TwilioHelper.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+      expect(TwilioHelper.getMMSarr).to eq([Text::THE_FINAL_MMS])
 
       expect(user.total_messages).to eq 1
 
@@ -410,7 +410,7 @@ describe 'SomeWorker, with sleep,' do
     end
 
 
-    Helpers.testSleep
+    TwilioHelper.testSleep
 
     Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
     # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
@@ -451,7 +451,7 @@ describe 'SomeWorker, with sleep,' do
 
 
       smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -475,8 +475,8 @@ describe 'SomeWorker, with sleep,' do
 
     NewTextWorker.drain
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       
@@ -502,9 +502,9 @@ describe 'SomeWorker, with sleep,' do
     mmsSoFar.concat Message.getMessageArray[0].getMmsArr
     smsSoFar.concat [Message.getMessageArray[0].getSMS]
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
-    expect(Helpers.getMMSarr).not_to eq(nil)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
 
@@ -528,9 +528,9 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
-    expect(Helpers.getMMSarr).not_to eq(nil)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
@@ -549,7 +549,7 @@ describe 'SomeWorker, with sleep,' do
 
       #They're asked for their story choice during storyTime.
       smsSoFar.push SomeWorker::SERIES_CHOICES[0]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
@@ -581,15 +581,15 @@ describe 'SomeWorker, with sleep,' do
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
 
-      expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       @user.reload
       #properly update after choice_worker
 
 
-      # puts Helpers.getMMSarr 
-      # puts Helpers.getSMSarr 
+      # puts TwilioHelper.getMMSarr 
+      # puts TwilioHelper.getSMSarr 
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on TUES. (3:52)
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -611,8 +611,8 @@ describe 'SomeWorker, with sleep,' do
       expect(@user.story_number).to eq(2)
 
 
-      puts Helpers.getMMSarr 
-      puts Helpers.getSMSarr 
+      puts TwilioHelper.getMMSarr 
+      puts TwilioHelper.getSMSarr 
 
 
       Timecop.travel(2015, 7, 2, 17, 24, 0) #on THURS . (3:52)
@@ -634,8 +634,8 @@ describe 'SomeWorker, with sleep,' do
       expect(@user.story_number).to eq(3)
 
 
-      puts Helpers.getMMSarr 
-      puts Helpers.getSMSarr
+      puts TwilioHelper.getMMSarr 
+      puts TwilioHelper.getSMSarr
       puts @user.story_number
 
 

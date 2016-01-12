@@ -20,7 +20,7 @@ include Text
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
 require_relative '../workers/next_message_worker'
-require_relative '../helpers.rb'
+require_relative '../helpers/twilio_helper.rb'
 
 #the models
 require_relative '../models/user' #add User model
@@ -112,24 +112,24 @@ def series_choice(user_id, params)
        # if a one-pager.
       if story.getMmsArr.length > 1
         # Reply with first photo immediately
-        Helpers.mms(story.getMmsArr[0], @user.phone)
+        TwilioHelper.mms(story.getMmsArr[0], @user.phone)
       else
         # If just one photo, reply
         # with MMS and SMS joint. 
-        Helpers.text_and_mms(story.getSMS,
+        TwilioHelper.text_and_mms(story.getSMS,
           story.getMmsArr[0], @user.phone)
       end
 
     else # Just SMS.
       NextMessageWorker.updateUser(@user.phone,
                                    story.getPoemSMS)
-      Helpers.text(story.getPoemSMS,
+      TwilioHelper.text(story.getPoemSMS,
                    story.getPoemSMS,
                    @user.phone)    
     end
   # An invalid choice. 
   else        
-    Helpers.text(R18n.t.error.bad_choice, 
+    TwilioHelper.text(R18n.t.error.bad_choice, 
                  R18n.t.error.bad_choice,
                  @user.phone)
   end

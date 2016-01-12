@@ -74,7 +74,7 @@ end
 
 #twilio failed: no valid response for sms.
 get '/failed' do
-    Helpers.smsRespondHelper("StoryTime: Hi! " + 
+    TwilioHelper.smsRespondHelper("StoryTime: Hi! " + 
         "We're updating StoryTime now and are offline, " +
         "but check back in the next day!")
 end

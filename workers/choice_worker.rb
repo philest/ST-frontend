@@ -40,7 +40,7 @@ class ChoiceWorker
 
 
       if @user.mms == true 
-        Helpers.new_mms(story.getSMS, story.getMmsArr[1..-1], @user.phone)
+        TwilioHelper.new_mms(story.getSMS, story.getMmsArr[1..-1], @user.phone)
       end
 
       #already responded with text only stuff!

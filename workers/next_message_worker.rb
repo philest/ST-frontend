@@ -4,7 +4,7 @@ require 'sidekiq'
 
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
-require_relative '../helpers'
+require_relative '../helpers/twilio_helper'
 
 require_relative '../i18n/constants'
 require 'sinatra/r18n'
@@ -42,13 +42,13 @@ class NextMessageWorker
       NextMessageWorker.updateUser(@user.phone, sms)
 
     elsif mms_arr.length == 1#if last MMS, send with SMS
-  		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
+  		TwilioHelper.fullSend(sms, mms_arr.shift, @user.phone, TwilioHelper::NO_WAIT)
   		puts "finished the message stack: #{@user.phone}"
       NextMessageWorker.updateUser(@user.phone, sms)
 
   	else #not last MMS...
-  		Helpers.mmsSend(mms_arr.shift, @user.phone)
-  		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
+  		TwilioHelper.mmsSend(mms_arr.shift, @user.phone)
+  		NextMessageWorker.perform_in(TwilioHelper::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
     end
 
 

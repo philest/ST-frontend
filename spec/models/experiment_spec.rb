@@ -18,7 +18,7 @@ require_relative "../../models/variation"
 
 
 #testing helpers
-require_relative '../../helpers.rb'
+require_relative '../../helpers/twilio_helper.rb'
 
 
 describe 'A/B experiments' do
@@ -30,7 +30,7 @@ describe 'A/B experiments' do
 
   	#clear background jobs each test. 
     before(:each) do
-      Helpers.initialize_testing_vars
+      TwilioHelper.initialize_testing_vars
       NextMessageWorker.jobs.clear
       NewTextWorker.jobs.clear
       Sidekiq::Worker.clear_all
