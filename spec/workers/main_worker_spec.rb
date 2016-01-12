@@ -24,7 +24,7 @@ require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 require_relative '../../workers/first_text_worker'
 
-require_relative '../../workers/some_worker'
+require_relative '../../workers/main_worker'
 require_relative '../../workers/new_text_worker'
 
 require_relative '../../i18n/constants'

@@ -18,7 +18,7 @@ require 'timecop'
 require_relative '../../i18n/constants'
 require_relative '../../sprint'
 require_relative '../../app/enroll'
-require_relative '../../workers/some_worker'
+require_relative '../../workers/main_worker'
 
 
 Time.zone_offset('EST')
