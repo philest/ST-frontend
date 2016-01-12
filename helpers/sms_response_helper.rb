@@ -1,6 +1,6 @@
 #  helpers/sms_repsonse_helper.rb            Phil Esterman   
 # 
-#  Helpers to reply to an SMS. 
+#  TwilioHelper to reply to an SMS. 
 #  --------------------------------------------------------
 
 #enrollment
@@ -24,7 +24,7 @@ require 'sinatra/r18n'
 R18n::I18n.default = 'en'
 
 #sending messages 
-require_relative '../helpers.rb'
+require_relative './twilio_helper.rb'
 
 #temp: constants not yet translated
 require_relative '../i18n/constants'
@@ -203,13 +203,13 @@ module SMSResponseHelper
         @user.update(next_index_in_series: 0)
         @user.update(awaiting_choice: true)
 
-        Helpers.text(msg, msg, @user.phone)
+        TwilioHelper.text(msg, msg, @user.phone)
 
       # Dropped manually, out of series
       elsif @user.subscribed == false 
         # Resubscribe. 
         @user.update(subscribed: true)
-        Helpers.text(R18n.t.stop.resubscribe.long, 
+        TwilioHelper.text(R18n.t.stop.resubscribe.long, 
                      R18n.t.stop.resubscribe.long,
                      @user.phone)
       end
@@ -225,7 +225,7 @@ module SMSResponseHelper
       # Get string of weekdays for reply.
       day_names = get_day_names(@user.days_per_week,
                                @user.carrier)
-      Helpers.text(R18n.t.help.normal(day_names).to_s,
+      TwilioHelper.text(R18n.t.help.normal(day_names).to_s,
                    R18n.t.help.sprint(day_names).to_s,
                    @user.phone)
 
@@ -234,7 +234,7 @@ module SMSResponseHelper
       @user.update(on_break: true)
       @user.update(days_left_on_break: Text::BREAK_LENGTH)
 
-      Helpers.text(R18n.t.break.start,
+      TwilioHelper.text(R18n.t.break.start,
                    R18n.t.break.start,
                    @user.phone)
 
@@ -262,13 +262,13 @@ module SMSResponseHelper
       #change subscription, then text us. 
       @user.update(subscribed: false)
       note = params[:From].to_s + "quit StoryTime."
-      Helpers.new_text(note, note, "+15612125831")
+      TwilioHelper.new_text(note, note, "+15612125831")
 
     # TEXT
     when R18n.t.commands.text.to_s
       #change mms to sms
       @user.update(mms: false)
-      Helpers.text(R18n.t.mms_update,
+      TwilioHelper.text(R18n.t.mms_update,
                    R18n.t.mms_update,
                    @user.phone)
 
@@ -276,7 +276,7 @@ module SMSResponseHelper
     when R18n.t.misc.sms.thanks.to_s,
          R18n.t.misc.sms.thank_you.to_s
 
-      Helpers.text(R18n.t.misc.reply.sure,
+      TwilioHelper.text(R18n.t.misc.reply.sure,
                    R18n.t.misc.reply.sure,
                    @user.phone)
 
@@ -284,7 +284,7 @@ module SMSResponseHelper
     when R18n.t.misc.sms.whos_this.to_s,
          R18n.t.misc.sms.who_is_this.to_s
 
-      Helpers.text(R18n.t.misc.reply.
+      TwilioHelper.text(R18n.t.misc.reply.
                       who_we_are(@user.days_per_week).to_s,
                    R18n.t.misc.reply.
                       who_we_are(@user.days_per_week).to_s,
@@ -299,7 +299,7 @@ module SMSResponseHelper
            @user.sample &&
            params[:Body] != R18n.t.commands.story
         
-        Helpers.text(R18n.t.sample.post,
+        TwilioHelper.text(R18n.t.sample.post,
                      R18n.t.sample.post,
                      @user.phone)
 
@@ -320,16 +320,16 @@ module SMSResponseHelper
                              "Body: #{params[:Body]} .")
         end
 
-        Helpers.text(R18n.t.error.no_signup_match, 
+        TwilioHelper.text(R18n.t.error.no_signup_match, 
                      R18n.t.error.no_signup_match,
                      params[:From])
 
       # Send the message to us. 
       elsif session["now_for_us"]
-        Helpers.new_text("#{@user.phone} sent: #{params[:Body]}",
+        TwilioHelper.new_text("#{@user.phone} sent: #{params[:Body]}",
                          "#{@user.phone} sent: #{params[:Body]}",
                          "+15612125831")
-        Helpers.text(R18n.t.to_us.thanks.to_s, 
+        TwilioHelper.text(R18n.t.to_us.thanks.to_s, 
                      R18n.t.to_us.thanks.to_s,
                      @user.phone)
        
@@ -358,7 +358,7 @@ module SMSResponseHelper
                                  "\n\nFrom: #{params[:From]}"\
                                  "\nBody: #{params[:Body]} ."))
           # Send us text, too.
-          Helpers.new_text(note, note, "+15612125831")
+          TwilioHelper.new_text(note, note, "+15612125831")
         end
 
            # Skip a repeated text.
@@ -370,7 +370,7 @@ module SMSResponseHelper
           # Forward their next text to us. 
           session["next_for_us"] = true 
 
-          Helpers.text(R18n.t.error.no_option.to_s, 
+          TwilioHelper.text(R18n.t.error.no_option.to_s, 
                        R18n.t.error.no_option_sprint.to_s,
                        @user.phone)
         end 

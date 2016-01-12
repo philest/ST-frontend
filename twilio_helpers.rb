@@ -1,9 +1,18 @@
+#  twilio_helpers.rb                          Phil Esterman     
+# 
+#  Helper methods for Twilio messaging. 
+#
+#  NOTE: Not Sinatra helpers.   
+#  --------------------------------------------------------
+
+#########  DEPENDENCIES  #########
+
 require 'sinatra/r18n'
 require_relative './workers/new_text_worker'
 
 require_relative './workers/first_text_worker'
 
-class Helpers
+class TwilioTwilioHelper
 
 SPRINT = "Sprint Spectrum, L.P."
 
@@ -97,10 +106,10 @@ SMS = "SMS"
 		@@my_twilio_number = "+12032023505"	   		
 
 	elsif ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
-		Helpers.initialize_testing_vars
+		TwilioHelper.initialize_testing_vars
 	end
  	
-	# #Helpers that simply twiml REST API
+	# #TwilioHelper that simply twiml REST API
 	# if ENV['RACK_ENV'] == "production"
 	# 		#set TWILIO credentials:
 		    # account_sid = ENV['TW_ACCOUNT_SID']
@@ -162,7 +171,7 @@ SMS = "SMS"
 
    		elsif @@mode == PRO || @@mode == TEST_CRED
    			
-   			Helpers.smsRespondHelper(body)
+   			TwilioHelper.smsRespondHelper(body)
    		end
 
 	end
@@ -172,7 +181,7 @@ SMS = "SMS"
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
 		elsif @@mode == PRO
-			Helpers.mmsRespondHelper(mms_url)
+			TwilioHelper.mmsRespondHelper(mms_url)
 		end
 
    	end
@@ -188,7 +197,7 @@ SMS = "SMS"
 			@@twiml_mms.push mms_url
 			@@twiml_sms.push body
 		elsif @@mode == PRO
-			Helpers.fullRespondHelper(body, mms_url)
+			TwilioHelper.fullRespondHelper(body, mms_url)
 		end
 
 	end
@@ -201,10 +210,10 @@ SMS = "SMS"
 			@@twiml_sms.push body
 
 			#turn on testcred
-			Helpers.testCred
+			TwilioHelper.testCred
 		end
 			#for Test_Cred: simulate actual REST api
-			Helpers.smsSendHelper(body, user_phone)
+			TwilioHelper.smsSendHelper(body, user_phone)
 		
    	end
 
@@ -214,7 +223,7 @@ SMS = "SMS"
 			@@twiml_mms.push mms_url
 			puts "Sent #{mms_url[18, mms_url.length]}"
 		elsif @@mode == PRO
-			Helpers.mmsSendHelper(mms_url, user_phone)
+			TwilioHelper.mmsSendHelper(mms_url, user_phone)
 		end
    	end
 
@@ -225,7 +234,7 @@ SMS = "SMS"
     		mms_url = mms_url[0]
     	end
 		
-		Helpers.fullSendHelper(body, mms_url, user_phone)
+		TwilioHelper.fullSendHelper(body, mms_url, user_phone)
    	end
 
 
@@ -284,7 +293,7 @@ SMS = "SMS"
     	end 
 
 		  #turn off testCred
-	      Helpers.testCredOff
+	      TwilioHelper.testCredOff
     end
 
     def self.mmsSendHelper(mms_url, user_phone)
@@ -381,7 +390,7 @@ SMS = "SMS"
 			puts "Sent full to #{@user.phone}}" 
   		end
 
-    	Helpers.fullRespond(body, mms_url, LAST)
+    	TwilioHelper.fullRespond(body, mms_url, LAST)
     end
 
 
@@ -396,7 +405,7 @@ SMS = "SMS"
   		end
 
 
-    	Helpers.mmsRespond(mms)
+    	TwilioHelper.mmsRespond(mms)
 
 	end
 
@@ -435,7 +444,7 @@ SMS = "SMS"
 			puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
   		end
 		
-		Helpers.smsRespond(msg, LAST)
+		TwilioHelper.smsRespond(msg, LAST)
 
 	end  
 
@@ -482,11 +491,11 @@ SMS = "SMS"
 
 			mms_array.each_with_index do |mms_url, index|
 					
-					Helpers.mmsSend(mms_url, user_phone)
+					TwilioHelper.mmsSend(mms_url, user_phone)
 		     	 	 #for all, because text follows
 			end
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			TwilioHelper.new_sprint_long_sms(sms, user_phone)
 
 		else
 
@@ -494,11 +503,11 @@ SMS = "SMS"
 
 				if index + 1 == mms_array.length #last image comes w/ SMS
 				
-					Helpers.fullSend(sms, mms, user_phone, LAST)
+					TwilioHelper.fullSend(sms, mms, user_phone, LAST)
 
 				else
 
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 
 				end
 
@@ -520,14 +529,14 @@ SMS = "SMS"
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			TwilioHelper.new_sprint_long_sms(sms, user_phone)
 
 			mms_array.each_with_index do |mms_url, index|
 
 				if index + 1 != mms_array.length
-				Helpers.mmsSend(mms_url, user_phone)
+				TwilioHelper.mmsSend(mms_url, user_phone)
 		    	else
-				Helpers.mmsSend(mms_url, user_phone)
+				TwilioHelper.mmsSend(mms_url, user_phone)
 				end
 
 			end
@@ -535,18 +544,18 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			Helpers.smsSend(first_sms, user_phone)
+			TwilioHelper.smsSend(first_sms, user_phone)
 
-			Helpers.mms_array.each_with_index do |mms_url, index|
+			TwilioHelper.mms_array.each_with_index do |mms_url, index|
 
 
 				if index + 1 == mms_array.length #send sms with mms on last story
 
-					Helpers.fullSend(last_sms, mms_url, user_phone, LAST)
+					TwilioHelper.fullSend(last_sms, mms_url, user_phone, LAST)
 
 				else
 
-					Helpers.mmsSend(mms_url, user_phone)
+					TwilioHelper.mmsSend(mms_url, user_phone)
 
 				end
 
@@ -577,20 +586,20 @@ SMS = "SMS"
 		#if long sprint mms + sms, send all images, then texts one-by-one
 		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
 
-			Helpers.new_sprint_long_sms(sms, user_phone)
+			TwilioHelper.new_sprint_long_sms(sms, user_phone)
 
 			sleep SMS_WAIT
 
 			mms_array.each_with_index do |mms, index|
 
-				Helpers.mmsSend(mms, user_phone)
+				TwilioHelper.mmsSend(mms, user_phone)
 
 				if index + 1 != mms_array.length
 
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 
 		    	else
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -598,14 +607,14 @@ SMS = "SMS"
 		else
 			#SMS first!
 
-			Helpers.smsSend(sms, user_phone)
+			TwilioHelper.smsSend(sms, user_phone)
 
 			mms_array.each_with_index do |mms, index|
 			
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -634,9 +643,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -658,9 +667,9 @@ SMS = "SMS"
 
 
 				if index + 1 != mms_array.length
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 		    	else
-					Helpers.mmsSend(mms, user_phone)
+					TwilioHelper.mmsSend(mms, user_phone)
 				end
 
 			end
@@ -678,7 +687,7 @@ SMS = "SMS"
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+			TwilioHelper.new_sprint_long_sms(sprintSMS, user_phone)
 		
 		else
 
@@ -688,7 +697,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			Helpers.smsSend(msg, user_phone)
+			TwilioHelper.smsSend(msg, user_phone)
 
 	 	end
 
@@ -702,7 +711,7 @@ SMS = "SMS"
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
-			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+			TwilioHelper.new_sprint_long_sms(sprintSMS, user_phone)
 
 		else
 
@@ -712,7 +721,7 @@ SMS = "SMS"
 				msg = normalSMS 
 			end 
 
-			Helpers.smsSend(msg, user_phone)
+			TwilioHelper.smsSend(msg, user_phone)
 
 	 	end
 
@@ -727,9 +736,9 @@ SMS = "SMS"
 		smsArr.each_with_index do |sms, index|
 
 				if index + 1 != smsArr.length
-					Helpers.smsSend(sms, user_phone)
+					TwilioHelper.smsSend(sms, user_phone)
 		    	else
-					Helpers.smsSend(sms, user_phone)
+					TwilioHelper.smsSend(sms, user_phone)
 				end
  		end
 

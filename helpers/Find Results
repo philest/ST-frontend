@@ -1,0 +1,1740 @@
+Searching 234 files for "Helpers" (regex, case sensitive)
+
+/Users/philesterman/Code/StoryTime Code/app/app.rb:
+   75  #twilio failed: no valid response for sms.
+   76  get '/failed' do
+   77:     Helpers.smsRespondHelper("StoryTime: Hi! " + 
+   78          "We're updating StoryTime now and are offline, " +
+   79          "but check back in the next day!")
+
+/Users/philesterman/Code/StoryTime Code/app/enroll.rb:
+  224      if params && params[:Body] != nil
+  225          if @user.carrier == Text::SPRINT
+  226:           Helpers.text_and_mms(R18n.t.start.sprint(days),
+  227              R18n.t.first_mms.to_s, @user.phone)
+  228          else
+  229:           Helpers.text_and_mms(R18n.t.start.normal(days),
+  230              R18n.t.first_mms.to_s, @user.phone)
+  231          end
+  ...
+  248      if params[:Body].casecmp(R18n.t.commands.sample) == 0 
+  249          if @user.carrier == Text::SPRINT
+  250:         Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
+  251        else
+  252:         Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
+  253        end
+  254      elsif params[:Body].casecmp(R18n.t.commands.example) == 0 
+  255:       Helpers.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
+  256      end
+  257    end
+
+/Users/philesterman/Code/StoryTime Code/app/series_choice.rb:
+  113        if story.getMmsArr.length > 1
+  114          # Reply with first photo immediately
+  115:         Helpers.mms(story.getMmsArr[0], @user.phone)
+  116        else
+  117          # If just one photo, reply
+  118          # with MMS and SMS joint. 
+  119:         Helpers.text_and_mms(story.getSMS,
+  120            story.getMmsArr[0], @user.phone)
+  121        end
+  ...
+  124        NextMessageWorker.updateUser(@user.phone,
+  125                                     story.getPoemSMS)
+  126:       Helpers.text(story.getPoemSMS,
+  127                     story.getPoemSMS,
+  128                     @user.phone)    
+  ...
+  130    # An invalid choice. 
+  131    else        
+  132:     Helpers.text(R18n.t.error.bad_choice, 
+  133                   R18n.t.error.bad_choice,
+  134                   @user.phone)
+
+/Users/philesterman/Code/StoryTime Code/helpers/sms_response_helper.rb:
+    1  #  helpers/sms_repsonse_helper.rb            Phil Esterman   
+    2  # 
+    3: #  Helpers to reply to an SMS. 
+    4  #  --------------------------------------------------------
+    5  
+    .
+  204          @user.update(awaiting_choice: true)
+  205  
+  206:         Helpers.text(msg, msg, @user.phone)
+  207  
+  208        # Dropped manually, out of series
+  ...
+  210          # Resubscribe. 
+  211          @user.update(subscribed: true)
+  212:         Helpers.text(R18n.t.stop.resubscribe.long, 
+  213                       R18n.t.stop.resubscribe.long,
+  214                       @user.phone)
+  ...
+  226        day_names = get_day_names(@user.days_per_week,
+  227                                 @user.carrier)
+  228:       Helpers.text(R18n.t.help.normal(day_names).to_s,
+  229                     R18n.t.help.sprint(day_names).to_s,
+  230                     @user.phone)
+  ...
+  235        @user.update(days_left_on_break: Text::BREAK_LENGTH)
+  236  
+  237:       Helpers.text(R18n.t.break.start,
+  238                     R18n.t.break.start,
+  239                     @user.phone)
+  ...
+  263        @user.update(subscribed: false)
+  264        note = params[:From].to_s + "quit StoryTime."
+  265:       Helpers.new_text(note, note, "+15612125831")
+  266  
+  267      # TEXT
+  ...
+  269        #change mms to sms
+  270        @user.update(mms: false)
+  271:       Helpers.text(R18n.t.mms_update,
+  272                     R18n.t.mms_update,
+  273                     @user.phone)
+  ...
+  277           R18n.t.misc.sms.thank_you.to_s
+  278  
+  279:       Helpers.text(R18n.t.misc.reply.sure,
+  280                     R18n.t.misc.reply.sure,
+  281                     @user.phone)
+  ...
+  285           R18n.t.misc.sms.who_is_this.to_s
+  286  
+  287:       Helpers.text(R18n.t.misc.reply.
+  288                        who_we_are(@user.days_per_week).to_s,
+  289                     R18n.t.misc.reply.
+  ...
+  300             params[:Body] != R18n.t.commands.story
+  301          
+  302:         Helpers.text(R18n.t.sample.post,
+  303                       R18n.t.sample.post,
+  304                       @user.phone)
+  ...
+  321          end
+  322  
+  323:         Helpers.text(R18n.t.error.no_signup_match, 
+  324                       R18n.t.error.no_signup_match,
+  325                       params[:From])
+  ...
+  327        # Send the message to us. 
+  328        elsif session["now_for_us"]
+  329:         Helpers.new_text("#{@user.phone} sent: #{params[:Body]}",
+  330                           "#{@user.phone} sent: #{params[:Body]}",
+  331                           "+15612125831")
+  332:         Helpers.text(R18n.t.to_us.thanks.to_s, 
+  333                       R18n.t.to_us.thanks.to_s,
+  334                       @user.phone)
+  ...
+  359                                   "\nBody: #{params[:Body]} ."))
+  360            # Send us text, too.
+  361:           Helpers.new_text(note, note, "+15612125831")
+  362          end
+  363  
+  ...
+  371            session["next_for_us"] = true 
+  372  
+  373:           Helpers.text(R18n.t.error.no_option.to_s, 
+  374                         R18n.t.error.no_option_sprint.to_s,
+  375                         @user.phone)
+
+/Users/philesterman/Code/StoryTime Code/helpers/twilio_helper.rb:
+    1  #  helpers/twilio_helper.rb                   Phil Esterman     
+    2  # 
+    3: #  Helpers for Twilio messaging.  
+    4  #  --------------------------------------------------------
+    5  
+    .
+  106  
+  107  	elsif ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
+  108: 		Helpers.initialize_testing_vars
+  109  	end
+  110   	
+  111: 	# #Helpers that simply twiml REST API
+  112  	# if ENV['RACK_ENV'] == "production"
+  113  	# 		#set TWILIO credentials:
+  ...
+  171     		elsif @@mode == PRO || @@mode == TEST_CRED
+  172     			
+  173:    			Helpers.smsRespondHelper(body)
+  174     		end
+  175  
+  ...
+  181  			@@twiml_mms.push mms_url
+  182  		elsif @@mode == PRO
+  183: 			Helpers.mmsRespondHelper(mms_url)
+  184  		end
+  185  
+  ...
+  197  			@@twiml_sms.push body
+  198  		elsif @@mode == PRO
+  199: 			Helpers.fullRespondHelper(body, mms_url)
+  200  		end
+  201  
+  ...
+  210  
+  211  			#turn on testcred
+  212: 			Helpers.testCred
+  213  		end
+  214  			#for Test_Cred: simulate actual REST api
+  215: 			Helpers.smsSendHelper(body, user_phone)
+  216  		
+  217     	end
+  ...
+  223  			puts "Sent #{mms_url[18, mms_url.length]}"
+  224  		elsif @@mode == PRO
+  225: 			Helpers.mmsSendHelper(mms_url, user_phone)
+  226  		end
+  227     	end
+  ...
+  234      	end
+  235  		
+  236: 		Helpers.fullSendHelper(body, mms_url, user_phone)
+  237     	end
+  238  
+  ...
+  293  
+  294  		  #turn off testCred
+  295: 	      Helpers.testCredOff
+  296      end
+  297  
+  ...
+  390    		end
+  391  
+  392:     	Helpers.fullRespond(body, mms_url, LAST)
+  393      end
+  394  
+  ...
+  405  
+  406  
+  407:     	Helpers.mmsRespond(mms)
+  408  
+  409  	end
+  ...
+  444    		end
+  445  		
+  446: 		Helpers.smsRespond(msg, LAST)
+  447  
+  448  	end  
+  ...
+  491  			mms_array.each_with_index do |mms_url, index|
+  492  					
+  493: 					Helpers.mmsSend(mms_url, user_phone)
+  494  		     	 	 #for all, because text follows
+  495  			end
+  496  
+  497: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  498  
+  499  		else
+  ...
+  503  				if index + 1 == mms_array.length #last image comes w/ SMS
+  504  				
+  505: 					Helpers.fullSend(sms, mms, user_phone, LAST)
+  506  
+  507  				else
+  508  
+  509: 					Helpers.mmsSend(mms, user_phone)
+  510  
+  511  				end
+  ...
+  529  		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
+  530  
+  531: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  532  
+  533  			mms_array.each_with_index do |mms_url, index|
+  534  
+  535  				if index + 1 != mms_array.length
+  536: 				Helpers.mmsSend(mms_url, user_phone)
+  537  		    	else
+  538: 				Helpers.mmsSend(mms_url, user_phone)
+  539  				end
+  540  
+  ...
+  544  			#SMS first!
+  545  
+  546: 			Helpers.smsSend(first_sms, user_phone)
+  547  
+  548: 			Helpers.mms_array.each_with_index do |mms_url, index|
+  549  
+  550  
+  551  				if index + 1 == mms_array.length #send sms with mms on last story
+  552  
+  553: 					Helpers.fullSend(last_sms, mms_url, user_phone, LAST)
+  554  
+  555  				else
+  556  
+  557: 					Helpers.mmsSend(mms_url, user_phone)
+  558  
+  559  				end
+  ...
+  586  		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
+  587  
+  588: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  589  
+  590  			sleep SMS_WAIT
+  ...
+  592  			mms_array.each_with_index do |mms, index|
+  593  
+  594: 				Helpers.mmsSend(mms, user_phone)
+  595  
+  596  				if index + 1 != mms_array.length
+  597  
+  598: 					Helpers.mmsSend(mms, user_phone)
+  599  
+  600  		    	else
+  601: 					Helpers.mmsSend(mms, user_phone)
+  602  				end
+  603  
+  ...
+  607  			#SMS first!
+  608  
+  609: 			Helpers.smsSend(sms, user_phone)
+  610  
+  611  			mms_array.each_with_index do |mms, index|
+  612  			
+  613  				if index + 1 != mms_array.length
+  614: 					Helpers.mmsSend(mms, user_phone)
+  615  		    	else
+  616: 					Helpers.mmsSend(mms, user_phone)
+  617  				end
+  618  
+  ...
+  643  
+  644  				if index + 1 != mms_array.length
+  645: 					Helpers.mmsSend(mms, user_phone)
+  646  		    	else
+  647: 					Helpers.mmsSend(mms, user_phone)
+  648  				end
+  649  
+  ...
+  667  
+  668  				if index + 1 != mms_array.length
+  669: 					Helpers.mmsSend(mms, user_phone)
+  670  		    	else
+  671: 					Helpers.mmsSend(mms, user_phone)
+  672  				end
+  673  
+  ...
+  687  		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+  688  
+  689: 			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+  690  		
+  691  		else
+  ...
+  697  			end 
+  698  
+  699: 			Helpers.smsSend(msg, user_phone)
+  700  
+  701  	 	end
+  ...
+  711  		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+  712  
+  713: 			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+  714  
+  715  		else
+  ...
+  721  			end 
+  722  
+  723: 			Helpers.smsSend(msg, user_phone)
+  724  
+  725  	 	end
+  ...
+  736  
+  737  				if index + 1 != smsArr.length
+  738: 					Helpers.smsSend(sms, user_phone)
+  739  		    	else
+  740: 					Helpers.smsSend(sms, user_phone)
+  741  				end
+  742   		end
+
+/Users/philesterman/Code/StoryTime Code/spec/app/app_spec.rb:
+   61  
+   62      before(:each) do
+   63:       Helpers.initialize_testing_vars
+   64        NextMessageWorker.jobs.clear
+   65        NewTextWorker.jobs.clear
+   ..
+   99    it "sends correct sign up sms" do
+  100    	get '/test/999/STORY/ATT' 
+  101:   	expect(Helpers.getSMSarr[0]).to eq(Text::START_SMS_1 + 2.to_s + Text::START_SMS_2)
+  102    end
+  103  
+  ...
+  109    it "sends new text properly using integration testing w/ credentials" do
+  110  
+  111:     Helpers.smsSend("Your Test Cred worked!", "+15612125831",)
+  112  
+  113    end
+  ...
+  117    it "sends correct sign up sms to Sprint users" do
+  118      get '/test/998/STORY/' + SPRINT_QUERY_STRING
+  119:     expect(Helpers.getSMSarr[0]).to eq(Text::START_SPRINT_1 + "2" + Text::START_SPRINT_2)
+  120    end
+  121  
+  ...
+  168        get "/test/400/" + HELP_URL + "/ATT"
+  169        @user.reload
+  170:       expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues/Thurs" + Text::HELP_SMS_2)
+  171      end
+  172  
+  173      it "responds to 'help now' (non-sprint)" do
+  174        get "/test/400/help%20now/ATT"
+  175:       expect(Helpers.getSimpleSMS).to eq(Text::HELP_SMS_1 + "Tues/Thurs" + Text::HELP_SMS_2)
+  176      end
+  177  
+  ...
+  184          it "responds to HELP NOW from sprint" do
+  185            get "/test/400/HELP%20NOW/" + SPRINT_QUERY_STRING
+  186:           expect(Helpers.getSimpleSMS).to eq(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2)
+  187        end
+  188  
+  ...
+  215  
+  216  
+  217:       expect(Helpers.getSimpleSMS).to_not eq(Text::BAD_CHOICE)
+  218      end
+  219  
+  ...
+  222        get '/test/700/X/ATT'
+  223        @user.reload
+  224:       expect(Helpers.getSimpleSMS).to eq(Text::BAD_CHOICE)
+  225      end
+  226  
+  ...
+  231        get '/test/700/p/ATT'
+  232        @user.reload
+  233:       expect(Helpers.getSimpleSMS).to eq(Text::BAD_CHOICE)
+  234      end
+  235  
+  ...
+  243  
+  244        @user.reload
+  245:       expect(Helpers.getSimpleSMS).to_not eq(Text::BAD_CHOICE)
+  246      end
+  247  
+  ...
+  281        get '/test/700/p/ATT'
+  282        @user.reload
+  283:       expect(Helpers.getSimpleSMS).to eq(R18n.t.error.bad_choice)
+  284:       puts Helpers.getSimpleSMS
+  285      end
+  286  
+  ...
+  324            get '/test/666/STORY/ATT'
+  325            @user.reload
+  326:           expect(Helpers.getSimpleSMS).to eq(Text::RESUBSCRIBE_LONG)
+  327          end
+  328  
+  ...
+  376              
+  377  
+  378:             Helpers.text(SINGLE_SPACE_LONG, SINGLE_SPACE_LONG, @user.phone)
+  379  
+  380  
+  381:             expect(Helpers.getSMSarr.length).to eq(3)
+  382:             puts Helpers.getSMSarr
+  383        end
+  384  
+  ...
+  394              story = messageSeriesHash["d"+ @user.series_number.to_s][0]
+  395  
+  396:             Helpers.text(story.getPoemSMS, story.getPoemSMS, @user.phone)
+  397  
+  398:             expect(Helpers.getSMSarr.length).to_not eq(1)
+  399:             puts Helpers.getSMSarr
+  400          end
+  401  
+  ...
+  414          @user.reload
+  415  
+  416:         Helpers.fullRespond("Here's the SMS part!", ["imgur:://http: IMAGE 1"], "last")
+  417:         expect(Helpers.getSMSarr).to eq ["Here's the SMS part!"]
+  418:         expect(Helpers.getMMSarr).to eq ["imgur:://http: IMAGE 1"]
+  419  
+  420:         puts Helpers.getSMSarr
+  421:         puts Helpers.getMMSarr
+  422  
+  423        end
+  424  
+  425        it "properly responds through wrapper (fullrespond)" do
+  426:         Helpers.text_and_mms("BODY!", "imgur:://http lastest Image", "+15612125833")
+  427  
+  428:         expect(Helpers.getSMSarr).to eq ["BODY!"]
+  429:         expect(Helpers.getMMSarr).to eq ["imgur:://http lastest Image"]
+  430  
+  431:         puts Helpers.getSMSarr
+  432:         puts Helpers.getMMSarr
+  433  
+  434        end
+  ...
+  456          get '/test/+15612125833/'+Text::BREAK+"/ATT"
+  457  
+  458:         expect(Helpers.getSMSarr).to include(Text::START_BREAK)
+  459  
+  460  
+  ...
+  467  
+  468  
+  469:         expect(Helpers.getMMSarr).to be_empty
+  470:         expect(Helpers.getSMSarr[1..-1]).to be_empty
+  471  
+  472          Timecop.travel(2015, 6, 25, 17, 30, 0) #on Thurs!
+  ...
+  478  
+  479  
+  480:         expect(Helpers.getMMSarr).to be_empty
+  481:         expect(Helpers.getSMSarr[1..-1]).to be_empty
+  482  
+  483        end
+  ...
+  496          NextMessageWorker.drain
+  497  
+  498:         expect(Helpers.getMMSarr).to be_empty
+  499:         expect(Helpers.getSMSarr[1..-1]).to be_empty
+  500  
+  501          Timecop.travel(2015, 7, 2, 17, 30, 0) #on next Thurs!
+  ...
+  506          NextMessageWorker.drain
+  507  
+  508:         expect(Helpers.getMMSarr).to be_empty
+  509:         expect(Helpers.getSMSarr[1..-1]).to be_empty
+  510  
+  511        end
+  ...
+  527        #   NextMessageWorker.drain
+  528  
+  529:       #   expect(Helpers.getMMSarr).to be_empty
+  530:       #   expect(Helpers.getSMSarr[1..-1]).to be_empty
+  531  
+  532        #   Timecop.travel(2015, 6, 25, 17, 30, 0) #on that Thursday!
+  ...
+  537        #   NextMessageWorker.drain
+  538  
+  539:       #   expect(Helpers.getMMSarr).to be_empty
+  540:       #   expect(Helpers.getSMSarr[1..-1]).to be_empty
+  541  
+  542  
+  ...
+  549        #   NextMessageWorker.drain
+  550  
+  551:       #   expect(Helpers.getMMSarr).to be_empty
+  552:       #   expect(Helpers.getSMSarr[1..-1]).to be_empty
+  553  
+  554  
+  ...
+  560        #   NextMessageWorker.drain
+  561  
+  562:       #   expect(Helpers.getMMSarr).to be_empty
+  563:       #   expect(Helpers.getSMSarr[1..-1]).to be_empty
+  564  
+  565  
+  ...
+  573        #   NewTextWorker.drain
+  574  
+  575:       #   expect(Helpers.getMMSarr).to_not be_empty
+  576:       #   expect(Helpers.getSMSarr[1..-1]).to_not be_empty
+  577:       #   expect(Helpers.getSMSarr.last).to include(Text::END_BREAK)
+  578  
+  579:       #   puts "here it is 1: " + Helpers.getSMSarr.last
+  580  
+  581  
+  ...
+  589  
+  590  
+  591:       #   puts "here it is 2: " + Helpers.getSMSarr.last
+  592  
+  593  
+  594:       #   expect(Helpers.getMMSarr).to_not be_empty
+  595:       #   expect(Helpers.getSMSarr[1..-1]).to_not be_empty
+  596:       #   expect(Helpers.getSMSarr.last).to_not include(Text::END_BREAK)
+  597  
+  598  
+  599:       #   puts Helpers.getSMSarr
+  600  
+  601        # end
+  ...
+  616          # to include Text::BREAK_END
+  617  
+  618:         # expect(Helpers.getMMSarr).to_not be_empty
+  619:         # expect(Helpers.getSMSarr).to_not be_empty
+  620  
+  621          Timecop.travel(2015, 7, 9, 17, 30, 0) #on next Thurs!
+  ...
+  628          # to not include Text::BREAK_END
+  629  
+  630:         # expect(Helpers.getMMSarr).to_not be_empty
+  631:         # expect(Helpers.getSMSarr).to_not be_empty
+  632  
+  633        end
+  ...
+  641          # to include Text::BREAK_END
+  642  
+  643:         expect(Helpers.getMMSarr).to be_empty
+  644:         expect(Helpers.getSMSarr).to eq [Text::START_BREAK]
+  645  
+  646        end
+  ...
+  677          
+  678          expect(R18n.t.error.no_signup_match).to_not eq nil
+  679:         expect(Helpers.getSMSarr[0]).to eq R18n.t.error.no_signup_match
+  680:         puts  Helpers.getSMSarr[0]
+  681        end
+  682  
+  ...
+  696          get '/test/+14445556666/AYUDA%20AHORA/ATT'
+  697  
+  698:         expect(Helpers.getSMSarr.last).to eq R18n.t.help.normal("Mar/Jue").to_s
+  699:         expect(Helpers.getSMSarr.last).to eq "HC: Cuentos gratis para pre kínder en Mar/Jue. Para ayuda, llámenos al 561-212 5831.\n\nTiempo en pantalla antes de acostarse puede tener riesgos para la salud, así que lea temprano.\n\nResponder:\nTEXTO para cuentos sin picturas\nPARA para terminar"
+  700          
+  701          expect(@user.subscribed).to be true 
+  ...
+  706  
+  707          get '/test/+14445556666/FAKECMD/ATT'
+  708:         expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option.to_s
+  709:         expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Lo sentimos este servicio es automático. Nosotros no entendíamos eso.\n\nResponder:\nAYUDA AHORA para preguntas\nPARA para cancelar"
+  710  
+  711          get '/test/+14445556666/TEXTO/ATT'
+  712          @user.reload
+  713:         expect(Helpers.getSMSarr.last).to eq "HC: Bien, usted ahora recibe solo el texto de cada historia. ¡Espero esto ayude!"
+  714:         expect(Helpers.getSMSarr.last).to eq R18n.t.mms_update
+  715  
+  716          end
+  ...
+  786          get '/test/+156122233333/thanks/ATT'
+  787  
+  788:         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
+  789        end
+  790  
+  ...
+  792        it 'responds to thank you' do
+  793          get '/test/+156122233333/thank%20you/ATT'
+  794:         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.sure.to_s
+  795        end
+  796  
+  797        it "responds to 'who's this' " do
+  798          get '/test/+156122233333/who%27s%20this/ATT'
+  799:         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
+  800        end
+  801  
+  802        it "responds to 'who is this' " do
+  803          get '/test/+156122233333/who%20is%20this/ATT'
+  804:         expect(Helpers.getSMSarr.last).to eq R18n.t.misc.reply.who_we_are("2").to_s
+  805        end
+  806  
+  ...
+  822          get '/test/+156122233333/randomSMS/ATT'
+  823  
+  824:         expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option.to_s
+  825  
+  826        end
+  ...
+  835          get '/test/+156122233333/randomSMS/ATT'
+  836  
+  837:         expect(Helpers.getSMSarr.last).to eq R18n.t.error.no_option_sprint.to_s
+  838  
+  839        end
+  ...
+  907            get '/test/123/d/ATT'
+  908            get '/test/123/d/ATT'
+  909:           expect(Helpers.getSMSarr.count).to eq 1
+  910          end
+  911  
+  ...
+  914            get '/test/123/d/ATT'
+  915            get '/test/123/d/ATT'
+  916:           expect(Helpers.getSMSarr.count).to eq 1
+  917          end 
+  918  
+  ...
+  935  
+  936            it 'replies normally' do
+  937:             expect(Helpers.getSMSarr.last).to eq(
+  938                                     R18n.t.help.normal("Tues/Thurs").to_s)
+  939            end
+  ...
+  946  
+  947            it "reply thanking user" do
+  948:             expect(Helpers.getSMSarr.last).to eq R18n.t.to_us.thanks
+  949            end
+  950  
+  ...
+  952              # Hacky. Just looking in message list for text 
+  953              # forwarded to us: 
+  954:             expect(Helpers.getSMSarr[1]).to include "sent"
+  955            end
+  956          end
+
+/Users/philesterman/Code/StoryTime Code/spec/app/enroll_spec.rb:
+   27  
+   28      before(:each) do
+   29:       Helpers.initialize_testing_vars
+   30        NextMessageWorker.jobs.clear
+   31        NewTextWorker.jobs.clear
+   ..
+   56          expect(@user.locale).to eq 'en'
+   57  
+   58:         expect(Helpers.getMMSarr).to_not eq nil
+   59  
+   60        end
+   ..
+   70  
+   71          expect(@user.locale).to eq 'es'
+   72:         expect(Helpers.getSMSarr[0]).to_not eq Text::START_SMS_1 + "2" +Text::START_SMS_2
+   73:         puts Helpers.getSMSarr[0]
+   74        end
+   75  
+   ..
+  115  
+  116  
+  117:         expect(Helpers.getSMSarr.length).to eq 2
+  118:         expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+  119  
+  120:         puts Helpers.getSMSarr
+  121        end
+  122  
+  ...
+  132        
+  133  
+  134:         expect(Helpers.getSMSarr.length).to eq 1
+  135:         expect(Helpers.getMMSarr.first).to eq R18n.t.first_mms
+  136  
+  137:         puts Helpers.getSMSarr
+  138        end
+  139  
+  ...
+  211          app_enroll_many(["+14445556666"], 'es', {Carrier: "ATT"})
+  212  
+  213:         expect(Helpers.getSMSarr.length).to eq 3 
+  214:         puts "Sp Part 1: #{Helpers.getSMSarr[0]}"
+  215:         puts "Sp Part 2: #{Helpers.getSMSarr[1]}"
+  216  
+  217:         puts "Norm:  #{Helpers.getSMSarr[2]}"
+  218  
+  219        end
+
+/Users/philesterman/Code/StoryTime Code/spec/experiment/experiment_spec.rb:
+   34    	#clear background jobs each test. 
+   35      before(:each) do
+   36:       Helpers.initialize_testing_vars
+   37        NextMessageWorker.jobs.clear
+   38        NewTextWorker.jobs.clear
+
+/Users/philesterman/Code/StoryTime Code/spec/models/experiment_spec.rb:
+   31    	#clear background jobs each test. 
+   32      before(:each) do
+   33:       Helpers.initialize_testing_vars
+   34        NextMessageWorker.jobs.clear
+   35        NewTextWorker.jobs.clear
+
+/Users/philesterman/Code/StoryTime Code/spec/models/user_spec.rb:
+   31    	#clear background jobs each test. 
+   32      before(:each) do
+   33:       Helpers.initialize_testing_vars
+   34        NextMessageWorker.jobs.clear
+   35        NewTextWorker.jobs.clear
+
+/Users/philesterman/Code/StoryTime Code/spec/models/variation_spec.rb:
+   30    	#clear background jobs each test. 
+   31      before(:each) do
+   32:       Helpers.initialize_testing_vars
+   33        NextMessageWorker.jobs.clear
+   34        NewTextWorker.jobs.clear
+
+/Users/philesterman/Code/StoryTime Code/spec/workers/first_text_worker_spec.rb:
+   32  		before(:each) do
+   33    			FirstTextWorker.jobs.clear
+   34:   			Helpers.initialize_testing_vars
+   35    			NextMessageWorker.jobs.clear
+   36    			Sidekiq::Testing.inline!
+   ..
+   47  			get '/test/556/SAMPLE/ATT'
+   48  			expect(NextMessageWorker.jobs.size).to eq(0)
+   49: 			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+   50  			puts Text::SAMPLE_SMS
+   51  		end		
+   ..
+   54  			get '/test/556/%20SAMPLE%20%0A/ATT'
+   55  			expect(NextMessageWorker.jobs.size).to eq(0)
+   56: 			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+   57  			puts Text::SAMPLE_SMS
+   58  		end		
+   ..
+   61  			get '/test/556/%20SAMPLE%20%0A/'+Text::SPRINT_QUERY_STRING
+   62  			expect(NextMessageWorker.jobs.size).to eq(0)
+   63: 			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SPRINT_SMS])
+   64  			puts Text::SAMPLE_SPRINT_SMS
+   65  		end
+   ..
+   68  			get '/test/556/%20%0AEXAMPLE%20%0A/ATT'
+   69  			expect(NextMessageWorker.jobs.size).to eq(0)
+   70: 			expect(Helpers.getSMSarr).to eq([Text::EXAMPLE_SMS])
+   71  		end
+   72  
+   ..
+   75  			get '/test/556/SAMPLE/ATT'
+   76  			expect(NextMessageWorker.jobs.size).to eq(0)
+   77: 			expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+   78  		end		
+   79  
+   ..
+   81  			get '/test/556/EXAMPLE/ATT'
+   82  			expect(NextMessageWorker.jobs.size).to eq(0)
+   83: 			expect(Helpers.getSMSarr).to eq([Text::EXAMPLE_SMS])
+   84  		end
+   85  
+   ..
+   88  			get '/test/556/SAMPLE/ATT'
+   89  			expect(NextMessageWorker.jobs.size).to eq(0)
+   90: 			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+   91  		end
+   92  
+
+/Users/philesterman/Code/StoryTime Code/spec/workers/main_worker_more_feature_spec.rb:
+   39          NextMessageWorker.jobs.clear
+   40          SomeWorker.jobs.clear
+   41:         Helpers.initialize_testing_vars
+   42          Timecop.return
+   43:         Helpers.testSleep
+   44      end
+   45  
+   46      after(:each) do
+   47        Timecop.return
+   48:       Helpers.initialize_testing_vars
+   49  
+   50      end
+   ..
+   55        users = []
+   56  
+   57:       Helpers.testSleepOff
+   58  
+   59        (1..10).each do |number|
+   ..
+   67          expect(user.story_number).to eq(0)
+   68  
+   69:         expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+   70:         expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+   71  
+   72          users.push user
+   ..
+   79        Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
+   80  
+   81:       # Helpers.testSleep
+   82  
+   83        #WORKS WIHOUT SLEEPING!
+   ..
+  104        users = []
+  105  
+  106:       Helpers.testSleepOff
+  107  
+  108        (1..10).each do |number|
+  ...
+  116          expect(user.story_number).to eq(0)
+  117  
+  118:         expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+  119:         expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+  120  
+  121          expect(user.total_messages).to eq 1
+  ...
+  128  
+  129  
+  130:       Helpers.testSleep
+  131  
+  132        Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
+  ...
+  152  
+  153      it "handles a single mms" do
+  154:       Helpers.new_just_mms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
+  155:       expect(Helpers.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
+  156:       expect(Helpers.getSMSarr.empty?).to be true
+  157      end
+  158  
+  ...
+  170  
+  171        smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
+  172:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  173  
+  174  
+  ...
+  194      NewTextWorker.drain
+  195  
+  196:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  197:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  198  
+  199  
+  ...
+  221      smsSoFar.concat [Message.getMessageArray[0].getSMS]
+  222  
+  223:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  224:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  225:     expect(Helpers.getMMSarr).not_to eq(nil)
+  226  
+  227  
+  ...
+  247  
+  248  
+  249:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  250:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  251:     expect(Helpers.getMMSarr).not_to eq(nil)
+  252  
+  253  
+  ...
+  268        #They're asked for their story choice during storyTime.
+  269        smsSoFar.push SomeWorker::SERIES_CHOICES[0]
+  270:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  271  
+  272        ##registers series text well!
+  ...
+  292        mmsSoFar.concat story.getMmsArr
+  293  
+  294:       expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  295:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  296  
+  297        @user.reload
+  ...
+  301        expect(@user.total_messages).to eq(3)
+  302  
+  303:       puts Helpers.getMMSarr 
+  304:       puts Helpers.getSMSarr 
+  305  
+  306    end
+  ...
+  322      #   users = []
+  323  
+  324:     #   Helpers.testSleepOff
+  325  
+  326      #   (1..25).each do |number|
+  ...
+  334      #     expect(user.story_number).to eq(0)
+  335  
+  336:     #     expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2,
+  337      #                                     FirstTextWorker::FIRST_SMS])              
+  338:     #     expect(Helpers.getMMSarr).to eq(FIRST_MMS)
+  339  
+  340      #     expect(user.total_messages).to eq 1
+  ...
+  347  
+  348  
+  349:     #   Helpers.testSleep
+  350      #   # require 'pry'
+  351      #   # binding.pry 
+  ...
+  374      users = []
+  375  
+  376:     Helpers.testSleepOff
+  377  
+  378  
+  ...
+  395  
+  396  
+  397:       expect(Helpers.getSMSarr).to eq([Text::START_SMS_1 + "2" + Text::START_SMS_2])              
+  398:       expect(Helpers.getMMSarr).to eq([Text::THE_FINAL_MMS])
+  399  
+  400        expect(user.total_messages).to eq 1
+  ...
+  411  
+  412  
+  413:     Helpers.testSleep
+  414  
+  415      Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
+  ...
+  452  
+  453        smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
+  454:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  455  
+  456  
+  ...
+  476      NewTextWorker.drain
+  477  
+  478:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  479:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  480  
+  481  
+  ...
+  503      smsSoFar.concat [Message.getMessageArray[0].getSMS]
+  504  
+  505:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  506:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  507:     expect(Helpers.getMMSarr).not_to eq(nil)
+  508  
+  509  
+  ...
+  529  
+  530  
+  531:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  532:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  533:     expect(Helpers.getMMSarr).not_to eq(nil)
+  534  
+  535  
+  ...
+  550        #They're asked for their story choice during storyTime.
+  551        smsSoFar.push SomeWorker::SERIES_CHOICES[0]
+  552:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  553  
+  554        ##registers series text well!
+  ...
+  582        mmsSoFar.concat story.getMmsArr
+  583  
+  584:       expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  585:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  586  
+  587        @user.reload
+  ...
+  589  
+  590  
+  591:       # puts Helpers.getMMSarr 
+  592:       # puts Helpers.getSMSarr 
+  593  
+  594        Timecop.travel(2015, 6, 30, 17, 24, 0) #on TUES. (3:52)
+  ...
+  612  
+  613  
+  614:       puts Helpers.getMMSarr 
+  615:       puts Helpers.getSMSarr 
+  616  
+  617  
+  ...
+  635  
+  636  
+  637:       puts Helpers.getMMSarr 
+  638:       puts Helpers.getSMSarr
+  639        puts @user.story_number
+  640  
+
+/Users/philesterman/Code/StoryTime Code/spec/workers/main_worker_spec.rb:
+   62          NewTextWorker.jobs.clear
+   63          FirstTextWorker.jobs.clear
+   64:         Helpers.initialize_testing_vars
+   65          Timecop.return
+   66          Sidekiq::Testing.inline!
+   ..
+  140      #     sleep SLEEP
+  141      #   end
+  142:     #   expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+  143      # end
+  144  
+  ...
+  177      #     @user.reload 
+  178  
+  179:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+  180      # end
+  181  
+  ...
+  195      #     @user.reload 
+  196  
+  197:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_SPRINT_1, SomeWorker::TIME_SMS_SPRINT_2])
+  198      # end
+  199  
+  ...
+  214      #     @user.reload 
+  215  
+  216:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+  217  
+  218  
+  ...
+  229      #     @user.reload 
+  230  
+  231:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+  232  
+  233      # end
+  ...
+  248      #     @user.reload 
+  249  
+  250:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+  251  
+  252  
+  ...
+  261      #     @user.reload 
+  262  
+  263:     #     expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE]) #not a second message
+  264      # end
+  265  
+  ...
+  347  
+  348  
+  349:       expect(Helpers.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)
+  350:       expect(Helpers.getMMSarr).not_to eq(nil)
+  351      end
+  352  
+  ...
+  371  
+  372  
+  373:       expect(Helpers.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+  374:       expect(Helpers.getSMSarr).not_to eq(nil)
+  375:       expect(Helpers.getSMSarr).not_to eq([])
+  376      end
+  377  
+  ...
+  565      NextMessageWorker.drain
+  566  
+  567:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  568:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  569  
+  570      #it properly sends the MMS and SMS on TUES
+  ...
+  572      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+  573  
+  574:     Helpers.testCred
+  575  
+  576      (1..10).each do 
+  ...
+  587      smsSoFar.concat [Message.getMessageArray[0].getSMS]
+  588  
+  589:     expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  590:     expect(Helpers.getSMSarr).to eq(smsSoFar)
+  591:     expect(Helpers.getMMSarr).not_to eq(nil)
+  592  
+  593      puts mmsSoFar
+  ...
+  609  
+  610          smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
+  611:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  612  
+  613  
+  ...
+  635  
+  636  
+  637:         expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  638:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  639  
+  640  
+  ...
+  663          smsSoFar.concat [Message.getMessageArray[0].getSMS]
+  664  
+  665:         expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  666:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  667:         expect(Helpers.getMMSarr).not_to eq(nil)
+  668  
+  669  
+  ...
+  684          NewTextWorker.drain
+  685  
+  686:         expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  687:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  688:         expect(Helpers.getMMSarr).not_to eq(nil)
+  689  
+  690  
+  ...
+  703          #They're asked for their story choice during storyTime.
+  704          smsSoFar.push R18n.t.choice.greet[0]
+  705:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  706  
+  707          @user.reload
+  ...
+  725          mmsSoFar.concat story.getMmsArr
+  726  
+  727:         expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  728:         expect(Helpers.getSMSarr).to eq(smsSoFar)
+  729  
+  730          @user.reload
+  ...
+  758  
+  759        smsSoFar = [R18n.t.choice.greet[0]]
+  760:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  761  
+  762        Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+  ...
+  772      NewTextWorker.drain
+  773  
+  774:       expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+  775  
+  776        #EXPECT A DAYLATE MSG when don't respond
+  ...
+  790        smsSoFar.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
+  791  
+  792:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  793        
+  794        #valid things: 
+  ...
+  812  
+  813  
+  814:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  815  
+  816  
+  ...
+  828  
+  829  
+  830:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  831  
+  832        Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
+  ...
+  845  
+  846        smsSoFar.push R18n.t.no_reply.dropped
+  847:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  848        expect(@user.subscribed).to eq(false)
+  849  
+  ...
+  884        smsSoFar = [R18n.t.choice.greet[0]]
+  885        mmsSoFar = []
+  886:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  887  
+  888        ##registers series text well!
+  ...
+  914        mmsSoFar.concat story.getMmsArr
+  915  
+  916:       expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  917:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  918  
+  919        Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
+  ...
+  949  
+  950  
+  951:       expect(Helpers.getMMSarr).to eq(mmsSoFar)
+  952:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  953  
+  954        puts mmsSoFar
+  ...
+  976        
+  977        smsSoFar = [R18n.t.choice.greet[0]]
+  978:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+  979  
+  980        Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+  ...
+  988        @user.reload
+  989  
+  990:       expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+  991  
+  992        #EXPECT A DAYLATE MSG when don't respond
+  ...
+ 1006  
+ 1007  
+ 1008:       expect(Helpers.getSMSarr.last).to_not eq(smsSoFar.last)
+ 1009  
+ 1010:       puts Helpers.getSMSarr
+ 1011    end
+ 1012  
+ ....
+ 1035  
+ 1036        smsSoFar = [(R18n.t.choice.greet[0]).to_s]
+ 1037:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1038  
+ 1039        Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+ ....
+ 1047        @user.reload
+ 1048  
+ 1049:       expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+ 1050  
+ 1051        #EXPECT A DAYLATE MSG when don't respond
+ ....
+ 1065  
+ 1066  
+ 1067:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1068        
+ 1069        #valid things: 
+ ....
+ 1086  
+ 1087        @user.reload
+ 1088:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1089  
+ 1090  
+ ....
+ 1101  
+ 1102        @user.reload
+ 1103:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1104  
+ 1105        Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
+ ....
+ 1117  
+ 1118        smsSoFar.push R18n.t.no_reply.dropped.to_str
+ 1119:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1120        expect(@user.subscribed).to eq(false)
+ 1121  
+ ....
+ 1134       
+ 1135  
+ 1136:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1137  
+ 1138        smsSoFar.each do |sms|
+ ....
+ 1163  
+ 1164        smsSoFar = [R18n.t.choice.greet[0]]
+ 1165:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1166  
+ 1167        Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
+ ....
+ 1175        @user.reload
+ 1176  
+ 1177:       expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+ 1178  
+ 1179        #EXPECT A DAYLATE MSG when don't respond
+ ....
+ 1193        smsSoFar.push R18n.t.no_reply.day_late + " "+ R18n.t.choice.no_greet[0]
+ 1194  
+ 1195:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1196        
+ 1197        #valid things: 
+ ....
+ 1221        mmsSoFar = story.getMmsArr
+ 1222  
+ 1223:       expect(Helpers.getMMSarr).to eq(mmsSoFar)
+ 1224:       expect(Helpers.getSMSarr).to eq(smsSoFar)
+ 1225  
+ 1226  
+ ....
+ 1249        (21..40).each do |num|
+ 1250  
+ 1251:        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*2 )
+ 1252         expect(wait).to eq(num + 40 )
+ 1253         puts wait
+ ....
+ 1256  
+ 1257        (41..60).each do |num|
+ 1258:        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*4 )
+ 1259         expect(wait).to eq(num + 80 )
+ 1260         puts wait
+ ....
+ 1271          time_sent.push wait
+ 1272  
+ 1273:         expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
+ 1274:         time_sent.push wait + Helpers::MMS_WAIT
+ 1275  
+ 1276:         expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
+ 1277:         time_sent.push wait + Helpers::MMS_WAIT*2
+ 1278        end
+ 1279  
+ ....
+ 1300  
+ 1301        (1..20).each do |num|
+ 1302:        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(Helpers::MMS_WAIT*2 + num + 20)
+ 1303         puts wait
+ 1304        end
+ 1305  
+ 1306        (21..40).each do |num|
+ 1307:         expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(20 + num + Helpers::MMS_WAIT*4) 
+ 1308          puts wait
+ 1309        end
+ 1310  
+ 1311        (21..40).each do |num|
+ 1312:         expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(40 + num + Helpers::MMS_WAIT*6) 
+ 1313          puts wait
+ 1314        end
+ ....
+ 1316  
+ 1317        # (41..60).each do |num|
+ 1318:       #  expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num + Helpers::MMS_WAIT*4 )
+ 1319        #  expect(wait).to eq(num + 80 )
+ 1320        #  puts wait
+ ....
+ 1342  
+ 1343          if type == SomeWorker::STORY
+ 1344:           expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
+ 1345:           time_sent.push wait + Helpers::MMS_WAIT
+ 1346  
+ 1347:           expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
+ 1348:           time_sent.push wait + Helpers::MMS_WAIT*2
+ 1349          end
+ 1350  
+ ....
+ 1382  
+ 1383  
+ 1384:       expect(Helpers.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
+ 1385:       expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+ 1386  
+ 1387  
+ ....
+ 1407        R18n.thread_set(i18n)
+ 1408  
+ 1409:       expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
+ 1410  
+ 1411  
+ ....
+ 1429        R18n.thread_set(i18n)
+ 1430  
+ 1431:       expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
+ 1432:       expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+ 1433  
+ 1434      end
+ ....
+ 1598  
+ 1599          NextMessageWorker.drain
+ 1600:         expect(Helpers.getMMSarr).to eq mmsSoFar
+ 1601        end
+ 1602  
+
+/Users/philesterman/Code/StoryTime Code/spec/workers/new_text_worker_spec.rb:
+   60          User.create(phone: "+15612125834")
+   61          NewTextWorker.jobs.clear
+   62:         Helpers.initialize_testing_vars
+   63          Timecop.return
+   64:         Helpers.testSleep
+   65          User.create(phone: "+15612125832")
+   66      end
+   ..
+   84        NewTextWorker.drain
+   85  
+   86:       expect(Helpers.getSMSarr).to eq [sms]
+   87:       expect(Helpers.getMMSarr).to eq []
+   88      end
+   89  
+   ..
+   99          NewTextWorker.drain
+  100  
+  101:       expect(Helpers.getSMSarr.size).to_not eq 1
+  102:       expect(Helpers.getSMSarr.size).to_not eq 0
+  103  
+  104:       puts Helpers.getSMSarr
+  105  
+  106      end
+  ...
+  114          NewTextWorker.drain
+  115  
+  116:       # expect(Helpers.getSMSarr.size).to eq 1
+  117  
+  118:         expect(Helpers.getSMSarr[1]).to eq SINGLE_SPACE_LONG
+  119:         expect(Helpers.getSMSarr.size).to eq 2
+  120      end
+  121  
+  ...
+  128        NewTextWorker.drain
+  129  
+  130:       # expect(Helpers.getSMSarr.size).to eq 1
+  131  
+  132:       expect(Helpers.getSMSarr[1]).to eq Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2
+  133:       expect(Helpers.getSMSarr.size).to eq 2
+  134  
+  135:       puts Helpers.getSMSarr[1]
+  136      end
+  137  
+
+/Users/philesterman/Code/StoryTime Code/spec/workers/next_message_worker_spec.rb:
+   50      before(:each) do
+   51          NextMessageWorker.jobs.clear
+   52:         Helpers.initialize_testing_vars
+   53          Timecop.return
+   54:         Helpers.testSleep
+   55          User.create(phone: "+15612125832")
+   56      end
+   ..
+   71        @user = User.find_by_phone("+15612125832")
+   72        arr = ["http://image.com"]
+   73:       Helpers.fullSend(SMS, arr, @user.phone, "last")
+   74  
+   75:       expect(Helpers.getMMSarr).to eq arr
+   76:       expect(Helpers.getSMSarr).to eq [SMS]
+   77      end
+   78  
+   ..
+   83        NextMessageWorker.drain
+   84  
+   85:       expect(Helpers.getMMSarr).to eq mms
+   86:       expect(Helpers.getSMSarr).to eq [SMS]
+   87      end
+   88  
+   ..
+   94        
+   95        # expect(NextMessageWorker.jobs.size).to eq 1
+   96:       # expect(Helpers.getMMSarr).to eq ["one"]
+   97:       # expect(Helpers.getSMSarr).to eq []
+   98   
+   99        NextMessageWorker.drain #the recursive call.
+  100:       expect(Helpers.getMMSarr).to eq ["one", "two"]
+  101:       expect(Helpers.getSMSarr).to eq [SMS]
+  102        expect(NextMessageWorker.jobs.size).to eq 0
+  103  
+  ...
+  111        
+  112        # expect(NextMessageWorker.jobs.size).to eq 1
+  113:       # expect(Helpers.getMMSarr).to eq ["one"]
+  114:       # expect(Helpers.getSMSarr).to eq []
+  115  
+  116        NextMessageWorker.drain #the recursive call.
+  117:       expect(Helpers.getMMSarr).to eq ["one", "two", "three"]
+  118:       expect(Helpers.getSMSarr).to eq [SMS]
+  119        expect(NextMessageWorker.jobs.size).to eq 0
+  120      end
+  ...
+  124        users = []
+  125  
+  126:       Helpers.testSleep #turn on
+  127  
+  128        (1..6).each do |number|
+  ...
+  168          user.reload
+  169  
+  170:         expect(Helpers.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)              
+  171:         expect(Helpers.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+  172          # expect(user.total_messages).to eq()
+  173          expect(user.story_number).to eq(1)
+
+/Users/philesterman/Code/StoryTime Code/twilio_helpers.rb:
+   13  require_relative './workers/first_text_worker'
+   14  
+   15: class TwilioHelpers
+   16  
+   17  SPRINT = "Sprint Spectrum, L.P."
+   ..
+  107  
+  108  	elsif ENV['RACK_ENV'] == 'test'		#test credentials for integration from SMS.
+  109: 		Helpers.initialize_testing_vars
+  110  	end
+  111   	
+  112: 	# #Helpers that simply twiml REST API
+  113  	# if ENV['RACK_ENV'] == "production"
+  114  	# 		#set TWILIO credentials:
+  ...
+  172     		elsif @@mode == PRO || @@mode == TEST_CRED
+  173     			
+  174:    			Helpers.smsRespondHelper(body)
+  175     		end
+  176  
+  ...
+  182  			@@twiml_mms.push mms_url
+  183  		elsif @@mode == PRO
+  184: 			Helpers.mmsRespondHelper(mms_url)
+  185  		end
+  186  
+  ...
+  198  			@@twiml_sms.push body
+  199  		elsif @@mode == PRO
+  200: 			Helpers.fullRespondHelper(body, mms_url)
+  201  		end
+  202  
+  ...
+  211  
+  212  			#turn on testcred
+  213: 			Helpers.testCred
+  214  		end
+  215  			#for Test_Cred: simulate actual REST api
+  216: 			Helpers.smsSendHelper(body, user_phone)
+  217  		
+  218     	end
+  ...
+  224  			puts "Sent #{mms_url[18, mms_url.length]}"
+  225  		elsif @@mode == PRO
+  226: 			Helpers.mmsSendHelper(mms_url, user_phone)
+  227  		end
+  228     	end
+  ...
+  235      	end
+  236  		
+  237: 		Helpers.fullSendHelper(body, mms_url, user_phone)
+  238     	end
+  239  
+  ...
+  294  
+  295  		  #turn off testCred
+  296: 	      Helpers.testCredOff
+  297      end
+  298  
+  ...
+  391    		end
+  392  
+  393:     	Helpers.fullRespond(body, mms_url, LAST)
+  394      end
+  395  
+  ...
+  406  
+  407  
+  408:     	Helpers.mmsRespond(mms)
+  409  
+  410  	end
+  ...
+  445    		end
+  446  		
+  447: 		Helpers.smsRespond(msg, LAST)
+  448  
+  449  	end  
+  ...
+  492  			mms_array.each_with_index do |mms_url, index|
+  493  					
+  494: 					Helpers.mmsSend(mms_url, user_phone)
+  495  		     	 	 #for all, because text follows
+  496  			end
+  497  
+  498: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  499  
+  500  		else
+  ...
+  504  				if index + 1 == mms_array.length #last image comes w/ SMS
+  505  				
+  506: 					Helpers.fullSend(sms, mms, user_phone, LAST)
+  507  
+  508  				else
+  509  
+  510: 					Helpers.mmsSend(mms, user_phone)
+  511  
+  512  				end
+  ...
+  530  		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
+  531  
+  532: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  533  
+  534  			mms_array.each_with_index do |mms_url, index|
+  535  
+  536  				if index + 1 != mms_array.length
+  537: 				Helpers.mmsSend(mms_url, user_phone)
+  538  		    	else
+  539: 				Helpers.mmsSend(mms_url, user_phone)
+  540  				end
+  541  
+  ...
+  545  			#SMS first!
+  546  
+  547: 			Helpers.smsSend(first_sms, user_phone)
+  548  
+  549: 			Helpers.mms_array.each_with_index do |mms_url, index|
+  550  
+  551  
+  552  				if index + 1 == mms_array.length #send sms with mms on last story
+  553  
+  554: 					Helpers.fullSend(last_sms, mms_url, user_phone, LAST)
+  555  
+  556  				else
+  557  
+  558: 					Helpers.mmsSend(mms_url, user_phone)
+  559  
+  560  				end
+  ...
+  587  		if @user != nil && (@user.carrier == SPRINT && sms.length > 160)
+  588  
+  589: 			Helpers.new_sprint_long_sms(sms, user_phone)
+  590  
+  591  			sleep SMS_WAIT
+  ...
+  593  			mms_array.each_with_index do |mms, index|
+  594  
+  595: 				Helpers.mmsSend(mms, user_phone)
+  596  
+  597  				if index + 1 != mms_array.length
+  598  
+  599: 					Helpers.mmsSend(mms, user_phone)
+  600  
+  601  		    	else
+  602: 					Helpers.mmsSend(mms, user_phone)
+  603  				end
+  604  
+  ...
+  608  			#SMS first!
+  609  
+  610: 			Helpers.smsSend(sms, user_phone)
+  611  
+  612  			mms_array.each_with_index do |mms, index|
+  613  			
+  614  				if index + 1 != mms_array.length
+  615: 					Helpers.mmsSend(mms, user_phone)
+  616  		    	else
+  617: 					Helpers.mmsSend(mms, user_phone)
+  618  				end
+  619  
+  ...
+  644  
+  645  				if index + 1 != mms_array.length
+  646: 					Helpers.mmsSend(mms, user_phone)
+  647  		    	else
+  648: 					Helpers.mmsSend(mms, user_phone)
+  649  				end
+  650  
+  ...
+  668  
+  669  				if index + 1 != mms_array.length
+  670: 					Helpers.mmsSend(mms, user_phone)
+  671  		    	else
+  672: 					Helpers.mmsSend(mms, user_phone)
+  673  				end
+  674  
+  ...
+  688  		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+  689  
+  690: 			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+  691  		
+  692  		else
+  ...
+  698  			end 
+  699  
+  700: 			Helpers.smsSend(msg, user_phone)
+  701  
+  702  	 	end
+  ...
+  712  		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
+  713  
+  714: 			Helpers.new_sprint_long_sms(sprintSMS, user_phone)
+  715  
+  716  		else
+  ...
+  722  			end 
+  723  
+  724: 			Helpers.smsSend(msg, user_phone)
+  725  
+  726  	 	end
+  ...
+  737  
+  738  				if index + 1 != smsArr.length
+  739: 					Helpers.smsSend(sms, user_phone)
+  740  		    	else
+  741: 					Helpers.smsSend(sms, user_phone)
+  742  				end
+  743   		end
+
+/Users/philesterman/Code/StoryTime Code/workers/choice_worker.rb:
+   41  
+   42        if @user.mms == true 
+   43:         Helpers.new_mms(story.getSMS, story.getMmsArr[1..-1], @user.phone)
+   44        end
+   45  
+
+/Users/philesterman/Code/StoryTime Code/workers/first_text_worker.rb:
+   56  
+   57        if type == FIRST
+   58:         Helpers.new_mms(FIRST_SMS, FIRST_MMS, @user.phone)
+   59          @user.update(total_messages: 1)
+   60        elsif type == SAMPLE
+   61:         Helpers.new_mms(SAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+   62        elsif type == EXAMPLE
+   63:         Helpers.new_mms(EXAMPLE_SMS, [THE_FINAL_MMS], @user.phone)
+   64        elsif type == SMS_HELPER
+   65:         Helpers.new_sms_chain(smsArr[0],  @user.phone)
+   66        end
+   67  
+
+/Users/philesterman/Code/StoryTime Code/workers/helpers.rb:
+    1: module Helpers
+    2    def help
+    3      :available
+
+/Users/philesterman/Code/StoryTime Code/workers/main_worker.rb:
+  298        total_first_msgs = @@user_num_story + @@user_num_text
+  299  
+  300:       wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+  301  
+  302      #increments by one each user.
+  ...
+  319    #     total_first_msgs = @@user_num_story + @@user_num_text
+  320  
+  321:   #     wait = total_first_msgs + (((total_first_msgs - 1) / Helpers::MMS_WAIT) * (Helpers::MMS_WAIT * 2))
+  322  
+  323    #     return wait
+
+/Users/philesterman/Code/StoryTime Code/workers/new_text_worker.rb:
+   39    		sms = Sprint.chop(sms)
+   40    	elsif sms.class == String
+   41:   		Helpers.smsSend(sms, @user.phone)  #send out normal text
+   42    	end
+   43  
+   ..
+   45    	if sms.class == Array && sms.length == 1 #transformed to Sprint array AND it's the last text
+   46    		msg = sms.shift
+   47:   		Helpers.new_text_no_wait(msg, msg, @user.phone)
+   48  
+   49        if type == STORY
+   ..
+   53    	elsif sms.class == Array && sms.length > 1  #not the last text
+   54    		msg = sms.shift
+   55:   		Helpers.new_text_no_wait(msg, msg, @user.phone)
+   56:   		NewTextWorker.perform_in(Helpers::SMS_WAIT, sms, NOT_STORY, @user.phone)
+   57    	end
+   58  
+
+/Users/philesterman/Code/StoryTime Code/workers/next_message_worker.rb:
+   43  
+   44      elsif mms_arr.length == 1#if last MMS, send with SMS
+   45:   		Helpers.fullSend(sms, mms_arr.shift, @user.phone, Helpers::NO_WAIT)
+   46    		puts "finished the message stack: #{@user.phone}"
+   47        NextMessageWorker.updateUser(@user.phone, sms)
+   48  
+   49    	else #not last MMS...
+   50:   		Helpers.mmsSend(mms_arr.shift, @user.phone)
+   51:   		NextMessageWorker.perform_in(Helpers::MMS_WAIT.seconds, sms, mms_arr, @user.phone)
+   52      end
+   53  
+
+398 matches across 23 files

@@ -5,7 +5,7 @@ require_relative "../spec_helper"
 require 'capybara/rspec'
 require 'rack/test'
 
-require_relative '../../helpers'
+require_relative '../../helpers/twilio_helper'
 require_relative '../../i18n/constants'
 require_relative '../../app/app'
 
@@ -31,7 +31,7 @@ describe 'First Text Message' do
 
 		before(:each) do
   			FirstTextWorker.jobs.clear
-  			Helpers.initialize_testing_vars
+  			TwilioHelper.initialize_testing_vars
   			NextMessageWorker.jobs.clear
   			Sidekiq::Testing.inline!
 		end
@@ -46,48 +46,48 @@ describe 'First Text Message' do
 		it "has all the SAMPLE S-MS in right order" do
 			get '/test/556/SAMPLE/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::SAMPLE_SMS])
 			puts Text::SAMPLE_SMS
 		end		
 
 		it "registers SAMPLE with whitespace" do
 			get '/test/556/%20SAMPLE%20%0A/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::SAMPLE_SMS])
 			puts Text::SAMPLE_SMS
 		end		
 
 		it "sends Sprint-Sample to sprint phones" do
 			get '/test/556/%20SAMPLE%20%0A/'+Text::SPRINT_QUERY_STRING
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SPRINT_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::SAMPLE_SPRINT_SMS])
 			puts Text::SAMPLE_SPRINT_SMS
 		end
 
 		it "sends the example with whitespace well" do 
 			get '/test/556/%20%0AEXAMPLE%20%0A/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::EXAMPLE_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::EXAMPLE_SMS])
 		end
 
 
 		it "has all the SAMPLE M-MS in right order" do
 			get '/test/556/SAMPLE/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getMMSarr).to eq(Text::FIRST_MMS)
+			expect(TwilioHelper.getMMSarr).to eq(Text::FIRST_MMS)
 		end		
 
 		it "sends the example SMS well" do 
 			get '/test/556/EXAMPLE/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::EXAMPLE_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::EXAMPLE_SMS])
 		end
 
 
 		it "sends the sample MMS well" do 
 			get '/test/556/SAMPLE/ATT'
 			expect(NextMessageWorker.jobs.size).to eq(0)
-			expect(Helpers.getSMSarr).to eq([Text::SAMPLE_SMS])
+			expect(TwilioHelper.getSMSarr).to eq([Text::SAMPLE_SMS])
 		end
 
 		it "properly updates total_messages" do 

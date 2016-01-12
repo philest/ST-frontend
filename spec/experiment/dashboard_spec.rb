@@ -25,7 +25,7 @@ require_relative '../../auto-signup'
 require_relative "../../experiment/create_experiment"
 
 #testing helpers
-require_relative '../../helpers.rb'
+require_relative '../../helpers/twilio_helper.rb'
 
 
 

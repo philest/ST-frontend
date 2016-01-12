@@ -73,7 +73,7 @@ class Message
 	
 		#dino tea party...
 		dino.push Message.new([Text::IMAGE_URL+"dino1.jpg", Text::IMAGE_URL+"dino2.jpg"],
-		"StoryTime: You're invited to to a dinosaur tea party!",
+		"StoryTime: You're invited to a dinosaur tea party!",
 		"The dinosaurs have a tea party!\n\nwill you come with me?\n\n\nwe'll stomp, and roar,\n\nand shake our tails,\n\nand sip on cups of tea!")
 
 

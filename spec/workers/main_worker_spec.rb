@@ -19,7 +19,7 @@ require_relative '../../app/app.rb'
 
 require_relative '../../auto-signup'
 
-require_relative '../../helpers'
+require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 require_relative '../../workers/first_text_worker'
@@ -61,7 +61,7 @@ describe 'SomeWorker' do
         NextMessageWorker.jobs.clear
         NewTextWorker.jobs.clear
         FirstTextWorker.jobs.clear
-        Helpers.initialize_testing_vars
+        TwilioHelper.initialize_testing_vars
         Timecop.return
         Sidekiq::Testing.inline!
     end
@@ -139,7 +139,7 @@ describe 'SomeWorker' do
 
     #     sleep SLEEP
     #   end
-    #   expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+    #   expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
     # end
 
     # it "has set_birthdate as true before it sends out the text" do
@@ -176,7 +176,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
     # end
 
     # it "gets all the SPRINT to update time SMS pieces" do
@@ -194,7 +194,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_SPRINT_1, SomeWorker::TIME_SMS_SPRINT_2])
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_SPRINT_1, SomeWorker::TIME_SMS_SPRINT_2])
     # end
 
     # it "doesn't send time update the next day... (sorry mom)" do
@@ -213,7 +213,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
 
 
     #     Timecop.travel(2015, 6, 24, 15, 45, 0)
@@ -228,7 +228,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
 
     # end
 
@@ -247,7 +247,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
 
 
     #     Timecop.travel(2015, 9, 2, 15, 45, 0)
@@ -260,7 +260,7 @@ describe 'SomeWorker' do
     #     end
     #     @user.reload 
 
-    #     expect(Helpers.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE]) #not a second message
+    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE]) #not a second message
     # end
 
 
@@ -346,8 +346,8 @@ describe 'SomeWorker' do
 
 
 
-      expect(Helpers.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)
-      expect(Helpers.getMMSarr).not_to eq(nil)
+      expect(TwilioHelper.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)
+      expect(TwilioHelper.getMMSarr).not_to eq(nil)
     end
 
 
@@ -370,9 +370,9 @@ describe 'SomeWorker' do
       @user.reload 
 
 
-      expect(Helpers.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
-      expect(Helpers.getSMSarr).not_to eq(nil)
-      expect(Helpers.getSMSarr).not_to eq([])
+      expect(TwilioHelper.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+      expect(TwilioHelper.getSMSarr).not_to eq(nil)
+      expect(TwilioHelper.getSMSarr).not_to eq([])
     end
 
 
@@ -564,14 +564,14 @@ time = Time.now.utc
 
     NextMessageWorker.drain
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
     #it properly sends the MMS and SMS on TUES
     Timecop.travel(2015, 6, 23, 17, 24, 0) #on tues!
     Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-    Helpers.testCred
+    TwilioHelper.testCred
 
     (1..10).each do 
       SomeWorker.perform_async
@@ -586,9 +586,9 @@ time = Time.now.utc
     mmsSoFar.concat Message.getMessageArray[0].getMmsArr
     smsSoFar.concat [Message.getMessageArray[0].getSMS]
 
-    expect(Helpers.getMMSarr).to eq(mmsSoFar)
-    expect(Helpers.getSMSarr).to eq(smsSoFar)
-    expect(Helpers.getMMSarr).not_to eq(nil)
+    expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+    expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+    expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
     puts mmsSoFar
     puts smsSoFar
@@ -608,7 +608,7 @@ time = Time.now.utc
         expect(@user.awaiting_choice).to eq false
 
         smsSoFar = [Text::START_SMS_1 + "2" + Text::START_SMS_2]
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
         Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -634,8 +634,8 @@ time = Time.now.utc
         NextMessageWorker.drain
 
 
-        expect(Helpers.getMMSarr).to eq(mmsSoFar)
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
         
@@ -662,9 +662,9 @@ time = Time.now.utc
         mmsSoFar.concat Message.getMessageArray[0].getMmsArr
         smsSoFar.concat [Message.getMessageArray[0].getSMS]
 
-        expect(Helpers.getMMSarr).to eq(mmsSoFar)
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
-        expect(Helpers.getMMSarr).not_to eq(nil)
+        expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
 
@@ -683,9 +683,9 @@ time = Time.now.utc
         #NO CHANGE
         NewTextWorker.drain
 
-        expect(Helpers.getMMSarr).to eq(mmsSoFar)
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
-        expect(Helpers.getMMSarr).not_to eq(nil)
+        expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
         Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
@@ -702,7 +702,7 @@ time = Time.now.utc
 
         #They're asked for their story choice during storyTime.
         smsSoFar.push R18n.t.choice.greet[0]
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
         @user.reload
 
@@ -724,8 +724,8 @@ time = Time.now.utc
         smsSoFar.push story.getSMS
         mmsSoFar.concat story.getMmsArr
 
-        expect(Helpers.getMMSarr).to eq(mmsSoFar)
-        expect(Helpers.getSMSarr).to eq(smsSoFar)
+        expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+        expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
         @user.reload
         #properly update after choice_worker
@@ -757,7 +757,7 @@ time = Time.now.utc
       NextMessageWorker.drain
 
       smsSoFar = [R18n.t.choice.greet[0]]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -771,7 +771,7 @@ time = Time.now.utc
 
     NewTextWorker.drain
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar) #no message
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
@@ -789,7 +789,7 @@ time = Time.now.utc
 
       smsSoFar.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
       expect(@user.next_index_in_series).to eq(999)
@@ -811,7 +811,7 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
@@ -827,7 +827,7 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
@@ -844,7 +844,7 @@ time = Time.now.utc
 
 
       smsSoFar.push R18n.t.no_reply.dropped
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
       expect(@user.subscribed).to eq(false)
 
 
@@ -883,7 +883,7 @@ time = Time.now.utc
       #They're asked for their story choice during storyTime.
       smsSoFar = [R18n.t.choice.greet[0]]
       mmsSoFar = []
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
       expect(@user.awaiting_choice).to eq(true)
@@ -913,8 +913,8 @@ time = Time.now.utc
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
 
-      expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -948,8 +948,8 @@ time = Time.now.utc
       smsSoFar.concat ["StoryTime: Enjoy tonight's superhero story!\n\nWhenever you talk or play with your child, you're helping her grow into a super-reader!"]
 
 
-      expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       puts mmsSoFar
       puts smsSoFar
@@ -975,7 +975,7 @@ time = Time.now.utc
 
       
       smsSoFar = [R18n.t.choice.greet[0]]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -987,7 +987,7 @@ time = Time.now.utc
       end
       @user.reload
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar) #no message
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
@@ -1005,9 +1005,9 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      expect(Helpers.getSMSarr.last).to_not eq(smsSoFar.last)
+      expect(TwilioHelper.getSMSarr.last).to_not eq(smsSoFar.last)
 
-      puts Helpers.getSMSarr
+      puts TwilioHelper.getSMSarr
   end
 
 
@@ -1034,7 +1034,7 @@ time = Time.now.utc
       NewTextWorker.drain
 
       smsSoFar = [(R18n.t.choice.greet[0]).to_s]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -1046,7 +1046,7 @@ time = Time.now.utc
       end
       @user.reload
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar) #no message
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
@@ -1064,7 +1064,7 @@ time = Time.now.utc
     NewTextWorker.drain
 
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
       expect(@user.next_index_in_series).to eq(999)
@@ -1085,7 +1085,7 @@ time = Time.now.utc
 
 
       @user.reload
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
@@ -1100,7 +1100,7 @@ time = Time.now.utc
           NewTextWorker.drain
 
       @user.reload
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
@@ -1116,7 +1116,7 @@ time = Time.now.utc
 
 
       smsSoFar.push R18n.t.no_reply.dropped.to_str
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
       expect(@user.subscribed).to eq(false)
 
 
@@ -1133,7 +1133,7 @@ time = Time.now.utc
       smsSoFar.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + R18n.t.choice.no_greet[0].to_s
      
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       smsSoFar.each do |sms|
         puts sms
@@ -1162,7 +1162,7 @@ time = Time.now.utc
             NewTextWorker.drain
 
       smsSoFar = [R18n.t.choice.greet[0]]
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
@@ -1174,7 +1174,7 @@ time = Time.now.utc
       end
       @user.reload
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar) #no message
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar) #no message
 
       #EXPECT A DAYLATE MSG when don't respond
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
@@ -1192,7 +1192,7 @@ time = Time.now.utc
 
       smsSoFar.push R18n.t.no_reply.day_late + " "+ R18n.t.choice.no_greet[0]
 
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
       
       #valid things: 
       expect(@user.next_index_in_series).to eq(999)
@@ -1220,8 +1220,8 @@ time = Time.now.utc
       smsSoFar.push story.getSMS
       mmsSoFar = story.getMmsArr
 
-      expect(Helpers.getMMSarr).to eq(mmsSoFar)
-      expect(Helpers.getSMSarr).to eq(smsSoFar)
+      expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
+      expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
       smsSoFar.each do |sms|
@@ -1248,14 +1248,14 @@ time = Time.now.utc
 
       (21..40).each do |num|
 
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*2 )
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*2 )
        expect(wait).to eq(num + 40 )
        puts wait
 
       end
 
       (41..60).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + Helpers::MMS_WAIT*4 )
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*4 )
        expect(wait).to eq(num + 80 )
        puts wait
       end
@@ -1270,11 +1270,11 @@ time = Time.now.utc
        expect(time_sent.include? (wait = SomeWorker.getWait(SomeWorker::STORY))).to be false
         time_sent.push wait
 
-        expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
-        time_sent.push wait + Helpers::MMS_WAIT
+        expect(time_sent.include? wait + TwilioHelper::MMS_WAIT).to be false
+        time_sent.push wait + TwilioHelper::MMS_WAIT
 
-        expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
-        time_sent.push wait + Helpers::MMS_WAIT*2
+        expect(time_sent.include? wait + TwilioHelper::MMS_WAIT*2).to be false
+        time_sent.push wait + TwilioHelper::MMS_WAIT*2
       end
 
       puts time_sent.sort
@@ -1299,23 +1299,23 @@ time = Time.now.utc
       end
 
       (1..20).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(Helpers::MMS_WAIT*2 + num + 20)
+       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(TwilioHelper::MMS_WAIT*2 + num + 20)
        puts wait
       end
 
       (21..40).each do |num|
-        expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(20 + num + Helpers::MMS_WAIT*4) 
+        expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(20 + num + TwilioHelper::MMS_WAIT*4) 
         puts wait
       end
 
       (21..40).each do |num|
-        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(40 + num + Helpers::MMS_WAIT*6) 
+        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(40 + num + TwilioHelper::MMS_WAIT*6) 
         puts wait
       end
 
 
       # (41..60).each do |num|
-      #  expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num + Helpers::MMS_WAIT*4 )
+      #  expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num + TwilioHelper::MMS_WAIT*4 )
       #  expect(wait).to eq(num + 80 )
       #  puts wait
       # end
@@ -1341,11 +1341,11 @@ time = Time.now.utc
         time_sent.push wait
 
         if type == SomeWorker::STORY
-          expect(time_sent.include? wait + Helpers::MMS_WAIT).to be false
-          time_sent.push wait + Helpers::MMS_WAIT
+          expect(time_sent.include? wait + TwilioHelper::MMS_WAIT).to be false
+          time_sent.push wait + TwilioHelper::MMS_WAIT
 
-          expect(time_sent.include? wait + Helpers::MMS_WAIT*2).to be false
-          time_sent.push wait + Helpers::MMS_WAIT*2
+          expect(time_sent.include? wait + TwilioHelper::MMS_WAIT*2).to be false
+          time_sent.push wait + TwilioHelper::MMS_WAIT*2
         end
 
         puts wait
@@ -1381,8 +1381,8 @@ time = Time.now.utc
       R18n.thread_set(i18n)
 
 
-      expect(Helpers.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+      expect(TwilioHelper.getSMSarr.last).to_not eq R18n.t.choice.greet[0]
+      expect(TwilioHelper.getSMSarr.last).to eq "Hora del Cuento: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
 
       ######### Spanish
@@ -1406,7 +1406,7 @@ time = Time.now.utc
       i18n = R18n::I18n.new('es', ::R18n.default_places)
       R18n.thread_set(i18n)
 
-      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
+      expect(TwilioHelper.getSMSarr.last).to eq R18n.t.choice.greet[0]
 
 
       #it works for a different locale 
@@ -1428,8 +1428,8 @@ time = Time.now.utc
       i18n = R18n::I18n.new('en', ::R18n.default_places)
       R18n.thread_set(i18n)
 
-      expect(Helpers.getSMSarr.last).to eq R18n.t.choice.greet[0]
-      expect(Helpers.getSMSarr.last).to eq "StoryTime: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
+      expect(TwilioHelper.getSMSarr.last).to eq R18n.t.choice.greet[0]
+      expect(TwilioHelper.getSMSarr.last).to eq "StoryTime: Hi! Ask your child if they want a story about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
     end
 
@@ -1597,7 +1597,7 @@ time = Time.now.utc
         mmsSoFar.concat story.getMmsArr
 
         NextMessageWorker.drain
-        expect(Helpers.getMMSarr).to eq mmsSoFar
+        expect(TwilioHelper.getMMSarr).to eq mmsSoFar
       end
 
 
