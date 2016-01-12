@@ -11,7 +11,6 @@ require 'active_support/all'
 require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
-require_relative '../../workers/first_text_worker'
 require_relative '../../workers/next_message_worker'
 require_relative '../../workers/new_text_worker'
 

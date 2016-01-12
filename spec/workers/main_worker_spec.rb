@@ -22,7 +22,6 @@ require_relative '../../app/enroll'
 require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
-require_relative '../../workers/first_text_worker'
 
 require_relative '../../workers/main_worker'
 require_relative '../../workers/new_text_worker'
@@ -60,7 +59,6 @@ describe 'MainWorker' do
         MainWorker.jobs.clear
         NextMessageWorker.jobs.clear
         NewTextWorker.jobs.clear
-        FirstTextWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
         Sidekiq::Testing.inline!
