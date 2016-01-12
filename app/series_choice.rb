@@ -17,8 +17,8 @@ require_relative '../i18n/constants'
 include Text
 
 #sending messages
-require_relative '../message'
-require_relative '../messageSeries'
+require_relative '../stories/story'
+require_relative '../stories/storySeries'
 require_relative '../workers/next_message_worker'
 require_relative '../helpers.rb'
 

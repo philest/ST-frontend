@@ -8,8 +8,8 @@ require 'time'
 require 'active_support/all'
 
 require_relative '../../helpers'
-require_relative '../../message'
-require_relative '../../messageSeries'
+require_relative '../../stories/story'
+require_relative '../../stories/storySeries'
 
 require_relative '../../workers/next_message_worker'
 # require_relative '../workers/first_text_worker'

@@ -2,8 +2,8 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 
-require_relative '../message'
-require_relative '../messageSeries'
+require_relative '../stories/story'
+require_relative '../stories/storySeries'
 require_relative '../helpers'
 
 require_relative '../i18n/constants'

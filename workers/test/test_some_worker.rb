@@ -7,8 +7,8 @@ require 'sidekiq'
 require 'sidetiq'
 
 require_relative '../../sprint'
-require_relative '../../message'
-require_relative '../../messageSeries'
+require_relative '../../stories/story'
+require_relative '../../stories/storySeries'
 require_relative '../../helpers'
 
 class SomeWorker

@@ -1,5 +1,5 @@
-require_relative './messageSeries'
-require_relative './i18n/constants'
+require_relative './storySeries'
+require_relative '../i18n/constants'
 
 class Message
 

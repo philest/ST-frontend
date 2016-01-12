@@ -20,8 +20,8 @@ require_relative '../../app/app.rb'
 require_relative '../../auto-signup'
 
 require_relative '../../helpers'
-require_relative '../../message'
-require_relative '../../messageSeries'
+require_relative '../../stories/story'
+require_relative '../../stories/storySeries'
 require_relative '../../workers/first_text_worker'
 
 require_relative '../../workers/some_worker'
