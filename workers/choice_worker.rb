@@ -5,7 +5,7 @@ require_relative '../models/user'           #add the user model
 require 'sidekiq'
 
 require_relative '../sprint'
-require_relative '../messageSeries'
+require_relative '../stories/storySeries'
 
 SPRINT_NAME_2 = "Sprint Spectrum, L.P."
 

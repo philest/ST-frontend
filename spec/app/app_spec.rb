@@ -478,8 +478,8 @@ describe 'The StoryTime App' do
             puts "\n"
             puts "\n"
 
-            require_relative '../../message'
-            require_relative '../../messageSeries'
+            require_relative '../../stories/story'
+            require_relative '../../stories/storySeries'
 
             messageSeriesHash = MessageSeries.getMessageSeriesHash
             story = messageSeriesHash["d"+ @user.series_number.to_s][0]
