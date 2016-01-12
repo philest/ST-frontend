@@ -48,7 +48,7 @@ Normal text rates may apply. For help or feedback, please contact our director, 
  Sidekiq::Worker.clear_all
 
 
-describe 'The NextMessageWorker' do
+describe 'The NewTextWorker' do
   include Rack::Test::Methods
   include Text
   def app
@@ -107,30 +107,25 @@ describe 'The NextMessageWorker' do
 
 
     it "Concatenates a long SMS to NON-SPrint in one piece" do
-        @user = create(:user)
-        @user.update(carrier: "ATT")
+        @user = create(:user, carrier: 'ATT')
 
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
         NewTextWorker.drain
 
-      # expect(TwilioHelper.getSMSarr.size).to eq 1
-
-        expect(TwilioHelper.getSMSarr[1]).to eq SINGLE_SPACE_LONG
-        expect(TwilioHelper.getSMSarr.size).to eq 2
+        expect(TwilioHelper.getSMSarr.first).to eq SINGLE_SPACE_LONG
+        expect(TwilioHelper.getSMSarr.size).to eq 1
     end
 
     it "sends a 1 piece SMS to sprint in... one piece (160 char), w/o numbering" do
-      get 'test/' + "+15612797798" + "/STORY/" + "ATT"
-      @user = User.find_by_phone "+15612797798"
-      @user.reload
+      user = create(:user)
 
-      NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, NOT_STORY, @user.phone)
+      NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, NOT_STORY, user.phone)
       NewTextWorker.drain
 
       # expect(TwilioHelper.getSMSarr.size).to eq 1
 
-      expect(TwilioHelper.getSMSarr[1]).to eq Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2
-      expect(TwilioHelper.getSMSarr.size).to eq 2
+      expect(TwilioHelper.getSMSarr.first).to eq Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2
+      expect(TwilioHelper.getSMSarr.size).to eq 1
 
       puts TwilioHelper.getSMSarr[1]
     end
