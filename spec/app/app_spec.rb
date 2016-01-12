@@ -44,8 +44,7 @@ MIX = "If you can't receive picture msgs, reply TEXT for text-only stories. Reme
 
 MIXIER = "If you can't receive picture msgs, reply TEXT for text-only stories.\nRemember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day. Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831.\nReply " + STOP + " to cancel."
 
-
-  DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
+  DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
 include Text
@@ -897,7 +896,7 @@ describe 'The StoryTime App' do
           user_2 = create(:user, phone: 456)
           get '/test/123/hello/ATT'
           get '/test/456/hi/ATT'
-          expect(TwilioHelper.getSMSarr[1]).to include "sent"
+          expect(TwilioHelper.getSMSarr[-2]).to include "sent"
         end
 
 
@@ -964,26 +963,14 @@ describe 'The StoryTime App' do
           it "sends us an SMS" do
             # Hacky. Just looking in message list for text 
             # forwarded to us: 
-            expect(TwilioHelper.getSMSarr[1]).to include "sent"
+            expect(TwilioHelper.getSMSarr[-2]).to include "sent"
           end
         end
 
 
       end
-      #this is a tests
 
     end
-    #it "gets a last message" do 
-    #     @user = User.find_by_phone("+15612125831")
-    #     expect(@user).to be nil 
-        
-    #     Sidekiq::Testing.inline! do
-    #       app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
-    #     end
-
-    #     get '/test/+15612125831/fakecmd/ATT'
-    #     expect(get_last_message("+15612125831")).to_eq "fakecmd"
-    #   end
 
 end
 

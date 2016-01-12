@@ -21,14 +21,17 @@ TIME_NO_DST = Time.utc(2015, 6, 21, 22, 30, 0)
 #-05:00
 
 
-#adjust the UTC time for EST daylight savings 
+# Adjust the UTC time for EST daylight savings.
 if is_dst?						
-	DEFAULT_TIME = TIME_DST 
+	default = TIME_DST 
 else 											
-	DEFAULT_TIME = TIME_NO_DST 
+	default = TIME_NO_DST 
 end
 
-#ensure TEST always has DST time. 
+# Ensure TEST always has DST time:
+# compatible with legacy specs.
 if ENV['RACK_ENV'] == "test"
 	DEFAULT_TIME = TIME_DST
+else
+	DEFAULT_TIME = default
 end 
