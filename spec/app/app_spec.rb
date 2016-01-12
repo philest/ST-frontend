@@ -872,7 +872,7 @@ describe 'The StoryTime App' do
 
     describe "Session" do 
 
-      describe 'basics' do 
+      describe 'Hash' do 
         before(:each) do
           get '/test/+15613334444/STORY/ATT'
           @user = User.find_by_phone "+15613334444" 
@@ -888,6 +888,19 @@ describe 'The StoryTime App' do
           expect(session['prev_body']).to eq "story"
           expect(session['new_body']).to eq 'who is this'
         end
+
+        # NOTE: This functionality differs from 
+        # the Twilio production session. That is 
+        # user-independent. 
+        it "mock is *NOT* user-independedent" do
+          user_1 = create(:user, phone: 123)
+          user_2 = create(:user, phone: 456)
+          get '/test/123/hello/ATT'
+          get '/test/456/hi/ATT'
+          expect(TwilioHelper.getSMSarr[1]).to include "sent"
+        end
+
+
       end
 
 
@@ -954,6 +967,7 @@ describe 'The StoryTime App' do
             expect(TwilioHelper.getSMSarr[1]).to include "sent"
           end
         end
+
 
       end
       #this is a tests
