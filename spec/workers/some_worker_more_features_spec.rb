@@ -15,7 +15,7 @@ require_relative '../../workers/first_text_worker'
 require_relative '../../workers/next_message_worker'
 require_relative '../../workers/new_text_worker'
 
-require_relative '../constants'
+require_relative '../i18n/constants'
 
 SLEEP_SCALE = 860
 

@@ -6,7 +6,7 @@ require_relative '../message'
 require_relative '../messageSeries'
 require_relative '../helpers'
 
-require_relative '../constants'
+require_relative '../i18n/constants'
 require 'sinatra/r18n'
 
 

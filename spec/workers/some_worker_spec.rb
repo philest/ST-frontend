@@ -27,7 +27,7 @@ require_relative '../../workers/first_text_worker'
 require_relative '../../workers/some_worker'
 require_relative '../../workers/new_text_worker'
 
-require_relative '../../constants'
+require_relative '../../i18n/constants'
 
 SLEEP = (1.0 / 16.0) 
 

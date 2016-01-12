@@ -5,7 +5,7 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require_relative '../../auto-signup'
+require_relative '../../app/enroll'
 
 #set default locale to english
 # R18n.default_places = '../i18n/'
@@ -46,7 +46,7 @@ describe 'The StoryTime App' do
         expect(@user).to be nil 
         
         Sidekiq::Testing.inline! do
-          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
         end
 
         @user = User.find_by_phone("+15612125831")
@@ -63,7 +63,7 @@ describe 'The StoryTime App' do
         @user = User.find_by_phone("+15612125831")
         expect(@user).to be nil 
         
-        Signup.enroll(["+15612125831"], 'es', {Carrier: "ATT"})
+        app_enroll_many(["+15612125831"], 'es', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
         @user.reload
         expect(@user).to_not be nil
@@ -74,10 +74,10 @@ describe 'The StoryTime App' do
       end
 
       it "has getWait giving values every 2 seconds." do 
-        Signup.initialize_user_count()
+        @wait = 0 
        
         (0..40).each do |num|
-         expect(wait = Signup.getWait).to eq(num*8)
+         expect(wait = get_new_wait()).to eq(STAGGER_TIME + num*STAGGER_TIME)
          
          if num == 0 || num == 40
           puts wait
@@ -91,7 +91,7 @@ describe 'The StoryTime App' do
       end
 
       it "enrolls with time 21:30 UTC (17:30 EST)" do
-        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
 
         expect(@user.time.zone).to eq "UTC"
@@ -108,7 +108,7 @@ describe 'The StoryTime App' do
         R18n.set 'es'
 
         Sidekiq::Testing.inline! do
-          Signup.enroll(["+15612125832"], 'es', {Carrier: Text::SPRINT})
+          app_enroll_many(["+15612125832"], 'es', {Carrier: Text::SPRINT})
         end
         @user = User.find_by_phone("+15612125832")
 
@@ -126,7 +126,7 @@ describe 'The StoryTime App' do
         R18n.set 'es'
 
         Sidekiq::Testing.inline! do
-          Signup.enroll(["+15612125831"], 'es', {Carrier: "ATT"})
+          app_enroll_many(["+15612125831"], 'es', {Carrier: "ATT"})
         end
         @user = User.find_by_phone("+15612125831")
       
@@ -207,8 +207,8 @@ describe 'The StoryTime App' do
         # R18n.thread_set(i18n)
         # R18n.set 'es'
 
-        Signup.enroll(["+12032223333"], 'es', {Carrier: Text::SPRINT})
-        Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
+        app_enroll_many(["+12032223333"], 'es', {Carrier: Text::SPRINT})
+        app_enroll_many(["+14445556666"], 'es', {Carrier: "ATT"})
 
         expect(Helpers.getSMSarr.length).to eq 3 
         puts "Sp Part 1: #{Helpers.getSMSarr[0]}"

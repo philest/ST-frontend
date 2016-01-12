@@ -27,7 +27,7 @@ R18n::I18n.default = 'en'
 require_relative '../helpers.rb'
 
 #temp: constants not yet translated
-require_relative '../constants'
+require_relative '../i18n/constants'
 include Text
 
 require_relative '../app/series_choice'
