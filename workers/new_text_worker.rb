@@ -11,9 +11,13 @@ require_relative '../helpers/sprint_helper'
 
 require_relative './next_message_worker'
 
+## Types 
+# For a lone SMS, update story details. 
 STORY = "story"
-
+# For a lone SMS
 NOT_STORY  = "not story"
+# For a lone MMS.
+MMS_ONLY = 'mms only'
 
 
 class NewTextWorker
