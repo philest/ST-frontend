@@ -47,7 +47,7 @@ DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:
 
 
 
-describe 'SomeWorker' do
+describe 'MainWorker' do
   include Rack::Test::Methods
   include Text
 
@@ -57,7 +57,7 @@ describe 'SomeWorker' do
 
 
     before(:each) do
-        SomeWorker.jobs.clear
+        MainWorker.jobs.clear
         NextMessageWorker.jobs.clear
         NewTextWorker.jobs.clear
         FirstTextWorker.jobs.clear
@@ -72,27 +72,27 @@ describe 'SomeWorker' do
     end
 
 
-    it "properly enques a SomeWorker" do
+    it "properly enques a MainWorker" do
 
-      expect(SomeWorker.jobs.size).to eq(0)
+      expect(MainWorker.jobs.size).to eq(0)
       Sidekiq::Testing.fake! do 
-        SomeWorker.perform_async
+        MainWorker.perform_async
       end
-      expect(SomeWorker.jobs.size).to eq(1)
+      expect(MainWorker.jobs.size).to eq(1)
     end
 
     it "starts with no enqued workers" do
-      expect(SomeWorker.jobs.size).to eq(0)
+      expect(MainWorker.jobs.size).to eq(0)
     end
 
     # it "might recurr" do
     #   Timecop.scale(1800) #seconds now seem like hours
     #   puts Time.now
 
-    #   SomeWorker.perform_async
-    #   expect(SomeWorker.jobs.size).to eq(1)
-    #   SomeWorker.drain
-    #   expect(SomeWorker.jobs.size).to eq(0)
+    #   MainWorker.perform_async
+    #   expect(MainWorker.jobs.size).to eq(1)
+    #   MainWorker.drain
+    #   expect(MainWorker.jobs.size).to eq(0)
 
     #   sleep 1 
     #   puts Time.now
@@ -109,16 +109,16 @@ describe 'SomeWorker' do
       puts Time.now
 
       (1..30).each do 
-        expect(SomeWorker.jobs.size).to eq(0)
+        expect(MainWorker.jobs.size).to eq(0)
 
         puts Time.now
-        SomeWorker.perform_async
+        MainWorker.perform_async
 
-        expect(SomeWorker.jobs.size).to eq(1)
+        expect(MainWorker.jobs.size).to eq(1)
 
-        SomeWorker.drain
+        MainWorker.drain
 
-        expect(SomeWorker.jobs.size).to eq(0)
+        expect(MainWorker.jobs.size).to eq(0)
         sleep SLEEP
       end
 
@@ -134,12 +134,12 @@ describe 'SomeWorker' do
     #   Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #   (1..30).each do 
-    #     SomeWorker.perform_async
-    #     SomeWorker.drain
+    #     MainWorker.perform_async
+    #     MainWorker.drain
 
     #     sleep SLEEP
     #   end
-    #   expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+    #   expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE])
     # end
 
     # it "has set_birthdate as true before it sends out the text" do
@@ -150,8 +150,8 @@ describe 'SomeWorker' do
     #     Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
@@ -169,14 +169,14 @@ describe 'SomeWorker' do
     #     Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL])
     # end
 
     # it "gets all the SPRINT to update time SMS pieces" do
@@ -187,14 +187,14 @@ describe 'SomeWorker' do
     #     Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_SPRINT_1, SomeWorker::TIME_SMS_SPRINT_2])
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_SPRINT_1, MainWorker::TIME_SMS_SPRINT_2])
     # end
 
     # it "doesn't send time update the next day... (sorry mom)" do
@@ -206,14 +206,14 @@ describe 'SomeWorker' do
     #     Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL])
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL])
 
 
     #     Timecop.travel(2015, 6, 24, 15, 45, 0)
@@ -221,14 +221,14 @@ describe 'SomeWorker' do
 
        
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::TIME_SMS_NORMAL]) #not a second message
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL]) #not a second message
 
     # end
 
@@ -240,27 +240,27 @@ describe 'SomeWorker' do
     #     Timecop.scale(1920) #1/16 seconds now are two minutes
 
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE])
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE])
 
 
     #     Timecop.travel(2015, 9, 2, 15, 45, 0)
        
     #     (1..20).each do 
-    #       SomeWorker.perform_async
-    #       SomeWorker.drain
+    #       MainWorker.perform_async
+    #       MainWorker.drain
 
     #       sleep SLEEP
     #     end
     #     @user.reload 
 
-    #     expect(TwilioHelper.getSMSarr).to eq([SomeWorker::BIRTHDATE_UPDATE]) #not a second message
+    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE]) #not a second message
     # end
 
 
@@ -272,7 +272,7 @@ describe 'SomeWorker' do
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
 
       time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time)).to be(true)
+      expect(MainWorker.sendStory?("444", time)).to be(true)
     end
 
     it "has sendStory? rightly not working when past time by one minute" do
@@ -281,7 +281,7 @@ describe 'SomeWorker' do
         
       Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
       time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time)).to be(false)
+      expect(MainWorker.sendStory?("444", time)).to be(false)
     end
 
 
@@ -292,7 +292,7 @@ describe 'SomeWorker' do
       Timecop.travel(2016, 6, 23, 17, 28, 0) #on Tuesday!
 
       time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time)).to be(false)
+      expect(MainWorker.sendStory?("444", time)).to be(false)
     end
 
 
@@ -303,7 +303,7 @@ describe 'SomeWorker' do
         
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on Tuesday!
       time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time)).to be(true)
+      expect(MainWorker.sendStory?("444", time)).to be(true)
     end
 
 
@@ -313,7 +313,7 @@ describe 'SomeWorker' do
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
             time = Time.now.utc
 
-      expect(SomeWorker.sendStory?("444", time)).to be(true)
+      expect(MainWorker.sendStory?("444", time)).to be(true)
     end
 
     it "doesn't send within 24 hours of creation " do 
@@ -322,7 +322,7 @@ describe 'SomeWorker' do
       Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
             time = Time.now.utc
 
-      expect(SomeWorker.sendStory?("444", time)).to be(false)
+      expect(MainWorker.sendStory?("444", time)).to be(false)
     end
 
 
@@ -334,8 +334,8 @@ describe 'SomeWorker' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         sleep SLEEP_TIME
       end
@@ -359,8 +359,8 @@ describe 'SomeWorker' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         sleep SLEEP_TIME
       end
@@ -383,31 +383,31 @@ describe 'SomeWorker' do
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 28, 17, 29, 0) #on sun.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
   end
 
   it "sends only on right days for M-W-F schedule (2)" do
@@ -417,31 +417,31 @@ time = Time.now.utc
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
   end
 
 
@@ -452,31 +452,31 @@ time = Time.now.utc
       
       Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(true)
+      expect(MainWorker.sendStory?("444", time )).to be(true)
 
       Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
 
       Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
 time = Time.now.utc
-      expect(SomeWorker.sendStory?("444", time )).to be(false)
+      expect(MainWorker.sendStory?("444", time )).to be(false)
   end
 
 
@@ -502,13 +502,13 @@ time = Time.now.utc
 
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
       
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
 
       # (1..15).each do 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
       #   sleep SLEEP_TIME
       # end
 
@@ -522,8 +522,8 @@ time = Time.now.utc
       Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -532,8 +532,8 @@ time = Time.now.utc
       # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
       # Timecop.scale(1920) #1/16 seconds now are two minutes
       # (1..20).each do 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
       #   sleep SLEEP
       # end
       # @user.reload 
@@ -543,8 +543,8 @@ time = Time.now.utc
       # Timecop.travel(2015, 6, 26, 17, 15, 0) #on Fri.
       # Timecop.scale(1920) #1/16 seconds now are two minutes     
       # (1..20).each do 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
       #   sleep SLEEP
       # end
       # @user.reload 
@@ -555,8 +555,8 @@ time = Time.now.utc
   #series choice
   it "sends proper texts for first signup through first story and series choice!" do
     Timecop.travel(2015, 6, 22, 16, 15, 0) #on MONDAY!
-    get 'test/+15612129000/STORY/ATT'
-    @user = User.find_by(phone: "+15612129000")
+    get 'test/+15559991111/STORY/ATT'
+    @user = User.find_by(phone: "+15559991111")
     @user.reload
 
     mmsSoFar = Text::FIRST_MMS
@@ -574,8 +574,8 @@ time = Time.now.utc
     TwilioHelper.testCred
 
     (1..10).each do 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
       sleep SLEEP_TIME
     end
    
@@ -583,8 +583,12 @@ time = Time.now.utc
 
     @user.reload 
 
+
     mmsSoFar.concat Message.getMessageArray[0].getMmsArr
     smsSoFar.concat [Message.getMessageArray[0].getSMS]
+
+    #HACK for VERY weird error: concat changes constant.
+    Text::FIRST_MMS = [Text::FIRST_MMS.first]
 
     expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
     expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
@@ -599,8 +603,8 @@ time = Time.now.utc
     it "sends the right first weeks (first, then two stories) content" do
         Sidekiq::Testing.fake! 
         Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-        get 'test/+15612129000/STORY/ATT'
-        @user = User.find_by(phone: "+15612129000")
+        get 'test/+15559991111/STORY/ATT'
+        @user = User.find_by(phone: "+15559991111")
         NextMessageWorker.drain
         @user.reload
         @user.update(time: DEFAULT_TIME)
@@ -611,20 +615,19 @@ time = Time.now.utc
         expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
-        Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-        (1..10).each do 
-          SomeWorker.perform_async
-          SomeWorker.drain
-          sleep SLEEP_TIME
-        end
+        Timecop.travel(2015, 6, 22, 16, 29, 0) #on MONDAY!
+        # Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+        # (1..10).each do 
+          MainWorker.perform_async
+          MainWorker.drain
+        #   sleep SLEEP_TIME
+        # end
        
         NextMessageWorker.drain
 
         @user.reload
         expect(@user.story_number).to eq(0)
         expect(@user.total_messages).to eq(1)
-
-
 
         mmsSoFar = Text::FIRST_MMS
         smsSoFar = [ Text::START_SMS_1 + "2" + Text::START_SMS_2]
@@ -634,20 +637,21 @@ time = Time.now.utc
         NextMessageWorker.drain
 
 
+
         expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
         expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
 
         
         Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
-        Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+        # Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-
-        (1..10).each do 
-          SomeWorker.perform_async
-          SomeWorker.drain
-          sleep SLEEP_TIME
-        end
+        Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
+        # (1..10).each do 
+          MainWorker.perform_async
+          MainWorker.drain
+        #   sleep SLEEP_TIME
+        # end
 
 
 
@@ -669,13 +673,16 @@ time = Time.now.utc
 
 
         Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED. (3:30)
-        Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+        # Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-        (1..10).each do 
-          SomeWorker.perform_async
-          SomeWorker.drain
-          sleep SLEEP_TIME
-        end
+        # (1..10).each do 
+
+          Timecop.travel(2015, 6, 24, 17, 29, 0) #on WED. (3:30)
+
+          MainWorker.perform_async
+          MainWorker.drain
+        #   sleep SLEEP_TIME
+        # end
         @user.reload 
         expect(@user.total_messages).to eq(2)
         expect(@user.story_number).to eq(1)
@@ -688,20 +695,24 @@ time = Time.now.utc
         expect(TwilioHelper.getMMSarr).not_to eq(nil)
 
 
-        Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
-        Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+        # Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS. (3:52)
+        # Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
-        (1..10).each do 
-          SomeWorker.perform_async
-          SomeWorker.drain
-          sleep SLEEP_TIME
-        end
+        # (1..10).each do 
+          Timecop.travel(2015, 6, 25, 17, 30, 0) #on THURS. (3:30)
+
+          MainWorker.perform_async
+          MainWorker.drain
+        #   sleep SLEEP_TIME
+        # end
         @user.reload 
+
 
         NewTextWorker.drain
 
         #They're asked for their story choice during storyTime.
-        smsSoFar.push R18n.t.choice.greet[0]
+
+        smsSoFar.push R18n.t.choice.greet[0].to_s
         expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
         @user.reload
@@ -744,8 +755,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -763,8 +774,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -778,8 +789,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -802,8 +813,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -818,8 +829,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -833,8 +844,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -866,8 +877,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -920,8 +931,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
 
@@ -965,8 +976,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -981,8 +992,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -994,8 +1005,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1025,8 +1036,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1040,8 +1051,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1053,8 +1064,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1077,8 +1088,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
     NewTextWorker.drain
@@ -1092,8 +1103,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
 
@@ -1106,8 +1117,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1153,8 +1164,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1168,8 +1179,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1181,8 +1192,8 @@ time = Time.now.utc
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload
@@ -1237,37 +1248,37 @@ time = Time.now.utc
       
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
 
       (1..20).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num)
+       expect(wait = MainWorker.getWait(MainWorker::STORY)).to eq(num)
        puts wait
       end
 
       (21..40).each do |num|
 
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*2 )
+       expect(wait = MainWorker.getWait(MainWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*2 )
        expect(wait).to eq(num + 40 )
        puts wait
 
       end
 
       (41..60).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*4 )
+       expect(wait = MainWorker.getWait(MainWorker::STORY)).to eq(num + TwilioHelper::MMS_WAIT*4 )
        expect(wait).to eq(num + 80 )
        puts wait
       end
 
 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
       time_sent = []
 
       (1..800).each do |num|
-       expect(time_sent.include? (wait = SomeWorker.getWait(SomeWorker::STORY))).to be false
+       expect(time_sent.include? (wait = MainWorker.getWait(MainWorker::STORY))).to be false
         time_sent.push wait
 
         expect(time_sent.include? wait + TwilioHelper::MMS_WAIT).to be false
@@ -1289,40 +1300,40 @@ time = Time.now.utc
       
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
 
       (1..20).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num )
+       expect(wait = MainWorker.getWait(MainWorker::TEXT)).to eq(num )
        puts wait
       end
 
       (1..20).each do |num|
-       expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(TwilioHelper::MMS_WAIT*2 + num + 20)
+       expect(wait = MainWorker.getWait(MainWorker::STORY)).to eq(TwilioHelper::MMS_WAIT*2 + num + 20)
        puts wait
       end
 
       (21..40).each do |num|
-        expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(20 + num + TwilioHelper::MMS_WAIT*4) 
+        expect(wait = MainWorker.getWait(MainWorker::TEXT)).to eq(20 + num + TwilioHelper::MMS_WAIT*4) 
         puts wait
       end
 
       (21..40).each do |num|
-        expect(wait = SomeWorker.getWait(SomeWorker::STORY)).to eq(40 + num + TwilioHelper::MMS_WAIT*6) 
+        expect(wait = MainWorker.getWait(MainWorker::STORY)).to eq(40 + num + TwilioHelper::MMS_WAIT*6) 
         puts wait
       end
 
 
       # (41..60).each do |num|
-      #  expect(wait = SomeWorker.getWait(SomeWorker::TEXT)).to eq(num + TwilioHelper::MMS_WAIT*4 )
+      #  expect(wait = MainWorker.getWait(MainWorker::TEXT)).to eq(num + TwilioHelper::MMS_WAIT*4 )
       #  expect(wait).to eq(num + 80 )
       #  puts wait
       # end
 
 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
       time_sent = []
 
@@ -1331,16 +1342,16 @@ time = Time.now.utc
       (1..400).each do |num|
 
         if num % 2 == 0
-          type = SomeWorker::STORY
+          type = MainWorker::STORY
         else
-          type = SomeWorker::TEXT
+          type = MainWorker::TEXT
         end
 
 
-       expect(time_sent.include? (wait = SomeWorker.getWait(type))).to be false
+       expect(time_sent.include? (wait = MainWorker.getWait(type))).to be false
         time_sent.push wait
 
-        if type == SomeWorker::STORY
+        if type == MainWorker::STORY
           expect(time_sent.include? wait + TwilioHelper::MMS_WAIT).to be false
           time_sent.push wait + TwilioHelper::MMS_WAIT
 
@@ -1373,7 +1384,7 @@ time = Time.now.utc
 
       Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received (THURSDAY!).
 
-      SomeWorker.perform_async
+      MainWorker.perform_async
 
 
       #set as English
@@ -1399,7 +1410,7 @@ time = Time.now.utc
 
       Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
   
-      SomeWorker.perform_async
+      MainWorker.perform_async
 
 
       #set as Spanish
@@ -1422,7 +1433,7 @@ time = Time.now.utc
 
       Timecop.travel(2016, 6, 23, 17, 30, 0) #First Story Received.
   
-      SomeWorker.perform_async
+      MainWorker.perform_async
 
       #set as English
       i18n = R18n::I18n.new('en', ::R18n.default_places)
@@ -1443,7 +1454,7 @@ time = Time.now.utc
       Timecop.travel(2015, 11, 24, 17, 29, 0) #on Tuesday!
       time = Time.now.utc
 
-      expect(SomeWorker.sendStory?("444", time)).to be(true)
+      expect(MainWorker.sendStory?("444", time)).to be(true)
 
       end 
 

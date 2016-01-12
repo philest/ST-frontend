@@ -460,8 +460,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 
@@ -471,8 +471,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 6, 25, 17, 30, 0) #on Thurs!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 
@@ -490,8 +490,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 6, 30, 17, 30, 0) #on next Tuesday!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 
@@ -500,8 +500,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 7, 2, 17, 30, 0) #on next Thurs!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 
@@ -521,8 +521,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 6, 23, 17, 30, 0) #on that Tuesday!
       
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
 
@@ -531,8 +531,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 6, 25, 17, 30, 0) #on that Thursday!
       
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
 
@@ -543,8 +543,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 6, 30, 17, 30, 0) #on the 2nd Tues!
       
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
 
@@ -554,8 +554,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 7, 2, 17, 30, 0) #on the 2nd Thurs!
       
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
 
@@ -565,8 +565,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 7, 7, 17, 30, 0) #DST on the third Tuesday!
 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
 
@@ -581,8 +581,8 @@ describe 'The StoryTime App' do
 
       #   Timecop.travel(2015, 7, 9, 17, 30, 0) #on third Thurs!
 
-      #   SomeWorker.perform_async
-      #   SomeWorker.drain
+      #   MainWorker.perform_async
+      #   MainWorker.drain
 
       #   NextMessageWorker.drain
       #   NewTextWorker.drain
@@ -608,8 +608,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 7, 7, 17, 30, 0) #on next Tuesday!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 
@@ -620,8 +620,8 @@ describe 'The StoryTime App' do
 
         Timecop.travel(2015, 7, 9, 17, 30, 0) #on next Thurs!
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
         NextMessageWorker.drain
 

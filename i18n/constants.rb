@@ -116,5 +116,4 @@ EXAMPLE_SMS = "Thanks for trying out StoryTime, free rhyming stories by text! En
 STORY = "story"
 NOT_STORY = "not_story"
 
-
 end
