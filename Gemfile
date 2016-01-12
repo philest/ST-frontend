@@ -24,6 +24,7 @@ group :development do
   gem "better_errors"
   gem "sinatra-contrib"
   gem 'guard-rspec', require: false
+  gem 'fuubar'
 end
 
 group :test do

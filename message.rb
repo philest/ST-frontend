@@ -1,5 +1,5 @@
 require_relative './messageSeries'
-require_relative './constants'
+require_relative './i18n/constants'
 
 class Message
 

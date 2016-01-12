@@ -1,6 +1,7 @@
-#  app/enroll.rb 	                          Phil Esterman		
+#  app/enroll.rb                            Phil Esterman   
 # 
-#  Enroll the user for stories. 
+#  Enroll the user for stories. Also, wrapper for signing
+#  up many parents.  
 #  --------------------------------------------------------
 
 #test
@@ -16,7 +17,7 @@ translations_path = File.expand_path(File.dirname(__FILE__) + '/../i18n')
 R18n.default_places { translations_path }
 
 #temp: constants not yet translated
-require_relative '../constants'
+require_relative '../i18n/constants'
 #constants (untranslated)
 include Text
 
@@ -50,170 +51,209 @@ MODE ||= ENV['RACK_ENV']
 PRO ||= "production"
 TEST ||= "test"
 
+# The seconds to wait between 
+# signup texts to parents. 
+STAGGER_TIME = 10
+
+
 #configure Twilio
 account_sid ||= ENV['TW_ACCOUNT_SID']
 auth_token ||= ENV['TW_AUTH_TOKEN']
 @client ||= Twilio::REST::Client.new account_sid, auth_token
 
+##
+#  Return the next parent's wait time 
+#  for their first story: one STAGGER
+#  after the last parent's time.
+#
+def get_new_wait
+  @wait += STAGGER_TIME 
+end
+
+
+##
+# Wrapper for subscribing many users. 
+#  - Send the first 'signup' story (MMS with into SMS).
+#  - Take array of parent phone numbers, with given language.
+def app_enroll_many(phone_nums, locale, *params)
+  @wait = 0 
+
+  if MODE == TEST
+    if params == nil 
+      # Set fake. 
+      params = {Carrier: "ATT"}
+    else 
+      # Pop from array.
+      params = params.shift
+    end 
+  end
+
+  phone_nums.each do |phone|
+    app_enroll(params, phone, locale, STORY, get_new_wait())
+    puts "Enrolled #{phone}."
+  end
+end
+
+
 
 # Enroll the user for stories, sending first
 # story and text. Alternatively, used
 # to send a sample story.  
-#	
+# 
 #   params => fake user data:
-# 	  [Carrier: "ATT", Body: "BREAK"] etc. 
-#   	-(For TEST mode. Normally given by Twilio.)	
+#     [Carrier: "ATT", Body: "BREAK"] etc. 
+#     -(For TEST mode. Normally given by Twilio.) 
 #   user_phone => phone number: "+15614449999"
 #   locale => language: "en"
-# 	type => sample or story: SAMPLE
+#   type => sample or story: SAMPLE
 #   wait_time) => async wait to send: [14]
-# 		-(for manual signup)
+#     -(for manual signup)
 #
 def app_enroll(params, user_phone, locale, type, *wait_time) 
 
-	@user = User.find_by_phone(user_phone) #check if already registered.
+  @user = User.find_by_phone(user_phone) #check if already registered.
 
-	if @user == nil
-		@user = User.create(phone: user_phone, locale: locale)
-	end
+  if @user == nil
+    @user = User.create(phone: user_phone, locale: locale)
+  end
 
-	#PRO, set locale for returning user 
-	if locale != nil && @user != nil
-		i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
+  #PRO, set locale for returning user 
+  if locale != nil && @user != nil
+    i18n = R18n::I18n.new(@user.locale, ::R18n.default_places)
         R18n.thread_set(i18n)
-	 	#set the locale for that user, w/in this thread
-	end
+    #set the locale for that user, w/in this thread
+  end
 
-	if type == STORY
-		@user.update(sample: false)
-		@user.update(subscribed: true) 
-		@user.update(locale: locale)
-	elsif type == SAMPLE
-		@user.update(sample: true)
-		@user.update(subscribed: false)
-	end
+  if type == STORY
+    @user.update(sample: false)
+    @user.update(subscribed: true) 
+    @user.update(locale: locale)
+  elsif type == SAMPLE
+    @user.update(sample: true)
+    @user.update(subscribed: false)
+  end
 
-	if type == STORY
-		@user.update(days_per_week: 2)
-	end
+  if type == STORY
+    @user.update(days_per_week: 2)
+  end
 
-	#must manually set default time.
-	@user.update(time: DEFAULT_TIME)
-
-
-	## ASSIGN TO EXPERIMENT VARIATION
-	#  -get first experiment
-	#  -assign user to one of its variation
-	#  -alternate variations using modulo
-	#
-	if type == STORY    #grab first experiment with users left to assign
-		if Experiment.where("active = true").count != 0 &&
-		  (our_experiment = Experiment.where("active = true AND users_to_assign != '0'").first)
-
-			users_to_assign = our_experiment.users_to_assign
-
-			#get valid variations from first experiment
-			variations = our_experiment.variations
-
-			#user-count used to alternate which variation chosen
-			#Eg. with three variations:
-			# u1 -> v1, u2 -> v2 ... u4 -> v1, u5 - > v2
-			var = variations[users_to_assign % variations.count]
-			@user.variation = var #give user the variation
-			var.users.push @user #give variation the user
-
-			#save to DB (TODO: necessary?)
-			#update user with experiment variation
+  #must manually set default time.
+  @user.update(time: DEFAULT_TIME)
 
 
-			case our_experiment.variable
-			when ExperimentConstants::TIME_FLAG
-				 @user.update(time: var.date_option)
-			when ExperimentConstants::DAYS_TO_START_FLAG
-				 @user.update(days_per_week: var.option.to_i)
-			end
+  ## ASSIGN TO EXPERIMENT VARIATION
+  #  -get first experiment
+  #  -assign user to one of its variation
+  #  -alternate variations using modulo
+  #
+  if type == STORY    #grab first experiment with users left to assign
+    if Experiment.where("active = true").count != 0 &&
+      (our_experiment = Experiment.where("active = true AND users_to_assign != '0'").first)
 
-			#update exp time by popping off REDIS last days set
-			if our_experiment.end_date == nil 
-				our_experiment.update(end_date: Time.now.utc + 
-								        REDIS
-								       .rpop(DAYS_FOR_EXPERIMENT)
-								       .to_i
-								       .days)
-			end
+      users_to_assign = our_experiment.users_to_assign
 
+      #get valid variations from first experiment
+      variations = our_experiment.variations
 
-			#one more user was assigned
-			our_experiment.update(users_to_assign: users_to_assign - 1)
-		
-			@user.save
-			var.save
-			our_experiment.save
+      #user-count used to alternate which variation chosen
+      #Eg. with three variations:
+      # u1 -> v1, u2 -> v2 ... u4 -> v1, u5 - > v2
+      var = variations[users_to_assign % variations.count]
+      @user.variation = var #give user the variation
+      var.users.push @user #give variation the user
 
-
-		end
-
-	end
+      #save to DB (TODO: necessary?)
+      #update user with experiment variation
 
 
-	if MODE == PRO
-   		account_sid = ENV['TW_ACCOUNT_SID']
-    	auth_token = ENV['TW_AUTH_TOKEN']
-	  	@client = Twilio::REST::LookupsClient.
-	  				new account_sid, auth_token
-    	# Lookup wireless carrier if not already done in SAMPLE
-    	if @user.carrier == nil
-		  	number = @client.phone_numbers.
-		  				get(@user.phone, type: 'carrier')
-		  	@user.update(carrier: number.carrier['name'])
-		end
-  	elsif MODE == TEST
-  		@user.update(carrier: params[:Carrier])
-  	end
+      case our_experiment.variable
+      when ExperimentConstants::TIME_FLAG
+         @user.update(time: var.date_option)
+      when ExperimentConstants::DAYS_TO_START_FLAG
+         @user.update(days_per_week: var.option.to_i)
+      end
 
-  	days = @user.days_per_week.to_s
+      #update exp time by popping off REDIS last days set
+      if our_experiment.end_date == nil 
+        our_experiment.update(end_date: Time.now.utc + 
+                        REDIS
+                       .rpop(DAYS_FOR_EXPERIMENT)
+                       .to_i
+                       .days)
+      end
 
-  	if locale != nil
-		i18n = R18n::I18n.new(locale, ::R18n.default_places)
+
+      #one more user was assigned
+      our_experiment.update(users_to_assign: users_to_assign - 1)
+    
+      @user.save
+      var.save
+      our_experiment.save
+
+
+    end
+
+  end
+
+
+  if MODE == PRO
+      account_sid = ENV['TW_ACCOUNT_SID']
+      auth_token = ENV['TW_AUTH_TOKEN']
+      @client = Twilio::REST::LookupsClient.
+            new account_sid, auth_token
+      # Lookup wireless carrier if not already done in SAMPLE
+      if @user.carrier == nil
+        number = @client.phone_numbers.
+              get(@user.phone, type: 'carrier')
+        @user.update(carrier: number.carrier['name'])
+    end
+    elsif MODE == TEST
+      @user.update(carrier: params[:Carrier])
+    end
+
+    days = @user.days_per_week.to_s
+
+    if locale != nil
+    i18n = R18n::I18n.new(locale, ::R18n.default_places)
         R18n.thread_set(i18n)
-	end
+  end
 
-	#NOT manually enrolled: respond to their signup text!
-	#NOTE! TODO This isn't configured for spanish, which require a two page Sprint response! 
-	if type == STORY
-		if params && params[:Body] != nil
-		  	if @user.carrier == Text::SPRINT
-		  		Helpers.text_and_mms(R18n.t.start.sprint(days),
-		  			R18n.t.first_mms.to_s, @user.phone)
-		  	else
-		  		Helpers.text_and_mms(R18n.t.start.normal(days),
-		  			R18n.t.first_mms.to_s, @user.phone)
-		  	end
-		  	#update total message count 
-		  	#NOTE: NextMessageWorker does it for auto-enrolled.
-		  	@user.update(total_messages: 1)
-		else #SEND NEW text, not response.
-			wait_time = wait_time.shift
-			if @user.carrier == Text::SPRINT				
-		  		NextMessageWorker.perform_in(wait_time.seconds,
-		  							 R18n.t.start.sprint(days), 
-		  				    R18n.t.first_mms.to_s, @user.phone)
-		  	else
-		  		NextMessageWorker.perform_in(wait_time.seconds,
-		  			                 R18n.t.start.normal(days),
-		  					R18n.t.first_mms.to_s, @user.phone)
-		  	end
-		end
-	elsif type == SAMPLE
-		if params[:Body].casecmp(R18n.t.commands.sample) == 0 
-		  	if @user.carrier == Text::SPRINT
-				Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
-			else
-				Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
-			end
-		elsif params[:Body].casecmp(R18n.t.commands.example) == 0 
-			Helpers.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
-		end
-	end
+  #NOT manually enrolled: respond to their signup text!
+  #NOTE! TODO This isn't configured for spanish, which require a two page Sprint response! 
+  if type == STORY
+    if params && params[:Body] != nil
+        if @user.carrier == Text::SPRINT
+          Helpers.text_and_mms(R18n.t.start.sprint(days),
+            R18n.t.first_mms.to_s, @user.phone)
+        else
+          Helpers.text_and_mms(R18n.t.start.normal(days),
+            R18n.t.first_mms.to_s, @user.phone)
+        end
+        #update total message count 
+        #NOTE: NextMessageWorker does it for auto-enrolled.
+        @user.update(total_messages: 1)
+    else #SEND NEW text, not response.
+      wait_time = wait_time.shift
+      if @user.carrier == Text::SPRINT        
+          NextMessageWorker.perform_in(wait_time.seconds,
+                     R18n.t.start.sprint(days), 
+                  R18n.t.first_mms.to_s, @user.phone)
+        else
+          NextMessageWorker.perform_in(wait_time.seconds,
+                             R18n.t.start.normal(days),
+                R18n.t.first_mms.to_s, @user.phone)
+        end
+    end
+  elsif type == SAMPLE
+    if params[:Body].casecmp(R18n.t.commands.sample) == 0 
+        if @user.carrier == Text::SPRINT
+        Helpers.text_and_mms(R18n.t.sample.sprint.to_s, R18n.t.first_mms.to_s, @user.phone)
+      else
+        Helpers.text_and_mms(R18n.t.sample.normal.to_s, R18n.t.first_mms.to_s, @user.phone)
+      end
+    elsif params[:Body].casecmp(R18n.t.commands.example) == 0 
+      Helpers.text_and_mms(R18n.t.example, R18n.t.first_mms, @user.phone) 
+    end
+  end
 
 end

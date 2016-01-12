@@ -6,7 +6,7 @@ require 'capybara/rspec'
 require 'rack/test'
 
 require_relative '../../helpers'
-require_relative '../../constants'
+require_relative '../../i18n/constants'
 require_relative '../../app/app'
 
 # require_relative '../config/environments'

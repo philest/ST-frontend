@@ -15,9 +15,9 @@ require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
 
-require_relative '../../constants'
+require_relative '../../i18n/constants'
 require_relative '../../sprint'
-require_relative '../../auto-signup'
+require_relative '../../app/enroll'
 require_relative '../../workers/some_worker'
 
 
@@ -285,7 +285,7 @@ describe 'The StoryTime App' do
     describe "Series" do
 
     it "updates series_choice" do
-      Signup.enroll(["5612125839"], 'en', {Carrier: "ATT"})
+      app_enroll_many(["5612125839"], 'en', {Carrier: "ATT"})
       NextMessageWorker.drain
 
       @user = User.find_by_phone "5612125839"
@@ -774,7 +774,7 @@ describe 'The StoryTime App' do
 
         it "recognizes Spanish non-sprint commands" do
 
-        Signup.enroll(["+14445556666"], 'es', {Carrier: "ATT"})
+        app_enroll_many(["+14445556666"], 'es', {Carrier: "ATT"})
 
         
         i18n = R18n::I18n.new('es', ::R18n.default_places)
@@ -1054,7 +1054,7 @@ describe 'The StoryTime App' do
     #     expect(@user).to be nil 
         
     #     Sidekiq::Testing.inline! do
-    #       Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+    #       app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
     #     end
 
     #     get '/test/+15612125831/fakecmd/ATT'
