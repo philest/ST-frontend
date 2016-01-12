@@ -28,6 +28,9 @@ require_relative '../../workers/new_text_worker'
 
 require_relative '../../i18n/constants'
 
+# Constant for time conversion.
+SIDETIQ_CONVERSION = 216000
+
 SLEEP = (1.0 / 16.0) 
 
 
@@ -38,11 +41,7 @@ SLEEP_SCALE = 860
 SLEEP_TIME = (1/ 8.0)
 
 
-
-
-SPRINT_CARRIER = "Sprint Spectrum, L.P."
-
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
+DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
 
@@ -67,287 +66,119 @@ describe 'MainWorker' do
     after(:each) do
       NextMessageWorker.jobs.clear
       Timecop.return
+      Sidekiq::Testing.inline!
     end
 
+    describe "Sidekiq testing" do 
 
-    it "properly enques a MainWorker" do
-
-      expect(MainWorker.jobs.size).to eq(0)
-      Sidekiq::Testing.fake! do 
-        MainWorker.perform_async
-      end
-      expect(MainWorker.jobs.size).to eq(1)
-    end
-
-    it "starts with no enqued workers" do
-      expect(MainWorker.jobs.size).to eq(0)
-    end
-
-    # it "might recurr" do
-    #   Timecop.scale(1800) #seconds now seem like hours
-    #   puts Time.now
-
-    #   MainWorker.perform_async
-    #   expect(MainWorker.jobs.size).to eq(1)
-    #   MainWorker.drain
-    #   expect(MainWorker.jobs.size).to eq(0)
-
-    #   sleep 1 
-    #   puts Time.now
-    # end
-
-
-    it "recurrs" do
-      Sidekiq::Testing.fake!
-
-      Timecop.travel(2015, 9, 1, 10, 0, 0) #set Time.now to Sept, 1 2015, 10:00:00 AM at this instant, but allow to move forward
-
-
-      Timecop.scale(1920) #1/16 seconds now are two minutes
-      puts Time.now
-
-      (1..30).each do 
+      it "properly enques a MainWorker" do
         expect(MainWorker.jobs.size).to eq(0)
-
-        puts Time.now
-        MainWorker.perform_async
-
+        Sidekiq::Testing.fake! { MainWorker.perform_async } 
         expect(MainWorker.jobs.size).to eq(1)
+      end
 
-        MainWorker.drain
-
+      it "starts with no enqued workers" do
         expect(MainWorker.jobs.size).to eq(0)
-        sleep SLEEP
+      end
+    end 
+
+    describe "Sidetiq" do
+
+      it "has 2 min between recurrences" do 
+        interval =  (MainWorker.next_scheduled_occurrence - 
+                      MainWorker.last_scheduled_occurrence)
+        expect(interval / SIDETIQ_CONVERSION).to be_within(0.3).of(2.0)
       end
 
-      puts Time.now
-    end
-
-
-    # it "asks to update birthdate" do
-    #   User.create(phone: "444", time: "5:30pm", total_messages: 5)
-
-    #   Timecop.travel(2015, 9, 1, 15, 30, 0) #set Time.now to Sept, 1 2015, 15:30:00  (3:30 PM) at this instant, but allow to move forward
-
-    #   Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #   (1..30).each do 
-    #     MainWorker.perform_async
-    #     MainWorker.drain
-
-    #     sleep SLEEP
-    #   end
-    #   expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE])
-    # end
-
-    # it "has set_birthdate as true before it sends out the text" do
-    #     @user = User.create(phone: "444", time: "5:30pm", total_messages: 5)
-      
-    #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(@user.set_birthdate).to be(true)
-    # end
-
-
-    # it "asks to update time when it should (non-sprint" do
-    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3)
-
-    #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL])
-    # end
-
-    # it "gets all the SPRINT to update time SMS pieces" do
-    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3, carrier: SPRINT_CARRIER)
-
-    #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_SPRINT_1, MainWorker::TIME_SMS_SPRINT_2])
-    # end
-
-    # it "doesn't send time update the next day... (sorry mom)" do
-    #     Timecop.travel(2015, 6, 22, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 3)
-
-    #     Timecop.travel(2015, 6, 23, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL])
-
-
-    #     Timecop.travel(2015, 6, 24, 15, 45, 0)
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-       
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::TIME_SMS_NORMAL]) #not a second message
-
-    # end
-
-    # it "doesn't send BIRTHDATE update the next day... (sorry mom)" do
-    #     @user = User.create(phone: "444", time: TIME_DST, total_messages: 5)
-
-    #     Timecop.travel(2015, 9, 1, 15, 45, 0) #set Time.now to Sept, 1 2015, 15:45:00  (3:30 PM) at this instant, but allow to move forward
-
-    #     Timecop.scale(1920) #1/16 seconds now are two minutes
-
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE])
-
-
-    #     Timecop.travel(2015, 9, 2, 15, 45, 0)
-       
-    #     (1..20).each do 
-    #       MainWorker.perform_async
-    #       MainWorker.drain
-
-    #       sleep SLEEP
-    #     end
-    #     @user.reload 
-
-    #     expect(TwilioHelper.getSMSarr).to eq([MainWorker::BIRTHDATE_UPDATE]) #not a second message
-    # end
-
-
-    it "has sendStory? properly working when at time" do
-      Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
-      
-
-      Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
-
-      time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time)).to be(true)
-    end
-
-    it "has sendStory? rightly not working when past time by one minute" do
-            Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
-        
-      Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
-      time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time)).to be(false)
-    end
-
-
-    it "has sendStory? rightly NOT working two minutes early" do
-         Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
-        
-      Timecop.travel(2016, 6, 23, 17, 28, 0) #on Tuesday!
-
-      time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time)).to be(false)
-    end
-
-
-    it "has sendStory? rightly working one min early" do
-       Timecop.travel(2014, 6, 21, 17, 30, 0) #on prev Sun!
-
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2, total_messages: 4)
-        
-      Timecop.travel(2016, 6, 23, 17, 29, 0) #on Tuesday!
-      time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time)).to be(true)
-    end
-
-
-    it "properly knows to send at next valid day after 24 hours " do 
-      Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
-      Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
-            time = Time.now.utc
-
-      expect(MainWorker.sendStory?("444", time)).to be(true)
-    end
-
-    it "doesn't send within 24 hours of creation " do 
-      Timecop.travel(2016, 6, 23, 16, 15, 0) #on TUESDAY!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
-      Timecop.travel(2016, 6, 23, 17, 29, 0) #on TUESDAY.
-            time = Time.now.utc
-
-      expect(MainWorker.sendStory?("444", time)).to be(false)
-    end
-
-
-    it "sends your first story MMS." do
-      Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
-      Timecop.travel(2016, 6, 23, 17, 24, 0) #on TUESDAY.
-
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-
-        sleep SLEEP_TIME
+      it "simulates recurring" do
+        Sidekiq::Testing.fake!
+        # Set current time to Sept, 1 2015, 10:00:00 AM
+        # at this instant.
+        #   - allow to move forward
+        Timecop.travel(2015, 9, 1, 10, 0, 0)
+        Timecop.scale(1920) 
+        # 1/16 seconds now are two minutes
+
+        # Every two minutes, MainWorker runs. 
+        (1..12).each do 
+          expect(MainWorker.jobs.size).to eq(0)
+          MainWorker.perform_async
+          expect(MainWorker.jobs.size).to eq(1)
+          MainWorker.drain
+          sleep SLEEP
+        end
       end
 
-      NextMessageWorker.drain
-
-      @user.reload 
-
-
-
-      expect(TwilioHelper.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)
-      expect(TwilioHelper.getMMSarr).not_to eq(nil)
     end
 
+    describe "sendStory?" do 
+
+      context "when enrolled last Sunday" do
+        before :each do
+          Timecop.travel(2015, 6, 21, 17, 30, 0) #on prev Sun!
+          @user = create(:user, 
+                        phone: 444,
+                        time: TIME_DST,
+                        total_messages: 4,
+                        created_at: Time.now)
+        end
+
+        it "works at time" do
+          Timecop.travel(2015, 6, 23, 17, 30, 0) #on Tuesday!
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be true
+        end
+
+        it "doesn't work when past time by one minute" do
+          Timecop.travel(2015, 6, 23, 17, 31, 0) #on Tuesday!
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+
+        it "doesn't work two minutes early" do            
+          Timecop.travel(2015, 6, 23, 17, 28, 0) #on Tuesday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+
+        it "works one min early" do            
+          Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tuesday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(true)
+        end
+      end
+
+      context "when enrolled over 24 hours before" do
+        before :each do
+          Timecop.travel(2015, 6, 22, 17, 15, 0) #on prev Sun!
+          @user = create(:user, 
+                        phone: 444,
+                        time: TIME_DST,
+                        total_messages: 4,
+                        created_at: Time.now)
+        end
+
+        it "sends" do 
+          Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tuesday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(true)
+        end
+      end
+
+      context "when enrolled within 24 hours before" do
+        before :each do
+          Timecop.travel(2015, 6, 23, 16, 15, 0) #on prev Sun!
+          @user = create(:user, 
+                        phone: 444,
+                        time: TIME_DST,
+                        total_messages: 4,
+                        created_at: Time.now)
+        end
+
+        it "doesn't send" do 
+          Timecop.travel(2015, 6, 23, 17, 29, 0) #still Tuesday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+      end
+
+    end
 
    it "sends your first story SMS." do
       Timecop.travel(2016, 6, 22, 17, 15, 0) #on MONDAY!
@@ -373,181 +204,149 @@ describe 'MainWorker' do
       expect(TwilioHelper.getSMSarr).not_to eq([])
     end
 
+    describe "Sending stories" do 
 
-    it "sends only on right days for T-TH schedule (2)" do
-
-      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
-      
-      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on sun.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-  end
-
-  it "sends only on right days for M-W-F schedule (2)" do
-
-      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 3)
-      
-      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-  end
-
-
-    it "sends only on right days for W schedule (1)" do
-
-      Timecop.travel(2014, 6, 21, 17, 15, 0) #on Sunday!
-      @user = User.create(phone: "444", time: TIME_DST, days_per_week: 1)
-      
-      Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 23, 17, 29, 0) #on T.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(true)
-
-      Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 27, 17, 29, 0) #on sat.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Fri.
-time = Time.now.utc
-      expect(MainWorker.sendStory?("444", time )).to be(false)
-  end
-
-
-
-    it "has total message count properly increasing" do
-      Sidekiq::Testing.inline!
-
-      Timecop.travel(2015, 6, 22, 17, 15, 0) #on MONDAY!
-      # @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
-      
-      app_enroll_many(["444"], 'en', {Carrier: "ATT"})
-      @user = User.find_by_phone "444"
-      @user.reload
-
-      expect(@user.total_messages).to eq(1)
-      expect(@user.story_number).to eq(0)
-
-
-
-      Timecop.travel(2015, 6, 23, 17, 20, 0) #on TUESDAY.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-
-
-      Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
-      
-      MainWorker.perform_async
-      MainWorker.drain
-
-
-      # (1..15).each do 
-      #   MainWorker.perform_async
-      #   MainWorker.drain
-      #   sleep SLEEP_TIME
-      # end
-
-      NextMessageWorker.drain
-      NewTextWorker.drain
-
-      @user.reload 
-      expect(@user.total_messages).to eq(2)
-      expect(@user.story_number).to eq(1)
-
-      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
+      before(:each) do
+        Timecop.travel(2015, 6, 21, 17, 15, 0) #on prev Sun!
+        @user = create(:user, 
+                      phone: 444,
+                      time: TIME_DST,
+                      total_messages: 4,
+                      created_at: Time.now)
       end
-      @user.reload 
-      expect(@user.total_messages).to eq(2)
 
-      # Timecop.travel(2015, 6, 25, 17, 15, 0) #on Thurs.
-      # Timecop.scale(1920) #1/16 seconds now are two minutes
-      # (1..20).each do 
-      #   MainWorker.perform_async
-      #   MainWorker.drain
-      #   sleep SLEEP
-      # end
-      # @user.reload 
-      # expect(@user.total_messages).to eq(2)
+      context "when 2 days a week" do 
 
+        it "sends Tuesday " do 
+          Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tues.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(true)
+        end
 
-      # Timecop.travel(2015, 6, 26, 17, 15, 0) #on Fri.
-      # Timecop.scale(1920) #1/16 seconds now are two minutes     
-      # (1..20).each do 
-      #   MainWorker.perform_async
-      #   MainWorker.drain
-      #   sleep SLEEP
-      # end
-      # @user.reload 
-      # expect(@user.total_messages).to eq(2)
+        it "sends Thursday" do 
+          Timecop.travel(2015, 6, 25, 17, 29, 0) #on Tues.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(true)
+        end
+
+        it "does not send Monday" do
+          Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "does not send Wed" do
+          Timecop.travel(2015, 6, 24, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "does not send Fri" do
+          Timecop.travel(2015, 6, 26, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "does not send Sat " do
+          Timecop.travel(2015, 6, 27, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "does not send Sun" do
+          Timecop.travel(2015, 6, 28, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+      end
+
+      context "when 1 day a week" do
+       
+        it "sends Wed" do
+          Timecop.travel(2015, 6, 24, 17, 29, 0) #on Wed.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(true)
+        end
+
+        it "doesn't send Monday" do
+          Timecop.travel(2015, 6, 22, 17, 29, 0) #on Monday.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+       
+        it "doesn't send Tuesday " do 
+          Timecop.travel(2015, 6, 23, 17, 29, 0) #on Tues.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "doesn't send Thursday" do 
+          Timecop.travel(2015, 6, 25, 17, 29, 0) #on Thurs.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "doesn't send Fri" do
+          Timecop.travel(2015, 6, 26, 17, 29, 0) #on Fri.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "doesn't send send Sat " do
+          Timecop.travel(2015, 6, 27, 17, 29, 0) #on Sat.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+        it "doesn't send send Sun" do
+          Timecop.travel(2015, 6, 28, 17, 29, 0) #on Sun.
+          expect(MainWorker.sendStory?("444", Time.now.utc)).to be(false)
+        end
+
+      end
     end
+
+    describe "total_messages" do 
+        
+      context "when enrolled" do 
+        before(:each) do
+          Sidekiq::Testing.inline!
+          Timecop.travel(2015, 6, 22, 17, 15, 0) #on Monday.
+          app_enroll_many(["444"], 'en', {Carrier: "ATT"})
+          @user = User.find_by_phone "444"
+          @user.reload
+        end
+
+        it "is 1" do
+          expect(@user.total_messages).to eq(1)
+        end
+
+        context "after second message" do 
+          it "is 2" do 
+            Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
+            MainWorker.perform_async
+            @user.reload
+            expect(@user.total_messages).to eq(2)
+          end
+        end
+
+      end
+    end
+
+    describe "story_number" do 
+        
+      context "when enrolled" do 
+        before(:each) do
+          Sidekiq::Testing.inline!
+          Timecop.travel(2015, 6, 22, 17, 15, 0) #on Monday.
+          app_enroll_many(["444"], 'en', {Carrier: "ATT"})
+          @user = User.find_by_phone "444"
+          @user.reload
+        end
+
+        it "is 0" do
+          expect(@user.story_number).to eq(0)
+        end
+
+        context "after second message" do 
+          it "is 1" do 
+            Timecop.travel(2015, 6, 23, 17, 29, 0) #on TUESDAY.
+            MainWorker.perform_async
+            @user.reload
+            expect(@user.story_number).to eq(1)
+          end
+        end
+      end
+
+    end
+
 
 
   #series choice
@@ -966,7 +765,7 @@ time = Time.now.utc
 
  it "properly sends SPRINT phones story-choices that are over 160+ in many chunks" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1, carrier: SPRINT_CARRIER) #ready to receive story choice
+      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1, carrier: Text::SPRINT) #ready to receive story choice
       @user.update(time: DEFAULT_TIME)
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY.
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes

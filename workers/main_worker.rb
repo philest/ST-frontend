@@ -87,6 +87,8 @@ class MainWorker
 
   def perform(*args)
 
+
+
     account_sid = ENV['TW_ACCOUNT_SID']
     auth_token = ENV['TW_AUTH_TOKEN']
 
