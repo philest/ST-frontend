@@ -28,7 +28,7 @@ require_relative '../config/pony'
 require_relative '../models/experiment'
 require_relative '../experiment/send_report'
 
-class SomeWorker
+class MainWorker
   include Sidekiq::Worker
   include Sidetiq::Schedulable
   
@@ -107,7 +107,7 @@ class SomeWorker
 
 
     #logging
-    puts "\nSystemTime: " + SomeWorker.cleanSysTime + "\n"
+    puts "\nSystemTime: " + MainWorker.cleanSysTime + "\n"
 
     #logging
     puts "\nSend story?: \n"
@@ -158,14 +158,14 @@ class SomeWorker
 
         #logging info
         print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
-        if SomeWorker.sendStory?(user.phone)
+        if MainWorker.sendStory?(user.phone)
           puts 'YES!!'
         else
           puts 'No.'
         end
 
 
-          if SomeWorker.sendStory?(user.phone) 
+          if MainWorker.sendStory?(user.phone) 
 
 
 
@@ -206,7 +206,7 @@ class SomeWorker
 
 
 
-                myWait = SomeWorker.getWait(TEXT)
+                myWait = MainWorker.getWait(TEXT)
 
                 NewTextWorker.perform_in(myWait.seconds, note + R18n.t.choice.greet[user.series_number], NewTextWorker::NOT_STORY, user.phone)
 
@@ -214,7 +214,7 @@ class SomeWorker
                 
                 msg = R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[user.series_number]
 
-                myWait = SomeWorker.getWait(TEXT)
+                myWait = MainWorker.getWait(TEXT)
                 NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
 
                 user.update(next_index_in_series: 999)  
@@ -226,7 +226,7 @@ class SomeWorker
 
                 quitters.push user.phone
 
-                myWait = SomeWorker.getWait(TEXT)
+                myWait = MainWorker.getWait(TEXT)
                 NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::NOT_STORY, user.phone)
 
               #send STORY or SERIES, but not if awaiting series response
@@ -248,14 +248,14 @@ class SomeWorker
                 #JUST SMS MESSAGING!
                 if user.mms == false
 
-                    myWait = SomeWorker.getWait(TEXT)
+                    myWait = MainWorker.getWait(TEXT)
                     NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::STORY, user.phone)
 
                 else #MULTIMEDIA MESSAGING (MMS)!
 
                     #start the MMS message stack
 
-                    myWait = SomeWorker.getWait(STORY)
+                    myWait = MainWorker.getWait(STORY)
                     NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
 
                 end#MMS or SMS

@@ -153,8 +153,8 @@ describe 'The NextMessageWorker' do
       #WORKS WIHOUT SLEEPING!
       (1..10).each do 
 
-          SomeWorker.perform_async
-          SomeWorker.drain
+          MainWorker.perform_async
+          MainWorker.drain
 
         sleep SLEEP_TIME
       end

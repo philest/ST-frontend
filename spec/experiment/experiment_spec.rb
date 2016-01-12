@@ -505,7 +505,7 @@ describe 'A/B experiments' do
     describe "Report" do
       
       before :each do 
-        SomeWorker.jobs.clear
+        MainWorker.jobs.clear
         Timecop.travel(Time.utc(2015,1,1,17,30))
 
         #delete all experiments and users
@@ -519,8 +519,8 @@ describe 'A/B experiments' do
       context "curr_date slightly < end_date" do
         before :each do
           Timecop.travel(Time.utc(2015,1,8,17,29))
-          SomeWorker.perform_async
-          SomeWorker.drain
+          MainWorker.perform_async
+          MainWorker.drain
         end
 
         it "still has experiment just before end_date" do
@@ -532,8 +532,8 @@ describe 'A/B experiments' do
       context "curr_date > end_date" do
         before :each do
           Timecop.travel(Time.utc(2015,1,8,17,31))
-          SomeWorker.perform_async
-          SomeWorker.drain
+          MainWorker.perform_async
+          MainWorker.drain
         end
 
         it "deactivates experiment" do

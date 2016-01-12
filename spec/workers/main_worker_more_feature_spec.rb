@@ -26,7 +26,7 @@ SLEEP_TIME = (1/ 8.0)
 SPRINT_CARRIER = "Sprint Spectrum, L.P."
 
 
-describe 'SomeWorker, with sleep,' do
+describe 'MainWorker, with sleep,' do
   include Rack::Test::Methods
   include Text
 
@@ -37,7 +37,7 @@ describe 'SomeWorker, with sleep,' do
 
     before(:each) do
         NextMessageWorker.jobs.clear
-        SomeWorker.jobs.clear
+        MainWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
         TwilioHelper.testSleep
@@ -82,8 +82,8 @@ describe 'SomeWorker, with sleep,' do
 
       #WORKS WIHOUT SLEEPING!
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end 
 
@@ -132,8 +132,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
       # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
 
 
 
@@ -174,8 +174,8 @@ describe 'SomeWorker, with sleep,' do
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
      
@@ -203,8 +203,8 @@ describe 'SomeWorker, with sleep,' do
 
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
 
@@ -230,8 +230,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -255,8 +255,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -266,7 +266,7 @@ describe 'SomeWorker, with sleep,' do
 
 
       #They're asked for their story choice during storyTime.
-      smsSoFar.push SomeWorker::SERIES_CHOICES[0]
+      smsSoFar.push MainWorker::SERIES_CHOICES[0]
       expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
@@ -353,8 +353,8 @@ describe 'SomeWorker, with sleep,' do
     #   Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
     #   # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
-    #     SomeWorker.perform_async
-    #     SomeWorker.drain
+    #     MainWorker.perform_async
+    #     MainWorker.drain
 
     #     NextMessageWorker.drain
 
@@ -417,8 +417,8 @@ describe 'SomeWorker, with sleep,' do
 
 
 
-      SomeWorker.perform_async
-      SomeWorker.drain
+      MainWorker.perform_async
+      MainWorker.drain
 
 
 
@@ -456,8 +456,8 @@ describe 'SomeWorker, with sleep,' do
 
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
      
@@ -485,8 +485,8 @@ describe 'SomeWorker, with sleep,' do
 
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
 
@@ -512,8 +512,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -537,8 +537,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -548,7 +548,7 @@ describe 'SomeWorker, with sleep,' do
 
 
       #They're asked for their story choice during storyTime.
-      smsSoFar.push SomeWorker::SERIES_CHOICES[0]
+      smsSoFar.push MainWorker::SERIES_CHOICES[0]
       expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
 
       ##registers series text well!
@@ -595,8 +595,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 
@@ -619,8 +619,8 @@ describe 'SomeWorker, with sleep,' do
       Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
 
       (1..10).each do 
-        SomeWorker.perform_async
-        SomeWorker.drain
+        MainWorker.perform_async
+        MainWorker.drain
         sleep SLEEP_TIME
       end
       @user.reload 

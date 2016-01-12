@@ -413,7 +413,6 @@ SMS = "SMS"
 	
  		@user = User.find_by(phone: user_phone)
 
-
 		#if sprint
 		if (@user == nil || @user.carrier == SPRINT) && sprintSMS.length > 160
 
