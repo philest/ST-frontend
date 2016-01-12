@@ -16,7 +16,7 @@ require 'rack/test'
 require 'timecop'
 
 require_relative '../../i18n/constants'
-require_relative '../../sprint'
+require_relative '../../helpers/sprint_helper'
 require_relative '../../app/enroll'
 require_relative '../../workers/main_worker'
 

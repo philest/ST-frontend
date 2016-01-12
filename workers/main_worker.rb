@@ -12,7 +12,7 @@ require 'sinatra/r18n'
 require 'time'
 require 'active_support/all'
 
-require_relative '../sprint'
+require_relative '../helpers/sprint_helper'
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
 require_relative '../helpers/twilio_helper'

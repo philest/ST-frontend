@@ -20,7 +20,7 @@ Capybara.app = Sinatra::Application
 #for routes to work
 require_relative '../../app/app.rb'
 
-require_relative '../../auto-signup'
+require_relative '../../app/enroll'
 
 require_relative "../../experiment/create_experiment"
 

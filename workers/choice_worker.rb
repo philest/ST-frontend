@@ -4,7 +4,7 @@ require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
 
-require_relative '../sprint'
+require_relative '../helpers/sprint_helper'
 require_relative '../stories/storySeries'
 
 SPRINT_NAME_2 = "Sprint Spectrum, L.P."
