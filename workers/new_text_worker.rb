@@ -7,7 +7,7 @@ require_relative '../stories/storySeries'
 require_relative '../helpers/twilio_helper'
 
 require_relative '../i18n/constants'
-require_relative '../sprint'
+require_relative '../helpers/sprint_helper'
 
 require_relative './next_message_worker'
 

@@ -17,7 +17,7 @@ require 'active_support/all'
 #TEMPORARY 
 require_relative '../../app/app.rb'
 
-require_relative '../../auto-signup'
+require_relative '../../app/enroll'
 
 require_relative '../../helpers/twilio_helper'
 require_relative '../../stories/story'
@@ -487,7 +487,7 @@ time = Time.now.utc
       Timecop.travel(2015, 6, 22, 17, 15, 0) #on MONDAY!
       # @user = User.create(phone: "444", time: TIME_DST, days_per_week: 2)
       
-      Signup.enroll(["444"], 'en', {Carrier: "ATT"})
+      app_enroll_many(["444"], 'en', {Carrier: "ATT"})
       @user = User.find_by_phone "444"
       @user.reload
 
@@ -1360,7 +1360,7 @@ time = Time.now.utc
       Sidekiq::Testing.inline!
 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125833"], 'es', {Carrier: "ATT"})
+      app_enroll_many(["+15612125833"], 'es', {Carrier: "ATT"})
 
       @user = User.find_by_phone "+15612125833"
       
@@ -1388,7 +1388,7 @@ time = Time.now.utc
       ######### Spanish
      
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125834"], 'es', {Carrier: "ATT"})
+      app_enroll_many(["+15612125834"], 'es', {Carrier: "ATT"})
 
       @user = User.find_by_phone "+15612125834"
 
@@ -1411,7 +1411,7 @@ time = Time.now.utc
 
       #it works for a different locale 
       Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Signup.enroll(["+15612125835"], 'en', {Carrier: "ATT"})
+      app_enroll_many(["+15612125835"], 'en', {Carrier: "ATT"})
 
       @user = User.find_by_phone "+15612125835"
 

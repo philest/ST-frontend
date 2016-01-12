@@ -6,7 +6,7 @@ require_relative '../../models/user'           #add the user model
 require 'sidekiq'
 require 'sidetiq'
 
-require_relative '../../sprint'
+require_relative '../../helpers/sprint_helper'
 require_relative '../../stories/story'
 require_relative '../../stories/storySeries'
 require_relative '../../helpers/twilio_helper'

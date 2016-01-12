@@ -1,6 +1,6 @@
 #  helpers/sms_repsonse_helper.rb            Phil Esterman   
 # 
-#  TwilioHelper to reply to an SMS. 
+#  Main helper to reply to an SMS. Core logic's here! 
 #  --------------------------------------------------------
 
 #enrollment

@@ -1,3 +1,8 @@
+#  helpers/sprint_helper.rb            Phil Esterman   
+# 
+#  Helper to chop a longer SMS into many SMS, each less
+#  than 160 characters (for Sprint compatibility).
+#  --------------------------------------------------------
 
 
 MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)

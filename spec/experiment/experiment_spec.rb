@@ -16,7 +16,7 @@ require 'timecop'
 #for testing send_report
 require_relative '../../workers/main_worker'
 
-require_relative '../../auto-signup'
+require_relative '../../app/enroll'
 
 require_relative "../../experiment/create_experiment"
 
@@ -86,7 +86,7 @@ describe 'A/B experiments' do
 
 
       it "enrolls without experiment" do 
-        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
         expect(@user).to_not be nil
       end
@@ -122,7 +122,7 @@ describe 'A/B experiments' do
         REDIS.del DAYS_FOR_EXPERIMENT 
         @num_users = 25 #original users
         create_experiment(TIME_FLAG, [[6,40],[6,40],[6,40]], @num_users, 15)
-        Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+        app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
         @user = User.find_by_phone("+15612125831")
 
       end
@@ -179,7 +179,7 @@ describe 'A/B experiments' do
 
         it "doesn't update date" do
           Timecop.travel(Time.utc(2015, 9, 20, 10, 0, 0))
-          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
           #discount miliseconds 
           expect(Time.at(Experiment.first.end_date.to_i))
                   .to eq Time.at(Time.utc(2015, 9, 1, 10, 0, 0).to_i)
@@ -231,7 +231,7 @@ describe 'A/B experiments' do
           REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
           create_experiment(DAYS_TO_START_FLAG, [1,2,3], @num_users, 20)
           
-          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
           @user = User.find_by_phone("+15612125831")
         end
 
@@ -257,11 +257,11 @@ describe 'A/B experiments' do
           REDIS.del DAYS_FOR_EXPERIMENT #simulate using the dates
           create_experiment(DAYS_TO_START_FLAG, [1,2,3], @num_users, 20)
          
-          Signup.enroll(["+15612125831"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+15612125831"], 'en', {Carrier: "ATT"})
           @user1 = User.find_by_phone("+15612125831")
-          Signup.enroll(["+1"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+1"], 'en', {Carrier: "ATT"})
           @user2 = User.find_by_phone("+1")
-          Signup.enroll(["+2"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+2"], 'en', {Carrier: "ATT"})
           @user3 = User.find_by_phone("+2")
         end
 
@@ -396,11 +396,11 @@ describe 'A/B experiments' do
             exper.destroy
           end
         
-          Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+1234"], 'en', {Carrier: "ATT"})
           @non_exper_user = User.find_by_phone("+1234")
 
           create_experiment(DAYS_TO_START_FLAG, [3,4], 10, 20)
-          Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+1561"], 'en', {Carrier: "ATT"})
           @exper_user = User.find_by_phone("+1561")
 
         end
@@ -448,10 +448,10 @@ describe 'A/B experiments' do
             exper.destroy
           end
         
-          Signup.enroll(["+1234"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+1234"], 'en', {Carrier: "ATT"})
           @non_exper_user = User.find_by_phone("+1234")
           create_experiment(TIME_FLAG, [[6,30], [6,45]], 20, 20)
-          Signup.enroll(["+1561"], 'en', {Carrier: "ATT"})
+          app_enroll_many(["+1561"], 'en', {Carrier: "ATT"})
           @exper_user = User.find_by_phone("+1561")
         end
 
@@ -513,7 +513,7 @@ describe 'A/B experiments' do
         User.all.to_a.each { |user| user.destroy }
 
         create_experiment(TIME_FLAG, [[5,45], [6,30], [6,45]], 5, 7)
-        Signup.enroll(["1","2","3","4","5"], 'en', {Carrier: "ATT"})
+        app_enroll_many(["1","2","3","4","5"], 'en', {Carrier: "ATT"})
       end
 
       context "curr_date slightly < end_date" do
