@@ -44,8 +44,8 @@ require_relative '../models/variation' #add User model
 require_relative '../experiment/experiment_constants'
 
 
-SAMPLE = "sample"
-STORY = "story"
+SAMPLE ||= "sample"
+STORY ||= "story"
 
 MODE ||= ENV['RACK_ENV']
 PRO ||= "production"

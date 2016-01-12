@@ -11,9 +11,7 @@ require_relative '../../app/enroll'
 # R18n.default_places = '../i18n/'
 R18n::I18n.default = 'en'
 
-
-
-DEFAULT_TIME = Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
+DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 include Text
 
