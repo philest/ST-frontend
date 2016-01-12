@@ -381,7 +381,7 @@ First, a background worker checks every few minutes whether any experiments have
 
 
 ```ruby
-#from workers/some_worker.rb
+#from workers/main_worker.rb
 
     begin
       #Experiment: Send report if completed-->i.e. past end_date! 

@@ -14,7 +14,7 @@ require 'rack/test'
 require 'timecop'
 
 #for testing send_report
-require_relative '../../workers/some_worker'
+require_relative '../../workers/main_worker'
 
 require_relative '../../auto-signup'
 
