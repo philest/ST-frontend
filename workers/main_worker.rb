@@ -43,6 +43,9 @@ require_relative '../config/pony'
 # Experiment reporting.
 require_relative '../experiment/report'
 
+require_relative '../app/series_choice'
+
+
 ##
 # Checks who's set for a story, then calls
 # job to send it.
@@ -72,8 +75,10 @@ class MainWorker
 
   def perform(*args)
 
+    # Send experiment report if ready.
     check_reports
 
+    ### TO REFACTOR ##############################
     @@times = []
 
     @@user_num_story = 1 #reset for each call
@@ -85,6 +90,8 @@ class MainWorker
       #record this before diving into sending each user a message.
       #the delay is long and thus it might be 5:33 before some users are checked. 
     @@time_now = Time.now.utc
+    ### END TO REFACTOR ###########################
+
 
     #Remember all the people who have quit! 
     quitters = Array.new 
@@ -151,81 +158,31 @@ class MainWorker
             # b) their third story, or every third one thereafter.
             # c) they're not in the middle of a series
             if user.awaiting_choice == false &&
-                 series_choice?(user.story_number) && 
+                 series_choice_time?(user.story_number) && 
                  user.next_index_in_series == nil
 
-              # Get set for first in series
-              user.update(next_index_in_series: 0)
-              user.update(awaiting_choice: true)
-            
-              # Send invitation to choose.
-              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
-              NewTextWorker.perform_in(myWait.seconds,
-                                       note + R18n.t.choice.greet[user.series_number],
-                                       NewTextWorker::NOT_STORY,
-                                       user.phone)
+                 series_choice_choose(user.id, note)
 
             # First No response to series choice.
             # -> Remind them  
             elsif user.awaiting_choice == true &&
                   user.next_index_in_series == 0 
-
-              msg = R18n.t.no_reply.day_late + R18n.t.choice.no_greet[user.series_number]
-
-              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
-              NewTextWorker.perform_in(myWait.seconds,
-                                       note + msg, NewTextWorker::NOT_STORY,
-                                       user.phone)
-
-              user.update(next_index_in_series: 999)  
+                 
+                 series_choice_remind(user.id, note)
 
             # Second no response to series choice.
             # -> Drop and notify them.  
             elsif user.next_index_in_series == 999
-
-              user.update(subscribed: false)
-              user.update(awaiting_choice: false)
-
-              quitters.push user.phone
-
-              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
-              NewTextWorker.perform_in(myWait.seconds,
-                                       R18n.t.no_reply.dropped.to_str,
-                                       NewTextWorker::NOT_STORY,
-                                       user.phone)
+                
+                 series_choice_drop(user.id, note)
+                 quitters.push user.phone
 
             # send STORY or SERIES, but not if awaiting series response
             elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
-              #get the story and series structures
-              storyArr = Story.getStoryArray
-              storySeriesHash = StorySeries.getStorySeriesHash
+                 Story.send_story(user.id, note)
 
-              #SERIES
-              if user.series_choice != nil
-                story = storySeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
-              #STORY
-              else 
-                story = storyArr[user.story_number]
-              end 
-            
-
-              #JUST SMS MESSAGING!
-              if user.mms == false
-
-                  myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
-                  NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::STORY, user.phone)
-
-              else #MULTIMEDIA MESSAGING (MMS)!
-
-                  #start the MMS message stack
-
-                  myWait = MainWorker.getWait(NewTextWorker::STORY)
-                  NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
-
-              end#MMS or SMS
-
-            end#end story_subpart
+            end
 
           end #non-break user
 
@@ -255,6 +212,7 @@ class MainWorker
   end #end perform method
 
 
+  ### TO REFACTOR ##############################
 
   #gets and updates wait, for sending Stories AND Texts (choose your story, notify lateness, etc.)
   #ensures that no more than one message per second is sent.
@@ -277,33 +235,23 @@ class MainWorker
 
   end
 
-
-
-
-  # def self.test_get_wait()
-
-  #     total_first_msgs = @@user_num_story + @@user_num_text
-
-  #     wait = total_first_msgs + (((total_first_msgs - 1) / TwilioHelper::MMS_WAIT) * (TwilioHelper::MMS_WAIT * 2))
-
-  #     return wait
-  # end
-
   def self.test_push_wait(time) 
     @@times.push time 
   end
 
-
   def self.test_get_wait_times()
     return @@times
   end
+  ### END TO REFACTOR ###########################
+
+
 
   ##
   # Checks whether it's time for a series
   # choice. 
   #  
   # Their third story, or every third one thereafter.
-  def series_choice?(story_number)
+  def series_choice_time?(story_number)
        story_number == 1 || 
       (story_number != 0 && 
        story_number % 3 == 0)

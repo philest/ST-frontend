@@ -340,7 +340,7 @@ module SMSResponseHelper
                match(params[:Body]))
              # 2nd condition: A dropped user's choice. 
 
-        series_choice(@user.id, params)
+        series_choice_reply(@user.id, params)
 
       ## Response Not Recognized  
       else 
