@@ -31,7 +31,7 @@ MMS_UPDATE = "Okay, you'll now receive just the text of each story. Hope this he
 
 START_SMS_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 
-START_SMS_2 = " stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
+START_SMS_2 = " stories/week... starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
 
 START_SPRINT_1 = "Welcome to StoryTime, free pre-k stories by text! You\'ll get "
 

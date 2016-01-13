@@ -1,5 +1,5 @@
 
-require_relative "./spec_helper"
+require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
@@ -14,7 +14,7 @@ require_relative '../../stories/storySeries'
 require_relative '../../workers/next_message_worker'
 require_relative '../../workers/new_text_worker'
 
-require_relative '../i18n/constants'
+require_relative '../../i18n/constants'
 
 SLEEP_SCALE = 860
 

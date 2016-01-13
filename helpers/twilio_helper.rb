@@ -5,6 +5,7 @@
 
 
 require 'sinatra/r18n'
+require 'twilio-ruby'
 require_relative '../workers/new_text_worker'
 
 #set Twilio credentials:
