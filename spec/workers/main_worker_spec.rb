@@ -226,6 +226,10 @@ describe 'MainWorker' do
     end
 
     it "simulates recurring" do
+      (1..3).each do
+        puts "THE SPECS BEGIN"
+      end
+
       Sidekiq::Testing.fake!
       # Set current time to Sept, 1 2015, 10:00:00 AM
       # at this instant.
