@@ -124,10 +124,6 @@ describe 'The StoryTime App' do
  	 	  @user = User.create(phone: "444", time: DEFAULT_TIME)
   	end
 
-      	it "has nil child birthdate value" do
-      		expect(@user.child_birthdate).to eq(nil)
-      	end
-
         it "has proper default age of 4" do
            expect(@user.child_age).to eq(4)
         end

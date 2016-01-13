@@ -107,12 +107,10 @@ class MainWorker
         (1..30).each { $stderr.print e.backtrace.shift }
     end
 
-
-    #logging
-    puts "\nSystemTime: " + MainWorker.cleanSysTime + "\n"
-
-    #logging
-    puts "\nSend story?: \n"
+    if MODE == PRO
+      puts "\nSystemTime: " + MainWorker.cleanSysTime + "\n"
+      puts "\nSend story?: \n"
+    end
 
     @@times = []
 
@@ -157,13 +155,14 @@ class MainWorker
           user.update(time: DEFAULT_TIME)
         end
 
-
-        #logging info
-        print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
-        if MainWorker.sendStory?(user.phone)
-          puts 'YES!!'
-        else
-          puts 'No.'
+    
+        if MODE == PRO
+          print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
+          if MainWorker.sendStory?(user.phone)
+            puts 'YES!!'
+          else
+            puts 'No.'
+          end
         end
 
 
@@ -274,9 +273,11 @@ class MainWorker
       end  #LEGACT STRING 
 
     end #User.do
-        
-    puts "doing hard work!!" + "\n\n" 
 
+    if MODE == PRO
+      puts "doing hard work!!" + "\n\n" 
+    end
+    
     #email us about the quitters
 
     if not quitters.empty? and MODE == "production"
