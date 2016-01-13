@@ -217,7 +217,7 @@ class MainWorker
 
               elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
                 
-                msg = R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[user.series_number]
+                msg = R18n.t.no_reply.day_late + R18n.t.choice.no_greet[user.series_number]
 
                 myWait = MainWorker.getWait(TEXT)
                 NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
