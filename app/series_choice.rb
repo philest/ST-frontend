@@ -38,8 +38,8 @@ def series_choice(user_id, params)
   @user = User.find(user_id)
 
   # Get hash of story series.
-  messageSeriesHash = MessageSeries.
-                        getMessageSeriesHash
+  storySeriesHash = StorySeries.
+                        getStorySeriesHash
   # Resubscribe, if dropped.
   if !@user.subscribed
     @user.update(subscribed: true)
@@ -58,7 +58,7 @@ def series_choice(user_id, params)
   # Gave the word.
   # (Its first letter matches a series choice.)
   elsif (body = /\A\s*[a-zA-Z]/.match(params[:Body])) && 
-           MessageSeries.codeIsInHash(body.to_s +
+           StorySeries.codeIsInHash(body.to_s +
              @user.series_number.to_s)
 
     body = body.to_s
@@ -84,7 +84,7 @@ def series_choice(user_id, params)
     # Two choices for each series,
     # so take twice the current series number
     # to get default.
-    body = messageSeriesHash.keys[@user.series_number * 2] #t0
+    body = storySeriesHash.keys[@user.series_number * 2] #t0
     body = body[0] #t
   end
 
@@ -93,14 +93,14 @@ def series_choice(user_id, params)
   @user.update(next_index_in_series: 0)
 
   # A valid choice.
-  if MessageSeries.codeIsInHash(body + @user.series_number.to_s)
+  if StorySeries.codeIsInHash(body + @user.series_number.to_s)
       
     # Update the series choice.
     @user.update(series_choice: body)
     @user.update(awaiting_choice: false)
 
     # Grab stories from the series hash. 
-    story = messageSeriesHash[@user.series_choice +
+    story = storySeriesHash[@user.series_choice +
                                @user.series_number.to_s][0]
     if @user.mms == true
       # In case of just one photo, this also updates user-info.

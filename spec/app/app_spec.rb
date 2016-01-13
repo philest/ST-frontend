@@ -384,8 +384,8 @@ describe 'The StoryTime App' do
             require_relative '../../stories/story'
             require_relative '../../stories/storySeries'
 
-            messageSeriesHash = MessageSeries.getMessageSeriesHash
-            story = messageSeriesHash["d"+ @user.series_number.to_s][0]
+            storySeriesHash = StorySeries.getStorySeriesHash
+            story = storySeriesHash["d"+ @user.series_number.to_s][0]
 
             TwilioHelper.text(story.getPoemSMS, story.getPoemSMS, @user.phone)
 

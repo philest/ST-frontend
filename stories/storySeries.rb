@@ -1,25 +1,25 @@
 require_relative './story'
 
 
-class MessageSeries
+class StorySeries
 
-@@messageSeriesHash = Hash.new
+@@storySeriesHash = Hash.new
 
 #the code is the letter (series choice) and series number, ex. p1 for puppy on series numbre 1
 def initialize(messageArray, code) 
-	@messageSeries = messageArray
+	@storySeries = messageArray
 	@code=code
-	@@messageSeriesHash[@code] = @messageSeries
+	@@storySeriesHash[@code] = @storySeries
 end
 
 
-def self.getMessageSeriesHash
-	return @@messageSeriesHash
+def self.getStorySeriesHash
+	return @@storySeriesHash
 end
 
 
 def self.codeIsInHash(code)
-	if @@messageSeriesHash[code] == nil
+	if @@storySeriesHash[code] == nil
 		return false
 	else
 		return true
