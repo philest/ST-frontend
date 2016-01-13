@@ -351,7 +351,6 @@ class MainWorker
     end
 
 
-
     this_weekday = @@time_now.wday 
 
     one_day_age = @@time_now - 1.day
