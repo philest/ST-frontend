@@ -59,7 +59,7 @@ class NextMessageWorker
 
       @user = User.find_by(phone: user_phone)
 
-      messageSeriesHash = MessageSeries.getMessageSeriesHash
+      storySeriesHash = StorySeries.getStorySeriesHash
 
       #updating story or series number after last part.
       #next_index_in_series == nil (or series_choice == nil?) means that you're not in a series
@@ -68,7 +68,7 @@ class NextMessageWorker
 
         
         #exit series if time's up
-        if @user.next_index_in_series == messageSeriesHash[@user.series_choice + @user.series_number.to_s].length
+        if @user.next_index_in_series == storySeriesHash[@user.series_choice + @user.series_number.to_s].length
 
           ##return variable to nil: (nil, which means "you're asking the wrong question-- I'm not in a series")
           @user.update(next_index_in_series: nil)

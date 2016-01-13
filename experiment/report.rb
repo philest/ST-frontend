@@ -1,4 +1,4 @@
-#  experiment/send_report.rb            Phil Esterman     
+#  experiment/report.rb            Phil Esterman     
 # 
 #  Send final report on experiment results, delete
 #  experiment.   
@@ -17,6 +17,29 @@ require 'descriptive_statistics'
 
 SEC_IN_DAY = 86400.0
 
+##
+# Check if any experiments have finished. If so,
+# Send the report. 
+#
+def check_reports
+	begin
+	  #Experiment: Send report if completed-->i.e. past end_date! 
+	  Experiment.where("active = true").to_a.each do |exper|
+	    if (exper.end_date && Time.now > exper.end_date)
+	      send_report(exper.id)
+	    end
+	  end
+	rescue StandardError => e
+	    $stderr.print "Experiment report not sent.\n\nError: #{e}"
+	    $stderr.print  "\n\nBacktrace:\n\n"
+	    (1..30).each { $stderr.print e.backtrace.shift }
+	end    
+end
+
+##
+# Email report about results of the
+# given experiment.
+#
 def send_report(experiment_id)
 
 	exper = Experiment.find(experiment_id)

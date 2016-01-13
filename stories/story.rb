@@ -77,8 +77,8 @@ class Message
 		"The dinosaurs have a tea party!\n\nwill you come with me?\n\n\nwe'll stomp, and roar,\n\nand shake our tails,\n\nand sip on cups of tea!")
 
 
-	MessageSeries.new(baboon, "t0")
-	MessageSeries.new(dino, "d0")
+	StorySeries.new(baboon, "t0")
+	StorySeries.new(dino, "d0")
 
 
 

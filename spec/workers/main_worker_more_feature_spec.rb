@@ -284,8 +284,8 @@ describe 'MainWorker, with sleep,' do
       expect(@user.awaiting_choice).to eq(false)
       expect(@user.series_choice).to eq("m")
 
-      messageSeriesHash = MessageSeries.getMessageSeriesHash
-      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+      storySeriesHash = StorySeries.getStorySeriesHash
+      story = storySeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr
@@ -574,8 +574,8 @@ describe 'MainWorker, with sleep,' do
       expect(@user.story_number).to eq(1)
 
 
-      messageSeriesHash = MessageSeries.getMessageSeriesHash
-      story = messageSeriesHash[@user.series_choice + @user.series_number.to_s][0]
+      storySeriesHash = StorySeries.getStorySeriesHash
+      story = storySeriesHash[@user.series_choice + @user.series_number.to_s][0]
 
       smsSoFar.push story.getSMS
       mmsSoFar.concat story.getMmsArr

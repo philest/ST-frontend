@@ -5,132 +5,82 @@
 
 #########  DEPENDENCIES  #########
 
-require 'rubygems'
-require 'bundler/setup'
-
-require 'twilio-ruby'
+# DB. 
 require 'sinatra/activerecord'
-require_relative '../models/user'           #add the user model
+require_relative '../models/user'
+
+# Background jobs and recurrence.
 require 'sidekiq'
 require 'sidetiq'
 
-require 'sinatra/r18n'
-
-require 'time'
-require 'active_support/all'
-
+# Texting API
+require 'twilio-ruby'
+# Wrapper for texting API
 require_relative '../helpers/sprint_helper'
+require_relative '../helpers/twilio_helper'
+
+# Stories. 
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
-require_relative '../helpers/twilio_helper'
+
+# Background Jobs for sending stories
 require_relative './next_message_worker'
 require_relative './new_text_worker'
 
+# Translations
+require 'sinatra/r18n'
+
+# Time, transformations
+require 'time'
+require 'active_support/all'
 require_relative '../lib/set_time'
 
-#email, to learn of failurs
+
+# Email, to learn of failures.
 require 'pony'
 require_relative '../config/pony'
 
-require_relative '../models/experiment'
-require_relative '../experiment/send_report'
+# Experiment reporting.
+require_relative '../experiment/report'
 
+##
+# Checks who's set for a story, then calls
+# job to send it.
 class MainWorker
+
   include Sidekiq::Worker
   include Sidetiq::Schedulable
   
+  # Configure background job options.
   sidekiq_options :queue => :default
-
-  MAX_TEXT = 155 #leaves room for (1/6) at start (160 char msg)
-  
-  TIME_SMS_NORMAL = "StoryTime: Hey there! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?
-
-  Rememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
-
-  TIME_SMS_SPRINT_1 = "(1/2)\nStoryTime: Hi! We want to make StoryTime better for you. When do you want to receive stories (e.g. 5:00pm)?"
-
-  TIME_SMS_SPRINT_2 = "(2/2)\nRememeber screentime within 2hrs before bedtime can delay children's sleep and carry health risks, so please read earlier."
-
-  BIRTHDATE_UPDATE = "StoryTime: If you want the best stories for your child's age, reply with your child's birthdate in MMYY format (e.g. 0912 for September 2012)."
-  
-  TESTERS = ["+15612125831", "+15619008225", "+16468878679", "+16509467649", "+19417243442", "+12022518772" ,"+15614796303", "+17722330863", "+12392735883", "+15614796303", "+13522226913", "+1615734535", "+19735448685", "+15133166064", "+18186897323", "+15617083233", "+14847063250", "+18456711380", "+15613056454", "+15618668227", "+15617893548", "+15615422027"]
-
-
-
- #set flags for getWait
- STORY = 1
- TEXT = 2
-
-
-
-
-  MODE = ENV['RACK_ENV']
-
-
-  #time for the birthdate and time updates: NOTE, EST set.  
-  if ENV['RACK_ENV'] == "production"
-    UPDATE_TIME = "20:00"
-    UPDATE_TIME_2 = "20:00"
-  else
-    UPDATE_TIME = "16:00"
-    UPDATE_TIME_2 = "16:01"
-  end
-
-
-
-
-
-	sidekiq_options retry: false #if fails, don't resent (multiple texts)
-
-
+  sidekiq_options retry: false # If it fails, don't resend.
+                               # (May lead to many texts.)
+  # Run every 2 minutes.                             
   recurrence { hourly.minute_of_hour(0, 2, 4, 6, 8, 10,
-  									12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
-  									32, 34, 36, 38, 40, 42, 44, 46, 48, 50,
-  									52, 54, 56, 58) } #set explicitly because of ice-cube sluggishness
+                    12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
+                    32, 34, 36, 38, 40, 42, 44, 46, 48, 50,
+                    52, 54, 56, 58) }
+  # Set explicitly because of ice-cube sluggishness.
 
+  # Send to us daily. 
+  TESTERS = ["+15612125831"]
 
-
-
+  # Environment.
+  MODE = ENV['RACK_ENV']
+  PRO ||= 'production'
+  TEST ||= 'test'
 
   def perform(*args)
 
-
-
-    account_sid = ENV['TW_ACCOUNT_SID']
-    auth_token = ENV['TW_AUTH_TOKEN']
-
-    @client = Twilio::REST::Client.new account_sid, auth_token
-
-    begin
-      #Experiment: Send report if completed-->i.e. past end_date! 
-      Experiment.where("active = true").to_a.each do |exper|
-        if (exper.end_date && Time.now > exper.end_date)
-          send_report(exper.id)
-        end
-      end
-    rescue StandardError => e
-        $stderr.print "Experiment report not sent.\n\nError: #{e}"
-        $stderr.print  "\n\nBacktrace:\n\n"
-        (1..30).each { $stderr.print e.backtrace.shift }
-    end
-
-    if MODE == PRO
-      puts "\nSystemTime: " + MainWorker.cleanSysTime + "\n"
-      puts "\nSend story?: \n"
-    end
+    check_reports
 
     @@times = []
-
 
     @@user_num_story = 1 #reset for each call
                    #start with the first user.
                    #this is used for computing getWait (updated for each STORY)
 
     @@user_num_text = 0 #this is used for computing getWait (updated for each TEXT)
-
-
-
-
 
       #record this before diving into sending each user a message.
       #the delay is long and thus it might be 5:33 before some users are checked. 
@@ -139,150 +89,153 @@ class MainWorker
     #Remember all the people who have quit! 
     quitters = Array.new 
 
-    # send Twilio message
-    # only for subscribed
+
+    if MODE == PRO
+      puts "\nCurrent Time: #{Time.now.utc.to_s(:time)} UTC"
+      puts "\nSend story?: \n"
+    end
+
+    # Send message to 1) subscribed 2) who are ready for story. 
     User.where(subscribed: true).find_each do |user|
 
-      
-      #LEGACY: set default locale.
-      if user.locale == nil 
-        user.update(locale: 'en')
+      ## LEGACY TEST:
+      # Give a Time!
+      if user.time == nil && MODE == TEST
+        user.update(time: DEFAULT_TIME)
+      end
+  
+      if MODE == PRO
+        print "#{user.phone}, time #{user.time.to_s(:time)}:"
+        if MainWorker.send_story?(user.phone)
+          puts 'YES!!'
+        else
+          puts 'No.'
+        end
       end
 
-      #set this thread's locale as user's locale
-      i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
-      R18n.thread_set(i18n)
+        if MainWorker.send_story?(user.phone) 
 
+          # BREAK
+          if user.on_break
+            if user.days_left_on_break > 1 
+              user.update(days_left_on_break: user.days_left_on_break - 1)
+            else 
+              user.update(days_left_on_break: 0) #remembers that just finished break last time.
+              user.update(on_break: false)
+            end
 
-      if user.time && user.time.class != String #LEGACY
-
-
-        # handling test users: convert give Time!
-        if user.time == nil && ENV['RACK_ENV'] == 'test'
-          user.update(time: DEFAULT_TIME)
-        end
-
-    
-        if MODE == PRO
-          print  user.phone + " with time " + user.time.hour.to_s + ":" + user.time.min.to_s + "  -> "
-          if MainWorker.sendStory?(user.phone)
-            puts 'YES!!'
           else
-            puts 'No.'
-          end
-        end
+
+            ## LEGACY: 
+            # Set default locale.
+            if user.locale == nil 
+              user.update(locale: 'en')
+            end
+            # Set this thread's locale as user's locale.
+            i18n = R18n::I18n.new(user.locale, ::R18n.default_places)
+            R18n.thread_set(i18n)
 
 
-
-          if MainWorker.sendStory?(user.phone) 
-
-
-
-            if user.on_break
-
-              if user.days_left_on_break > 1 
-                user.update(days_left_on_break: user.days_left_on_break - 1)
-              else 
-                user.update(days_left_on_break: 0) #remembers that just finished break last time.
-                user.update(on_break: false)
-              end
-
+            #just finished break last time -> include note.
+            if user.days_left_on_break == 0 
+              note = Text::END_BREAK #note to append
+              user.update(days_left_on_break: nil) #set back to normal
             else
-
-              #just finished break last time -> include note.
-              if user.days_left_on_break == 0 
-                note = Text::END_BREAK #note to append
-                user.update(days_left_on_break: nil) #set back to normal
-              else
-                note = ''
-              end
+              note = ''
+            end
 
 
-             #Should the user be asked to choose a series?
-              #If it's all of these:
-              #0) not awaiting chioce
-              #a) their time, 
-              #b) their third story, or every third one thereafter.
-              #c) they're not in the middle of a series
-  
-  
+           #Should the user be asked to choose a series?
+            # If it's:
+            # a) not awaiting chioce
+            # b) their third story, or every third one thereafter.
+            # c) they're not in the middle of a series
+            if user.awaiting_choice == false &&
+                 series_choice?(user.story_number) && 
+                 user.next_index_in_series == nil
 
+              # Get set for first in series
+              user.update(next_index_in_series: 0)
+              user.update(awaiting_choice: true)
+            
+              # Send invitation to choose.
+              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+              NewTextWorker.perform_in(myWait.seconds,
+                                       note + R18n.t.choice.greet[user.series_number],
+                                       NewTextWorker::NOT_STORY,
+                                       user.phone)
 
-              if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
+            # First No response to series choice.
+            # -> Remind them  
+            elsif user.awaiting_choice == true &&
+                  user.next_index_in_series == 0 
 
-                #get set for first in series
-                user.update(next_index_in_series: 0)
-                user.update(awaiting_choice: true)
-                #choose a series
+              msg = R18n.t.no_reply.day_late + R18n.t.choice.no_greet[user.series_number]
 
+              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+              NewTextWorker.perform_in(myWait.seconds,
+                                       note + msg, NewTextWorker::NOT_STORY,
+                                       user.phone)
 
+              user.update(next_index_in_series: 999)  
 
-                myWait = MainWorker.getWait(TEXT)
+            # Second no response to series choice.
+            # -> Drop and notify them.  
+            elsif user.next_index_in_series == 999
 
-                NewTextWorker.perform_in(myWait.seconds, note + R18n.t.choice.greet[user.series_number], NewTextWorker::NOT_STORY, user.phone)
+              user.update(subscribed: false)
+              user.update(awaiting_choice: false)
 
-              elsif user.awaiting_choice == true && user.next_index_in_series == 0 # the first time they haven't responded
-                
-                msg = R18n.t.no_reply.day_late + R18n.t.choice.no_greet[user.series_number]
+              quitters.push user.phone
 
-                myWait = MainWorker.getWait(TEXT)
-                NewTextWorker.perform_in(myWait.seconds, note + msg, NewTextWorker::NOT_STORY, user.phone)
+              myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+              NewTextWorker.perform_in(myWait.seconds,
+                                       R18n.t.no_reply.dropped.to_str,
+                                       NewTextWorker::NOT_STORY,
+                                       user.phone)
 
-                user.update(next_index_in_series: 999)  
+            # send STORY or SERIES, but not if awaiting series response
+            elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
-              elsif user.next_index_in_series == 999 #the second time they haven't responded
+              #get the story and series structures
+              messageArr = Message.getMessageArray
+              storySeriesHash = StorySeries.getStorySeriesHash
 
-                user.update(subscribed: false)
-                user.update(awaiting_choice: false)
+              #SERIES
+              if user.series_choice != nil
+                story = storySeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
+              #STORY
+              else 
+                story = messageArr[user.story_number]
+              end 
+            
 
-                quitters.push user.phone
+              #JUST SMS MESSAGING!
+              if user.mms == false
 
-                myWait = MainWorker.getWait(TEXT)
-                NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::NOT_STORY, user.phone)
+                  myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+                  NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::STORY, user.phone)
 
-              #send STORY or SERIES, but not if awaiting series response
-              elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
+              else #MULTIMEDIA MESSAGING (MMS)!
 
-                #get the story and series structures
-                messageArr = Message.getMessageArray
-                messageSeriesHash = MessageSeries.getMessageSeriesHash
+                  #start the MMS message stack
 
-                #SERIES
-                if user.series_choice != nil
-                  story = messageSeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
-                #STORY
-                else 
-                  story = messageArr[user.story_number]
-                end 
-              
+                  myWait = MainWorker.getWait(NewTextWorker::STORY)
+                  NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
 
-                #JUST SMS MESSAGING!
-                if user.mms == false
+              end#MMS or SMS
 
-                    myWait = MainWorker.getWait(TEXT)
-                    NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::STORY, user.phone)
+            end#end story_subpart
 
-                else #MULTIMEDIA MESSAGING (MMS)!
+          end #non-break user
 
-                    #start the MMS message stack
+        end#end send_story? large
 
-                    myWait = MainWorker.getWait(STORY)
-                    NextMessageWorker.perform_in(myWait.seconds, note + story.getSMS, story.getMmsArr, user.phone)  
-
-                end#MMS or SMS
-
-              end#end story_subpart
-
-            end #non-break user
-
-          end#end sendStory? large
-
-      end  #LEGACT STRING 
 
     end #User.do
 
     if MODE == PRO
-      puts "doing hard work!!" + "\n\n" 
+      puts "Just checked :)" + "\n\n" 
     end
     
     #email us about the quitters
@@ -314,9 +267,9 @@ class MainWorker
 
     #increments by one each user.
     #jumps 40 seconds each 20 users. 
-    if type == STORY
+    if type == NewTextWorker::STORY
       @@user_num_story += 1
-    elsif type == TEXT
+    elsif type == NewTextWorker::NOT_STORY
       @@user_num_text += 1 
     end      
 
@@ -345,100 +298,82 @@ class MainWorker
     return @@times
   end
 
-
-
-
-  # helper methods
-  # check if user's story time is this exact minute, or the next minute
-  def self.sendStory?(user_phone, *time) #don't know object as parameter  #time variable allows for testing, sending time.
-
-    user = User.find_by(phone: user_phone)
-
-    if time[0] != nil && MODE == "test"
-      @@time_now = time[0]
-    end
-
-
-    this_weekday = @@time_now.wday 
-
-    one_day_age = @@time_now - 1.day
-
-    case user.days_per_week
-      when 3
-        valid_weekdays = [1, 3, 5]
-      when nil, 2
-        valid_weekdays = [2, 4]
-      when 1  
-        valid_weekdays = [3]
-      else
-       puts "ERR: invalid days of week"
-    end
-
-    if (valid_weekdays.include?(this_weekday) && (user.created_at <= one_day_age)) || (TESTERS.include?(user.phone))
-                                                                     #SEND TO US EVERYDAY
-                                                                     #SEND IF ony valid day and NOT created this past day!
-                                                                    #Note: this messes up if they created this past 5:30pm on a M or W
-      currHour = @@time_now.hour
-      userHour = user.time.utc.hour 
-
-      currMin =  @@time_now.min
-      userMin = user.time.utc.min
-
-      if currHour == userHour
-        
-        if (userMin - currMin) < 2 && (userMin - currMin) >= 0 #if either now, or next minute
-          return true
-        else
-          return false
-        end
-
-      elsif currHour == userHour && (currMin == 59 && userMin == 1) #edge case
-      
-        return true
-      
-      else
-      
-        return false
-      
-      end#end currHour == userHour
-
-    else
-
-      return false
-    
-    end#end ifvalid days
-    
-  end#end sendStory?
-
-
-
-  # returns a cleaned version of the current system time in 24 hour version
-  #ALWAYS IN UTC
-  def self.cleanSysTime 
-
-    currTime = Time.now
-
-    hours = currTime.hour
-    min = currTime.min
-
-    # check if min is single digit
-    if min < 10
-      min = min.to_s
-      min = "0"+min #add zero infront 
-    end
-
-    # check if hour is single digit
-    if hours < 10
-    	hours = hours.to_s
-    	hours = "0" + hours #add zero to front
-    end
-
-    	cleanedTime = hours.to_s+":"+min.to_s 
-
-    return cleanedTime
+  ##
+  # Checks whether it's time for a series
+  # choice. 
+  #  
+  # Their third story, or every third one thereafter.
+  def series_choice?(story_number)
+       story_number == 1 || 
+      (story_number != 0 && 
+       story_number % 3 == 0)
   end
 
 
+  ##
+  # Check if a weekday is valid for a given 
+  # schedule of stories per week. 
+  #
+  def self.valid_weekday?(wday_num, days_per_week)
+    # Get valid weekdays
+    case days_per_week
+    when 3
+      wdays = [1, 3, 5]
+    when nil, 2
+      wdays = [2, 4]
+    when 1  
+      wdays = [3]
+    else
+      $stderr.puts "ERROR: #{days_per_week} is an invalid days_per_week."
+    end
+
+    # Is this weekday valid for the given schedule? 
+    return wdays.include?(wday_num)
+  end
+
+  ##
+  # Is the user's time in the next or previous 1 minute? 
+  #       
+  def self.valid_time(user_time, time_now)
+    # Use seconds_since_midnight to compare hour:min, not dates.
+
+    (user_time.seconds_since_midnight - time_now.seconds_since_midnight >= 0 &&
+     user_time.seconds_since_midnight - time_now.seconds_since_midnight < 1.minutes) ||
+    (time_now.seconds_since_midnight - user_time.seconds_since_midnight >= 0 &&
+     time_now.seconds_since_midnight - user_time.seconds_since_midnight < 1.minutes)
+  end
+
+  # helper methods
+  # check if user's story time is this exact minute, or the next minute
+
+  def self.send_story?(user_phone, *time) #don't know object as parameter  #time variable allows for testing, sending time.
+
+    user = User.find_by(phone: user_phone)
+
+    # Allow to manual set time in testing.
+    if time.empty? == false &&
+        MODE == TEST
+
+      @@time_now = time.first
+    end
+
+   # They're a candidate if it's us, or 
+   # - it's the right weekday
+   # - they didn't enroll in the last day.
+    if TESTERS.include?(user.phone) ||
+         (MainWorker.valid_weekday?(@@time_now.wday, user.days_per_week) &&
+         (@@time_now - 1.day) > user.created_at)
+
+
+       # Is their time in the next or previous 1 minute? 
+       # Use seconds_since_midnight to compare hour:min, not dates.       
+       if MainWorker.valid_time(user.time, @@time_now) 
+            return true
+       end
+
+    end
+    return false
+  end
 
 
 end  #end class
