@@ -13,7 +13,7 @@ break:
 #newlines added because this prepends a new story message. 
 
 start:
-  normal: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week… starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
+  normal: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week... starting now!\n\nText STOP to quit, or HELP NOW for help. Normal text rates may apply."
   sprint: "Welcome to StoryTime, free pre-k stories by text! You'll get %1 stories/week, starting now!\n\nText STOP to end, or HELP NOW for help. Normal text rates may apply."
 
 stop:

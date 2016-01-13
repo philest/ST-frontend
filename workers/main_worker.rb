@@ -167,6 +167,7 @@ class MainWorker
         end
 
 
+
           if MainWorker.sendStory?(user.phone) 
 
 
@@ -198,6 +199,8 @@ class MainWorker
               #b) their third story, or every third one thereafter.
               #c) they're not in the middle of a series
   
+  
+
 
               if user.awaiting_choice == false && ((user.story_number == 1 || (user.story_number != 0 && user.story_number % 3 == 0)) && user.next_index_in_series == nil)
 
@@ -229,7 +232,7 @@ class MainWorker
                 quitters.push user.phone
 
                 myWait = MainWorker.getWait(TEXT)
-                NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::NOT_STORY, user.phone)
+                NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::NOT_STORY, user.phone)
 
               #send STORY or SERIES, but not if awaiting series response
               elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
@@ -251,7 +254,7 @@ class MainWorker
                 if user.mms == false
 
                     myWait = MainWorker.getWait(TEXT)
-                    NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped, NewTextWorker::STORY, user.phone)
+                    NewTextWorker.perform_in(myWait.seconds, R18n.t.no_reply.dropped.to_str, NewTextWorker::STORY, user.phone)
 
                 else #MULTIMEDIA MESSAGING (MMS)!
 

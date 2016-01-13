@@ -225,8 +225,8 @@ module SMSResponseHelper
       # Get string of weekdays for reply.
       day_names = get_day_names(@user.days_per_week,
                                @user.carrier)
-      TwilioHelper.text(R18n.t.help.normal(day_names).to_s,
-                   R18n.t.help.sprint(day_names).to_s,
+      TwilioHelper.text(R18n.t.help.normal(day_names).to_str,
+                   R18n.t.help.sprint(day_names).to_str,
                    @user.phone)
 
     # BREAK
