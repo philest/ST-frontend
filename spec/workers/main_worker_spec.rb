@@ -52,7 +52,7 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
       @user.reload
 
       # Get first MMS, with introductory SMS
-      @properMMS = Text::FIRST_MMS
+      @properMMS = [Text::FIRST_MMS.first]
 
       if carrier == Text::SPRINT
         @properSMS = [R18n.t.start.sprint("2").to_str]
