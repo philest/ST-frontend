@@ -18,11 +18,6 @@ require_relative '../helpers/sprint_helper'
 
 require_relative './next_message_worker'
 
-## Types 
-# For a lone SMS, and update user info. 
-STORY = "story"
-# For a lone SMS
-NOT_STORY  = "not story"
 
 ##
 # Send an SMS asynchonously. Update the user if it's an SMS
@@ -31,6 +26,13 @@ NOT_STORY  = "not story"
 class NewTextWorker
   include Sidekiq::Worker
   include Text
+
+  ## Types 
+  # For a lone SMS, and update user info. 
+  STORY = "story"
+  # For a lone SMS
+  NOT_STORY  = "not story"
+
 
   #Poll more often, so peeps rightly get their messages 
   Sidekiq.configure_server do |config|
