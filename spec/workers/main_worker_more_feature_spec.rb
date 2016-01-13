@@ -216,8 +216,8 @@ describe 'MainWorker, with sleep,' do
       expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
 
-    mmsSoFar.concat Message.getMessageArray[0].getMmsArr
-    smsSoFar.concat [Message.getMessageArray[0].getSMS]
+    mmsSoFar.concat Story.getStoryArray[0].getMmsArr
+    smsSoFar.concat [Story.getStoryArray[0].getSMS]
 
     expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
     expect(TwilioHelper.getSMSarr).to eq(smsSoFar)
@@ -498,8 +498,8 @@ describe 'MainWorker, with sleep,' do
       expect(@user.total_messages).to eq(2)
       expect(@user.story_number).to eq(1)
 
-    mmsSoFar.concat Message.getMessageArray[0].getMmsArr
-    smsSoFar.concat [Message.getMessageArray[0].getSMS]
+    mmsSoFar.concat Story.getStoryArray[0].getMmsArr
+    smsSoFar.concat [Story.getStoryArray[0].getSMS]
 
     expect(TwilioHelper.getMMSarr).to eq(mmsSoFar)
     expect(TwilioHelper.getSMSarr).to eq(smsSoFar)

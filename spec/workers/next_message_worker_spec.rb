@@ -166,8 +166,8 @@ describe 'The NextMessageWorker' do
       users.each do |user|
         user.reload
 
-        expect(TwilioHelper.getMMSarr).to eq(Message.getMessageArray[0].getMmsArr)              
-        expect(TwilioHelper.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+        expect(TwilioHelper.getMMSarr).to eq(Story.getStoryArray[0].getMmsArr)              
+        expect(TwilioHelper.getSMSarr).to eq([Story.getStoryArray[0].getSMS])
         # expect(user.total_messages).to eq()
         expect(user.story_number).to eq(1)
         puts " "+ user.phone + "passed"

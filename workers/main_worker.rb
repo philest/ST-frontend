@@ -198,7 +198,7 @@ class MainWorker
             elsif (user.series_choice == nil && user.next_index_in_series == nil) || user.series_choice != nil
 
               #get the story and series structures
-              messageArr = Message.getMessageArray
+              storyArr = Story.getStoryArray
               storySeriesHash = StorySeries.getStorySeriesHash
 
               #SERIES
@@ -206,7 +206,7 @@ class MainWorker
                 story = storySeriesHash[user.series_choice + user.series_number.to_s][user.next_index_in_series]
               #STORY
               else 
-                story = messageArr[user.story_number]
+                story = storyArr[user.story_number]
               end 
             
 
