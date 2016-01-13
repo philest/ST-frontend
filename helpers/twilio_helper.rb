@@ -224,7 +224,7 @@ SMS = "SMS"
    	def self.mmsSend(mms_url, user_phone)
 		if @@mode == TEST || @@mode == TEST_CRED
 			@@twiml_mms.push mms_url
-			puts "Sent #{mms_url[18, mms_url.length]}"
+			puts "Sent #{mms_url[-10..-5]}"
 		elsif @@mode == PRO
 			TwilioHelper.mmsSendHelper(mms_url, user_phone)
 		end
@@ -290,9 +290,9 @@ SMS = "SMS"
             :from => @@my_twilio_number)   # Replace with your Twilio number
 
         if @@mode == TEST_CRED 
-        	puts "TC: Sent sms to #{user_phone}: #{body[9, 18]}" 
+        	puts "TC: Sent sms to #{user_phone}: #{body[10, 18]}" 
        	else
-    		puts "Sent sms to #{user_phone}: #{body[9, 18]}"
+    		puts "Sent sms to #{user_phone}: #{body[10, 18]}"
     	end 
 
 		  #turn off testCred
@@ -312,7 +312,7 @@ SMS = "SMS"
             :to => user_phone,     # Replace with your phone number
             :from => @@my_twilio_number)   # Replace with your Twilio number
 
-    	puts "Sent mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
+    	puts "Sent mms to #{user_phone}: #{mms_url[-10..-5]}"
     end
 
     def self.fullSendHelper(body, mms_url, user_phone)
@@ -347,7 +347,7 @@ SMS = "SMS"
 
 			end 
 
-			puts "Sent #{mms_url[18, mms_url.length]} and sms part 1"
+			puts "Sent #{mms_url[-10..-5]} and sms part 1"
 
 			#send the rest of sms series
             NewTextWorker.perform_in(MMS_WAIT.seconds, sprint_arr, NewTextWorker::NOT_STORY, user_phone)
@@ -357,7 +357,7 @@ SMS = "SMS"
 			if @@mode == TEST || @@mode == TEST_CRED
 				@@twiml_mms.push mms_url
 				@@twiml_sms.push body
-				puts "Sent #{mms_url[18, mms_url.length]}, #{body}"
+				puts "Sent #{mms_url[-10..-5]}, #{body}"
 
 	        else
 	           message = @client.account.messages.create(
@@ -369,8 +369,8 @@ SMS = "SMS"
 
 		end
 
-        puts "Sent mms to #{user_phone}: #{mms_url[18, mms_url.length]}"
-    	puts "along with sms: #{body[9, 18]}" 
+        puts "Sent mms to #{user_phone}: #{mms_url[-10..-5]}"
+    	puts "along with sms: #{body[10, 18]}" 
 
     end
 
@@ -404,7 +404,7 @@ SMS = "SMS"
 		if (user = User.find_by(phone: user_phone)) == nil
     		puts "Sent mms to new user"
     	else
-    		puts "Sent to #{user.phone}: #{mms[18, mms.length]}" 
+    		puts "Sent to #{user.phone}: #{mms[-10..-5]}" 
   		end
 
 
@@ -444,7 +444,7 @@ SMS = "SMS"
 		if @user == nil
     		puts "Sent full to new user"
     	else
-			puts "Sent sms to #{@user.phone}: " + "\"" + msg[0,18] + "...\""
+			puts "Sent sms to #{@user.phone}: " + "\"" + msg[10,18] + "...\""
   		end
 		
 		TwilioHelper.smsRespond(msg, LAST)

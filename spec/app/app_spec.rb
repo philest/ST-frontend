@@ -323,14 +323,14 @@ describe 'The StoryTime App' do
 
 
         #SPRINT tests
-
+        ## TODO implement these --> turn puts into test
         it "leaves a message intact if under 160" do
           expect(Sprint.chop(Text::STOPSMS)).to eq([Text::STOPSMS])
         end
 
         it "seperates a longer message into two texts" do
           expect(Sprint.chop(Text::BAD_TIME_SMS).length).to eq(2)
-          puts Sprint.chop(Text::BAD_TIME_SMS)
+          # puts Sprint.chop(Text::BAD_TIME_SMS)
         end
 
         it "works for a long guy" do 
@@ -339,27 +339,27 @@ describe 'The StoryTime App' do
 
         it "works for single space long" do
             puts "\n"
-            puts Sprint.chop(SINGLE_SPACE_LONG)
+            # puts Sprint.chop(SINGLE_SPACE_LONG)
         end
 
         it "properly breaks up a 160+ chunk without newlines" do
             puts "\n"
             puts "\n"
-            puts Sprint.chop(NO_NEW_LINES)
+            # puts Sprint.chop(NO_NEW_LINES)
         end
 
 
         it "properly breaks up a MIX chunk without newlines" do
             puts "\n"
             puts "\n"
-            puts Sprint.chop(MIX)
+            # puts Sprint.chop(MIX)
         end
 
 
         it "properly breaks up a MIXIER chunk without newlines" do
             puts "\n"
             puts "\n"
-            puts Sprint.chop(MIXIER)
+            # puts Sprint.chop(MIXIER)
         end
 
       #SPRINT ACTION TESTS
@@ -374,7 +374,6 @@ describe 'The StoryTime App' do
 
 
             expect(TwilioHelper.getSMSarr.length).to eq(3)
-            puts TwilioHelper.getSMSarr
       end
 
         it "properly sends long poemSMS to Sprint users as many pieces" do
@@ -391,7 +390,6 @@ describe 'The StoryTime App' do
             TwilioHelper.text(story.getPoemSMS, story.getPoemSMS, @user.phone)
 
             expect(TwilioHelper.getSMSarr.length).to_not eq(1)
-            puts TwilioHelper.getSMSarr
         end
 
 
@@ -412,9 +410,6 @@ describe 'The StoryTime App' do
         expect(TwilioHelper.getSMSarr).to eq ["Here's the SMS part!"]
         expect(TwilioHelper.getMMSarr).to eq ["imgur:://http: IMAGE 1"]
 
-        puts TwilioHelper.getSMSarr
-        puts TwilioHelper.getMMSarr
-
       end
 
       it "properly responds through wrapper (fullrespond)" do
@@ -422,9 +417,6 @@ describe 'The StoryTime App' do
 
         expect(TwilioHelper.getSMSarr).to eq ["BODY!"]
         expect(TwilioHelper.getMMSarr).to eq ["imgur:://http lastest Image"]
-
-        puts TwilioHelper.getSMSarr
-        puts TwilioHelper.getMMSarr
 
       end
 
