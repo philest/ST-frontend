@@ -6,8 +6,8 @@ class StorySeries
 @@storySeriesHash = Hash.new
 
 #the code is the letter (series choice) and series number, ex. p1 for puppy on series numbre 1
-def initialize(messageArray, code) 
-	@storySeries = messageArray
+def initialize(storyArray, code) 
+	@storySeries = storyArray
 	@code=code
 	@@storySeriesHash[@code] = @storySeries
 end

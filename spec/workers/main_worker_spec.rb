@@ -70,8 +70,8 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
       MainWorker.perform_async
       
       # Get full story MMS, with its SMS
-      @properMMS.concat Message.getMessageArray[0].getMmsArr
-      @properSMS.concat [Message.getMessageArray[0].getSMS]
+      @properMMS.concat Story.getStoryArray[0].getMmsArr
+      @properSMS.concat [Story.getStoryArray[0].getSMS]
 
       if test_it
         expect(TwilioHelper.getMMSarr).to eq(@properMMS)
@@ -368,7 +368,7 @@ describe 'MainWorker' do
       @user.reload 
 
 
-      expect(TwilioHelper.getSMSarr).to eq([Message.getMessageArray[0].getSMS])
+      expect(TwilioHelper.getSMSarr).to eq([Story.getStoryArray[0].getSMS])
       expect(TwilioHelper.getSMSarr).not_to eq(nil)
       expect(TwilioHelper.getSMSarr).not_to eq([])
     end
