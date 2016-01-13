@@ -20,10 +20,34 @@ include Text
 require_relative '../stories/story'
 require_relative '../stories/storySeries'
 require_relative '../workers/next_message_worker'
+
 require_relative '../helpers/twilio_helper.rb'
 
 #the models
 require_relative '../models/user' #add User model
+
+
+require_relative '../workers/new_text_worker'
+require_relative '../workers/main_worker'
+
+
+##
+# Invite the user to choose a series. 
+#
+def choose_series_sms(user_id)
+
+  # Get set for first in series
+  user = User.find user_id
+  user.update(next_index_in_series: 0)
+  user.update(awaiting_choice: true)
+
+  # Send invitation to choose.
+  myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+  NewTextWorker.perform_in(myWait.seconds,
+                           note + R18n.t.choice.greet[user.series_number],
+                           NewTextWorker::NOT_STORY,
+                           user.phone)
+end
 
 
 
