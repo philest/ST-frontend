@@ -1,3 +1,10 @@
+#  worker/new_text_worker.rb                  Phil Esterman   
+# 
+#  Send an SMS asynchonously. Update the user if it's an SMS
+#  Story.  
+#  --------------------------------------------------------
+
+
 require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'

@@ -1,3 +1,9 @@
+#  worker/next_message_worker.rb               Phil Esterman   
+# 
+#  Send an MMS, or MMS/SMS story asynchonously. 
+#  Update the user if it's story.
+#  --------------------------------------------------------
+
 require 'sinatra/activerecord'
 require_relative '../models/user'           #add the user model
 require 'sidekiq'
@@ -21,8 +27,6 @@ class NextMessageWorker
     Sidekiq.configure_server do |config|
       config.average_scheduled_poll_interval = 1
     end
-
-
 
 
 

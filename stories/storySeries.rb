@@ -1,3 +1,9 @@
+#  stories/storySeries.rb                     Phil Esterman   
+# 
+#  StorySeries are hashes of multiple stories, sent
+#  episodically. 
+#  --------------------------------------------------------
+
 require_relative './story'
 
 
@@ -25,16 +31,6 @@ def self.codeIsInHash(code)
 		return true
 	end
 end
-
-
-
-
-
-##Create Messages, Create Series from Messages
-
-
-
-
 
 
 end

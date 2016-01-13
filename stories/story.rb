@@ -1,3 +1,10 @@
+#  stories/story.rb                           Phil Esterman   
+# 
+#  The Story class stores all the MMS/SMS stories. It also
+#  Handles the logic for sending a story.  
+#  --------------------------------------------------------
+
+
 require_relative './storySeries'
 require_relative '../i18n/constants'
 

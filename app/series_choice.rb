@@ -1,3 +1,9 @@
+#  app/series_choice.rb                  Phil Esterman   
+# 
+#  Invite, remind, drop, & reply to users about series
+#  choices.  
+#  --------------------------------------------------------
+
 require 'twilio-ruby'
 
 #internationalization
