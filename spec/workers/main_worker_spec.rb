@@ -133,7 +133,48 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
     expect(@user.total_messages).to eq(3)
   end
 
- 
+  def to_dropped(properSMS, properMMS, phone, carrier)
+
+      @properSMS = []
+      @properMMS = [] 
+      through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
+
+     # Sunday
+      # No change. 
+      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Sunday
+      MainWorker.perform_async
+      expect(TwilioHelper.getSMSarr).to eq @properSMS
+
+      # Tuesday (next valid day)
+      # Get reminder
+      Timecop.travel(2015, 6, 30, 17, 29, 0) #on tues, first valid day after
+      MainWorker.perform_async
+      @user.reload
+      @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
+      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+      # Notes no response: 
+      expect(@user.next_index_in_series).to eq(999)
+
+      # Wed
+      # No change. 
+      Timecop.travel(2015, 7, 1, 17, 29, 0)  #on Wed
+      MainWorker.perform_async
+      @user.reload
+      expect(TwilioHelper.getSMSarr).to eq @properSMS
+      expect(@user.subscribed).to eq true
+
+      #Thursday
+      #PROPERLY DROPS THE FOOL: It's the next valid day.
+      Timecop.travel(2015, 7, 2, 17, 29, 0)  #on Thurs
+      MainWorker.perform_async
+      @user.reload
+      @properSMS.push R18n.t.no_reply.dropped.to_str
+
+      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+      expect(@user.subscribed).to eq(false)
+  end
+
+
 describe 'MainWorker' do
   include Rack::Test::Methods
   include Text
@@ -478,41 +519,7 @@ describe 'MainWorker' do
      
       @properSMS = []
       @properMMS = [] 
-      through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
-
-     # Sunday
-      # No change. 
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Sunday
-      MainWorker.perform_async
-      expect(TwilioHelper.getSMSarr).to eq @properSMS
-
-      # Tuesday (next valid day)
-      # Get reminder
-      Timecop.travel(2015, 6, 30, 17, 29, 0) #on tues, first valid day after
-      MainWorker.perform_async
-      @user.reload
-      @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      # Notes no response: 
-      expect(@user.next_index_in_series).to eq(999)
-
-      # Wed
-      # No change. 
-      Timecop.travel(2015, 7, 1, 17, 29, 0)  #on Wed
-      MainWorker.perform_async
-      @user.reload
-      expect(TwilioHelper.getSMSarr).to eq @properSMS
-      expect(@user.subscribed).to eq true
-
-      #Thursday
-      #PROPERLY DROPS THE FOOL: It's the next valid day.
-      Timecop.travel(2015, 7, 2, 17, 29, 0)  #on Thurs
-      MainWorker.perform_async
-      @user.reload
-      @properSMS.push R18n.t.no_reply.dropped.to_str
-
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      expect(@user.subscribed).to eq(false)
+      to_dropped(@properSMS, @properMMS, '+15612129999', 'ATT')
     end
   end
 
@@ -581,6 +588,13 @@ describe 'MainWorker' do
 
   end
 
+  context 'when dropped' do 
+    it 'resubscribes with STORY' do 
+
+    end
+  end
+
+  it "signs up after dropping."
 
  it "properly signs back up after being dropped, then STORY-responding" do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on Monday.
