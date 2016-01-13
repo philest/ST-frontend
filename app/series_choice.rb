@@ -32,9 +32,11 @@ require_relative '../workers/main_worker'
 
 
 ##
-# Invite the user to choose a series. 
+# Invite the user to choose a series.
+#  - Update appropriate user attributes to
+#    indicate waiting on choice. 
 #
-def choose_series_sms(user_id)
+def series_choice_choose(user_id, note)
 
   # Get set for first in series
   user = User.find user_id
@@ -51,13 +53,55 @@ end
 
 
 
+
+##
+# Remind the user to choose a series.
+#  - Update appropriate user attributes to
+#    indicate this. 
+#
+def series_choice_remind(user_id, note)
+
+  user = User.find user_id
+  msg = R18n.t.no_reply.day_late + R18n.t.choice.no_greet[user.series_number]
+
+  myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+  NewTextWorker.perform_in(myWait.seconds,
+                           note + msg, NewTextWorker::NOT_STORY,
+                           user.phone)
+
+  user.update(next_index_in_series: 999)  
+end
+
+
+##
+# Drop the user and notify her.
+#  - Update appropriate user attributes to
+#    indicate drop. 
+#
+def series_choice_drop(user_id, note)
+
+  # Get set for first in series
+  user = User.find user_id
+  user.update(subscribed: false)
+  user.update(awaiting_choice: false)
+
+  myWait = MainWorker.getWait(NewTextWorker::NOT_STORY)
+  NewTextWorker.perform_in(myWait.seconds,
+                           R18n.t.no_reply.dropped.to_str,
+                           NewTextWorker::NOT_STORY,
+                           user.phone)
+end
+
+
+
+
 ##
 # Reply to a user's series choice.
 #   - Set that user's series. 
 #   - Give that user the first in the series. 
 #   - Reply when given invalid response. 
 #  
-def series_choice(user_id, params)
+def series_choice_reply(user_id, params)
 
   @user = User.find(user_id)
 
