@@ -103,7 +103,19 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Send an MMS, or MMS/SMS story asynchonously.  Update the user if it&#39;s
+story.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -136,7 +148,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>updates what story, series, choice, total_message, or index User is on.</p>
+<p>Updates what story, series, choice, total_message, or index User is on.</p>
 </div></span>
   
 </li>
@@ -168,7 +180,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Run asynchrnously (Sidekiq).</p>
+</div></span>
   
 </li>
 
@@ -196,7 +210,7 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>updates what story, series, choice, total_message, or index User is on.</p>
+<p>Updates what story, series, choice, total_message, or index User is on.</p>
 
 
   </div>
@@ -210,8 +224,6 @@
       <pre class="lines">
 
 
-62
-63
 64
 65
 66
@@ -245,10 +257,12 @@
 94
 95
 96
-97</pre>
+97
+98
+99</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'workers/next_message_worker.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'workers/next_message_worker.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_updateUser'>updateUser</span><span class='lparen'>(</span><span class='id identifier rubyid_user_phone'>user_phone</span><span class='comma'>,</span> <span class='id identifier rubyid_sms'>sms</span><span class='rparen'>)</span>
 
@@ -306,15 +320,23 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Run asynchrnously (Sidekiq)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-33
-34
-35
 36
 37
 38
@@ -338,15 +360,16 @@
 56
 57
 58
-59</pre>
+59
+60
+61</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'workers/next_message_worker.rb', line 33</span>
+      <pre class="code"><span class="info file"># File 'workers/next_message_worker.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_perform'>perform</span><span class='lparen'>(</span><span class='id identifier rubyid_sms'>sms</span><span class='comma'>,</span> <span class='id identifier rubyid_mms_arr'>mms_arr</span><span class='comma'>,</span> <span class='id identifier rubyid_user_phone'>user_phone</span><span class='rparen'>)</span>
   
 	<span class='ivar'>@user</span> <span class='op'>=</span> <span class='const'>User</span><span class='period'>.</span><span class='id identifier rubyid_find_by'>find_by</span><span class='lparen'>(</span><span class='label'>phone:</span> <span class='id identifier rubyid_user_phone'>user_phone</span><span class='rparen'>)</span>
-
 
   <span class='comment'>#handle strings
 </span>  <span class='kw'>if</span> <span class='id identifier rubyid_mms_arr'>mms_arr</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>String</span>
@@ -380,7 +403,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Jan 13 18:13:36 2016 by
+  Generated on Wed Jan 13 18:42:03 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>

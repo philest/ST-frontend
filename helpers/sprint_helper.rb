@@ -1,13 +1,9 @@
-#  helpers/sprint_helper.rb            Phil Esterman   
+# helpers/sprint_helper.rb            Phil Esterman   
 # 
-#  Helper to chop a longer SMS into many SMS, each less
-#  than 160 characters (for Sprint compatibility).
+# Helper to chop a longer SMS into many SMS, each less
+# than 160 characters (for Sprint compatibility).
 #  --------------------------------------------------------
 
-
-MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
-
-BREAK = "\n" #for Help Message
 
 
 ##
@@ -15,8 +11,12 @@ BREAK = "\n" #for Help Message
 #  than 160 characters (for Sprint compatibility).
 class Sprint
 
-	#if just one message, no (1/X); otherwise, append it. 
-	#returns array of chunks, numbered on top
+SPRINT_MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
+
+	#  Helper to chop a longer SMS into many SMS, each less
+	#  than 160 characters (for Sprint compatibility).
+	#
+	#  Paginates the SMS, and returns them as an array. 
 	def self.chop(story) 
 
 		sms = Array.new #array of texts to send seperately
@@ -36,8 +36,8 @@ class Sprint
 
 			while (totalChar < storyLen - 1) #haven't divided up entire message yet
 
-				if (totalChar + MAX_TEXT < storyLen) #if not on last message
-					endIndex = startIndex + MAX_TEXT	
+				if (totalChar + SPRINT_MAX_TEXT < storyLen) #if not on last message
+					endIndex = startIndex + SPRINT_MAX_TEXT	
 				else #if on last message
 					endIndex = storyLen - 1 #endIndex is last index of story
 				end
@@ -45,7 +45,7 @@ class Sprint
 				just_spaces_end_index = endIndex #if there's no newlines, come back to this as starting endIndex
 
 
-					while (story[endIndex - 1] != BREAK || (endIndex - 1) == startIndex) && endIndex > startIndex && endIndex != storyLen-1 do  #find the latest newline before endIndex
+					while (story[endIndex - 1] != "\n" || (endIndex - 1) == startIndex) && endIndex > startIndex && endIndex != storyLen-1 do  #find the latest newline before endIndex
 						endIndex -= 1
 					end
 

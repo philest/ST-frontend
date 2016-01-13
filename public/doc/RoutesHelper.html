@@ -87,7 +87,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>Admin authentication, from Sinatra.</p>
+<p>Admin authentication, taken from Sinatra.</p>
 
 
   </div>
@@ -127,7 +127,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Check if a user is authorized as admin.</p>
+</div></span>
   
 </li>
 
@@ -149,7 +151,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Mark the route as protected, i.e.</p>
+</div></span>
   
 </li>
 
@@ -175,6 +179,8 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Check if a user is authorized as admin.</p>
+
 
   </div>
 </div>
@@ -200,13 +206,13 @@
       <pre class="lines">
 
 
-11
-12
 13
-14</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'helpers/routes_helper.rb', line 11</span>
+      <pre class="code"><span class="info file"># File 'helpers/routes_helper.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_authorized?'>authorized?</span>
   <span class='ivar'>@auth</span> <span class='op'>||=</span>  <span class='const'>Rack</span><span class='op'>::</span><span class='const'>Auth</span><span class='op'>::</span><span class='const'>Basic</span><span class='op'>::</span><span class='const'>Request</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_env'>env</span><span class='rparen'>)</span>
@@ -226,20 +232,31 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Mark the route as protected, i.e. requires authentication.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-5
 6
 7
 8
-9</pre>
+9
+10</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'helpers/routes_helper.rb', line 5</span>
+      <pre class="code"><span class="info file"># File 'helpers/routes_helper.rb', line 6</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_protected!'>protected!</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_authorized?'>authorized?</span>
@@ -256,7 +273,7 @@
 </div>
 
     <div id="footer">
-  Generated on Wed Jan 13 18:13:36 2016 by
+  Generated on Wed Jan 13 18:42:03 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>

@@ -99,13 +99,37 @@
 </dl>
 <div class="clear"></div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>StorySeries are hashes of multiple stories, sent</p>
 
+<pre class="code ruby"><code class="ruby">episodically.</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
   <h2>Constant Summary</h2>
   
     <dl class="constants">
       
         <dt id="storySeriesHash-classvariable" class="">@@storySeriesHash =
-          
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>The master hash of all series.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
         </dt>
         <dd><pre class="code"><span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span></pre></dd>
       
@@ -143,7 +167,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Check whether the code corresponds to an actual series.</p>
+</div></span>
   
 </li>
 
@@ -165,7 +191,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Get the hash of all series.</p>
+</div></span>
   
 </li>
 
@@ -199,7 +227,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>the code is the letter (series choice) and series number, ex.</p>
+<p>Create a new series.</p>
 </div></span>
   
 </li>
@@ -223,8 +251,19 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>the code is the letter (series choice) and series number, ex. p1 for puppy
-on series numbre 1</p>
+<p>Create a new series.</p>
+<dl class="rdoc-list label-list"><dt>code
+<dd>
+<p>is the letter (series choice) and series number</p>
+</dd></dl>
+
+<pre class="code ruby"><code class="ruby">ex. p1 for puppy on series number 1</code></pre>
+<dl class="rdoc-list label-list"><dt>storyArray
+<dd>
+<p>is an array of the story objects</p>
+</dd></dl>
+
+<p>that make up the series.</p>
 
 
   </div>
@@ -238,14 +277,14 @@ on series numbre 1</p>
       <pre class="lines">
 
 
-15
-16
-17
-18
-19</pre>
+25
+26
+27
+28
+29</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_storyArray'>storyArray</span><span class='comma'>,</span> <span class='id identifier rubyid_code'>code</span><span class='rparen'>)</span> 
 	<span class='ivar'>@storySeries</span> <span class='op'>=</span> <span class='id identifier rubyid_storyArray'>storyArray</span>
@@ -273,22 +312,33 @@ on series numbre 1</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Check whether the code corresponds to an actual series.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-27
-28
-29
-30
-31
-32
-33</pre>
+38
+39
+40
+41
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_codeIsInHash'>codeIsInHash</span><span class='lparen'>(</span><span class='id identifier rubyid_code'>code</span><span class='rparen'>)</span>
 	<span class='kw'>if</span> <span class='cvar'>@@storySeriesHash</span><span class='lbracket'>[</span><span class='id identifier rubyid_code'>code</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='kw'>nil</span>
@@ -311,18 +361,29 @@ on series numbre 1</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get the hash of all series.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-22
-23
-24</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'stories/storySeries.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_getStorySeriesHash'>getStorySeriesHash</span>
 	<span class='kw'>return</span> <span class='cvar'>@@storySeriesHash</span>
@@ -337,7 +398,7 @@ on series numbre 1</p>
 </div>
 
     <div id="footer">
-  Generated on Wed Jan 13 18:13:36 2016 by
+  Generated on Wed Jan 13 18:42:03 2016 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-2.1.5).
 </div>
