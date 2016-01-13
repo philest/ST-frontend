@@ -1,3 +1,10 @@
+#  workers/main_worker.rb                     Phil Esterman     
+# 
+#  Checks who's set for a story, then calls job to send it.
+#  --------------------------------------------------------
+
+#########  DEPENDENCIES  #########
+
 require 'rubygems'
 require 'bundler/setup'
 
