@@ -25,6 +25,7 @@ group :development do
   gem "sinatra-contrib"
   gem 'guard-rspec', require: false
   gem 'fuubar'
+  gem 'yard'
 end
 
 group :test do

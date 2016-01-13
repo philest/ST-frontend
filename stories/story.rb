@@ -16,10 +16,17 @@ require_relative '../workers/main_worker'
 require_relative '../workers/next_message_worker'
 
 
-
-
+##
+#  The Story class stores all the MMS/SMS stories. It also
+#  Handles the logic for sending a story.
+#
 class Story
 
+  ##
+  # Send the user the appropriate story, then
+  # updates its story count. 
+  #
+  # They may be in a story series. 
   def self.send_story(user_id, note)
     user = User.find user_id
 
@@ -51,38 +58,30 @@ class Story
 
 
 
-
+  # Create a new story. Used to hardcode our content in within
+  # stories/story.rb
   def initialize(mmsArr, sms, poemSMS)
     @mmsArr=mmsArr
     @sms=sms
     @poemSMS= sms + "\n\n" + poemSMS
   end
 
-  def setMmsArr(mmsArr)
-    @mmsArr = mmsArr
-  end
-
-  def setSMS(sms)
-    @sms = sms
-  end
-
-  def setPoemSMS(poemSMS)
-    @poemSMS = poemSMS
-  end
-
+  # Return the array of MMS.
   def getMmsArr
     return @mmsArr
   end
 
+  # Return accompanying SMS.
   def getSMS
     return @sms
   end
 
+  # Return poem as an SMS (no MMS).
   def getPoemSMS
     return @poemSMS
   end
 
-
+  # Get the container of all Story instances.
   def self.getStoryArray
     return @@storyArray
   end

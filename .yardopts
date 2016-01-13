@@ -1,0 +1,1 @@
+yardoc 'app/*' 'lib/*.rb' 'experiment/*' 'helpers/*' 'stories/*' 'workers/*'  -o public/doc/
