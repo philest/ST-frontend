@@ -18,7 +18,7 @@ start:
 
 stop:
   resubscribe:
-    short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud."
+    short: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud.\n\n"
     long: "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud, continuing from where you left off."
   stopped: "Okay, we'll stop texting you stories. Thanks for trying us out! If you have any feedback, please contact our director, Phil, at 561-212-5831."
   continuing: "StoryTime: Great, we'll keep sending you free stories!"
