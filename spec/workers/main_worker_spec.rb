@@ -44,20 +44,27 @@ SLEEP_TIME = (1/ 8.0)
 DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 17:30:00 (5:30PM), EST
 
 
-  def through_sent_choices(properSMS, properMMS, phone)
+  def through_sent_choices(properSMS, properMMS, phone, carrier, test_it)
           # Monday
       Timecop.travel(2015, 6, 22, 16, 15, 0) #on Monday.
-      app_enroll_many([phone], 'en', {Carrier: "ATT"})
+      app_enroll_many([phone], 'en', {Carrier: carrier})
       @user = User.find_by_phone phone
       @user.reload
 
       # Get first MMS, with introductory SMS
       @properMMS = Text::FIRST_MMS
-      @properSMS = [R18n.t.start.normal("2").to_str]
 
-      expect(TwilioHelper.getMMSarr).to eq(@properMMS)
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      
+      if carrier == Text::SPRINT
+        @properSMS = [R18n.t.start.sprint("2").to_str]
+      else
+        @properSMS = [R18n.t.start.normal("2").to_str]
+      end
+
+      if test_it
+        expect(TwilioHelper.getMMSarr).to eq(@properMMS)
+        expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+      end
+
       #Tuesday
       Timecop.travel(2015, 6, 23, 17, 29, 0) #on tues!
       MainWorker.perform_async
@@ -66,17 +73,20 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
       @properMMS.concat Message.getMessageArray[0].getMmsArr
       @properSMS.concat [Message.getMessageArray[0].getSMS]
 
-
-      expect(TwilioHelper.getMMSarr).to eq(@properMMS)
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      expect(TwilioHelper.getMMSarr).not_to eq(nil)
+      if test_it
+        expect(TwilioHelper.getMMSarr).to eq(@properMMS)
+        expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+        expect(TwilioHelper.getMMSarr).not_to eq(nil)
+      end
 
       # Wednesday
       Timecop.travel(2015, 6, 24, 17, 29, 0) #on WED. (3:30)
       MainWorker.perform_async
       @user.reload
       # No change. 
-      expect(@user.total_messages).to eq 2
+      if test_it
+        expect(@user.total_messages).to eq 2
+      end
 
       # Thursday
       Timecop.travel(2015, 6, 25, 17, 30, 0) #on THURS. (3:30)
@@ -85,17 +95,20 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
 
       #They're asked for their story choice during storyTime.
       @properSMS.push R18n.t.choice.greet[0].to_s
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      expect(@user.awaiting_choice).to eq(true)
-      expect(@user.next_index_in_series).to eq(0)
+     
+      if test_it
+        expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+        expect(@user.awaiting_choice).to eq(true)
+        expect(@user.next_index_in_series).to eq(0)
+      end
       ##registers series text well!
   end
 
 
-  def make_choice(properSMS, properMMS, phone, letter_choice)
+  def make_choice(properSMS, properMMS, phone, letter_choice, carrier)
     story = ''
     Sidekiq::Testing.fake! do 
-      get 'test/'+ phone + '/' + letter_choice + '/ATT'
+      get "test/#{phone}/#{letter_choice}/#{carrier}"
       @user.reload
       expect(@user.awaiting_choice).to eq(false)
       expect(@user.series_choice).to eq(letter_choice.downcase)
@@ -444,12 +457,12 @@ describe 'MainWorker' do
 
       @properSMS = []
       @properMMS = [] 
-      through_sent_choices(@properSMS, @properMMS, "+15612129999")
+      through_sent_choices(@properSMS, @properMMS, "+15612129999", 'ATT', true)
      
       #HACK for VERY weird error: concat changes constant.
       Text::FIRST_MMS = [Text::FIRST_MMS.first]
 
-      make_choice(@properSMS, @properMMS, '+15612129999', 'D')
+      make_choice(@properSMS, @properMMS, '+15612129999', 'D', 'ATT')
       # Friday
       Timecop.travel(2015, 6, 26, 17, 30, 0) #on Fri. (3:30)
       MainWorker.perform_async
@@ -465,7 +478,7 @@ describe 'MainWorker' do
      
       @properSMS = []
       @properMMS = [] 
-      through_sent_choices(@properSMS, @properMMS, '+15612129999')
+      through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
 
      # Sunday
       # No change. 
@@ -478,7 +491,7 @@ describe 'MainWorker' do
       Timecop.travel(2015, 6, 30, 17, 29, 0) #on tues, first valid day after
       MainWorker.perform_async
       @user.reload
-      @properSMS.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
+      @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
       expect(TwilioHelper.getSMSarr).to eq(@properSMS)
       # Notes no response: 
       expect(@user.next_index_in_series).to eq(999)
@@ -508,9 +521,9 @@ describe 'MainWorker' do
 
     @properSMS = []
     @properMMS = [] 
-    through_sent_choices(@properSMS, @properMMS, '+15612129999')
+    through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
    
-    make_choice(@properSMS, @properMMS, '+15612129999', 't')
+    make_choice(@properSMS, @properMMS, '+15612129999', 't', 'ATT')
 
     @user.reload 
 
@@ -540,64 +553,33 @@ describe 'MainWorker' do
   end
 
 
+  it "sends Sprint users 160-char+ choices over many SMS" do
+   
+    @properSMS = []
+    @properMMS = [] 
+    through_sent_choices(@properSMS, @properMMS, '+15612129999', Text::SPRINT, false)
+   
+    # The same
+    expect(TwilioHelper.getSMSarr).to eq(@properSMS)
 
-  it "properly sends SPRINT phones story-choices that are over 160+ in many chunks" do
-      Timecop.travel(2015, 6, 22, 16, 24, 0) #on Monday.
-      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1, carrier: Text::SPRINT) #ready to receive story choice
-      @user.update(time: DEFAULT_TIME)
-      Timecop.travel(2015, 6, 23, 17, 24, 0) #on Tuesday.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
+    # Tuesday
+    # EXPECT A DAYLATE MSG when don't respond 
+    Timecop.travel(2015, 6, 30, 17, 30, 0)
+    MainWorker.perform_async
+    @user.reload 
 
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
+    # Broken into two chunks beause of Sprint, 
+    # so will differ from properSMS by one message
+    @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
+    msg_difference = TwilioHelper.getSMSarr.count - @properSMS.count
+    expect(msg_difference).to eq 1 
 
-      NewTextWorker.drain
+    # Proper sprint-chopped message
+    expect(TwilioHelper.getSMSarr[-2]).to include "(1/2)"
+    expect(TwilioHelper.getSMSarr[-2]).to include "Ask your child"
+    expect(TwilioHelper.getSMSarr[-1]).to include "(2/2)"
 
-      
-      properSMS = [R18n.t.choice.greet[0]]
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-
-      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-      expect(TwilioHelper.getSMSarr).to eq(properSMS) #no message
-
-      #EXPECT A DAYLATE MSG when don't respond
-      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-      properSMS.push R18n.t.no_reply.day_late + " " + R18n.t.no_reply.day_late[0]
-
-      NewTextWorker.drain
-
-
-      expect(TwilioHelper.getSMSarr.last).to_not eq(properSMS.last)
-
-      puts TwilioHelper.getSMSarr
   end
-
-
-
-
-
 
 
  it "properly signs back up after being dropped, then STORY-responding" do
