@@ -134,44 +134,43 @@ DEFAULT_TIME ||= Time.new(2015, 6, 21, 17, 30, 0, "-04:00").utc #Default Time: 1
   end
 
   def to_dropped(properSMS, properMMS, phone, carrier)
+    @properSMS = []
+    @properMMS = [] 
+    through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
 
-      @properSMS = []
-      @properMMS = [] 
-      through_sent_choices(@properSMS, @properMMS, '+15612129999', 'ATT', false)
+    # Sunday
+    # No change. 
+    Timecop.travel(2015, 6, 28, 17, 29, 0) #on Sunday
+    MainWorker.perform_async
+    expect(TwilioHelper.getSMSarr).to eq @properSMS
 
-     # Sunday
-      # No change. 
-      Timecop.travel(2015, 6, 28, 17, 29, 0) #on Sunday
-      MainWorker.perform_async
-      expect(TwilioHelper.getSMSarr).to eq @properSMS
+    # Tuesday (next valid day)
+    # Get reminder
+    Timecop.travel(2015, 6, 30, 17, 29, 0) #on tues, first valid day after
+    MainWorker.perform_async
+    @user.reload
+    @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
+    expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+    # Notes no response: 
+    expect(@user.next_index_in_series).to eq(999)
 
-      # Tuesday (next valid day)
-      # Get reminder
-      Timecop.travel(2015, 6, 30, 17, 29, 0) #on tues, first valid day after
-      MainWorker.perform_async
-      @user.reload
-      @properSMS.push R18n.t.no_reply.day_late + R18n.t.choice.no_greet[0]
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      # Notes no response: 
-      expect(@user.next_index_in_series).to eq(999)
+    # Wed
+    # No change. 
+    Timecop.travel(2015, 7, 1, 17, 29, 0)  #on Wed
+    MainWorker.perform_async
+    @user.reload
+    expect(TwilioHelper.getSMSarr).to eq @properSMS
+    expect(@user.subscribed).to eq true
 
-      # Wed
-      # No change. 
-      Timecop.travel(2015, 7, 1, 17, 29, 0)  #on Wed
-      MainWorker.perform_async
-      @user.reload
-      expect(TwilioHelper.getSMSarr).to eq @properSMS
-      expect(@user.subscribed).to eq true
+    #Thursday
+    #PROPERLY DROPS THE FOOL: It's the next valid day.
+    Timecop.travel(2015, 7, 2, 17, 29, 0)  #on Thurs
+    MainWorker.perform_async
+    @user.reload
+    @properSMS.push R18n.t.no_reply.dropped.to_str
 
-      #Thursday
-      #PROPERLY DROPS THE FOOL: It's the next valid day.
-      Timecop.travel(2015, 7, 2, 17, 29, 0)  #on Thurs
-      MainWorker.perform_async
-      @user.reload
-      @properSMS.push R18n.t.no_reply.dropped.to_str
-
-      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
-      expect(@user.subscribed).to eq(false)
+    expect(TwilioHelper.getSMSarr).to eq(@properSMS)
+    expect(@user.subscribed).to eq(false)
   end
 
 
@@ -591,116 +590,11 @@ describe 'MainWorker' do
   context 'when dropped' do 
     it 'resubscribes with STORY' do 
 
-    end
-  end
+      @properSMS = []
+      @properMMS = [] 
+      to_dropped(@properSMS, @properMMS, '+15612129999', 'ATT')
 
-  it "signs up after dropping."
-
- it "properly signs back up after being dropped, then STORY-responding" do
-      Timecop.travel(2015, 6, 22, 16, 24, 0) #on Monday.
-      @user = User.create(phone: "+15615422025", days_per_week: 2, story_number: 1) #ready to receive story choice
-      @user.update(time: DEFAULT_TIME)
-
-      Timecop.travel(2015, 6, 23, 17, 24, 0) #on Tuesday.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-      NewTextWorker.drain
-
-      properSMS = [(R18n.t.choice.greet[0]).to_s]
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-
-      Timecop.travel(2015, 6, 24, 17, 24, 0) #on WED.
-      Timecop.scale(SLEEP_SCALE) #1/16 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-      expect(TwilioHelper.getSMSarr).to eq(properSMS) #no message
-
-      #EXPECT A DAYLATE MSG when don't respond
-      Timecop.travel(2015, 6, 25, 17, 24, 0) #on THURS.
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-      properSMS.push R18n.t.no_reply.day_late + " " + R18n.t.choice.no_greet[0]
-
-    NewTextWorker.drain
-
-
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-      
-      #valid things: 
-      expect(@user.next_index_in_series).to eq(999)
-
-
-
-      #PROPERLY DROPS THE FOOL w/ no response
-
-      Timecop.travel(2015, 6, 26, 17, 24, 0) #on FRI.
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-    NewTextWorker.drain
-
-
-      @user.reload
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-
-
-      Timecop.travel(2015, 6, 27, 17, 24, 0) #on SAT.
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-
-          NewTextWorker.drain
-
-      @user.reload
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-
-      Timecop.travel(2015, 6, 30, 17, 24, 0) #on next TUES--> DAY TO DROP!
-      Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
-
-      (1..10).each do 
-        MainWorker.perform_async
-        MainWorker.drain
-        sleep SLEEP_TIME
-      end
-      @user.reload
-
-    NewTextWorker.drain
-
-
-      properSMS.push R18n.t.no_reply.dropped.to_str
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-      expect(@user.subscribed).to eq(false)
-
-
-      get 'test/+15615422025/STORY/ATT'
+      get 'test/+15612129999/STORY/ATT'
       @user.reload
 
       expect(@user.awaiting_choice).to be(true)
@@ -710,17 +604,11 @@ describe 'MainWorker' do
       #send the SERIES choice
 
       #welcome back, with series choice
-      properSMS.push "StoryTime: Welcome back to StoryTime! We'll keep sending you free stories to read aloud." + "\n\n" + R18n.t.choice.no_greet[0].to_s
+      @properSMS.push  R18n.t.stop.resubscribe.short + R18n.t.choice.no_greet[0].to_s
      
-
-      expect(TwilioHelper.getSMSarr).to eq(properSMS)
-
-      properSMS.each do |sms|
-        puts sms
-      end
-
-      #ADD THE RESPONDING WITH STORY, CHECK THAT AWAITINGCHOICE: FALSE, AND SUBSCRIBED TRUE. THEN CHECK ACTUAL
+      expect(TwilioHelper.getSMSarr).to eq(@properSMS)
     end
+  end
 
 
     it "re-offers choice after day-late" do

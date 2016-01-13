@@ -197,7 +197,7 @@ module SMSResponseHelper
 
         # Resubscribe. 
         @user.update(subscribed: true)
-        msg = R18n.t.stop.resubscribe.short + "\n\n" +
+        msg = R18n.t.stop.resubscribe.short +
               R18n.t.choice.no_greet[@user.series_number]
               #longer message, give more newlines
         @user.update(next_index_in_series: 0)
