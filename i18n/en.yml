@@ -49,7 +49,7 @@ choice:
     - "Ask your child if they want stories about Tim's cleanup or about a dinosaur party.\n\nReply 't' for Tim or 'd' for dinos."
 
 no_reply:
-  day_late: "StoryTime: Hi! We noticed you didn't choose your last story."
+  day_late: "StoryTime: Hi! We noticed you didn't choose your last story.\n\n"
   dropped: "We haven't heard from you, so we'll stop sending you messages. To get StoryTime again, reply with STORY"
 
 misc:
