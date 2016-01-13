@@ -223,10 +223,10 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
   if type == STORY
     if params && params[:Body] != nil
         if @user.carrier == Text::SPRINT
-          TwilioHelper.text_and_mms(R18n.t.start.sprint(days),
+          TwilioHelper.text_and_mms(R18n.t.start.sprint(days).to_str,
             R18n.t.first_mms.to_s, @user.phone)
         else
-          TwilioHelper.text_and_mms(R18n.t.start.normal(days),
+          TwilioHelper.text_and_mms(R18n.t.start.normal(days).to_str,
             R18n.t.first_mms.to_s, @user.phone)
         end
         #update total message count 
@@ -236,11 +236,11 @@ def app_enroll(params, user_phone, locale, type, *wait_time)
       wait_time = wait_time.shift
       if @user.carrier == Text::SPRINT        
           NextMessageWorker.perform_in(wait_time.seconds,
-                     R18n.t.start.sprint(days), 
+                     R18n.t.start.sprint(days).to_str, 
                   R18n.t.first_mms.to_s, @user.phone)
         else
           NextMessageWorker.perform_in(wait_time.seconds,
-                             R18n.t.start.normal(days),
+                             R18n.t.start.normal(days).to_str,
                 R18n.t.first_mms.to_s, @user.phone)
         end
     end
