@@ -48,7 +48,7 @@ require_relative '../app/series_choice'
 
 ##
 # Checks who's set for a story, then calls
-# job to send it.
+# job to send it. Asynchronous. 
 class MainWorker
 
   include Sidekiq::Worker
@@ -73,6 +73,8 @@ class MainWorker
   PRO ||= 'production'
   TEST ||= 'test'
 
+  # Sidekiq syntax:
+  # Called as 'perform_async' to run asynchrnously.
   def perform(*args)
 
     # Send experiment report if ready.
@@ -214,8 +216,8 @@ class MainWorker
 
   ### TO REFACTOR ##############################
 
-  #gets and updates wait, for sending Stories AND Texts (choose your story, notify lateness, etc.)
-  #ensures that no more than one message per second is sent.
+  # Get and update wait. For sending Stories AND Texts (choose your story, notify lateness, etc.)
+  # Ensures that no more than one message per second is sent.
   def self.getWait(type)
 
       
@@ -280,7 +282,7 @@ class MainWorker
   end
 
   ##
-  # Is the user's time in the next or previous 1 minute? 
+  # Check if the user's time in the next or previous 1 minute? 
   #       
   def self.valid_time(user_time, time_now)
     # Use seconds_since_midnight to compare hour:min, not dates.
@@ -291,11 +293,10 @@ class MainWorker
      time_now.seconds_since_midnight - user_time.seconds_since_midnight < 1.minutes)
   end
 
-  # helper methods
-  # check if user's story time is this exact minute, or the next minute
-
-  def self.send_story?(user_phone, *time) #don't know object as parameter  #time variable allows for testing, sending time.
-
+  ##
+  # Check if the user should receive a story now. 
+  # Time variable allows for testing, sending time.
+  def self.send_story?(user_phone, *time) 
     user = User.find_by(phone: user_phone)
 
     # Allow to manual set time in testing.

@@ -10,8 +10,9 @@ MAX_TEXT = 153 #leaves room for (1/6) at start (160 char msg)
 BREAK = "\n" #for Help Message
 
 
-
-
+##
+#  Helper to chop a longer SMS into many SMS, each less
+#  than 160 characters (for Sprint compatibility).
 class Sprint
 
 	#if just one message, no (1/X); otherwise, append it. 

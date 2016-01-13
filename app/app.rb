@@ -57,6 +57,13 @@ get '/' do
     erb :main
 end
 
+# Documenation. 
+get '/doc/' do 
+  File.read(File.join('public', 'doc/_index.html'))
+end
+get '/doc' do
+  redirect to('/doc/')
+end
 
 #experiment dashboard
 get '/admin' do

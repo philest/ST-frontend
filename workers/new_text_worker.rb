@@ -24,6 +24,10 @@ STORY = "story"
 # For a lone SMS
 NOT_STORY  = "not story"
 
+##
+# Send an SMS asynchonously. Update the user if it's an SMS
+# story.  
+#
 class NewTextWorker
   include Sidekiq::Worker
   include Text
@@ -38,6 +42,7 @@ class NewTextWorker
     sidekiq_options :queue => :critical
     sidekiq_options retry: false #if fails, don't resent (multiple texts)
 
+  # Run asynchronously (Sidekiq)
   def perform(sms, type, user_phone)
 
   	@user = User.find_by(phone: user_phone)

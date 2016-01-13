@@ -15,7 +15,10 @@ require_relative '../helpers/twilio_helper'
 require_relative '../i18n/constants'
 require 'sinatra/r18n'
 
-
+##
+# Send an MMS, or MMS/SMS story asynchonously. 
+# Update the user if it's story.
+#
 class NextMessageWorker
   include Sidekiq::Worker
   include Text
@@ -29,11 +32,10 @@ class NextMessageWorker
     end
 
 
-
+  # Run asynchrnously (Sidekiq)
   def perform(sms, mms_arr, user_phone)
     
   	@user = User.find_by(phone: user_phone)
-
 
     #handle strings
     if mms_arr.class == String
@@ -58,7 +60,7 @@ class NextMessageWorker
 
   end
 
-  #updates what story, series, choice, total_message, or index User is on.
+  # Updates what story, series, choice, total_message, or index User is on.
   def self.updateUser(user_phone, sms)
 
       @user = User.find_by(phone: user_phone)
