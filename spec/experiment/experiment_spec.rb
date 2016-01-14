@@ -6,12 +6,16 @@
 # set test enviroment
 ENV['RACK_ENV'] = "test"
 
+
 # DEPENDENCIES 
 require_relative "../spec_helper"
 
 require 'capybara/rspec'
 require 'rack/test'
 require 'timecop'
+
+# Speed up Redis with fake. 
+require 'fakeredis'
 
 #for testing send_report
 require_relative '../../workers/main_worker'

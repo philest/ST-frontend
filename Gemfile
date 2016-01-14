@@ -38,5 +38,6 @@ group :test do
 	gem 'timecop'
 	gem 'factory_girl'
 	gem 'fuubar'
+	gem 'fakeredis', :require => 'fakeredis/rspec'
 end
 

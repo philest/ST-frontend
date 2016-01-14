@@ -6,7 +6,6 @@
 # set test enviroment
 ENV['RACK_ENV'] = "test"
 
-
 # DEPENDENCIES 
 require_relative "../spec_helper"
 
@@ -14,6 +13,9 @@ require 'capybara/rspec'
 require 'capybara/dsl'
 require 'rack/test'
 require 'timecop'
+
+# Speed up Redis with fake. 
+require 'fakeredis'
 
 Capybara.app = Sinatra::Application
 
