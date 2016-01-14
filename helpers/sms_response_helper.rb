@@ -32,6 +32,10 @@ include Text
 
 require_relative '../app/series_choice'
 
+##
+# Main helper to reply to an SMS. Includes the core 
+# response logic. 
+#
 module SMSResponseHelper
 
   ##
