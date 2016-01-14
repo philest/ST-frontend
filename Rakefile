@@ -15,7 +15,11 @@ require 'rspec/core/rake_task'
   # Refresh documentation. 
   task :yard do
   	sh 'rm -r public/doc'
-  	sh 'yardoc'
+  	sh 'bundle exec yardoc'
+  end
+
+  task :main_worker do 
+  	sh 'bundle exec rspec -fd spec/workers/main_worker_spec.rb'
   end
  
 
