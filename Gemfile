@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem 'rubygems'
 gem "sinatra"
 gem "activerecord"
 gem "sinatra-activerecord"
@@ -19,12 +20,14 @@ gem "as-duration"
 gem 'statsample'
 gem 'descriptive_statistics'
 
+group :development, :test do
+  gem 'fuubar'
+end
 
 group :development do
   gem "better_errors"
   gem "sinatra-contrib"
   gem 'guard-rspec', require: false
-  gem 'fuubar'
   gem 'yard'
 end
 
@@ -37,7 +40,6 @@ group :test do
 	gem 'pry-nav'
 	gem 'timecop'
 	gem 'factory_girl'
-	gem 'fuubar'
 	gem 'fakeredis', :require => 'fakeredis/rspec'
 end
 
