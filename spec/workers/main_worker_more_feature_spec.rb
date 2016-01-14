@@ -39,7 +39,7 @@ describe 'MainWorker, with sleep,' do
         MainWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
-        TwilioHelper.testSleep
+        
     end
 
     after(:each) do
@@ -53,7 +53,7 @@ describe 'MainWorker, with sleep,' do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       users = []
 
-      TwilioHelper.testSleepOff
+      
 
       (1..10).each do |number|
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -77,7 +77,7 @@ describe 'MainWorker, with sleep,' do
       Timecop.travel(2015, 6, 23, 17, 26, 0) #on TUESDAY!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
-      # TwilioHelper.testSleep
+      # 
 
       #WORKS WIHOUT SLEEPING!
       (1..10).each do 
@@ -102,7 +102,7 @@ describe 'MainWorker, with sleep,' do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       users = []
 
-      TwilioHelper.testSleepOff
+      
 
       (1..10).each do |number|
         get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -126,7 +126,7 @@ describe 'MainWorker, with sleep,' do
       end
 
 
-      TwilioHelper.testSleep
+      
 
       Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
       # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
@@ -150,7 +150,7 @@ describe 'MainWorker, with sleep,' do
 
 
     it "handles a single mms" do
-      TwilioHelper.new_just_mms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
+      TwilioHelper.new_sms("http://i.imgur.com/Qkh15vl.png?1", "+15612125833")
       expect(TwilioHelper.getMMSarr[0]).to eq "http://i.imgur.com/Qkh15vl.png?1"
       expect(TwilioHelper.getSMSarr.empty?).to be true
     end
@@ -320,7 +320,7 @@ describe 'MainWorker, with sleep,' do
     #         Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
     #   users = []
 
-    #   TwilioHelper.testSleepOff
+    #   
 
     #   (1..25).each do |number|
     #     get 'test/'+number.to_s+"/STORY/ATT"#each signs up
@@ -345,7 +345,7 @@ describe 'MainWorker, with sleep,' do
     #   end
 
 
-    #   TwilioHelper.testSleep
+    #   
     #   # require 'pry'
     #   # binding.pry 
 
@@ -372,7 +372,7 @@ describe 'MainWorker, with sleep,' do
     Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
     users = []
 
-    TwilioHelper.testSleepOff
+    
 
 
 
@@ -409,7 +409,7 @@ describe 'MainWorker, with sleep,' do
     end
 
 
-    TwilioHelper.testSleep
+    
 
     Timecop.travel(2015, 6, 23, 17, 30, 0) #on TUESDAY!
     # Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes

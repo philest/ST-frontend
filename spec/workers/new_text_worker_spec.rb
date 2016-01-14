@@ -60,7 +60,7 @@ describe 'The NewTextWorker' do
         NewTextWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
-        TwilioHelper.testSleep
+        
         User.create(phone: "+15612125832")
     end
 
