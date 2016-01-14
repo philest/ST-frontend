@@ -4,13 +4,11 @@ require 'sinatra/activerecord'
 require 'sinatra/activerecord/rake'
 # Dir.glob('lib/tasks/*.rake').each { |r| load r}
 
-
-
-require 'rspec/core/rake_task'
-
+configure :development, :test do
+  require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
-
   task :default => :spec
+end
 
   # Refresh documentation. 
   task :yard do
