@@ -1,6 +1,3 @@
-group :production do
-  ruby '2.1.0'
-end
 
 gem "sinatra"
 gem "activerecord"
