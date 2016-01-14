@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Sprint
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!Sprint.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (S)</a> &raquo;
+    
+    
+    <span class="title">Sprint</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Sprint
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Sprint</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">helpers/sprint_helper.rb</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Helper to chop a longer SMS into many SMS, each less</p>
+
+<pre class="code ruby"><code class="ruby">than 160 characters (for Sprint compatibility).</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="SPRINT_MAX_TEXT-constant" class="">SPRINT_MAX_TEXT =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>leaves room for (1/6) at start (160 char msg)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='int'>153</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#chop-class_method" title="chop (class method)">+ (Object) <strong>chop</strong>(story) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Helper to chop a longer SMS into many SMS, each less  than 160 characters
+(for Sprint compatibility).</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="chop-class_method">
+  
+    + (<tt>Object</tt>) <strong>chop</strong>(story) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Helper to chop a longer SMS into many SMS, each less</p>
+
+<pre class="code ruby"><code class="ruby">than 160 characters (for Sprint compatibility).
+
+Paginates the SMS, and returns them as an array.</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'helpers/sprint_helper.rb', line 20</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_chop'>chop</span><span class='lparen'>(</span><span class='id identifier rubyid_story'>story</span><span class='rparen'>)</span> 
+
+	<span class='id identifier rubyid_sms'>sms</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='comment'>#array of texts to send seperately
+</span>
+	<span class='id identifier rubyid_storyLen'>storyLen</span> <span class='op'>=</span> <span class='id identifier rubyid_story'>story</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='comment'>#characters in story
+</span>
+	<span class='id identifier rubyid_totalChar'>totalChar</span> <span class='op'>=</span> <span class='int'>0</span> <span class='comment'>#none counted so far
+</span>
+	<span class='id identifier rubyid_startIndex'>startIndex</span> <span class='op'>=</span> <span class='int'>0</span> 
+
+	<span class='id identifier rubyid_smsNum'>smsNum</span> <span class='op'>=</span> <span class='int'>1</span> <span class='comment'>#which sms you&#39;re on (starts with first)
+</span>
+	<span class='kw'>if</span> <span class='id identifier rubyid_storyLen'>storyLen</span> <span class='op'>&lt;=</span> <span class='int'>160</span>
+		<span class='kw'>return</span> <span class='lbracket'>[</span><span class='id identifier rubyid_story'>story</span><span class='rbracket'>]</span>
+
+	<span class='kw'>else</span>
+
+		<span class='kw'>while</span> <span class='lparen'>(</span><span class='id identifier rubyid_totalChar'>totalChar</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_storyLen'>storyLen</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='comment'>#haven&#39;t divided up entire message yet
+</span>
+			<span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_totalChar'>totalChar</span> <span class='op'>+</span> <span class='const'>SPRINT_MAX_TEXT</span> <span class='op'>&lt;</span> <span class='id identifier rubyid_storyLen'>storyLen</span><span class='rparen'>)</span> <span class='comment'>#if not on last message
+</span>				<span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>=</span> <span class='id identifier rubyid_startIndex'>startIndex</span> <span class='op'>+</span> <span class='const'>SPRINT_MAX_TEXT</span>	
+			<span class='kw'>else</span> <span class='comment'>#if on last message
+</span>				<span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>=</span> <span class='id identifier rubyid_storyLen'>storyLen</span> <span class='op'>-</span> <span class='int'>1</span> <span class='comment'>#endIndex is last index of story
+</span>			<span class='kw'>end</span>
+
+			<span class='id identifier rubyid_just_spaces_end_index'>just_spaces_end_index</span> <span class='op'>=</span> <span class='id identifier rubyid_endIndex'>endIndex</span> <span class='comment'>#if there&#39;s no newlines, come back to this as starting endIndex
+</span>
+
+				<span class='kw'>while</span> <span class='lparen'>(</span><span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> <span class='op'>||</span> <span class='lparen'>(</span><span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_startIndex'>startIndex</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_startIndex'>startIndex</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>!=</span> <span class='id identifier rubyid_storyLen'>storyLen</span><span class='op'>-</span><span class='int'>1</span> <span class='kw'>do</span>  <span class='comment'>#find the latest newline before endIndex
+</span>					<span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-=</span> <span class='int'>1</span>
+				<span class='kw'>end</span>
+
+				<span class='comment'>#there was no newLines
+</span>				<span class='kw'>if</span> <span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>==</span> <span class='id identifier rubyid_startIndex'>startIndex</span>
+					<span class='comment'>#try again, looking for spaces
+</span>					<span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>=</span> <span class='id identifier rubyid_just_spaces_end_index'>just_spaces_end_index</span>
+
+					<span class='kw'>while</span> <span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span>
+						<span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-=</span> <span class='int'>1</span>
+					<span class='kw'>end</span>
+				<span class='kw'>end</span>
+
+			<span class='id identifier rubyid_smsLen'>smsLen</span> <span class='op'>=</span> <span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-</span> <span class='id identifier rubyid_startIndex'>startIndex</span> <span class='comment'>#chars in sms
+</span>
+			<span class='id identifier rubyid_totalChar'>totalChar</span> <span class='op'>+=</span> <span class='id identifier rubyid_smsLen'>smsLen</span> <span class='comment'>#chars dealt with so far
+</span>
+			<span class='comment'>#keep on biting off the ending \n&#39;s 
+</span>			<span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_endIndex'>endIndex</span> <span class='op'>-</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+				<span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_startIndex'>startIndex</span><span class='comma'>,</span> <span class='id identifier rubyid_smsLen'>smsLen</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span>
+			<span class='kw'>else</span>
+				<span class='id identifier rubyid_msg'>msg</span> <span class='op'>=</span> <span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_startIndex'>startIndex</span><span class='comma'>,</span> <span class='id identifier rubyid_smsLen'>smsLen</span><span class='rbracket'>]</span>
+			<span class='kw'>end</span>
+
+
+			<span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_story'>story</span><span class='lbracket'>[</span><span class='id identifier rubyid_startIndex'>startIndex</span><span class='rbracket'>]</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='comment'>#if it doesn&#39;t start with a newline...
+</span>			
+				<span class='id identifier rubyid_sms'>sms</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_smsNum'>smsNum</span><span class='embexpr_end'>}</span><span class='tstring_content'>/X)\n</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_msg'>msg</span><span class='comment'>#...add two
+</span>
+			<span class='kw'>else</span>
+				<span class='id identifier rubyid_sms'>sms</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_smsNum'>smsNum</span><span class='embexpr_end'>}</span><span class='tstring_content'>/X)</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_msg'>msg</span><span class='comment'>#...just add one
+</span>			<span class='kw'>end</span>
+
+
+			<span class='id identifier rubyid_startIndex'>startIndex</span> <span class='op'>=</span> <span class='id identifier rubyid_endIndex'>endIndex</span>
+
+			<span class='id identifier rubyid_smsNum'>smsNum</span> <span class='op'>+=</span> <span class='int'>1</span> <span class='comment'>#on the next message
+</span>
+		<span class='kw'>end</span>
+
+		<span class='id identifier rubyid_sms'>sms</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_text'>text</span><span class='op'>|</span>
+			<span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_gsub!'>gsub!</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[\/][X][)]</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_smsNum'>smsNum</span><span class='op'>-</span><span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+		<span class='kw'>end</span>
+
+		<span class='comment'>#if last char is newline, delete it. 
+</span>		<span class='id identifier rubyid_sms'>sms</span><span class='period'>.</span><span class='id identifier rubyid_each_with_index'>each_with_index</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_text'>text</span><span class='comma'>,</span> <span class='id identifier rubyid_index'>index</span><span class='op'>|</span>
+		   <span class='id identifier rubyid_lastChar'>lastChar</span> <span class='op'>=</span> <span class='id identifier rubyid_text'>text</span><span class='lbracket'>[</span><span class='id identifier rubyid_text'>text</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>-</span> <span class='int'>1</span><span class='rbracket'>]</span>
+
+
+		   <span class='kw'>if</span> <span class='id identifier rubyid_lastChar'>lastChar</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n</span><span class='tstring_end'>&quot;</span></span> 
+		   	<span class='id identifier rubyid_sms'>sms</span><span class='lbracket'>[</span><span class='id identifier rubyid_index'>index</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_text'>text</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='op'>-</span><span class='int'>2</span><span class='rbracket'>]</span> <span class='comment'>#delete last char (by replacing the elt with a truncated version)
+</span>		   <span class='kw'>end</span>
+
+		<span class='kw'>end</span>
+
+		<span class='kw'>return</span> <span class='id identifier rubyid_sms'>sms</span>
+
+	<span class='kw'>end</span> <span class='comment'>#160 or under char
+</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Wed Jan 13 20:07:15 2016 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.1.5).
+</div>
+
+  </body>
+</html>
