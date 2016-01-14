@@ -16,20 +16,11 @@ require_relative '../../workers/next_message_worker'
 # Last test. 
 require_relative '../../app/enroll'
 
-SLEEP_SCALE = 860
+SLEEP_SCALE ||= 860
 
-SLEEP_TIME = (1/ 8.0)
-
-
-
-SPRINT_CARRIER = "Sprint Spectrum, L.P."
-
-START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
+SLEEP_TIME ||= (1 / 8.0)
 
 
-MMS_ARR = ["http://i.imgur.com/CG1DxZd.jpg", "http://i.imgur.com/GEc0dhT.jpg"]
 
 SMS = "This is a test SMS"
 
@@ -66,7 +57,8 @@ describe 'The NextMessageWorker' do
     it "properly adds jobs after calling NextMessageWorker" do
       Sidekiq::Testing.fake! do 
         expect(NextMessageWorker.jobs.size).to eq 0
-        NextMessageWorker.perform_in(20.seconds, SMS, MMS_ARR, "+15612125832")
+        mms_arr = ["http://i.imgur.com/CG1DxZd.jpg", "http://i.imgur.com/GEc0dhT.jpg"]
+        NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, "+15612125832")
         expect(NextMessageWorker.jobs.size).to eq 1 
         puts "jobs: #{NextMessageWorker.jobs.size}"
       end

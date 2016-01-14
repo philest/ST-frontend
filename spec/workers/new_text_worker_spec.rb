@@ -14,34 +14,10 @@ require_relative '../../i18n/constants'
 
 require_relative '../../workers/new_text_worker'
 
-SLEEP_SCALE = 860
+SLEEP_SCALE ||= 860
 
-SLEEP_TIME = (1/ 8.0)
+SLEEP_TIME ||= (1/ 8.0)
 
-
-HELP = "help now"
-STOP = "stop now"
-
-SPRINT_CARRIER = "Sprint Spectrum, L.P."
-
-START_SMS_1 = "StoryTime: Welcome to StoryTime, free pre-k stories by text! You'll get "
-
-START_SMS_2 = " stories/week-- the first is on the way!\n\nText " + HELP + " for help, or " + STOP + " to cancel."
-
-
-MMS_ARR = ["http://i.imgur.com/CG1DxZd.jpg", "http://i.imgur.com/GEc0dhT.jpg"]
-
-SMS = "This is a test SMS"
-
-PHONE = "+15612125832"
-
-SPRINT_QUERY_STRING = 'Sprint%20Spectrum%2C%20L%2EP%2E'
-
-SP_PHONE = '+15619008229'
-
-SINGLE_SPACE_LONG = ". If you can't receive picture msgs, reply TEXT for text-only stories.
-Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day.
-Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831." 
 
 #clean up leftover jobs
  Sidekiq::Worker.clear_all
@@ -53,6 +29,13 @@ describe 'The NewTextWorker' do
   def app
     Sinatra::Application
   end
+
+
+  SINGLE_SPACE_LONG = ". If you can't receive picture msgs, reply TEXT for text-only stories.
+  Remember that looking at screens within two hours of bedtime can delay children's sleep and carry health risks, so read StoryTime earlier in the day.
+  Normal text rates may apply. For help or feedback, please contact our director, Phil, at 561-212-5831." 
+  
+  SMS = "This is a test SMS"
 
 
     before(:each) do
@@ -92,7 +75,7 @@ describe 'The NewTextWorker' do
 
     it "sends out a long SMS to Sprint in the seperate chunks" do
 
-        @user = create(:user, carrier: SPRINT_CARRIER)
+        @user = create(:user, carrier: Text::SPRINT)
 
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
 
