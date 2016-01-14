@@ -114,7 +114,7 @@ class MainWorker
       end
   
       if MODE == PRO
-        print "#{user.phone}, time #{user.time.to_s(:time)}:"
+        print "#{user.phone}, time #{user.time.to_s(:time)} "
         if MainWorker.send_story?(user.phone)
           puts 'YES!!'
         else
@@ -194,7 +194,7 @@ class MainWorker
     end #User.do
 
     if MODE == PRO
-      puts "Just checked :)" + "\n\n" 
+      puts "Just checked :-)" + "\n\n" 
     end
     
     #email us about the quitters
