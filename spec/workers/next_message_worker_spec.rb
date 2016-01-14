@@ -13,6 +13,9 @@ require_relative '../../stories/storySeries'
 
 require_relative '../../workers/next_message_worker'
 
+# Last test. 
+require_relative '../../app/enroll'
+
 SLEEP_SCALE = 860
 
 SLEEP_TIME = (1/ 8.0)
@@ -52,6 +55,7 @@ describe 'The NextMessageWorker' do
         Timecop.return
         
         User.create(phone: "+15612125832")
+        Sidekiq::Testing.inline!
     end
 
     after(:each) do
@@ -60,10 +64,12 @@ describe 'The NextMessageWorker' do
 
 
     it "properly adds jobs after calling NextMessageWorker" do
-      expect(NextMessageWorker.jobs.size).to eq 0
-      NextMessageWorker.perform_in(20.seconds, SMS, MMS_ARR, "+15612125832")
-      expect(NextMessageWorker.jobs.size).to eq 1 
-      puts "jobs: #{NextMessageWorker.jobs.size}"
+      Sidekiq::Testing.fake! do 
+        expect(NextMessageWorker.jobs.size).to eq 0
+        NextMessageWorker.perform_in(20.seconds, SMS, MMS_ARR, "+15612125832")
+        expect(NextMessageWorker.jobs.size).to eq 1 
+        puts "jobs: #{NextMessageWorker.jobs.size}"
+      end
     end
 
     it "has fullSend working even with mms_url in array" do
@@ -75,11 +81,22 @@ describe 'The NextMessageWorker' do
       expect(TwilioHelper.getSMSarr).to eq [SMS]
     end
 
+    describe 'perform_in' do 
+
+      it 'properly schedules' do 
+        Sidekiq::Testing.fake! do 
+          mms = ["http::image.com"] 
+          NextMessageWorker.perform_in(20.seconds, SMS, mms, PHONE)
+          wait = NextMessageWorker.jobs.first['at'] - NextMessageWorker.jobs.first['created_at']
+          expect(wait).to be_within(0.2).of(20)
+        end
+      end 
+
+    end
+
     it "properly sends out a single MMS w/ SMS" do
       mms = ["http::image.com"] 
       NextMessageWorker.perform_in(20.seconds, SMS, mms, PHONE)
-      expect(NextMessageWorker.jobs.size).to eq 1 
-      NextMessageWorker.drain
 
       expect(TwilioHelper.getMMSarr).to eq mms
       expect(TwilioHelper.getSMSarr).to eq [SMS]
@@ -87,97 +104,75 @@ describe 'The NextMessageWorker' do
 
     it "sends out a two MMS stack in the right order" do
       mms_arr = ["one", "two"]
-      NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
-      puts "jobs: #{NextMessageWorker.jobs.size}"
-      NextMessageWorker.drain
-      
-      # expect(NextMessageWorker.jobs.size).to eq 1
-      # expect(TwilioHelper.getMMSarr).to eq ["one"]
-      # expect(TwilioHelper.getSMSarr).to eq []
- 
-      NextMessageWorker.drain #the recursive call.
+      Sidekiq::Testing.fake! do 
+        NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
+        puts "jobs: #{NextMessageWorker.jobs.size}"
+        NextMessageWorker.drain
+
+        # Can't test iteratively. 
+        
+      end
       expect(TwilioHelper.getMMSarr).to eq ["one", "two"]
       expect(TwilioHelper.getSMSarr).to eq [SMS]
       expect(NextMessageWorker.jobs.size).to eq 0
-
     end
 
     it "sends out a THREE MMS stack in the right order" do
       mms_arr = ["one", "two", 'three']
-      NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
-      puts "jobs: #{NextMessageWorker.jobs.size}"
-      NextMessageWorker.drain
+      Sidekiq::Testing.fake! do 
+        NextMessageWorker.perform_in(20.seconds, SMS, mms_arr, PHONE)
+        puts "jobs: #{NextMessageWorker.jobs.size}"
+        NextMessageWorker.drain
       
-      # expect(NextMessageWorker.jobs.size).to eq 1
-      # expect(TwilioHelper.getMMSarr).to eq ["one"]
-      # expect(TwilioHelper.getSMSarr).to eq []
-
-      NextMessageWorker.drain #the recursive call.
+      end
+      
       expect(TwilioHelper.getMMSarr).to eq ["one", "two", "three"]
       expect(TwilioHelper.getSMSarr).to eq [SMS]
       expect(NextMessageWorker.jobs.size).to eq 0
     end
 
-    it "works for 21 users!" do 
+    it "works for 20 users!" do 
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
-      users = []
 
-       #turn on
-
-      (1..6).each do |number|
-        get 'test/1561212582'+number.to_s+"/STORY/ATT"#each signs up
-        user = User.find_by(phone: '1561212582'+number.to_s)
-
-        NextMessageWorker.jobs.clear
-        user.reload
-
-        @@twiml_sms = []
-        @@twiml_mms = []
-
-
-        expect(user.total_messages).to eq(1)
-        expect(user.story_number).to eq(0)
-
-
-        users.push user
-
-        @@twiml_sms = []
-        @@twiml_mms = []
+      # Build 20 phone numbers.
+      numbers = []
+      (0..9).each do |num|
+        numbers.push "+1561542202"+num.to_s
+        numbers.push "+1561542203"+num.to_s
       end
 
+      app_enroll_many(numbers, 'en', {Carrier: 'ATT'})
+      @@twiml_sms = []
+      @@twiml_mms = []
+
+      expect(User.all.last.total_messages).to eq 1 
+      expect(User.all.last.story_number).to eq 0 
 
       Timecop.travel(2015, 6, 23, 17, 24, 0) #on TUESDAY!
       Timecop.scale(SLEEP_SCALE) #1/8 seconds now are two minutes
 
       #WORKS WIHOUT SLEEPING!
-      (1..10).each do 
+      Sidekiq::Testing.fake! do
+        (1..10).each do 
+            MainWorker.perform_async
+            MainWorker.drain
+          sleep SLEEP_TIME
+        end
 
-          MainWorker.perform_async
-          MainWorker.drain
-
-        sleep SLEEP_TIME
+        expect(NextMessageWorker.jobs.size).to eq 20
+        NextMessageWorker.drain #send all
       end
 
-
-      expect(NextMessageWorker.jobs.size).to eq 6
-      NextMessageWorker.drain #send all
-
-
-      users.each do |user|
-        user.reload
-
-        expect(TwilioHelper.getMMSarr).to eq(Story.getStoryArray[0].getMmsArr)              
-        expect(TwilioHelper.getSMSarr).to eq([Story.getStoryArray[0].getSMS])
+      numbers.each do |num|
+        user = User.find_by_phone num
+        expect(TwilioHelper.getMMSarr.count).to eq(Story.getStoryArray[0].getMmsArr.count * 20)              
+        expect(TwilioHelper.getSMSarr.count).to eq([Story.getStoryArray[0].getSMS].count * 20)
         # expect(user.total_messages).to eq()
         expect(user.story_number).to eq(1)
-        puts " "+ user.phone + "passed"
+      
       end
 
-    end
-
-
-
-      
+    end      
 
 
 

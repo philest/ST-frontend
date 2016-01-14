@@ -60,8 +60,8 @@ describe 'The NewTextWorker' do
         NewTextWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
-        
         User.create(phone: "+15612125832")
+        Sidekiq::Testing.inline!
     end
 
     after(:each) do
@@ -70,20 +70,24 @@ describe 'The NewTextWorker' do
 
 
     it "properly adds jobs after calling NextMessageWorker" do
-      expect(NewTextWorker.jobs.size).to eq 0
-      NewTextWorker.perform_in(20.seconds, SMS, NOT_STORY, "+15612125832")
-      expect(NewTextWorker.jobs.size).to eq 1 
-      puts "jobs: #{NewTextWorker.jobs.size}"
+      Sidekiq::Testing.fake! do 
+        expect(NewTextWorker.jobs.size).to eq 0
+        NewTextWorker.perform_in(20.seconds, SMS, NOT_STORY, "+15612125832")
+        expect(NewTextWorker.jobs.size).to eq 1 
+        puts "jobs: #{NewTextWorker.jobs.size}"
+      end
     end
 
     it "properly sends out a single  SMS" do
-      sms = "This is a test!" 
-      NewTextWorker.perform_in(20.seconds, sms, NOT_STORY, "+15612125834")
-      expect(NewTextWorker.jobs.size).to eq 1 
-      NewTextWorker.drain
+      Sidekiq::Testing.fake! do 
+        sms = "This is a test!" 
+        NewTextWorker.perform_in(20.seconds, sms, NOT_STORY, "+15612125834")
+        expect(NewTextWorker.jobs.size).to eq 1 
+        NewTextWorker.drain
 
-      expect(TwilioHelper.getSMSarr).to eq [sms]
-      expect(TwilioHelper.getMMSarr).to eq []
+        expect(TwilioHelper.getSMSarr).to eq [sms]
+        expect(TwilioHelper.getMMSarr).to eq []
+      end
     end
 
     it "sends out a long SMS to Sprint in the seperate chunks" do
@@ -91,7 +95,6 @@ describe 'The NewTextWorker' do
         @user = create(:user, carrier: SPRINT_CARRIER)
 
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
-        NewTextWorker.drain
 
       expect(TwilioHelper.getSMSarr.size).to_not eq 1
       expect(TwilioHelper.getSMSarr.size).to_not eq 0
@@ -105,7 +108,6 @@ describe 'The NewTextWorker' do
         @user = create(:user, carrier: 'ATT')
 
         NewTextWorker.perform_async(SINGLE_SPACE_LONG, NOT_STORY, @user.phone)
-        NewTextWorker.drain
 
         expect(TwilioHelper.getSMSarr.first).to eq SINGLE_SPACE_LONG
         expect(TwilioHelper.getSMSarr.size).to eq 1
@@ -115,7 +117,6 @@ describe 'The NewTextWorker' do
       user = create(:user)
 
       NewTextWorker.perform_async(Text::HELP_SPRINT_1 + "Tue/Th" + Text::HELP_SPRINT_2, NOT_STORY, user.phone)
-      NewTextWorker.drain
 
       # expect(TwilioHelper.getSMSarr.size).to eq 1
 
