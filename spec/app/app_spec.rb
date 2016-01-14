@@ -189,18 +189,20 @@ describe 'The StoryTime App' do
     describe "Series" do
 
     it "updates series_choice" do
-      app_enroll_many(["5612125839"], 'en', {Carrier: "ATT"})
-      NextMessageWorker.drain
+      Sidekiq::Testing.fake! do 
+        app_enroll_many(["5612125839"], 'en', {Carrier: "ATT"})
+        NextMessageWorker.drain
 
-      @user = User.find_by_phone "5612125839"
-      @user.update(story_number: 3, awaiting_choice: true, series_number: 0)
-      @user.reload
+        @user = User.find_by_phone "5612125839"
+        @user.update(story_number: 3, awaiting_choice: true, series_number: 0)
+        @user.reload
 
-      get '/test/5612125839/t/ATT'
+        get '/test/5612125839/t/ATT'
 
-      @user.reload
+        @user.reload
 
-      expect(@user.series_choice).to eq("t")
+        expect(@user.series_choice).to eq("t")
+      end
     end
 
     it "good text response" do
