@@ -50,7 +50,7 @@ describe 'The NextMessageWorker' do
         NextMessageWorker.jobs.clear
         TwilioHelper.initialize_testing_vars
         Timecop.return
-        TwilioHelper.testSleep
+        
         User.create(phone: "+15612125832")
     end
 
@@ -122,7 +122,7 @@ describe 'The NextMessageWorker' do
       Timecop.travel(2015, 6, 22, 16, 24, 0) #on MONDAY!
       users = []
 
-      TwilioHelper.testSleep #turn on
+       #turn on
 
       (1..6).each do |number|
         get 'test/1561212582'+number.to_s+"/STORY/ATT"#each signs up
