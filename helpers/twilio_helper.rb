@@ -483,7 +483,10 @@ SMS = "SMS"
 
   end  
 
-  #doesn't sleep; relies on bkg worker async call in X seconds. 
+  # Sends a new text without sleeping. Relies on background worker's 
+  # async call. 
+  # 
+  # Used in NewTextWorker...
   def self.new_text_no_wait(normalSMS, sprintSMS, user_phone)
     
     @user = User.find_by(phone: user_phone)
@@ -506,25 +509,6 @@ SMS = "SMS"
     end
 
   end  
-
-
-
-
-  def self.new_sms_chain(smsArr, user_phone)
-    @user = User.find_by(phone: user_phone)
-
-    smsArr.each_with_index do |sms, index|
-
-        if index + 1 != smsArr.length
-          TwilioHelper.smsSend(sms, user_phone)
-          else
-          TwilioHelper.smsSend(sms, user_phone)
-        end
-    end
-
-  end
-
-
 
 
 end
