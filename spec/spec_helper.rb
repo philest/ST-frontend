@@ -5,7 +5,7 @@ require 'database_cleaner'
 require 'rspec'
 
 require 'sidekiq/testing'
-Sidekiq::Testing.fake!
+Sidekiq::Testing.inline!
 
 # require_relative '../app/app.rb'
 
