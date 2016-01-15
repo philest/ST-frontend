@@ -39,7 +39,7 @@ error:
 to_us:
   thanks: "Thanks! We've sent your message along."
 
-first_mms: "http://www.joinstorytime.herokuapp.com/images/d_sp.jpg"
+first_mms: "http://joinstorytime.herokuapp.com/images/d_sp.jpg"
 
 example: "Thanks for trying out StoryTime, free rhyming stories by text! Enjoy your sample story about Devon's scoop!"
 
