@@ -30,12 +30,19 @@ require 'sidetiq'
 require 'sidekiq/web'
 require 'sidekiq/api' 
 
+require_relative '../experiment/experiment_constants'
+require_relative '../experiment/form_success'
+
+
 configure :production do
   require 'newrelic_rpm'
 end
 
-require_relative '../experiment/experiment_constants'
-require_relative '../experiment/form_success'
+# Error tracking. 
+require 'airbrake'
+require_relative '../config/initializers/airbrake'
+use Airbrake::Rack::Middleware
+
 
 include ExperimentConstants
 

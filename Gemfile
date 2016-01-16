@@ -17,6 +17,8 @@ gem "pony"
 gem "as-duration"
 gem 'statsample'
 gem 'descriptive_statistics'
+gem 'airbrake'
+
 
 group :development, :test do
   gem 'fuubar'
