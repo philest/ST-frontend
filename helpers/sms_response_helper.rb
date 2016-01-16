@@ -14,9 +14,6 @@ require_relative '../config/initializers/redis'
 require 'pony'
 require_relative '../config/pony'
 
-#twilio texting API
-require 'twilio-ruby'
-
 #internationalization
 require 'sinatra/r18n'
 #set default locale to english
