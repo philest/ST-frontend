@@ -72,13 +72,23 @@ get '/doc' do
   redirect to('/doc/')
 end
 
+# Resources
+get '/resources' do 
+  protected!
+  erb :resources
+end
+
+get '/resources/' do 
+  redirect to('/resources')
+end 
+
 #experiment dashboard
 get '/admin' do
-    protected!
-    #pull up experiments for dash
-    @active_experiments = Experiment.where("active = true")
-    @inactive_experiments = Experiment.where("active = false")
-    erb :experiment_dashboard
+  protected!
+  #pull up experiments for dash
+  @active_experiments = Experiment.where("active = true")
+  @inactive_experiments = Experiment.where("active = false")
+  erb :experiment_dashboard
 end
 
 #with form-selected options, create_experiment().
