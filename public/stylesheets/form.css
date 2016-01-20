@@ -4,10 +4,15 @@ h1{
     text-align: center;
 }
 
+#resources h2{
+    color: #ed7844;
+}
+
 h2, h3, h4, h5, h6{
     font-family: Nunito;
 
 }
+
 
 div.experiment{
   width: 200px;
@@ -18,7 +23,10 @@ div.experiment{
     margin: 20px;
 }
 
-
+p{
+    font-family: Nunito;
+    font-size: 1.15em
+}
 
 form {
 	    font-family: Nunito;
