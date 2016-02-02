@@ -65,7 +65,7 @@ get '/' do
 end
 
 get '/learn' do
-  File.read(File.join('public', 'doc/about_StoryTime.pdf'))
+  send_file File.join(settings.public_folder, 'about_StoryTime.pdf')
 end
 
 # Documenation. 
