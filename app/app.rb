@@ -65,7 +65,7 @@ get '/' do
 end
 
 get '/learn' do
-  send_file 'doc/about_StoryTime.pdf'
+  send_file('doc/about_StoryTime.pdf')
 end
 
 # Documenation. 
