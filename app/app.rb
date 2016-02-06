@@ -64,6 +64,10 @@ get '/' do
     erb :main
 end
 
+get '/learn' do
+  send_file File.join(settings.public_folder, 'about_StoryTime.pdf')
+end
+
 # Documenation. 
 get '/doc/' do 
   File.read(File.join('public', 'doc/_index.html'))
