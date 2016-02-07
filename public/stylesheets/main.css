@@ -1,4 +1,4 @@
-@media screen and (max-width: 600px) {
+ @media screen and (max-width: 600px) {
 	body {
 		background-image: url('../images/StoryTime_background_iphone5_tall.png');
 		background-size: cover;
@@ -9,9 +9,9 @@
 
 
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 500px) {
 	body {
-		background-image: url('../images/StoryTime_background_tablet.png');
+		background-image: url('../images/ST_tablet.gif');
 		background-size: cover;
 	    background-attachment: fixed;
 		margin: 0px;
@@ -19,7 +19,7 @@
 }
 
 
-@media screen and (min-width: 938px) {
+@media screen and (min-width: 600px) {
 	body {
 		background-image: url('../images/ST_Desktop_Viewport_with-names.gif');
 		background-size: cover;
