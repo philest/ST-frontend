@@ -64,7 +64,7 @@ get '/' do
     erb :main
 end
 
-get '/learn' do
+get '/learn-more' do
   send_file File.join(settings.public_folder, 'about_StoryTime.pdf')
 end
 
