@@ -1,13 +1,12 @@
- @media screen and (max-width: 600px) {
+ @media screen and (max-width: 500px) {
 	body {
 		background-image: url('../images/StoryTime_background_iphone5_tall.png');
 		background-size: cover;
 	    background-attachment: fixed;
+	    background-repeat: no-repeat;
 		margin: 0px;
 	}
 }
-
-
 
 @media screen and (min-width: 500px) {
 	body {
@@ -18,7 +17,6 @@
 	}
 }
 
-
 @media screen and (min-width: 600px) {
 	body {
 		background-image: url('../images/ST_Desktop_Viewport_with-names.gif');
@@ -28,12 +26,12 @@
 	}
 }
 
-#learn {
+/*#learn {
 	width: 27%;
 	position: absolute;
 	margin-left: 20%;
 	margin-top: 20%;
-}
+}*/
 
 img {
 	width: 100%;
