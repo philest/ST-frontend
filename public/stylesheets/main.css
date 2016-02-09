@@ -1,4 +1,4 @@
- @media screen and (max-width: 500px) {
+ @media screen and (orientation: portrait) and (max-width: 500px) {
 	body {
 		background-image: url('../images/StoryTime_background_iphone5_tall.png');
 		background-size: cover;
