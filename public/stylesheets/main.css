@@ -1,4 +1,35 @@
- @media screen and (orientation: portrait) and (max-width: 500px) {
+body {
+	background-image: url('../images/modules/clouds.png');
+	/*background-size: cover;*/
+    background-attachment: fixed;
+    background-repeat: repeat;
+	margin: 0px;
+}
+
+.grass {
+	position:absolute;
+/*	height: 10px;
+	overflow: hidden;*/
+	width: 100%;
+	bottom:0px;
+	/*background-image: url('../images/modules/grass.png');*/
+	/*background-position: center;*/
+	/*background-repeat: no-repeat; */
+	/*style="width: 300%; margin: auto; overflow: hidden*/
+}
+
+#grass {
+	display: block;
+    position: relative;
+    margin-left: -85%;
+    margin-bottom: -25%;
+    width: 300%;
+    overflow:hidden;
+    max-height: 20em; 
+	
+}
+
+/* @media screen and (orientation: portrait) and (max-width: 500px) {
 	body {
 		background-image: url('../images/StoryTime_background_iphone5_tall.png');
 		background-size: cover;
@@ -24,7 +55,7 @@
 	    background-attachment: fixed;
 		margin: 0px;
 	}
-}
+}*/
 
 /*#learn {
 	width: 27%;
