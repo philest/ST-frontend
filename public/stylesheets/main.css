@@ -1,24 +1,93 @@
-body {
-	background-image: url('../images/modules/clouds.png');
+/*@media screen and (max-width: 48em) {
+
+}*/
+html, body {
+	background-image: url('../images/modules/background_mobile.png');
+	height: 100%;
 	/*background-size: cover;*/
+	/*background-*/
+    background-attachment: fixed;
+    /*background-repeat: no-repeat;*/
+	margin: 0px;
+	/*height: 100%;*/
+}
+
+.pure-g {
+	display: flex;
+	align-items: flex-end;
+	margin: auto;
+	height: 100%;
+	text-align: center;
+	/*margin-top: 5%;*/
+
+}
+
+.bedframe {
+	margin-top: 10em;
+}
+
+
+
+/*.pure-g div#test {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50%;
+	margin-bottom: 50%;
+	text-align: center;
+	display: block; 
+	vertical-align: center;
+	/*height:100%;*/
+/*}*/
+
+
+/*.pure-g-valign-fix{
+	display:block;
+	vertical-align: center;
+}*/
+
+/*div:first-child #test .inner {
+	vertical-align: center !important;
+}*/
+
+
+/*img {
+	width: 100%;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+h4 {
+	color: #ee7744;
+	font-family: 'Nunito', sans-serif;
+	font-weight: 300;
+   text-align: center;
+   font-size: 200%;
+}
+*/
+
+
+/*body {
+	background-image: url('../images/modules/clouds.png');
+	background-size: cover;
     background-attachment: fixed;
     background-repeat: repeat;
 	margin: 0px;
-}
+}*/
 
-.grass {
-	position:absolute;
-/*	height: 10px;
-	overflow: hidden;*/
+/*.grass {*/
+	/*position:absolute;
+	height: 10px;
+	overflow: hidden;
 	width: 100%;
-	bottom:0px;
+	bottom:0px;*/
 	/*background-image: url('../images/modules/grass.png');*/
 	/*background-position: center;*/
 	/*background-repeat: no-repeat; */
 	/*style="width: 300%; margin: auto; overflow: hidden*/
-}
+/*}*/
 
-#grass {
+/*#grass {
 	display: block;
     position: relative;
     margin-left: -85%;
@@ -27,7 +96,7 @@ body {
     overflow:hidden;
     max-height: 20em; 
 	
-}
+}*/
 
 /* @media screen and (orientation: portrait) and (max-width: 500px) {
 	body {
@@ -64,17 +133,3 @@ body {
 	margin-top: 20%;
 }*/
 
-img {
-	width: 100%;
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    }
-
-h4 {
-	color: #ee7744;
-	font-family: 'Nunito', sans-serif;
-	font-weight: 300;
-   text-align: center;
-   font-size: 200%;
-}
