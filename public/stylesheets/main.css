@@ -1,7 +1,9 @@
 /*@media screen and (max-width: 48em) {
 
 }*/
-body {
+
+
+html, body {
 	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
 	width: 100%;
@@ -10,154 +12,34 @@ body {
 	
 	font-family: 'Nunito', sans-serif;
 
-	margin: 0px;
+	/*margin: 0px;*/
 	/*turn this off*/
 	/*display:table;	*/
 }
-.test {
-	display:table-cell;
-	vertical-align: middle !important;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
+
+.wrapper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	text-align: center; 
 }
 
-h1 {
-	color: #ee7744;
-	font-weight: 700;
-   	font-size: 2em;
+.main {
+	display: table;
+	height: 100%;
+	width: 100%;
 }
 
-h2 {
-	font-weight: bold;
-
-	font-size: 2em;
-	/*width: 60%;*/
-	margin: 0 auto;
+/* what should the display type be for the h1, h2, p tags? block? table-cell?*/
+.column {
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .text {
-	width: 20em;
-	font-weight: 700;
-	text-align: center;
-   	font-size: 1.2em;
-   	/*width: 21%;*/
-   	padding-left: 3em;
-}
-
-/*.inner {
-	display: inline-table;
-	margin: 0 auto;
-}
-*/
-
-#bedframe {
-	padding-left: 12em;
+	width: 30em;
 }
 
 
-.column {
-	display: inline-block;
-	margin: auto;
-}
-/*.bed {
-	display: table;
-}
-*/
-
-
-
-
-/*.bedframe {
-	margin-top: 10em;
-}
-*/
-
-
-/*.pure-g div#test {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 50%;
-	margin-bottom: 50%;
-	text-align: center;
-	display: block; 
-	vertical-align: center;
-	/*height:100%;*/
-/*}*/
-
-
-/*.pure-g-valign-fix{
-	display:block;
-	vertical-align: center;
-}*/
-
-/*div:first-child #test .inner {
-	vertical-align: center !important;
-}*/
-
-
-/*img {
-	width: 100%;
-	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    }*/
-
-
-
-
-/*body {
-	background-image: url('../images/modules/clouds.png');
-	background-size: cover;
-    background-attachment: fixed;
-    background-repeat: repeat;
-	margin: 0px;
-}*/
-
-/*.grass {*/
-	/*position:absolute;
-	height: 10px;
-	overflow: hidden;
-	width: 100%;
-	bottom:0px;*/
-	/*background-image: url('../images/modules/grass.png');*/
-	/*background-position: center;*/
-	/*background-repeat: no-repeat; */
-	/*style="width: 300%; margin: auto; overflow: hidden*/
-/*}*/
-
-/* @media screen and (orientation: portrait) and (max-width: 500px) {
-	body {
-		background-image: url('../images/StoryTime_background_iphone5_tall.png');
-		background-size: cover;
-	    background-attachment: fixed;
-	    background-repeat: no-repeat;
-		margin: 0px;
-	}
-}
-
-@media screen and (min-width: 500px) {
-	body {
-		background-image: url('../images/ST_tablet.gif');
-		background-size: cover;
-	    background-attachment: fixed;
-		margin: 0px;
-	}
-}
-
-@media screen and (min-width: 600px) {
-	body {
-		background-image: url('../images/ST_Desktop_Viewport_with-names.gif');
-		background-size: cover;
-	    background-attachment: fixed;
-		margin: 0px;
-	}
-}*/
-
-/*#learn {
-	width: 27%;
-	position: absolute;
-	margin-left: 20%;
-	margin-top: 20%;
-}*/
 
