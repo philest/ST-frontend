@@ -12,9 +12,6 @@ html, body {
 	
 	font-family: 'Nunito', sans-serif;
 
-	/*margin: 0px;*/
-	/*turn this off*/
-	/*display:table;	*/
 }
 
 .wrapper {
@@ -40,6 +37,33 @@ html, body {
 .text {
 	width: 30em;
 }
+
+
+/*when the image doesn't scale it extends the width of the divs beyond the viewport*/
+
+
+@media screen and (max-width: 48em) {
+	.column {
+		display: table-row; 
+	}	
+	.text {
+		height: 33%;
+	}
+	img {
+		width: 100%;
+		max-width: 591px;
+	}
+
+	.txt_inner {
+
+		/* TEMPORARY SOLUTION. Next step: vertically align */ 
+		padding-top: 3em;
+	}
+
+}
+
+
+
 
 
 
