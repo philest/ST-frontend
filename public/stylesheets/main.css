@@ -4,7 +4,7 @@
 
 
 html, body {
-	background-image: url('../images/modules/background_mobile.png');
+	background-image: url('../images/modules/background_mobile2.png');
 	height: 100%;
 	width: 100%;
     background-attachment: fixed;
@@ -23,6 +23,8 @@ html, body {
 
 .main {
 	display: table;
+	/* make height 60-70%, making room for full-width div for grass at the bottom*/
+
 	height: 100%;
 	width: 100%;
 }
