@@ -2,7 +2,6 @@
 
 }*/
 
-
 body {
 	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
@@ -33,7 +32,7 @@ body {
 	/*display: table;*/
 	width: 100%;
 	margin: 0 auto;
-	margin-top: -10em;
+	margin-top: -13em;
 	padding-bottom: 4em;
 	background-color: white;
 }
@@ -50,21 +49,19 @@ body {
 	width: 6em;
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 4.5em;
-
-
+	margin-top: 7.5em;
 	/*display: table-cell;*/
 }
+	/* logo positioning */
+	.left img {
+		float: right;
+	}
 
-.left img {
-	float: right;
-}
+	.right img {
+		float: left;
+	}
 
-.right img {
-	float: left;
-}
-
-
+/* main container for table positioning */
 .wrapper {
 	display: table;
 	height: 100%;
@@ -72,6 +69,7 @@ body {
 	text-align: center; 
 }
 
+/* subcontainer for table positioning */
 .main {
 	display: table;
 	/* make height 60-70%, making room for full-width div for grass at the bottom*/
@@ -120,7 +118,6 @@ body {
 		display: none; 
 	}
 
-	
 	.txt_inner {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
