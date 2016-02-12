@@ -3,7 +3,7 @@
 }*/
 
 
-html, body {
+body {
 	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
 	width: 100%;
@@ -20,6 +20,8 @@ html, body {
 
 .grass {
 	overflow: hidden;
+	position: relative;
+	margin-top: -7em;
 }
 .grass img {
 	/* the actual width of the image */
@@ -61,6 +63,10 @@ html, body {
 
 
 @media screen and (max-width: 48em) {
+	html, body {
+		background-image: url('../images/modules/background_mobile2.png');
+	}
+
 	.column {
 		display: table-row; 
 	}	
@@ -70,6 +76,11 @@ html, body {
 	img {
 		width: 100%;
 		max-width: 591px;
+	}
+
+	.grass {
+		display: none; 
+
 	}
 
 	.txt_inner {
