@@ -9,27 +9,61 @@ body {
 	width: 100%;
     background-attachment: fixed;
     overflow: hidden;
-	
 	font-family: 'Nunito', sans-serif;
-
 }
 
 .overlap {
 	display: block;
 }
 
-.grass {
+.footer {
 	overflow: hidden;
 	position: relative;
 	margin-top: -7em;
 }
-.grass img {
+.footer #grass {
 	/* the actual width of the image */
 	width: 1484px; 
 	position: relative;
 	left: 50%;
 	margin-left: -700px;
 }
+
+.partner-logos {
+	/*display: table;*/
+	width: 100%;
+	margin: 0 auto;
+	margin-top: -10em;
+	padding-bottom: 4em;
+	background-color: white;
+}
+
+.logo {
+	display: inline-block;
+	/* Yale logo doesn't enter a new row when width is below 31%. */
+	width: 33%;
+	margin: 0 auto;
+}
+
+.partner-logos img {
+	display: block;
+	width: 6em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 4.5em;
+
+
+	/*display: table-cell;*/
+}
+
+.left img {
+	float: right;
+}
+
+.right img {
+	float: left;
+}
+
 
 .wrapper {
 	display: table;
@@ -59,6 +93,7 @@ body {
 
 
 
+
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
 
@@ -78,13 +113,15 @@ body {
 		max-width: 591px;
 	}
 
-	.grass {
+	.footer {
+		display: none; 	
+	}
+	.footer img#grass {
 		display: none; 
-
 	}
 
+	
 	.txt_inner {
-
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
 	}
