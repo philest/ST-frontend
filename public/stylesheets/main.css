@@ -21,10 +21,7 @@
 
 @media screen and (min-width: 600px) {
 	body {
-		background-image: url('../images/ST_Desktop_Viewport_with-names.gif');
-		background-size: cover;
-	    background-attachment: fixed;
-		margin: 0px;
+		background-image: url('../images/Landing_Page_Laptop_Viewport_Names_Short.gif');
 	}
 }
 
