@@ -4,7 +4,7 @@
 
 
 html, body {
-	background-image: url('../images/modules/background_mobile2.png');
+	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
 	width: 100%;
     background-attachment: fixed;
@@ -12,6 +12,21 @@ html, body {
 	
 	font-family: 'Nunito', sans-serif;
 
+}
+
+.overlap {
+	display: block;
+}
+
+.grass {
+	overflow: hidden;
+}
+.grass img {
+	/* the actual width of the image */
+	width: 1484px; 
+	position: relative;
+	left: 50%;
+	margin-left: -700px;
 }
 
 .wrapper {
@@ -33,12 +48,13 @@ html, body {
 .column {
 	height: 100%;
 	display: table-cell;
-	vertical-align: middle;
+	vertical-align: bottom;
 }
 
 .text {
 	width: 30em;
 }
+
 
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
