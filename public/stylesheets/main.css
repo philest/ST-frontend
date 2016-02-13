@@ -2,13 +2,15 @@
 
 }*/
 
+
 body {
 	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
 	width: 100%;
     background-attachment: fixed;
     overflow: hidden;
-	font-family: 'Nunito', sans-serif;
+    /* Need to fix this font. Lowercase "s" doesn't render. */
+	font-family: 'dk_cool_crayonregular'; 
 }
 
 .overlap {
@@ -22,10 +24,10 @@ body {
 }
 .footer #grass {
 	/* the actual width of the image */
-	width: 1484px; 
+	width: 1600px; 
 	position: relative;
 	left: 50%;
-	margin-left: -700px;
+	margin-left: -800px;
 }
 
 .partner-logos {
@@ -40,7 +42,7 @@ body {
 .logo {
 	display: inline-block;
 	/* Yale logo doesn't enter a new row when width is below 31%. */
-	width: 33%;
+	width: 31%;
 	margin: 0 auto;
 }
 
@@ -85,8 +87,27 @@ body {
 	vertical-align: bottom;
 }
 
+.plane {
+	position: relative;
+	float: right;
+	z-index: -1;
+	vertical-align: top;
+}
+
+#bedframe {
+	float: left;
+}
+
 .text {
 	width: 30em;
+}
+
+.txt_inner {
+	min-width: 20em;
+}
+
+.plane {
+	width: 10em;
 }
 
 
@@ -94,12 +115,10 @@ body {
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
-
 @media screen and (max-width: 48em) {
 	html, body {
 		background-image: url('../images/modules/background_mobile2.png');
 	}
-
 	.column {
 		display: table-row; 
 	}	
@@ -110,17 +129,22 @@ body {
 		width: 100%;
 		max-width: 591px;
 	}
-
 	.footer {
 		display: none; 	
 	}
 	.footer img#grass {
 		display: none; 
 	}
-
 	.txt_inner {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
+	}
+	.plane {
+		display: none;
+	}
+
+	#bedframe {
+		float: none;
 	}
 
 }
