@@ -4,16 +4,16 @@
 
 
 body {
+
+    /*overflow: hidden;*/
+    /* Need to fix this font. Lowercase "s" doesn't render. */
+	font-family: 'dk_cool_crayonregular'; 
+}
+.overlap {
 	background-image: url('../images/modules/background_mobile.png');
 	height: 100%;
 	width: 100%;
     background-attachment: fixed;
-    overflow: hidden;
-    /* Need to fix this font. Lowercase "s" doesn't render. */
-	font-family: 'dk_cool_crayonregular'; 
-}
-
-.overlap {
 	display: block;
 }
 
@@ -71,6 +71,9 @@ body {
 	text-align: center; 
 }
 
+.wrapper .footer .bottom {
+	margin-bottom: -12em;
+}
 /* subcontainer for table positioning */
 .main {
 	display: table;
@@ -110,8 +113,73 @@ body {
 	width: 10em;
 }
 
+section.video iframe { 
+	display: block;
+	margin: 0 auto;
+
+}
+section.video {
+	padding-bottom: 4em;
+}
 
 
+.the-problem .text {
+	text-align: left;
+	float: right;
+	
+	padding-right: 4em;
+	line-height: 1.5em;
+}
+
+.phone img {
+	float: right;
+}
+
+.the-product .text {
+	text-align: left;
+	width: 60%;
+	padding-left: 4em;
+	line-height: 1.5em;
+}
+section.the-product {
+	padding-bottom: 4em;
+}
+
+.progress {
+	width: 60%;
+	margin: 0 auto;
+	line-height: 1.5em;
+	text-align: center;
+	font-family: sans-serif;
+	padding-bottom: 4em;
+}
+
+.join-us .text {
+	text-align: left;
+	width: 60%;
+	float: right;
+	padding-right: 4em;
+	line-height: 1.5em;
+	padding-bottom: 4em;
+}
+
+.footer-bottom {
+	overflow: hidden;
+}
+
+.globe img { 
+	width: 80%;
+	float: left;
+}
+
+.v-align {
+	display: table;
+}
+
+.v-align .text {
+	display:table-cell; 
+	vertical-align:middle;
+}
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
