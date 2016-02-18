@@ -102,7 +102,8 @@ body {
 }
 
 .text {
-	width: 30em;
+	width: 60%;
+	line-height: 1.8em;
 }
 
 .txt_inner {
@@ -127,8 +128,6 @@ section.video {
 	text-align: left;
 	float: right;
 	
-	padding-right: 4em;
-	line-height: 1.5em;
 }
 
 .phone img {
@@ -137,9 +136,9 @@ section.video {
 
 .the-product .text {
 	text-align: left;
-	width: 60%;
-	padding-left: 4em;
-	line-height: 1.5em;
+}
+.the-product .phone img {
+	padding-right: 10%;
 }
 
 div.section-header {
@@ -149,14 +148,13 @@ div.section-header {
 	color: #ed7844;
 }	
 
-section.the-product {
+section {
 	padding-bottom: 4em;
 }
 
 .progress {
 	width: 60%;
 	margin: 0 auto;
-	line-height: 1.5em;
 	text-align: center;
 	font-family: sans-serif;
 	padding-bottom: 4em;
@@ -164,11 +162,7 @@ section.the-product {
 
 .join-us .text {
 	text-align: left;
-	width: 60%;
 	float: right;
-	padding-right: 4em;
-	line-height: 1.5em;
-	padding-bottom: 4em;
 }
 
 .footer-bottom {
@@ -190,6 +184,12 @@ section.the-product {
 }
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
+
+@media screen and (max-width: 64em) {
+	.text {
+		width: 80%;
+	}
+}
 
 @media screen and (max-width: 48em) {
 	.overlap {
