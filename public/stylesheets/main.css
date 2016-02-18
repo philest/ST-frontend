@@ -79,15 +79,19 @@ body {
 	display: table;
 	/* make height 60-70%, making room for full-width div for grass at the bottom*/
 
-	height: 100%;
+	height: 25em;
 	width: 100%;
+}
+.main h1 {
+	font-size: 4em;
+	color: #ed7844;
 }
 
 /* what should the display type be for the h1, h2, p tags? block? table-cell?*/
 .column {
 	height: 100%;
 	display: table-cell;
-	vertical-align: bottom;
+	vertical-align: middle;
 }
 
 .plane {
@@ -170,8 +174,9 @@ section {
 }
 
 .globe img { 
-	width: 80%;
+	width: 50%;
 	float: left;
+	padding-left: 2em;
 }
 
 .v-align {
@@ -188,6 +193,16 @@ section {
 @media screen and (max-width: 64em) {
 	.text {
 		width: 80%;
+	}
+	.globe img {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 48em) {
+	/*change image size to lose margins */
+	.globe img {
+		width: 90%;
 	}
 }
 
