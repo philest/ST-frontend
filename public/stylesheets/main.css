@@ -191,7 +191,7 @@ section {
 	}
 }
 
-@media screen and (max-width: 48em) {
+@media screen and (max-width: 35.5em) {
 	.overlap {
 		background-image: url('../images/modules/background_mobile2.png');
 	}
@@ -225,14 +225,45 @@ section {
 		float: none;
 	}
 
-	.the-problem .text {
+	.the-problem .text, .the-product .text {
 		text-align: center;
 		float: none;
-		width: 80%;
+		width: 90%;
+		display: block;
 		margin: 0 auto;
 		
 		padding-right: 0em;
 		line-height: 1.5em;
+	}
+	.v-align .text {
+		text-align: center;
+		float: none;
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+		
+		padding-right: 0em;
+		line-height: 1.5em;
+	}
+
+
+	iframe {
+		width: 350px;
+		height: 215px;
+	}
+	.the-product .phone img {
+		display: block;
+		margin-left: auto;
+    	margin-right: auto;
+    	float: none;
+    	padding-right: 0%;
+		width: 50%;
+	}
+
+	.the-problem .girl img {
+		max-width: 80%;
+		display: block;
+		margin: 0 auto;
 	}
 
 
