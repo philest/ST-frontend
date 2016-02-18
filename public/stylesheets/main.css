@@ -251,6 +251,7 @@ section {
 		line-height: 1.5em;
 	}
 	.v-align .text {
+		position: relative;
 		text-align: center;
 		float: none;
 		width: 90%;
@@ -259,6 +260,11 @@ section {
 		
 		padding-right: 0em;
 		line-height: 1.5em;
+	}
+	.v-align .text p {
+		position: absolute;
+		transform: translate(0, -50%)
+		top: 50%;
 	}
 
 
