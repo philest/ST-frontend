@@ -10,3 +10,17 @@
     font-style: normal;
 
 }
+
+
+@font-face {
+	font-family: 'Futura_normal';
+    
+	src: url('fonts/futura-normal_allfont.net-webfont.eot'); 
+    src: url('fonts/futura-normal_allfont.net-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/futura-normal_allfont.net-webfont.woff2') format('woff2'),
+         url('fonts/futura-normal_allfont.net-webfont.woff') format('woff'),
+         url('fonts/futura-normal_allfont.net-webfont.ttf') format('truetype'),
+         url('fonts/futura-normal_allfont.net-webfont.svg#futura_normal') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

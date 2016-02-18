@@ -1,46 +1,277 @@
- @media screen and (max-width: 600px) {
-	body {
-		background-image: url('../images/StoryTime_background_iphone5_tall.png');
-		background-size: cover;
-	    background-attachment: fixed;
-		margin: 0px;
-	}
+/*@media screen and (max-width: 48em) {
+
+}*/
+
+
+body {
+
+    /*overflow: hidden;*/
+    /* Need to fix this font. Lowercase "s" doesn't render. */
+	font-family: 'dk_cool_crayonregular'; 
 }
-
-
-
-@media screen and (min-width: 500px) {
-	body {
-		background-image: url('../images/ST_tablet.gif');
-		background-size: cover;
-	    background-attachment: fixed;
-		margin: 0px;
-	}
-}
-
-
-@media screen and (min-width: 600px) {
-	body {
-		background-image: url('../images/Landing_Page_Laptop_Viewport_Names_Short.gif');
-	}
-}
-
-
-
-
-
-
-img {
+.overlap {
+	background-image: url('../images/modules/clouds.png');
+	height: 100%;
 	width: 100%;
+    background-attachment: fixed;
 	display: block;
-    margin-left: auto;
-    margin-right: auto;
-    }
-
-h4 {
-	color: #ee7744;
-	font-family: 'Nunito', sans-serif;
-	font-weight: 300;
-   text-align: center;
-   font-size: 200%;
 }
+
+.footer {
+	overflow: hidden;
+	position: relative;
+	margin-top: -7em;
+}
+.footer #grass {
+	/* the actual width of the image */
+	width: 1600px; 
+	position: relative;
+	left: 50%;
+	margin-left: -800px;
+}
+
+.partner-logos {
+	/*display: table;*/
+	width: 100%;
+	margin: 0 auto;
+	margin-top: -13em;
+	padding-bottom: 4em;
+	background-color: white;
+}
+
+.logo {
+	display: inline-block;
+	/* Yale logo doesn't enter a new row when width is below 31%. */
+	width: 31%;
+	margin: 0 auto;
+}
+
+.partner-logos img {
+	display: block;
+	width: 6em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 7.5em;
+	/*display: table-cell;*/
+}
+	/* logo positioning */
+	.left img {
+		float: right;
+	}
+
+	.right img {
+		float: left;
+	}
+
+/* main container for table positioning */
+.wrapper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	text-align: center; 
+}
+
+.wrapper .footer .bottom {
+	margin-bottom: -12em;
+}
+/* subcontainer for table positioning */
+.main {
+	display: table;
+	/* make height 60-70%, making room for full-width div for grass at the bottom*/
+
+	height: 100%;
+	width: 100%;
+}
+
+/* what should the display type be for the h1, h2, p tags? block? table-cell?*/
+.column {
+	height: 100%;
+	display: table-cell;
+	vertical-align: bottom;
+}
+
+.plane {
+	position: relative;
+	float: right;
+	z-index: -1;
+	vertical-align: top;
+}
+
+#bedframe {
+	float: left;
+}
+
+.text {
+	width: 60%;
+	line-height: 1.8em;
+}
+
+.txt_inner {
+	min-width: 20em;
+}
+
+.plane {
+	width: 10em;
+}
+
+section.video iframe { 
+	display: block;
+	margin: 0 auto;
+
+}
+section.video {
+	padding-bottom: 4em;
+}
+
+
+.the-problem .text {
+	text-align: left;
+	float: right;
+	
+}
+
+.phone img {
+	float: right;
+}
+
+.the-product .text {
+	text-align: left;
+}
+.the-product .phone img {
+	padding-right: 10%;
+}
+
+div.section-header {
+	width: 100%;
+	text-align: center;
+	font-size: 1.8em;
+	color: #ed7844;
+}	
+
+section {
+	padding-bottom: 4em;
+}
+
+.progress {
+	width: 60%;
+	margin: 0 auto;
+	text-align: center;
+	font-family: sans-serif;
+	padding-bottom: 4em;
+}
+
+.join-us .text {
+	text-align: left;
+	float: right;
+}
+
+.footer-bottom {
+	overflow: hidden;
+}
+
+.globe img { 
+	width: 80%;
+	float: left;
+}
+
+.v-align {
+	display: table;
+}
+
+.v-align .text {
+	display:table-cell; 
+	vertical-align:middle;
+}
+
+/*when the image doesn't scale it extends the width of the divs beyond the viewport*/
+
+@media screen and (max-width: 64em) {
+	.text {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 35.5em) {
+	.overlap {
+		background-image: url('../images/modules/background_mobile2.png');
+	}
+
+
+	.column {
+		display: table-row; 
+	}	
+	.text {
+		height: 33%;
+	}
+	img {
+		width: 100%;
+		max-width: 591px;
+	}
+	.footer {
+		display: none; 	
+	}
+	.footer img#grass {
+		display: none; 
+	}
+	.txt_inner {
+		/* TEMPORARY SOLUTION. Next step: vertically align */ 
+		padding-top: 3em;
+	}
+	.plane {
+		display: none;
+	}
+
+	#bedframe {
+		float: none;
+	}
+
+	.the-problem .text, .the-product .text {
+		text-align: center;
+		float: none;
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+		
+		padding-right: 0em;
+		line-height: 1.5em;
+
+	}
+	.v-align .text {
+		text-align: center;
+		float: none;
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+		
+		padding-right: 0em;
+		line-height: 1.5em;
+	}
+
+
+	iframe {
+		width: 350px;
+		height: 215px;
+	}
+	.the-product .phone img {
+		display: block;
+		margin-left: auto;
+    	margin-right: auto;
+    	float: none;
+    	padding-right: 0%;
+		width: 50%;
+	}
+
+	.the-problem .girl img {
+		max-width: 80%;
+		display: block;
+		margin: 0 auto;
+	}
+
+
+}
+
+
+
+
+
+
