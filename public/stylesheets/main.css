@@ -10,7 +10,7 @@ body {
 	font-family: 'dk_cool_crayonregular'; 
 }
 .overlap {
-	background-image: url('../images/modules/background_mobile.png');
+	background-image: url('../images/modules/clouds.png');
 	height: 100%;
 	width: 100%;
     background-attachment: fixed;
@@ -141,6 +141,14 @@ section.video {
 	padding-left: 4em;
 	line-height: 1.5em;
 }
+
+div.section-header {
+	width: 100%;
+	text-align: center;
+	font-size: 1.8em;
+	color: #ed7844;
+}	
+
 section.the-product {
 	padding-bottom: 4em;
 }
@@ -184,9 +192,11 @@ section.the-product {
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
 @media screen and (max-width: 48em) {
-	html, body {
+	.overlap {
 		background-image: url('../images/modules/background_mobile2.png');
 	}
+
+
 	.column {
 		display: table-row; 
 	}	
@@ -214,6 +224,17 @@ section.the-product {
 	#bedframe {
 		float: none;
 	}
+
+	.the-problem .text {
+		text-align: center;
+		float: none;
+		width: 80%;
+		margin: 0 auto;
+		
+		padding-right: 0em;
+		line-height: 1.5em;
+	}
+
 
 }
 
