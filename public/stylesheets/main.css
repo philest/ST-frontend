@@ -97,7 +97,7 @@ body {
 .plane {
 	position: relative;
 	float: right;
-	z-index: -1;
+	z-index: 1;
 	vertical-align: top;
 }
 
@@ -188,6 +188,17 @@ section {
 	vertical-align:middle;
 }
 
+.recruitment-text {
+	text-align: left;
+	display: block; 
+	width: 70%;
+	margin: 0 auto;
+}
+.recruitment-text h1 {
+	font-size: 2em;
+	color: #ed7844;
+}
+
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
 @media screen and (max-width: 64em) {
@@ -238,6 +249,7 @@ section {
 
 	#bedframe {
 		float: none;
+		display: none;
 	}
 
 	.the-problem .text, .the-product .text {
@@ -261,11 +273,7 @@ section {
 		padding-right: 0em;
 		line-height: 1.5em;
 	}
-	.v-align .text p {
-		position: absolute;
-		transform: translate(0, -50%)
-		top: 50%;
-	}
+
 
 
 	iframe {
@@ -286,6 +294,22 @@ section {
 		display: block;
 		margin: 0 auto;
 	}
+
+
+	.recruitment-text {
+		text-align: center;
+		display: block; 
+		width: 70%;
+		margin: 0 auto;
+		margin-bottom: 10em;
+	}
+	.recruitment-text h1 {
+		font-size: 1.5em;
+		color: #ed7844;
+	}
+
+
+
 
 
 }
