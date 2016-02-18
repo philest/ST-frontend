@@ -222,7 +222,6 @@ section {
 		background-image: url('../images/modules/background_mobile2.png');
 	}
 
-
 	.column {
 		display: table-row; 
 	}	
@@ -274,8 +273,6 @@ section {
 		line-height: 1.5em;
 	}
 
-
-
 	iframe {
 		width: 350px;
 		height: 215px;
@@ -295,7 +292,6 @@ section {
 		margin: 0 auto;
 	}
 
-
 	.recruitment-text {
 		text-align: center;
 		display: block; 
@@ -307,10 +303,6 @@ section {
 		font-size: 1.5em;
 		color: #ed7844;
 	}
-
-
-
-
 
 }
 
