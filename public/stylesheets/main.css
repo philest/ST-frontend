@@ -14,7 +14,12 @@ p{
 	font-family: 'Open Sans', sans-serif;
 }
 
-.catch_phrase{
+/*.catch_phrase{
+	display: table-cell;
+	vertical-align: middle;
+}
+*/
+.catch_phrase h2 { 
 	font-family: 'Open Sans', sans-serif;
 	font-weight: bold;
 	margin-top: -1.5em
@@ -233,22 +238,22 @@ section {
 		background-image: url('../images/modules/background_mobile2.png');
 	}
 
-	.column {
+	/*.column {
 		display: table-row; 
-	}	
+	}	*/
 	.text {
 		height: 33%;
 	}
-	img {
+/*	img {
 		width: 100%;
 		max-width: 591px;
-	}
-	.footer {
+	}*/
+	.partner-loops {
 		display: none; 	
 	}
-	.footer img#grass {
+/*	.footer img#grass {
 		display: none; 
-	}
+	}*/
 	.txt_inner {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
