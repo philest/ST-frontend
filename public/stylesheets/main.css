@@ -9,6 +9,17 @@ body {
     /* Need to fix this font. Lowercase "s" doesn't render. */
 	font-family: 'dk_cool_crayonregular'; 
 }
+
+p{
+	font-family: 'Open Sans', sans-serif;
+}
+
+.catch_phrase{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	margin-top: -1.5em
+}
+
 .overlap {
 	background-image: url('../images/modules/clouds.png');
 	height: 100%;
@@ -260,6 +271,7 @@ section {
 		
 		padding-right: 0em;
 		line-height: 1.5em;
+
 	}
 	.v-align .text {
 		position: relative;
