@@ -243,6 +243,12 @@ section.progress h4 {
 	font-weight: normal;
 }
 
+h4 span {
+	font-family: 'dk_cool_crayonregular'; 
+	color: #ed7844;
+
+}
+
 .partners img { 
 	
 	padding-top: 1.5em;
@@ -250,7 +256,6 @@ section.progress h4 {
 	max-width: 15em;
 	float: left;
 	padding-left: 20%;
-
 }
 
 .globe img { 
@@ -295,13 +300,23 @@ section.progress h4 {
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
+@media screen and (max-width: 73em) {
+	.recruitment-text h1 {
+		font-size: 4em;
+	}
+}
+
 @media screen and (max-width: 64em) {
 	.text {
 		width: 80%;
 	}
 	.partners img {
 		width: 80%;
+	}	
+	.plane {
+		display: none;
 	}
+
 }
 
 @media screen and (max-width: 48em) {
@@ -313,6 +328,10 @@ section.progress h4 {
 	section.video iframe {
 		width: 568px;
 		height: 320px;
+	}
+
+	.recruitment-text h1 {
+		font-size: 4em;
 	}
 }
 
@@ -342,7 +361,7 @@ section.progress h4 {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
 	}
-	.plane {
+	div.column.bed {
 		display: none;
 	}
 
@@ -404,6 +423,7 @@ section.progress h4 {
 		margin: 0 auto;
 		margin-bottom: 10em;
 	}
+
 	.recruitment-text h1 {
 		font-size: 3em;
 		color: #ed7844;
