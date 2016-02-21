@@ -154,10 +154,6 @@ p {
 	min-width: 20em;
 }
 
-.progress {
-	font-size: 1.3em;
-}
-
 .plane {
 	width: 10em;
 }
@@ -218,7 +214,9 @@ section {
 	text-align: center;
 	font-family: sans-serif;
 	min-height: 15em; 
-	padding-top: 7em;
+	padding-top: 3.5em;
+	font-size: 1.3em;
+
 }
 
 .join-us .text {
@@ -230,23 +228,37 @@ section {
 	overflow: hidden;
 }
 
-/*.globe {
+/*.partners {
 	display: table;
 }
 
-.globe .container {
+.partners .container {
 	display: table-cell;
 	vertical-align: middle;
 }*/
 
-.globe img { 
+section.progress h4 {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.2em;
+	font-weight: normal;
+}
 
+.partners img { 
+	
+	padding-top: 1.5em;
 	min-width: 13em;
 	max-width: 15em;
 	float: left;
 	padding-left: 20%;
 
 }
+
+.globe img { 
+	
+	min-width: 13em;
+	max-width: 15em;
+}
+
 
 .v-align {
 	display: table;
@@ -287,14 +299,14 @@ section {
 	.text {
 		width: 80%;
 	}
-	.globe img {
+	.partners img {
 		width: 80%;
 	}
 }
 
 @media screen and (max-width: 48em) {
 	/*change image size to lose margins */
-	.globe img {
+	.partners img {
 		width: 90%;
 	}
 
