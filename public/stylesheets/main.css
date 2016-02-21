@@ -5,7 +5,6 @@
 
 body {
 
-    /*overflow: hidden;*/
     /* Need to fix this font. Lowercase "s" doesn't render. */
 	font-family: 'dk_cool_crayonregular'; 
 }
@@ -54,6 +53,8 @@ p {
 	width: 100%;
     background-attachment: fixed;
 	display: block;
+	overflow: hidden;
+
 }
 
 .footer {
@@ -153,6 +154,10 @@ p {
 	min-width: 20em;
 }
 
+.progress {
+	font-size: 1.3em;
+}
+
 .plane {
 	width: 10em;
 }
@@ -162,6 +167,8 @@ section.video iframe {
 	margin: 0 auto;
 	margin-top: 100px;
 	box-shadow: 0 0 100px #000;
+	width: 750px;
+	height: 422px;
 
 }
 section.video {
@@ -206,7 +213,7 @@ section {
 }
 
 .progress {
-	width: 60%;
+	width: 100%;
 	margin: 0 auto;
 	text-align: center;
 	font-family: sans-serif;
@@ -260,6 +267,7 @@ section {
 	font-size: 5em;
 	color: #ed7844;
 	text-align:center;
+	line-height: normal;
 
 }
 .recruitment-text h2 {
@@ -288,6 +296,11 @@ section {
 	/*change image size to lose margins */
 	.globe img {
 		width: 90%;
+	}
+
+	section.video iframe {
+		width: 568px;
+		height: 320px;
 	}
 }
 
@@ -353,9 +366,9 @@ section {
 		line-height: 1.5em;
 	}
 
-	iframe {
-		width: 960px;
-		height: 540px;
+	section.video iframe {
+		width: 360px;
+		height: 203px;
 	}
 	.the-product .phone img {
 		display: block;
