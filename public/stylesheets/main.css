@@ -240,12 +240,10 @@ section {
 }*/
 
 .globe img { 
-
 	min-width: 13em;
 	max-width: 15em;
 	float: left;
 	padding-left: 20%;
-
 }
 
 .v-align {
@@ -283,13 +281,23 @@ section {
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
+@media screen and (max-width: 73em) {
+	.recruitment-text h1 {
+		font-size: 4em;
+	}
+}
+
 @media screen and (max-width: 64em) {
 	.text {
 		width: 80%;
 	}
 	.globe img {
 		width: 80%;
+	}	
+	.plane {
+		display: none;
 	}
+
 }
 
 @media screen and (max-width: 48em) {
@@ -301,6 +309,10 @@ section {
 	section.video iframe {
 		width: 568px;
 		height: 320px;
+	}
+
+	.recruitment-text h1 {
+		font-size: 4em;
 	}
 }
 
@@ -330,7 +342,7 @@ section {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
 	}
-	.plane {
+	div.column.bed {
 		display: none;
 	}
 
@@ -392,6 +404,7 @@ section {
 		margin: 0 auto;
 		margin-bottom: 10em;
 	}
+
 	.recruitment-text h1 {
 		font-size: 3em;
 		color: #ed7844;
