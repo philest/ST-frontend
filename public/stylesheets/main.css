@@ -4,13 +4,14 @@
 
 
 body {
-
     /* Need to fix this font. Lowercase "s" doesn't render. */
 	font-family: 'dk_cool_crayonregular'; 
 }
 
 p {
-	font-family: 'Open Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 1.1em;
 }
 
 .divider {
@@ -42,9 +43,9 @@ p {
 }*/
 
 .catch_phrase h2 { 
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	margin-top: -1.5em
+    font-family: 'Montserrat', sans-serif;
+    font-weight: normal;
+    margin-top: -1.5em
 }
 
 .overlap {
@@ -238,9 +239,13 @@ section {
 }*/
 
 section.progress h4 {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Montserrat', sans-serif;
 	font-size: 1.2em;
-	font-weight: normal;
+	font-weight: 200;
+}
+
+span {
+	font-weight: bold;
 }
 
 h4 span {
