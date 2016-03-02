@@ -189,6 +189,12 @@ section.video {
 	float: right;
 }
 
+.prize img {
+	max-width: 372px;
+	float: right;
+	padding-right: 15%;
+}
+
 .the-product .text {
 	text-align: left;
 }
@@ -322,6 +328,12 @@ h4 span {
 		display: none;
 	}
 
+	.prize img {
+		width: 80%;
+		padding-right: 15%;
+		/*min-width: 250px;*/
+	}
+
 }
 
 @media screen and (max-width: 48em) {
@@ -338,7 +350,15 @@ h4 span {
 	.recruitment-text h1 {
 		font-size: 4em;
 	}
+
+	/*.prize img {
+		max-width: 250px;
+	}*/
+
 }
+
+/*@media screen and (max-width: 60em)*/
+
 
 @media screen and (max-width: 35.5em) {
 /*	.overlap {
