@@ -8,7 +8,26 @@
 		<link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+		<style>
+			@font-face {
+			    font-family: 'dk_cool_crayonregular';
+			    src: url('fonts/dk_cool_crayon-webfont.eot');
+			    src: url('fonts/dk_cool_crayon-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/dk_cool_crayon-webfont.woff2') format('woff2'),
+			         url('fonts/dk_cool_crayon-webfont.woff') format('woff'),
+			         url('fonts/dk_cool_crayon-webfont.ttf') format('truetype'),
+			         url('fonts/dk_cool_crayon-webfont.svg#dk_cool_crayonregular') format('svg');
+			    font-weight: normal;
+			    font-style: normal;
 
+			}
+
+
+			body {
+			    /* Need to fix this font. Lowercase "s" doesn't render. */
+				font-family: 'dk_cool_crayonregular'; 
+			}
+		</style>
 		<!-- Favicon and App icon images -->
 		<link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -34,6 +53,7 @@
 	<body>
 
 		<div class="overlap">
+		<img style="display:none" src="../images/modules/clouds_wide_with_birds_large.png">
 			<div class="wrapper">
 
 
