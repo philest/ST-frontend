@@ -281,6 +281,10 @@ section {
 	vertical-align: middle;
 }*/
 
+button.get_update{
+	background-color: #ed7844; 
+}
+
 section.progress h4 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.2em;
