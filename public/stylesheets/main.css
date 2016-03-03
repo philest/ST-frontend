@@ -27,6 +27,18 @@ p {
 	border-bottom: 1px solid #AAAAAA;
 }
 
+.divider-mini {
+	width: 100%; 
+	
+}
+
+.divider-mini div {
+	display: block; 
+	width: 10%;
+	margin: 0 auto;
+	border-bottom: 1px solid #AAAAAA;
+}
+
 /*.catch_phrase{
 	display: table-cell;
 	vertical-align: middle;
@@ -190,7 +202,7 @@ section.video {
 }
 
 .prize img {
-	max-width: 372px;
+	max-width: 260px;
 	float: right;
 	padding-right: 15%;
 }
