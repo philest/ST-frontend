@@ -100,6 +100,10 @@ post '/form_success' do
 	form_success()
 end
 
+post '/get_updates_form_success' do 
+  redirect to('/')
+end
+
 #twilio failed: no valid response for sms.
 get '/failed' do
     TwilioHelper.smsRespondHelper("StoryTime: Hi! " + 
