@@ -27,6 +27,12 @@ p {
 	border-bottom: 1px solid #AAAAAA;
 }
 
+span a {
+	text-decoration: none;
+	color: #ed7844;
+	
+}
+
 /*.catch_phrase{
 	display: table-cell;
 	vertical-align: middle;
