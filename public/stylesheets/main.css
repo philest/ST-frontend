@@ -287,6 +287,10 @@ section.progress h4 {
 	font-weight: 200;
 }
 
+section.progress.text {
+	padding-bottom: 2.5em
+}
+
 span {
 	font-weight: bold;
 }
