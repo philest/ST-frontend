@@ -28,7 +28,7 @@ module RoutesHelper
     Follower.create(name: params[:name],
                   email: params[:email])
   
-    # if MODE == PRO
+    if MODE == PRO
 
       # Report new followers.
       Pony.mail(:to => 'phil.esterman@yale.edu',
@@ -37,7 +37,7 @@ module RoutesHelper
             :subject => "ST: #{params[:name]} subscribed for updates.",
             :body => "Their email is #{params[:email]}. Now, \
                       there's #{Follower.count} people subscribed.")
-    # end
+    end
   end
 
 end
