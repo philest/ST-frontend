@@ -1,3 +1,11 @@
+require 'sinatra/activerecord' #sinatra w/ DB
+require_relative '../config/environments' #DB configuration
+require_relative '../models/follower'
+
+#email, to learn of failures
+require 'pony'
+require_relative '../config/pony'
+
 
 # Admin authentication, taken from Sinatra.
 module RoutesHelper
@@ -13,6 +21,23 @@ module RoutesHelper
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
     @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'ST']
+  end
+
+  # Create a follower from the HTML form, notify us by email. 
+  def create_follower(params)
+    Follower.create(name: params[:name],
+                  email: params[:email])
+  
+    # if MODE == PRO
+
+      # Report new followers.
+      Pony.mail(:to => 'phil.esterman@yale.edu',
+            # :cc => 'david.mcpeek@yale.edu',
+            :from => 'phil.esterman@yale.edu',
+            :subject => "ST: #{params[:name]} subscribed for updates.",
+            :body => "Their email is #{params[:email]}. Now, \
+                      there's #{Follower.count} people subscribed.")
+    # end
   end
 
 end
