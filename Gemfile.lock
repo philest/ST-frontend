@@ -226,6 +226,8 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (>= 1.3, < 3)
+    sinatra-flash (0.3.0)
+      sinatra (>= 1.0.0)
     sinatra-r18n (2.0.4)
       r18n-core (= 2.0.4)
       sinatra (>= 1.3)
@@ -296,6 +298,7 @@ DEPENDENCIES
   sinatra
   sinatra-activerecord
   sinatra-contrib
+  sinatra-flash
   sinatra-r18n
   statsample
   timecop
