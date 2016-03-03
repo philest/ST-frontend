@@ -19,7 +19,26 @@
 		<link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+		<style>
+			@font-face {
+			    font-family: 'dk_cool_crayonregular';
+			    src: url('fonts/dk_cool_crayon-webfont.eot');
+			    src: url('fonts/dk_cool_crayon-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/dk_cool_crayon-webfont.woff2') format('woff2'),
+			         url('fonts/dk_cool_crayon-webfont.woff') format('woff'),
+			         url('fonts/dk_cool_crayon-webfont.ttf') format('truetype'),
+			         url('fonts/dk_cool_crayon-webfont.svg#dk_cool_crayonregular') format('svg');
+			    font-weight: normal;
+			    font-style: normal;
 
+			}
+
+
+			body {
+			    /* Need to fix this font. Lowercase "s" doesn't render. */
+				font-family: 'dk_cool_crayonregular'; 
+			}
+		</style>
 		<!-- Favicon and App icon images -->
 		<link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -168,6 +187,36 @@
 
 		<div class="divider"><div></div></div>
 
+		
+		<div class="section-header">
+			<h2>The people</h2>
+		</div>		
+		<section class="the-product pure-g"> 
+
+			<div class="prize pure-u-1 pure-u-sm-1-2">
+				<img src="/images/Thorne_prize.png" alt="">
+			</div>
+			<div class="pure-u-1 pure-u-sm-1-2">
+				<div class="text">
+					<h2>The people</h2>
+					<p>
+						
+						We’re a Yale team of developers and former Head Start preschool teachers. We built StoryTime for our class’s families at Martinez Head Start. 
+
+					</p>
+
+					<p>Now, we’re solving the word gap at scale. </p>
+
+				</div>
+			</div>
+			
+			
+		</section>
+
+		<div class="divider"><div></div></div>
+
+
+
 		<section class="progress text"> 
 
 			<h4>
@@ -180,10 +229,22 @@
 				</div>
 			</div>
 
-			<h4>
-				Join us. <span><a href="mailto:info@joinstorytime.com">info@joinstorytime.com</a></span>
+			<h4>Get in touch. <span><a href="mailto:info@joinstorytime.com">info@joinstorytime.com</a></span>
 			</h4>
 
+			<div class="divider-mini"><div></div></div>
+
+			<form action="/get_updates_form_success" method="post"class="pure-form">
+			    <fieldset>
+
+					<p><input name="name" type="text" placeholder="your name"></p>
+			        <p><input name="email" type="email" placeholder="your email"></p>
+
+			        <button type="submit" class="pure-button pure-button-primary">get updates</button>
+			    </fieldset>
+			</form>
+
+			
 
 		</section>
 
