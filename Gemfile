@@ -18,7 +18,7 @@ gem "as-duration"
 gem 'statsample'
 gem 'descriptive_statistics'
 gem 'airbrake'
-
+gem 'sinatra-flash'
 
 group :development, :test do
   gem 'fuubar'

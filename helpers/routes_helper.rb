@@ -6,6 +6,8 @@ require_relative '../models/follower'
 require 'pony'
 require_relative '../config/pony'
 
+require 'sinatra/flash'
+
 
 # Admin authentication, taken from Sinatra.
 module RoutesHelper
@@ -38,6 +40,8 @@ module RoutesHelper
             :body => "Their email is #{params[:email]}. Now, \
                       there's #{Follower.count} people subscribed.")
     end
+    flash[:notice] = "Great! We'll keep you updated."
+
   end
 
 end

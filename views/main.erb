@@ -13,6 +13,8 @@
 
 </script>
 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+
 		<link href='http://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
 	
@@ -62,6 +64,13 @@
 	</head>
 
 	<body>
+		
+		<!-- Notify about form submission -->
+		<% if flash[:notice] %>
+			<div id="alert">
+			    <a class="alert" href="#alert">Great! We'll keep you updated.</a>
+			</div>
+		<% end %>
 
 		<div class="overlap">
 			<img style="display:none" src="../images/modules/clouds_wide_with_birds_large.png">
@@ -201,11 +210,11 @@
 					<h2>The people</h2>
 					<p>
 						
-						We’re a Yale team of developers and former Head Start preschool teachers. We built StoryTime for our class’s families at Martinez Head Start. 
+						We’re a Yale team of developers and former Head Start preschool teachers. 
 
 					</p>
 
-					<p>Now, we’re solving the word gap at scale. </p>
+					<p>We built StoryTime for our class’s families at Martinez Head Start. Now, we’re solving the word gap at scale. </p>
 
 				</div>
 			</div>

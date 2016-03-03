@@ -14,6 +14,25 @@ p {
     font-size: 1em;
 }
 
+.flash {
+	z-index: 999;
+	position: fixed;
+	font-weight: bold;
+   -moz-border-radius: 4px 4px 4px 4px;
+   -webkit-border-radius: 4px 4px 4px 4px;
+   border-radius: 4px 4px 4px 4px;
+   margin-bottom: 18px;
+   padding: 12px 25px 12px 24px;
+   -moz-box-shadow: 3px 3px 1px 1px #CCCCCC;
+   -webkit-box-shadow: 3px 3px 1px 1px #CCCCCC;
+   box-shadow: 3px 3px 1px 1px #CCCCCC;
+   background-color: #66E167;
+   border-color: #D6E9C6;
+   width: 280px;
+   color: black;
+   padding-top: 20px;
+}
+
 .divider {
 	width: 100%; 
 	padding-top: 2em;
