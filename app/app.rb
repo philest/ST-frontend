@@ -17,6 +17,7 @@ require "sinatra/reloader" if development?
 require_relative '../config/environments' #DB configuration
 require_relative '../models/user' #add User model
 require_relative '../models/experiment' #add Experiment model
+require_relative '../models/follower'
 
 #helpers
 require_relative '../helpers/routes_helper'
@@ -98,6 +99,11 @@ end
 #with form-selected options, create_experiment().
 post '/form_success' do
 	form_success()
+end
+
+post '/get_updates_form_success' do 
+  create_follower(params)
+  redirect to('/')
 end
 
 #twilio failed: no valid response for sms.

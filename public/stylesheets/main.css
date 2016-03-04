@@ -14,6 +14,25 @@ p {
     font-size: 1em;
 }
 
+.flash {
+	z-index: 999;
+	position: fixed;
+	font-weight: bold;
+   -moz-border-radius: 4px 4px 4px 4px;
+   -webkit-border-radius: 4px 4px 4px 4px;
+   border-radius: 4px 4px 4px 4px;
+   margin-bottom: 18px;
+   padding: 12px 25px 12px 24px;
+   -moz-box-shadow: 3px 3px 1px 1px #CCCCCC;
+   -webkit-box-shadow: 3px 3px 1px 1px #CCCCCC;
+   box-shadow: 3px 3px 1px 1px #CCCCCC;
+   background-color: #66E167;
+   border-color: #D6E9C6;
+   width: 280px;
+   color: black;
+   padding-top: 20px;
+}
+
 .divider {
 	width: 100%; 
 	padding-top: 2em;
@@ -23,6 +42,24 @@ p {
 .divider div {
 	display: block; 
 	width: 25%;
+	margin: 0 auto;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+span a {
+	text-decoration: none;
+	color: #ed7844;
+	
+}
+
+.divider-mini {
+	width: 100%; 
+	
+}
+
+.divider-mini div {
+	display: block; 
+	width: 10%;
 	margin: 0 auto;
 	border-bottom: 1px solid #AAAAAA;
 }
@@ -189,6 +226,12 @@ section.video {
 	float: right;
 }
 
+.prize img {
+	max-width: 260px;
+	float: right;
+	padding-right: 15%;
+}
+
 .the-product .text {
 	text-align: left;
 }
@@ -238,10 +281,18 @@ section {
 	vertical-align: middle;
 }*/
 
+button.get_update{
+	background-color: #ed7844; 
+}
+
 section.progress h4 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.2em;
 	font-weight: 200;
+}
+
+section.progress.text {
+	padding-bottom: 2em;
 }
 
 span {
@@ -322,6 +373,12 @@ h4 span {
 		display: none;
 	}
 
+	.prize img {
+		width: 80%;
+		padding-right: 15%;
+		/*min-width: 250px;*/
+	}
+
 }
 
 @media screen and (max-width: 48em) {
@@ -338,7 +395,15 @@ h4 span {
 	.recruitment-text h1 {
 		font-size: 4em;
 	}
+
+	/*.prize img {
+		max-width: 250px;
+	}*/
+
 }
+
+/*@media screen and (max-width: 60em)*/
+
 
 @media screen and (max-width: 35.5em) {
 /*	.overlap {
