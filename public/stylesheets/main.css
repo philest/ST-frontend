@@ -9,29 +9,11 @@ body {
 }
 
 p {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'montserratlight', sans-serif;
     font-weight: 200;
     font-size: 1em;
 }
 
-.flash {
-	z-index: 999;
-	position: fixed;
-	font-weight: bold;
-   -moz-border-radius: 4px 4px 4px 4px;
-   -webkit-border-radius: 4px 4px 4px 4px;
-   border-radius: 4px 4px 4px 4px;
-   margin-bottom: 18px;
-   padding: 12px 25px 12px 24px;
-   -moz-box-shadow: 3px 3px 1px 1px #CCCCCC;
-   -webkit-box-shadow: 3px 3px 1px 1px #CCCCCC;
-   box-shadow: 3px 3px 1px 1px #CCCCCC;
-   background-color: #66E167;
-   border-color: #D6E9C6;
-   width: 280px;
-   color: black;
-   padding-top: 20px;
-}
 
 .divider {
 	width: 100%; 
@@ -80,7 +62,7 @@ span a {
 }*/
 
 .catch_phrase h2 { 
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'montserratbold', sans-serif;
     font-weight: normal;
     margin-top: -1.5em
 }
@@ -286,7 +268,7 @@ button.get_update{
 }
 
 section.progress h4 {
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'montserratlight', sans-serif;
 	font-size: 1.2em;
 	font-weight: 200;
 }
@@ -299,7 +281,7 @@ span {
 	font-weight: bold;
 }
 
-h4 span {
+h4 span a{
 	font-family: 'dk_cool_crayonregular'; 
 	color: #ed7844;
 
@@ -330,36 +312,12 @@ h4 span {
 	vertical-align:middle;
 }
 
-.recruitment-text {
-	text-align: left;
-	display: block; 
-	width: 70%;
-	margin: 0 auto;
-}
-.recruitment-text h1 {
-	font-size: 5em;
-	color: #ed7844;
-	text-align:center;
-	line-height: normal;
-
-}
-.recruitment-text h2 {
-	color: black;
-	font-size: 1.5em;
-	padding-top: 2em;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	margin-top: -1.5em;
-	text-align:center;
-}
 
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
 @media screen and (max-width: 73em) {
-	.recruitment-text h1 {
-		font-size: 4em;
-	}
+
 }
 
 @media screen and (max-width: 64em) {
@@ -392,9 +350,6 @@ h4 span {
 		height: 320px;
 	}
 
-	.recruitment-text h1 {
-		font-size: 4em;
-	}
 
 	/*.prize img {
 		max-width: 250px;
@@ -486,18 +441,6 @@ h4 span {
 		margin: 0 auto;
 	}
 
-	.recruitment-text {
-		text-align: center;
-		display: block; 
-		width: 70%;
-		margin: 0 auto;
-		margin-bottom: 10em;
-	}
-
-	.recruitment-text h1 {
-		font-size: 3em;
-		color: #ed7844;
-	}
 
 	div.section-header {
 		visibility: visible;
