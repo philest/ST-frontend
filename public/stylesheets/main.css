@@ -312,36 +312,12 @@ h4 span {
 	vertical-align:middle;
 }
 
-.recruitment-text {
-	text-align: left;
-	display: block; 
-	width: 70%;
-	margin: 0 auto;
-}
-.recruitment-text h1 {
-	font-size: 5em;
-	color: #ed7844;
-	text-align:center;
-	line-height: normal;
-
-}
-.recruitment-text h2 {
-	color: black;
-	font-size: 1.5em;
-	padding-top: 2em;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	margin-top: -1.5em;
-	text-align:center;
-}
 
 
 /*when the image doesn't scale it extends the width of the divs beyond the viewport*/
 
 @media screen and (max-width: 73em) {
-	.recruitment-text h1 {
-		font-size: 4em;
-	}
+
 }
 
 @media screen and (max-width: 64em) {
@@ -374,9 +350,6 @@ h4 span {
 		height: 320px;
 	}
 
-	.recruitment-text h1 {
-		font-size: 4em;
-	}
 
 	/*.prize img {
 		max-width: 250px;
@@ -468,18 +441,6 @@ h4 span {
 		margin: 0 auto;
 	}
 
-	.recruitment-text {
-		text-align: center;
-		display: block; 
-		width: 70%;
-		margin: 0 auto;
-		margin-bottom: 10em;
-	}
-
-	.recruitment-text h1 {
-		font-size: 3em;
-		color: #ed7844;
-	}
 
 	div.section-header {
 		visibility: visible;
