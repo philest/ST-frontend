@@ -14,6 +14,14 @@ p {
     font-size: 1em;
 }
 
+fieldset p {
+	display: block;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
 
 .divider {
 	width: 100%; 
@@ -21,9 +29,13 @@ p {
 	
 }
 
+#divider-mobile {
+	display: none;
+}
+
 .divider div {
 	display: block; 
-	width: 25%;
+	width: 15%;
 	margin: 0 auto;
 	border-bottom: 1px solid #AAAAAA;
 }
@@ -46,20 +58,6 @@ span a {
 	border-bottom: 1px solid #AAAAAA;
 }
 
-/*.catch_phrase{
-	display: table-cell;
-	vertical-align: middle;
-}
-*/
-
-/*.container {
-	display: table;
-}
-
-.container img {
-	display: table-cell;
-	vertical-align: middle;
-}*/
 
 .catch_phrase h2 { 
     font-family: 'montserratbold', sans-serif;
@@ -269,8 +267,12 @@ button.get_update{
 
 section.progress h4 {
 	font-family: 'montserratlight', sans-serif;
-	font-size: 1.2em;
+	font-size: 1.3em;
 	font-weight: 200;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 26em;
 }
 
 section.progress.text {
@@ -296,7 +298,7 @@ h4 span a{
 	padding-left: 20%;
 }
 
-.globe img { 
+.globe  img { 
 	
 	min-width: 13em;
 	max-width: 15em;
@@ -337,18 +339,35 @@ h4 span a{
 		/*min-width: 250px;*/
 	}
 
+	#divider-mobile {
+		display: none;
+	}
+
+
+	.divider div {
+		display: block; 
+		width: 25%;
+		margin: 0 auto;
+		border-bottom: 1px solid #AAAAAA;
+	}
+
 }
 
 @media screen and (max-width: 48em) {
 	/*change image size to lose margins */
-	.partners img {
+	/*.partners img {
 		width: 90%;
-	}
+	}*/
 
 	section.video iframe {
 		width: 568px;
 		height: 320px;
 	}
+
+	#divider-mobile {
+		display: none;
+	}
+
 
 
 	/*.prize img {
@@ -361,21 +380,12 @@ h4 span a{
 
 
 @media screen and (max-width: 35.5em) {
-/*	.overlap {
-		background-image: url('../images/modules/background_mobile2.png');
-	}*/
 
-	/*.column {
-		display: table-row; 
-	}	*/
 
 	.text {
 		height: 33%;
 	}
-/*	img {
-		width: 100%;
-		max-width: 591px;
-	}*/
+
 	.partner-loops {
 		display: none; 	
 	}
@@ -423,8 +433,8 @@ h4 span a{
 	}
 
 	section.video iframe {
-		width: 360px;
-		height: 203px;
+		width: 300px;
+		height: 169px;
 	}
 	.the-product .phone img {
 		display: block;
@@ -449,6 +459,49 @@ h4 span a{
 	.divider {
 		display: none;
 	}
+
+	#divider-mobile {
+		display: block;
+	}
+
+
+	.globe img {
+		width: 80%;
+		min-width: none;
+		max-width: none;
+
+	}
+
+
+	.partners img, .prize img { 
+	
+		padding-top: 0px;
+		min-width: 10em;
+		max-width: 18em;
+		width: 80%;
+		display: block;
+		padding-left: 0px;
+		padding-right: 0px;
+		float: none;
+		margin: 0 auto;
+
+	}
+
+	.partners img {
+		padding-top: 1.5em;
+	}
+
+	section {
+		padding-bottom: none;
+	}
+
+	section.progress h4 {
+		font-family: 'montserratlight', sans-serif;
+		font-size: 1.1em;
+		font-weight: 200;
+	}
+
+
 
 }
 
