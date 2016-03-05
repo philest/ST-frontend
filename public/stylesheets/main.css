@@ -1,27 +1,129 @@
-/*@media screen and (max-width: 48em) {
-
-}*/
-
-
-body {
-    /* Need to fix this font. Lowercase "s" doesn't render. */
-	font-family: 'dk_cool_crayonregular'; 
+/* header ******************************************************** */
+.catch_phrase h2 { 
+    font-family: 'montserratbold', sans-serif;
+    font-weight: normal;
+    margin-top: -1.5em
 }
 
-p {
-    font-family: 'montserratlight', sans-serif;
-    font-weight: 200;
-    font-size: 1em;
-}
-
-fieldset p {
+.overlap {
+	background-image: url('../images/modules/clouds_wide_with_birds_large.png');
+	height: 100%;
+	width: 100%;
+    background-attachment: fixed;
 	display: block;
-	width: 80%;
+	overflow: hidden;
+
+}
+
+/* main container for table positioning */
+.wrapper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	text-align: center; 
+}
+
+.wrapper .footer .bottom {
+	margin-bottom: -12em;
+}
+/* subcontainer for table positioning */
+.main {
+	display: table;
+	/* make height 60-70%, making room for full-width div for grass at the bottom*/
+
+	height: 25em;
+	width: 100%;
+}
+
+.main h1 {
+	font-size: 4em;
+	color: #ed7844;
+}
+
+.column {
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.logo {
+	display: inline-block;
+	/* Yale logo doesn't enter a new row when width is below 31%. */
+	width: 31%;
+	margin: 0 auto;
+}
+
+.partner-logos img {
+	display: block;
+	width: 6em;
 	margin-left: auto;
 	margin-right: auto;
-
+	margin-top: 7.5em;
+	/*display: table-cell;*/
+}
+/* logo positioning */
+.left img {
+	float: right;
 }
 
+.right img {
+	float: left;
+}
+
+/*****************************************************************************************/
+
+
+
+
+
+/* footer  ********************************************************************** */
+.footer {
+	overflow: hidden;
+	position: relative;
+	margin-top: -7em;
+}
+.footer #grass {
+	/* the actual width of the image */
+	width: 1600px; 
+	position: relative;
+	left: 50%;
+	margin-left: -800px;
+}
+
+.partner-logos {
+	/*display: table;*/
+	width: 100%;
+	margin: 0 auto;
+	margin-top: -13em;
+	padding-bottom: 4em;
+	background-color: white;
+}
+
+
+
+/*****************************************************************************************/
+
+
+
+/* video  ********************************************************************** */
+
+section.video iframe { 
+	display: block;
+	margin: 0 auto;
+	margin-top: 100px;
+	box-shadow: 0 0 100px #000;
+	width: 750px;
+	height: 422px;
+
+}
+section.video {
+	padding-bottom: 4em;
+}
+
+/*****************************************************************************************/
+
+
+/* sections ********************************************************************** */
 
 .divider {
 	width: 100%; 
@@ -59,110 +161,6 @@ span a {
 }
 
 
-.catch_phrase h2 { 
-    font-family: 'montserratbold', sans-serif;
-    font-weight: normal;
-    margin-top: -1.5em
-}
-
-.overlap {
-	background-image: url('../images/modules/clouds_wide_with_birds_large.png');
-	height: 100%;
-	width: 100%;
-    background-attachment: fixed;
-	display: block;
-	overflow: hidden;
-
-}
-
-.footer {
-	overflow: hidden;
-	position: relative;
-	margin-top: -7em;
-}
-.footer #grass {
-	/* the actual width of the image */
-	width: 1600px; 
-	position: relative;
-	left: 50%;
-	margin-left: -800px;
-}
-
-.partner-logos {
-	/*display: table;*/
-	width: 100%;
-	margin: 0 auto;
-	margin-top: -13em;
-	padding-bottom: 4em;
-	background-color: white;
-}
-
-.logo {
-	display: inline-block;
-	/* Yale logo doesn't enter a new row when width is below 31%. */
-	width: 31%;
-	margin: 0 auto;
-}
-
-.partner-logos img {
-	display: block;
-	width: 6em;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 7.5em;
-	/*display: table-cell;*/
-}
-	/* logo positioning */
-	.left img {
-		float: right;
-	}
-
-	.right img {
-		float: left;
-	}
-
-/* main container for table positioning */
-.wrapper {
-	display: table;
-	height: 100%;
-	width: 100%;
-	text-align: center; 
-}
-
-.wrapper .footer .bottom {
-	margin-bottom: -12em;
-}
-/* subcontainer for table positioning */
-.main {
-	display: table;
-	/* make height 60-70%, making room for full-width div for grass at the bottom*/
-
-	height: 25em;
-	width: 100%;
-}
-.main h1 {
-	font-size: 4em;
-	color: #ed7844;
-}
-
-/* what should the display type be for the h1, h2, p tags? block? table-cell?*/
-.column {
-	height: 100%;
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.plane {
-	position: relative;
-	float: right;
-	z-index: 1;
-	vertical-align: top;
-}
-
-#bedframe {
-	float: left;
-}
-
 .text {
 	width: 60%;
 	line-height: 1.8em;
@@ -172,22 +170,9 @@ span a {
 	min-width: 20em;
 }
 
-.plane {
-	width: 10em;
-}
 
-section.video iframe { 
-	display: block;
-	margin: 0 auto;
-	margin-top: 100px;
-	box-shadow: 0 0 100px #000;
-	width: 750px;
-	height: 422px;
 
-}
-section.video {
-	padding-bottom: 4em;
-}
+
 
 
 .the-problem .text {
@@ -243,6 +228,35 @@ section {
 
 }
 
+
+/*****************************************************************************************/
+
+body {
+	font-family: 'dk_cool_crayonregular'; 
+}
+
+p {
+    font-family: 'montserratlight', sans-serif;
+    font-weight: 200;
+    font-size: 1em;
+}
+
+fieldset p {
+	max-width: 20em;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+fieldset input {
+	display: block;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+
 .join-us .text {
 	text-align: left;
 	float: right;
@@ -252,14 +266,6 @@ section {
 	overflow: hidden;
 }
 
-/*.partners {
-	display: table;
-}
-
-.partners .container {
-	display: table-cell;
-	vertical-align: middle;
-}*/
 
 button.get_update{
 	background-color: #ed7844; 
@@ -315,13 +321,6 @@ h4 span a{
 }
 
 
-
-/*when the image doesn't scale it extends the width of the divs beyond the viewport*/
-
-@media screen and (max-width: 73em) {
-
-}
-
 @media screen and (max-width: 64em) {
 	.text {
 		width: 80%;
@@ -354,10 +353,6 @@ h4 span a{
 }
 
 @media screen and (max-width: 48em) {
-	/*change image size to lose margins */
-	/*.partners img {
-		width: 90%;
-	}*/
 
 	section.video iframe {
 		width: 568px;
@@ -368,15 +363,8 @@ h4 span a{
 		display: none;
 	}
 
-
-
-	/*.prize img {
-		max-width: 250px;
-	}*/
-
 }
 
-/*@media screen and (max-width: 60em)*/
 
 
 @media screen and (max-width: 35.5em) {
@@ -389,13 +377,12 @@ h4 span a{
 	.partner-loops {
 		display: none; 	
 	}
-/*	.footer img#grass {
-		display: none; 
-	}*/
+
 	.txt_inner {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
 	}
+
 	div.column.bed {
 		display: none;
 	}
@@ -501,6 +488,15 @@ h4 span a{
 		font-weight: 200;
 	}
 
+
+/*	fieldset p {
+		display: block;
+		width: 80%;
+		margin-left: auto;
+		margin-right: auto;
+
+	}
+*/
 
 
 }
