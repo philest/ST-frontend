@@ -1,8 +1,8 @@
 /* header ******************************************************** */
 .catch_phrase h2 { 
-    font-family: 'montserratbold', sans-serif;
+    font-family: 'montserratregular', sans-serif;
     font-weight: normal;
-    margin-top: -1.5em
+    margin-top: -1.5em;
 }
 
 .overlap {
@@ -489,14 +489,12 @@ h4 span a{
 	}
 
 
-/*	fieldset p {
-		display: block;
-		width: 80%;
-		margin-left: auto;
-		margin-right: auto;
-
+	.main h1 {
+		font-size: 3.3em;
+		color: #ed7844;
 	}
-*/
+
+
 
 
 }
