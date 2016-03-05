@@ -9,7 +9,7 @@ body {
 }
 
 p {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'montserratlight', sans-serif;
     font-weight: 200;
     font-size: 1em;
 }
@@ -62,7 +62,7 @@ span a {
 }*/
 
 .catch_phrase h2 { 
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'montserratbold', sans-serif;
     font-weight: normal;
     margin-top: -1.5em
 }
@@ -268,7 +268,7 @@ button.get_update{
 }
 
 section.progress h4 {
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'montserratlight', sans-serif;
 	font-size: 1.2em;
 	font-weight: 200;
 }
@@ -281,7 +281,7 @@ span {
 	font-weight: bold;
 }
 
-h4 span {
+h4 span a{
 	font-family: 'dk_cool_crayonregular'; 
 	color: #ed7844;
 
