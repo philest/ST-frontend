@@ -5,6 +5,14 @@
     margin-top: -1.5em;
 }
 
+.banner {
+	text-align: center;
+	font-family: 'montserratbold', sans-serif;
+    font-weight: normal;
+    margin-bottom: -1em;
+
+}
+
 .overlap {
 	background-image: url('../images/modules/clouds_wide_with_birds_large.png');
 	height: 100%;
@@ -117,6 +125,7 @@ section.video iframe {
 
 }
 section.video {
+	margin-top: -2.5em;
 	padding-bottom: 4em;
 }
 
