@@ -1,70 +1,16 @@
-/*@media screen and (max-width: 48em) {
-
-}*/
-
-
-body {
-    /* Need to fix this font. Lowercase "s" doesn't render. */
-	font-family: 'dk_cool_crayonregular'; 
-}
-
-p {
-    font-family: 'montserratlight', sans-serif;
-    font-weight: 200;
-    font-size: 1em;
-}
-
-
-.divider {
-	width: 100%; 
-	padding-top: 2em;
-	
-}
-
-.divider div {
-	display: block; 
-	width: 25%;
-	margin: 0 auto;
-	border-bottom: 1px solid #AAAAAA;
-}
-
-span a {
-	text-decoration: none;
-	color: #ed7844;
-	
-}
-
-.divider-mini {
-	width: 100%; 
-	
-}
-
-.divider-mini div {
-	display: block; 
-	width: 10%;
-	margin: 0 auto;
-	border-bottom: 1px solid #AAAAAA;
-}
-
-/*.catch_phrase{
-	display: table-cell;
-	vertical-align: middle;
-}
-*/
-
-/*.container {
-	display: table;
-}
-
-.container img {
-	display: table-cell;
-	vertical-align: middle;
-}*/
-
+/* header ******************************************************** */
 .catch_phrase h2 { 
-    font-family: 'montserratbold', sans-serif;
+    font-family: 'montserratregular', sans-serif;
     font-weight: normal;
-    margin-top: -1.5em
+    margin-top: -1.5em;
+}
+
+.banner {
+	text-align: center;
+	font-family: 'montserratbold', sans-serif;
+    font-weight: normal;
+    margin-bottom: -1em;
+
 }
 
 .overlap {
@@ -77,6 +23,68 @@ span a {
 
 }
 
+/* main container for table positioning */
+.wrapper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	text-align: center; 
+}
+
+.wrapper .footer .bottom {
+	margin-bottom: -12em;
+}
+/* subcontainer for table positioning */
+.main {
+	display: table;
+	/* make height 60-70%, making room for full-width div for grass at the bottom*/
+
+	height: 25em;
+	width: 100%;
+}
+
+.main h1 {
+	font-size: 4em;
+	color: #ed7844;
+}
+
+.column {
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.logo {
+	display: inline-block;
+	/* Yale logo doesn't enter a new row when width is below 31%. */
+	width: 31%;
+	margin: 0 auto;
+}
+
+.partner-logos img {
+	display: block;
+	width: 6em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 7.5em;
+	/*display: table-cell;*/
+}
+/* logo positioning */
+.left img {
+	float: right;
+}
+
+.right img {
+	float: left;
+}
+
+/*****************************************************************************************/
+
+
+
+
+
+/* footer  ********************************************************************** */
 .footer {
 	overflow: hidden;
 	position: relative;
@@ -99,84 +107,13 @@ span a {
 	background-color: white;
 }
 
-.logo {
-	display: inline-block;
-	/* Yale logo doesn't enter a new row when width is below 31%. */
-	width: 31%;
-	margin: 0 auto;
-}
 
-.partner-logos img {
-	display: block;
-	width: 6em;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 7.5em;
-	/*display: table-cell;*/
-}
-	/* logo positioning */
-	.left img {
-		float: right;
-	}
 
-	.right img {
-		float: left;
-	}
+/*****************************************************************************************/
 
-/* main container for table positioning */
-.wrapper {
-	display: table;
-	height: 100%;
-	width: 100%;
-	text-align: center; 
-}
 
-.wrapper .footer .bottom {
-	margin-bottom: -12em;
-}
-/* subcontainer for table positioning */
-.main {
-	display: table;
-	/* make height 60-70%, making room for full-width div for grass at the bottom*/
 
-	height: 25em;
-	width: 100%;
-}
-.main h1 {
-	font-size: 4em;
-	color: #ed7844;
-}
-
-/* what should the display type be for the h1, h2, p tags? block? table-cell?*/
-.column {
-	height: 100%;
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.plane {
-	position: relative;
-	float: right;
-	z-index: 1;
-	vertical-align: top;
-}
-
-#bedframe {
-	float: left;
-}
-
-.text {
-	width: 60%;
-	line-height: 1.8em;
-}
-
-.txt_inner {
-	min-width: 20em;
-}
-
-.plane {
-	width: 10em;
-}
+/* video  ********************************************************************** */
 
 section.video iframe { 
 	display: block;
@@ -188,8 +125,63 @@ section.video iframe {
 
 }
 section.video {
+	margin-top: -2.5em;
 	padding-bottom: 4em;
 }
+
+/*****************************************************************************************/
+
+
+/* sections ********************************************************************** */
+
+.divider {
+	width: 100%; 
+	padding-top: 2em;
+	
+}
+
+#divider-mobile {
+	display: none;
+}
+
+.divider div {
+	display: block; 
+	width: 15%;
+	margin: 0 auto;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+span a {
+	text-decoration: none;
+	color: #ed7844;
+	
+}
+
+.divider-mini {
+	width: 100%; 
+	
+}
+
+.divider-mini div {
+	display: block; 
+	width: 10%;
+	margin: 0 auto;
+	border-bottom: 1px solid #AAAAAA;
+}
+
+
+.text {
+	width: 60%;
+	line-height: 1.8em;
+}
+
+.txt_inner {
+	min-width: 20em;
+}
+
+
+
+
 
 
 .the-problem .text {
@@ -245,6 +237,35 @@ section {
 
 }
 
+
+/*****************************************************************************************/
+
+body {
+	font-family: 'dk_cool_crayonregular'; 
+}
+
+p {
+    font-family: 'montserratlight', sans-serif;
+    font-weight: 200;
+    font-size: 1em;
+}
+
+fieldset p {
+	max-width: 20em;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+fieldset input {
+	display: block;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+
 .join-us .text {
 	text-align: left;
 	float: right;
@@ -254,14 +275,6 @@ section {
 	overflow: hidden;
 }
 
-/*.partners {
-	display: table;
-}
-
-.partners .container {
-	display: table-cell;
-	vertical-align: middle;
-}*/
 
 button.get_update{
 	background-color: #ed7844; 
@@ -269,8 +282,12 @@ button.get_update{
 
 section.progress h4 {
 	font-family: 'montserratlight', sans-serif;
-	font-size: 1.2em;
+	font-size: 1.3em;
 	font-weight: 200;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 26em;
 }
 
 section.progress.text {
@@ -296,7 +313,7 @@ h4 span a{
 	padding-left: 20%;
 }
 
-.globe img { 
+.globe  img { 
 	
 	min-width: 13em;
 	max-width: 15em;
@@ -312,13 +329,6 @@ h4 span a{
 	vertical-align:middle;
 }
 
-
-
-/*when the image doesn't scale it extends the width of the divs beyond the viewport*/
-
-@media screen and (max-width: 73em) {
-
-}
 
 @media screen and (max-width: 64em) {
 	.text {
@@ -337,55 +347,51 @@ h4 span a{
 		/*min-width: 250px;*/
 	}
 
+	#divider-mobile {
+		display: none;
+	}
+
+
+	.divider div {
+		display: block; 
+		width: 25%;
+		margin: 0 auto;
+		border-bottom: 1px solid #AAAAAA;
+	}
+
 }
 
 @media screen and (max-width: 48em) {
-	/*change image size to lose margins */
-	.partners img {
-		width: 90%;
-	}
 
 	section.video iframe {
 		width: 568px;
 		height: 320px;
 	}
 
-
-	/*.prize img {
-		max-width: 250px;
-	}*/
+	#divider-mobile {
+		display: none;
+	}
 
 }
 
-/*@media screen and (max-width: 60em)*/
 
 
 @media screen and (max-width: 35.5em) {
-/*	.overlap {
-		background-image: url('../images/modules/background_mobile2.png');
-	}*/
 
-	/*.column {
-		display: table-row; 
-	}	*/
 
 	.text {
 		height: 33%;
 	}
-/*	img {
-		width: 100%;
-		max-width: 591px;
-	}*/
+
 	.partner-loops {
 		display: none; 	
 	}
-/*	.footer img#grass {
-		display: none; 
-	}*/
+
 	.txt_inner {
 		/* TEMPORARY SOLUTION. Next step: vertically align */ 
 		padding-top: 3em;
 	}
+
 	div.column.bed {
 		display: none;
 	}
@@ -423,8 +429,8 @@ h4 span a{
 	}
 
 	section.video iframe {
-		width: 360px;
-		height: 203px;
+		width: 300px;
+		height: 169px;
 	}
 	.the-product .phone img {
 		display: block;
@@ -449,6 +455,56 @@ h4 span a{
 	.divider {
 		display: none;
 	}
+
+	#divider-mobile {
+		display: block;
+	}
+
+
+	.globe img {
+		width: 80%;
+		min-width: none;
+		max-width: none;
+
+	}
+
+
+	.partners img, .prize img { 
+	
+		padding-top: 0px;
+		min-width: 10em;
+		max-width: 18em;
+		width: 80%;
+		display: block;
+		padding-left: 0px;
+		padding-right: 0px;
+		float: none;
+		margin: 0 auto;
+
+	}
+
+	.partners img {
+		padding-top: 1.5em;
+	}
+
+	section {
+		padding-bottom: none;
+	}
+
+	section.progress h4 {
+		font-family: 'montserratlight', sans-serif;
+		font-size: 1.1em;
+		font-weight: 200;
+	}
+
+
+	.main h1 {
+		font-size: 3.3em;
+		color: #ed7844;
+	}
+
+
+
 
 }
 
