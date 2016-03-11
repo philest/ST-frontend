@@ -466,6 +466,7 @@ h4 span a{
 
 	#divider-mobile {
 		display: block;
+		padding-top: 0;
 	}
 
 
@@ -509,6 +510,11 @@ h4 span a{
 	.main h1 {
 		font-size: 3.3em;
 		color: #ed7844;
+	}
+
+	section.progress span.final h4 {
+		font-style: normal;
+		margin-top: 0px;
 	}
 
 
