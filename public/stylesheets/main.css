@@ -1,14 +1,15 @@
 /* header ******************************************************** */
 .catch_phrase h2 { 
-    font-family: 'montserratregular', sans-serif;
-    font-weight: normal;
+    font-family: 'Karla', sans-serif;
+    font-weight: bold;
     margin-top: -1.5em;
 }
 
 .banner {
+	font-size: 2.2em; /*added for Karla*/
 	text-align: center;
-	font-family: 'montserratbold', sans-serif;
-    font-weight: normal;
+	font-family: 'Karla', sans-serif;
+    font-weight: bold;
     margin-bottom: -1em;
 
 }
@@ -245,9 +246,10 @@ body {
 }
 
 p {
-    font-family: 'montserratlight', sans-serif;
+    font-family: 'Karla', sans-serif;
     font-weight: 200;
-    font-size: 1em;
+    font-size: 1.12em;
+    line-height: 1.6;
 }
 
 fieldset p {
@@ -278,11 +280,12 @@ fieldset input {
 
 button.get_update{
 	background-color: #ed7844; 
+	font-family: 'Karla', sans-serif;
 }
 
 section.progress h4 {
-	font-family: 'montserratlight', sans-serif;
-	font-size: 1.3em;
+	font-family: 'Karla', sans-serif;
+	font-size: 1.4em;
 	font-weight: 200;
 	display: block;
 	margin-left: auto;
@@ -296,6 +299,11 @@ section.progress.text {
 
 span {
 	font-weight: bold;
+}
+
+span.italic {
+	font-style: italic;
+	font-weight: normal
 }
 
 h4 span a{
@@ -492,7 +500,7 @@ h4 span a{
 	}
 
 	section.progress h4 {
-		font-family: 'montserratlight', sans-serif;
+		font-family: 'Karla', sans-serif;
 		font-size: 1.1em;
 		font-weight: 200;
 	}
@@ -502,7 +510,6 @@ h4 span a{
 		font-size: 3.3em;
 		color: #ed7844;
 	}
-
 
 
 
