@@ -337,6 +337,11 @@ h4 span a{
 	vertical-align:middle;
 }
 
+#padded-img{
+	padding-top: 1.4em;
+}
+
+
 
 @media screen and (max-width: 64em) {
 	.text {
@@ -517,7 +522,9 @@ h4 span a{
 		margin-top: 0px;
 	}
 
-
+	#padded-img{
+		padding-top: 0;
+	}
 
 }
 
