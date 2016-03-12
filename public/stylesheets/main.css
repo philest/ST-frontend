@@ -1,4 +1,10 @@
 /* header ******************************************************** */
+
+#logo {
+	width: 20em;
+	margin: 2.3em 0px;
+}
+
 .catch_phrase h2 { 
     font-family: 'Karla', sans-serif;
     font-weight: bold;
@@ -392,6 +398,10 @@ h4 span a{
 
 @media screen and (max-width: 35.5em) {
 
+	#logo{
+		width: 17em;
+		margin: 1.8em 0;
+	}
 
 	.text {
 		height: 33%;
