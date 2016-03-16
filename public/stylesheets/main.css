@@ -14,7 +14,8 @@
 .banner {
 	font-size: 2.2em; /*added for Karla*/
 	text-align: center;
-	font-family: 'Karla', sans-serif;
+	font-family: 'dk_cool_crayonregular', sans-serif;
+	color: #403E3E; /*dark grey*/
     font-weight: bold;
     margin-bottom: -1em;
 
