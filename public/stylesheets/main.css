@@ -15,7 +15,7 @@
 	font-size: 2.2em; /*added for Karla*/
 	text-align: center;
 	font-family: 'dk_cool_crayonregular', sans-serif;
-	color: #403E3E; /*dark grey*/
+	color: rgba(0,0,0,0.75); /*dark grey*/
     font-weight: bold;
     margin-bottom: -1em;
 
