@@ -408,12 +408,19 @@ h4 span a{
 		margin: 1.8em 0;
 	}
 
+
 	.text {
 		height: 33%;
 	}
 
 	.partner-loops {
 		display: none; 	
+	}
+
+	.banner {
+		font-size: 2em; /*added for Karla*/
+		padding-left: .15em;
+		padding-right: .15em;
 	}
 
 	.txt_inner {
