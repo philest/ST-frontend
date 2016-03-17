@@ -9,13 +9,14 @@
     font-family: 'Karla', sans-serif;
     font-weight: bold;
     margin-top: -1.5em;
+    color: rgba(0,0,0,0.75); /*dark grey*/
 }
 
 .banner {
 	font-size: 2.2em; /*added for Karla*/
 	text-align: center;
 	font-family: 'dk_cool_crayonregular', sans-serif;
-	color: rgba(0,0,0,0.75); /*dark grey*/
+	color: rgba(0,0,0,0.6); /*dark grey*/
     font-weight: bold;
     margin-bottom: -1em;
 
@@ -257,6 +258,8 @@ p {
     font-weight: 200;
     font-size: 1.12em;
     line-height: 1.6;
+    color: rgba(0,0,0,0.85);
+
 }
 
 fieldset p {
@@ -298,6 +301,7 @@ section.progress h4 {
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 26em;
+    color: rgba(0,0,0,0.85);
 }
 
 section.progress.text {
