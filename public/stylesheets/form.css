@@ -1,6 +1,6 @@
 
 h1{
-    font-family: Nunito;
+    font-family: Karla;
     text-align: center;
 }
 
@@ -9,7 +9,7 @@ h1{
 }
 
 h2, h3, h4, h5, h6{
-    font-family: Nunito;
+    font-family: Karla;
 
 }
 
@@ -24,12 +24,12 @@ div.experiment{
 }
 
 p{
-    font-family: Nunito;
+    font-family: Karla;
     font-size: 1.15em
 }
 
 form {
-	    font-family: Nunito;
+	    font-family: Karla;
 
     /* Just to center the form on the page */
     margin: 0 auto;
@@ -95,7 +95,7 @@ input:focus, textarea:focus {
 
 
 button {
-        font-family: Nunito;
+        font-family: Karla;
 
     /* This extra margin represent roughly the same space as the space
        between the labels and their text fields */
