@@ -552,14 +552,4 @@ h4 span a{
 }
 
 
- /*Andoid portrait, narrow*/
-@media screen and (max-width: 16em) {
-
-	#logo{
-		width: 15em;
-	}
-
-}
-
-
 
