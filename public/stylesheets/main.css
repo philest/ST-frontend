@@ -1,3 +1,21 @@
+/*exp*/
+
+.exp_splash .anim_phone{
+	float:right;
+	margin-top: 2em;
+	width: 20em;
+}
+
+.splash_text {
+	height: 45em;
+	margin-top: -5em;
+}
+
+.exp_splash {
+	height: 40em;
+}
+	
+
 /* header ******************************************************** */
 
 #logo {
