@@ -24,6 +24,9 @@
 */
 
 
+
+
+
 .navbar {
 	min-height: 100px;
 }
@@ -57,6 +60,7 @@
 .navbar-right { 
 	float: right !important;
 	list-style: none;
+	display: none;
 
  }
 
@@ -64,15 +68,23 @@
 .splash h1.storytime-tagline {
 	font-family: 'Karla';
 	font-weight: 100;
-	font-size: 2.3em;
 	margin-top: -.1em;
 	line-height: 1.3em;
 	color: #4a4a4a;
+	text-align: center;
+	font-size: 1.8em;
+}
+
+
+.splash h1.storytime-tagline span {
+	font-weight: 100;
 }
 
 .splash #logo-new{
-	width: 20em;
-    margin-top: 5em
+	width: 13em;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
 
 }
 
@@ -81,26 +93,109 @@
     margin-left: auto;
     padding-left: 15px;
     padding-right: 15px;
-    display: block;
 }
 
 #splash {
-    padding-top: 3em;
+    padding-top: 1em;
 	text-align: left;
 	/*large screen only*/
 	height: 36em;
 
 }
 
-#splash .animation {
-    position: absolute;
-    left: 80%;
-    margin-left: -155px;
+#splash .animation img{
+	width: 14em;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+	margin-top: 1.5em;
+
+}
+
+
+
+
+@media screen and (min-width: 35.5em)	{
+	
+	.navbar-right{
+		display: block;
+		margin-right: 20px;
+
+	}
+
+	#splash {
+		padding-top: 3em;
+	}
+
+	.splash h1.storytime-tagline span {
+	font-weight: 700;
+	}
+
+
+	#splash .animation {
+		position: relative;
+	}
+
+	#splash .animation img{
+		position: relative;
+		width: 15em;
+		margin-top: 2em;
+	}
+
+
+	.splash h1.storytime-tagline {
+		text-align: center;
+		font-size: 1.8em;
+	}
+
+	.splash #logo-new {
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
+		width: 14em;
+		margin-top: 0px;
+	}
+
+	.partner-logos {
+		margin-top: -7em;
+	}
+
+
+
+
+}
+
+@media screen and (min-width: 48em)	{
+	#splash .animation {
+	    position: absolute;
+	    left: 80%;
+	    margin-left: -155px;
+	}
+
+	#splash .animation img{
+		width: 18em;
+	}
+
+	.splash h1.storytime-tagline {
+		text-align: left;
+		font-size: 2.3em;
+	}
+
+	.splash #logo-new {
+		margin-right: 0;
+		margin-left: 0;
+		width: 20em;
+		margin-top: 5em;
+
+	}
+
+
 }
 
 #splash .animation img{
-	width: 18em;
+	display: block;
 }
+
 
 #splash_text {
 	height: 45em;
@@ -110,6 +205,10 @@
 .exp_splash {
 	height: 40em;
 }
+
+
+
+
 	
 
 /* header ******************************************************** */
@@ -225,7 +324,7 @@
 	/*display: table;*/
 	width: 100%;
 	margin: 0 auto;
-	margin-top: -13em;
+    margin-top: -6.5em;
 	padding-bottom: 4em;
 	background-color: rgba(255,255,254,1);
 }
@@ -517,6 +616,8 @@ h4 span a{
  /*Iphone-ish mobile*/
 @media screen and (max-width: 35.5em) {
 
+
+
 	#logo{
 		width: 17em;
 		margin: 1.8em 0;
@@ -549,6 +650,10 @@ h4 span a{
 	#bedframe {
 		float: none;
 		display: none;
+	}
+
+	h2 {
+		font-family: "dk_cool_crayonregular";
 	}
 
 	.the-problem .text, .the-product .text {
@@ -663,6 +768,14 @@ h4 span a{
 		padding-top: 0;
 	}
 
+}
+
+@media screen and (min-width: 35.5em)	{
+
+	.partner-logos {
+		margin-top: -7em;
+
+	}
 }
 
 
