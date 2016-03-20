@@ -1,12 +1,108 @@
 /*exp*/
 
-.exp_splash .anim_phone{
-	float:right;
-	margin-top: 2em;
-	width: 20em;
+
+
+@media (min-width: 768px) {
+	.container {
+		width: 750px;
+	}
 }
 
-.splash_text {
+
+@media (min-width: 992px) {
+	.container {
+	    width: 970px;
+	}
+}
+
+
+/*@media (min-width: 1200px) {
+	.container {
+	    width: 1170px;
+	}
+}
+*/
+
+
+.navbar {
+	min-height: 100px;
+}
+
+.navbar-logo {
+	background-image: url("/images/modules/bird.gif");
+	background-size: 90px 72px;
+	background-position: center;
+    background-repeat: no-repeat;
+    float: left;
+    height: 110px;
+    width: 82px;
+}
+
+.navbar li {
+	padding-top: 40.5px;
+    padding-bottom: 40.5px;
+    float: left;
+    margin-left: 30px;
+    font-size: 1.25em;
+    color: #ed7844;
+;
+
+}
+
+.nav > li {
+	position: relative; 
+    display: block; 
+}
+
+.navbar-right { 
+	float: right !important;
+	list-style: none;
+
+ }
+
+
+.splash h1.storytime-tagline {
+	font-family: 'Karla';
+	font-weight: 100;
+	font-size: 2.3em;
+	margin-top: -.1em;
+	line-height: 1.3em;
+	color: #4a4a4a;
+}
+
+.splash #logo-new{
+	width: 20em;
+    margin-top: 2.3em
+
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: block;
+}
+
+#splash {
+	padding-top: 95px;
+	text-align: left;
+	/*large screen only*/
+	height: 36em;
+
+}
+
+#splash .animation {
+    position: absolute;
+    left: 80%;
+    margin-left: -155px;
+}
+
+#splash .animation img{
+	width: 18em;
+}
+
+#splash_text {
 	height: 45em;
 	margin-top: -5em;
 }
@@ -268,7 +364,7 @@ section {
 /*****************************************************************************************/
 
 body {
-	font-family: 'dk_cool_crayonregular'; 
+	font-family: 'Karla'; 
 	background-color: rgba(255,255,254,1)
 }
 
