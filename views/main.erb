@@ -7,6 +7,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 		<meta name="description" content="StoryTime - Free stories by text message. For every family without books. We're closing the word gap at scale.">
 
+		<script src="/js/smooth-scroll.min.js"></script>
+
+
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -63,9 +66,9 @@
 				<div class="navbar-logo">
 				</div>
 				<ul class="navbar-right">
-					<li>problem</li>
-					<li>product</li>
-					<li>progress</li>
+					<li> <a data-scroll href="#prob">problem</a></li>
+					<li><a data-scroll href="#prod">product</a></li>
+					<li><a data-scroll href="#people">people</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -117,7 +120,7 @@
 
 			<div class="pure-u-1 pure-pull-sm-1-2 pure-u-sm-1-2">
 				<div class="text">
-					<h2>the problem</h2>
+					<h2 id="prob">the problem</h2>
 					<p>
 						Poorer kids are set up to fail before they even start preschool. By age three, they’ve heard <span>30 million fewer words</span> than wealthier kids— a word-gap that stunts early brain growth. Books get families talking, but 1 billion families just don’t have access to any books or Internet. 
 					</p>
@@ -141,7 +144,7 @@
 			</div>
 			<div class="pure-u-1 pure-u-sm-1-2">
 				<div class="text">
-					<h2>the product</h2>
+					<h2 id="prod">the product</h2>
 					<p>
 						
 						But 6 billion do have mobile phones. We send illustrated children’s stories by text message and messaging apps to get families talking face-to-face. And it’s <span>300x cheaper</span> than just shipping paperbacks.
@@ -191,7 +194,7 @@
 			</div>
 			<div class="pure-u-1 pure-u-sm-1-2">
 				<div class="text">
-					<h2>the people</h2>
+					<h2 id="people">the people</h2>
 					<p>
 						
 						We’re a Yale team of developers and former Head Start preschool teachers. We built StoryTime for our class’s families at Martinez Head Start. Now, we’re closing the word gap at scale. </p>
@@ -244,4 +247,9 @@
 		
 
 	</body>
+	<footer>
+		<script>
+    	smoothScroll.init();
+		</script>
+	</footer>
 </html>
