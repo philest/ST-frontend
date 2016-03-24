@@ -97,6 +97,10 @@ get '/admin' do
   erb :experiment_dashboard
 end
 
+get '/curriculum' do 
+  erb :"jobs/curriculum"
+end 
+
 #with form-selected options, create_experiment().
 post '/form_success' do
 	form_success()
