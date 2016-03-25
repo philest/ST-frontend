@@ -103,7 +103,16 @@ end
 
 get '/curriculum' do 
   erb :"jobs/curriculum"
+end
+
+get '/developer' do 
+  erb :"jobs/developer"
 end 
+
+get '/pilots' do 
+  erb :"jobs/pilots"
+end 
+
 
 #with form-selected options, create_experiment().
 post '/form_success' do
