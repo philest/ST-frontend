@@ -8,7 +8,19 @@
 div.job_list h2 {
 	text-align: center;
 	line-height: 1.75em;
-	font-size: 2.5em;	
+	font-size: 1.4em;
+	font-weight: 100;
+	color: #4a4a4a;
+	font-family: 'Karla'
+	
+}
+
+div.job_list a {
+	text-decoration: none;
+}
+
+div.job_list a:hover {
+	color: #ed7844;
 }
 
 @media screen and (min-width: 35.5em)	{
@@ -23,6 +35,10 @@ div.job_list h2 {
 	
 	#jobs #logo-new {
 		margin-top: 0em;
+	}
+
+	div.job_list h2 {
+		font-size: 1.8em;
 	}
 
 
