@@ -504,12 +504,6 @@ section {
 
 }
 
-#join {
-	margin-top: 1.5em;
-	margin-bottom: 1em;
-	font-weight: 800;
-}
-
 
 /*****************************************************************************************/
 
@@ -616,6 +610,14 @@ h4 span a{
 #padded-img{
 	padding-top: 1.4em;
 }
+
+
+#join {
+	margin-top: 1.5em;
+	margin-bottom: 1em;
+	font-weight: 800;
+}
+
 
 
 
