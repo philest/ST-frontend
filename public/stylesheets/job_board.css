@@ -15,12 +15,36 @@ div.job_list h2 {
 	
 }
 
+fieldset input {
+	display: block !important;
+}
+
+button.job {
+	display: block;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	background-color: #ed7844;
+	margin-bottom: 2em;
+}
+
 div.job_list a {
 	text-decoration: none;
 }
 
 div.job_list a:hover {
 	color: #ed7844;
+}
+
+
+div.divider-mini {
+	padding: 2em 0em;
+}
+
+h2#form {
+	text-align: center;
+	font-family: 'Karla';
+	margin-bottom: 0px;
+	font-weight: 100;
 }
 
 @media screen and (min-width: 35.5em)	{
