@@ -57,26 +57,31 @@
 		<br class="mobile_only">
 		<div id="jobs">
 								<img id="logo-new" src="/images/modules/logo.png">
+								<h2 id="our_team">our team</h2>
 		</div>
 		
 			<div class="team">
 			
-			<% team_names = ["Phil Esterman", "David McPeek", "Sarah Weston", "Henok Addis", "Sophie Burrows", "Aubrey Wahl"] %>
-			<% team_names.each do |full_name| %>
-			<div class="section-header">
-				<h2> <%= full_name%> </h2>
-			</div>		
-			<section class="the-product pure-g"> 
+				<% team_names = ["Phil Esterman", "David McPeek", "Sarah Weston", "Henok Addis", "Sophie Burrows", "Aubrey Wahl"] %>
+				<% team_roles = ["CEO, Engineering", "Engineering", "Content", "Engineering", "Illustration", "Engineering"] %>
+				<% team_names.each_with_index do |full_name, idx| %>
+	<!-- 			<div class="section-header full-name">
+					<h2> <%= full_name%> </h2>
+				</div>	
+	
+ -->			<section class="the-product pure-g"> 
 
-				<div class="prize pure-u-1 pure-u-sm-1-2">
+				<div class="prize team_profile pure-u-1 pure-u-sm-1-2">
 					<img src=<%= "/images/team/"+full_name.split.first.downcase + ".png"%> "/images/team/phil.png" alt="" id="padded-img">
 				</div>
 				<div class="pure-u-1 pure-u-sm-1-2">
 					<div class="text">
 						<h2 id="people"><%= full_name%></h2>
+						<h2 id="role"><%= team_roles[idx]%></h2>
+
 						<p>
 							
-							We’re a Yale team of developers and former Head Start preschool teachers. We built StoryTime for our class’s families at Martinez Head Start. Now, we’re closing the word gap at scale. </p>
+							Phil is a senior studying computer science at Yale and a former Head Start preschool teacher. Previously, he’s led social policy research at Yale, Harvard, and Columbia. He built StoryTime to change the odds for his students at Martinez Head Start. </p>
 
 					</div>
 				</div>
@@ -85,10 +90,10 @@
 			</section>
 
 			
-			<div class="divider"><div></div></div>
-			<div class="divider" id="divider-mobile"><div></div></div>
 			<% end %>
 
+			<div class="divider"><div></div></div>
+			<div class="divider" id="divider-mobile"><div></div></div>
 
 
 			<section class="progress text"> 

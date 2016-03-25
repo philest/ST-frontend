@@ -1,3 +1,43 @@
-.team h2#people {
+
+h2#our_team {
 	font-family: 'Karla';
+	font-size: 2em;
+	color: #4a4a4a;
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 1em;
+
+}
+
+.team h2#people {
+	font-family: 'Karla'; 
+	font-size: 1.8em;
+}
+
+.team h2#role {
+	font-family: 'Karla'; 
+    color: #4a4a4a;
+    font-size: 1.5em;
+   	font-weight: 100;
+
+}
+
+
+div.full-name h2 {
+	font-family: 'Karla'; 
+}
+
+
+
+.team_profile img {
+	width: 12em;
+}
+
+
+@media screen and (max-width: 35.5em) {
+
+	.the-product .text h2 {
+		display: block;
+	}
+
 }
