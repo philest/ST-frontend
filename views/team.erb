@@ -63,13 +63,28 @@
 			<div class="team">
 			
 				<% team_names = ["Phil Esterman", "David McPeek", "Sarah Weston", "Henok Addis", "Sophie Burrows", "Aubrey Wahl"] %>
-				<% team_roles = ["CEO, Engineering", "Engineering", "Content", "Engineering", "Illustration", "Engineering"] %>
+				<% team_roles = ["CEO, Engineering", "Engineering", "Content", "Product", "Illustration", "Engineering"] %>
 				<% team_names.each_with_index do |full_name, idx| %>
-	<!-- 			<div class="section-header full-name">
-					<h2> <%= full_name%> </h2>
-				</div>	
-	
- -->			<section class="the-product pure-g"> 
+				
+				<% team_bios = 
+
+				["Phil is a senior studying computer science at Yale and a former Head Start preschool teacher. Previously, he’s led social policy research at Yale, Harvard, and Columbia. He built StoryTime to change the odds for his students at Martinez Head Start.",
+
+					"David is a senior studying computer science at Yale. Previously, he’s worked at Digital Surgeons, the Yale Center for Bioinformatics and the Yale Social Robotics Lab. He's also taught as a CS50 TA. At Yale, he’s acted in 7 shows.",
+
+					"Sarah graduated from Stanford studying English and earned her MPhil at Cambridge through a Beinecke Scholarship. At Stanford, she wrote for and edited over 8 publications and led writing workshops for survivors of abuse.",
+
+					"Henok studies computer science at Yale. Previously, he’s led product teams at Microsoft and Ancera. He's also led client services for the Elmseed Fund. The son of Ethiopian immigrants, he's seen the difference that reading makes even when circumstances made it hard.",
+
+					"Sophie studied illustration at the University of West England. She's won the Macmillan Prize for Children's Illustration and has illustrated for clients including HarperCollins and Parragon Books. She also enjoys really bad TV.",
+
+					"Aubrey is a junior studying computer science at Yale. Previously, he’s researched social networks in Honduras with the Yale Network Science Institute. He’s also a competitive ultimate frisbee player."
+
+				]%>
+
+
+
+ <section class="the-product pure-g"> 
 
 				<div class="prize team_profile pure-u-1 pure-u-sm-1-2">
 					<img src=<%= "/images/team/"+full_name.split.first.downcase + ".png"%> "/images/team/phil.png" alt="" id="padded-img">
@@ -79,9 +94,7 @@
 						<h2 id="people"><%= full_name%></h2>
 						<h2 id="role"><%= team_roles[idx]%></h2>
 
-						<p>
-							
-							Phil is a senior studying computer science at Yale and a former Head Start preschool teacher. Previously, he’s led social policy research at Yale, Harvard, and Columbia. He built StoryTime to change the odds for his students at Martinez Head Start. </p>
+						<p> <%=team_bios[idx]%> </p>
 
 					</div>
 				</div>
