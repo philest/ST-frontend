@@ -1,0 +1,29 @@
+
+
+#jobs #logo-new {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+div.job_list h2 {
+	text-align: center;
+	line-height: 1.75em;
+	font-size: 2.5em;	
+}
+
+@media screen and (min-width: 35.5em)	{
+	
+	#mobile-only {
+		display: none;
+	}
+}
+
+
+@media screen and (min-width: 48em)	{
+	
+	#jobs #logo-new {
+		margin-top: 0em;
+	}
+
+
+}

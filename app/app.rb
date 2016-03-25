@@ -97,6 +97,10 @@ get '/admin' do
   erb :experiment_dashboard
 end
 
+get '/join' do 
+  erb :job_board
+end
+
 get '/curriculum' do 
   erb :"jobs/curriculum"
 end 
