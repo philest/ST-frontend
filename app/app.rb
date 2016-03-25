@@ -121,7 +121,7 @@ end
 
 post '/get_updates_form_success' do 
   create_follower(params)
-  redirect to('/')
+  redirect to('/join')
 end
 
 #twilio failed: no valid response for sms.

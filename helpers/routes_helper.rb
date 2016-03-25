@@ -27,7 +27,7 @@ module RoutesHelper
 
   # Create a follower from the HTML form, notify us by email. 
   def create_follower(params)
-    Follower.create(name: params[:name],
+    Follower.create(name: "none"
                   email: params[:email])
   
     if MODE == PRO
@@ -36,8 +36,8 @@ module RoutesHelper
       Pony.mail(:to => 'phil.esterman@yale.edu',
             # :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: #{params[:name]} subscribed for updates.",
-            :body => "Their email is #{params[:email]}. Now, \
+            :subject => "ST: #{params[:email]} subscribed for updates.",
+            :body => "Now, \
                       there's #{Follower.count} people subscribed.")
     end
     flash[:notice] = "Great! We'll keep you updated."
