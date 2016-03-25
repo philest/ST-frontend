@@ -148,6 +148,24 @@ h1.banner {
 	}
 
 
+h2#people a {
+	text-decoration: none;
+	color: #ed7844;
+}
+
+h2#people a:visited {
+	color: #ed7844;
+}
+
+h2#people a:hover {
+    color: #4a4a4a;
+}
+
+
+
+
+
+
 @media screen and (min-width: 35.5em)	{
 	
 	.navbar-right{
