@@ -27,7 +27,7 @@ module RoutesHelper
 
   # Create a follower from the HTML form, notify us by email. 
   def create_follower(params)
-    Follower.create(name: "none"
+    Follower.create(name: "none",
                   email: params[:email])
   
     if MODE == PRO
