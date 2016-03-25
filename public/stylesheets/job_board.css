@@ -31,6 +31,10 @@ div.job_list a {
 	text-decoration: none;
 }
 
+div.job_list a:visited {
+	color: #4a4a4a;
+}
+
 div.job_list a:hover {
 	color: #ed7844;
 }
