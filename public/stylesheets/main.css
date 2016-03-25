@@ -516,6 +516,10 @@ a#more_team p{
 	font-weight: 800;
 }
 
+a#more_team p {
+	font-size: 1.25em;
+}
+
 a#more_team {
 	text-decoration: none;
 }
