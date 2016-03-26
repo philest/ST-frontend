@@ -514,10 +514,9 @@ section {
 
 a#more_team p{
 	font-weight: 800;
-}
-
-a#more_team p {
+	color: #ed7844;
 	font-size: 1.25em;
+
 }
 
 a#more_team {
@@ -525,11 +524,11 @@ a#more_team {
 }
 
 a#more_team:visited {
-	color: #4a4a4a;
+	color: #ed7844;
 }
 
 a#more_team:hover p{
-	color: #ed7844;
+	color: #4a4a4a;
 }
 
 
