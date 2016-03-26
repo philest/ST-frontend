@@ -117,6 +117,10 @@ get '/pilots' do
   erb :"jobs/pilots"
 end 
 
+get '/schools' do 
+  erb :"jobs/schools"
+end 
+
 
 #with form-selected options, create_experiment().
 post '/form_success' do
