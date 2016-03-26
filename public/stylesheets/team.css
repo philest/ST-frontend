@@ -20,8 +20,10 @@ h2#our_team {
 	font-family: 'Karla'; 
     color: #4a4a4a;
     font-size: 1.5em;
-   	font-weight: 100;
+   	font-weight: 800;
    	margin-top: 0px;
+   	font-variant: small-caps;
+
 
 }
 
