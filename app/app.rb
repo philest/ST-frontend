@@ -105,8 +105,8 @@ get '/join' do
   erb :job_board
 end
 
-get '/curriculum' do 
-  erb :"jobs/curriculum"
+get '/product_lead' do 
+  erb :"jobs/product"
 end
 
 get '/developer' do 
