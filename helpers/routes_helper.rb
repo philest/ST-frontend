@@ -22,7 +22,7 @@ module RoutesHelper
   # Check if a user is authorized as admin. 
   def authorized?
     @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'ST']
+    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'gostorytime']
   end
 
   # Create a follower from the HTML form, notify us by email. 
