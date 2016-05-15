@@ -276,6 +276,14 @@ a .bottom button#join {
 	    margin-left: -155px;
 	}
 
+	.bottom .splash {
+		margin-top: 1.5em;
+	}
+
+	.bottom #splash {
+		height: 33em;
+	}
+
 	.bottom .splash-text {
 		margin-left: 5%;
 	}
