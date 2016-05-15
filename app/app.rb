@@ -125,6 +125,10 @@ get '/illustrator' do
   erb :"jobs/illustrator"
 end 
 
+get '/design' do 
+  erb :"jobs/design"
+end 
+
 
 #with form-selected options, create_experiment().
 post '/form_success' do
