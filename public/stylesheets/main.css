@@ -327,8 +327,8 @@ a .bottom button#join {
 	}
 
 	#join {
-		margin-top: 0.5em;
-		margin-bottom: 0.5em;
+		margin-top: 1em;
+		margin-bottom: 0px;
 		font-weight: 800;
 	}
 
