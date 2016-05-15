@@ -35,7 +35,6 @@
 }
 
 
-
 .navbar {
 	min-height: 100px;
 }
@@ -140,13 +139,21 @@ h1.banner {
 
 }
 
+.bottom #splash {
+    padding-top: 3em;
+}
+
+
 #splash .animation img{
 	width: 14em;
 	display: block;
 	margin-left: auto;
     margin-right: auto;
 	margin-top: 1.5em;
+}
 
+.bottom #splash .animation img{
+		width: 16em;
 }
 
 .banner-text {
@@ -170,8 +177,27 @@ h2#people a:hover {
     color: #4a4a4a;
 }
 
+a .bottom button#join {
 
+	font-size: 1.2em;
+	text-align: center;
+	}
 
+.bottom a{
+	text-decoration: none;
+}
+
+.meta-block button#join{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#join {
+	margin-top: 1.5em;
+	margin-bottom: 1em;
+	font-weight: 800;
+}
 
 
 
@@ -196,11 +222,19 @@ h2#people a:hover {
 		position: relative;
 	}
 
+
 	#splash .animation img{
 		position: relative;
 		width: 15em;
 		margin-top: 2em;
 	}
+
+	.bottom #splash .animation img{
+		position: relative;
+		width: 18em;
+		margin-top: 2em;
+	}
+
 
 
 	h1.storytime-tagline {
@@ -242,9 +276,19 @@ h2#people a:hover {
 	    margin-left: -155px;
 	}
 
+	.bottom .splash-text {
+		margin-left: 5%;
+	}
+
+	#splash .bottom_globe {
+		left: 63%;
+	}
+	
+
 	#splash .animation img{
 		width: 18em;
 	}
+
 
 	h1.storytime-tagline {
 		text-align: left;
@@ -263,8 +307,48 @@ h2#people a:hover {
 
 	}
 
+	.bottom button#join {
+		display: inline-block;
+		font-size: 1.3em;
+		margin-left: 34px;
+	}
+
+
+	.email a#more_team p {
+		text-align: left;
+		font-size: 1.25em;
+		margin-left: 62px;
+	}
+
+
+
+	.bottom img#logo-new {
+		margin-top: 2.2em;
+	}
+
+	#join {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+		font-weight: 800;
+	}
+
+
 
 }
+
+@media screen and (min-width: 64em)	{
+
+	#splash .bottom_globe {
+		left: 58%;
+	}
+
+	.bottom #splash .animation img{
+		width: 21em;
+	}
+
+}
+
+
 
 #splash .animation img{
 	display: block;
@@ -664,11 +748,6 @@ h4 span a{
 }
 
 
-#join {
-	margin-top: 1.5em;
-	margin-bottom: 1em;
-	font-weight: 800;
-}
 
 
 
