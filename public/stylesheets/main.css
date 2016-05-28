@@ -2,8 +2,7 @@
 
 @media (min-width: 1600px) {
 	.main-container {
-		max-width: 1600px;	
-
+		max-width: 1600px;
 	}
 }
 
@@ -12,7 +11,6 @@
 	margin-left: auto;
 	margin-right: auto;
 }
-
 
 @media (min-width: 768px) {
 	.container {
