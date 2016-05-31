@@ -7,7 +7,7 @@
 
 div.job_list h2 {
 	text-align: center;
-	line-height: 1.75em;
+	line-height: 1.1em;
 	font-size: 1.4em;
 	font-weight: 100;
 	color: #4a4a4a;
@@ -15,6 +15,11 @@ div.job_list h2 {
 	
 }
 
+
+.job_nav {
+		min-height: 91px;
+
+}
 fieldset input {
 	display: block !important;
 }
@@ -42,14 +47,14 @@ div.job_list a:hover {
 
 
 div.divider-mini {
-	padding: 2em 0em;
+	padding: 1.5em 0em;
 }
 
 h2#form {
 	text-align: center;
 	font-family: 'Karla';
 	margin-bottom: 0px;
-	font-weight: 100;
+	font-weight: 800;
 }
 
 @media screen and (min-width: 35.5em)	{
