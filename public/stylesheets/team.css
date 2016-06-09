@@ -16,6 +16,13 @@ h2#our_team {
 
 }
 
+h2#people a:hover {
+/*    color: #ed7844;
+uncomment to take off the hover color change on team names
+
+*/}
+
+
 .team h2#role {
 	font-family: 'Karla'; 
     color: #4a4a4a;
