@@ -74,11 +74,11 @@
 
 				["Phil studied computer science at Yale and is a former Head Start preschool teacher. Previously, he’s led social policy research at Yale, Harvard, and Columbia. He built StoryTime to change the odds for his students at Martinez Head Start.",
 
-					"David studied computer science at Yale and quit Google to found StoryTime. Previously, he’s worked at Digital Surgeons, the Yale Center for Bioinformatics and the Yale Social Robotics Lab. He's also taught CS50 and acted in 7 shows.",
+					"David studied computer science at Yale and quit Google to found StoryTime. Previously, he led bioinformatics and robotics research in Yale labs, taught computer science, and worked as a software engineer. He’s also an actor and played the lead in 15 shows.",
 
 					"Kabrillen studied at the Harvard Graduate School of Education. Previously, she's worked at the Federal Reserve Bank of Boston and the Massachussets Office of Education. As a Bonner Scholar at Spelman, she spent four years working in Head Start schools.",
 
-					"Aubrey is a studied computer science at Yale. Previously, he’s researched social networks in Honduras with the Yale Network Science Institute. He’s also a competitive ultimate frisbee player and podcast fanatic.",
+					"Aubrey is a studied computer science at Yale. Previously, he’s researched social networks in Honduras with the Yale Network Science Institute and taught computer science. He’s also a competitive ultimate frisbee player and lover of podcasts.",
 
 
 					"Sarah graduated from Stanford studying English and earned her MPhil at Cambridge through a Beinecke Scholarship. At Stanford, she wrote for and edited over 8 publications and led writing workshops for survivors of abuse.",
@@ -95,7 +95,7 @@
 				</div>
 				<div class="pure-u-1 pure-u-sm-1-2">
 					<div class="text">
-						<h2 id="people"><%= full_name%></h2>
+						<h2 id="people"> <a href = mailto:<%=full_name.split.first.downcase%>@joinstorytime.com> <%= full_name%></a></h2>
 						<h2 id="role"><%= team_roles[idx].downcase%></h2>
 
 						<p> <%=team_bios[idx]%> </p>
