@@ -70,6 +70,10 @@ get '/learn-more' do
   send_file File.join(settings.public_folder, 'About_StoryTime.pdf')
 end
 
+get '/privacy' do
+  erb :privacy_policy
+end
+
 # Documenation. 
 get '/doc/' do 
   File.read(File.join('public', 'doc/_index.html'))
