@@ -15,44 +15,49 @@
 
 		<script> 
 
-		(function($,W,D)
-		{
-		    var JQUERY4U = {};
+			(function($,W,D)
+			{
+			    var JQUERY4U = {};
 
-		    JQUERY4U.UTIL =
-		    {
+			    JQUERY4U.UTIL =
+			    {
 
-		        setupFormValidation: function()
-        		{
-		  
-				    // Setup form validation on the .table-input-body-row element
-				    $(".table-input-body-row").validate({
+			        setupFormValidation: function()
+	        		{
+			  
+						    // Setup form validation on the .table-input-body-row element
+						    $(<%="\".table-input-body-row\""%>).each(function () {
+						    	$(this).validate({
 
-						    	  // Specify the validation rules
-				        rules: {
-				            userid: {
-				            	email: true
-				            }
-				        },
+								    	  // Specify the validation rules
+						        rules: {
+						            userid: {
+						            	email: true
+						            }
+						        },
 
-				        messages: {
-				               userid: "Please enter a valid email address",
-				        },
+						        messages: {
+						               userid: "Please enter a valid email address",
+						        },
 
-				         submitHandler: function(form) {
-		            		form.submit();
-		        		}
+						         submitHandler: function(form) {
+				            		form.submit();
+				        		}
 
-				    });
+						    });
+
+						   });
+
+					}
 				}
-			}
 
-		    //when the dom has loaded setup form validation rules
-		    $(D).ready(function($) {
-		        JQUERY4U.UTIL.setupFormValidation();
-		    });
+			    //when the dom has loaded setup form validation rules
+			    $(D).ready(function($) {
+			        JQUERY4U.UTIL.setupFormValidation();
+			    });
 
-		})(jQuery, window, document);
+			})(jQuery, window, document);
+
 		</script>
 		
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -140,7 +145,7 @@
 
 							<div class="table-input-container">
 								<div class="table-input-body">
-									<%25.times do |idx| @new_idx= idx % 5; puts @names[@new_idx] %>
+									<%25.times do |idx| @idx = idx; @new_idx= idx % 5%>
 										<form class="table-input-body-row">
 											<span class="table-input-cell-validation table-input-cell">
 											</span>
