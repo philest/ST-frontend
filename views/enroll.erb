@@ -17,12 +17,6 @@
 
 		<script> 
 
-			$('Button').click(function(){
-			    $('form').each(function(){
-			        $(this).submit();
-			    });
-			});
-
 
 			(function($,W,D)
 			{
@@ -155,7 +149,7 @@
 							<div class="table-input-container">
 								<div class="table-input-body">
 									<%25.times do |idx| @idx = idx; @new_idx= idx % 5%>
-										<form class="table-input-body-row">
+										<form class="table-input-body-row" action="enroll_families_form_success" method="post">
 											<span class="table-input-cell-validation table-input-cell">
 											</span>
 
@@ -192,7 +186,16 @@
 
 			
 
-			
+	
 
 	</body>
+	<footer>
+	<script>
+		$('Button').click(function(){
+			    $('form').each(function(){
+			        $(this).submit();
+			    });
+			});
+	</script>
+	</footer>
 </html>
