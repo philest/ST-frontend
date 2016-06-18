@@ -19,6 +19,8 @@ gem 'statsample'
 gem 'descriptive_statistics'
 gem 'airbrake'
 gem 'sinatra-flash'
+gem 'json'
+gem 'httparty'
 
 group :development, :test do
   gem 'fuubar'

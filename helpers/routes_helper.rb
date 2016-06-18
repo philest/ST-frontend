@@ -7,6 +7,7 @@ require 'pony'
 require_relative '../config/pony'
 
 require 'sinatra/flash'
+require 'json'
 
 
 # Admin authentication, taken from Sinatra.
@@ -43,5 +44,26 @@ module RoutesHelper
     flash[:notice] = "Great! We'll keep you updated."
 
   end
+
+  def enroll_families(params)
+
+    # send the families to birdv
+    # HTTParty.post(___, body: params.to_json)
+
+    if MODE == PRO
+
+      # Report new followers.
+      # Pony.mail(:to => 'phil.esterman@yale.edu',
+      #       :cc => 'david.mcpeek@yale.edu',
+      #       :from => 'phil.esterman@yale.edu',
+      #       :subject => "ST: A new teacher enrolled a class.",
+      #       :body => "Now, \
+      #                 there's #{Follower.count} people subscribed.")
+    end
+    flash[:notice] = "Great! You've signed up your class for free stories!"
+
+
+  end
+
 
 end

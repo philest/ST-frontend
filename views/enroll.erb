@@ -12,8 +12,17 @@
 		<!-- Load jQuery and  -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+		
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
 		<script> 
+
+			$('Button').click(function(){
+			    $('form').each(function(){
+			        $(this).submit();
+			    });
+			});
+
 
 			(function($,W,D)
 			{
@@ -32,12 +41,12 @@
 								    	  // Specify the validation rules
 						        rules: {
 						            userid: {
-						            	email: true
+						            	phoneUS: true
 						            }
 						        },
 
 						        messages: {
-						               userid: "Please enter a valid email address",
+						               userid: "Invalid phone number",
 						        },
 
 						         submitHandler: function(form) {
@@ -175,7 +184,7 @@
 						By clicking "Add people," I confirm that these people gave me permission to send them emails and text messages. 
 						</span>
 					</div>
-					<button class="Button">Add people
+					<button class="Button" type="submit">Add people
 					</button>
 				</div>
 			</div>

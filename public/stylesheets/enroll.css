@@ -171,3 +171,7 @@ TODO trigger a new div with this styling on focus.
 
 	
 }
+
+label#userid-error {
+	color: #C63442;
+}
