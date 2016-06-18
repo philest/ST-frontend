@@ -1,7 +1,7 @@
 
 .enroll {
 	display: block;
-	width: 40%;
+	width: 60%;
 	margin: auto;
 }
 
@@ -35,6 +35,7 @@
     font-size: 14px;
     margin: 6px 0 0;
     font-weight: 400;
+    text-align: center;
 
 }
 
@@ -73,4 +74,33 @@
 .table-input-cell {
 	display: table-cell;
 }
+
+.table-input-container{
+	overflow: auto;
+	height: 275px;
+}
+
+.table-input-body {
+	width: 100%;
+	display: table;
+}
+
+.table-input-body-row {
+	display: table-row;
+}
+
+.table-input-body-cell {
+    border-bottom: 1px solid #dcdee2;
+    width: 50%;
+}
+
+.form-cell-input {
+	border: 1px solid transparent;
+    margin: 0 0 -1px;
+    transition: 75ms ease-in-out;
+    transition-property: background,border-color,color;
+}
+
+
+
 

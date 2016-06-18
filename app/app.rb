@@ -74,6 +74,11 @@ get '/privacy' do
   erb :privacy_policy
 end
 
+get '/enroll' do
+  erb :enroll
+end
+
+
 # Documenation. 
 get '/doc/' do 
   File.read(File.join('public', 'doc/_index.html'))
