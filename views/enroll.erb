@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+		<title>StoryTime - Enroll Class</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<meta name="description" content="StoryTime - Free stories by text message. For every family without books. We're closing the word gap at scale.">
+		
+		<meta property="og:image" content="http://www.joinstorytime.com/images/modules/st-og-image.png">
+		
+		<script type="text/javascript" src="/js/analytics.js"></script>
+		
+		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+
+		<link rel="stylesheet" href="stylesheets/enroll.css" type="text/css" />
+
+
+		<link rel="stylesheet" href="stylesheets/job_board.css" type="text/css" />
+
+		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+
+		<link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
+
+		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+
+		<link rel="stylesheet" href="stylesheets/team.css" type="text/css" />
+
+		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
+
+
+		<!-- Favicon and App icon images -->
+		<link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="/images/favicon/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="/images/favicon/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+		<link rel="manifest" href="/images/favicon/manifest.json">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
+		<meta name="theme-color" content="#ffffff">
+	</head>
+
+	<% @names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
+	<% @phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(777) 777-777"] %>
+
+
+	<body>
+	
+		<nav class="navbar" role="navigation">
+			<div class="container">
+				<a href="../">
+					<div class="navbar-logo">
+					</div>
+				</a>
+			</div>
+		</nav>
+		<br class="mobile_only">
+		<div id="jobs">
+								<img id="logo-new" src="/images/modules/logo.png">
+								<h2 id="our_team">enroll policy</h2>
+
+		</div>
+		
+			<div class="enroll group-invite">
+				<div class="box-header">
+					<h2 class="box-header-title">Enter phone numbers</h2>
+					<h3 class="box-header-subtext">
+						Enter contact information in the space provided
+					</h3>
+				</div>
+				<div class="box-body">
+					<div class="row row-small">
+						<div class="table-input">
+							<header class="table-input-header-row">
+								<div class="table-input-header-cell table-input-cell"> Full name</div>
+								<div class="table-input-header-cell table-input-cell"> Phone number
+								</div>
+
+							</header>
+
+							<div class="table-input-container">
+								<div class="table-input-body">
+									<%25.times do |idx| @new_idx= idx % 5; puts @names[@new_idx] %>
+										<form class="table-input-body-row">
+											<span class="table-input-body-cell table-input-cell">
+												<div class="form-cell-input">
+													<input name="name" value placeholder= "<%=@names[@new_idx]%>">
+												</div>
+											</span>
+		
+											<span class="table-input-body-cell table-input-cell">
+												<div class="form-cell-input">
+													<input name="userid" value placeholder="<%=@phones[@new_idx]%>" >
+												</div>
+											</span>
+										</form>
+									<%end%>
+
+				
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+				<button> </button>
+
+			</div>
+
+
+			
+
+			
+
+	</body>
+</html>
