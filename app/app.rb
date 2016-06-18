@@ -149,6 +149,16 @@ post '/get_updates_form_success' do
   redirect to('/join')
 end
 
+post '/enroll_families_form_success' do 
+
+  require 'pry'
+  binding.pry
+
+  enroll_families(params)
+  redirect to('/enroll')
+end
+
+
 #twilio failed: no valid response for sms.
 get '/failed' do
     TwilioHelper.smsRespondHelper("StoryTime: Hi! " + 

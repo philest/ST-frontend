@@ -49,7 +49,8 @@ module RoutesHelper
 
     # send the families to birdv
     # HTTParty.post(___, body: params.to_json)
-
+    puts params
+    
     if MODE == PRO
 
       # Report new followers.
