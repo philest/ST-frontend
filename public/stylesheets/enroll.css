@@ -1,0 +1,76 @@
+
+.enroll {
+	display: block;
+	width: 40%;
+	margin: auto;
+}
+
+.enroll h1 {
+	text-align: left;
+}
+
+.enroll a {
+	display: inline-block;
+}
+
+.group-invite {
+	box-sizing: border-box;
+	display: block;
+}
+
+.box-header {
+	padding: 40px 40px 28px;
+	display: block;
+}
+
+.box-header-title {
+	font-size: 20px;
+	font-weight: 400;
+	text-align: center;
+	line-height: 1.38;
+}
+
+.box-header-subtext {
+    color: #6b6e72;
+    font-size: 14px;
+    margin: 6px 0 0;
+    font-weight: 400;
+
+}
+
+.box-body {
+	padding-top: 0;
+	padding: 40px;
+}
+.row-small{
+	margin-bottom: 16px;
+}
+
+.row {
+	margin: 0 0 32px;
+}
+
+.table-input {
+	text-align: left;
+	font-size: 15px;
+}
+
+.table-input-header-row {
+	width: 100%;
+	display: table;
+}
+
+.table-input-header-cell {
+	background-color: #f2f3f5;
+    border: 1px solid #dcdee2;
+    border-width: 1px 0;
+    color: #6b6e72;
+    font-weight: 600;
+    padding: 12px;
+    width: 50%;
+}
+
+.table-input-cell {
+	display: table-cell;
+}
+
