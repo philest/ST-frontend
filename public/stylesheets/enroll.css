@@ -13,6 +13,10 @@
 	display: inline-block;
 }
 
+h2.enroll_header {
+	margin-bottom: 0px;
+}
+
 .group-invite {
 	box-sizing: border-box;
 	display: block;
@@ -41,7 +45,7 @@
 
 .box-body {
 	padding-top: 0;
-	padding: 40px;
+	padding: 0px 40px 40px 40px;
 }
 .row-small{
 	margin-bottom: 16px;
@@ -69,7 +73,10 @@
     color: #6b6e72;
     font-weight: 600;
     padding: 12px;
-    width: 50%;
+}
+
+.table-input-header-cell, .table-input-body-cell {
+	    width:50%;
 }
 
 .table-input-cell {
@@ -79,6 +86,7 @@
 .table-input-container{
 	overflow: auto;
 	height: 275px;
+	-webkit-overflow-scrolling: touch;
 }
 
 .table-input-body {
@@ -90,23 +98,76 @@
 	display: table-row;
 }
 
+.table-input-cell-validation {
+	min-width: 23px;
+}
+
 .table-input-body-cell {
     border-bottom: 1px solid #dcdee2;
-    width: 50%;
 }
 
 .form-cell-input {
-	border: 1px solid transparent;
+    border: 1px solid transparent;
     margin: 0 0 -1px;
     transition: 75ms ease-in-out;
     transition-property: background,border-color,color;
+	cursor: pointer;
 }
+
+/*
+TODO trigger a new div with this styling on focus. 
+.form-cell-input:focus{
+	border-bottom-color: #2f75c1;
+}
+*/
 
 .table-input-body-cell input {
 	width: 100%;
 	padding: 16px 12px;
 	font-weight: 400;
+	border: none;
 }
 
+* {
+	margin: 0;
+	padding: 0;
+}
 
+*, :after, :before {
+    box-sizing: border-box;
+}
 
+.field {
+	margin: 0 0 12px;
+    position: relative;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.5;
+
+}
+
+.thunder {
+	color: #6b6e72;
+	font-weight: 100;
+}
+
+.Button {
+	
+	display:block;
+	background: #2f75c1;
+    color: #fff;
+    letter-spacing: .01em;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 20px;
+    text-align: center;
+    transition: 75ms ease-in-out;
+    transition-property: background,border-color,color,opacity;
+	
+	margin-left: auto;
+	margin-right: auto;
+
+	
+}
