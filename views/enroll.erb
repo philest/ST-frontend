@@ -81,6 +81,9 @@
 					<div class="row row-small">
 						<div class="table-input">
 							<header class="table-input-header-row">
+								<span class="table-input-cell-validation table-input-cell">
+								</span>
+	
 								<div class="table-input-header-cell table-input-cell"> Full name</div>
 								<div class="table-input-header-cell table-input-cell"> Phone number
 								</div>
@@ -91,6 +94,9 @@
 								<div class="table-input-body">
 									<%25.times do |idx| @new_idx= idx % 5; puts @names[@new_idx] %>
 										<form class="table-input-body-row">
+											<span class="table-input-cell-validation table-input-cell">
+											</span>
+
 											<span class="table-input-body-cell table-input-cell">
 												<div class="form-cell-input">
 													<input name="name" value placeholder= "<%=@names[@new_idx]%>">
