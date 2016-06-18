@@ -54,6 +54,7 @@
 .table-input {
 	text-align: left;
 	font-size: 15px;
+	margin-left: -23px;
 }
 
 .table-input-header-row {
@@ -101,6 +102,11 @@
     transition-property: background,border-color,color;
 }
 
+.table-input-body-cell input {
+	width: 100%;
+	padding: 16px 12px;
+	font-weight: 400;
+}
 
 
 
