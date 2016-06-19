@@ -7,7 +7,6 @@ require 'pony'
 require_relative '../config/pony'
 
 require 'sinatra/flash'
-require 'json'
 require 'httparty'
 require 'dotenv'
 Dotenv.load
@@ -54,8 +53,7 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    HTTParty.post(ENV['birdv_url'], body: params.to_json)
-
+    HTTParty.post(ENV['birdv_url'], body: params)
 
     if MODE == PRO
 
