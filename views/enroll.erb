@@ -31,7 +31,6 @@
 
 			        setupFormValidation: function()
 	        		{
-			  
 						    // Setup form validation on the .table-input-body-row element
 						    $(<%="\".table-input-body\""%>).each(function () {
 						    	$(this).validate({
@@ -73,7 +72,7 @@
 			    //when the dom has loaded setup form validation rules
 			    $(D).ready(function($) {
 			        JQUERY4U.UTIL.setupFormValidation();
-			        $('.Button-ready').hide()
+			        // $('.Button-ready').hide()
 
 			    });
 
@@ -207,9 +206,9 @@
 						By clicking "Add people," I confirm that these people gave me permission to send them emails and text messages. 
 						</span>
 					</div>
-					<button class="Button-not-ready" type="submit">Add people
+<!-- 					<button class="Button-not-ready" type="submit">Add people
 					</button>
-					<button class="Button-ready" type="submit">Add people
+ -->					<button class="Button-ready" type="submit">Add people
 					</button>
 				</div>
 			</div>
@@ -231,32 +230,37 @@
 		// was there ever some valid input?
 		some_valid = false 
 
+
+
+
 		//  Every 200ms, make button clickable if some valid input
-        window.setInterval(function(){
+        // window.setInterval(function(){
 
-			//<%(@stud_count).times do |idx| @idx = idx%>
-			//    <%="phone_#{@idx}"%>: "Invalid phone number",
+			// <%(@stud_count).times do |idx| @idx = idx%>
+			// 	if($("<%="input[name=\'phone_#{@idx}\']"%>").val() != '' && 
+			// 		$("<%="input[name=\'phone_#{@idx}\']"%>").validate().errorContext.length == 0)
+			// 	{
+			// 		some_valid = true
+			// 		console.log(<%=@idx%>)
+			// 	}
+			// <%end%>
 
-			//<%end%>
+   //        // if there's some valid input
+   //        if(some_valid)
+   //        {
+   //        	$('.Button-not-ready').hide()
+   //        	$('.Button-ready').show()
 
-          // if there's some valid input
-          if($(".table-input-body").validate().successList.length > 0)
-          {
-          	$('.Button-not-ready').hide()
-          	$('.Button-ready').show()
+   //        	// console.log("there's a valid input!")
 
-          	some_valid = true 
-
-          	console.log("there's a valid input!")
-
-          }
-          else
-          {
-          	$('.Button-ready').hide()
-          	$('.Button-not-ready').show()
-          	console.log("no valid input")
-          }
-        }, 200);
+   //        }
+   //        else
+   //        {
+   //        	$('.Button-ready').hide()
+   //        	$('.Button-not-ready').show()
+   //        	console.log("no valid input")
+   //        }
+   //      }, 200);
 
 
 	</script>
