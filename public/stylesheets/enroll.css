@@ -193,3 +193,7 @@ TODO trigger a new div with this styling on focus.
 label.error {
 	color: #C63442;
 }
+
+.submit-errors {
+	display: none;
+}
