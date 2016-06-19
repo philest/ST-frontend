@@ -58,7 +58,29 @@
 
 						         submitHandler: function(form) {
 				            		form.submit();
-				        		}
+				        		},
+
+    invalidHandler: function(form, validator) {
+      var errors = validator.numberOfInvalids();
+      if (errors) {
+        var message = errors == 1
+          ? 'Please correct the following error:\n'
+          : 'Please correct the following ' + errors + ' errors.\n';
+        var errors = "";
+        if (validator.errorList.length > 0) {
+            for (x=0;x<validator.errorList.length;x++) {
+                errors += "\n\u25CF " + validator.errorList[x].message;
+            }
+        }
+
+        $('.submit-errors').show()
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+
+        // alert(message + errors);
+      }
+      validator.focusInvalid();
+    }
+
 
 						    });
 
@@ -139,7 +161,14 @@
 	<% end %>
 
 
+
+
 	<body>
+
+        <div id="alert" class='submit-errors'>
+		    <a class="alert" href="#alert">Please fix the invalid phone numbers</a>
+		</div>
+
 	
 		<nav class="navbar" role="navigation">
 			<div class="container">
@@ -227,8 +256,12 @@
 			    });
 			});
 
+		$('.submit-errors').click(function(){
+			        $(this).hide();
+			});
+
 		// was there ever some valid input?
-		some_valid = false 
+		// some_valid = false 
 
 
 
