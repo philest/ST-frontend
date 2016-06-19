@@ -197,3 +197,8 @@ label.error {
 .submit-errors {
 	display: none;
 }
+
+.submit-errors a {
+	background-color: #C63442;
+
+}

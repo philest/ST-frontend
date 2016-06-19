@@ -47,10 +47,13 @@ module RoutesHelper
 
   def enroll_families(params)
 
+    # Delete all the empty form fields
+    params = params.delete_if { |k, v| v.empty? }
+    puts params
+
     # send the families to birdv
     # HTTParty.post(___, body: params.to_json)
-    puts params
-    
+
 
     if MODE == PRO
 

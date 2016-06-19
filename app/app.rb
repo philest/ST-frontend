@@ -151,6 +151,7 @@ end
 
 post '/enroll_families_form_success' do 
 
+  puts "HERE"
   enroll_families(params)
   redirect to('/enroll')
 end
