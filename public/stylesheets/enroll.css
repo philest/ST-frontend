@@ -151,7 +151,7 @@ TODO trigger a new div with this styling on focus.
 	font-weight: 100;
 }
 
-.Button {
+.Button-ready {
 	
 	display:block;
 	background: #2f75c1;
@@ -168,10 +168,28 @@ TODO trigger a new div with this styling on focus.
 	
 	margin-left: auto;
 	margin-right: auto;
-
 	
 }
 
-label#userid-error {
+.Button-not-ready {
+	display:block;
+	background: red;
+    color: #fff;
+    letter-spacing: .01em;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 20px;
+    text-align: center;
+    transition: 75ms ease-in-out;
+    transition-property: background,border-color,color,opacity;
+	
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+label.error {
 	color: #C63442;
 }

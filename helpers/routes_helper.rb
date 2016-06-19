@@ -51,6 +51,7 @@ module RoutesHelper
     # HTTParty.post(___, body: params.to_json)
     puts params
     
+
     if MODE == PRO
 
       # Report new followers.
@@ -61,7 +62,7 @@ module RoutesHelper
       #       :body => "Now, \
       #                 there's #{Follower.count} people subscribed.")
     end
-    flash[:notice] = "Great! You've signed up your class for free stories!"
+    flash[:notice] = "Great! Your class was successfully added."
 
 
   end

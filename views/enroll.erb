@@ -15,6 +15,10 @@
 		
 		<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
+		<!-- The max number of students in a class -->
+		<%@stud_count = 25%>
+
+
 		<script> 
 
 
@@ -29,18 +33,28 @@
 	        		{
 			  
 						    // Setup form validation on the .table-input-body-row element
-						    $(<%="\".table-input-body-row\""%>).each(function () {
+						    $(<%="\".table-input-body\""%>).each(function () {
 						    	$(this).validate({
 
 								    	  // Specify the validation rules
 						        rules: {
-						            userid: {
-						            	phoneUS: true
-						            }
+				
+									<%(@stud_count).times do |idx| @idx = idx%>
+							            <%="phone_#{@idx}"%>: {
+							            	phoneUS: true
+							            },
+
+								    <%end%>
+
+
 						        },
 
 						        messages: {
-						               userid: "Invalid phone number",
+
+									<%(@stud_count).times do |idx| @idx = idx%>
+							            <%="phone_#{@idx}"%>: "Invalid phone number",
+
+								    <%end%>
 						        },
 
 						         submitHandler: function(form) {
@@ -54,14 +68,24 @@
 					}
 				}
 
+
+
 			    //when the dom has loaded setup form validation rules
 			    $(D).ready(function($) {
 			        JQUERY4U.UTIL.setupFormValidation();
+			        $('.Button-ready').hide()
+
 			    });
+
+
 
 			})(jQuery, window, document);
 
+
 		</script>
+
+
+
 		
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
@@ -105,8 +129,15 @@
 		<meta name="theme-color" content="#ffffff">
 	</head>
 
-	<% @names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
-	<% @phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
+	<% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
+	<% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
+
+	<!-- Notify about form submission -->
+	<% if flash[:notice] %>
+		<div id="alert">
+		    <a class="alert" href="#alert">Great! Your class was successfully added.</a>
+		</div>
+	<% end %>
 
 
 	<body>
@@ -147,29 +178,27 @@
 							</header>
 
 							<div class="table-input-container">
-								<div class="table-input-body">
-									<%25.times do |idx| @idx = idx; @new_idx= idx % 5%>
-										<form class="table-input-body-row" action="enroll_families_form_success" method="post">
+								<form class="table-input-body" action="enroll_families_form_success" method="post">
+									<%@stud_count.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+										<span class="table-input-body-row">
 											<span class="table-input-cell-validation table-input-cell">
 											</span>
 
 											<span class="table-input-body-cell table-input-cell">
 												<div class="form-cell-input">
-													<input name="name" value placeholder= "<%=@names[@new_idx]%>">
+													<input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
 												</div>
 											</span>
 		
 											<span class="table-input-body-cell table-input-cell">
 												<div class="form-cell-input">
-													<input name="userid" value placeholder="<%=@phones[@new_idx]%>" >
+													<input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
 												</div>
 											</span>
-										</form>
+										</span>
 									<%end%>
+								</form>
 
-				
-
-								</div>
 							</div>
 						</div>
 					</div>
@@ -178,7 +207,9 @@
 						By clicking "Add people," I confirm that these people gave me permission to send them emails and text messages. 
 						</span>
 					</div>
-					<button class="Button" type="submit">Add people
+					<button class="Button-not-ready" type="submit">Add people
+					</button>
+					<button class="Button-ready" type="submit">Add people
 					</button>
 				</div>
 			</div>
@@ -196,6 +227,38 @@
 			        $(this).submit();
 			    });
 			});
+
+		// was there ever some valid input?
+		some_valid = false 
+
+		//  Every 200ms, make button clickable if some valid input
+        window.setInterval(function(){
+
+			//<%(@stud_count).times do |idx| @idx = idx%>
+			//    <%="phone_#{@idx}"%>: "Invalid phone number",
+
+			//<%end%>
+
+          // if there's some valid input
+          if($(".table-input-body").validate().successList.length > 0)
+          {
+          	$('.Button-not-ready').hide()
+          	$('.Button-ready').show()
+
+          	some_valid = true 
+
+          	console.log("there's a valid input!")
+
+          }
+          else
+          {
+          	$('.Button-ready').hide()
+          	$('.Button-not-ready').show()
+          	console.log("no valid input")
+          }
+        }, 200);
+
+
 	</script>
 	</footer>
 </html>

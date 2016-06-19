@@ -151,9 +151,6 @@ end
 
 post '/enroll_families_form_success' do 
 
-  require 'pry'
-  binding.pry
-
   enroll_families(params)
   redirect to('/enroll')
 end
