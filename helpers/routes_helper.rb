@@ -52,18 +52,19 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    # HTTParty.post(___, body: params.to_json)
+    HTTParty.post("http://birdv.herokuapp.com/enroll", body: params.to_json)
 
 
     if MODE == PRO
 
-      # Report new followers.
-      # Pony.mail(:to => 'phil.esterman@yale.edu',
-      #       :cc => 'david.mcpeek@yale.edu',
-      #       :from => 'phil.esterman@yale.edu',
-      #       :subject => "ST: A new teacher enrolled a class.",
-      #       :body => "Now, \
-      #                 there's #{Follower.count} people subscribed.")
+      Report new followers.
+      Pony.mail(:to => 'phil.esterman@yale.edu',
+            :cc => 'david.mcpeek@yale.edu',
+            :from => 'phil.esterman@yale.edu',
+            :subject => "ST: A new teacher enrolled \
+                           a class of #{params.count / 2}.",
+            :body => "They enrolled: \
+                      #{params}.")
     end
     flash[:notice] = "Great! Your class was successfully added."
 
