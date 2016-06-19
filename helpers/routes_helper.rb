@@ -8,7 +8,9 @@ require_relative '../config/pony'
 
 require 'sinatra/flash'
 require 'json'
-
+require 'httparty'
+require 'dotenv'
+Dotenv.load
 
 # Admin authentication, taken from Sinatra.
 module RoutesHelper
@@ -52,7 +54,7 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    HTTParty.post("http://birdv.herokuapp.com/enroll", body: params.to_json)
+    HTTParty.post(ENV['birdv_url'], body: params.to_json)
 
 
     if MODE == PRO

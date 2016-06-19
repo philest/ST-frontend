@@ -21,6 +21,7 @@ gem 'airbrake'
 gem 'sinatra-flash'
 gem 'json'
 gem 'httparty'
+gem 'dotenv'
 
 group :development, :test do
   gem 'fuubar'
