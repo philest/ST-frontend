@@ -283,6 +283,7 @@ DEPENDENCIES
   capybara
   database_cleaner
   descriptive_statistics
+  dotenv
   factory_girl
   fakeredis
   fuubar
