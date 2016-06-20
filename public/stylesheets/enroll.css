@@ -15,7 +15,7 @@
 
 
 
-/*portrait*/
+/*tablet*/
 @media (min-width: 768px) {
 	.enroll{
 		width: 65%;
@@ -24,7 +24,7 @@
 }
 
 
-/*tablet*/
+/*desktop*/
 @media (min-width: 1024px) {
 	.enroll{
 		width: 55%;
@@ -32,10 +32,10 @@
 
 }
 
-/*desktop*/
-@media (min-width: 1024px) {
+/*xlarge*/
+@media (min-width: 1280px) {
 	.enroll{
-		width: 60%;
+		width: 45%;
 	}
 }
 
