@@ -54,7 +54,57 @@ h2.enroll_header {
 
 /*teacher stuff*/
 
+.teacher-info-box {
+	padding: 40px;
+	max-width: 480px;
+	margin: 0 auto;
+}
 
+.setup-signature-title, .setup-signature-name {
+	display: inline-block;
+    vertical-align: top;
+}
+
+.setup-signature-name {
+    width: 260px;
+}
+
+.setup-signature-title {
+	margin-right: 10px;
+	width: 100px;
+}
+
+.label {
+	font-size: 14px;
+    font-weight: 600;
+    line-height: 1.38;
+    margin: 0 0 8px;
+    text-align: left;
+    display: block;
+    cursor: default;
+}
+
+
+.field .input {
+	margin: 0 0 8px;
+}
+
+.input {
+	transition: 75ms ease-in-out;
+    transition-property: background,border-color,box-shadow,color;
+    background: #fff;
+    border: 1px solid #c5c7cb;
+    border-radius: 3px;
+    width: 100%;
+    color: #282c31;
+    font-family: 'Karla',sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    line-height: normal;
+}
+
+
+/*END of teacher stuff*/
 
 
 .group-invite {
@@ -182,9 +232,11 @@ TODO trigger a new div with this styling on focus.
 	margin: 0 0 12px;
     position: relative;
     text-align: left;
-    font-size: 13px;
-    line-height: 1.5;
+}
 
+.legal-field {
+	font-size: 13px;
+    line-height: 1.5;
 }
 
 .thunder {
