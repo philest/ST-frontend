@@ -55,14 +55,16 @@ h2.enroll_header {
 /*teacher stuff*/
 
 .teacher-info-box {
-	padding: 40px;
+	padding: 40px 40px 0px 40px;
 	max-width: 480px;
 	margin: 0 auto;
 }
 
 .setup-signature-title, .setup-signature-name {
-	display: inline-block;
-    vertical-align: top;
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+
 }
 
 .setup-signature-name {
@@ -70,8 +72,20 @@ h2.enroll_header {
 }
 
 .setup-signature-title {
-	margin-right: 10px;
-	width: 100px;
+	width: 260px;
+}
+
+/*portrait*/
+@media (min-width: 568px) {
+	.setup-signature-title {
+		width: 100px;
+		margin-right: 10px;
+	}
+	.setup-signature-title, .setup-signature-name {
+	display: inline-block;
+    vertical-align: top;
+	}
+
 }
 
 .label {
