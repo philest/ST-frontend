@@ -12,7 +12,7 @@ body {
     border-radius: 3px;
     color: #f6f6f6;
     content: 'Click to dismiss';
-    font: bold 12px/30px 'Montserrat';
+    font: bold 12px/30px 'Karla', sans-serif;
     height: 30px;
     left: 50%;
     margin-left: -60px;
@@ -67,7 +67,7 @@ body {
     box-shadow: 0 5px 0 hsla(0,0%,0%,.1);
     color: #f6f6f6;
     display: block;
-    font: bold 16px/40px 'Montserrat';
+    font: bold 16px/40px 'Karla', sans-serif;
     height: 40px;
     position: absolute;
     text-align: center;

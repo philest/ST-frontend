@@ -139,7 +139,7 @@ select.input  {
 	font-weight: 400;
 	text-align: center;
 	line-height: 1.38;
-	font-family: 'Karla';
+	font-family: 'Karla', sans-serif;
 }
 
 .box-header-subtext {
