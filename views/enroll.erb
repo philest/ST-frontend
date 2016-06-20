@@ -32,7 +32,7 @@
 			        setupFormValidation: function()
 	        		{
 						    // Setup form validation on the .table-input-body-row element
-						    $(<%="\".table-input-body\""%>).each(function () {
+						    $("form").each(function () {
 						    	$(this).validate({
 
 								    	  // Specify the validation rules
@@ -45,6 +45,13 @@
 
 								    <%end%>
 
+								    	teacher_prefix: {
+								    		required: true
+								    	},
+
+								    	teacher_name: {
+								    		required: true
+								    	}
 
 						        },
 
@@ -54,6 +61,11 @@
 							            <%="phone_#{@idx}"%>: "Invalid phone number",
 
 								    <%end%>
+
+								    	teacher_name: "Include your name for parents."
+								    
+
+
 						        },
 
 						         submitHandler: function(form) {
@@ -166,7 +178,7 @@
 	<body>
 
         <div id="alert" class='submit-errors'>
-		    <a class="alert" href="#alert">Please fix the invalid phone numbers</a>
+		    <a class="alert" href="#alert">Please correct the following errors</a>
 		</div>
 
 	
@@ -200,7 +212,7 @@
 						<label class="label">Title
 						</label>
 						<div class="field">
-							<select name="teacher-title" class="input">
+							<select name="teacher_prefix" class="input">
 								<option selected="selected">[No title]</option>
 								<option value="Ms.">Ms.</option>
 								<option value="Mrs.">Mrs.</option>
@@ -213,7 +225,7 @@
 						<label class="label">Name
 						</label>
 						<div class="field">
-							<input name="teacher-name" placeholder= "Sarah Jones" class="input">
+							<input name="teacher_name" placeholder= "S. Jones" class="input">
 						</div>
 					</div>
 				</div>
