@@ -1,9 +1,44 @@
 
 .enroll {
 	display: block;
-	width: 60%;
+	width: 100%;
 	margin: auto;
 }
+
+/*portrait*/
+@media (min-width: 568px) {
+	.enroll{
+		width: 80%;
+	}
+
+}
+
+
+
+/*portrait*/
+@media (min-width: 768px) {
+	.enroll{
+		width: 65%;
+	}
+
+}
+
+
+/*tablet*/
+@media (min-width: 1024px) {
+	.enroll{
+		width: 55%;
+	}
+
+}
+
+/*desktop*/
+@media (min-width: 1024px) {
+	.enroll{
+		width: 60%;
+	}
+}
+
 
 .enroll h1 {
 	text-align: left;
@@ -32,6 +67,7 @@ h2.enroll_header {
 	font-weight: 400;
 	text-align: center;
 	line-height: 1.38;
+	font-family: 'Karla';
 }
 
 .box-header-subtext {
