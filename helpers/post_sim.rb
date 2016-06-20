@@ -14,7 +14,7 @@ params = { :name_0 => "Phil",
 		   :name_2 => "Aub",
 		   :phone_2 => "5612125999",
 		   "teacher_prefix" => "Ms.",
-		   "teacher_name" => "Jones"
+		   "teacher_signature" => "Jones"
 		 }
 
 # binding.pry
