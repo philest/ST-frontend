@@ -254,6 +254,7 @@ TODO trigger a new div with this styling on focus.
 .legal-field {
 	font-size: 13px;
     line-height: 1.5;
+    text-align: center;
 }
 
 .thunder {
