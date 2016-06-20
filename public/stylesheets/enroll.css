@@ -84,6 +84,9 @@ h2.enroll_header {
     cursor: default;
 }
 
+select.input  {
+	height: 45px;
+}
 
 .field .input {
 	margin: 0 0 8px;
