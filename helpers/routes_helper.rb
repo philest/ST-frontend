@@ -57,7 +57,7 @@ module RoutesHelper
 
     if MODE == PRO
 
-      Report new followers.
+      # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
