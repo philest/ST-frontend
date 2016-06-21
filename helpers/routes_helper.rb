@@ -54,10 +54,11 @@ module RoutesHelper
 
     # send the families to birdv
     HTTParty.post(ENV['quailtime_url'], body: params)
+    puts "Posted #{params} to #{ENV['quailtime_url']}"
 
     if MODE == PRO
 
-      Report new followers.
+      # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
