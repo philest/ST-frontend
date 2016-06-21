@@ -15,7 +15,7 @@
 
 
 
-/*portrait*/
+/*tablet*/
 @media (min-width: 768px) {
 	.enroll{
 		width: 65%;
@@ -24,7 +24,7 @@
 }
 
 
-/*tablet*/
+/*desktop*/
 @media (min-width: 1024px) {
 	.enroll{
 		width: 55%;
@@ -32,10 +32,10 @@
 
 }
 
-/*desktop*/
-@media (min-width: 1024px) {
+/*xlarge*/
+@media (min-width: 1280px) {
 	.enroll{
-		width: 60%;
+		width: 45%;
 	}
 }
 
@@ -139,7 +139,7 @@ select.input  {
 	font-weight: 400;
 	text-align: center;
 	line-height: 1.38;
-	font-family: 'Karla';
+	font-family: 'Karla', sans-serif;
 }
 
 .box-header-subtext {
@@ -254,6 +254,7 @@ TODO trigger a new div with this styling on focus.
 .legal-field {
 	font-size: 13px;
     line-height: 1.5;
+    text-align: center;
 }
 
 .thunder {
