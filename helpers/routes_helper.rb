@@ -64,7 +64,7 @@ module RoutesHelper
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: A new teacher enrolled \
-                           a class of #{params.count / 2}.",
+                           a class of #{(params.count / 2)-1}.",
             :body => "They enrolled: \
                       #{params}.")
     end
