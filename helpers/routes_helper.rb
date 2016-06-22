@@ -53,7 +53,7 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    HTTParty.post(ENV['quailtime_url'], body: params)
+    HTTParty.post(ENV['birdv_url'], body: params)
 
     puts "Posted #{params} to #{ENV['birdv_url']}"
 
