@@ -83,6 +83,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "gives invalid phone errors" do
+      fill_in('name_3', :with => 'Phil Vandelay')
       expect(page).to have_content "Invalid"
     end
 
@@ -128,6 +129,29 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
   end 
+
+  context "when submitting with an improper email", :type => :feature, :js => :true do
+    
+    before(:each) do
+      visit '/enroll'   
+      select('Ms.', :from => 'teacher_prefix')
+      fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_email', :with => "sam_stobierski")
+      fill_in('name_0', :with => 'Art Vandelay')
+      fill_in('phone_0', :with => '5612125888')
+      click_button('Add people')
+    end
+
+    it "shows error message" do
+      expect(page).to have_content "Please enter a valid email"
+    end
+
+    it "does not redirect" do
+      expect(page).to have_content "get your class free stories"
+    end
+
+  end 
+
 
 
 
