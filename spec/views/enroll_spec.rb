@@ -52,6 +52,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       visit '/enroll'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
     end
@@ -73,6 +74,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       visit '/enroll'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125')
       fill_in('name_1', :with => 'Phil Vandelay')
@@ -86,10 +88,11 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
 
   end 
 
-  context "when submitting with no name", :type => :feature, :js => :true do
+  context "when submitting with no teacher name", :type => :feature, :js => :true do
     
     before(:each) do
       visit '/enroll'   
+      fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
       click_button('Add people')
@@ -104,6 +107,28 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
   end 
+
+  context "when submitting with no teacher email", :type => :feature, :js => :true do
+    
+    before(:each) do
+      visit '/enroll'   
+      select('Ms.', :from => 'teacher_prefix')
+      fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('name_0', :with => 'Art Vandelay')
+      fill_in('phone_0', :with => '5612125888')
+      click_button('Add people')
+    end
+
+    it "shows error message" do
+      expect(page).to have_content "Please correct"
+    end
+
+    it "does not redirect" do
+      expect(page).to have_content "get your class free stories"
+    end
+
+  end 
+
 
 
 
