@@ -61,6 +61,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "does redirect" do
+      click_button('Add people')
       expect(page).to have_content "Great!"
     end
 
