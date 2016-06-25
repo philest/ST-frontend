@@ -161,6 +161,16 @@ get '/enroll_success' do
   erb :enroll_success
 end
 
+# redirect to Messenger app. 
+get '/books' do
+  redirect to('http://m.me/490917624435792')
+end
+
+
+
+
+
+
 
 #twilio failed: no valid response for sms.
 get '/failed' do
