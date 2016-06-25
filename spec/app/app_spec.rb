@@ -10,7 +10,7 @@ ENV['RACK_ENV'] = "test"
 require_relative "../spec_helper"
 require 'rack/test'
 
-require_relative '../../app/controllers/app.rb'
+require_relative '../../app/app.rb'
 
 
 
@@ -50,6 +50,14 @@ describe 'Website' do
       get '/books'
       expect(last_response).to have_http_status(:redirect)
   end 
+
+  # it "redirects to the messaging app" do
+  #     get '/books'
+  #     require 'pry'
+  #     binding.pry
+  #     expect(last_response).to have_http_status(:redirect)
+  # end 
+
 
 end
 
