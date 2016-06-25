@@ -14,7 +14,7 @@ require_relative '../../app/app.rb'
 
 
 
-describe 'Website' do
+describe 'Website',  :type => :request do
   include Rack::Test::Methods
 
   def app
@@ -46,17 +46,20 @@ describe 'Website' do
       expect(last_response).to be_ok
   end
 
-  it "redirects to the messaging app" do
+  it "redirects" do
       get '/books'
-      expect(last_response).to have_http_status(:redirect)
+      expect(last_response).to be_redirect   # This works, but I want it to be more specific
   end 
 
-  # it "redirects to the messaging app" do
-  #     get '/books'
-  #     require 'pry'
-  #     binding.pry
-  #     expect(last_response).to have_http_status(:redirect)
-  # end 
+  it "redirects to the messaging app" do
+      get '/books'
+      follow_redirect!
+      expect(last_request.url).to eq 'http://m.me/490917624435792'
+  end 
+
+
+
+
 
 
 end
