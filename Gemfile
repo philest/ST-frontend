@@ -23,6 +23,8 @@ gem 'json'
 gem 'httparty'
 gem 'dotenv'
 
+
+
 group :development, :test do
   gem 'fuubar'
 end
@@ -37,7 +39,7 @@ end
 group :test do
 	gem 'rspec'
 	gem 'capybara'
-	gem 'selenium-webdriver'
+	gem 'selenium-webdriver', "2.48"
 	gem 'database_cleaner'
 	gem 'pry', "= 0.10.0"
 	gem 'pry-nav'

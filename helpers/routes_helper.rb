@@ -53,8 +53,9 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    HTTParty.post(ENV['quailtime_url'], body: params)
-    puts "Posted #{params} to #{ENV['quailtime_url']}"
+    HTTParty.post(ENV['enroll_url'], body: params)
+
+    puts "Posted #{params} to #{ENV['enroll_url']}"
 
     if MODE == PRO
 
@@ -62,15 +63,12 @@ module RoutesHelper
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: A new teacher enrolled \
-                           a class of #{params.count / 2}.",
+            :subject => "ST: A new teacher (#{params[:teacher_name]}) enrolled \
+                           a class of #{(params.count / 2)-1}.",
             :body => "They enrolled: \
                       #{params}.")
     end
     flash[:notice] = "Great! Your class was successfully added."
-
-
   end
-
 
 end
