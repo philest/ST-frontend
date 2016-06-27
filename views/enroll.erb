@@ -51,6 +51,11 @@
 
 								    	teacher_signature: {
 								    		required: true
+								    	},
+
+								    	teacher_email: {
+								    		required: true,
+								    		email: true
 								    	}
 
 						        },
@@ -228,6 +233,13 @@
 							<input name="teacher_signature" placeholder= "S. Jones" class="input">
 						</div>
 					</div>
+					<div class="setup-signature-email">
+						<label class="label">Email
+						</label>
+						<div class="field">
+							<input name="teacher_email" placeholder= "sjones@ymca.org" class="input">
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -304,41 +316,6 @@
 		$('.submit-errors').click(function(){
 			        $(this).hide();
 			});
-
-		// was there ever some valid input?
-		// some_valid = false 
-
-
-
-
-		//  Every 200ms, make button clickable if some valid input
-        // window.setInterval(function(){
-
-			// <%(@stud_count).times do |idx| @idx = idx%>
-			// 	if($("<%="input[name=\'phone_#{@idx}\']"%>").val() != '' && 
-			// 		$("<%="input[name=\'phone_#{@idx}\']"%>").validate().errorContext.length == 0)
-			// 	{
-			// 		some_valid = true
-			// 		console.log(<%=@idx%>)
-			// 	}
-			// <%end%>
-
-   //        // if there's some valid input
-   //        if(some_valid)
-   //        {
-   //        	$('.Button-not-ready').hide()
-   //        	$('.Button-ready').show()
-
-   //        	// console.log("there's a valid input!")
-
-   //        }
-   //        else
-   //        {
-   //        	$('.Button-ready').hide()
-   //        	$('.Button-not-ready').show()
-   //        	console.log("no valid input")
-   //        }
-   //      }, 200);
 
 
 	</script>
