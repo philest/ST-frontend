@@ -40,6 +40,31 @@
 }
 
 
+
+#enroll-logo {
+	height: 100px;
+}
+/*SIDEBAR*/
+
+.sidebar {
+	display: inline-block;
+	box-sizing: border-box;
+	background: #f2f3f5;
+    width: 260px;    
+    height: 1100px;
+    padding: 28px 28px 0;
+    position: relative;
+    text-align: left;
+}
+
+
+/*END SIDEBAR*/
+
+.main-box {
+	display: inline-block;
+	width: 600px;
+}
+
 .enroll h1 {
 	text-align: left;
 }
