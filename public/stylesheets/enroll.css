@@ -501,6 +501,27 @@ label.error {
 }
 
 
+.alert {
+	width: 100%;
+}
+
+
+@media (min-width: 728px) {
+	.alert {
+		z-index: -10;
+		position: relative;
+		width: 70%;
+		float: right;
+}
+
+
+@media (min-width: 885px) {
+	.alert {
+		width: 78%;
+	}
+}
+
+
 /*Flyer section*/
 
 
