@@ -161,6 +161,10 @@ get '/enroll_success' do
   erb :enroll_success
 end
 
+get '/enroll/flyer' do
+  erb :flyer
+end
+
 # redirect to Messenger app. 
 get '/books' do
   redirect to('http://m.me/490917624435792')

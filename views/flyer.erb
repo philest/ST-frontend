@@ -131,20 +131,20 @@
 
 
 
-		<link rel="stylesheet" href="stylesheets/job_board.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/job_board.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/alert.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
+		<link rel="stylesheet" href="../stylesheets/fonts.css" type="text/css">
 
-		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/main.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/team.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/team.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/enroll.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/enroll.css" type="text/css" />
 
 
-		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
+		<link rel="stylesheet" href="../stylesheets/pure-push-pull.css" type="text/css" />
 
 
 		<!-- Favicon and App icon images -->
@@ -196,7 +196,7 @@
 			</div>
 			<nav class="tabs">
 				<ul>
-					<li id="envelope" class="active">
+					<li id="envelope" >
 						<img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
 
@@ -204,7 +204,7 @@
  -->						<a  href="/enroll">Signup class
 						</a>
 					</li>
-					<li id="printer">
+					<li id="printer" class="active">
 						<img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
 
 						<a href="/enroll/flyer">Info for parents
@@ -237,103 +237,7 @@
 					<h2 class="our_team enroll_header">get your class free stories</h2>
 				</div>
 			</div>
-
-			<form class = "enroll-teacher-class" action="enroll_families_form_success" method="post">
-				<div class="teacher-info-box">
-					<header class="box-header">
-						<h2 class="box-header-title">What do parents call you?</h2>
-						<h3 class="box-header-subtext">
-							Only your class can see your name on StoryTime.
-						</h3>
-					</header>
-					<div class="setup-signature">
-					<div>
-					</div>
-						<div class="setup-signature-title">
-							<label class="label">Title
-							</label>
-							<div class="field">
-								<select name="teacher_prefix" class="input">
-									<option selected="selected" value=''>[No title]</option>
-									<option value="Ms.">Ms.</option>
-									<option value="Mrs.">Mrs.</option>
-									<option value="Mr.">Mr.</option>
-									<option value="Miss">Miss</option>
-								</select>
-							</div>
-						</div>
-						<div class="setup-signature-name">
-							<label class="label">Name
-							</label>
-							<div class="field">
-								<input name="teacher_signature" placeholder= "S. Jones" class="input">
-							</div>
-						</div>
-						<div class="setup-signature-email">
-							<label class="label">Email
-							</label>
-							<div class="field">
-								<input name="teacher_email" placeholder= "sjones@ymca.org" class="input">
-							</div>
-						</div>
-					</div>
-				</div>
-
-			
-				<div class="enroll group-invite">
-					<div class="box-header">
-						<h2 class="box-header-title">Enter phone numbers</h2>
-						<h3 class="box-header-subtext">
-							Enter contact information in the space provided
-						</h3>
-					</div>
-					<div class="box-body">
-						<div class="row row-small">
-							<div class="table-input">
-								<header class="table-input-header-row">
-									<span class="table-input-cell-validation table-input-cell">
-									</span>
-		
-									<div class="table-input-header-cell table-input-cell"> Child name</div>
-									<div class="table-input-header-cell table-input-cell"> Parent phone
-									</div>
-
-								</header>
-
-								<div class="table-input-container">
-									<div class="table-input-body">
-										<%@stud_count.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
-											<span class="table-input-body-row">
-												<span class="table-input-cell-validation table-input-cell">
-												</span>
-
-												<span class="table-input-body-cell table-input-cell">
-													<div class="form-cell-input">
-														<input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
-													</div>
-												</span>
-			
-												<span class="table-input-body-cell table-input-cell">
-													<div class="form-cell-input">
-														<input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
-													</div>
-												</span>
-											</span>
-										<%end%>
-									</div>
-
-								</div>
-							</div>
-						</div>
-						<div class="field legal-field">
-							<span class="thunder">
-							By clicking "Add people," I confirm that these people gave me permission to send them emails and text messages. 
-							</span>
-						</div>
-							<button class="Button-ready" type="submit">Add people</button>					
-					</div>
-				</div>
-			</form>
+			<h2>               Put your PDF here!</h2>
 		</div>
 
 
