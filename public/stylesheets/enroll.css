@@ -59,7 +59,43 @@
     padding: 28px 28px 0;
     position: relative;
     text-align: left;
+    width: 30%;
 }
+
+/*ONLY FOR non-mobile*/
+nav.tabs {
+/*	width: 260px;
+*/
+    width: 260px;
+    border: 0;
+/*    margin: 0 -260px 0 0;
+*/
+	margin: 0 -260px 0 0;
+    position: absolute;
+    top: 135px;
+    right: 100%;
+}
+
+
+@media (min-width: 885px) {
+
+	.sidebar {
+	    width: 22%;
+	}
+	
+	.main-box {
+		width: 78%;
+	}
+
+	nav.tabs {
+		width: 340px;
+		margin: 0 -340px 0 0;
+	}
+
+}
+
+
+
 
 .sidebar-heading { 
 	color: #6b6e72;
@@ -72,12 +108,92 @@
 	margin-top: 5em;
 }
 
+ul {
+	list-style: none;
+}
+
+li {
+	display: block;
+    margin: 0;
+    font-size: 14px;
+	
+	/*added because absolute positioning broke the padding*/
+    height: 56px;
+}
+
+li.active {
+    background: #fff;
+    border: 0;
+    color: inherit;
+}
+
+li.active a {
+    color: inherit;
+}
+
+li img {
+	display: inline-block;
+}
+
+li#envelope a{
+	position: absolute;
+    margin-top: 18px;
+    margin-left: -21px;
+    padding-top: 0px;
+}
+
+li#envelope img {
+	margin-left: 29px;
+    margin-top: 17px;
+    height: 20px;
+}
+
+
+
+
+
+li#printer a{
+	position: absolute;
+    margin-top: 18px;
+    margin-left: -21px;
+    padding-top: 0px;
+}
+
+li#printer img {
+	margin-left: 25px;
+    margin-top: 12px;
+    height: 1.9em;
+}
+/*
+.glyph:before {
+	    content: "";
+	float: left;
+    width: 15px;
+    height: 15px;
+    margin: 4px 5px 0 0;
+    background: url("https://s3.amazonaws.com/st-webpage/assets/printer-icon.png") -15px 0;
+
+}
+*/
+li a {
+	display: inline-block;
+	border: 0;
+    color: #6b6e72;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 16px 28px;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 
 /*END SIDEBAR*/
 
 .main-box {
 	display: inline-block;
-	width: 600px;
+	width: 70%;
+
 }
 
 .enroll h1 {
