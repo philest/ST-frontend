@@ -77,6 +77,7 @@ nav.tabs {
 }
 
 
+
 @media (min-width: 885px) {
 
 	.sidebar {
@@ -93,6 +94,7 @@ nav.tabs {
 	}
 
 }
+
 
 
 
@@ -195,6 +197,19 @@ li a {
 	width: 70%;
 
 }
+
+/*mobile!!!! NOTE: max-width, not min-width*/
+@media (max-width: 768px) {
+	.sidebar {
+	    display: none;
+	}
+
+	.main-box {
+		width: 100%;
+	}
+
+}
+
 
 .enroll h1 {
 	text-align: left;
