@@ -39,6 +39,9 @@
 	}
 }
 
+#logo-container {
+	margin-top: 5em;
+}
 
 
 #enroll-logo {
@@ -48,13 +51,25 @@
 
 .sidebar {
 	display: inline-block;
+	float: left;
 	box-sizing: border-box;
 	background: #f2f3f5;
     width: 260px;    
-    height: 1100px;
+    height: 1150px;
     padding: 28px 28px 0;
     position: relative;
     text-align: left;
+}
+
+.sidebar-heading { 
+	color: #6b6e72;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.sidebar-heading h3 {
+	margin-top: 5em;
 }
 
 
