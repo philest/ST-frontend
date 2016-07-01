@@ -66,10 +66,6 @@ get '/' do
 end
 
 
-get '/learn-more' do
-  send_file File.join(settings.public_folder, 'About_StoryTime.pdf')
-end
-
 get '/privacy' do
   erb :privacy_policy
 end
