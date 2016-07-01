@@ -121,6 +121,7 @@ li {
 	
 	/*added because absolute positioning broke the padding*/
     height: 56px;
+    width: 100%;
 }
 
 li.active {
@@ -199,7 +200,7 @@ li a {
 }
 
 /*mobile!!!! NOTE: max-width, not min-width*/
-@media (max-width: 768px) {
+@media (max-width: 728px) {
 	.sidebar {
 	    display: none;
 	}
