@@ -1,6 +1,5 @@
 require 'sinatra/activerecord' #sinatra w/ DB
 require_relative '../config/environments' #DB configuration
-require_relative '../models/follower'
 
 #email, to learn of failures
 require 'pony'
