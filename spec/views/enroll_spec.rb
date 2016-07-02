@@ -1,4 +1,4 @@
-#  spec/views/enroll.rb       Phil Esterman    
+#  spec/views/enroll_spec.rb       Phil Esterman    
 # 
 #  Testing the Teacher Enrollment interface. 
 #  --------------------------------------------------------
@@ -35,13 +35,13 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       expect(page).to have_content "free"
   end
 
-  it "loads /enroll" do 
-      visit '/enroll'
+  it "loads /signup" do 
+      visit '/signup'
       expect(page).to have_content "get your class free stories"
   end 
 
   it "does not load a random page" do 
-      visit '/enroll'
+      visit '/signup'
       expect(page).to_not have_content "fake fake fake... / 
                                         just my analysis."
   end
@@ -49,7 +49,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
   context "when properly enrolling a family", :type => :feature, :js => :true do
     
     before(:each) do
-      visit '/enroll'   
+      visit '/signup'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
@@ -71,7 +71,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
   context "when entering invalid phone", :type => :feature, :js => :true do
     
     before(:each) do
-      visit '/enroll'   
+      visit '/signup'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
@@ -92,7 +92,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
   context "when submitting with no teacher name", :type => :feature, :js => :true do
     
     before(:each) do
-      visit '/enroll'   
+      visit '/signup'   
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
@@ -112,7 +112,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
   context "when submitting with no teacher email", :type => :feature, :js => :true do
     
     before(:each) do
-      visit '/enroll'   
+      visit '/signup'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
       fill_in('name_0', :with => 'Art Vandelay')
@@ -133,7 +133,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
   context "when submitting with an improper email", :type => :feature, :js => :true do
     
     before(:each) do
-      visit '/enroll'   
+      visit '/signup'   
       select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
       fill_in('teacher_email', :with => "sam_stobierski")
