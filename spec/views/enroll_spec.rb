@@ -152,6 +152,10 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
 
   end 
 
+  it "has the flyer" do
+      get '/signup/flyer'
+      expect(last_response).to be_ok
+  end
 
 
 
