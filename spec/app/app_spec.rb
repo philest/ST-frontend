@@ -37,7 +37,7 @@ describe 'Website',  :type => :request do
   end
 
   it "loads teacher interface" do
-      get '/enroll'
+      get '/signup'
       expect(last_response).to be_ok
   end
 

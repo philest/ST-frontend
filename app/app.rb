@@ -59,7 +59,7 @@ get '/privacy' do
   erb :privacy_policy
 end
 
-get '/enroll' do
+get '/signup' do
   erb :enroll
 end
 
@@ -128,7 +128,7 @@ post '/enroll_families_form_success' do
 end
 
 
-get '/enroll/flyer' do
+get '/signup/flyer' do
   erb :flyer
 end
 
