@@ -16,10 +16,10 @@ working_directory app_path
 listen app_path + '/tmp/unicorn.sock', backlog: 64
 
 
-
-before_fork do |server, worker|
-   @sidekiq_pid ||= spawn("bundle exec sidekiq -q critical -q default -c 15 -v -r ./app/app.rb")
-end
+# commented out the job
+# before_fork do |server, worker|
+#    @sidekiq_pid ||= spawn("bundle exec sidekiq -q critical -q default -c 15 -v -r ./app/app.rb")
+# end
 
 # # If using ActiveRecord, disconnect (from the database) before forking.
 # before_fork do |server, worker|
