@@ -147,15 +147,10 @@ end
 
 post '/enroll_families_form_success' do 
 
-  puts "HERE"
   enroll_families(params)
   erb :internal_success
 end
 
-
-get '/enroll_success' do
-  erb :enroll_success
-end
 
 get '/enroll/flyer' do
   erb :flyer

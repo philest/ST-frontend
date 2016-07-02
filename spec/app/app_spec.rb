@@ -42,7 +42,7 @@ describe 'Website',  :type => :request do
   end
 
   it "loads enroll success page" do
-      get '/enroll_success'
+      post '/enroll_families_form_success' 
       expect(last_response).to be_ok
   end
 
