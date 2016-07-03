@@ -137,5 +137,17 @@ a.enroll_success {
 	}
 }
 
+@media (min-width: 1280px) {
+	div.enroll_suc.sidebar {
+		height: 750px;
+	}
+}
+
+
+@media (min-width: 1564px) {
+	div.enroll_suc.sidebar {
+		height: 850px;
+	}
+}
 
 
