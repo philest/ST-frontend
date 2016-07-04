@@ -63,6 +63,10 @@ get '/signup' do
   erb :enroll
 end
 
+get '/go' do
+  redirect to('/signup')
+end
+
 
 # Documenation. 
 get '/doc/' do 
