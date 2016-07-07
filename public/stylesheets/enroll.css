@@ -245,30 +245,22 @@ h2.enroll_header {
 	margin: 0 auto;
 }
 
-.setup-signature-title, .setup-signature-name, .setup-signature-email {
+.setup-signature-name, .setup-signature-email {
 	margin-left: auto;
     margin-right: auto;
     display: block;
 }
 
-.setup-signature-name, .setup-signature-title, .setup-signature-email {
+.setup-signature-name, .setup-signature-email {
 	width: 260px;
 }
 
 /*portrait*/
 @media (min-width: 568px) {
 
-	.setup-signature-email {
-		margin-left: 0px;
-	}
-
 	.setup-signature-title {
 		width: 100px;
 		margin-right: 10px;
-	}
-	.setup-signature-title, .setup-signature-name {
-	display: inline-block;
-    vertical-align: top;
 	}
 
 }
