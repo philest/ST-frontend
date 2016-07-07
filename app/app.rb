@@ -63,8 +63,16 @@ get '/signup' do
   erb :enroll
 end
 
-get '/go' do
+get '/read' do
   redirect to('/signup')
+end
+
+get '/start' do
+  redirect to('/signup')
+end
+
+get '/go' do
+  redirect to('http://m.me/490917624435792')
 end
 
 
