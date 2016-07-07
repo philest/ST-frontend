@@ -50,8 +50,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     
     before(:each) do
       visit '/signup'   
-      select('Ms.', :from => 'teacher_prefix')
-      fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_signature', :with => 'Ms. Stobierski')
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
@@ -72,8 +71,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     
     before(:each) do
       visit '/signup'   
-      select('Ms.', :from => 'teacher_prefix')
-      fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_signature', :with => 'Sam')
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125')
@@ -113,8 +111,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     
     before(:each) do
       visit '/signup'   
-      select('Ms.', :from => 'teacher_prefix')
-      fill_in('teacher_signature', :with => 'Stobierski')
+      fill_in('teacher_signature', :with => 'Sam')
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
       click_button('Add people')
@@ -134,7 +131,6 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     
     before(:each) do
       visit '/signup'   
-      select('Ms.', :from => 'teacher_prefix')
       fill_in('teacher_signature', :with => 'Stobierski')
       fill_in('teacher_email', :with => "sam_stobierski")
       fill_in('name_0', :with => 'Art Vandelay')
