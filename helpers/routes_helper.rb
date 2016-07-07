@@ -62,8 +62,8 @@ module RoutesHelper
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: A new teacher (#{params[:teacher_name]}) enrolled \
-                           a class of #{(params.count / 2)-1}.",
+            :subject => "ST: A new teacher (#{params[:teacher_signature]}) enrolled \
+                           #{(params.count / 2)-1} student.",
             :body => "They enrolled: \
                       #{params}.")
     end
