@@ -21,8 +21,7 @@ params = { :name_0 => "Phil Esterman",
 		   :phone_5 => "8188049338",
 		   :name_6 => "Emily McPeek", 
 		   :phone_6 => "8184292090",
-		   "teacher_prefix" => "Ms.",
-		   "teacher_signature" => "Jones",
+		   "teacher_signature" => "Ms. Jones",
 		   "teacher_email" => "david.mcpeek@yale.edu",
 		   :name_7 => "Dud One", 
 		   :phone_7 => "123456789",
@@ -33,15 +32,6 @@ params = { :name_0 => "Phil Esterman",
 
 
 		 }
-
-# params = {
-# 	:name_0 => "AssWipe", 
-# 	:phone_0 => "keyboard MADNESS!", 
-# 	:teacher_prefix => "Ms.",
-# 	:teacher_signature => "Jones"
-# }
-
-# binding.pry
 
 
 HTTParty.post(ENV['enroll_url'], body: params)
