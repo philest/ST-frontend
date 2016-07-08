@@ -15,6 +15,8 @@ require "sinatra/reloader" if development?
 
 #for access in views
 require_relative '../config/environments' #DB configuration
+require_relative '../models/follower'
+
 #helpers
 require_relative '../helpers/routes_helper'
 
