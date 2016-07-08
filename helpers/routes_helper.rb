@@ -1,5 +1,6 @@
 require 'sinatra/activerecord' #sinatra w/ DB
 require_relative '../config/environments' #DB configuration
+require_relative '../models/follower'
 
 #email, to learn of failures
 require 'pony'
@@ -28,8 +29,8 @@ module RoutesHelper
 
   # Create a follower from the HTML form, notify us by email. 
   def create_follower(params)
-    # Follower.create(name: "none",
-    #               email: params[:email])
+    Follower.create(name: "none",
+                  email: params[:email])
   
     if MODE == PRO
 
