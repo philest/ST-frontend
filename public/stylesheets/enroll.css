@@ -5,11 +5,22 @@
 	margin: auto;
 }
 
+
+#enroll-container {
+	padding-left: 25px
+}
+
 /*portrait*/
 @media (min-width: 568px) {
 	.enroll{
 		width: 80%;
 	}
+
+	#enroll-container {
+		padding-left: 50px
+	}
+
+
 
 }
 
@@ -37,10 +48,6 @@
 	.enroll{
 		width: 45%;
 	}
-}
-
-#logo-container {
-	margin-top: 5em;
 }
 
 
