@@ -289,10 +289,6 @@ a .bottom button#join {
 	    margin-left: auto;
 	}
 
-	.hero-animation {
-		padding-right: 40px
-	}
-
 	.bottom .splash {
 		margin-top: 1.5em;
 	}
@@ -1005,6 +1001,13 @@ h4 span a{
 
 }
 
+@media screen and (min-width: 768px)	{
+	
+	#splash .hero-animation-container {
+	    padding-right: 70px;
+	}
+}
+
 @media screen and (min-width: 64em)	{
 
 	#splash .bottom_globe  img{
@@ -1019,9 +1022,14 @@ h4 span a{
 	    width: 45%;
 	}
 	
-
+	
+	#splash .hero-animation-container {
+		padding-right: 35px;
+	}
 
 }
+
+
 
 
 
