@@ -163,6 +163,9 @@ h1.banner {
 	margin-top: 1.5em;
 }
 
+
+
+
 .bottom #splash .animation img{
 		width: 16em;
 }
@@ -282,10 +285,14 @@ a .bottom button#join {
 
 @media screen and (min-width: 48em)	{
 	#splash .animation {
-	    position: absolute;
+	    display: block;
+	    margin-left: auto;
+	    padding-right: 40px
+
+/*	    position: absolute;
 	    left: 80%;
 	    margin-left: -155px;
-	}
+*/	}
 
 	.bottom .splash {
 		margin-top: 1.5em;
@@ -992,8 +999,18 @@ h4 span a{
 		margin-top: -7em;
 
 	}
+
+
 }
 
+@media screen and (min-width: 48em)	{
+
+	#splash .animation img{
+		margin-left: 0px;
+	    margin-right: 0px;
+	}
+
+}
 
 
 
