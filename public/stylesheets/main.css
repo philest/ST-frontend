@@ -287,12 +287,11 @@ a .bottom button#join {
 	#splash .animation {
 	    display: block;
 	    margin-left: auto;
-	    padding-right: 40px
+	}
 
-/*	    position: absolute;
-	    left: 80%;
-	    margin-left: -155px;
-*/	}
+	.hero-animation {
+		padding-right: 40px
+	}
 
 	.bottom .splash {
 		margin-top: 1.5em;
@@ -303,13 +302,9 @@ a .bottom button#join {
 	}
 
 	.bottom .splash-text {
-		margin-left: 5%;
-	}
+/*		margin-left: 5%;
+*/	}
 
-	#splash .bottom_globe {
-		left: 63%;
-	}
-	
 
 	#splash .animation img{
 		width: 18em;
@@ -364,9 +359,6 @@ a .bottom button#join {
 
 @media screen and (min-width: 64em)	{
 
-	#splash .bottom_globe {
-		left: 58%;
-	}
 
 	.bottom #splash .animation img{
 		width: 21em;
@@ -757,6 +749,7 @@ h4 span a{
 	
 	min-width: 13em;
 	max-width: 15em;
+	display: inline-block;
 }
 
 
@@ -1005,12 +998,33 @@ h4 span a{
 
 @media screen and (min-width: 48em)	{
 
-	#splash .animation img{
+	#splash .hero-animation img{
 		margin-left: 0px;
 	    margin-right: 0px;
 	}
 
 }
+
+@media screen and (min-width: 64em)	{
+
+	#splash .bottom_globe  img{
+   		margin-left: auto;
+   		margin-right: 0px;
+
+	}
+		
+		/*change it from off-center*/
+	#splash .globe-text {
+		padding-left: 5%;
+	    width: 45%;
+	}
+	
+
+
+}
+
+
+
 
 
 
