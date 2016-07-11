@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-		<title>StoryTime - Enroll Class</title>
+		<title>StoryTime - Invite Class</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 		<meta name="description" content="StoryTime - Free stories by text message. For every family without books. We're closing the word gap at scale.">
@@ -17,111 +17,6 @@
 
 		<!-- The max number of students in a class -->
 		<%@stud_count = 25%>
-
-
-		<script> 
-
-
-			(function($,W,D)
-			{
-			    var JQUERY4U = {};
-
-			    JQUERY4U.UTIL =
-			    {
-
-			        setupFormValidation: function()
-	        		{
-						    // Setup form validation on the .table-input-body-row element
-						    $("form").each(function () {
-						    	$(this).validate({
-
-								    	  // Specify the validation rules
-						        rules: {
-				
-									<%(@stud_count).times do |idx| @idx = idx%>
-							            <%="phone_#{@idx}"%>: {
-							            	phoneUS: true
-							            },
-
-								    <%end%>
-
-								    	teacher_prefix: {
-								    		required: true
-								    	},
-
-								    	teacher_signature: {
-								    		required: true
-								    	},
-
-								    	teacher_email: {
-								    		required: true,
-								    		email: true
-								    	}
-
-						        },
-
-						        messages: {
-
-									<%(@stud_count).times do |idx| @idx = idx%>
-							            <%="phone_#{@idx}"%>: "Invalid phone number",
-
-								    <%end%>
-
-								    	teacher_signature: "Include your name for parents."
-								    
-
-
-						        },
-
-						         submitHandler: function(form) {
-				            		form.submit();
-				        		},
-
-    invalidHandler: function(form, validator) {
-      var errors = validator.numberOfInvalids();
-      if (errors) {
-        var message = errors == 1
-          ? 'Please correct the following error:\n'
-          : 'Please correct the following ' + errors + ' errors.\n';
-        var errors = "";
-        if (validator.errorList.length > 0) {
-            for (x=0;x<validator.errorList.length;x++) {
-                errors += "\n\u25CF " + validator.errorList[x].message;
-            }
-        }
-
-        $('.submit-errors').show()
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-
-        // alert(message + errors);
-      }
-      validator.focusInvalid();
-    }
-
-
-						    });
-
-						   });
-
-					}
-				}
-
-
-
-			    //when the dom has loaded setup form validation rules
-			    $(D).ready(function($) {
-			        JQUERY4U.UTIL.setupFormValidation();
-			        // $('.Button-ready').hide()
-
-			    });
-
-
-
-			})(jQuery, window, document);
-
-
-		</script>
-
 
 
 		
@@ -234,7 +129,7 @@
 			<div id="logo-container">
 				<div id="jobs">
 					<img id="logo-new" src="/images/modules/logo.png">
-					<h2 class="our_team enroll_header">get your class free stories</h2>
+					<h2 class="our_team enroll_header">free books by text.</h2>
 				</div>
 			</div>
 
