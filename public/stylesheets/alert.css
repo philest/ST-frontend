@@ -6,6 +6,7 @@ body {
 
 #alert {
     position: relative;
+    z-index: 999;
 }
 #alert:hover:after {
     background: hsla(0,0%,0%,.8);

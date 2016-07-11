@@ -3,6 +3,18 @@
 		margin-top: 30px;
 	}
 
+#questions {
+	border: none;
+}
+
+#questions:hover {
+	background: white;
+}
+
+a#questions:hover {
+	color: #ed7844;
+}
+
 @media (min-width: 600px)
 { 
 	.navbar {
