@@ -5,6 +5,21 @@
 	margin: auto;
 }
 
+#questions {
+	border-radius: 15px;
+    border: 4px solid #ed7844;
+    width: 145px;
+    height: 53px; 
+    font-size: 17px;
+}
+
+#questions:hover {
+	background-color: #ed7844;
+}
+
+a#questions:hover {
+	color: white;
+}
 
 #enroll-container {
 	padding-left: 25px
