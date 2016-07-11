@@ -1,4 +1,14 @@
 
+.navbar {
+		margin-top: 30px;
+	}
+
+@media (min-width: 600px)
+{ 
+	.navbar {
+		margin-top: 0px;
+	}
+}
 body#enroll_success{
 	text-align: center;
 	color: #4a4a4a;
