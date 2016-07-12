@@ -77,7 +77,64 @@
 							</h1>
 						</div>			
 						<div class="animation hero-animation-container pure-u-1 pure-u-md-1-2 pure-pull-md-1-2">
-							<img class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/animation.gif" alt="">
+							<img id="background-phone" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/htc-one-blank-high.jpg">
+							<img id="gif-animation" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/animation.gif">
+
+							<video  id="my-video" preload=auto autoplay loop/>
+								<source src="http://d2yudi7y1eei74.cloudfront.net/assets/rotated-video.mp4" type='video/mp4'>
+							</video>	
+						
+						<style>
+
+							img#gif-animation.hero-animation {
+								display: none;
+							}
+
+							#my-video {
+							    width: 240px;
+							    margin-left: 63px;
+							    margin-top: 100px;
+							    z-index: 999;
+
+							}
+
+							img#background-phone.hero-animation {
+								width: 370px;
+							}
+
+
+							img#background-phone.hero-animation, #my-video {
+								position: absolute;
+								display: inline-block;
+							}
+
+							@media (min-width: 1026px) {
+								#my-video {
+									margin-left: 143px;
+								}
+								
+								img#background-phone.hero-animation {
+									margin-left: 80px;
+
+								}
+
+							}
+
+							@media (max-width: 768px)
+							{
+								img#background-phone.hero-animation, #my-video {
+									display: none;
+								}
+
+								img#gif-animation.hero-animation {
+									display: block;
+								}
+
+							}
+
+
+						</style>
+
 						</div>
 
 
