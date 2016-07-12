@@ -53,6 +53,7 @@ enable :sessions
 
 #root
 get '/' do
+    cache_control :public, :max_age => 36000
     erb :main
 end
 
