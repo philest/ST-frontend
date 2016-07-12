@@ -83,8 +83,51 @@
 							<video  id="my-video" preload=auto autoplay loop muted>
 								<source src="http://d2yudi7y1eei74.cloudfront.net/assets/rotated-video.mp4" type='video/mp4'>
 							</video>	
-						
+						<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">Signup for StoryTime!</h2>
+        <div class="field">
+								<input name="teacher_email" placeholder="sjones@ymca.org" class="input">
+							</div>
+		<a href="/signup">
+	        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Signup</button>
+	    </a>
+
+      </div>
+    </div>
+  </div>
+	
 						<style>
+							
+							button#join.dialog-button {
+								margin-bottom: 15px;
+								font-size: 17px;
+								display: inline-block;
+							}
+
+							h2.modal-signup-heading{
+								font-size: 26px;
+   								text-align: center;
+   								color: #4a4a4a;
+   								font-family: 'Karla';
+							}
+							/*modal additions*/
+							div.modal-header {
+  							 	padding-bottom: 60px;
+							}
 
 							img#gif-animation.hero-animation {
 								display: none;
