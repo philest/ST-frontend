@@ -12,7 +12,15 @@
 		<script async src="/js/smooth-scroll.min.js"></script>
 
 		<script async type="text/javascript" src="/js/analytics.js"></script>
-		
+	
+	<!-- Bootstrap modal files -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script async type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+
+		<!-- end Boostrap -->
+
+
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
@@ -46,9 +54,14 @@
 
 	<body>
 
+
+
+
+
 		<div class="main-container">
 
-	
+
+
 			<nav class="navbar" role="navigation">
 				<div class="container">
 					<a href="/">
@@ -75,19 +88,10 @@
 							<br>
 							for your students<br>without any.
 							</h1>
-						</div>			
-						<div class="animation hero-animation-container pure-u-1 pure-u-md-1-2 pure-pull-md-1-2">
-							<img id="background-phone" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/htc-one-blank-high.jpg">
-							<img id="gif-animation" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/small-android.gif">
-
-							<video  id="my-video" preload=auto autoplay loop muted>
-								<source src="http://d2yudi7y1eei74.cloudfront.net/assets/rotated-video.mp4" type='video/mp4'>
-							</video>	
-						<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
+							<!-- Button trigger modal 	-->
+							<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+							  Launch demo modal
+							</button>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -99,24 +103,69 @@
       </div>
       <div class="modal-body">
         <h2 class="modal-signup-heading">Signup for StoryTime!</h2>
-        <div class="field">
-								<input name="teacher_email" placeholder="sjones@ymca.org" class="input">
-							</div>
-		<a href="/signup">
-	        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Signup</button>
-	    </a>
-
+      	<div class="signup-setup">
+	        <div class="field">
+									<input name="teacher_email" placeholder="sjones@ymca.org" class="input">
+			</div>
+			<a href="/signup">
+		        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Signup</button>
+		    </a>
+		 </div>
       </div>
     </div>
   </div>
+</div>								
+						</div>			
+						<div class="animation hero-animation-container pure-u-1 pure-u-md-1-2 pure-pull-md-1-2">
+							<img id="background-phone" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/htc-one-blank-high.jpg">
+							<img id="gif-animation" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/small-android.gif">
+
+							<video  id="my-video" preload=auto autoplay loop muted>
+								<source src="http://d2yudi7y1eei74.cloudfront.net/assets/rotated-video.mp4" type='video/mp4'>
+							</video>	
+
+
+
 	
 						<style>
 							
-							button#join.dialog-button {
-								margin-bottom: 15px;
-								font-size: 17px;
-								display: inline-block;
-							}
+.field .input {
+	margin: 0 0 8px;
+}
+
+.field {
+	display: inline-block;
+	margin: 0 0 12px;
+    position: relative;
+    text-align: left;
+        margin-left: 134px
+}
+
+.input {
+	transition: 75ms ease-in-out;
+    transition-property: background,border-color,box-shadow,color;
+    background: #fff;
+    border: 1px solid #c5c7cb;
+    border-radius: 3px;
+    width: 100%;
+    color: #282c31;
+    font-family: 'Karla',sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    line-height: normal;
+}
+
+
+
+					button#join.dialog-button {
+						margin-bottom: 15px;
+						font-size: 17px;
+						display: inline-block;
+						padding: 11px; 
+						/*match other*/
+						margin-left: 10px;
+
+					}
 
 							h2.modal-signup-heading{
 								font-size: 26px;
@@ -129,6 +178,7 @@
   							 	padding-bottom: 60px;
 							}
 
+
 							img#gif-animation.hero-animation {
 								display: none;
 							}
@@ -137,7 +187,7 @@
 							    width: 240px;
 							    margin-left: 63px;
 							    margin-top: 100px;
-							    z-index: 999;
+							    z-index: 800;
 
 							}
 
@@ -179,7 +229,7 @@
 						</style>
 
 						</div>
-
+						
 
 					</div>
 				</div>
