@@ -31,6 +31,7 @@ require 'sidekiq/api'
 
 configure :production do
   require 'newrelic_rpm'
+  set :static_cache_control, [:public, :max_age => 300]
 end
 
 # Error tracking. 
@@ -53,7 +54,6 @@ enable :sessions
 
 #root
 get '/' do
-    cache_control :public, :max_age => 36000
     erb :main
 end
 
