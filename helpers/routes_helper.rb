@@ -1,6 +1,7 @@
 require 'sinatra/activerecord' #sinatra w/ DB
 require_relative '../config/environments' #DB configuration
 require_relative '../models/follower'
+require_relative '../models/invite'
 
 #email, to learn of failures
 require 'pony'
@@ -45,6 +46,22 @@ module RoutesHelper
     flash[:notice] = "Great! We'll keep you updated."
 
   end
+
+  def create_invite
+
+    Invite.create(email: params[:email]) 
+    
+    if MODE == PRO
+      # Report new enrollees.
+      Pony.mail(:to => 'phil.esterman@yale.edu',
+            :cc => 'david.mcpeek@yale.edu',
+            :from => 'phil.esterman@yale.edu',
+            :subject => "ST: A new person (#{params[:email]}) signed up.",
+            :body => "They're on the list to get an invite.")
+    end
+
+  end
+
 
   def enroll_families(params)
 
