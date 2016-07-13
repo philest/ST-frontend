@@ -67,12 +67,10 @@ get '/signup' do
 end
 
 post '/success' do 
+  
   erb :success
 end
 
-get '/success' do 
-  erb :success
-end
 
 get '/read' do
   redirect to('/signup')
