@@ -73,7 +73,7 @@ post '/success' do
 end
 
 post '/demo_success' do 
-  send_demo(params[:phone])
+  send_demo(params)
   redirect to('/')
 end
 
