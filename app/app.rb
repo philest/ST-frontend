@@ -72,6 +72,11 @@ post '/success' do
   erb :success
 end
 
+post '/demo_success' do 
+  send_demo(params[:phone])
+  redirect to('/')
+end
+
 
 get '/read' do
   redirect to('/signup')

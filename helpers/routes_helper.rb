@@ -47,6 +47,21 @@ module RoutesHelper
 
   end
 
+  def send_demo(phone)
+
+    flash[:notice] = "Great! Your story's on the way."
+   
+    if MODE == PRO
+      # Report new enrollees.
+      Pony.mail(:to => 'phil.esterman@yale.edu',
+            :cc => 'david.mcpeek@yale.edu',
+            :from => 'phil.esterman@yale.edu',
+            :subject => "ST: Demo requested by #{phone}",
+            :body => "That's all.")
+    end
+
+  end
+
   def create_invite(params)
 
     Invite.create(email: params[:email]) 

@@ -23,6 +23,8 @@
 
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
+		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+
 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
@@ -55,7 +57,12 @@
 	<body>
 
 
-
+	<!-- Notify about form submission -->
+	<% if flash[:notice] %>
+		<div id="alert">
+		    <a class="alert" href="#alert">Great! Your story's on the way.</a>
+		</div>
+	<% end %>
 
 
 		<div class="main-container">
@@ -76,7 +83,7 @@
 				</div>
 			</nav>
 	
-<!-- Modal -->
+<!-- Modal Signup -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -100,10 +107,33 @@
     </div>
   </div>
 </div>
+<!-- end Modal Signup-->
 
-
-<!-- end Modal -->
-
+<!-- Modal Demo -->
+<div class="modal fade" id="myDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="navbar-logo" id="modal-logo"></div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">Get a demo story!</h2>
+        <form action="demo_success" method="post"> 
+	      	<div class="signup-setup">
+		        <div class="field" id="signup-field">
+										<input name="phone" placeholder="(555)-555-5555" class="input">
+				</div>
+			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Demo</button>
+			 </div>
+		</form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end Modal Demo-->
 
 
 			<div class="splash">
@@ -122,9 +152,10 @@
 			                Sign Up
 			              </button>
 							
-							<div class="demo">
-							  <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+							<div class="demo" data-toggle="modal" data-target="#myDemo">
+							  <span class="glyphicon glyphicon-book my-glyph" aria-hidden="true"></span>
 								<span class='try-it'>Try Demo</span>
+
 							</div>
 
 
@@ -151,9 +182,11 @@
     width: 100px;
 }
 
-.demo span.try-it:hover, /*.demo span:hover*/ {
+.demo:hover, .demo span.try-it:hover {
 	color: #4a4a4a;
 }
+
+
 
 .demo span.try-it {
 
@@ -165,7 +198,7 @@
     font-size: 16px;
     font-weight: 100;
 }
-.glyphicon-envelope {
+.my-glyph {
 	font-size: 1.5em;
 	color: #ed7a44;
 }
