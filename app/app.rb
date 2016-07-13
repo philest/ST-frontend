@@ -66,6 +66,14 @@ get '/signup' do
   erb :enroll
 end
 
+post '/success' do 
+  erb :success
+end
+
+get '/success' do 
+  erb :success
+end
+
 get '/read' do
   redirect to('/signup')
 end
