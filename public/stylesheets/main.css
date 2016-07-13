@@ -593,11 +593,11 @@ span a {
 
 .phone img {
 	float: right;
-	width: 14em;
+	width: 23em;
 }
 
 .prize img {
-	max-width: 260px;
+	max-width: 300px;
 	float: right;
 	padding-right: 15%;
 }
@@ -739,8 +739,8 @@ h4 span a{
 .partners img { 
 	
 	padding-top: 1.5em;
-	min-width: 13em;
-	max-width: 15em;
+	min-width: 150px;
+	max-width: 330px;
 	float: left;
 	padding-left: 20%;
 }
