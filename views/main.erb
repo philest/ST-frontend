@@ -177,10 +177,22 @@
 						<style>
 
 .demo {
-		margin-top: 35px;
-		cursor: pointer;
+	cursor: pointer;
     width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:25px;
 }
+
+
+@media (min-width: 768px) {
+	.demo {
+		margin-top: 35px;
+		margin-left: 0px;
+	}
+
+}
+
 
 .demo:hover, .demo span.try-it:hover {
 	color: #4a4a4a;
@@ -229,12 +241,12 @@ div.splash-text.hero-splash-text-container{
 }
 
 div.partner-logos {
-	margin-top: 0.5em;
+	margin-top: 4.75em;
 }
 
 @media (min-width: 570px) {
 	div.partner-logos {
-	    margin-top: 4.5em;
+	    margin-top: 9.5em;
 	}
 }
 
