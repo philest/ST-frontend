@@ -47,10 +47,10 @@ module RoutesHelper
 
   end
 
-  def create_invite
+  def create_invite(params)
 
     Invite.create(email: params[:email]) 
-    
+
     if MODE == PRO
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',

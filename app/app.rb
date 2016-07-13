@@ -48,6 +48,7 @@ TEST ||= "test"
 #########  ROUTES  #########
 
 # Admin authentication, from Sinatra.
+include RoutesHelper
 helpers RoutesHelper
 
 enable :sessions
@@ -66,8 +67,8 @@ get '/signup' do
   erb :enroll
 end
 
-post '/success' do 
-  
+post '/success' do  
+  create_invite(params) 
   erb :success
 end
 
