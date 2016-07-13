@@ -37,7 +37,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
 
   it "loads /signup" do 
       visit '/signup'
-      expect(page).to have_content "get your class free stories"
+      expect(page).to have_content "free books"
   end 
 
   it "does not load a random page" do 
@@ -61,7 +61,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "does redirect" do
-      click_button('Add people')
+      click_button('Invite class')
       expect(page).to have_content "Great!"
     end
 
@@ -94,7 +94,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       fill_in('teacher_email', :with => "sam_stobierski@ymca.org")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
-      click_button('Add people')
+      click_button('Invite class')
     end
 
     it "shows error message" do
@@ -102,7 +102,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "does not redirect" do
-      expect(page).to have_content "get your class free stories"
+      expect(page).to have_content "free books"
     end
 
   end 
@@ -114,7 +114,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       fill_in('teacher_signature', :with => 'Sam')
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
-      click_button('Add people')
+      click_button('Invite class')
     end
 
     it "shows error message" do
@@ -122,7 +122,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "does not redirect" do
-      expect(page).to have_content "get your class free stories"
+      expect(page).to have_content "free books"
     end
 
   end 
@@ -135,7 +135,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
       fill_in('teacher_email', :with => "sam_stobierski")
       fill_in('name_0', :with => 'Art Vandelay')
       fill_in('phone_0', :with => '5612125888')
-      click_button('Add people')
+      click_button('Invite class')
     end
 
     it "shows error message" do
@@ -143,7 +143,7 @@ describe 'Teacher Enrollment Interface', :type => :feature, :js => :true do
     end
 
     it "does not redirect" do
-      expect(page).to have_content "get your class free stories"
+      expect(page).to have_content "free books"
     end
 
   end 
