@@ -45,15 +45,16 @@ h2.enroll_header {
 	#questions {
 		border-radius: 15px;
 	    border: 3px solid #ed7844;
-	    width: 128px;
-	    height: 55px; 
+	    width: 111px;
+	    height: 48px; 
 	    transition: all 0.5s ease;
 
 	}
 
 	a#questions {
-		padding-left: 18px;
-
+	    padding-left: 12px;
+	    padding-top: 12px;
+	    font-weight: 100;
 	}
 
 	#questions:hover {
