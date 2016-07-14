@@ -219,12 +219,12 @@ a .bottom button#join {
 
 
 
-@media screen and (min-width: 35.5em)	{
+@media screen and (min-width: 583px)	{
 	
 	.navbar-right{
 		display: block;
 		margin-right: 20px;
-
+    	margin-bottom: 6px;
 	}
 
 	#splash {
