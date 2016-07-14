@@ -94,13 +94,16 @@
         <div class="navbar-logo" id="modal-logo"></div>
       </div>
       <div class="modal-body">
-        <h2 class="modal-signup-heading">Signup for StoryTime!</h2>
+        <h2 class="modal-signup-heading">Add your class on StoryTime!</h2>
+        <div class= modal-subheading-container>
+	        <h3 class="modal-subheading">1. Send home flyers.<br>2. Your class gets <span>free books.</span></h3>
+	    </div>
         <form action="success" method="post"> 
 	      	<div class="signup-setup">
 		        <div class="field" id="signup-field">
-										<input name="email" placeholder="sarah.jones@ymca.org" class="input">
+										<input name="email" placeholder="sarah.jones@ymca.org" class="input" required>
 				</div>
-			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Sign Up</button>
+			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Started</button>
 			 </div>
 		</form>
       </div>
@@ -124,7 +127,7 @@
         <form action="demo_success" method="post"> 
 	      	<div class="signup-setup">
 		        <div class="field" id="signup-field">
-										<input name="phone" placeholder="(555)-555-5555" class="input">
+										<input name="phone" placeholder="(555)-555-5555" class="input" required>
 				</div>
 			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Demo</button>
 			 </div>
@@ -149,7 +152,7 @@
 							</h1>
 			              <!-- Button trigger modal   -->
 			              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#myModal">
-			                Sign Up
+			                Add Class
 			              </button>
 							
 							<div class="demo" data-toggle="modal" data-target="#myDemo">
@@ -175,6 +178,18 @@
 
 	
 						<style>
+
+div.modal-subheading-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 218px;
+}
+
+h3.modal-subheading {
+	font-weight: 100;
+	text-align: left;
+}
 
 .demo {
 	cursor: pointer;
@@ -265,7 +280,7 @@ div#modal-logo {
 }
 
 div#signup-field {
-	margin-left: 12%;
+	margin-left: 6%;
 	width: 185px;
     margin-top: 13px;
 }		
