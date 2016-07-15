@@ -152,11 +152,12 @@
 					<div class="pure-g">	
 						
 						<div class="splash-text hero-splash-text-container pure-u-1 pure-u-md-1-2 pure-push-md-1-2">
-							<img id="logo-new" src="/images/modules/logo.png">
-							<h1 class="storytime-tagline">
-							<span>free stories by text.</span>
-							<br>
-							for your students<br>without books.
+							<img id="logo-new" src="http://d2yudi7y1eei74.cloudfront.net/assets/logo.png">
+							<h1 class="storytime-tagline" id="main-tagline">
+							<span>Free stories by text.</span>
+							</h1>
+							<h1 id="sub-tagline" class="storytime-tagline">
+							For your students without books.
 							</h1>
 			              <!-- Button trigger modal   -->
 			              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#myModal">
@@ -186,6 +187,116 @@
 
 	
 						<style>
+
+
+#logo-new {
+		margin-top: 0em;
+	}
+
+
+
+@media screen and (min-width: 767px)
+{
+	#logo-new {
+		margin-top: 7em;
+	}
+}
+
+
+/*@media screen and (max-width: 692px) and (min-width: 10px)
+{
+	#logo-new {
+		margin-top: 0em;
+	} 
+}*/
+
+
+h1#main-tagline {
+	font-size: 40px;
+	color:  #3B3F44;
+	margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+h1#sub-tagline {
+	font-size: 30px;
+	margin-top: 10px;
+	margin-bottom: 40px
+}
+
+@media (max-width: 585px) {
+
+	h1#main-tagline {
+		font-size: 32px;
+	}
+
+	h1#sub-tagline {
+		font-size: 24px;
+	}
+
+}
+
+
+
+@media (min-width: 666px) {
+
+	h1#main-tagline {
+		font-size: 34px;
+	}
+
+	h1#sub-tagline {
+		font-size: 26px;
+	}
+
+}
+
+/*@media (max-width: 692px)
+{
+	#
+}*/
+
+
+@media (min-width: 740px) {
+
+	h1#main-tagline {
+		font-size: 35px;
+	}
+
+	h1#sub-tagline {
+		font-size: 27px;
+	}
+
+}
+
+@media (min-width: 820px) {
+
+	h1#main-tagline {
+		font-size: 37px;
+	}
+
+	h1#sub-tagline {
+		font-size: 28px;
+	}
+
+}	
+
+@media (min-width: 918px) {
+	h1#main-tagline {
+		font-size: 38px;
+	}
+
+	h1#sub-tagline {
+/*	    line-height: px;
+*/	}
+}
+
+
+
+
+h1 {
+	color:  #3B3F44;
+}
+
 ul.navbar-right li {
 
 }
@@ -284,12 +395,12 @@ div.splash-text.hero-splash-text-container{
 }
 
 div.partner-logos {
-	margin-top: 4.75em;
+	margin-top: 5.25em;
 }
 
 @media (min-width: 570px) {
 	div.partner-logos {
-	    margin-top: 9.5em;
+	    margin-top: 10.5em;
 	}
 }
 
