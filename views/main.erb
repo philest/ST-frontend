@@ -157,7 +157,7 @@
 							<span>Free stories by text.</span>
 							</h1>
 							<h1 id="sub-tagline" class="storytime-tagline">
-							For your students<br> without books.
+							For your students<br class="subheading-br"> without books.
 							</h1>
 			              <!-- Button trigger modal   -->
 			              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#myModal">
@@ -187,6 +187,18 @@
 
 	
 						<style>
+
+h1 br.subheading-br {
+	display: none;
+}
+
+@media screen and (max-width: 450px){
+
+	h1 br.subheading-br {
+		display: inline-block;
+	}	
+}
+
 
 
 #logo-new {
@@ -568,7 +580,7 @@ button#join.dialog-button {
 					</div>
 
 
-			<h1 class="banner">So every kid can be a reader.</h1>
+			<h1 class="banner">So every kid can <br class="subheading-br">be a reader.</h1>
 
 
 			<section class="video" >
