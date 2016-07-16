@@ -28,6 +28,7 @@ require 'sidetiq'
 require 'sidekiq/web'
 require 'sidekiq/api' 
 
+require 'twilio-ruby'
 
 configure :production do
   require 'newrelic_rpm'
@@ -183,6 +184,7 @@ get '/called' do
     r.Play "http://www.joinstorytime.com/mp3"
   end.text
 end
+
 
 
  
