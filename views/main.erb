@@ -52,6 +52,99 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+
+
+		<!-- Load jQuery and  -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+		<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
+
+		<script> 
+
+
+			(function($,W,D)
+			{
+			    var JQUERY4U = {};
+
+			    JQUERY4U.UTIL =
+			    {
+
+			        setupFormValidation: function()
+	        		{
+						    // Setup form validation on the .table-input-body-row element
+						    $("form#demo-form").each(function () {
+						    	$(this).validate({
+
+								    	  // Specify the validation rules
+						        rules: {
+				
+							            phone: {
+							            	phoneUS: true,
+							            	required: true
+							            }
+
+						        },
+
+						        messages: {
+
+							            phone: "Invalid phone number"								    
+
+						        },
+
+						         submitHandler: function(form) {
+				            		form.submit();
+				        		},
+
+    invalidHandler: function(form, validator) {
+      var errors = validator.numberOfInvalids();
+      if (errors) {
+        var message = errors == 1
+          ? 'Please correct the following error:\n'
+          : 'Please correct the following ' + errors + ' errors.\n';
+        var errors = "";
+        if (validator.errorList.length > 0) {
+            for (x=0;x<validator.errorList.length;x++) {
+                errors += "\n\u25CF " + validator.errorList[x].message;
+            }
+        }
+
+        // $('.submit-errors').show()
+        // $("html, body").animate({ scrollTop: 0 }, "slow");
+
+        // alert(message + errors);
+      }
+      validator.focusInvalid();
+    }
+
+
+						    });
+
+						   });
+
+					}
+				}
+
+
+
+			    //when the dom has loaded setup form validation rules
+			    $(D).ready(function($) {
+			        JQUERY4U.UTIL.setupFormValidation();
+			        // $('.Button-ready').hide()
+
+			    });
+
+
+
+			})(jQuery, window, document);
+
+
+		</script>
+
+
+
+
+
 	</head>
 
 	<body>
@@ -132,12 +225,12 @@
       <div class="modal-body">
         <h2 class="modal-signup-heading">Get a demo story!</h2>
 	        <h3 class="demo-modal modal-subheading">We'll text you a few StoryTime pages.</h3>
-        <form action="demo_success" method="post"> 
+        <form id="demo-form" action="demo_success" method="post"> 
 	      	<div class="signup-setup">
 		        <div class="field" id="signup-field">
 										<input name="phone" placeholder="(555)-555-5555" class="input" required>
 				</div>
-			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Demo</button>
+			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Get Demo</button>
 			 </div>
 		</form>
       </div>
@@ -745,6 +838,14 @@ button#join.dialog-button {
 	<footer>
 		<script>
     	smoothScroll.init();
+
+			$('button.demo-form-button').click(function(){
+			    $('form#demo-form').each(function(){
+			        $(this).submit();
+			    });
+			});
+
+
 		</script>
 	</footer>
 </html>
