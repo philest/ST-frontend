@@ -335,7 +335,7 @@ h2.enroll_header {
 /*teacher stuff*/
 
 .teacher-info-box {
-	padding: 20px 40px 0px 40px;
+	padding: 0px 40px 0px 40px;
 	max-width: 480px;
 	margin: 0 auto;
 }
