@@ -148,18 +148,18 @@ h2.enroll_header {
 
 /*ONLY FOR non-mobile*/
 nav.tabs {
-/*	width: 260px;
-*/
-    width: 260px;
-    border: 0;
-/*    margin: 0 -260px 0 0;
-*/
-	margin: 0 -260px 0 0;
+
     position: absolute;
-    top: 135px;
-    right: 100%;
+    margin-left: -28px;
+    width: 101%;
+    top: 135px
+
 }
 
+li a:hover {
+	color: black;
+	transition-duration: 400ms
+}
 
 
 
@@ -194,11 +194,23 @@ li.active {
     background: #fff;
     border: 0;
     color: inherit;
+	border-bottom: solid 1px gray;
+	border-top: solid 1px gray;    
 }
 
 li.active a {
     color: inherit;
 }
+
+@media (min-width: 700px) {
+
+	.main-box {
+		border-left: solid 1px gray;
+	}
+
+}
+
+
 
 li img {
 	display: inline-block;
@@ -286,10 +298,6 @@ li a {
 		width: 78%;
 	}
 
-	nav.tabs {
-		width: 300px;
-		margin: 0 -300px 0 0;
-	}
 
 }
 
@@ -297,10 +305,6 @@ li a {
 
 @media (min-width: 1100px) {
 
-	nav.tabs {
-		width: 350px;
-		margin: 0 -350px 0 0;
-	}
 
 }
 
