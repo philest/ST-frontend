@@ -160,6 +160,12 @@ get '/signup/flyer' do
   erb :flyer
 end
 
+get '/signup/in-person' do
+  erb :inperson
+end
+
+
+
 # redirect to Messenger app. 
 get '/books' do
   redirect to('http://m.me/490917624435792')

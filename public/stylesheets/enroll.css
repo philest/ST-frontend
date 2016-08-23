@@ -204,17 +204,28 @@ li img {
 	display: inline-block;
 }
 
-li#envelope a{
+li#envelope a, li#fake-class a{
 	position: absolute;
     margin-top: 18px;
     margin-left: -21px;
     padding-top: 0px;
 }
 
+
+
 li#envelope img {
 	margin-left: 29px;
     margin-top: 17px;
     height: 20px;
+}
+
+
+li#fake-class img {
+	margin-left: 29px;
+    margin-top: 17px;
+    height: 27px;
+
+
 }
 
 
