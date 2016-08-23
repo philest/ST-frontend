@@ -204,7 +204,7 @@ li img {
 	display: inline-block;
 }
 
-li#envelope a, li#fake-class a{
+li#envelope a, li#easel a{
 	position: absolute;
     margin-top: 18px;
     margin-left: -21px;
@@ -220,7 +220,7 @@ li#envelope img {
 }
 
 
-li#fake-class img {
+li#easel img {
 	margin-left: 29px;
     margin-top: 17px;
     height: 27px;
@@ -608,6 +608,17 @@ label.error {
 	}
 }
 
+img.phone-image {
+	height: 26em;
+	padding-top: 1em;
+	padding-bottom: 2em;
+	box-shadow: 0 0 0 0;
+
+}
+
+header#header-phone-invites.box-header {
+	padding-bottom: 0px;
+}
 
 /*Flyer section*/
 
