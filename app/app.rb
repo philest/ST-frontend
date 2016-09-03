@@ -30,6 +30,9 @@ require 'sidekiq/api'
 
 require 'twilio-ruby'
 
+
+
+
 configure :production do
   require 'newrelic_rpm'
   set :static_cache_control, [:public, :max_age => 600]
@@ -59,6 +62,9 @@ get '/' do
     erb :main
 end
 
+get '/new' do
+    erb :main_new
+end
 
 get '/privacy' do
   erb :privacy_policy

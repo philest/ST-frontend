@@ -25,7 +25,9 @@
 
 		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+<!-- 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+ -->
+		<link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
 		<link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
@@ -158,10 +160,6 @@
 	<% end %>
 
 
-		<div class="main-container">
-
-
-
 			<nav class="navbar" role="navigation">
 				<div class="container">
 					<a href="/">
@@ -174,7 +172,7 @@
 						<li> <a href="https://storytime.zendesk.com">help</a></li>
 						<li class="navbar-button-item">
 							<a>
-								<button class="signup-btn pure-button pure-button-primary get_update dialog-button" data-toggle="modal" data-target="#myModal">
+								<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
 								Add Class
 								</button>
 							</a>
@@ -182,68 +180,12 @@
 					</ul>
 				</div>
 			</nav>
-	
-<!-- Modal Signup -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="navbar-logo" id="modal-logo"></div>
-      </div>
-      <div class="modal-body">
-        <h2 class="modal-signup-heading">Add your class on StoryTime!</h2>
-        <div class= modal-subheading-container>
-	        <h3 class="modal-subheading">1. Send home invites (we'll email you).<br>2. Your class can get free books by text!</h3>
-	    </div>
-        <form action="success" method="post"> 
-	      	<div class="signup-setup">
-		        <div class="field" id="signup-field">
-										<input name="email" placeholder="sarah.jones@ymca.org" class="input" required>
-				</div>
-			        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Started</button>
-			 </div>
-		</form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end Modal Signup-->
 
-<!-- Modal Demo -->
-<div class="modal fade" id="myDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="navbar-logo" id="modal-logo"></div>
-      </div>
-      <div class="modal-body">
-        <h2 class="modal-signup-heading">Get a demo story!</h2>
-	        <h3 class="demo-modal modal-subheading">We'll text you a few StoryTime pages.</h3>
-        <form id="demo-form" action="demo_success" method="post"> 
-	      	<div class="signup-setup">
-		        <div class="field" id="signup-field">
-										<input name="phone" placeholder="(555)-555-5555" class="input" required>
-				</div>
-			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Get Demo</button>
-			 </div>
-		</form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end Modal Demo-->
 
 
 			<div class="splash">
 				<div class="container" id="splash">
-					<div class="pure-g">	
-						
+					<div class="pure-g">						
 						<div class="splash-text hero-splash-text-container pure-u-1 pure-u-md-1-2 pure-push-md-1-2">
 							<img id="logo-new" src="http://d2yudi7y1eei74.cloudfront.net/assets/redesign/new-logo.png">
 							<h1 class="storytime-tagline" id="main-tagline">
@@ -253,7 +195,7 @@
 							For your students<br class="subheading-br"> without books.
 							</h1>
 			              <!-- Button trigger modal   -->
-			              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#myModal">
+<!-- 			              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#myModal">
 			                Add Class
 			              </button>
 							
@@ -262,7 +204,7 @@
 								<span class='try-it'>Try Demo</span>
 
 							</div>
-
+ -->
 
 								
 						</div>			
@@ -279,7 +221,7 @@
 
 
 	
-						<style>
+<!-- 						<style>
 .navbar-logo {
     background-image: url("https://st-webpage.s3.amazonaws.com/assets/st-fb-logo.jpg");
     background-size: 62px 54px;
@@ -655,13 +597,6 @@ button#join.dialog-button {
 								display: none;
 							}
 
-							#my-video {
-							    width: 240px;
-							    margin-left: 63px;
-							    margin-top: 100px;
-							    z-index: 800;
-
-							}
 
 							img#background-phone.hero-animation {
 								width: 370px;
@@ -673,207 +608,33 @@ button#join.dialog-button {
 								display: inline-block;
 							}
 
-							@media (min-width: 1026px) {
-								#my-video {
-									margin-left: 143px;
-								}
-								
-								img#background-phone.hero-animation {
-									margin-left: 80px;
 
-								}
-
-							}
-
-							@media (max-width: 768px)
-							{
-								img#background-phone.hero-animation, #my-video {
-									display: none;
-								}
-
-								img#gif-animation.hero-animation {
-									display: block;
-								}
-
-							}
-
+						
 
 						</style>
 
-						</div>
+ -->						</div>
 						
 
 					</div>
 				</div>
 			</div>
-		
-					<div class="partner-logos">
-
-						<div class="logo left"><img src="/images/modules/ymca_logo.png" alt=""></div>
-						<div class="logo center"><img src="/images/modules/headStart_logo.png" alt=""></div>
-						<div class="logo right"><img src="/images/modules/yale_logo.png" alt=""></div>
-					</div>
-
-
-			<h1 class="banner">So every kid can <br class="subheading-br">be a reader.</h1>
-
-
-			<section class="video" >
-				<iframe src="http://www.youtube.com/embed/2UY1Zw0Gw7w" frameborder="0" allowfullscreen></iframe>
-			</section>
-
-
-			<div class="section-header">
-				<h2 id="the_problem">the problem</h2>
-			</div>		
-			<section class="the-problem pure-g"> 
-
-				<div class="girl pure-u-1 pure-u-sm-1-2 pure-push-sm-1-2">
-					<img src="https://st-webpage.s3.amazonaws.com/assets/books.jpg" alt="" id="padded-img">
-				</div>
-
-
-				<div class="pure-u-1 pure-pull-sm-1-2 pure-u-sm-1-2">
-					<div class="text">
-						<h2 id="prob">the problem</h2>
-						<p>
-							Low-income kids are set up to fail before they even start preschool. By age three, they’ve heard <span>30 million fewer words</span> than wealthier kids— a word-gap that stunts early brain growth. Books get families talking, but 1 billion families just don’t have access to any books or Internet. 
-						</p>
-					</div>
-				</div>
-				
-			</section>
-			
-			<div class="divider"><div></div></div>
-			<div class="divider" id="divider-mobile"><div></div></div>
-		
-
-				
-			<div class="section-header">
-				<h2>the product</h2>
-			</div>		
-			<section class="the-product pure-g"> 
-
-				<div class="phone pure-u-1 pure-u-sm-1-2">
-					<img src="/images/modules/phone.png" alt="">
-				</div>
-				<div class="pure-u-1 pure-u-sm-1-2">
-					<div class="text">
-						<h2 id="prod">the product</h2>
-						<p>
-							
-							But 6 billion do have mobile phones. We send stories by text message and messaging apps to get families talking face-to-face. And it’s <span>300x cheaper</span> than just shipping paperbacks.
-						</p>
-					</div>
-				</div>
-				
-				
-			</section>
-
-			<div class="divider"><div></div></div>
-			<div class="divider" id="divider-mobile"><div></div></div>
-
-			<div class="section-header">
-				<h2>the progress</h2>
-			</div>		
-			<section class="join-us pure-g">
-				<div class="partners pure-u-1 pure-u-sm-1-2 pure-push-sm-1-2">
-						<img src="/images/modules/partners.png" alt="">
-				</div>
-				<div class="pure-u-1 pure-u-sm-1-2 pure-pull-sm-1-2">
-					<div class="v-align">
-						<div class="text">
-							<h2>the progress</h2>
-							<p>
-					Now, we’re piloting with  families from across New York, Connecticut, Texas, and Florida. And with our first families, StoryTime more than <span>doubled nightly reading</span>.  
-							</p>
-
-						</div>
-
-					</div>
-				</div>
-
-			</section>
-
-			<div class="divider"><div></div></div>
-			<div class="divider" id="divider-mobile"><div></div></div>
-
-
-			
-			<div class="section-header">
-				<h2>the people</h2>
-			</div>		
-			<section class="the-product pure-g"> 
-
-				<div class="prize pure-u-1 pure-u-sm-1-2">
-					<img src="/images/modules/Thorne_Prize_Crayon_Border.png" alt="" id="padded-img">
-				</div>
-				<div class="pure-u-1 pure-u-sm-1-2">
-					<div class="text">
-						<h2 id="people">the people</h2>
-						<p>
-
-							We’re a Yale team of engineers and former Head Start preschool teachers,  spanning Google and the Federal Reserve. We built StoryTime for our class’s families at Martinez Head Start. Now, we’re closing the word gap at scale and bringing every family closer.  </p>
-
-							<a id="more_team" href="team"><p>more about us</p></a>
-
-					</div>
-				</div>
-				
-				
-			</section>
-
-			<div class="divider"><div></div></div>
-			<div class="divider" id="divider-mobile"><div></div></div>
-
-			<div class="bottom">
-				<div class="splash">
-					<div class="container" id="splash">
-						<div class="pure-g">	
-							<div class="splash-text pure-u-1 pure-u-md-1-2">
-								<img id="logo-new" src="/images/modules/1_billion_text.png">
-								<h1 class="storytime-tagline">
-								without books or <br>Internet. We <span> get <br>
-								them stories. </span>
-								</h1>
-
-
-								<div class="meta-block">
-									<a href="/join">
-								        <button id="join" class="pure-button pure-button-primary get_update">join our team</button>
-								    </a>
-							    </div>
-
-
-								<div class="email">
-									<a id="more_team" href="mailto:phil@joinstorytime.com,david@joinstorytime.com"><p>get in touch</p></a>
-								</div>
 
 
 
-							</div>					
-							<div class="animation bottom_globe pure-u-1 pure-u-md-1-2">
-								<img src="/images/modules/globe.png" alt="">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-		</div>	
 
+
+
+	
 	</body>
 	<footer>
 		<script>
     	smoothScroll.init();
-
 			$('button.demo-form-button').click(function(){
 			    $('form#demo-form').each(function(){
 			        $(this).submit();
 			    });
 			});
-
-
 		</script>
 	</footer>
 </html>
