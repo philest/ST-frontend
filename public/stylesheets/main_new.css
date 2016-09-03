@@ -178,6 +178,77 @@ a:hover {
 }
 
 
+/*Modal*/
+.modal-subheading-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 313px;
+}
+
+h3.modal-subheading {
+	font-weight: 100;
+	text-align: left;
+}
+.field .input {
+	margin: 0 0 8px;
+}
+
+.field {
+	display: inline-block;
+	margin: 0 0 12px;
+    position: relative;
+    text-align: left;
+        margin-left: 134px
+}
+
+.input {
+	transition: 75ms ease-in-out;
+    transition-property: background,border-color,box-shadow,color;
+    background: #fff;
+    border: 1px solid #c5c7cb;
+    border-radius: 3px;
+    width: 100%;
+    color: #282c31;
+    font-family: 'Karla',sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    line-height: normal;
+}
+						
+
+h2.modal-signup-heading{
+	font-size: 26px;
+	text-align: center;
+	color: #4a4a4a;
+	font-family: 'Karla';
+}
+
+div#modal-logo {
+	float: none;
+	height: 72px;
+	width: 100%;
+}
+
+div#signup-field {
+	margin-left: 6%;
+	width: 185px;
+    margin-top: 13px;
+}		
+
+button#join.dialog-button {
+	margin-bottom: 15px;
+	font-size: 17px;
+	display: inline-block;
+	padding: 11px; 
+/*	padding-top: 10px;
+*/	/*match other*/
+	margin-left: 2px;
+	margin-top: 12px;
+	font-weight: 100;
+	background-color: #ed7844;
+}
+
 
 @media (min-width: 450px) {
 	#logo-new {
@@ -224,6 +295,23 @@ a:hover {
 	}
 
 }	
+
+
+@media (min-width: 520px) {
+	div#signup-field {
+		margin-left: 18%;
+		width: 250px;
+
+	}
+	
+	button#join.dialog-button {
+		margin-top: 13px;
+		margin-left: 10px;
+
+	}
+
+
+}
 
 
 @media (min-width: 666px) {
