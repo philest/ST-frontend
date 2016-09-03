@@ -24,9 +24,10 @@
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
 		<link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+			
+		<!-- This is only needed for below-the-fold content. -->
+		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
 
-<!-- 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
- -->
 		<link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
@@ -248,7 +249,8 @@
  -->
 
 								
-						</div>			
+						</div>	
+						<!--End splash text  -->
 						<div class="animation hero-animation-container pure-u-1 pure-u-md-1-2 pure-pull-md-1-2" id="hero-animation-container">
 							<img id="background-phone" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/htc-one-blank-high.jpg">
 							<img id="gif-animation" class="hero-animation" src="http://d2yudi7y1eei74.cloudfront.net/assets/small-android.gif">
@@ -259,409 +261,116 @@
 								<source src="http://d2yudi7y1eei74.cloudfront.net/assets/video-file-gumbo.ogv">
 							</video>	
 
- 						</div>
+ 						</div>   
+ 						<!-- End animation -->
 
 
-	
-<!-- 						<style>
-.navbar-logo {
-    background-image: url("https://st-webpage.s3.amazonaws.com/assets/st-fb-logo.jpg");
-    background-size: 62px 54px;
-    background-position: center;
-    background-repeat: no-repeat;
-    float: left;
-    height: 110px;
-    width: 88px;
-}
-
-button.demo-form-button {
-	position: absolute;
-}
-
-label.error {
-	color: #C63442;
-    font-weight: bold;
-}
-
-.the-problem .text h2, .the-product .text h2, .join-us .text h2 {
-	font-size: 2em;
-	color: #ed7a44;
-	font-family: 'Karla'
-}
-
-@media screen and (max-width: 35.5em) {
-	h2 {
-	    font-family: "Karla";
-	}
-}
-
-
-h1 br.subheading-br {
-	display: none;
-}
-
-@media screen and (max-width: 450px){
-
-	h1 br.subheading-br {
-		display: inline-block;
-	}	
-}
-
-
-@media screen and (min-width: 568px) {
-	.girl img#padded-img {
-		margin-left: 60px;
-	}
-}
-
-
-#logo-new {
-		margin-top: 0em;
-	}
-
-
-
-@media screen and (min-width: 767px)
-{
-	#logo-new {
-		margin-top: 7em;
-	}
-}
-
-
-/*@media screen and (max-width: 692px) and (min-width: 10px)
-{
-	#logo-new {
-		margin-top: 0em;
-	} 
-}*/
-
-
-h1#main-tagline {
-	font-size: 40px;
-	color:  #3B3F44;
-	margin-bottom: 0px;
-    margin-top: 10px;
-}
-
-h1#sub-tagline {
-	font-size: 30px;
-	margin-top: 10px;
-	margin-bottom: 40px
-}
-
-@media (max-width: 665px) {
-
-	h1#main-tagline {
-		font-size: 32px;
-	}
-
-	h1#sub-tagline {
-		font-size: 24px;
-	}
-
-}
-
-
-@media (max-width: 450px) {
-
-	h1#main-tagline {
-		font-size: 30px;
-	}
-
-	h1#sub-tagline {
-		font-size: 22px;
-	}
-
-}
-
-
-
-@media (min-width: 666px) {
-
-	h1#main-tagline {
-		font-size: 34px;
-	}
-
-	h1#sub-tagline {
-		font-size: 26px;
-	}
-
-}
-
-/*@media (max-width: 692px)
-{
-	#
-}*/
-
-
-@media (min-width: 740px) {
-
-	h1#main-tagline {
-		font-size: 35px;
-	}
-
-	h1#sub-tagline {
-		font-size: 27px;
-	}
-
-}
-
-@media (min-width: 820px) {
-
-	h1#main-tagline {
-		font-size: 37px;
-	}
-
-	h1#sub-tagline {
-		font-size: 28px;
-	}
-
-}	
-
-@media (min-width: 918px) {
-	h1#main-tagline {
-		font-size: 38px;
-	}
-
-	h1#sub-tagline {
-/*	    line-height: px;
-*/	}
-}
-
-
-
-#logo-new {
-    margin-left: -41px;
-    width: 29em;
-}
-
-
-h1 {
-	color:  #3B3F44;
-}
-
-ul.navbar-right li {
-
-}
-
-li.navbar-button-item{
-	padding-top: 34px;
-}
-
-.signup-btn {
-	font-weight: 900;
-	font-size: 16px;
-    padding: 12px 12px 8px;
-    text-transform: uppercase;
-}
-
-
-.modal-subheading-container {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 313px;
-}
-
-h3.modal-subheading {
-	font-weight: 100;
-	text-align: left;
-}
-
-h3.demo-modal {
-	text-align: center;
-}
-
-
-.demo {
-	cursor: pointer;
-    width: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top:25px;
-}
-
-
-@media (min-width: 768px) {
-	.demo {
-		margin-top: 35px;
-		margin-left: 0px;
-	}
-
-}
-
-
-.demo:hover, .demo span.try-it:hover {
-	color: #4a4a4a;
-}
-
-
-
-.demo span.try-it {
-
-		position: absolute;
-    margin-left: 10px;
-    margin-top: 0px;
-    color: #ed7a44;
-    font-family: 'Karla';
-    font-size: 16px;
-    font-weight: 100;
-}
-.my-glyph {
-	font-size: 1.5em;
-	color: #ed7a44;
-}
-
-div.animation#hero-animation-container {
-	display: inline-block;
-}
-
-
-#start-modal-button {
-	font-size: 17px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 11px 30px;
-
-}
-
-@media (min-width: 768px)
-{
-    #start-modal-button {
-		margin-left: 0;
-	}
-}
-
-div.splash-text.hero-splash-text-container{
-	z-index: 99;
-}
-
-div.partner-logos {
-	margin-top: 7.5em;
-}
-
-@media (min-width: 570px) {
-	div.partner-logos {
-	    margin-top: 10.5em;
-	}
-}
-
-
-
-@media (min-width: 768px) {
-	div.partner-logos {
-	    margin-top: 6.5em;
-	}
-}
-
-div#modal-logo {
-	float: none;
-	height: 72px;
-	width: 100%;
-}
-
-div#signup-field {
-	margin-left: 6%;
-	width: 185px;
-    margin-top: 13px;
-}		
-
-button#join.dialog-button {
-	margin-bottom: 15px;
-	font-size: 17px;
-	display: inline-block;
-	padding: 11px; 
-/*	padding-top: 10px;
-*/	/*match other*/
-	margin-left: 2px;
-	margin-top: 12px;
-	font-weight: 100;
-}
-
-
-@media (min-width: 520px) {
-	div#signup-field {
-		margin-left: 18%;
-		width: 250px;
-
-	}
-	
-	button#join.dialog-button {
-		margin-top: 13px;
-		margin-left: 10px;
-
-	}
-
-
-}
-
-.field .input {
-	margin: 0 0 8px;
-}
-
-.field {
-	display: inline-block;
-	margin: 0 0 12px;
-    position: relative;
-    text-align: left;
-        margin-left: 134px
-}
-
-.input {
-	transition: 75ms ease-in-out;
-    transition-property: background,border-color,box-shadow,color;
-    background: #fff;
-    border: 1px solid #c5c7cb;
-    border-radius: 3px;
-    width: 100%;
-    color: #282c31;
-    font-family: 'Karla',sans-serif;
-    font-size: 14px;
-    padding: 12px;
-    line-height: normal;
-}
-
-
-						
-
-							h2.modal-signup-heading{
-								font-size: 26px;
-   								text-align: center;
-   								color: #4a4a4a;
-   								font-family: 'Karla';
-							}
-							
-
-
-							img#gif-animation.hero-animation {
-								display: none;
-							}
-
-
-							img#background-phone.hero-animation {
-								width: 370px;
-							}
-
-
-							img#background-phone.hero-animation, #my-video {
-								position: absolute;
-								display: inline-block;
-							}
-
-
-						
-
-						</style>
-
- -->				
-
-
-					</div>
+					</div> 
+					<!-- End pure-g -->
 				</div>
+				<!-- End container -->
+			</div> 
+			<!-- End Splash -->
+			<h1 class="banner" id="main-banner">160% more reading.</h1>
+
+			<br>
+			<br>
+			<br>
+			<!-- Below the FOLD  -->
+			<div class="container">
+			
+				<div class="section-header">
+					<h2 id="the_problem">We make readers.</h2>
+				</div>		
+				<section class="the-problem pure-g"> 
+
+					<div class="girl pure-u-1 pure-u-sm-1-2 pure-push-sm-1-2">
+						<img class="girl_reading" src="http://st-webpage.s3.amazonaws.com/assets/redesign/girl_reading.jpg" alt="" id="padded-img">
+					</div>
+
+
+					<div class="pure-u-1 pure-pull-sm-1-2 pure-u-sm-1-2">
+						<div class="text">
+							<h2 id="prob">We make readers.</h2>
+							<p>
+								
+								Most low-income families don’t have books, but they do have phones. With books by text, StoryTime reaches the busiest parents to build strong reading habits. It’s proven to <span>double nightly reading</span> and increase <span>school readiness</span>. 
+
+								 
+							</p>
+						</div>
+					</div>
+					
+				</section>
+				
+				<div class="divider"><div></div></div>
+				<div class="divider" id="divider-mobile"><div></div></div>
+			
+
+					
+				<div class="section-header">
+					<h2>School readiness impact.</h2>
+				</div>		
+				<section class="the-product pure-g"> 
+
+					<div class="phone pure-u-1 pure-u-sm-1-2">
+						<img class="curriculum_image" src="http://st-webpage.s3.amazonaws.com/assets/redesign/curriculum.png" alt="">
+					</div>
+					<div class="pure-u-1 pure-u-sm-1-2">
+						<div class="text">
+							<h2 id="prod">School readiness impact.</h2>
+							<p>
+								Designed with Yale researchers, StoryTime builds strong dialogic reading habits so families get talking face-to-face. It’s proven to increase <span>oral language </span> skills, <span>phonological awareness</span>, and <span>socio-emotional</span> learning. Parents teach these skills by learning to ask about pictures.  
+							</p>
+						</div>
+					</div>
+					
+					
+				</section>
+
+				<div class="divider"><div></div></div>
+				<div class="divider" id="divider-mobile"><div></div></div>
+
+				<div class="section-header">
+					<h2>It takes 1 minute.</h2>
+				</div>		
+				<section class="join-us pure-g">
+					<div class="partners pure-u-1 pure-u-sm-1-2 pure-push-sm-1-2">
+							<img src="http://st-webpage.s3.amazonaws.com/assets/redesign/flyer.png" alt="">
+					</div>
+					<div class="pure-u-1 pure-u-sm-1-2 pure-pull-sm-1-2">
+						<div class="v-align">
+							<div class="text">
+								<h2>It takes 1 minute.</h2>
+								<p>
+						Teachers just print out invites, then send them home.  Then, they get progress reports to support and engage parents— and see literacy gains.  We’re working with the best schools in the country, including <span>US Head Start</span>, US <span>Promise Neighborhoods</span>, and the <span>YMCA</span>.  
+								</p>
+
+							</div>
+
+						</div>
+					</div>
+
+				</section>
+
+
+				<div class="divider"><div></div></div>
+				<div class="divider" id="divider-mobile"><div></div></div>
+
+
+				<h1 class="banner" id="call-to-action">Join hundreds of educators</h1>
+
+				<h3 class="call-to-action-text">Learn how StoryTime can work for your school.</h3>
+
+	              <img class="contact-image call-to-action-image" src="http://d2yudi7y1eei74.cloudfront.net/assets/phone.png">
+		          <a href="mailto:hello@joinstorytime.com?&subject=Storytime">   
+		              <img id="email-image" class="contact-image call-to-action-image call-to-action-email-image" src="http://d2yudi7y1eei74.cloudfront.net/assets/email.png">
+	              </a>
+
 			</div>
 
+			
+		
 
 
 

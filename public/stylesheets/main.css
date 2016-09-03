@@ -1,5 +1,29 @@
 /*exp*/
 
+
+
+/* BELOW FOLD */
+label.error {
+	color: #C63442;
+    font-weight: bold;
+}
+
+.the-problem .text h2, .the-product .text h2, .join-us .text h2 {
+	font-size: 2em;
+	color: #ed7a44;
+	font-family: 'Karla'
+}
+
+@media screen and (max-width: 35.5em) {
+	h2 {
+	    font-family: "Karla";
+	}
+}
+
+/*END BELOW FOLD*/
+
+
+
 @media (min-width: 1600px) {
 	.main-container {
 		max-width: 1600px;
@@ -584,7 +608,7 @@ span a {
 }
 
 .the-problem .text h2, .the-product .text h2, .join-us .text h2 {
-	font-family: 'dk_cool_crayonregular'; 
+	font-family: 'Karla'; 
 	color: #ed7844;
 	font-size: 2em;
 }
@@ -605,7 +629,7 @@ span a {
 	text-align: left;
 }
 .the-product .phone img {
-	padding-right: 21%;
+    padding-right: 35px;
 }
 
 div.section-header {
@@ -730,7 +754,7 @@ span.italic {
 }
 
 h4 span a{
-	font-family: 'dk_cool_crayonregular'; 
+	font-family: 'Karla'; 
 	color: #ed7844;
 
 }
@@ -856,7 +880,7 @@ h4 span a{
 	}
 
 	h2 {
-		font-family: "dk_cool_crayonregular";
+		font-family: "Karla";
 	}
 
 	.the-problem .text, .the-product .text {
