@@ -234,7 +234,7 @@ img#gif-animation.hero-animation {
 	#logo-new {
 		width: 345px;
 		z-index: 801;
-		margin-left: -11px; 
+		margin-left: -21px; 
 		margin-top: 7em;
 	}
 
@@ -268,11 +268,11 @@ img#gif-animation.hero-animation {
 @media (min-width: 1026px) {
 
 	img#background-phone.hero-animation {
-		margin-left: 135px;
+		margin-left: 115px;
 	}
 
 	video#my-video {
-		margin-left: 200px;
+		margin-left: 177px;
 	}
 
 }
@@ -283,5 +283,15 @@ img#gif-animation.hero-animation {
 	.container {
 	    width: 1170px;
 	}
+
+	img#background-phone.hero-animation {
+		margin-left: 135px;
+	}
+
+	video#my-video {
+		margin-left: 200px;
+	}
+
+
 }	
 
