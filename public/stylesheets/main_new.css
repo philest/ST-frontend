@@ -30,13 +30,13 @@ button.signup-button {
 }
 
 .navbar-logo {
-	background-image: url("/images/modules/bird.gif");
-	background-size: 90px 72px;
+	background-image: url("https://st-webpage.s3.amazonaws.com/assets/st-fb-logo.jpg");
+	background-size: 47px 41px;
 	background-position: center;
     background-repeat: no-repeat;
     float: left;
     height: 110px;
-    width: 82px;
+    width: 88px;
 }
 
 .navbar li {
@@ -79,8 +79,9 @@ button.signup-button {
 
 
 #logo-new {
-	width: 280px;
-    margin-left: auto;
+	width: 13em;
+/*	width: 280px;
+*/    margin-left: auto;
     margin-right: auto;
     display: block;
     margin-top: 0px;
@@ -110,6 +111,18 @@ h1#sub-tagline {
 h1 br.subheading-br {
 	display: inline-block;
 }	
+
+
+.contact-image {
+	height: 40px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;	
+}
+
+#email-image {
+	margin-bottom: 30px;
+}
 
 
 img#background-phone.hero-animation {
@@ -168,7 +181,10 @@ a:hover {
 
 @media (min-width: 450px) {
 	#logo-new {
-		width: 310px;
+/*		width: 310px;
+*/
+		width: 14em;
+
 	}
 
 	h1#main-tagline {
@@ -189,10 +205,6 @@ a:hover {
 /***** Portrait mode, small tablet ******/
 @media (min-width: 568px) {
 	
-	.container {
-	    width: 750px;
-	}
-
 	.navbar-right{
 		display: block;
 		margin-right: 20px;
@@ -217,7 +229,9 @@ a:hover {
 @media (min-width: 666px) {
 
 	#logo-new {
-		width: 330px;
+/*		width: 330px;
+*/		width: 16em;
+
 	}
 
 
@@ -251,6 +265,12 @@ a:hover {
 	    font-size: 27px;
 	}
 
+
+	.contact-image {
+		margin-left: 0px;
+		height: 50px;
+	}
+
 	img#background-phone.hero-animation, #my-video {
 		display: inline-block;
 	}
@@ -268,10 +288,14 @@ a:hover {
 	}
 
 	#logo-new {
-		width: 345px;
-		z-index: 801;
-		margin-left: -21px; 
-		margin-top: 7em;
+		width: 18em;
+
+/*		width: 345px;
+*/		z-index: 801;
+		margin-left: 0px;
+/* Undo until get the pencil image*/
+/*		margin-left: -21px; 
+*/		margin-top: 7em;
 	}
 
 	#start-modal-button {
@@ -292,7 +316,10 @@ a:hover {
 	}
 
 	#logo-new {
-		width: 370px;
+/*		width: 370px;
+*/
+		width: 20em;
+
 	}
 }
 
