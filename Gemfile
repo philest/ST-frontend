@@ -22,7 +22,8 @@ gem 'sinatra-flash'
 gem 'json'
 gem 'httparty'
 gem 'dotenv'
-
+gem 'sass'
+gem 'sprockets'
 
 
 group :development, :test do
