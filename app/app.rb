@@ -59,12 +59,9 @@ enable :sessions
 
 #root
 get '/' do
-    erb :main
-end
-
-get '/new' do
     erb :main_new
 end
+
 
 get '/privacy' do
   erb :privacy_policy
