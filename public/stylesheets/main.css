@@ -839,6 +839,8 @@ h4 span a{
 }
 
 
+
+
  /*Iphone-ish mobile*/
 @media screen and (max-width: 35.5em) {
 
@@ -1008,6 +1010,32 @@ h4 span a{
 	}
 
 }
+
+
+@media screen and (min-width: 568px) and (max-width: 568px)	{
+
+	#padded-img {
+		max-width: 90%;
+		padding-top: 2em;
+	}
+
+	.the-problem p {
+		margin-top: 2em;
+		text-align: left;
+	}
+
+	.the-product p {
+		text-align: right;
+	}
+
+	p.partners {
+		text-align: left;
+	}
+
+
+
+}
+
 
 @media screen and (min-width: 35.5em)	{
 
