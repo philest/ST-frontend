@@ -332,6 +332,12 @@ h3.call-to-action-text {
 		display: none;
 	}
 
+	h1#main-banner {
+		padding-top: 11em;
+	/*	font-size: 3em;
+	*/}
+
+
 	.the-product .phone img {
 		width: 100%;
 		max-width: 370px;
