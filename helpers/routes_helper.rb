@@ -47,19 +47,19 @@ module RoutesHelper
 
   end
 
-  def send_demo(params)
+  def notify_demo(params)
 
-    flash[:notice] = "Great! Your story's on the way."
-    HTTParty.post(ENV['demo_url'], body: params)
-    puts "\nPosting demo params to #{ENV['demo_url']}\n"
+    flash[:notice] = "Great! Someone from our outreach team will be in touch soon."
+    # HTTParty.post(ENV['demo_url'], body: params)
+    # puts "\nPosting demo params to #{ENV['demo_url']}\n"
     
     if MODE == PRO
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: Demo requested by #{params[:phone]}",
-            :body => "That's all.")
+            :subject => "ST: Demo requested.",
+            :body => "Here's all the details so you can follow-up:\n #{params}")
     end
 
   end

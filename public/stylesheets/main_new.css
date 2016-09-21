@@ -311,6 +311,7 @@ button#start-modal-button.demo-request-button {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 2em;
 }
 
 @media (min-width: 450px) {
