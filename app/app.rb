@@ -77,7 +77,7 @@ post '/success' do
 end
 
 post '/demo_success' do 
-  send_demo(params)
+  notify_demo(params)
   redirect to('/')
 end
 

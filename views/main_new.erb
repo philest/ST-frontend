@@ -87,17 +87,27 @@
 
 								    	  // Specify the validation rules
 						        rules: {
-				
-							            phone: {
-							            	phoneUS: true,
+										
+							            teacher_email: {
+							            	required: true,
+      											email: true
+							            },
+
+							            demo_first_name: {
+							            	required: true
+							            },
+
+							            demo_last_name: {
 							            	required: true
 							            }
+
+
 
 						        },
 
 						        messages: {
 
-							            phone: "Invalid phone number"								    
+							            teacher_email: "Invalid email"								    
 
 						        },
 
@@ -163,7 +173,7 @@
 	<!-- Notify about form submission -->
 	<% if flash[:notice] %>
 		<div id="alert">
-		    <a class="alert" href="#alert">Great! Your story's on the way.</a>
+		    <a class="alert" href="#alert">Great! Someone from our outreach team will be in touch soon.</a>
 		</div>
 	<% end %>
 
@@ -232,7 +242,7 @@
         <h2 class="modal-signup-heading">See Storytime for yourself</h2>
 	        <h3 class="demo-modal modal-subheading">Request a demo for your school or district.</h3>
 
-	    			<form class = "enroll-teacher-class" id="demo-form" action="demo_success" method="post">
+    			<form class = "enroll-teacher-class" id="demo-form" action="demo_success" method="post">
 				<div class="teacher-info-box">
 					<div class="setup-signature">
 					<div>
@@ -265,6 +275,7 @@
 	      	<div class="signup-setup">
 			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Submit</button>
 			</div>
+			</form>
       </div>
     </div>
   </div>
