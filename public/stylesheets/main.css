@@ -288,6 +288,12 @@ a .bottom button#join {
 		font-size: 2.3em;
 	}
 
+	h1.banner#call-to-action{
+		font-size: 28px;
+	}
+
+
+
 	#logo-new {
 		display: block;
 		margin-right: auto;
@@ -340,8 +346,8 @@ a .bottom button#join {
 		font-size: 2.3em;
 	}
 
-	h1.banner{
-		font-size: 2.6em;
+	h1.banner#call-to-action{
+		font-size: 28px;
 	}
 	
 	#logo-new {
@@ -865,6 +871,10 @@ h4 span a{
 		font-size: 2em; /*added for Karla*/
 		padding-left: .15em;
 		padding-right: .15em;
+	}
+
+	h1.banner#call-to-action{
+		font-size: 22px;
 	}
 
 	.txt_inner {

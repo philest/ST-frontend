@@ -281,6 +281,10 @@ h3.call-to-action-text {
 
 }
 
+h1.banner#call-to-action{
+	font-size: 21px;
+	margin-bottom: 1em;
+}
 
 
 @media (min-width: 450px) {
@@ -451,6 +455,10 @@ h3.call-to-action-text {
 
 	img#email-image.call-to-action-email-image {
 		margin-bottom: 50px;
+	}
+
+	h1.banner#call-to-action{
+		font-size: 26px;
 	}
 
 
