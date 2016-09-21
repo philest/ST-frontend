@@ -199,7 +199,7 @@ h3.modal-subheading {
 	margin: 0 0 12px;
     position: relative;
     text-align: left;
-        margin-left: 134px
+    margin-left: 134px
 }
 
 .input {
@@ -248,6 +248,27 @@ button#join.dialog-button {
 	font-weight: 100;
 	background-color: #ed7844;
 }
+/*END SIGNUP MODAL*/
+
+/*DEMO Modal*/
+
+.field.demo-field {
+	margin-left: 0px;
+	width: 230px;
+}
+
+.demo-modal.modal-subheading {
+	text-align: center;
+}
+
+button#join.demo-form-button{
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/*End Demo Modal*/
+
 
 
 /*BELOW THE FOLD*/
@@ -286,6 +307,11 @@ h1.banner#call-to-action{
 	margin-bottom: 1em;
 }
 
+button#start-modal-button.demo-request-button {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 @media (min-width: 450px) {
 	#logo-new {
@@ -358,7 +384,7 @@ h1.banner#call-to-action{
 
 	}
 	
-	button#join.dialog-button {
+	button#join.dialog-button.signup-form-button {
 		margin-top: 13px;
 		margin-left: 10px;
 
