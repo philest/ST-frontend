@@ -31,6 +31,9 @@
 		<!-- This is only needed for below-the-fold content. -->
 		<link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
 
+		<link rel="stylesheet" href="stylesheets/teacher-form-input.css" type="text/css" />
+
+
 		<link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" />
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
@@ -206,7 +209,7 @@
 					        <div class="field" id="signup-field">
 													<input name="email" placeholder="sarah.jones@ymca.org" class="input" required>
 							</div>
-						        <button id="join" class="pure-button pure-button-primary get_update dialog-button">Get Started</button>
+						        <button id="join" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Get Started</button>
 						 </div>
 					</form>
 			      </div>
@@ -214,6 +217,60 @@
 			  </div>
 			</div>
 			<!-- end Modal Signup-->
+
+<!-- Modal Demo -->
+<div class="modal fade" id="myDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="navbar-logo" id="modal-logo"></div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">See Storytime for yourself</h2>
+	        <h3 class="demo-modal modal-subheading">Request a demo for your school or district.</h3>
+
+	    			<form class = "enroll-teacher-class" id="demo-form" action="demo_success" method="post">
+				<div class="teacher-info-box">
+					<div class="setup-signature">
+					<div>
+					</div>
+						<div class="setup-signature-name">
+							<label class="label">First Name
+							</label>
+							<div class="field demo-field">
+								<input name="demo_first_name" class="input">
+							</div>
+						</div>
+						<div class="setup-signature-name">
+							<label class="label">Last Name
+							</label>
+							<div class="field demo-field">
+								<input name="demo_last_name" class="input">
+							</div>
+						</div>
+
+						<div class="setup-signature-email">
+							<label class="label">Email
+							</label>
+							<div class="field demo-field">
+								<input name="teacher_email" class="input">
+							</div>
+						</div>
+					</div>
+				</div>
+    
+	      	<div class="signup-setup">
+			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Submit</button>
+			</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end Modal Demo-->
+
 
 
 
@@ -243,13 +300,7 @@
 						
 
 
-							<!-- 
-							<div class="demo" data-toggle="modal" data-target="#myDemo">
-							  <span class="glyphicon glyphicon-book my-glyph" aria-hidden="true"></span>
-								<span class='try-it'>Try Demo</span>
 
-							</div>
- -->
 
 								
 						</div>	
@@ -363,6 +414,21 @@
 
 
 				<h1 class="banner" id="call-to-action">Learn how Storytime can work for your school or district</h1>
+
+							<div class="demo" data-toggle="modal" data-target="#myDemo">
+
+				              <button type="button" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+				                Request a Demo
+				              </button>
+							</div>
+
+
+<!-- 							<div class="demo" data-toggle="modal" data-target="#myDemo">
+							  <span class="glyphicon glyphicon-book my-glyph" aria-hidden="true"></span>
+								<span class='try-it'>Try Demo</span>
+
+							</div>
+ -->
 
 
 	              <img class="contact-image call-to-action-image" src="http://d2yudi7y1eei74.cloudfront.net/assets/phone.png">

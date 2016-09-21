@@ -1,0 +1,61 @@
+
+.teacher-info-box {
+	padding: 0px 40px 0px 40px;
+	max-width: 480px;
+	margin: 0 auto;
+}
+
+.setup-signature-name, .setup-signature-email {
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.setup-signature-name, .setup-signature-email {
+	width: 260px;
+}
+
+/*portrait*/
+@media (min-width: 568px) {
+
+	.setup-signature-title {
+		width: 100px;
+		margin-right: 10px;
+	}
+
+}
+
+.label {
+	font-size: 14px;
+    font-weight: 600;
+    line-height: 1.38;
+    margin: 0 0 8px;
+    text-align: left;
+    display: block;
+    cursor: default;
+}
+
+select.input  {
+	height: 45px;
+}
+
+.field .input {
+	margin: 0 0 8px;
+}
+
+.input {
+	transition: 75ms ease-in-out;
+    transition-property: background,border-color,box-shadow,color;
+    background: #fff;
+    border: 1px solid #c5c7cb;
+    border-radius: 3px;
+    width: 100%;
+    color: #282c31;
+    font-family: 'Karla',sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    line-height: normal;
+}
+
+
+/*END of teacher stuff*/
