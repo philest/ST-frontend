@@ -289,6 +289,11 @@ h1#main-banner {
 
 }
 
+.the-problem .text h2, .the-product .text h2, .join-us .text h2, h2 {
+	color: #4a4a4a;
+}
+
+
 h1#call-to-action {
 	padding-top: 1em;
 }
