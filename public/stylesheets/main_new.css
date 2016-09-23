@@ -254,7 +254,7 @@ button#join.dialog-button {
 
 .field.demo-field {
 	margin-left: 0px;
-	width: 230px;
+	width: 177px;
 }
 
 .demo-modal.modal-subheading {
@@ -338,7 +338,9 @@ button#start-modal-button.demo-request-button {
 	padding-top: 10em;
 	}
 
-
+	.field.demo-field {
+		width: 230px;
+	}
 
 }
 
