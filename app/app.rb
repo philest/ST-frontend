@@ -174,6 +174,11 @@ get '/books' do
   redirect to('http://m.me/490917624435792')
 end
 
+get '/rayna' do
+  redirect to('https://www.youtube.com/watch?v=fjwSdLfkPOg&feature=youtu.be')
+end
+
+
 
 
 
