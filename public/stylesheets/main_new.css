@@ -275,7 +275,8 @@ button#join.demo-form-button{
 
 
 h1#main-banner {
-	padding-top: 11em;
+	padding-top: 13.5em;
+	color: rgba(255,255,254,1);
 /*	font-size: 3em;
 */}
 
@@ -340,7 +341,7 @@ button#start-modal-button.demo-request-button {
 	}	
 
 	h1#main-banner {
-	padding-top: 10em;
+	padding-top: 13em;
 	}
 
 	.field.demo-field {
@@ -371,8 +372,9 @@ button#start-modal-button.demo-request-button {
 	}
 
 	h1#main-banner {
-		padding-top: 11em;
-	/*	font-size: 3em;
+		padding-top: 14em;
+		color: #4a4a4a;
+		/*	font-size: 3em;
 	*/}
 
 
@@ -441,6 +443,15 @@ button#start-modal-button.demo-request-button {
 	    font-size: 27px;
 	}
 
+	a button#start-modal-button {
+		display: inline-block;
+	}
+
+/*#1d9ffc*/
+
+	a button#start-modal-button.inline-button-right {
+		margin-left: 7px;
+	}
 
 	.contact-image {
 		margin-left: 0px;
