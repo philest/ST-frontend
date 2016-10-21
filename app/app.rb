@@ -71,10 +71,16 @@ get '/signup' do
   erb :enroll
 end
 
-post '/success' do  
-  create_invite(params) 
-  erb :success
+
+post '/success' do
+  puts params.to_s
+  return params.to_s
 end
+
+# post '/success' do  
+  # create_invite(params) 
+  # erb :success
+# end
 
 post '/demo_success' do 
   notify_demo(params)
