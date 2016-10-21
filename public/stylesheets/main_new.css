@@ -148,6 +148,10 @@ img#gif-animation.hero-animation {
 	margin-right: auto;
 }
 
+#splash .animation {
+	display: inline-block;
+}
+
 #splash .animation img {
 	margin-left: auto;
 }
