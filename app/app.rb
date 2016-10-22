@@ -63,6 +63,19 @@ get '/' do
 end
 
 
+# users sign in. posted from bird.
+post '/signin' do
+  # puts params
+  teacher           = params["teacher"]
+  school            = params["school"]
+  puts teacher, school
+  # session[:teacher] = teacher
+  # session[:school]  = school
+  # puts session
+
+end
+
+
 get '/privacy' do
   erb :privacy_policy
 end
@@ -73,7 +86,7 @@ end
 
 
 post '/success' do
-  puts params.to_s
+  puts params.to_s  
   return params.to_s
 end
 
@@ -183,12 +196,6 @@ end
 get '/rayna' do
   redirect to('https://www.youtube.com/watch?v=fjwSdLfkPOg&feature=youtu.be')
 end
-
-
-
-
-
-
 
 
 #twilio failed: no valid response for sms.
