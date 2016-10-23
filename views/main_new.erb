@@ -248,7 +248,8 @@
 			        <h2 class="modal-signup-heading">What do parents call you?</h2>
 			        <h3 class="modal-signup-heading">Only your class can see your name on StoryTime.</h3>
 
-			        <form id='login' action=<% (ENV['RACK_ENV'] == 'production') ? ENV['birdv_url'] : 'http://localhost:5000' %> method="post">
+			         <form id='login' action='signin' method="post"> 
+			        <form id='login'>
 				      	<div class="signup-setup">
 					        <div class="field" id="signup-field">
 								     <label class="label">What parents call you</label>
@@ -520,6 +521,11 @@
 				// console.log("ass")
 				// event.preventDefault();
 				console.log($( this ).serializeArray());
+
+				// $.post( "http://localhost:5000/signup", $( this ).serialize() 
+				// 	.done(function( data ) {
+    // 					alert( "Data Loaded: " + data );
+  		// 		});
 
 			});
 

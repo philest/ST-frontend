@@ -133,10 +133,22 @@
 				</div>
 			</div>
 
+			<div id="logo-container">
+				<div id="jobs">
+					<h2 class="our_team enroll_header">Hello, <%= session['teacher']['signature'] %></h2>
+				</div>
+			</div>
+
 					<header class="box-header">
-						<h2 class="box-header-title">Tell people to text <span>Read</span> to (203)-202-3505</h2>
+						<% code_english, code_spanish = session['teacher']['code'].split('|') %>
+
+						<h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
 						<h3 class="box-header-subtext">
 							They'll receive a welcome text from StoryTime.
+						</h3>
+
+						<h3 class="box-header-subtext">
+							For Spanish, text <span><%= code_spanish %></span>
 						</h3>
 					</header>
 
