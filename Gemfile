@@ -24,6 +24,7 @@ gem 'httparty'
 gem 'dotenv'
 gem 'sass'
 gem 'sprockets'
+ruby '2.2.3'
 
 
 group :development, :test do

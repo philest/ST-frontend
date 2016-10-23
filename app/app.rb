@@ -30,9 +30,6 @@ require 'sidekiq/api'
 
 require 'twilio-ruby'
 
-
-
-
 configure :production do
   require 'newrelic_rpm'
   set :static_cache_control, [:public, :max_age => 600]
@@ -62,27 +59,51 @@ get '/' do
     erb :main_new
 end
 
-
-# users sign in. posted from bird.
+# users sign in. posted from birdv.
 post '/signin' do
-  # puts params
-  teacher           = params["teacher"]
-  school            = params["school"]
-  puts teacher, school
-  # session[:teacher] = teacher
-  # session[:school]  = school
-  # puts session
+  puts "params = #{params}"
+  data = HTTParty.post(
+    'http://localhost:5000/signup', 
+    body: params
+  )
 
+  data = JSON.parse(data)
+
+  puts data
+
+  if data["secret"] != 'our little secret'
+    return "bad secret, motherfucker"
+  end
+
+  # puts params
+  teacher           = data["teacher"]
+  school            = data["school"]
+  # puts teacher, school
+  session[:teacher] = teacher
+  session[:school]  = school
+
+  puts session.inspect
+
+  redirect to '/signup/in-person'
 end
+
+
+get '/signup' do
+  if session[:teacher].nil?
+    # maybe have a banner saying, "must log in through teacher account"
+    redirect_to '/'
+  end
+
+  erb :enroll
+end
+
 
 
 get '/privacy' do
   erb :privacy_policy
 end
 
-get '/signup' do
-  erb :enroll
-end
+
 
 
 post '/success' do
@@ -183,6 +204,7 @@ get '/signup/flyer' do
 end
 
 get '/signup/in-person' do
+  session.inspect
   erb :inperson
 end
 
