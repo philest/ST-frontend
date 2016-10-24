@@ -247,9 +247,6 @@ li a:hover {
 }
 
 
-
-
-
 .sidebar-heading { 
   color: #6b6e72;
     font-size: 12px;
@@ -257,10 +254,11 @@ li a:hover {
     text-transform: uppercase;
 }
 
-.sidebar-heading h3 {
+
+/*.sidebar-heading h3 {
   margin-top: 5em;
 }
-
+*/
 ul {
   list-style: none;
 }

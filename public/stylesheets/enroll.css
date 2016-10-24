@@ -5,6 +5,11 @@
 	}
 }
 
+.welcome {
+  font-family: 'dk_cool_crayonregular'; 
+  color: orange;
+}
+
 #icondemo {
   display: block;
   width: 50%;
@@ -215,7 +220,7 @@ li a:hover {
 }
 
 .sidebar-heading h3 {
-	margin-top: 5em;
+	margin-top: 4em;
 }
 
 ul {
