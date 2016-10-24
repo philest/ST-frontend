@@ -1,23 +1,63 @@
 
 .enroll-container @media (min-width: 1600px) {
-	.container {
-		max-width: 1600px;
-	}
+  .container {
+    max-width: 1600px;
+  }
 }
 
-#icondemo {
-  display: block;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
+
+.Button-ready.spreadsheet {
+  margin-top: 2em;
+}
+
+
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+  background-color: #BDBDBD;
+  height: 200px;
+  width: 200px;
   text-align: center;
+}
+.fileUpload input.upload {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  height: 100%;
+  text-align: center;
+}
+.custom-span{ 
+  font-family: Arial; 
+  font-weight: bold;
+  font-size: 100px; 
+  color: #FE57A1
+}
+#uploadFile{
+  border: none;
+  display: block; 
 
+  margin: auto; 
+  text-align: center;
+  width: 100%;
+}
+.custom-para{
+  font-family: arial;
+  font-weight: bold;
+  font-size: 24px; 
+  color:#585858;
 }
 
-#icondemo {
+.foo {
     display: block;
     position: relative;
-    width: 15em;
+    width: 300px;
     margin: auto;
     cursor: pointer;
     border: 0;
@@ -25,10 +65,10 @@
     border-radius: 5px;
     outline: 0;
 }
-#icondemo:hover:after {
+.foo:hover:after {
     background: #5978f8;
 }
-#icondemo:after {
+.foo:after {
     transition: 200ms all ease;
     border-bottom: 3px solid rgba(0,0,0,.2);
     background: #3c5ff4;
@@ -36,89 +76,92 @@
     color: #fff;
     font-size: 20px;
     text-align: center;
+    /*margin-top: 5em;*/
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     display: block;
-    content: 'Add spreadsheet';
+    content: 'Upload spreadsheet';
     line-height: 60px;
     border-radius: 5px;
 }
 
 
+
+
 @media (min-width: 768px) {
-	.container {
-		width: 615px;
-	}
+  .container {
+    width: 615px;
+  }
 }
 
 
 @media (min-width: 1020px) {
-	.container {
-	    width: 870px;
-	}
+  .container {
+      width: 870px;
+  }
 }
 
 .enroll {
-	display: block;
-	width: 100%;
-	margin: auto;
+  display: block;
+  width: 100%;
+  margin: auto;
 }
 
 h2.enroll_header {
-	margin-left: 7px;
-	margin-right: 7px
+  margin-left: 7px;
+  margin-right: 7px
 }
 
 
 .navbar-right {
-	display: block;
+  display: block;
 }
 
 #questions {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 @media (min-width: 728px) {
 
 
-	#questions {
-		border-radius: 15px;
-	    border: 3px solid #ed7844;
-	    width: 111px;
-	    height: 48px; 
-	    transition: all 0.5s ease;
+  #questions {
+    border-radius: 15px;
+      border: 3px solid #ed7844;
+      width: 111px;
+      height: 48px; 
+      transition: all 0.5s ease;
 
-	}
+  }
 
-	a#questions {
-	    padding-left: 12px;
-	    padding-top: 12px;
-	    font-weight: 100;
-	}
+  a#questions {
+      padding-left: 12px;
+      padding-top: 12px;
+      font-weight: 100;
+  }
 
-	#questions:hover {
-		background-color: #ed7844;
-	}
+  #questions:hover {
+    background-color: #ed7844;
+  }
 
-	a#questions:hover {
-		color: white;
-	}
+  a#questions:hover {
+    color: white;
+  }
 
 }
-/*	#questions { 
-		border: none;
-	}
+/*  #questions { 
+    border: none;
+  }
 
-	#questions:hover {
-		background-color: white;
-	}
+  #questions:hover {
+    background-color: white;
+  }
 
-	a#questions:hover {
-		background-color: #ed7844;
-	}	
+  a#questions:hover {
+    background-color: #ed7844;
+  } 
 */
 }
 
@@ -126,18 +169,18 @@ h2.enroll_header {
 
 
 #enroll-container {
-	padding-left: 25px
+  padding-left: 25px
 }
 
 /*portrait*/
 @media (min-width: 568px) {
-	.enroll{
-		width: 80%;
-	}
+  .enroll{
+    width: 80%;
+  }
 
-	#enroll-container {
-		padding-left: 50px
-	}
+  #enroll-container {
+    padding-left: 50px
+  }
 
 
 
@@ -147,39 +190,39 @@ h2.enroll_header {
 
 /*tablet*/
 @media (min-width: 768px) {
-	.enroll{
-		width: 65%;
-	}
+  .enroll{
+    width: 65%;
+  }
 
 }
 
 
 /*desktop*/
 @media (min-width: 1024px) {
-	.enroll{
-		width: 55%;
-	}
+  .enroll{
+    width: 55%;
+  }
 
 }
 
 /*xlarge*/
 @media (min-width: 1280px) {
-	.enroll{
-		width: 45%;
-	}
+  .enroll{
+    width: 45%;
+  }
 }
 
 
 #enroll-logo {
-	height: 100px;
+  height: 100px;
 }
 /*SIDEBAR*/
 
 .sidebar {
-	display: inline-block;
-	float: left;
-	box-sizing: border-box;
-	background: #f2f3f5;
+  display: inline-block;
+  float: left;
+  box-sizing: border-box;
+  background: #f2f3f5;
     width: 260px;    
     height: 1150px;
     padding: 28px 28px 0;
@@ -199,8 +242,8 @@ nav.tabs {
 }
 
 li a:hover {
-	color: black;
-	transition-duration: 400ms
+  color: black;
+  transition-duration: 400ms
 }
 
 
@@ -208,26 +251,26 @@ li a:hover {
 
 
 .sidebar-heading { 
-	color: #6b6e72;
+  color: #6b6e72;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .sidebar-heading h3 {
-	margin-top: 5em;
+  margin-top: 5em;
 }
 
 ul {
-	list-style: none;
+  list-style: none;
 }
 
 li {
-	display: block;
+  display: block;
     margin: 0;
     font-size: 14px;
-	
-	/*added because absolute positioning broke the padding*/
+  
+  /*added because absolute positioning broke the padding*/
     height: 56px;
     width: 100%;
 }
@@ -236,8 +279,8 @@ li.active {
     background: #fff;
     border: 0;
     color: inherit;
-	border-bottom: solid 1px gray;
-	border-top: solid 1px gray;    
+  border-bottom: solid 1px gray;
+  border-top: solid 1px gray;    
 }
 
 li.active a {
@@ -246,20 +289,20 @@ li.active a {
 
 @media (min-width: 700px) {
 
-	.main-box {
-		border-left: solid 1px gray;
-	}
+  .main-box {
+    border-left: solid 1px gray;
+  }
 
 }
 
 
 
 li img {
-	display: inline-block;
+  display: inline-block;
 }
 
 li#envelope a, li#easel a{
-	position: absolute;
+  position: absolute;
     margin-top: 18px;
     margin-left: -21px;
     padding-top: 0px;
@@ -268,14 +311,14 @@ li#envelope a, li#easel a{
 
 
 li#envelope img {
-	margin-left: 29px;
+  margin-left: 29px;
     margin-top: 17px;
     height: 20px;
 }
 
 
 li#easel img {
-	margin-left: 29px;
+  margin-left: 29px;
     margin-top: 17px;
     height: 27px;
 
@@ -287,21 +330,34 @@ li#easel img {
 
 
 li#printer a{
-	position: absolute;
+  position: absolute;
     margin-top: 18px;
     margin-left: -21px;
     padding-top: 0px;
 }
 
 li#printer img {
-	margin-left: 25px;
+  margin-left: 25px;
+    margin-top: 12px;
+    height: 1.9em;
+}
+
+li#spreadsheet a{
+  position: absolute;
+    margin-top: 18px;
+    margin-left: -19px;
+    padding-top: 0px;
+}
+
+li#spreadsheet img {
+  margin-left: 25px;
     margin-top: 12px;
     height: 1.9em;
 }
 /*
 .glyph:before {
-	    content: "";
-	float: left;
+      content: "";
+  float: left;
     width: 15px;
     height: 15px;
     margin: 4px 5px 0 0;
@@ -310,8 +366,8 @@ li#printer img {
 }
 */
 li a {
-	display: inline-block;
-	border: 0;
+  display: inline-block;
+  border: 0;
     color: #6b6e72;
     font-size: 15px;
     font-weight: 600;
@@ -325,20 +381,20 @@ li a {
 /*END SIDEBAR*/
 
 .main-box {
-	display: inline-block;
-	width: 70%;
+  display: inline-block;
+  width: 70%;
 
 }
 
 @media (min-width: 885px) {
 
-	.sidebar {
-	    width: 22%;
-	}
-	
-	.main-box {
-		width: 78%;
-	}
+  .sidebar {
+      width: 22%;
+  }
+  
+  .main-box {
+    width: 78%;
+  }
 
 
 }
@@ -355,59 +411,59 @@ li a {
 
 /*mobile!!!! NOTE: max-width, not min-width*/
 @media (max-width: 728px) {
-	.sidebar {
-	    display: none;
-	}
+  .sidebar {
+      display: none;
+  }
 
-	.main-box {
-		width: 100%;
-	}
+  .main-box {
+    width: 100%;
+  }
 
 }
 
 
 .enroll h1 {
-	text-align: left;
+  text-align: left;
 }
 
 .enroll a {
-	display: inline-block;
+  display: inline-block;
 }
 
 h2.enroll_header {
-	margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 /*teacher stuff*/
 
 .teacher-info-box {
-	padding: 0px 40px 0px 40px;
-	max-width: 480px;
-	margin: 0 auto;
+  padding: 0px 40px 0px 40px;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 .setup-signature-name, .setup-signature-email {
-	margin-left: auto;
+  margin-left: auto;
     margin-right: auto;
     display: block;
 }
 
 .setup-signature-name, .setup-signature-email {
-	width: 260px;
+  width: 260px;
 }
 
 /*portrait*/
 @media (min-width: 568px) {
 
-	.setup-signature-title {
-		width: 100px;
-		margin-right: 10px;
-	}
+  .setup-signature-title {
+    width: 100px;
+    margin-right: 10px;
+  }
 
 }
 
 .label {
-	font-size: 14px;
+  font-size: 14px;
     font-weight: 600;
     line-height: 1.38;
     margin: 0 0 8px;
@@ -417,15 +473,15 @@ h2.enroll_header {
 }
 
 select.input  {
-	height: 45px;
+  height: 45px;
 }
 
 .field .input {
-	margin: 0 0 8px;
+  margin: 0 0 8px;
 }
 
 .input {
-	transition: 75ms ease-in-out;
+  transition: 75ms ease-in-out;
     transition-property: background,border-color,box-shadow,color;
     background: #fff;
     border: 1px solid #c5c7cb;
@@ -443,21 +499,21 @@ select.input  {
 
 
 .group-invite {
-	box-sizing: border-box;
-	display: block;
+  box-sizing: border-box;
+  display: block;
 }
 
 .box-header {
-	padding: 30px 40px 28px;
-	display: block;
+  padding: 30px 40px 28px;
+  display: block;
 }
 
 .box-header-title {
-	font-size: 20px;
-	font-weight: 400;
-	text-align: center;
-	line-height: 1.38;
-	font-family: 'Karla', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.38;
+  font-family: 'Karla', sans-serif;
 }
 
 .box-header-subtext {
@@ -470,30 +526,30 @@ select.input  {
 }
 
 .box-body {
-	padding-top: 0;
-	padding: 0px 40px 40px 40px;
+  padding-top: 0;
+  padding: 0px 40px 40px 40px;
 }
 .row-small{
-	margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .row {
-	margin: 0 0 32px;
+  margin: 0 0 32px;
 }
 
 .table-input {
-	text-align: left;
-	font-size: 15px;
-	margin-left: -23px;
+  text-align: left;
+  font-size: 15px;
+  margin-left: -23px;
 }
 
 .table-input-header-row {
-	width: 100%;
-	display: table;
+  width: 100%;
+  display: table;
 }
 
 .table-input-header-cell {
-	background-color: #f2f3f5;
+  background-color: #f2f3f5;
     border: 1px solid #dcdee2;
     border-width: 1px 0;
     color: #6b6e72;
@@ -502,30 +558,30 @@ select.input  {
 }
 
 .table-input-header-cell, .table-input-body-cell {
-	    width:50%;
+      width:50%;
 }
 
 .table-input-cell {
-	display: table-cell;
+  display: table-cell;
 }
 
 .table-input-container{
-	overflow: auto;
-	height: 200px;
-	-webkit-overflow-scrolling: touch;
+  overflow: auto;
+  height: 200px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .table-input-body {
-	width: 100%;
-	display: table;
+  width: 100%;
+  display: table;
 }
 
 .table-input-body-row {
-	display: table-row;
+  display: table-row;
 }
 
 .table-input-cell-validation {
-	min-width: 23px;
+  min-width: 23px;
 }
 
 .table-input-body-cell {
@@ -537,26 +593,26 @@ select.input  {
     margin: 0 0 -1px;
     transition: 75ms ease-in-out;
     transition-property: background,border-color,color;
-	cursor: pointer;
+  cursor: pointer;
 }
 
 /*
 TODO trigger a new div with this styling on focus. 
 .form-cell-input:focus{
-	border-bottom-color: #2f75c1;
+  border-bottom-color: #2f75c1;
 }
 */
 
 .table-input-body-cell input {
-	width: 100%;
-	padding: 16px 12px;
-	font-weight: 400;
-	border: none;
+  width: 100%;
+  padding: 16px 12px;
+  font-weight: 400;
+  border: none;
 }
 
 * {
-	margin: 0;
-	padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 *, :after, :before {
@@ -564,26 +620,26 @@ TODO trigger a new div with this styling on focus.
 }
 
 .field {
-	margin: 0 0 12px;
+  margin: 0 0 12px;
     position: relative;
     text-align: left;
 }
 
 .legal-field {
-	font-size: 13px;
+  font-size: 13px;
     line-height: 1.5;
     text-align: center;
 }
 
 .thunder {
-	color: #6b6e72;
-	font-weight: 100;
+  color: #6b6e72;
+  font-weight: 100;
 }
 
 .Button-ready {
-	
-	display:block;
-	background: #2f75c1;
+  
+  display:block;
+  background: #2f75c1;
     color: #fff;
     letter-spacing: .01em;
     border: 1px solid transparent;
@@ -594,15 +650,15 @@ TODO trigger a new div with this styling on focus.
     text-align: center;
     transition: 75ms ease-in-out;
     transition-property: background,border-color,color,opacity;
-	
-	margin-left: auto;
-	margin-right: auto;
-	
+  
+  margin-left: auto;
+  margin-right: auto;
+  
 }
 
 .Button-not-ready {
-	display:block;
-	background: red;
+  display:block;
+  background: red;
     color: #fff;
     letter-spacing: .01em;
     border: 1px solid transparent;
@@ -613,72 +669,59 @@ TODO trigger a new div with this styling on focus.
     text-align: center;
     transition: 75ms ease-in-out;
     transition-property: background,border-color,color,opacity;
-	
-	margin-left: auto;
-	margin-right: auto;
+  
+  margin-left: auto;
+  margin-right: auto;
 
 }
 
 label.error {
-	color: #C63442;
-	font-weight: 800;
+  color: #C63442;
+  font-weight: 800;
 }
 
 .submit-errors {
-	display: none;
+  display: none;
 }
 
 .submit-errors a {
-	background-color: #C63442;
+  background-color: #C63442;
 
 }
 
 
 .alert {
-	width: 100%;
+  width: 100%;
 }
 
 
 @media (min-width: 728px) {
-	.alert {
-		z-index: -10;
-		position: relative;
-		width: 70%;
-		float: right;
+  .alert {
+    z-index: -10;
+    position: relative;
+    width: 70%;
+    float: right;
 }
 
 
 @media (min-width: 885px) {
-	.alert {
-		width: 78%;
-	}
+  .alert {
+    width: 78%;
+  }
 }
 
 img.phone-image {
-	height: 26em;
-	padding-top: 1em;
-	padding-bottom: 2em;
-	box-shadow: 0 0 0 0;
+  height: 26em;
+  padding-top: 1em;
+  padding-bottom: 2em;
+  box-shadow: 0 0 0 0;
 
 }
 
 header#header-phone-invites.box-header {
-	padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 
-
-li#spreadsheet a{
-  position: absolute;
-    margin-top: 18px;
-    margin-left: -19px;
-    padding-top: 0px;
-}
-
-li#spreadsheet img {
-  margin-left: 25px;
-    margin-top: 12px;
-    height: 1.9em;
-}
 /*Flyer section*/
 
 
