@@ -52,13 +52,52 @@ TEST ||= "test"
 include RoutesHelper
 helpers RoutesHelper
 
+set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
 enable :sessions
+
+# use Rack::Session::Cookie, :key => 'rack.session',
+                           # :path => '/',
+                           # :secret => 'your_secret'
 
 #root
 get '/' do
+  puts "session = #{session.inspect}"
     erb :main_new
 end
 
+get '/signup/spreadsheet' do
+  erb :spreadsheet
+end
+
+post '/signup/spreadsheet' do
+  # Check if user uploaded a file
+  if params['spreadsheet'] && params['spreadsheet'][:filename] && !session[:teacher].nil?
+    filename = params['spreadsheet'][:filename]
+    file = params['spreadsheet'][:tempfile]
+
+    dirname = "./public/uploads/#{session[:teacher]['signature']}"
+    unless File.directory?(dirname)
+      FileUtils.mkdir_p(dirname)
+    end
+    path = "#{dirname}/#{filename}"
+
+    # Write file to disk
+    File.open(path, 'wb') do |f|
+      f.write(file.read)
+    end
+  end
+
+  Pony.mail(:to => 'phil.esterman@yale.edu',
+            :cc => 'aubrey.wahl@yale.edu',
+            :from => 'david.mcpeek@yale.edu',
+            :subject => "ST: #{session[:teacher]['signature']} uploaded a spreadsheet",
+            :body => "Check it out. #{filename}")
+  flash[:spreadsheet] = "Congrats! We'll send your class a text in a few days."
+  redirect to '/signup/spreadsheet'
+
+end
+
+ 
 # users sign in. posted from birdv.
 post '/signin' do
   puts "params = #{params}"
@@ -91,7 +130,7 @@ end
 get '/signup' do
   if session[:teacher].nil?
     # maybe have a banner saying, "must log in through teacher account"
-    redirect_to '/'
+    redirect to '/'
   end
 
   erb :enroll
@@ -204,7 +243,7 @@ get '/signup/flyer' do
 end
 
 get '/signup/in-person' do
-  session.inspect
+  puts "session = #{session.inspect}"
   erb :inperson
 end
 
