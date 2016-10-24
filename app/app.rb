@@ -69,6 +69,13 @@ get '/signup/spreadsheet' do
   erb :spreadsheet
 end
 
+get '/logout' do
+  session[:teacher] = nil
+  session[:school] = nil
+
+  redirect to '/'
+end
+
 post '/signup/spreadsheet' do
   # Check if user uploaded a file
   if params['spreadsheet'] && params['spreadsheet'][:filename] && !session[:teacher].nil?

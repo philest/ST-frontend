@@ -195,9 +195,17 @@
 						<li> <a href="https://storytime.zendesk.com">help</a></li>
 						<li class="navbar-button-item">
 							<a>
-								<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
-								Add Class
-								</button>
+								<% if session['teacher'].nil? %>
+									<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
+									Log in
+									</button>
+								<% else %>
+									<form action="signup" method="get">									
+										<button id="top-button" type="submit" class=" pure-button-primary pure-button signup-button">
+											Log in
+										</button>
+									</form>
+								<% end %>
 							</a>
 						</li>
 					</ul>
