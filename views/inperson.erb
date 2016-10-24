@@ -141,9 +141,7 @@
 			</div>
 
 			<div id="logo-container">
-				<div id="jobs">
-					<h2 class="our_team enroll_header">Hello, <%= session['teacher']['signature'] %></h2>
-				</div>
+		
 			</div>
 
 					<header class="box-header">
@@ -159,7 +157,8 @@
 						</h3>
 					</header>
 
-					<img class="flyer-image phone-image" src="http://localhost:5000/enroll-forms/<%= code_english %>">
+					<% birdv_url = (ENV['RACK_ENV'] == 'production') ? ENV['birdv_url'] : 'http://localhost:5000' %>
+					<img class="flyer-image phone-image" src="<%= birdv_url %>/enroll-forms/<%= code_english %>">
 
 
 		</div>

@@ -175,6 +175,13 @@
 		</div>
 	<% end %>
 
+			<!-- Notify about form submission -->
+	<% if flash[:signin_error] %>
+		<div id="alert">
+		    <a class="alert" href="#alert">Incorrect login information. Check with your administrator for the correct school code!</a>
+		</div>
+	<% end %>
+
 
 			<nav class="navbar" role="navigation">
 				<div class="container">

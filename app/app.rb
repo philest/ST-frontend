@@ -105,13 +105,22 @@ post '/signin' do
     'http://localhost:5000/signup', 
     body: params
   )
+  puts "data = #{data.code.inspect}"
+
+  if data.code == 500 or data.code == 501
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+    # return 
+    puts "ass me!!!!!!!"
+  end
 
   data = JSON.parse(data)
 
   puts data
 
   if data["secret"] != 'our little secret'
-    return "bad secret, motherfucker"
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
   end
 
   # puts params
@@ -123,13 +132,14 @@ post '/signin' do
 
   puts session.inspect
 
-  redirect to '/signup/in-person'
+  redirect to '/signup'
 end
 
 
 get '/signup' do
   if session[:teacher].nil?
     # maybe have a banner saying, "must log in through teacher account"
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
     redirect to '/'
   end
 

@@ -106,7 +106,6 @@
 
 					<li id="spreadsheet">
             <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
-
             <a href="/signup/spreadsheet">Add spreadsheet
             </a>
           </li>
@@ -157,9 +156,11 @@
 						</h3>
 					</header>
 
-					<img class="flyer-image" src="http://d2yudi7y1eei74.cloudfront.net/assets/sample-flyer.png">
+					<% code_english =  session['teacher']['code'].split('|').first %>
+					<% birdv_url = (ENV['RACK_ENV'] == 'production') ? ENV['birdv_url'] : 'http://localhost:5000' %>
+					<img class="flyer-image" src="<%= birdv_url %>/enroll-flyers/<%= code_english %>?ext=png">
 
-					<button class="Button-ready"> <a href="https://st-materials.s3.amazonaws.com/StoryTime%20Invite%20Packet.pdf" target="_blank">Download PDF</a></button>					
+					<button class="Button-ready"> <a href="<%= birdv_url %>/enroll-flyers/<%= code_english %>?ext=pdf" target="_blank">Download PDF</a></button>					
 
 		</div>
 
