@@ -522,9 +522,8 @@
 			$('#login').on('submit', function(event) {
 				// event.preventDefault();
 				var teacherinfo = $("#teacher-info").serializeArray()
-				// var signature =  $( this ).serializeArray();
 				console.log(teacherinfo);
-				// console.log(signature);
+
 
 				for (var i = 0; i < teacherinfo.length; i++) {
 					console.log(teacherinfo[i])
@@ -533,14 +532,8 @@
                					.attr('name', teacherinfo[i]['name']).val(teacherinfo[i]['value']);
           $('#login').append($(input));
 				}
-				// console.log("ass")
-				// event.preventDefault();
-				console.log($( this ).serializeArray());
 
-				// $.post( "http://localhost:5000/signup", $( this ).serialize() 
-				// 	.done(function( data ) {
-    // 					alert( "Data Loaded: " + data );
-  		// 		});
+
 
 			});
 
