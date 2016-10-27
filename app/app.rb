@@ -108,7 +108,7 @@ post '/signup/spreadsheet' do
     # end
   end
 
-  Pony.mail(:to => 'phil.esterman@yale.edu',
+  Pony.mail(:to => 'phil.esterman@yale.edu,supermcpeek@gmail.com',
             :cc => 'aubrey.wahl@yale.edu',
             :from => 'david.mcpeek@yale.edu',
             :subject => "ST: #{session[:teacher]['signature']} uploaded a spreadsheet",
