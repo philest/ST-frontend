@@ -15,6 +15,7 @@ require "sinatra/reloader" if development?
 
 #for access in views
 require_relative '../config/environments' #DB configuration
+require_relative '../config/initializers/aws'
 require_relative '../models/follower'
 
 #helpers
@@ -82,16 +83,29 @@ post '/signup/spreadsheet' do
     filename = params['spreadsheet'][:filename]
     file = params['spreadsheet'][:tempfile]
 
-    dirname = "./public/uploads/#{session[:teacher]['signature']}"
-    unless File.directory?(dirname)
-      FileUtils.mkdir_p(dirname)
-    end
-    path = "#{dirname}/#{filename}"
+    teacher_assets = S3.bucket('teacher-materials')
+    if teacher_assets.exists?
+      name = "#{session[:teacher]['signature']}/#{filename}"
 
-    # Write file to disk
-    File.open(path, 'wb') do |f|
-      f.write(file.read)
+      if teacher_assets.object(name).exists?
+            puts "#{name} already exists in the bucket"
+      else
+        obj = teacher_assets.object(name)
+        obj.put(body: file.to_blob, acl: "public-read")
+        puts "Uploaded '%s' to S3!" % name
+      end
     end
+
+    # dirname = "./public/uploads/#{session[:teacher]['signature']}"
+    # unless File.directory?(dirname)
+    #   FileUtils.mkdir_p(dirname)
+    # end
+    # path = "#{dirname}/#{filename}"
+
+    # # Write file to disk
+    # File.open(path, 'wb') do |f|
+    #   f.write(file.read)
+    # end
   end
 
   Pony.mail(:to => 'phil.esterman@yale.edu',
