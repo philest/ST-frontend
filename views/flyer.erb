@@ -159,9 +159,9 @@
 
 					<% code_english =  session['teacher']['code'].split('|').first.upcase %>
 					<% aws_url = 'https://s3.amazonaws.com/teacher-materials/flyers' %>
-					<img class="flyer-image" src="<%= aws_url %>/<%= code_english %>-flyer.png">
+					<img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
 
-					<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer.pdf" target="_blank">Download PDF</a></button>					
+					<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer.pdf" target="_blank">Download PDF</a></button>
 
 		</div>
 
