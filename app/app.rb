@@ -88,7 +88,7 @@ post '/signup/spreadsheet' do
       name = "teacher-uploads/#{session[:teacher]['signature']}/#{filename}"
 
       if teacher_assets.object(name).exists?
-            puts "#{name} already exists in the bucket"
+          puts "#{name} already exists in the bucket"
       else
         obj = teacher_assets.object(name)
         obj.put(body: file, acl: "public-read")
