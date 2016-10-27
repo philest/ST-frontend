@@ -85,13 +85,13 @@ post '/signup/spreadsheet' do
 
     teacher_assets = S3.bucket('teacher-materials')
     if teacher_assets.exists?
-      name = "#{session[:teacher]['signature']}/#{filename}"
+      name = "teacher-uploads/#{session[:teacher]['signature']}/#{filename}"
 
       if teacher_assets.object(name).exists?
             puts "#{name} already exists in the bucket"
       else
         obj = teacher_assets.object(name)
-        obj.put(body: file.to_blob, acl: "public-read")
+        obj.put(body: file, acl: "public-read")
         puts "Uploaded '%s' to S3!" % name
       end
     end
