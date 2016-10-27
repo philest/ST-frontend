@@ -158,8 +158,8 @@
 						</h3>
 					</header>
 
-					<% birdv_url = (ENV['RACK_ENV'] == 'production') ? ENV['birdv_url'] : 'http://localhost:5000' %>
-					<img class="flyer-image phone-image" src="<%= birdv_url %>/enroll-forms/<%= code_english %>">
+					<% aws_url = 'https://s3.amazonaws.com/teacher-materials/phone-imgs' %>
+					<img class="flyer-image phone-image" src="<%= aws_url %>/<%= code_english.upcase %>-phone.png">
 
 
 		</div>

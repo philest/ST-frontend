@@ -157,11 +157,11 @@
 						</h3>
 					</header>
 
-					<% code_english =  session['teacher']['code'].split('|').first %>
-					<% birdv_url = (ENV['RACK_ENV'] == 'production') ? ENV['birdv_url'] : 'http://localhost:5000' %>
-					<img class="flyer-image" src="<%= birdv_url %>/enroll-flyers/<%= code_english %>?ext=png">
+					<% code_english =  session['teacher']['code'].split('|').first.upcase %>
+					<% aws_url = 'https://s3.amazonaws.com/teacher-materials/flyers' %>
+					<img class="flyer-image" src="<%= aws_url %>/<%= code_english %>-flyer.png">
 
-					<button class="Button-ready"> <a href="<%= birdv_url %>/enroll-flyers/<%= code_english %>?ext=pdf" target="_blank">Download PDF</a></button>					
+					<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer.pdf" target="_blank">Download PDF</a></button>					
 
 		</div>
 
