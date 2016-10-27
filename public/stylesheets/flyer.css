@@ -11,6 +11,18 @@
     margin-bottom: 30px;   
 }
 
+.english {
+  border-right: 1px solid #aaaaaa;
+}
+
+.english .flyer-image {
+
+}
+
+.spanish .flyer-image {
+
+}
+
 button {
 	margin-bottom: 2.5em
 }
