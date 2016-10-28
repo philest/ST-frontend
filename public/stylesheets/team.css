@@ -53,3 +53,20 @@ div.full-name h2 {
 	}
 
 }
+
+
+a {
+	text-decoration: none;
+	color: #337ab7;
+}
+
+a:visited {
+	color: #337ab7;
+}
+
+a:hover {
+	text-decoration: none;
+    color: #23527c;
+}
+
+
