@@ -129,7 +129,8 @@
 						</div>
 					</a>
 					<ul class="navbar-right">
-						<li><a href="https://storytime.zendesk.com" target="_blank" id="questions">Questions?</a></li>
+						<li class="logout"><a href="/logout">Logout</a></li>
+						<li class="logout questions"><a href="https://storytime.zendesk.com" target="_blank" id="questions">Questions?</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -147,6 +148,10 @@
 
 					<header class="box-header">
 						<% code_english, code_spanish = session['teacher']['code'].split('|') %>
+						<% school = session['school']['signature'] %>
+						<% teacher = session['teacher']['signature'] + "-" + session['teacher']['t_number'].to_s %>
+						<% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
+
 
 						<h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
 						<h3 class="box-header-subtext">
@@ -158,8 +163,7 @@
 						</h3>
 					</header>
 
-					<% aws_url = 'https://s3.amazonaws.com/teacher-materials/phone-imgs' %>
-					<img class="flyer-image phone-image" src="<%= aws_url %>/<%= code_english.upcase %>-phone.png">
+					<img class="flyer-image phone-image" src="<%= aws_url %>/<%= code_english %>-phone.png">
 
 
 		</div>
