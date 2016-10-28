@@ -162,16 +162,18 @@
 					<div class="pure-g">
 							<% code_english = session['teacher']['code'].split('|').first %>
 							<% school = session['school']['signature'] %>
-							<% teacher = session['teacher']['signature'] + "-" + session['teacher']['t_number'].to_s %>
-							<% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/flyers" %>
+							<% teacher = session['teacher']['signature'] %>
+							<% teacher_dir = teacher + "-" + session['teacher']['t_number'].to_s %>
+							<% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
+
 
 							<div class="pure-u-1-2 english">
 									<img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
-									<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer.pdf" target="_blank">Download English</a></button>		
+									<button class="Button-ready"> <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank">Download English</a></button>		
 							</div>
 							<div class="pure-u-1-2 spanish">
 									<img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">	
-									<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer-es.pdf" target="_blank">Download Spanish</a></button>	
+									<button class="Button-ready"> <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank">Download Spanish</a></button>	
 							</div>
 					</div>
 
