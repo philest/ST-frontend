@@ -5,6 +5,12 @@
 	}
 }
 
+.logout {
+  display: inline-block;
+  width: auto;
+
+}
+
 .welcome {
   font-family: 'dk_cool_crayonregular'; 
   color: orange;
@@ -231,8 +237,7 @@ li {
 	display: block;
     margin: 0;
     font-size: 14px;
-	
-	/*added because absolute positioning broke the padding*/
+	   /*added because absolute positioning broke the padding*/
     height: 56px;
     width: 100%;
 }
@@ -367,6 +372,10 @@ li a {
 	.main-box {
 		width: 100%;
 	}
+
+  .questions {
+    display: none;
+  }
 
 }
 

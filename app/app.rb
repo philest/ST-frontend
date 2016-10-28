@@ -88,7 +88,7 @@ post '/signup/spreadsheet' do
       name = "teacher-uploads/#{session[:teacher]['signature']}/#{filename}"
 
       if teacher_assets.object(name).exists?
-            puts "#{name} already exists in the bucket"
+          puts "#{name} already exists in the bucket"
       else
         obj = teacher_assets.object(name)
         obj.put(body: file, acl: "public-read")
@@ -123,6 +123,7 @@ end
 post '/signin' do
   puts "params = #{params}"
   post_url = ENV['RACK_ENV'] == 'production' ? ENV['birdv_url'] : 'http://localhost:5000'
+  puts "post_url = #{post_url}"
   data = HTTParty.post(
     "#{post_url}/signup", 
     body: params
