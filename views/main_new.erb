@@ -511,7 +511,7 @@
 	</body>
 	<footer>
 		<script>
-			$( document ).ready(function() {
+			// $( document ).ready(function() {
 		    	smoothScroll.init();
 					$('button.demo-form-button').click(function(){
 					    $('form#demo-form').each(function(){
@@ -533,8 +533,10 @@
 		          $('#login').append($(input));
 						}
 
+						console.log($(this).serializeArray());
+
 					});
-			});
+			// });
 
 		</script>
 	</footer>
