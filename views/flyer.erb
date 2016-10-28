@@ -89,7 +89,7 @@
  -->						<a  href="/signup/in-person">In-person guide 
 						</a>
 					</li>
-
+	
 					<li id="envelope" >
 						<img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
@@ -139,7 +139,8 @@
 					</div>
 				</a>
 				<ul class="navbar-right">
-					<li><a href="https://storytime.zendesk.com" target="_blank" id="questions">Questions?</a></li>
+					<li class="logout"><a href="/logout">Logout</a></li>
+					<li class="logout questions"><a href="https://storytime.zendesk.com" target="_blank" id="questions">Questions?</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -160,15 +161,15 @@
 					<div class="pure-g">
 							<% code_english = session['teacher']['code'].split('|').first %>
 							<% school = session['school']['signature'] %>
-							<% teacher = session['teacher']['signature'] %>
+							<% teacher = session['teacher']['signature'] + "-" + session['teacher']['t_number'].to_s %>
 							<% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/flyers" %>
 
 							<div class="pure-u-1-2 english">
-									<img class="flyer-image" src="<%= aws_url %>/<%= code_english %>-flyer.png">
+									<img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
 									<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer.pdf" target="_blank">Download English</a></button>		
 							</div>
 							<div class="pure-u-1-2 spanish">
-									<img class="flyer-image" src="<%= aws_url %>/<%= code_english %>-flyer-es.png">	
+									<img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">	
 									<button class="Button-ready"> <a href="<%= aws_url %>/<%= code_english %>-flyer-es.pdf" target="_blank">Download Spanish</a></button>	
 							</div>
 					</div>

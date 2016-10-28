@@ -143,7 +143,6 @@
 				}
 
 
-
 			    //when the dom has loaded setup form validation rules
 			    $(D).ready(function($) {
 			        JQUERY4U.UTIL.setupFormValidation();
@@ -512,29 +511,29 @@
 	</body>
 	<footer>
 		<script>
-    	smoothScroll.init();
-			$('button.demo-form-button').click(function(){
-			    $('form#demo-form').each(function(){
-			        $(this).submit();
-			    });
-			});
+			$( document ).ready(function() {
+		    	smoothScroll.init();
+					$('button.demo-form-button').click(function(){
+					    $('form#demo-form').each(function(){
+					        $(this).submit();
+					    });
+					});
 
-			$('#login').on('submit', function(event) {
-				// event.preventDefault();
-				var teacherinfo = $("#teacher-info").serializeArray()
-				console.log(teacherinfo);
-
-
-				for (var i = 0; i < teacherinfo.length; i++) {
-					console.log(teacherinfo[i])
-					var input = $('<input>')
-               					.attr('type', 'hidden')
-               					.attr('name', teacherinfo[i]['name']).val(teacherinfo[i]['value']);
-          $('#login').append($(input));
-				}
+					$('#login').on('submit', function(event) {
+						// event.preventDefault();
+						var teacherinfo = $("#teacher-info").serializeArray()
+						console.log(teacherinfo);
 
 
+						for (var i = 0; i < teacherinfo.length; i++) {
+							console.log(teacherinfo[i])
+							var input = $('<input>')
+		               					.attr('type', 'hidden')
+		               					.attr('name', teacherinfo[i]['name']).val(teacherinfo[i]['value']);
+		          $('#login').append($(input));
+						}
 
+					});
 			});
 
 		</script>
