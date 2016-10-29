@@ -69,4 +69,17 @@ a:hover {
     color: #23527c;
 }
 
+#favorite-book-colon {
+	margin-bottom: 0px;	
+}
+
+
+#favorite-book-answer {
+	margin-top: 0px;
+}
+
+span#favorite-book-title {
+	font-style: italic;
+	font-weight: 100;
+}
 
