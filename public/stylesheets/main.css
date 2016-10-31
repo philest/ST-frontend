@@ -503,18 +503,6 @@ a .bottom button#join {
 
 
 /* footer  ********************************************************************** */
-.footer {
-	overflow: hidden;
-	position: relative;
-	margin-top: -7em;
-}
-.footer #grass {
-	/* the actual width of the image */
-	width: 1600px; 
-	position: relative;
-	left: 50%;
-	margin-left: -800px;
-}
 
 .partner-logos {
 	/*display: table;*/
@@ -725,9 +713,6 @@ fieldset input {
 	float: right;
 }
 
-.footer-bottom {
-	overflow: hidden;
-}
 
 
 button.get_update{
