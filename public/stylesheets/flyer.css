@@ -23,11 +23,19 @@
 
 }
 
+/*button.Button-ready:hover {
+    color: #337ab7;
+}*/
+
 button {
 	margin-bottom: 2.5em
 }
 
-a {
+.Button-ready a {
 	text-decoration: none;
 	color: white;
 }
+/*.Button-ready:hover {
+    text-decoration: none;
+    color: #aaaaaa;
+}*/
