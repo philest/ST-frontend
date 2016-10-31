@@ -68,6 +68,11 @@
 			
 				<% team_names = ["Phil Esterman", "Jose David McPeek", "Aubrey Alonzo Wahl", "Sarah Weston", "Sophie Burrows"] %>
 				<% team_roles = ["CEO", "CTO", "engineering", "content", "illustration"] %>
+				<% team_books = ["The Lorax", "Alexander and the Terrible, Horrible, No Good, Very Bad Day", "The Gruffalo", "Fox in Socks", "Harold and the Purple Crayon"] %>
+				
+				<% team_authors = ["Dr. Seuss", "Judith Viorst", "Julia Donaldson", "Dr. Seuss", "Crockett Johnson"] %>
+
+
 				<% team_names.each_with_index do |full_name, idx| %>
 				
 				<% team_bios = 
@@ -97,6 +102,8 @@
 						<h2 id="role"><%= team_roles[idx].downcase%></h2>
 
 						<p> <%=team_bios[idx]%> </p>
+						<p id="favorite-book-colon"><span>Favorite Children's Book:<span></p>
+						<p id="favorite-book-answer"><span id="favorite-book-title"> <%=team_books[idx]%></span>, <%=team_authors[idx]%></p>
 
 					</div>
 				</div>
