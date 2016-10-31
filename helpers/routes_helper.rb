@@ -87,9 +87,9 @@ module RoutesHelper
     puts params
 
     # send the families to birdv
-    HTTParty.post(ENV['enroll_url'], body: params)
+    HTTParty.post(ENV['birdv_url'], body: params)
 
-    puts "Posted #{params} to #{ENV['enroll_url']}"
+    puts "Posted #{params} to #{ENV['birdv_url']}"
 
     if MODE == PRO
 

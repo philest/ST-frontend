@@ -34,4 +34,4 @@ params = { :name_0 => "Phil Esterman",
 		 }
 
 
-HTTParty.post(ENV['enroll_url'], body: params)
+HTTParty.post(ENV['birdv_url'], body: params)
