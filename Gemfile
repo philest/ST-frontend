@@ -1,24 +1,18 @@
-ruby '2.2.3'
+source 'https://rubygems.org'
 
-gem "sinatra"
-gem "activerecord"
-gem "sinatra-activerecord"
+ruby '2.3.1'
+
+
+gem 'sinatra'
+
+gem 'puma'
 gem "twilio-ruby"
-gem 'pg'
 gem 'aws-sdk'
 gem 'numbers_in_words'
-gem 'sidekiq'
-gem 'sidetiq'
-gem 'redis'
-gem 'unicorn'
 gem 'newrelic_rpm'
 gem 'rake'
 gem "activesupport", :require => "active_support"
-gem "sinatra-r18n"
 gem "pony"
-gem "as-duration"
-gem 'statsample'
-gem 'descriptive_statistics'
 gem 'airbrake'
 gem 'sinatra-flash'
 gem 'json'

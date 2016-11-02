@@ -1,8 +1,3 @@
-require 'sinatra/activerecord' #sinatra w/ DB
-require_relative '../config/environments' #DB configuration
-require_relative '../models/follower'
-require_relative '../models/invite'
-
 #email, to learn of failures
 require 'pony'
 require_relative '../config/pony'
@@ -20,12 +15,6 @@ module RoutesHelper
     return if authorized?
     headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
     halt 401, "Not authorized\n"
-  end
-
-  # Check if a user is authorized as admin. 
-  def authorized?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', 'gostorytime']
   end
 
   # Create a follower from the HTML form, notify us by email. 

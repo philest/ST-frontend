@@ -10,24 +10,15 @@ require 'bundler/setup'
 
 #siantra dependencies 
 require 'sinatra'
-require 'sinatra/activerecord' #sinatra w/ DB
 require "sinatra/reloader" if development?
 
 #for access in views
-require_relative '../config/environments' #DB configuration
 require_relative '../config/initializers/aws'
-require_relative '../models/follower'
 
 #helpers
 require_relative '../helpers/routes_helper'
 
 set :root, File.join(File.dirname(__FILE__), '../')
-
-#scheduled background jobs 
-require 'sidekiq'
-require 'sidetiq'
-require 'sidekiq/web'
-require 'sidekiq/api' 
 
 require 'twilio-ruby'
 

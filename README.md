@@ -1,3 +1,2 @@
-#StoryTime
-### Website and enrollment interface.
-
+# storytime
+The frontend to StoryTime. 
