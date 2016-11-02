@@ -15,6 +15,7 @@
 		<script async src="/js/smooth-scroll.min.js"></script>
 
 		<script async type="text/javascript" src="/js/analytics.js"></script>
+
 	
 	<!-- Bootstrap modal files -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
@@ -22,7 +23,6 @@
 		<link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
 
 		<!-- end Boostrap -->
-
 
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
@@ -66,100 +66,9 @@
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 		<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
-
-		<script> 
-
-
-			(function($,W,D)
-			{
-			    var JQUERY4U = {};
-
-			    JQUERY4U.UTIL =
-			    {
-
-			        setupFormValidation: function()
-	        		{
-						    // Setup form validation on the .table-input-body-row element
-						    $("form#demo-form").each(function () {
-						    	$(this).validate({
-
-								    	  // Specify the validation rules
-						        rules: {
-										
-							            teacher_email: {
-							            	required: true,
-      											email: true
-							            },
-
-							            demo_first_name: {
-							            	required: true
-							            },
-
-							            demo_last_name: {
-							            	required: true
-							            }
-
-
-
-						        },
-
-						        messages: {
-
-							            teacher_email: "Invalid email"								    
-
-						        },
-
-						         submitHandler: function(form) {
-				            		form.submit();
-				        		},
-
-    invalidHandler: function(form, validator) {
-      var errors = validator.numberOfInvalids();
-      if (errors) {
-        var message = errors == 1
-          ? 'Please correct the following error:\n'
-          : 'Please correct the following ' + errors + ' errors.\n';
-        var errors = "";
-        if (validator.errorList.length > 0) {
-            for (x=0;x<validator.errorList.length;x++) {
-                errors += "\n\u25CF " + validator.errorList[x].message;
-            }
-        }
-
-        // $('.submit-errors').show()
-        // $("html, body").animate({ scrollTop: 0 }, "slow");
-
-        // alert(message + errors);
-      }
-      validator.focusInvalid();
-    }
-
-
-						    });
-
-						   });
-
-					}
-				}
-
-
-			    //when the dom has loaded setup form validation rules
-			    $(D).ready(function($) {
-			        JQUERY4U.UTIL.setupFormValidation();
-			        // $('.Button-ready').hide()
-
-			    });
-
-
-
-			})(jQuery, window, document);
-
-
-		</script>
-
-
-
-
+		<!-- our scripts -->
+		<script type="text/javascript" src="/js/validations.js"></script>
+		<script type="text/javascript" src="/js/appendform.js"></script>
 
 	</head>
 
@@ -324,7 +233,7 @@
     
 	      	<div class="signup-setup">
 			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Submit</button>
-			</div>
+					</div>
 			</form>
       </div>
     </div>
@@ -388,8 +297,6 @@
 
  						</div>   
  						<!-- End animation -->
-
-
 					</div> 
 					<!-- End pure-g -->
 				</div>
@@ -522,32 +429,7 @@
 		 </div> 
 	
 		<script>
-			// $( document ).ready(function() {
-		    	smoothScroll.init();
-					$('button.demo-form-button').click(function(){
-					    $('form#demo-form').each(function(){
-					        $(this).submit();
-					    });
-					});
 
-					$('#login').on('submit', function(event) {
-						// event.preventDefault();
-						var teacherinfo = $("#teacher-info").serializeArray()
-						console.log(teacherinfo);
-
-
-						for (var i = 0; i < teacherinfo.length; i++) {
-							console.log(teacherinfo[i])
-							var input = $('<input>')
-		               					.attr('type', 'hidden')
-		               					.attr('name', teacherinfo[i]['name']).val(teacherinfo[i]['value']);
-		          $('#login').append($(input));
-						}
-
-						console.log($(this).serializeArray());
-
-					});
-			// });
 
 		</script>
 	</footer>
