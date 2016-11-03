@@ -168,6 +168,10 @@ img#gif-animation.hero-animation {
 	margin-bottom: 30px;
 }
 
+#start-modal-button.inline-button-right {
+	background-color: #337AB7;
+}
+
 a button#start-modal-button:hover {
 	text-decoration: none;
 }
@@ -289,7 +293,7 @@ button#join.demo-form-button{
 
 
 h1#main-banner {
-	padding-top: 13.5em;
+	padding-top: 8em;
 	color: rgba(255,255,254,1);
 /*	font-size: 3em;
 */}
@@ -412,7 +416,7 @@ button#start-modal-button.demo-request-button {
 	}	
 
 	h1#main-banner {
-	padding-top: 13em;
+	padding-top: 8em;
 	}
 
 	.field.demo-field {
@@ -443,7 +447,7 @@ button#start-modal-button.demo-request-button {
 	}
 
 	h1#main-banner {
-		padding-top: 14em;
+		padding-top: 12em;
 		color: #4a4a4a;
 		/*	font-size: 3em;
 	*/}
@@ -535,15 +539,9 @@ button#start-modal-button.demo-request-button {
 	    font-size: 27px;
 	}
 
-	a button#start-modal-button {
-		display: inline-block;
-	}
 
 /*#1d9ffc*/
 
-	a button#start-modal-button.inline-button-right {
-		margin-left: 7px;
-	}
 
 	.contact-image {
 		margin-left: 0px;
