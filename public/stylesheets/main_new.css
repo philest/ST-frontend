@@ -168,6 +168,20 @@ img#gif-animation.hero-animation {
 	margin-bottom: 30px;
 }
 
+p.box-header-subtext {
+        color: #6b6e72;
+    font-size: 14px;
+    margin: 6px 0 0;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2.name-heading {
+	margin-bottom: 10px;
+}
+
+
 #start-modal-button.inline-button-right {
 	background-color: #337AB7;
 }
@@ -239,6 +253,7 @@ h3.modal-signup-heading{
 	line-height: 0.5em;
 	color: #4a4a4a;
 	font-family: 'Karla';
+	font-weight: 100;
 }
 
 div#modal-logo {
@@ -254,10 +269,10 @@ div#signup-field {
 }		
 
 button#join.dialog-button {
-			display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 65%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 255px;
 
 	font-size: 17px;
 	/*display: inline-block;*/
@@ -265,6 +280,8 @@ button#join.dialog-button {
 */	/*match other*/
 	font-weight: 100;
 	background-color: #ed7844;
+	margin-bottom: 15px;
+
 }
 /*END SIGNUP MODAL*/
 
