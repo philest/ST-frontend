@@ -168,6 +168,24 @@ img#gif-animation.hero-animation {
 	margin-bottom: 30px;
 }
 
+p.box-header-subtext {
+        color: #6b6e72;
+    font-size: 14px;
+    margin: 6px 0 0;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2.name-heading {
+	margin-bottom: 10px;
+}
+
+
+#start-modal-button.inline-button-right {
+	background-color: #337AB7;
+}
+
 a button#start-modal-button:hover {
 	text-decoration: none;
 }
@@ -235,6 +253,7 @@ h3.modal-signup-heading{
 	line-height: 0.5em;
 	color: #4a4a4a;
 	font-family: 'Karla';
+	font-weight: 100;
 }
 
 div#modal-logo {
@@ -250,10 +269,10 @@ div#signup-field {
 }		
 
 button#join.dialog-button {
-			display: block;
-		margin-left: auto;
-		margin-right: auto;
-		width: 65%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 255px;
 
 	font-size: 17px;
 	/*display: inline-block;*/
@@ -261,6 +280,8 @@ button#join.dialog-button {
 */	/*match other*/
 	font-weight: 100;
 	background-color: #ed7844;
+	margin-bottom: 15px;
+
 }
 /*END SIGNUP MODAL*/
 
@@ -289,7 +310,7 @@ button#join.demo-form-button{
 
 
 h1#main-banner {
-	padding-top: 13.5em;
+	padding-top: 8em;
 	color: rgba(255,255,254,1);
 /*	font-size: 3em;
 */}
@@ -412,7 +433,7 @@ button#start-modal-button.demo-request-button {
 	}	
 
 	h1#main-banner {
-	padding-top: 13em;
+	padding-top: 8em;
 	}
 
 	.field.demo-field {
@@ -443,7 +464,7 @@ button#start-modal-button.demo-request-button {
 	}
 
 	h1#main-banner {
-		padding-top: 14em;
+		padding-top: 12em;
 		color: #4a4a4a;
 		/*	font-size: 3em;
 	*/}
@@ -535,15 +556,9 @@ button#start-modal-button.demo-request-button {
 	    font-size: 27px;
 	}
 
-	a button#start-modal-button {
-		display: inline-block;
-	}
 
 /*#1d9ffc*/
 
-	a button#start-modal-button.inline-button-right {
-		margin-left: 7px;
-	}
 
 	.contact-image {
 		margin-left: 0px;
@@ -598,6 +613,18 @@ button#start-modal-button.demo-request-button {
 		font-size: 26px;
 	}
 
+	img#background-phone.hero-animation {
+		margin-left: 0px;
+	}
+
+	video#my-video {
+    	margin-left: 65px;
+	}
+
+	#splash .hero-splash-text-container {
+		padding-left: 50px;
+	}
+
 
 }	
 
@@ -624,19 +651,18 @@ button#start-modal-button.demo-request-button {
 	.container {
 	    width: 970px;
 	}
+
+	#splash .hero-splash-text-container {
+		padding-left: 100px;
+	}
+
+
 }	
 
 
 /***** Small (std) desktop screen ******/
 @media (min-width: 1026px) {
 
-	img#background-phone.hero-animation {
-		margin-left: 115px;
-	}
-
-	video#my-video {
-		margin-left: 177px;
-	}
 
 }
 
@@ -647,12 +673,17 @@ button#start-modal-button.demo-request-button {
 	    width: 1170px;
 	}
 
+	#splash .hero-splash-text-container {
+		padding-left: 200px;
+	}
+
+
 	img#background-phone.hero-animation {
-		margin-left: 135px;
+		margin-left: 35px;
 	}
 
 	video#my-video {
-		margin-left: 200px;
+		margin-left: 100px;
 	}
 
 
