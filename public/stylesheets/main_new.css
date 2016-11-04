@@ -613,6 +613,18 @@ button#start-modal-button.demo-request-button {
 		font-size: 26px;
 	}
 
+	img#background-phone.hero-animation {
+		margin-left: 0px;
+	}
+
+	video#my-video {
+    	margin-left: 65px;
+	}
+
+	#splash .hero-splash-text-container {
+		padding-left: 50px;
+	}
+
 
 }	
 
@@ -639,19 +651,18 @@ button#start-modal-button.demo-request-button {
 	.container {
 	    width: 970px;
 	}
+
+	#splash .hero-splash-text-container {
+		padding-left: 100px;
+	}
+
+
 }	
 
 
 /***** Small (std) desktop screen ******/
 @media (min-width: 1026px) {
 
-	img#background-phone.hero-animation {
-		margin-left: 115px;
-	}
-
-	video#my-video {
-		margin-left: 177px;
-	}
 
 }
 
@@ -662,12 +673,17 @@ button#start-modal-button.demo-request-button {
 	    width: 1170px;
 	}
 
+	#splash .hero-splash-text-container {
+		padding-left: 200px;
+	}
+
+
 	img#background-phone.hero-animation {
-		margin-left: 135px;
+		margin-left: 35px;
 	}
 
 	video#my-video {
-		margin-left: 200px;
+		margin-left: 100px;
 	}
 
 
