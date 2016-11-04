@@ -110,10 +110,10 @@ post '/signup/spreadsheet' do
 end
 
  
-# users sign in. posted from birdv.
+# users sign in. posted from st-enroll.
 post '/signin' do
   puts "params = #{params}"
-  post_url = ENV['RACK_ENV'] == 'production' ? ENV['birdv_url'] : 'http://localhost:5000'
+  post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
   puts "post_url = #{post_url}"
   data = HTTParty.post(
     "#{post_url}/signup", 
