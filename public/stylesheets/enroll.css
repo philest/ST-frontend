@@ -58,6 +58,26 @@
     border-radius: 5px;
 }
 
+img.phone-image.enroll-image {
+	margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+
+img.phone-image {
+	height: 25em;
+	padding-top: 1em;
+	padding-bottom: 2em;
+	box-shadow: 0 0 0 0;
+}
+
+img.phone-image.enroll-image {
+	padding-bottom: 0em;
+	padding-top: 1.5em;
+
+}
+
 
 @media (min-width: 768px) {
 	.container {
@@ -668,13 +688,7 @@ label.error {
 	}
 }
 
-img.phone-image {
-	height: 26em;
-	padding-top: 1em;
-	padding-bottom: 2em;
-	box-shadow: 0 0 0 0;
 
-}
 
 header#header-phone-invites.box-header {
 	padding-bottom: 0px;
@@ -694,6 +708,7 @@ li#spreadsheet img {
     height: 1.9em;
 }
 /*Flyer section*/
+
 
 
 
