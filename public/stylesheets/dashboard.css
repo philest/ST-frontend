@@ -1,20 +1,16 @@
 /* modal shit */
 #myModal {
   width: 100%;
-  min-height: 50em;
 }
 
 #myModal .modal-body {
-    min-height: 80%;
+    padding: 0px;
 }
 .modal-dialog,
 .modal-content {
     /* 80% of window height */
-    height: 80%;
 }
 .modal-body {
-    /* 100% = dialog height, 120px = header + footer */
-    max-height: calc(100% - 120px);
     overflow-y: scroll;
 }
 
@@ -24,14 +20,14 @@
   box-sizing: border-box;
   background: #f2f3f5;
     width: 260px;    
-    height: 1150px;
-    padding: 28px 28px 0;
+    
     position: relative;
     text-align: left;
-    width: 30%;
+    width: 18em;
 }
 
 .sidebar-heading { 
+  padding: 28px 28px 0;
   color: #6b6e72;
     font-size: 12px;
     font-weight: 600;
@@ -41,47 +37,23 @@
   font-size: 1em;
 }
 
-
-
-/*ONLY FOR non-mobile*/
-nav.tabs {
-
-    position: absolute;
-    margin-left: -28px;
-    width: 101%;
-    top: 135px
-
-}
-
 li img {
   display: inline-block;
 }
 
-li a:hover {
+li span:hover {
   color: black;
   transition-duration: 400ms
 }
-li#envelope a, li#easel a{
-  position: absolute;
-    margin-top: 18px;
-    margin-left: -21px;
-    padding-top: 0px;
-}
 
-li#envelope img {
-  margin-left: 29px;
-    margin-top: 17px;
-    height: 20px;
-}
-
-li#easel img {
-  margin-left: 29px;
-    margin-top: 17px;
-    height: 27px;
-}
-
-ul {
+.tabs ul {
   list-style: none;
+  padding-left: 0px;
+  padding-top: 2em;
+}
+
+.tabs li {
+  margin: 0 auto;
 }
 
 li {
@@ -97,30 +69,18 @@ li.active {
     background: #fff;
     border: 0;
     color: inherit;
-  border-bottom: solid 1px gray;
-  border-top: solid 1px gray;    
+    /*border-bottom: solid 1px gray;*/
+    /*border-top: solid 1px gray;    */
 }
 
-li.active a {
+li.active span {
     color: inherit;
 }
 
-
-
-
-
-
-li#printer a{
-  position: absolute;
-    margin-top: 18px;
-    margin-left: -21px;
-    padding-top: 0px;
-}
-
-li#printer img {
-  margin-left: 25px;
-    margin-top: 12px;
-    height: 1.9em;
+.tabs .sidebar-item {
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 0.9em;
 }
 
 
