@@ -1,3 +1,7 @@
+.container {
+  height: 100%;
+}
+
 /* modal shit */
 #myModal {
   width: 100%;
@@ -5,87 +9,327 @@
 
 #myModal .modal-body {
     padding: 0px;
+    height: 70vh;
+    max-height: 1000px;
 }
 .modal-dialog,
 .modal-content {
     /* 80% of window height */
 }
 .modal-body {
-    overflow-y: scroll;
+  /*height: 90%;*/
+    overflow-y: hidden;
 }
 
-.sidebar {
-  display: inline-block;
-  float: left;
-  box-sizing: border-box;
-  background: #f2f3f5;
-    width: 260px;    
+  /*sidebar*/
+
+  .sidebar {
+    display: inline-block;
+    float: left;
+    box-sizing: border-box;
+    background: #f2f3f5;
+      width: 260px;    
+      height: 100%;
+      
+      position: relative;
+      text-align: left;
+      width: 18em;
+  }
+
+  .sidebar-heading { 
+    padding: 28px 28px 0;
+    color: #6b6e72;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+  }
+  .sidebar-heading h3 {
+    font-size: 1em;
+  }
+
+
+  li img {
+    display: inline-block;
+  }
+
+  li span:hover {
+    color: black;
+    transition-duration: 400ms
+  }
+
+  .tabs ul {
+    list-style: none;
+    padding-left: 0px;
+    padding-top: 2em;
+  }
+
+  .tabs li {
+    margin: 0 auto;
+    cursor: pointer; cursor: hand;
+  }
+
+  li {
+    display: block;
+      margin: 0;
+      font-size: 14px;
+       /*added because absolute positioning broke the padding*/
+      height: 56px;
+      width: 100%;
+  }
+
+  li.active {
+      background: #fff;
+      border: 0;
+      color: inherit;
+      /*border-bottom: solid 1px gray;*/
+      /*border-top: solid 1px gray;    */
+  }
+
+  li.active span {
+      color: inherit;
+  }
+
+  .tabs .sidebar-item {
+    width: 60%;
+    margin: 0 auto;
+    padding-top: 0.9em;
+  }
+
+  /*  end sidebar */
+  
+  /* in-person */
+  
+  h2.our_team {
+    font-family: 'Karla';
+    font-size: 2em;
+    color: #4a4a4a;
+    text-align: center;
+    margin-top: 2em;
+    margin-bottom: 0em;
+  }
+
+  .box-header {
+    padding: 0px;
+    display: block;
+  }
+
+  .box-header-title {
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.38;
+    font-family: 'Karla', sans-serif;
+  }
+
+  .box-header-subtext {
+      color: #6b6e72;
+      font-size: 14px;
+      margin: 6px 0 0;
+      font-weight: 400;
+      text-align: center;
+
+  }
+
+  .flyer-image {
+    display: block;
+      height: 20em;
+      margin-left: auto;
+      margin-right: auto;
+      /*box-shadow: 0 1px 3px rgba(0,0,0,.25);*/
+      margin-bottom: 5px;   
+  }
+
+
+  img.phone-image.enroll-image {
+    margin-left: auto;
+      margin-right: auto;
+      display: block;
+  }
+
+
+  img.phone-image {
+    height: 25em;
+    padding-top: 1em;
+    padding-bottom: 2em;
+    box-shadow: 0 0 0 0;
+  }
+
+  img.phone-image.enroll-image {
+    padding-bottom: 0em;
+    padding-top: 1.5em;
+
+  }
+
+  /* end in-person */
+
+  /* begin flyers */
+
+  .english-spanish-flyers {
+    margin-top: 2em;
+  }
+
+  .Button-ready {
+  
+    display:block;
+    background: #2f75c1;
+      color: #fff;
+      letter-spacing: .01em;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 20px;
+      text-align: center;
+      transition: 75ms ease-in-out;
+      transition-property: background,border-color,color,opacity;
     
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.5em;
+    
+  }
+
+  .Button-ready a {
+    text-decoration: none;
+    color: white;
+  }
+
+
+
+
+  /* end flyers */
+
+
+  /* begin SPREADSHEET */
+  .Button-ready.spreadsheet {
+    margin-top: 1.6em;
+  }
+
+
+  .spreadsheet-upload .box-header {
+    margin-bottom: 2em;
+  }
+
+
+  .fileUpload {
     position: relative;
-    text-align: left;
-    width: 18em;
-}
-
-.sidebar-heading { 
-  padding: 28px 28px 0;
-  color: #6b6e72;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-.sidebar-heading h3 {
-  font-size: 1em;
-}
-
-li img {
-  display: inline-block;
-}
-
-li span:hover {
-  color: black;
-  transition-duration: 400ms
-}
-
-.tabs ul {
-  list-style: none;
-  padding-left: 0px;
-  padding-top: 2em;
-}
-
-.tabs li {
-  margin: 0 auto;
-}
-
-li {
-  display: block;
+    overflow: hidden;
+    margin: auto;
+    background-color: #BDBDBD;
+    /*height: 200px;*/
+    width: 200px;
+    text-align: center;
+  }
+  .fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
     margin: 0;
-    font-size: 14px;
-     /*added because absolute positioning broke the padding*/
-    height: 56px;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    height: 100%;
+    text-align: center;
+  }
+  .custom-span{ 
+    font-family: Arial; 
+    font-weight: bold;
+    font-size: 100px; 
+    color: #FE57A1
+  }
+  #uploadFile{
+    border: none;
+    display: block; 
+
+    margin: auto; 
+    text-align: center;
+    width: 200px;
+  }
+  .custom-para{
+    font-family: arial;
+    font-weight: bold;
+    font-size: 24px; 
+    color:#585858;
+  }
+
+
+  /* end SPREADSHEET */
+
+  /* begin invite-by-phone */
+
+  .table-input {
+    text-align: left;
+    font-size: 15px;
+    margin-left: -23px;
+  }
+
+  .table-input-header-row {
     width: 100%;
-}
+    display: table;
+  }
 
-li.active {
-    background: #fff;
-    border: 0;
-    color: inherit;
-    /*border-bottom: solid 1px gray;*/
-    /*border-top: solid 1px gray;    */
-}
+  .table-input-header-cell {
+    background-color: #f2f3f5;
+      border: 1px solid #dcdee2;
+      border-width: 1px 0;
+      color: #6b6e72;
+      font-weight: 600;
+      padding: 12px;
+  }
 
-li.active span {
-    color: inherit;
-}
+  .table-input-header-cell, .table-input-body-cell {
+        width:50%;
+  }
 
-.tabs .sidebar-item {
-  width: 60%;
-  margin: 0 auto;
-  padding-top: 0.9em;
-}
+  .table-input-cell {
+    display: table-cell;
+  }
+
+  .table-input-container{
+    overflow: auto;
+    height: 200px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-input-body {
+    width: 100%;
+    display: table;
+  }
+
+  .table-input-body-row {
+    display: table-row;
+  }
+
+  .table-input-cell-validation {
+    min-width: 23px;
+  }
+
+  .table-input-body-cell {
+      border-bottom: 1px solid #dcdee2;
+  }
+
+  .form-cell-input {
+      border: 1px solid transparent;
+      margin: 0 0 -1px;
+      transition: 75ms ease-in-out;
+      transition-property: background,border-color,color;
+    cursor: pointer;
+  }
+
+
+  /* end invite-by-phone */
+
+
+
+
+
+
+/* end modal */
 
 
 /* welcome back message */
-
 .pure-g.welcome {
   text-align: center;
   margin-top: 4em;
