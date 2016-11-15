@@ -77,6 +77,50 @@
     <!-- Load jQuery and  -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
+
+    <script>
+      $(document).ready(function () {
+        $('.tabs li').click(function() {
+          var id = $(this).attr('id');
+          var sidebar_options = ['easel', 'envelope', 'printer', 'spreadsheet']
+
+          var arr = sidebar_options.filter(function(item) { 
+              return item !== id;
+          });
+
+          console.log(arr)
+
+          for (var i = 0; i < arr.length; i++) {
+              $('#main-' + arr[i]).css('display', 'none'); 
+              $('#' + arr[i]).removeClass('active');
+          }
+
+          $(this).addClass('active');
+          $('#main-' + id).css('display', 'block');
+
+        });
+
+      });
+
+      $(document).ready(function () {
+
+        document.getElementById("uploadBtn").onchange = function () {
+          console.log(this.value);
+          var string = this.value
+          regex = 
+          string = string.split(/[\\/]/);
+
+          console.log(string)
+          document.getElementById("uploadFile").value = string[string.length - 1];
+        };
+
+        // validate file upload
+        // $('#fileInput').val()
+      });
+
+
+    </script>
+
 </head>
 <body>
 
@@ -116,40 +160,50 @@
             </div>
             <nav class="tabs">
               <ul>
-                <li id="easel" class="active">
-                  <div class="sidebar-item">
+                <li id="easel">
+                  <a>
+                    <div class="sidebar-item">
+                      
                      <img src="https://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
-
-
         <!--            <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
          -->            <span>In-person guide </span>
-                  </div>
+                    </div>
+                  </a>
                    
                 </li>
 
-                <li id="envelope" >
-                  <div class="sidebar-item">
-                    <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
+                <li id="envelope" class="active">
+                  <a>
+                    <div class="sidebar-item">
+                      
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
 
-        <!--            <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
-         -->            <span>Invite by phone</span>
-                  </div>
+          <!--            <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
+           -->            <span>Invite by phone</span>
+                    </div>
+                  </a>
                 </li>
-                <li id="printer" >
-                  <div class="sidebar-item">
-                    <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
-                    <span>Printable flyer</span>
-                  </div>
+                <li id="printer" class="">
+                  <a>
+                    <div class="sidebar-item">
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
+                      <span>Printable flyer</span>
+                      
+                    </div>
+                  </a>
 
                 </li>
 
-                <li id="spreadsheet">
-                  <div class="sidebar-item">
-                    <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
+                <li id="spreadsheet" class="">
+                  <a>
+                    <div class="sidebar-item">
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
 
-                    <span>Add spreadsheet</span>
-                  </div>
+                      <span>Add spreadsheet</span>
+                      
+                    </div>
+                  </a>
                 </li>
 
               </ul>
@@ -158,7 +212,8 @@
           
           <!-- end sidebar -->
 
-          <div class="main-box">
+          <!-- in-person -->
+          <div class="main-box in-person" id="main-easel" style="display: none;">
             <div id="logo-container">
               <div id="jobs">
                 <h2 class="our_team enroll_header">Talk with parents.</h2>
@@ -186,11 +241,163 @@
                   </h3>
                 </header>
 
-                <img class="flyer-image phone-image enroll-image" src="<%= aws_url %>/<%= code_english %>-phone.png">
-
+                <object class="flyer-image phone-image enroll-image" data="<%= aws_url %>/<%= code_english %>-phone.png" type="image/png">
+                    <img class="flyer-image phone-image enroll-image" src="/images/phone-text-default.png" />
+                </object>
 
           </div>
+          <!-- end in-person -->
 
+
+          <!-- begin flyers -->
+          <div class="main-box flyers" id="main-printer" style="display: none;">
+
+              <div id="logo-container">
+                <div id="jobs">
+                  <h2 class="our_team enroll_header">Print out flyers.</h2>
+                </div>
+              </div>
+
+                  <header class="box-header">
+                    <h2 class="box-header-title">Print and send one home with each student.
+                    <h3 class="box-header-subtext">
+                      Then parents can just text to sign up.
+                    </h3>
+                  </header>
+
+
+                  <div class="pure-g english-spanish-flyers">
+                      <% code_english = session['teacher']['code'].split('|').first %>
+                      <% school = session['school']['signature'] %>
+                      <% teacher = session['teacher']['signature'] %>
+                      <% teacher_dir = teacher + "-" + session['teacher']['t_number'].to_s %>
+                      <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
+
+
+                      <div class="pure-u-1-2 english">
+                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
+                          <button class="Button-ready"> <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank">Download English</a></button>    
+                      </div>
+                      <div class="pure-u-1-2 spanish">
+                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
+                          <button class="Button-ready"> <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank">Download Spanish</a></button>  
+                      </div>
+                  </div>
+     
+
+            </div>
+
+            <!-- end flyers -->
+
+            <!-- begin spreadsheet -->
+            <div class="main-box spreadsheet-upload" id="main-spreadsheet" style="display: none;">
+
+              <div id="logo-container">
+                <div id="jobs">
+                  <h2 class="our_team enroll_header">Add a spreadsheet.</h2>
+                </div>
+              </div>
+
+                  <header class="box-header">
+
+                    <h2 class="box-header-title">Add a spreadsheet with your class's names and numbers</h2>
+                    <h3 class="box-header-subtext">
+                      They'll receive a welcome text from StoryTime.
+                    </h3>
+
+
+                  </header>
+
+
+                <form action="spreadsheet" method="post" enctype="multipart/form-data">
+                  <div class="fileUpload">
+                    <span class="custom-span">+</span>
+                      <p class="custom-para">Upload spreadsheet</p>
+                      <input id="uploadBtn" type="file" class="upload" name="spreadsheet"/>
+                    </div>
+                  <input id="uploadFile" placeholder="0 files selected" disabled="disabled" />
+                  <button class="Button-ready spreadsheet" type="submit">Invite class</button>      
+                </form>
+
+            </div>
+            <!-- end spreadsheet -->
+
+
+            <!-- begin invite-by-phone -->
+            <div class="main-box by-phone" id="main-envelope" style="">
+
+              <% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
+              <% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
+
+                <div id="logo-container">
+                  <div id="jobs">
+                    <h2 class="our_team enroll_header">Invite by phone.</h2>
+                  </div>
+                </div>
+
+                <!-- <img class="flyer-image phone-image enroll-image" src="https://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+
+
+
+                <form class="enroll-teacher-class" action="enroll_families_form_success" method="post">     
+                  <div class="enroll group-invite">
+                    <div class="box-header">
+                      <h2 class="box-header-title">Enter phone numbers</h2>
+                      <h3 class="box-header-subtext">
+                        Enter contact information in the space provided
+                      </h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="row row-small">
+                        <div class="table-input">
+                          <header class="table-input-header-row">
+                            <span class="table-input-cell-validation table-input-cell">
+                            </span>
+              
+                            <div class="table-input-header-cell table-input-cell"> Child name</div>
+                            <div class="table-input-header-cell table-input-cell"> Parent phone
+                            </div>
+
+                          </header>
+
+                          <div class="table-input-container">
+                            <div class="table-input-body">
+                              <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+                                <span class="table-input-body-row">
+                                  <span class="table-input-cell-validation table-input-cell">
+                                  </span>
+
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
+                                    </div>
+                                  </span>
+                
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                                    </div>
+                                  </span>
+                                </span>
+                              <%end%>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="field legal-field">
+                        <span class="thunder">
+                        Families will be able to get their first book next week. We'll keep you updated by email. 
+                        </span>
+                      </div>
+                        <button class="Button-ready" type="submit">Invite class</button>          
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+
+            <!-- end invite-by-phone -->
 
         </div>
     
@@ -238,9 +445,6 @@
       
     </table>
   </div>
-
-
-
 
 
 
