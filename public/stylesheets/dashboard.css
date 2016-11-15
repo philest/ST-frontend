@@ -259,6 +259,46 @@
 
   /* begin invite-by-phone */
 
+  .group-invite {
+    box-sizing: border-box;
+    display: block;
+  }
+
+  .by-phone .box-header {
+    padding-bottom: 2em;
+    display: block;
+  }
+
+  .by-phone .box-header-title{
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 1.38;
+    font-family: 'Karla', sans-serif;
+  }
+
+  .by-phone .box-header-subtext {
+      color: #6b6e72;
+      font-size: 14px;
+      margin: 6px 0 0;
+      font-weight: 400;
+      text-align: center;
+
+  }
+
+  .box-body {
+    padding-top: 0;
+    padding: 0px 40px 40px 40px;
+  }
+  .row-small{
+    margin-bottom: 16px;
+    height: 14em;
+  }
+
+  .row {
+    margin: 0 0 32px;
+  }
+
   .table-input {
     text-align: left;
     font-size: 15px;
@@ -266,7 +306,7 @@
   }
 
   .table-input-header-row {
-    width: 100%;
+    /*width: 100%;*/
     display: table;
   }
 
@@ -289,7 +329,7 @@
 
   .table-input-container{
     overflow: auto;
-    height: 200px;
+    height: 150px;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -316,6 +356,39 @@
       transition: 75ms ease-in-out;
       transition-property: background,border-color,color;
     cursor: pointer;
+  }
+
+  .table-input-body-cell input {
+    width: 100%;
+    padding: 16px 12px;
+    font-weight: 400;
+    border: none;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  *, :after, :before {
+      box-sizing: border-box;
+  }
+
+  .field {
+    margin: 0 0 12px;
+      position: relative;
+      text-align: left;
+  }
+
+  .legal-field {
+    font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+  }
+
+  .thunder {
+    color: #6b6e72;
+    font-weight: 100;
   }
 
 

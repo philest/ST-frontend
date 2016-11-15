@@ -75,7 +75,11 @@
     <meta name="theme-color" content="#ffffff">
 
     <!-- Load jQuery and  -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
 
 
     <script>
@@ -324,7 +328,7 @@
 
 
             <!-- begin invite-by-phone -->
-            <div class="main-box by-phone" id="main-envelope" style="">
+            <div class="main-box by-phone" id="main-envelope">
 
               <% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
               <% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
