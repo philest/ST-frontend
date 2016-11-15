@@ -54,10 +54,27 @@ enable :sessions
 #root
 get '/' do
   puts "session = #{session.inspect}"
-    erb :main_new
+  erb :main_new
+end
+
+get '/dashboard' do
+  if session[:teacher].nil?
+    redirect to '/'
+  end
+  puts "session[:teacher] = #{session[:teacher]}"
+
+  get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
+  data = HTTParty.get("#{get_url}/users/#{session[:teacher]['id']}")
+  puts "data dashboard = #{data.body.inspect}"
+
+  erb :dashboard, :locals => {:users => JSON.parse(data)}
 end
 
 get '/signup/spreadsheet' do
+  if session[:teacher].nil?
+    redirect to '/'
+  end
+
   erb :spreadsheet
 end
 
@@ -138,11 +155,13 @@ post '/signin' do
   end
 
   # puts params
-  teacher           = data["teacher"]
-  school            = data["school"]
+  teacher           = data['teacher']
+  school            = data['school']
+  users             = data['users']
   # puts teacher, school
   session[:teacher] = teacher
   session[:school]  = school
+  session[:users]   = users
 
   puts session.inspect
 
@@ -157,7 +176,7 @@ get '/signup' do
     redirect to '/'
   end
 
-  erb :enroll
+  redirect to '/dashboard'
 end
 
 
@@ -263,10 +282,18 @@ end
 
 
 get '/signup/flyer' do
+  if session[:teacher].nil?
+    redirect to '/'
+  end
+
   erb :flyer
 end
 
 get '/signup/in-person' do
+  if session[:teacher].nil?
+    redirect to '/'
+  end
+
   puts "session = #{session.inspect}"
   erb :inperson
 end

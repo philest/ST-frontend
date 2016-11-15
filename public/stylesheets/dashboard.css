@@ -1,0 +1,268 @@
+/* modal shit */
+#myModal {
+  width: 100%;
+  min-height: 50em;
+}
+
+#myModal .modal-body {
+    min-height: 80%;
+}
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    height: 80%;
+}
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 120px);
+    overflow-y: scroll;
+}
+
+.sidebar {
+  display: inline-block;
+  float: left;
+  box-sizing: border-box;
+  background: #f2f3f5;
+    width: 260px;    
+    height: 1150px;
+    padding: 28px 28px 0;
+    position: relative;
+    text-align: left;
+    width: 30%;
+}
+
+.sidebar-heading { 
+  color: #6b6e72;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.sidebar-heading h3 {
+  font-size: 1em;
+}
+
+
+
+/*ONLY FOR non-mobile*/
+nav.tabs {
+
+    position: absolute;
+    margin-left: -28px;
+    width: 101%;
+    top: 135px
+
+}
+
+li img {
+  display: inline-block;
+}
+
+li a:hover {
+  color: black;
+  transition-duration: 400ms
+}
+li#envelope a, li#easel a{
+  position: absolute;
+    margin-top: 18px;
+    margin-left: -21px;
+    padding-top: 0px;
+}
+
+li#envelope img {
+  margin-left: 29px;
+    margin-top: 17px;
+    height: 20px;
+}
+
+li#easel img {
+  margin-left: 29px;
+    margin-top: 17px;
+    height: 27px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  display: block;
+    margin: 0;
+    font-size: 14px;
+     /*added because absolute positioning broke the padding*/
+    height: 56px;
+    width: 100%;
+}
+
+li.active {
+    background: #fff;
+    border: 0;
+    color: inherit;
+  border-bottom: solid 1px gray;
+  border-top: solid 1px gray;    
+}
+
+li.active a {
+    color: inherit;
+}
+
+
+
+
+
+
+li#printer a{
+  position: absolute;
+    margin-top: 18px;
+    margin-left: -21px;
+    padding-top: 0px;
+}
+
+li#printer img {
+  margin-left: 25px;
+    margin-top: 12px;
+    height: 1.9em;
+}
+
+
+/* welcome back message */
+
+.pure-g.welcome {
+  text-align: center;
+  margin-top: 4em;
+  margin-bottom: 3em;
+}
+
+.mobile-welcome, .mobile-navbar {
+  display: none;
+}
+
+thead {
+  background-color: #eceff1
+}
+
+/* navbar shit */
+
+.page-header {
+  background: url("/images/modules/bird.gif") left no-repeat;
+}
+
+.page-header h1 {
+  margin-left: 4em;
+}
+
+.page-header h1, .navbar-buttons {
+  display: inline-block;
+}
+
+.navbar-buttons {
+  float: right;
+}
+
+.navbar-buttons .navbar-menu{
+  margin-left: 0.3em;
+}
+
+.navbar-buttons .btn.outline {
+  background: none;
+  /*padding: 12px 22px;*/
+
+  border: 2px solid #ed7844;
+  color: #ed7844;
+}
+
+.btn.outline:hover, .btn.outline:focus, .btn.outline:active, .btn.outline.active, .open > .dropdown-toggle.btn {
+  color: white;
+  background-color: #ed7844;
+  transition-duration: 400ms
+}
+.btn.outline:active, .btn.outline.active {
+  border-color: #007299;
+  color: #007299;
+  box-shadow: none;
+}
+
+@media screen and (max-width: 52em) {
+  .navbar-buttons .navbar-menu {
+    margin-left: 0em;
+  }
+  .navbar-buttons a.navbar-menu {
+    margin-right: 0.5em;
+  }
+}
+
+
+@media screen and (max-width: 46em) {
+  button.navbar-menu {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 35.5em) {
+  .paper-plane {
+    display: none;
+  }
+  .pure-u-1-2 {
+    display: none;
+  }
+
+  .pure-g.welcome {
+    display: none; 
+  }
+
+  .mobile-welcome {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 3em;
+    display: block;
+    width: 80%;
+    height: 15em;
+
+    background-color: white;
+    background: url('/images/paper-plane.png') no-repeat center; 
+  }
+
+  .page-header h1, .navbar-buttons {
+    display: block;
+    text-align: center;
+    margin-left: 0em;
+  }
+  h1 {
+    display: block; 
+    clear:both;
+  }
+
+  #logout {
+    display: none;
+  }
+
+  .page-header {
+    background: none;
+  }
+
+  body {
+    background: url("/images/modules/bird.gif") left top no-repeat;
+  }
+
+  .page-header .mobile-navbar {
+    text-align: right;
+    display: block;
+    clear: both;
+  }
+
+
+}
+
+/* navbar shit */
+
+
+
+
+
+
+
+
+
+
+
+
+
