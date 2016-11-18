@@ -1,3 +1,7 @@
+body {
+  font-family: 'Karla';
+}
+
 .container {
   height: 100%;
 }
@@ -46,6 +50,7 @@
   }
   .sidebar-heading h3 {
     font-size: 1em;
+    font-weight: 800;
   }
 
 
@@ -94,7 +99,15 @@
     width: 60%;
     margin: 0 auto;
     padding-top: 0.9em;
+    color: #4a4a4a;
+
   }
+
+  .tabs .sidebar-item a:hover {
+    font-weight: 800;
+    text-decoration: none;
+  }
+
 
   /*  end sidebar */
   
@@ -504,9 +517,11 @@ thead {
     text-align: center;
     margin-left: 0em;
   }
+
   h1 {
     display: block; 
     clear:both;
+    font-weight: 800;
   }
 
   #logout {
