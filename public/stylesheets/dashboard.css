@@ -9,16 +9,17 @@
 
 #myModal .modal-body {
     padding: 0px;
-    height: 70vh;
+    height: 90vh;
     max-height: 1000px;
 }
 .modal-dialog,
 .modal-content {
     /* 80% of window height */
+
 }
 .modal-body {
   /*height: 90%;*/
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
   /*sidebar*/
