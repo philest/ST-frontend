@@ -26,6 +26,14 @@ body {
     overflow-y: scroll;
 }
 
+a#logout {
+  font-weight: 800;
+}
+
+b, i {
+  font-family: 'Karla';
+}
+
   /*sidebar*/
 
   .sidebar {
