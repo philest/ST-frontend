@@ -1,3 +1,8 @@
+.modal-body iframe{
+        margin: 0 auto;
+        display: block;
+    }
+
 /***** Mobile! ******/
 
 body {

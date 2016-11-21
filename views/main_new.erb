@@ -70,6 +70,45 @@
 		<script type="text/javascript" src="/js/validations.js"></script>
 		<script type="text/javascript" src="/js/appendform.js"></script>
 
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+			    /* Get iframe src attribute value i.e. YouTube video url
+			    and store it in a variable */
+			    var url = $("#raynaVideo").attr('src');
+
+			    console.log('not working....');
+
+			    $(document).on('hidden.bs.modal', '#videoModal', function(){
+						alert('hidden');
+			    	console.log("bullshit. hiding!");
+			       $("#raynaVideo").attr('src', '');
+					});
+
+					$(document).on('shown.bs.modal', '#videoModal', function(){
+						alert('shown');
+			    	console.log("bullshit. showing!!");
+			       $("#raynaVideo").attr('src', url);
+					});
+			    
+			    /* Assign empty url value to the iframe src attribute when
+			    modal hide, which stop the video playing */
+			    // $("#videoModal").on('hidden.bs.modal', function(){
+			    // 	alert('hidden');
+			    // 	console.log("bullshit. hiding!");
+			    //     $("#raynaVideo").attr('src', '');
+			    // });
+			    
+			    /* Assign the initially stored url back to the iframe src
+			    attribute when modal is displayed again */
+			    // $("#videoModal").on('shown.bs.modal', function(){
+			    // 	alert('hidden');
+			    // 	console.log("bullshit. showing!");
+			    //     $("#raynaVideo").attr('src', url);
+			    // });
+			});
+		</script>
+
 	</head>
 
 	<body>
@@ -119,6 +158,25 @@
 					</ul>
 				</div>
 			</nav>
+
+			<!-- Modal Video -->
+			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+			<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			    	<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+
+			      <div class="modal-body">
+								<iframe id="raynaVideo" width="560" height="315" src="https://www.youtube.com/embed/fjwSdLfkPOg?autoplay=1" frameborder="0" allowfullscreen></iframe>
+
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<!-- end Modal Signup-->
+
 
 			<!-- Modal Signup -->
 			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
@@ -256,11 +314,9 @@
 							</h1>
 			              <!-- Button trigger modal   -->
 
-			              <a href="https://www.youtube.com/watch?v=fjwSdLfkPOg&feature=youtu.be" target="_blank">
-				              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+				              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button" data-toggle="modal" data-target="#videoModal ">
 				                Watch Video
 				              </button>
-			              </a>
 
 			              <a href="http://st-materials.s3.amazonaws.com/About_StoryTime_Literacy.pdf" target="_blank">
 				              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button inline-button-right" id="start-modal-button">
@@ -418,6 +474,22 @@
 		 </div> 
 	
 		<script>
+
+			var url = $("#raynaVideo").attr('src');
+
+			    console.log('not working....');
+
+			    $(window).on('hidden.bs.modal', '#videoModal', function(){
+						alert('hidden');
+			    	console.log("bullshit. hiding!");
+			       $("#raynaVideo").attr('src', '');
+					});
+
+					$(window).on('shown.bs.modal', '#videoModal', function(){
+						alert('shown');
+			    	console.log("bullshit. showing!!");
+			       $("#raynaVideo").attr('src', url);
+					});
 
 
 		</script>
