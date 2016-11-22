@@ -3,6 +3,20 @@
         display: block;
     }
 
+#videoModal .modal-body {
+  padding: 0px;
+}
+
+#videoButton {
+  display: inline-block;
+  position: relative;
+  top: 40px;
+  right: 8px;
+  font-size: 40px;
+  color:white;
+
+}
+
 /***** Mobile! ******/
 
 body {
