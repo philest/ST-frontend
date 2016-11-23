@@ -411,8 +411,14 @@
 
   <div class="pure-g welcome">
       <div class="pure-u-1-2">
-        <h2><b>Welcome back!</b></h2>
-        <h3><i>Your class is reading great!</i></h3>
+        <% if users.size == 0 %>
+          <h2><b>Welcome!</b></h2>
+          <h3><i>Let's start by inviting your class.</i></h3>
+        <% else %>
+          <h2><b>Welcome back!</b></h2>
+          <h3><i>Your class is reading great!</i></h3>
+        <% end %>
+
       </div>
       <div class="pure-u-1-2 paper-plane">
         <img src="/images/paper-plane.png" alt="">
@@ -431,16 +437,19 @@
         <tr>
           <th>Name</th>
           <th>Date joined</th>
-          <th>Phone number</th>
         </tr>
       </thead>
 
       <tbody>
         <% users.each do |user| %>
           <tr>
-            <th><%= user['first_name'] %> <%= user['last_name'] %></th>
+            <% if user['first_name'].nil? or user['first_name'].empty? %>
+              <% user_name = "(Not given)" %>
+            <% else %>
+              <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+            <% end %>
+            <th><%= user_name %></th>
             <th><%= Time.parse(user['enrolled_on']).strftime("%B %-d, %Y") %></th>
-            <th><%= user['phone'] %></th>
           </tr>
         <% end %>
 
