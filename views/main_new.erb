@@ -76,13 +76,24 @@
 			    and store it in a variable */
 			    var url = $("#raynaVideo").attr('src');
 
-			    $("#start-modal-button").on('click', function(){
+			    $("#videoExitButton").on('click', function(){
+			    	$("#raynaVideo").attr("src", null);
+			    });
+
+					$("#start-modal-button").click(function(){
 			    	$("#raynaVideo").attr("src", url+"&autoplay=1");
 			    });
 
-			    $("#videoButton").on('click', function(){
-			    	$("#raynaVideo").attr("src", null);
-			    });
+			    $(document).click(function(event) {
+			    	if(!$(event.target).closest('#start-modal-button').length) {
+							$("#raynaVideo").attr("src", null);
+			    	}
+
+					});
+
+					$('#raynaVideo').click(function(event){
+					    event.stopPropagation();
+					});
 
 			});
 		</script>
@@ -139,12 +150,12 @@
 
 			<!-- Modal Video -->
 			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-			<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="videoModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-dialog" role="document">
 
 
 			      <div class="modal-body">
-               <button type="button" id="videoButton" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+               <button type="button" id="videoExitButton" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 								<iframe id="raynaVideo" width="100%" height="400" src="https://www.youtube.com/embed/fjwSdLfkPOg?modestbranding=1&autohide=1&showinfo=0" frameborder="0" allowfullscreen></iframe>
 
 			      </div>
