@@ -25,6 +25,8 @@
 
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
+		<link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" />
+
 
 		<!-- Favicon and App icon images -->
 		<link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
@@ -50,14 +52,43 @@
 	<body>
 		<!-- Notify about form submission -->
 	
-		<nav class="navbar" role="navigation">
-			<div class="container">
-				<a href="../">
+			<nav class="navbar" role="navigation">
+				<div class="container">
+					<a href="/">
 					<div class="navbar-logo">
 					</div>
-				</a>
-			</div>
-		</nav>
+					</a>
+					<ul class="navbar-right">
+						<li><a href="team">people</a></li>
+						<li><a href="http://st-materials.s3.amazonaws.com/About_StoryTime_Literacy.pdf" target="_blank">product</a></li>
+						<li> <a href="https://storytime.zendesk.com">help</a></li>
+						<li class="navbar-button-item">
+							<a>
+								<% if session['teacher'].nil? %>
+									<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
+									Log in
+									</button>
+								<% else %>
+									<form action="signup" method="get">									
+										<button id="top-button" type="submit" class=" pure-button-primary pure-button signup-button">
+											Log in
+										</button>
+									</form>
+								<% end %>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+
+
+
+
+		<div class="navbar" id="fake-nav">
+		</div>
+
+
 		<br class="mobile_only">
 		<div id="jobs">
 								<img id="logo-new" src="/images/modules/logo.png">
@@ -117,48 +148,42 @@
 			<div class="divider"><div></div></div>
 			<div class="divider" id="divider-mobile"><div></div></div>
 
-		<div class="bottom">
-			<div class="splash">
-				<div class="container" id="splash">
-					<div class="pure-g">	
-						<div class="splash-text pure-u-1 pure-u-md-1-2">
-							<img id="logo-new" src="/images/modules/1_billion_text.png">
-							<h1 class="storytime-tagline">
-							without books or <br>Internet. We <span> get <br>
-							them stories. </span>
-							</h1>
+				<h1 class="banner" id="call-to-action">Help us build literacy everywhere.</h1>
 
+				<p id="hiring-call">We're hiring engineers, sales teams, school partners, and product people to close the 30-million word gap and change the odds for low-income children.</p> 
 
-							<div class="meta-block">
-								<a href="/join">
-							        <button id="join" class="pure-button pure-button-primary get_update">join our team</button>
-							    </a>
-						    </div>
+							<div class="demo" data-toggle="modal" data-target="#myDemo">
 
-
-							<div class="email">
-								<a id="more_team" href="mailto:phil@joinstorytime.com,david@joinstorytime.com"><p>get in touch</p></a>
+				              <button type="button" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+				                Email us
+				              </button>
 							</div>
 
-
-
-						</div>					
-						<div class="animation bottom_globe pure-u-1 pure-u-md-1-2">
-							<img src="/images/modules/globe.png" alt="">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
 			
 
 			
 
 	</body>
+		<footer class="footer"> 
+		<div class="footer--container  container---full"> 
+			<nav class="footer--nav"> 
+				<a class="footer--nav--link footer--nav--link---terms-privacy" href="/privacy">  
+					Terms &amp; Privacy </a> <a class="footer--nav--link" href="http://st-materials.s3.amazonaws.com/About_StoryTime_Literacy.pdf" target="_blank">Learn More</a>
+					<a class="footer--nav--link" target="_blank" href="/rayna">Watch Video</a>
+					<a class="footer--nav--link" href="mailto:hello@joinstorytime.com" >Email Us</a>
+					<a data-toggle="modal" data-target="#myDemo" class="footer--nav--link" >Request Demo</a>
+					<a class="footer--nav--link" href="/team">Our Team</a>
+					<a class="footer--nav--link" href="mailto:careers@joinstorytime.com">Careers</a>
+					<a class="footer--nav--link" href="/privacy">Trust &amp; Safety</a>
+					<a class="footer--nav--link" href="https://storytime.zendesk.com/hc/en-us" target="_blank">Support</a>
+			</nav> 
+		 </div> 
+	
+
+	</footer>
+
+
 	<footer>
-		<script>
-    	smoothScroll.init();
-		</script>
 	</footer>
 </html>
