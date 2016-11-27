@@ -1,4 +1,8 @@
 
+div#fake-nav {
+	min-height: 75px;
+}
+
 h2.our_team {
 	font-family: 'Karla';
 	font-size: 2em;
@@ -82,4 +86,34 @@ span#favorite-book-title {
 	font-style: italic;
 	font-weight: 100;
 }
+
+
+h1#call-to-action.banner {
+	margin-top: 2em;
+}
+
+button#start-modal-button.demo-request-button {
+	margin-bottom: 4em;
+
+}
+
+p#hiring-call {
+	text-align: center;
+	margin-left: 50px;
+	margin-right: 50px;
+}
+
+
+
+
+@media (min-width: 450px) {
+
+	p#hiring-call {
+		margin-left: 25%;
+		margin-right: 25%;
+	}
+
+}
+
+
 
