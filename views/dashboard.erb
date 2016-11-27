@@ -440,11 +440,12 @@
         </tr>
       </thead>
 
+
       <tbody>
-        <% users.each do |user| %>
+        <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
           <tr>
             <% if user['first_name'].nil? or user['first_name'].empty? %>
-              <% user_name = "(Not given)" %>
+              <% user_name = "(not given)" %>
             <% else %>
               <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
             <% end %>
