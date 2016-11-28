@@ -1,3 +1,84 @@
+/* stats stuff */
+.stats {
+  display: inline-block;
+  /*float:right;*/
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+.the-data {
+  text-align: center;
+}
+
+.stats.user {
+  display: block;
+  /*text-align: center;*/
+}
+
+.the-data h1 {
+  font-weight: bold; 
+  font-size: 4em;
+  margin-top: 0.3em;
+}
+
+.table.table-hover.fields th {
+  /*padding-left: 2em;*/
+}
+
+/*::-webkit-scrollbar { 
+    display: none; 
+}*/
+#bs-override div.table-responsive.pure-u-1-2 {
+  margin-left: -1em;
+}
+
+.stats h1 {
+  font-size: 4em;
+  margin-top: 0.2em;
+  font-weight: bold;
+}
+.stats p {
+  font-weight: bold;
+  font-size: 1.15em;
+}
+
+.stats-wrapper {
+  width: 100%;
+  margin: 0 auto;
+}
+
+#bs-override tr.user-info th {
+  line-height: 3em;
+}
+
+
+#bs-override .user-name {
+  width: 50%;
+}
+
+.user-name-top {
+  width: 24.5%;
+}
+
+.table-responsive {
+  height: 26em;
+  overflow: auto; 
+  direction:rtl; 
+}
+
+.table-responsive .table.table-hover.data {
+  direction: ltr; 
+}
+
+#bs-override .table.table-hover {
+  margin-bottom: 0px;
+}
+
+
+
+/* END stats stuff */
+
+
 body {
   font-family: 'Karla';
 }
@@ -433,7 +514,7 @@ b, i {
 .pure-g.welcome {
   text-align: center;
   margin-top: 4em;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
 }
 
 .pure-g.welcome h2, .pure-g.welcome h3 {
@@ -452,6 +533,7 @@ thead {
 
 .page-header {
   background: url("/images/modules/bird.gif") left no-repeat;
+  margin-top: 20px;
 }
 
 .page-header h1 {
