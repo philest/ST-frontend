@@ -1,17 +1,101 @@
+/* header */
+img.apple {
+  float: right;
+  padding-right: 1.5em;
+  padding-top: 0.8em;
+}
+
+h3.apple {
+  clear: right;
+  text-align: right;
+}
+
+
+.user-info:hover {
+  background-color: #eceff1;
+}
+
+.user-info.user-spotlight:hover {
+  background-color: rgba(255,240,208,0.7);
+}
+
+
+
+
+/* END header */
+
 /* stats stuff */
 .stats {
   display: inline-block;
   /*float:right;*/
-  padding-left: 3em;
-  padding-right: 3em;
+  /*padding-left: 3em;*/
+  /*padding-right: 3em;*/
+  margin-top: 1em;
 }
+
+#bs-override .user-spotlight {
+  /*background-color: #fff0d0;*/
+  background-color: rgba(255,240,208,0.35);
+
+  border-top: 2px solid rgba(249,189,61,1);  
+  border-bottom: 2px solid rgba(249,189,61,1);  
+  border-right: none;
+
+  font-weight: normal;
+
+}
+
+
+
+.default-user-info {
+  margin: 0 auto;
+  width: 50%;
+  margin-top: 7em;
+
+}
+
+#clicked-user tr {
+  /*background-color: #fff0d0;*/
+  background-color: rgba(255,240,208,0.35);
+}
+
+.family-header {
+  width: 20em;
+  margin: 0 auto;
+  margin-top: 1em;
+  padding-bottom: 1em;
+  /*float: right;*/
+}
+
+.family-header .family-name {
+  display: inline-block; 
+}
+
+.family-header img {
+  /*float: right;*/
+  display: inline-block;
+  margin: 0;
+}
+
+.family-header h3 {
+  position: relative;
+  top: 0.7em;
+  margin: 0em;
+  font-weight: bold;
+}
+
 
 .the-data {
   text-align: center;
+  /*background-color: #eceff1;*/
+  /*background-color: #fff0d0;*/
+  background-color: rgba(255,240,208,0.35);
+  height: 27.5em;
 }
 
 .stats.user {
   display: block;
+  padding: 0px;
   /*text-align: center;*/
 }
 
@@ -21,15 +105,34 @@
   margin-top: 0.3em;
 }
 
-.table.table-hover.fields th {
-  /*padding-left: 2em;*/
+.table.fields {
+  width: 99.4%;
 }
+.table.fields th {
+  padding-left: 2em;
+}
+
+.big-daddy-data {
+  /*width: 90%;*/
+  margin: 0 auto;
+}
+
+.big-daddy-data h4 {
+  margin-top: 0px;
+  font-size: 1.4em;
+}
+
+#bottom-guy {
+  margin-top: -1.5em;
+}
+
+
 
 /*::-webkit-scrollbar { 
     display: none; 
 }*/
 #bs-override div.table-responsive.pure-u-1-2 {
-  margin-left: -1em;
+  /*margin-left: -1em;*/
 }
 
 .stats h1 {
@@ -44,8 +147,17 @@
 
 .stats-wrapper {
   width: 100%;
-  margin: 0 auto;
+  /*text-align: center;*/
+  /*padding-left: 4em;*/
+  /*margin: 0 auto;*/
 }
+
+.user-info {
+  cursor: pointer; 
+  cursor: hand;
+  border-right: 2px solid rgba(249,189,61,1);  
+}
+
 
 #bs-override tr.user-info th {
   line-height: 3em;
@@ -61,16 +173,21 @@
 }
 
 .table-responsive {
-  height: 26em;
+  height: 27.5em;
   overflow: auto; 
   direction:rtl; 
 }
 
-.table-responsive .table.table-hover.data {
-  direction: ltr; 
+#bs-override .table-responsive.pure-u-12-24 {
+  margin-right: -4px;
 }
 
-#bs-override .table.table-hover {
+.table-responsive .table.data {
+  direction: ltr; 
+
+}
+
+#bs-override .table {
   margin-bottom: 0px;
 }
 
@@ -247,6 +364,10 @@ b, i {
       margin-bottom: 5px;   
   }
 
+  .flyer-image.phone-image.enroll-image {
+    margin-top: 2em;
+  }
+
 
   img.phone-image.enroll-image {
     margin-left: auto;
@@ -342,7 +463,7 @@ b, i {
     text-align: center;
   }
   .custom-span{ 
-    font-family: Arial; 
+    font-family: 'Karla'; 
     font-weight: bold;
     font-size: 100px; 
     color: #FE57A1
@@ -356,7 +477,7 @@ b, i {
     width: 200px;
   }
   .custom-para{
-    font-family: arial;
+    font-family: 'Karla';
     font-weight: bold;
     font-size: 24px; 
     color:#585858;
@@ -513,12 +634,13 @@ b, i {
 /* welcome back message */
 .pure-g.welcome {
   text-align: center;
-  margin-top: 4em;
-  margin-bottom: 2em;
+  margin-top: 3em;
+  /*margin-bottom: 2em;*/
 }
 
 .pure-g.welcome h2, .pure-g.welcome h3 {
   font-family: 'Karla';
+  font-weight: bold;
 }
 
 .mobile-welcome, .mobile-navbar {
