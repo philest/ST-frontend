@@ -2,7 +2,7 @@
 img.apple {
   float: right;
   padding-right: 1.5em;
-  padding-top: 0.8em;
+  /*padding-top: 0.8em;*/
 }
 
 h3.apple {
@@ -10,6 +10,10 @@ h3.apple {
   text-align: right;
 }
 
+/*img#paper-plane {
+  margin-top: -2em;
+}
+*/
 
 .user-info:hover {
   background-color: #eceff1;
@@ -30,6 +34,7 @@ h3.apple {
   /*border-top: none;*/
   border-radius: 20px;
   border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
 }
 
 /* stats stuff */
@@ -41,16 +46,25 @@ h3.apple {
   margin-top: 1em;
 }
 
-#bs-override .user-spotlight {
+/*border right not working */
+.user-info {
+  cursor: pointer; 
+  cursor: hand;
+  border-right: 2px solid rgba(249,189,61,1);  
+}
+
+#bs-override .user-spotlight th {
   /*background-color: #fff0d0;*/
   background-color: rgba(255,240,208,0.35);
 
   border-top: 2px solid rgba(249,189,61,1);  
   border-bottom: 2px solid rgba(249,189,61,1);  
+
+  font-weight: bold;
+}
+
+#bs-override .user-spotlight {
   border-right: none;
-
-  font-weight: normal;
-
 }
 
 
@@ -58,8 +72,12 @@ h3.apple {
 .default-user-info {
   margin: 0 auto;
   width: 50%;
-  margin-top: 7em;
+  margin-top: 10.5em;
 
+}
+
+.default-user-info h2 {
+  font-size: 23px;
 }
 
 #clicked-user tr {
@@ -160,11 +178,7 @@ h3.apple {
   /*margin: 0 auto;*/
 }
 
-.user-info {
-  cursor: pointer; 
-  cursor: hand;
-  border-right: 2px solid rgba(249,189,61,1);  
-}
+
 
 
 #bs-override tr.user-info th {
@@ -190,10 +204,14 @@ h3.apple {
   margin-right: -4px;
 }
 
-.table-responsive .table.data {
+#bs-override .table-responsive .table.data {
   direction: ltr; 
 
 }
+.table-responsive .table.data th{
+  font-weight: normal;  
+}
+
 
 #bs-override .table {
   margin-bottom: 0px;
@@ -664,11 +682,13 @@ thead {
 .page-header {
   background: url("/images/modules/bird.gif") left no-repeat;
   margin-top: 20px;
+  padding-bottom: 11px;
 }
 
 .page-header h1 {
   margin-left: 4em;
   font-weight: 800;
+  margin-bottom: 10px;
 
 }
 
@@ -678,6 +698,7 @@ thead {
 
 .navbar-buttons {
   float: right;
+  margin-top: 0.8em;
 }
 
 .navbar-buttons .navbar-menu{
@@ -764,7 +785,7 @@ thead {
   }
 
   body {
-    background: url("/images/modules/bird.gif") left top no-repeat;
+    background: url("/images/modules/bird.gif") top left no-repeat;
   }
 
   .page-header .mobile-navbar {
