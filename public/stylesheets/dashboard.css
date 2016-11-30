@@ -725,15 +725,26 @@ thead {
   color: #ed7844;
 }
 
-.btn.outline:hover, .btn.outline:focus, .btn.outline:active, .btn.outline.active, .open > .dropdown-toggle.btn {
+#get-help:hover, #get-help:focus, #get-help:active, #get-help.active, .open > .dropdown-toggle.btn {
   color: white;
   background-color: #ed7844;
-  transition-duration: 400ms
+  
 }
 .btn.outline:active, .btn.outline.active {
   border-color: #007299;
   color: #007299;
   box-shadow: none;
+}
+
+.btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
+  background-color: #f3976f;
+  transition-duration: 400ms;
+}
+
+.btn.outline#top-button { 
+  color: white;
+  background-color: #ed7844;
+  
 }
 
 @media screen and (max-width: 52em) {
