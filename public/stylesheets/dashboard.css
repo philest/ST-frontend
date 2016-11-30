@@ -19,10 +19,18 @@ h3.apple {
   background-color: rgba(255,240,208,0.7);
 }
 
-
-
-
 /* END header */
+
+#bs-override .panel.panel-default.header {
+  margin-bottom: 0px;
+}
+
+#bs-override .big-daddy-data .panel.panel-default.table-body {
+  border-color: rgba(255,240,208, 1);
+  /*border-top: none;*/
+  border-radius: 20px;
+  border-top-right-radius: 0px;
+}
 
 /* stats stuff */
 .stats {
@@ -89,7 +97,7 @@ h3.apple {
   text-align: center;
   /*background-color: #eceff1;*/
   /*background-color: #fff0d0;*/
-  background-color: rgba(255,240,208,0.35);
+  background-color: rgba(255,240,208,0.5);
   height: 27.5em;
 }
 
@@ -106,7 +114,7 @@ h3.apple {
 }
 
 .table.fields {
-  width: 99.4%;
+  width: 100%;
 }
 .table.fields th {
   padding-left: 2em;

@@ -436,7 +436,7 @@
           <h2><b>Welcome!</b></h2>
           <h3><i>Let's start by inviting your class.</i></h3>
         <% else %>
-          <img class="apple" src="/images/apple-icon.png" alt="">
+          <img class="apple" src="/images/fresh-apple-icon.png" alt="">
           <h3 class="apple">Class totals</h3>
         <% end %>
 
@@ -470,29 +470,7 @@
         </div>
       <% end %>
 
-      
-<!-- 
-      <div class="pure-u-2-3 paper-plane">
-        <% if users.size == 0 %>
-          <img src="/images/paper-plane.png" alt="">
-        <% else %>
-          <div class="stats-wrapper">
-            <div class="stats">
-              <p>Weekly books read</p>
-              <% weekly_books = users.inject(0) {|sum, user| sum += user['story_number'] } %>
-              <%# users.map {|user| user['story_number'] } %>
-              <h1><%= weekly_books %></h1>
-            </div>
-            <div class="stats">
-              <p>Time spent reading</p>
-              <h1><%= (weekly_books * 2.3).ceil %></h1>
-            </div>
-          </div>  <%# stats-wrapper %>
-
-        <% end %>
-      </div> -->
-
-
+    
   </div>
 
   <div class="mobile-welcome">
@@ -502,72 +480,86 @@
 
   <div class="big-daddy-data">
     <h4>Class (<%= users.size %> joined) </h4>
-    <table class="table fields">
-        <thead>
-          <tr>
-            <th class="user-name-top">Name</th>
-            <th>Date joined</th>
-          </tr>
-        </thead>
-      </table>
-    <div class="table-responsive pure-u-12-24">
-      <table class="table data">
-        <tbody>
-          <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-              <tr class="user-info" id=<%= user['id'] %> >
-                <% if user['first_name'].nil? or user['first_name'].empty? %>
-                  <% user_name = "(not given)" %>
-                <% else %>
-                  <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
-                <% end %>
-                <th class="user-name"><%= user_name %></th>
-                <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
-              </tr>
-          <% end %>
-        </tbody>
+
+     <div class="panel panel-default header">
+      <table class="table fields">
+          <thead>
+            <tr>
+              <th class="user-name-top">Name</th>
+              <th>Date joined</th>
+            </tr>
+          </thead>
       </table>
     </div>
 
-    <div class="pure-u-12-24 the-data">
-      <div class="default-user-info">
-          <h2>
-            Click on a user to the left
-            to see their information.
-          </h2>
+    <div class="panel panel-default table-body">
+   
+      <div class="table-responsive pure-u-12-24">
+        <table class="table data">
+          <tbody>
+            <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                <tr class="user-info" id=<%= user['id'] %> >
+                  <% if user['first_name'].nil? or user['first_name'].empty? %>
+                    <% user_name = "(not given)" %>
+                  <% else %>
+                    <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+                  <% end %>
+                  <th class="user-name"><%= user_name %></th>
+                  <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
+                </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
+    
+      <div class="pure-u-12-24 the-data">
+        <div class="default-user-info">
+            <h2>
+              Click on a user to the left
+              to see their information.
+            </h2>
+        </div>
 
-      <% users.each do |user| %>
-        <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;">
-          <div class="family-header">
-            <img src="/images/book-icon.png" alt="">
-            <div class="family-name">
-              <% if user['last_name'] %>
-                <% family_name = user['last_name'] %>
-              <% elsif user['first_name'] %>
-                <% family_name = user['first_name'] + "'s" %>
-              <% else %>
-                <% family_name = "unnamed" %>
-              <% end %>
+        <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'fresh-apple'] %>
+        <% icon_index = 0 %>
+
+        <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+          <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;">
+            <div class="family-header">
+              <img src="/images/<%= icons[icon_index] %>-icon.png" alt="">
+              <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
+              <% icon_index = (icon_index + 1) % icons.length %>
+              <div class="family-name">
+                <% if user['last_name'] %>
+                  <% family_name = user['last_name'] %>
+                <% elsif user['first_name'] %>
+                  <% family_name = user['first_name'] + "'s" %>
+                <% else %>
+                  <% family_name = "unnamed" %>
+                <% end %>
 
                 <h3><%= family_name %></h3>
                 <h3>Family</h3>
+
+              </div>
+            </div>
+
+            <div class="stats user">
+              <p>Weekly books read</p>
+              <h1><%= user['story_number'] %></h1>
+            </div>
+            <div class="stats user" id="bottom-guy">
+              <p>Time spent reading</p>
+              <h1 style="display: inline-block;"><%= (user['story_number'] * 2.3).ceil %><small style="font-size: 0.3em; color: black;">min</small></h1>
             </div>
           </div>
+        <% end %>
 
-          <div class="stats user">
-            <p>Weekly books read</p>
-            <h1><%= user['story_number'] %></h1>
-          </div>
-          <div class="stats user" id="bottom-guy">
-            <p>Time spent reading</p>
-            <h1 style="display: inline-block;"><%= (user['story_number'] * 2.3).ceil %><small style="font-size: 0.3em; color: black;">min</small></h1>
-          </div>
-        </div>
+      </div>
+    </div> <%# panel-default %>
 
-      <% end %>
 
-    </div>
-  </div>
+  </div> <%# big-daddy-data %>
 
 
 </div> <!-- class="container" -->
