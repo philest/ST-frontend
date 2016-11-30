@@ -129,6 +129,7 @@ h3.apple {
 .stats.user {
   display: block;
   padding: 0px;
+  font-family: 'Karla';
   /*text-align: center;*/
 }
 
@@ -176,6 +177,10 @@ h3.apple {
 .stats p {
   font-weight: bold;
   font-size: 1.15em;
+}
+
+.stats.total {
+  font-family: 'Karla';
 }
 
 .stats-wrapper {
