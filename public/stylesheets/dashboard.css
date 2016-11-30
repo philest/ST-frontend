@@ -37,6 +37,13 @@ h3.apple {
   border-top-left-radius: 0px;
 }
 
+#bs-override .table-bordered {
+  border-color: rgba(255,240,208, 1);
+  border-radius: 20px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
+}
+
 /* stats stuff */
 .stats {
   display: inline-block;
