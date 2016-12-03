@@ -70,6 +70,17 @@ get '/dashboard' do
   erb :dashboard, :locals => {:users => JSON.parse(data)}
 end
 
+get '/admin_dashboard' do
+  if session[:admin].nil?
+    redirect to '/'
+  end
+  puts "session[:admin] = #{session[:admin]}"
+  get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
+  data = HTTParty.get("#{get_url}/teachers/#{session[:admin]['id']}")
+  puts "data dashboard = #{data.body.inspect}"
+  erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
+end
+
 get '/signup/spreadsheet' do
   if session[:teacher].nil?
     redirect to '/'
@@ -155,13 +166,10 @@ post '/signin' do
   end
 
   # puts params
-  teacher           = data['teacher']
-  school            = data['school']
-  users             = data['users']
-  # puts teacher, school
-  session[:teacher] = teacher
-  session[:school]  = school
-  session[:users]   = users
+  session[:teacher] = data['teacher']
+  session[:school]  = data['school']
+  session[:users]   = data['users']
+  session[:admin]   = data['admin']
 
   puts session.inspect
 
@@ -170,13 +178,18 @@ end
 
 
 get '/signup' do
-  if session[:teacher].nil?
+  if session[:teacher].nil? and session[:admin].nil?
     # maybe have a banner saying, "must log in through teacher account"
     flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
     redirect to '/'
   end
 
-  redirect to '/dashboard'
+  if session[:admin]
+    redirect to '/admin_dashboard'
+  else
+    redirect to '/dashboard'
+  end
+
 end
 
 
