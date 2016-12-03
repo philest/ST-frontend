@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
 
-    <link rel="stylesheet" href="stylesheets/dashboard.css" type="text/css" />
+    <link rel="stylesheet" href="stylesheets/admin_dashboard.css" type="text/css" />
 
 
 
@@ -101,6 +101,23 @@
         //   $(this).css('background-color', '#eceff1');
         // });
 
+        var rows_height = $('table.data').height();
+        console.log('rows_height = ' + rows_height);
+        // check if this is greater than the height of the table, 27.5em
+        var table_height = $('.table-responsive').height();
+        console.log('table_height = ' + table_height);
+
+        var leftover_height;
+
+        if (rows_height > table_height) {
+          leftover_height = 0;
+        } else {
+          leftover_height = table_height - rows_height;
+        }
+
+        console.log('leftover = ' + leftover_height);
+
+        $('.leftover-space').css('height', leftover_height);
 
       });
 
@@ -125,22 +142,6 @@
 
         });
 
-      });
-
-      $(document).ready(function () {
-
-        document.getElementById("uploadBtn").onchange = function () {
-          console.log(this.value);
-          var string = this.value
-          regex = 
-          string = string.split(/[\\/]/);
-
-          console.log(string)
-          document.getElementById("uploadFile").value = string[string.length - 1];
-        };
-
-        // validate file upload
-        // $('#fileInput').val()
       });
 
 
@@ -175,8 +176,8 @@
           <h2><b>Welcome!</b></h2>
           <h3><i>Let's start by inviting your class.</i></h3>
         <% else %>
-          <img class="apple" src="/images/fresh-apple-icon.png" alt="">
-          <h3 class="apple">School totals</h3>
+          <img class="apple" src="/images/school-icon.png" alt="">
+          <h3 class="apple">School Totals</h3>
         <% end %>
 
       </div>
@@ -245,12 +246,17 @@
                     <% end %>
                   </tbody>
                 </table>
+
+                <div class="leftover-space">
+                  
+                </div>
+
               </div>
             
               <div class="pure-u-12-24 the-data">
                 <div class="default-user-info">
                     <h2>
-                      Click on a family to see how they're reading!
+                      Click on a classroom to see how they're reading!
                     </h2>
                 </div>
 
@@ -265,8 +271,8 @@
                       <% icon_index = (icon_index + 1) % icons.length %>
                       <div class="family-name">
 
-                        <h3><%= user['signature'] %></h3>
-                        <h3><%= user['num_families'] %> families</h3>
+                        <h3><%= user['signature'] %>'s Class</h3>
+                        <h3 id="bottom-mofo"><%= user['num_families'] %> StoryTime <%= (user['num_families'] > 1 or user['num_families'] == 0) ? 'families' : 'family' %></h3>
 
                       </div>
                     </div>
