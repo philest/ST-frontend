@@ -114,7 +114,6 @@ post '/signup/spreadsheet' do
         puts "Uploaded '%s' to S3!" % name
       end
     end
-
     # dirname = "./public/uploads/#{session[:teacher]['signature']}"
     # unless File.directory?(dirname)
     #   FileUtils.mkdir_p(dirname)

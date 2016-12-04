@@ -121,6 +121,8 @@
 
         $('.leftover-space').css('height', leftover_height);
 
+        $('.user-info:last-child').css('border-bottom', 'solid rgb(210, 218, 224) 0.5px')
+
       });
 
       $(document).ready(function () {
@@ -272,26 +274,27 @@
 
                 <% teachers.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
                   <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;">
+                   
+                    <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
                     <div class="family-header">
-                      <img src="/images/<%= icons[icon_index] %>-icon.png" alt="">
                       <% icon_index = (icon_index + 1) % icons.length %>
                       <div class="family-name">
-                        <h3><%= user['signature'] %>'s Class</h3>
+                        <h3><%= user['signature'] %></h3>
                         <h3 id="bottom-mofo"><%= user['num_families'] %> StoryTime <%= (user['num_families'] > 1 or user['num_families'] == 0) ? 'families' : 'family' %></h3>
-
                       </div>
                     </div>
+
                     <div class="pure-g stats-user">
                       
                         <div class="pure-u-1-2">
-                          <div class="stats user" style="float:right; padding-right: 3em;">
+                          <div class="stats user" style="margin-left: 3em;">
                             <h1><%= user['books_read'] %></h1>
                             <p>Books</p>
                             <small style="font-size: 1.05em; color: black;"><i>read this week</i></small>
                           </div>
                         </div>
                         <div class="pure-u-1-2">
-                          <div class="stats user" style="float:left; padding-left: 3em;">
+                          <div class="stats user" style="margin-right: 3em;">
                             <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
                             <p>Minutes</p>
                             <small style="font-size: 1.05em; color: black;"><i>spent reading</i></small>
