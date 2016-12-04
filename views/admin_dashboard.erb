@@ -78,7 +78,20 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
 
     <script>
+      // hover effect for right arrow
+      $(document).ready(function () {
+        $('.the-whole-teacher-thing').mouseenter(function() {
+          $('#right-arrow').animate({
+            opacity: 1.0
+          }, 200);
+        });
 
+        $('.the-whole-teacher-thing').mouseleave(function() {
+          $('#right-arrow').animate({
+            opacity: 0.3
+          }, 200);
+        });
+      });
 
       // clicking rows, selecting users and teachers
       $(document).ready(function () {
@@ -210,7 +223,7 @@
   <% teacher_icon_index = 0 %>
   <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
     <div class="modal fade teacherModal" tabindex="-1" id="teacherModal-<%= teacher['id'] %>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
 
         <div class="modal-content">
           
@@ -530,13 +543,15 @@
 
                 <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
                   <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
-                   
-                    <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
+                    <div class="teacher-imgs">
+                        <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
+                        <img src="/images/right-arrow.png" alt="" id="right-arrow">
+                    </div>
                     <div class="family-header">
                       <% icon_index = (icon_index + 1) % icons.length %>
                       <div class="teacher-name">
                         <h3><%= teacher['signature'] %></h3>
-                        <h3 id="bottom-mofo"><%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
+                        <h3 id="bottom-mofo">   <%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
                       </div>
                     </div>
 
