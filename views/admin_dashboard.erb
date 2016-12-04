@@ -29,10 +29,6 @@
 
     <!-- end Boostrap -->
 
-
-    
-
-
     <!-- end Boostrap -->
 
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -83,41 +79,56 @@
 
     <script>
 
-      // $(document).ready(function () {
-      //   $('the-whole-damn-thing').click(function(event) {
-      //     var id = $(this).attr('id');
 
-      //   });
-
-
-      // });
-
-
+      // clicking rows, selecting users and teachers
       $(document).ready(function () {
-        $('.user-info').click(function(event) {
-          $('.user-info').not(this).removeClass('user-spotlight');
+        // teachers
+        $('.teacher-info').click(function(event) {
+          $('.teacher-info').not(this).removeClass('user-spotlight');
           $(this).addClass('user-spotlight');
 
           if ($(this).is(':first-child')) {
-            $('.user-info').not(this).addClass('user-info-first-box');
+            $('.teacher-info').not(this).addClass('user-info-first-box');
             $(this).addClass('first-row');
           } else {
-            $('.user-info').not(this).removeClass('user-info-first-box');
-            $('.user-info:first-child').removeClass('first-row');
+            $('.teacher-info').not(this).removeClass('user-info-first-box');
+            $('.teacher-info:first-child').removeClass('first-row');
           }
 
           var id = $(this).attr('id');
-          var infoBox = $('#' + id + '.the-whole-damn-thing'); 
-          $('.the-whole-damn-thing').not(infoBox).css('display', 'none');
+          var infoBox = $('#' + id + '.the-whole-teacher-thing'); 
+          $('.the-whole-teacher-thing').not(infoBox).css('display', 'none');
+          infoBox.css('display', 'block');
+          $('.default-teacher-info').css('display', 'none');
+        });
+
+        // users
+        $('.user-info').click(function(event) {
+          var parent = $(this).parent();
+          $(parent).find('.user-info').not(this).removeClass('user-spotlight');
+          $(this).addClass('user-spotlight');
+
+          if ($(this).is(':first-child')) {
+            $(parent).find('.user-info').not(this).addClass('user-info-first-box');
+            $(this).addClass('first-row');
+          } else {
+            $(parent).find('.user-info').not(this).removeClass('user-info-first-box');
+            $(parent).find('.user-info:first-child').removeClass('first-row');
+          }
+
+          var id = $(this).attr('id');
+          var infoBox = $('#' + id + '.the-whole-user-thing'); 
+          $('.the-whole-user-thing').not(infoBox).css('display', 'none');
           infoBox.css('display', 'block');
           $('.default-user-info').css('display', 'none');
         });
 
 
-        var rows_height = $('table.data').height();
+        // get a border on the bottom of the left table panel
+        var rows_height = $('.teacher-table').height();
         console.log('rows_height = ' + rows_height);
         // check if this is greater than the height of the table, 27.5em
-        var table_height = $('.table-responsive').height();
+        var table_height = $('.teacher-table-responsive').height();
         console.log('table_height = ' + table_height);
 
         var leftover_height;
@@ -128,11 +139,12 @@
           leftover_height = table_height - rows_height;
         }
 
-        console.log('leftover = ' + leftover_height);
+        console.log('leftovers = ' + leftover_height);
 
         $('.leftover-space').css('height', leftover_height);
 
         $('.user-info:last-child').css('border-bottom', 'solid rgb(210, 218, 224) 0.5px')
+        $('.teacher-info:last-child').css('border-bottom', 'solid rgb(210, 218, 224) 0.5px')
 
       });
 
@@ -165,6 +177,13 @@
 </head>
 <body id="bs-override">
 
+  <!-- Notify about form submission -->
+  <% if flash[:teacher_invite_success] %>
+    <div id="alert">
+        <a class="alert" href="#alert" style="padding: 0px;">Great! We'll send your teachers an invite to join StoryTime.</a>
+    </div>
+  <% end %>
+
 
 <div class="container">
   <div class="page-header">
@@ -179,17 +198,17 @@
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
       <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
-      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#teacherModal">
-                  Add people
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
+                  Add teachers
                   </button>
 
     </div>
 
   </div>
 
-  <% teachers.each do |teacher| %>
-  
-  
+  <% teacher_icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+  <% teacher_icon_index = 0 %>
+  <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
     <div class="modal fade teacherModal" tabindex="-1" id="teacherModal-<%= teacher['id'] %>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
 
@@ -197,14 +216,16 @@
           
           <div class="modal-body">
             <div class="teacher-title">
-              <img src="/images/fresh-apple-icon.png" alt="">
+              <!-- <img src="/images/fresh-apple-icon.png" alt=""> -->
+              <img src="/images/<%= teacher_icons[teacher_icon_index] %>-icon.png" alt="">
+              <% teacher_icon_index = (teacher_icon_index + 1) % teacher_icons.length %>
               <h1><%= teacher['signature'] %>'s Class</h1>
             </div>
 
             <% users = teacher['users'] %>
 
             <!-- THE REAL SHIT -->
-            <div class="big-daddy-data">
+            <div class="big-daddy-data big-user">
               <h4>Class (<%= users.size %> joined) </h4>
 
                <div class="panel panel-default header">
@@ -212,7 +233,7 @@
                     <thead>
                       <tr>
                         <th class="user-name-top">Name</th>
-                        <th>Date joined</th>
+                        <!-- <th>Date joined</th> -->
                       </tr>
                     </thead>
                 </table>
@@ -232,7 +253,7 @@
                                   <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
                                 <% end %>
                                 <th class="user-name"><%= user_name %></th>
-                                <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
+                                <!-- <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th> -->
                               </tr>
                           <% end %>
                         </tbody>
@@ -250,8 +271,8 @@
                       <% icon_index = 0 %>
 
                       <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-                        <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;">
-                          <div class="family-header">
+                        <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none;">
+                          <div class="family-header users">
                             <img src="/images/<%= icons[icon_index] %>-icon.png" alt="">
                             <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
                             <% icon_index = (icon_index + 1) % icons.length %>
@@ -271,13 +292,13 @@
                           </div>
 
                           <div class="stats user" style="margin-right: 2em;">
-                            <h1><%= user['story_number'] %></h1>
+                            <h1><%= user['this_month'] %></h1>
                             <p>Books</p>
-                            <small style="font-size: 1.23em; color: black;"><i>read this week</i></small>
+                            <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
                           </div>
                           <div class="stats user" id="bottom-guy" style="margin-left: 2em;">
 
-                            <h1 style="display: inline-block;"><%= (user['story_number'] * 4.6).ceil %></h1>
+                            <h1 style="display: inline-block;"><%= (user['this_month'] * 4.6).ceil %></h1>
                             <p>Minutes</p>
                             <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
                           </div>
@@ -322,9 +343,91 @@
 
       </div>
     </div>
-    <!-- end Teacher Modal-->
-
   <% end %>
+  <!-- end Teacher Modal-->
+
+  <!-- Invite teachers Modal -->
+  <div class="modal fade" id="inviteTeachersModal" role="dialog" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  
+        <div class="modal-body">
+
+          <!-- begin invite-by-phone -->
+            <div class="main-box by-phone" id="main-envelope">
+
+              <% @sample_names = ["Jane Doe", "Alice Smith", "John Jones", "Bob Johnson", "Art Vandelay"] %>
+              <% @sample_phones = ["jane.doe@storytime.edu", "alice.smith@storytime.edu", "john.jones@storytime.edu", "bob.johnson@storytime.edu", "art.vanelay@storytime.edu"] %>
+
+                <div id="logo-container">
+                  <div id="jobs">
+                    <h2 class="our_team enroll_header">Invite Teachers.</h2>
+                  </div>
+                </div>
+
+                <!-- <img class="flyer-image phone-image enroll-image" src="https://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+
+
+
+                <form class="enroll-teacher-class invite-teachers" action="enroll_teachers_form_success" method="post">     
+                  <div class="enroll group-invite">
+                    <div class="box-header">
+                      <h2 class="box-header-title">Enter emails below</h2>
+                      <h3 class="box-header-subtext">
+                        Teachers will get their classroom flyers to start sharing.
+                      </h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="row row-small">
+                        <div class="table-input">
+                          <header class="table-input-header-row">
+                            <span class="table-input-cell-validation table-input-cell">
+                            </span>
+              
+                            <div class="table-input-header-cell table-input-cell"> Teacher name</div>
+                            <div class="table-input-header-cell table-input-cell"> Teacher email
+                            </div>
+
+                          </header>
+
+                          <div class="table-input-container">
+                            <div class="table-input-body">
+                              <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+                                <span class="table-input-body-row">
+                                  <span class="table-input-cell-validation table-input-cell">
+                                  </span>
+
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
+                                    </div>
+                                  </span>
+                
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                                    </div>
+                                  </span>
+                                </span>
+                              <%end%>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+            
+                        <button class="Button-ready" type="submit">Invite class</button>          
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            <!-- end invite-by-phone -->
+
+        </div>
+      </div>
+    </div>
+  </div> <%# end invite teachers modal %>
 
 
 
@@ -351,10 +454,10 @@
         <div class="pure-u-1-3 paper-plane">
           <div class="stats-wrapper">
             <div class="stats total" style="text-align: center;">
-              <% weekly_books = teachers.inject(0) {|sum, teacher| sum += teacher['books_read'] } %>
+              <% weekly_books = teachers.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
               <h1><%= weekly_books %></h1>
               <p>Books</p>
-              <small style="font-size: 1.23em; color: black;"><i>read this week</i></small>
+              <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
             </div>
           </div>
           
@@ -363,7 +466,7 @@
 
           <div class="stats-wrapper" style="text-align: left;">
             <div class="stats total">
-              <h1><%= (weekly_books * 4.6).ceil %></h1>
+              <h1><%= teachers.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %></h1>
               <p>Minutes</p>
               <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
             </div>
@@ -397,12 +500,12 @@
         <% if teachers.size > 0 %>
             <div class="panel panel-default table-body">
            
-              <div class="table-responsive pure-u-12-24">
-                <table class="table data">
+              <div class="table-responsive pure-u-12-24 teacher-table-responsive">
+                <table class="table data teacher-table">
                   <tbody>
-                    <% teachers.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |teacher| %>
-                        <tr class="user-info" id=<%= teacher['id'] %> >
-                          <th class="user-name"><%= teacher['signature'] %></th>
+                    <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+                        <tr class="teacher-info" id=<%= teacher['id'] %> >
+                          <th class="teacher-name"><%= teacher['signature'] %></th>
                           <th><%= Time.parse(teacher['enrolled_on']).strftime("%b %-d, %Y") %></th>
                         </tr>
                     <% end %>
@@ -416,24 +519,24 @@
               </div>
             
               <div class="pure-u-12-24 the-data">
-                <div class="default-user-info">
+                <div class="default-teacher-info">
                     <h2>
                       Click on a classroom to see how they're reading!
                     </h2>
                 </div>
 
-                <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
+                <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
                 <% icon_index = 0 %>
 
-                <% teachers.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-                  <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;" data-toggle="modal" data-target="#teacherModal-<%= user['id'] %>">
+                <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+                  <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
                    
                     <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
                     <div class="family-header">
                       <% icon_index = (icon_index + 1) % icons.length %>
-                      <div class="family-name">
-                        <h3><%= user['signature'] %></h3>
-                        <h3 id="bottom-mofo"><%= user['num_families'] %> StoryTime <%= (user['num_families'] > 1 or user['num_families'] == 0) ? 'families' : 'family' %></h3>
+                      <div class="teacher-name">
+                        <h3><%= teacher['signature'] %></h3>
+                        <h3 id="bottom-mofo"><%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
                       </div>
                     </div>
 
@@ -441,16 +544,16 @@
                       
                         <div class="pure-u-1-2">
                           <div class="stats user" style="margin-left: 3em;">
-                            <h1><%= user['books_read'] %></h1>
+                            <h1><%= teacher['this_month'] %></h1>
                             <p>Books</p>
-                            <small style="font-size: 1.05em; color: black;"><i>read this week</i></small>
+                            <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                           </div>
                         </div>
                         <div class="pure-u-1-2">
                           <div class="stats user" style="margin-right: 3em;">
-                            <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                            <h1 style="display: inline-block;"><%= teacher['reading_time'] %></h1>
                             <p>Minutes</p>
-                            <small style="font-size: 1.05em; color: black;"><i>spent reading</i></small>
+                            <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                           </div>
                         </div>
 

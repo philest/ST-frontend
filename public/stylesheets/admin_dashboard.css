@@ -1,11 +1,38 @@
+/* INVITE TEACHERS BY EMAIL modal */
+
+#inviteTeachersModal .modal-body {
+  overflow-y: hidden;
+}
+
+#inviteTeachersModal .modal-content {
+  height: 75vh;
+  width: 50vw;
+  margin-left: 8vw;
+}
+
+#inviteTeachersModal .table-input-container {
+  height: 11.5em;
+}
+
+#inviteTeachersModal .row-small {
+  height: 17em;
+}
+
+
+
+
+/* END INVITE TEACHERS BY EMAIL modal */
+
+
+
 /* teacher modal */
 .teacherModal .modal-body {
   overflow-y: hidden;
 }
 
 .teacherModal .modal-content {
-  width: 70vw;
-  margin-left: -15vw;
+  width: 60vw;
+  margin-left: -10vw;
 }
 
 .teacher-title {
@@ -38,13 +65,21 @@ h3.apple {
   text-align: right;
 }
 
+.paper-plane {
+  padding-top: 1em;
+}
+
 /*img#paper-plane {
   margin-top: -2em;
 }
 */
 
 
-.the-whole-damn-thing {
+.the-whole-teacher-thing {
+  position: relative;
+}
+
+.the-whole-user-thing {
   position: relative;
 }
 
@@ -53,6 +88,14 @@ h3.apple {
 }
 
 .user-info.user-spotlight:hover {
+  background-color: rgba(255,240,208,0.7);
+}
+
+.teacher-info:hover {
+  background-color: #eceff1;
+}
+
+.teacher-info.user-spotlight:hover {
   background-color: rgba(255,240,208,0.7);
 }
 
@@ -68,6 +111,10 @@ h3.apple {
   border-radius: 20px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
+}
+
+.big-daddy-data.big-user {
+  width: 88%;
 }
 
 #bs-override .table-bordered {
@@ -92,15 +139,23 @@ h3.apple {
 
 .stats.user h1 {
   margin-bottom: 0.1em;
-  font-size: 3.5em;
+  font-size: 3.15em;
 }
 
 .stats.user p {
   margin: 0px;
-  font-size: 1.4em;
+  font-size: 1.26em;
 }
 
 /*border right not working */
+.teacher-info {
+  cursor: pointer; 
+  cursor: hand;
+  border-right: 2px solid rgba(249,189,61,1);  
+}
+
+
+
 .user-info {
   cursor: pointer; 
   cursor: hand;
@@ -129,13 +184,21 @@ h3.apple {
   border-right: none;
 }
 
-
+.default-teacher-info {
+  margin: 0 auto;
+  width: 50%;
+  margin-top: 10.5em;
+}
 
 .default-user-info {
   margin: 0 auto;
   width: 50%;
   margin-top: 10.5em;
 
+}
+
+.default-teacher-info h2 {
+  font-size: 23px;
 }
 
 .default-user-info h2 {
@@ -147,6 +210,12 @@ h3.apple {
   background-color: rgba(255,240,208,0.35);
 }
 
+.family-header.users {
+  /*display: inline-block;*/
+  width: 100%;
+  padding-bottom: 1.9em;
+}
+
 .family-header {
   width: 30em;
   margin: 0 auto;
@@ -155,7 +224,7 @@ h3.apple {
   /*float: right;*/
 }
 
-.family-header .family-name {
+.family-header .teacher-name {
   display: inline-block;
   margin-top: 0.6em;
 }
@@ -184,7 +253,7 @@ h3.apple {
 }
 
 .stats-user {
-  margin-top: 2.5em;
+  margin-top: 3.5em;
 }
 
 .stats.user {
@@ -248,8 +317,10 @@ h3.apple {
   /*margin-left: -1em;*/
 }
 
+
+
 .stats h1 {
-  font-size: 5.5em;
+  font-size: 4.2em;
   margin-top: 0.2em;
   margin-bottom: 0px;
   font-weight: bold;
@@ -263,10 +334,11 @@ h3.apple {
 .stats.total {
   font-family: 'Karla';
   text-align: center;
+  /*font-size: 4.5em;*/
 }
 
 .stats.total p {
-  font-size: 1.64em;
+  font-size: 1.68em;
   line-height: 1em;
 }
 
@@ -284,6 +356,18 @@ h3.apple {
   line-height: 3em;
 }
 
+#bs-override tr.teacher-info th {
+  line-height: 3em;
+}
+
+
+#bs-override .teacher-name {
+  width: 50%;
+}
+
+.teacher-name-top {
+  width: 24.5%;
+}
 
 #bs-override .user-name {
   width: 50%;

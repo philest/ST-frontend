@@ -286,6 +286,18 @@ post '/get_updates_form_success' do
   redirect to('/join')
 end
 
+post '/enroll_teachers_form_success' do
+  puts "contact info params = #{params}"
+  Pony.mail(:to => 'supermcpeek@gmail.com',
+            :cc => '',
+            :from => 'supermcpeek@gmail.com',
+            :subject => "An admin invited teachers",
+            :body => "#{params}")
+
+  flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
+  redirect to '/admin_dashboard'
+end
+
 post '/enroll_families_form_success' do 
 
   enroll_families(params)
