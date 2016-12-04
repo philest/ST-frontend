@@ -81,14 +81,19 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
 
-
     <script>
       $(document).ready(function () {
         $('.user-info').click(function(event) {
           $('.user-info').not(this).removeClass('user-spotlight');
           $(this).addClass('user-spotlight');
-          // $('.user-info').not(this).css('background-color', 'white');
-          // $(this).css('background-color', 'rgba(255,240,208,0.35)');
+
+          if ($(this).is(':first-child')) {
+            $('.user-info').not(this).addClass('user-info-first-box');
+            $(this).addClass('first-row');
+          } else {
+            $('.user-info').not(this).removeClass('user-info-first-box');
+            $('.user-info:first-child').removeClass('first-row');
+          }
 
           var id = $(this).attr('id');
           var infoBox = $('#' + id + '.the-whole-damn-thing'); 
@@ -97,9 +102,6 @@
           $('.default-user-info').css('display', 'none');
         });
 
-        // $('.user-info').hover(function() {
-        //   $(this).css('background-color', '#eceff1');
-        // });
 
         var rows_height = $('table.data').height();
         console.log('rows_height = ' + rows_height);
@@ -164,6 +166,9 @@
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
       <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#myModal">
+                  Add people
+                  </button>
 
     </div>
 
@@ -191,9 +196,10 @@
         <div class="pure-u-1-3 paper-plane">
           <div class="stats-wrapper">
             <div class="stats total" style="text-align: center;">
-              <p>Books read this week</p>
               <% weekly_books = teachers.inject(0) {|sum, teacher| sum += teacher['books_read'] } %>
               <h1><%= weekly_books %></h1>
+              <p>Books</p>
+              <small style="font-size: 1.23em; color: black;"><i>read this week</i></small>
             </div>
           </div>
           
@@ -202,8 +208,9 @@
 
           <div class="stats-wrapper" style="text-align: left;">
             <div class="stats total">
-              <p>Time spent reading</p>
-              <h1><%= (weekly_books * 4.6).ceil %><small style="font-size: 0.3em; color: black;"> min</small></h1>
+              <h1><%= (weekly_books * 4.6).ceil %></h1>
+              <p>Minutes</p>
+              <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
             </div>
           </div>
         </div>
@@ -267,24 +274,32 @@
                   <div class="the-whole-damn-thing" id=<%= user['id'] %> style="display: none;">
                     <div class="family-header">
                       <img src="/images/<%= icons[icon_index] %>-icon.png" alt="">
-                      <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
                       <% icon_index = (icon_index + 1) % icons.length %>
                       <div class="family-name">
-
                         <h3><%= user['signature'] %>'s Class</h3>
                         <h3 id="bottom-mofo"><%= user['num_families'] %> StoryTime <%= (user['num_families'] > 1 or user['num_families'] == 0) ? 'families' : 'family' %></h3>
 
                       </div>
                     </div>
+                    <div class="pure-g stats-user">
+                      
+                        <div class="pure-u-1-2">
+                          <div class="stats user" style="float:right; padding-right: 3em;">
+                            <h1><%= user['books_read'] %></h1>
+                            <p>Books</p>
+                            <small style="font-size: 1.05em; color: black;"><i>read this week</i></small>
+                          </div>
+                        </div>
+                        <div class="pure-u-1-2">
+                          <div class="stats user" style="float:left; padding-left: 3em;">
+                            <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                            <p>Minutes</p>
+                            <small style="font-size: 1.05em; color: black;"><i>spent reading</i></small>
+                          </div>
+                        </div>
 
-                    <div class="stats user">
-                      <p>Books read this week</p>
-                      <h1><%= user['books_read'] %></h1>
-                    </div>
-                    <div class="stats user" id="bottom-guy">
-                      <p>Time spent reading</p>
-                      <h1 style="display: inline-block;"><%= user['reading_time'] %><small style="font-size: 0.3em; color: black;">min</small></h1>
-                    </div>
+                    </div> <%# end nested pure-g %>
+
                   </div>
                 <% end %>
 
