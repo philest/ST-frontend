@@ -1,3 +1,30 @@
+/* teacher modal */
+.teacherModal .modal-body {
+  overflow-y: hidden;
+}
+
+.teacherModal .modal-content {
+  width: 70vw;
+  margin-left: -15vw;
+}
+
+.teacher-title {
+  margin: 0 auto;
+  text-align: center; 
+  margin-left: -2em;
+
+}
+
+.teacher-title h1 {
+  display: inline-block;
+}
+
+
+
+/* end teacher modal */
+
+
+
 /* header */
 img.apple {
   float: right;
