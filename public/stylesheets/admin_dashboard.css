@@ -4,6 +4,11 @@
   overflow-y: hidden;
 }
 
+.teacher-modal-btn {
+  cursor: pointer; cursor: hand;
+  display: inline-block;
+}
+
 #inviteTeachersModal .modal-content {
   height: 75vh;
   width: 55vw;
