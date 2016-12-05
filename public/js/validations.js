@@ -1,6 +1,31 @@
 // script to validate the signature, email, and password fields for login
 $(document).ready(function () {
-  $("#join").on('click', function(event) {
+  $('#top-button').click(function(event) {
+    console.log('opening modal....');
+    $('#myModal').modal('toggle');
+  });
+
+  $('#modalSig').on('hidden.bs.modal', function(event) {
+    $("body").removeClass("hide-scroll");
+    $("body").css("padding-right", '0px');
+  });
+
+  $('.modal').on('hidden.bs.modal', function(event) {
+    $('body').addClass('destroy-padding');
+    // $("body").css("padding-right", '0px');
+  });
+
+  $('.modal').on('shown.bs.modal', function(event) {
+    $('body').removeClass('destroy-padding');
+    // $('body').css("padding-right", '15px');
+  });
+
+
+  // $('.modal').on('shown.bs.modal', function(event) {
+  //   $('body').removeClass('destroy-padding');
+  // });
+
+  $("#join.signature-modal").on('click', function(event) {
     event.preventDefault();
     $('#teacher-info').validate({ // initialize the plugin
         rules: {
@@ -15,10 +40,59 @@ $(document).ready(function () {
     }).form();
 
     var ValidStatus = $("#teacher-info").valid();
-    console.log(ValidStatus);
     if (ValidStatus == false) {
         return false;
     }
+
+    $('#myModal').modal('toggle');
+
+    // animate a loading gif...
+
+    var teacher_data = $("#teacher-info").serializeArray();
+    // var teacher_data = $("#teacher-info").serialize();
+    var email = teacher_data[0]['value'];
+    var password = teacher_data[1]['value'];
+
+    // then AJAX req existing user....
+    $.ajax({
+      url: 'user_exists',
+      // crossDomain: true,
+      type: 'get',
+      dataType: 'text',
+      data: {
+        email: email,
+        password: password
+      },
+      success: function(data) {
+        console.log(data);
+        if (data == 'false') {
+          // $('body').css("padding-right", '15px');
+          $("body").addClass("hide-scroll");
+          $('#modalSig').modal('toggle');
+        } else { 
+          console.log(data);
+          $("#login input[name='signature']").val(data);
+          $('#login').submit();
+        } 
+      },
+      error: function(xhr) {
+        d = xhr;
+        console.log('fucker, error');
+        console.log(xhr);
+      }
+    });
+
+
+    // if user exists, just log in
+
+
+    // if not, ask for signature
+
+
+
+
+    
+
   });
 
   $('#login').validate({ // initialize the plugin
