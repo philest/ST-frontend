@@ -402,6 +402,8 @@
 
                           <div class="table-input-container">
                             <div class="table-input-body">
+                              <input type="hidden" name="school_id" value=<%= session[:school]['id'] %> />
+                              <input type="hidden" name="admin_id" value=<%= session[:admin]['id'] %> />
                               <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
                                 <span class="table-input-body-row">
                                   <span class="table-input-cell-validation table-input-cell">
@@ -415,7 +417,7 @@
                 
                                   <span class="table-input-body-cell table-input-cell">
                                     <div class="form-cell-input">
-                                      <input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                                      <input name="<%="email_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
                                     </div>
                                   </span>
                                 </span>
@@ -571,7 +573,7 @@
               </div>
             </div> <%# panel-default table-body %>
 
-
+            
           <% else %> <%# there are 0 teachers.... %>
             <div class="panel panel-default">
               <div class="table-bordered">

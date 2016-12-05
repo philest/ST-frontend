@@ -18,6 +18,7 @@ require_relative '../config/initializers/aws'
 #helpers
 require_relative '../helpers/routes_helper'
 
+
 set :root, File.join(File.dirname(__FILE__), '../')
 
 require 'twilio-ruby'
@@ -294,11 +295,18 @@ end
 
 post '/enroll_teachers_form_success' do
   puts "contact info params = #{params}"
-  Pony.mail(:to => 'supermcpeek@gmail.com',
-            :cc => '',
-            :from => 'supermcpeek@gmail.com',
-            :subject => "An admin invited teachers",
-            :body => "#{params}")
+
+  HTTParty.post(
+    "#{ENV['enroll_url']}/invite_teachers",
+    body: params
+  )
+  # Pony.mail(:to => 'supermcpeek@gmail.com',
+  #           :cc => '',
+  #           :from => 'supermcpeek@gmail.com',
+  #           :subject => "An admin invited teachers",
+  #           :body => "#{params}")
+
+ 
 
   flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
   redirect to '/admin_dashboard'
