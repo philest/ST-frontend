@@ -53,8 +53,13 @@ enable :sessions
 
 #root
 get '/' do
-  puts "session = #{session.inspect}"
-  erb :main_new
+  if session[:teacher]
+    redirect to '/dashboard'
+  elsif session[:admin]
+    redirect to 'admin_dashboard'
+  else
+    erb :main_new
+  end
 end
 
 get '/dashboard' do
@@ -91,6 +96,7 @@ end
 
 get '/logout' do
   session[:teacher] = nil
+  session[:admin] = nil
   session[:school] = nil
 
   redirect to '/'

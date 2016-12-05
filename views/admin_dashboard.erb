@@ -81,13 +81,13 @@
       // hover effect for right arrow
       $(document).ready(function () {
         $('.the-whole-teacher-thing').mouseenter(function() {
-          $('#right-arrow').animate({
+          $('.right-arrow').animate({
             opacity: 1.0
           }, 200);
         });
 
         $('.the-whole-teacher-thing').mouseleave(function() {
-          $('#right-arrow').animate({
+          $('.right-arrow').animate({
             opacity: 0.3
           }, 200);
         });
@@ -212,7 +212,7 @@
       <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
       <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
-                  Add teachers
+                  Invite teachers
                   </button>
 
     </div>
@@ -545,7 +545,7 @@
                   <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
                     <div class="teacher-imgs">
                         <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
-                        <img src="/images/right-arrow.png" alt="" id="right-arrow">
+                        <img src="/images/right-arrow.png" alt="" class="right-arrow">
                     </div>
                     <div class="family-header">
                       <% icon_index = (icon_index + 1) % icons.length %>
