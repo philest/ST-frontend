@@ -28,6 +28,13 @@ configure :production do
   set :static_cache_control, [:public, :max_age => 600]
 end
 
+before do
+  headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+  headers['Access-Control-Allow-Origin'] = "#{ENV['enroll_url']}"
+  headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
+  headers['Access-Control-Allow-Credentials'] = 'true'
+end
+
 # Error tracking. 
 require 'airbrake'
 require_relative '../config/initializers/airbrake'
@@ -62,6 +69,22 @@ get '/' do
     erb :main_new
   end
 end
+
+
+get '/user_exists' do
+  puts "params=#{params}"
+
+  res = HTTParty.get(
+    "#{ENV['enroll_url']}/user_exists",
+    query: {
+      password: params['password'],
+      email: params['email']
+    }
+  )
+  puts res.inspect
+  return res.parsed_response
+end
+
 
 get '/dashboard' do
   if session[:teacher].nil?

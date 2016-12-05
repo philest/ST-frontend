@@ -1,3 +1,20 @@
+body.hide-scroll#override {
+    overflow: hidden;
+    padding-right: 15px;
+}
+
+body.destroy-padding#override {
+  padding-right: 0px;
+}
+
+body.hide-scroll.destroy-padding#override {
+  padding-right: 15px;
+}
+
+/*body#override {
+  padding-right: 0px;
+}*/
+
 .modal-body iframe{
         margin: 0 auto;
         display: block;

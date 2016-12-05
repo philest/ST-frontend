@@ -62,7 +62,7 @@
 
 
 		<!-- Load jQuery and  -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
 		<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 		<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
@@ -71,6 +71,19 @@
 		<script type="text/javascript" src="/js/appendform.js"></script>
 
 		<script type="text/javascript">
+			// signature modal
+			$(document).ready(function(){
+				// $("#modalSig").on("show", function () {
+				// 	console.log('showing modal!');
+				//   $("body").addClass("modal-open");
+				// }).on("hidden", function () {
+				//   $("body").removeClass("modal-open");
+				//   console.log('that shit\'s hidden');
+				// });
+
+			});
+
+
 			$(document).ready(function(){
 			    /* Get iframe src attribute value i.e. YouTube video url
 			    and store it in a variable */
@@ -99,7 +112,7 @@
 
 	</head>
 
-	<body>
+	<body id="override">
 
 	<!-- Notify about form submission -->
 	<% if flash[:notice] %>
@@ -129,14 +142,16 @@
 						<li class="navbar-button-item">
 							<a>
 								<% if session['teacher'].nil? %>
-									<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
+									<!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal"> -->
+									<button id="top-button" class="pure-button-primary pure-button signup-button">
 									Log in
 									</button>
 								<% else %>
 									<form action="signup" method="get">									
-										<button id="top-button" type="submit" class=" pure-button-primary pure-button signup-button">
+										<button id="top-button" type="submit" class="pure-button-primary pure-button signup-button">
 											Log in
 										</button>
+
 									</form>
 								<% end %>
 							</a>
@@ -185,7 +200,9 @@
 											<label class="label">Password</label>
 										<input name="password" placeholder="your school passcode here" class="input" required>
 										</div>
-						        <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-primary get_update dialog-button">Log in</button>
+						        <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-primary get_update dialog-button">Log in</button> -->
+
+						        <button id="join" data-dismiss='modal' class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Log in</button>
 						 		</div>
 							</form>
 
@@ -214,7 +231,7 @@
 			        <p class="box-header-subtext">Only your class can see your name on StoryTime.</p>
 
 			         <form id='login' action='signin' method="post"> 
-			        <form id='login'>
+			        <!-- <form id='login'> -->
 				      	<div class="signup-setup">
 					        <div class="field" id="signup-field">
 								     <label class="label">What parents call you</label>
