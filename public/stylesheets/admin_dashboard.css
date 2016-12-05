@@ -10,7 +10,7 @@
 }
 
 #inviteTeachersModal .modal-content {
-  height: 75vh;
+  height: 85vh;
   width: 55vw;
   margin: 0 auto;
   /*margin-left: 8vw;*/
@@ -88,10 +88,12 @@ h3.apple {
 
 .the-whole-teacher-thing {
   position: relative;
+  margin-top: 1em;
 }
 
 .the-whole-user-thing {
   position: relative;
+  margin-top: 1em;
 }
 
 .user-info:hover {
@@ -264,7 +266,7 @@ h3.apple {
 }
 
 .stats-user {
-  margin-top: 2.5em;
+  margin-top: 2em;
 }
 
 .stats.user {
