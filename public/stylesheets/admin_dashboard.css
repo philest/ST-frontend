@@ -19,9 +19,6 @@
   height: 17em;
 }
 
-
-
-
 /* END INVITE TEACHERS BY EMAIL modal */
 
 
@@ -46,7 +43,14 @@
 
 .teacher-title h1 {
   display: inline-block;
+  font-weight: bold;
 }
+
+.teacherModal .teacher-title img {
+  width: 80px;
+}
+
+
 
 
 
@@ -307,7 +311,7 @@ h3.apple {
   margin-left: 2.5em;
 }
 
-#right-arrow {
+.right-arrow {
   display: inline-block;
   height: 50px;
   width: auto;
