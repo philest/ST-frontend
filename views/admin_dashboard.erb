@@ -456,6 +456,8 @@
     </div>
   </div> <%# end invite teachers modal %>
 
+  <%= erb :dashboard_tutorial, :locals => {:teachers => teachers} %>
+
   <div class="pure-g welcome">
       <div class="pure-u-1-3">
         <% if teachers.size == 0 %>
@@ -483,7 +485,6 @@
               <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
             </div>
           </div>
-          
         </div>
         <div class="pure-u-1-3 paper-plane">
 
@@ -497,8 +498,7 @@
         </div>
       <% end %>
 
-    
-  </div>
+  </div> <%# end pure-g welcome %>
 
   <div class="mobile-welcome">
     <h2><b>Welcome back!</b></h2>
