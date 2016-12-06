@@ -1,0 +1,143 @@
+<div class="pure-g welcome">
+      <div class="pure-u-1-3">
+        <img class="apple" src="/images/schoolhouse-icon.png" alt="" style="width: 150px; margin-right: -12px;">
+        <h3 class="apple">School Totals</h3>
+      </div>
+
+
+      <div class="pure-u-1-3 paper-plane">
+        <div class="stats-wrapper">
+          <div class="stats total" style="text-align: center;">
+            <h1>455</h1>
+            <p>Books</p>
+            <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
+          </div>
+        </div>
+        
+      </div>
+      <div class="pure-u-1-3 paper-plane">
+
+        <div class="stats-wrapper" style="text-align: left;">
+          <div class="stats total">
+            <h1> 689 </h1>
+            <p>Minutes</p>
+            <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
+          </div>
+        </div>
+      </div>
+
+
+    
+</div>
+
+<div class="big-daddy-data">
+        <h4>Example Classrooms</h4>
+
+         <div class="panel panel-default header">
+          <table class="table fields">
+              <thead>
+                <tr>
+                  <th class="user-name-top">Name</th>
+                  <th>Date joined</th>
+                </tr>
+              </thead>
+          </table>
+        </div>
+
+
+        <% teachers = 
+          { 'signature'=>'Ms. JK Rowling', 'num_families'=>5, 'reading_time'=>123, 'id'=>'1', 'this_month'=>45 },
+          { 'signature'=>'Ms. Jennifer Hudson', 'num_families'=>4, 'reading_time'=>123, 'id'=>'2', 'this_month'=>45 }
+          { 'signature'=>'Mr. Mark Twain', 'num_families'=>5, 'reading_time'=>123, 'id'=>'3', 'this_month'=>45 }
+          { 'signature'=>'Mr. George Lucas', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45 }
+
+        %>
+
+        <%# teacher_sigs = ['Ms. JK Rowling', 'Mr. Mark Twain', 'Ms. Jennifer Hudson', 'Mr. George Lucas'] %>
+        <%# dates = ['Jul 31, 1965', 'Nov 30, 1835', 'Dec 18, 1946', 'May 14, 1944'] %>
+
+        <div class="panel panel-default table-body">
+
+          <div class="table-responsive pure-u-12-24 teacher-table-responsive">
+            <table class="table data teacher-table">
+              <tbody>
+
+                  <tr class="teacher-info" id='1'>
+                    <th class="teacher-name">Ms. JK Rowling</th>
+                    <th>Jul 31, 1965</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='2'>
+                    <th class="teacher-name">Mr. Mark Twain</th>
+                    <th>Nov 30, 1835</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='4'>
+                    <th class="teacher-name">Ms. Jennifer Hudson</th>
+                    <th>Sep 12, 1981</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='5'>
+                    <th class="teacher-name">Mr. George Lucas</th>
+                    <th>Dec 18, 1946</th>
+                  </tr>
+              </tbody>
+            </table>
+
+            <div class="leftover-space"></div>
+
+          </div>
+        
+          <div class="pure-u-12-24 the-data">
+            <div class="default-teacher-info" style="display: none;">
+                <h2>
+                  Click on a classroom to see how they're reading!
+                </h2>
+            </div>
+
+            <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+            <% icon_index = 0 %>
+
+            <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+              <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;">
+                <div class="teacher-imgs">
+                  <div class="teacher-modal-btn" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
+                    <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
+                    <img src="/images/right-arrow.png" alt="" class="right-arrow">
+                  </div>
+                </div>
+                <div class="family-header">
+                  <% icon_index = (icon_index + 1) % icons.length %>
+                  <div class="teacher-name">
+                    <h3><%= teacher['signature'] %></h3>
+                    <h3 id="bottom-mofo">   <%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
+                  </div>
+                </div>
+
+                <div class="pure-g stats-user">
+                    <div class="pure-u-1-2">
+                      <div class="stats user" style="margin-left: 3em;">
+                        <h1><%= teacher['this_month'] %></h1>
+                        <p>Books</p>
+                        <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
+                      </div>
+                    </div>
+                    <div class="pure-u-1-2">
+                      <div class="stats user" style="margin-right: 3em;">
+                        <h1 style="display: inline-block;"><%= teacher['reading_time'] %></h1>
+                        <p>Minutes</p>
+                        <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
+                      </div>
+                    </div>
+                </div> <%# end nested pure-g %>
+
+              </div>
+            <% end %>
+
+          </div>
+        </div> <%# panel-default table-body %>
+
+            
+
+
+      </div> <%# big-daddy-data %>
