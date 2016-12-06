@@ -88,6 +88,21 @@
 
       });
 
+      $(document).ready(function() {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+
+        if (isSafari) {
+          // $('.table-responsive').css('direction', 'ltr');
+          document.styleSheets[0].addRule('.table-responsive::-webkit-scrollbar','width: 0');
+          $('th.teacher-name').css('padding-left', '2em');
+          $('th.teacher-name').next('th').css('padding-left', '2em');
+          $('th.user-name').css('padding-left', '2em');
+
+          // $('-webkit-scrollbar').css('width', '0 !important');
+        }
+
+      });
+
 
       $(document).ready(function () {
         $('.user-info').click(function(event) {

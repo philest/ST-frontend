@@ -70,6 +70,15 @@ get '/' do
   end
 end
 
+get '/test_dashboard' do
+  session[:admin] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
+  session[:school] = {"id"=>39, "name"=>"Rocky Mountain Prep", "code"=>"RMP|RMP-es", "signature"=>"RMP"}
+  get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
+  data = HTTParty.get("#{get_url}/teachers/#{session[:admin]['id']}")
+  puts "data dashboard = #{data.body.inspect}"
+  erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
+end
+
 
 get '/user_exists' do
   puts "params=#{params}"
@@ -104,6 +113,7 @@ get '/admin_dashboard' do
     redirect to '/'
   end
   puts "session[:admin] = #{session[:admin]}"
+  puts "session[:school] = #{session[:school]}"
   get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
   data = HTTParty.get("#{get_url}/teachers/#{session[:admin]['id']}")
   puts "data dashboard = #{data.body.inspect}"
