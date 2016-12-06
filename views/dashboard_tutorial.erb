@@ -1,3 +1,11 @@
+<% tutorial_teachers = [
+  { 'signature'=>'Ms. JK Rowling', 'num_families'=>5, 'reading_time'=>123, 'id'=>'1', 'this_month'=>45, 'joined'=>'Jul 31, 1965' },
+  { 'signature'=>'Ms. Jennifer Hudson', 'num_families'=>4, 'reading_time'=>123, 'id'=>'2', 'this_month'=>45, 'joined'=> 'Nov 30, 1835' },
+  { 'signature'=>'Mr. Mark Twain', 'num_families'=>5, 'reading_time'=>123, 'id'=>'3', 'this_month'=>45, 'joined'=> 'Sep 12, 1981' },
+  { 'signature'=>'Mr. George Lucas', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45, 'joined'=> 'Dec 18, 1946' }
+  ]
+%>
+
 <div class="pure-g welcome">
       <div class="pure-u-1-3">
         <img class="apple" src="/images/schoolhouse-icon.png" alt="" style="width: 150px; margin-right: -12px;">
@@ -8,7 +16,8 @@
       <div class="pure-u-1-3 paper-plane">
         <div class="stats-wrapper">
           <div class="stats total" style="text-align: center;">
-            <h1>455</h1>
+            <% weekly_books = tutorial_teachers.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
+            <h1><%= weekly_books %></h1>
             <p>Books</p>
             <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
           </div>
@@ -19,7 +28,7 @@
 
         <div class="stats-wrapper" style="text-align: left;">
           <div class="stats total">
-            <h1> 689 </h1>
+            <h1><%= tutorial_teachers.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %></h1>
             <p>Minutes</p>
             <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
           </div>
@@ -45,13 +54,7 @@
         </div>
 
 
-        <% teachers = 
-          { 'signature'=>'Ms. JK Rowling', 'num_families'=>5, 'reading_time'=>123, 'id'=>'1', 'this_month'=>45 },
-          { 'signature'=>'Ms. Jennifer Hudson', 'num_families'=>4, 'reading_time'=>123, 'id'=>'2', 'this_month'=>45 }
-          { 'signature'=>'Mr. Mark Twain', 'num_families'=>5, 'reading_time'=>123, 'id'=>'3', 'this_month'=>45 }
-          { 'signature'=>'Mr. George Lucas', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45 }
 
-        %>
 
         <%# teacher_sigs = ['Ms. JK Rowling', 'Mr. Mark Twain', 'Ms. Jennifer Hudson', 'Mr. George Lucas'] %>
         <%# dates = ['Jul 31, 1965', 'Nov 30, 1835', 'Dec 18, 1946', 'May 14, 1944'] %>
@@ -61,8 +64,14 @@
           <div class="table-responsive pure-u-12-24 teacher-table-responsive">
             <table class="table data teacher-table">
               <tbody>
+                <% tutorial_teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+                        <tr class="teacher-info" id=<%= teacher['id'] %> >
+                          <th class="teacher-name"><%= teacher['signature'] %></th>
+                          <th><%= teacher['joined'] %></th>
+                        </tr>
+                <% end %>
 
-                  <tr class="teacher-info" id='1'>
+            <!--       <tr class="teacher-info" id='1'>
                     <th class="teacher-name">Ms. JK Rowling</th>
                     <th>Jul 31, 1965</th>
                   </tr>
@@ -80,7 +89,7 @@
                   <tr class="teacher-info" id='5'>
                     <th class="teacher-name">Mr. George Lucas</th>
                     <th>Dec 18, 1946</th>
-                  </tr>
+                  </tr> -->
               </tbody>
             </table>
 
@@ -98,7 +107,7 @@
             <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
             <% icon_index = 0 %>
 
-            <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+            <% tutorial_teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
               <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;">
                 <div class="teacher-imgs">
                   <div class="teacher-modal-btn" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
