@@ -15,10 +15,10 @@ body.hide-scroll.destroy-padding#override {
   padding-right: 0px;
 }*/
 
-.modal-body iframe{
+.modal-body iframe {
         margin: 0 auto;
         display: block;
-    }
+}
 
 #videoModal .modal-body {
   padding: 0px;
@@ -31,7 +31,6 @@ button.close#videoExitButton {
   right: 8px;
   font-size: 40px;
   color:white;
-
 }
 
 /***** Mobile! ******/
