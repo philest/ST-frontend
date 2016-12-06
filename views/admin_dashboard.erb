@@ -419,6 +419,9 @@
                             <div class="table-input-body">
                               <input type="hidden" name="school_id" value=<%= session[:school]['id'] %> />
                               <input type="hidden" name="admin_id" value=<%= session[:admin]['id'] %> />
+
+                              <input type="hidden" name="school_sig" value=<%= session[:school]['signature'].delete(' ') %> />
+                              <input type="hidden" name="admin_sig" value=<%= session[:admin]['signature'].delete(' ') %> />
                               <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
                                 <span class="table-input-body-row">
                                   <span class="table-input-cell-validation table-input-cell">
