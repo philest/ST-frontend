@@ -80,6 +80,8 @@ get '/test_dashboard' do
 end
 
 
+
+
 get '/user_exists' do
   puts "params=#{params}"
 
@@ -173,6 +175,68 @@ post '/signup/spreadsheet' do
             :body => "Check it out. #{filename}")
   flash[:spreadsheet] = "Congrats! We'll send your class a text in a few days."
   redirect to '/signup/spreadsheet'
+
+end
+
+
+# http://localhost:4567/signin?admin=david.mcpeek@yale.edu&school=rmp
+
+get '/signin' do
+  puts "signin params = #{params}"
+  admin_email = params['admin']
+  school_code = params['school']
+
+  # admin = Admin.where(email: admin_email).first
+  sig = HTTParty.get(
+    "#{ENV['enroll_url']}/admin_sig",
+    query: {
+      email: admin_email
+    }
+  )
+  puts "sig  = #{sig.inspect}"
+
+
+  if sig.response.code.to_i == 404
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+  end
+
+  post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
+  puts "post_url = #{post_url}"
+  data = HTTParty.post(
+    "#{post_url}/signup", 
+    body: {
+      signature: sig,
+      email: admin_email,
+      password: school_code
+    }
+  )
+  puts "data = #{data.code.inspect}"
+
+  if data.code == 500 or data.code == 501
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+    # return 
+  end
+
+  data = JSON.parse(data)
+
+  puts data
+
+  if data["secret"] != 'our little secret'
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+  end
+
+  # puts params
+  session[:teacher] = data['teacher']
+  session[:school]  = data['school']
+  session[:users]   = data['users']
+  session[:admin]   = data['admin']
+
+  puts session.inspect
+
+  redirect to '/signup'
 
 end
 
