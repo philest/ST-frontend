@@ -74,6 +74,10 @@ img.apple {
   /*padding-top: 0.8em;*/
 }
 
+img#schoolhouse.apple {
+  margin-right: -10px;
+}
+
 
 h3.apple {
   clear: right;
@@ -1046,6 +1050,11 @@ thead {
     padding-right: 12px;
     width: 120px;
   }
+
+  /*img#schoolhouse {
+    padding-right: 10px;
+    width: 150px;
+  }*/
 
   #bs-override th.user-name {
     word-wrap: break-word;
