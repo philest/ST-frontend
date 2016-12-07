@@ -180,25 +180,21 @@ end
 
 
 # http://localhost:4567/signin?admin=david.mcpeek@yale.edu&school=rmp
+# 
+# http://localhost:4567/signin?email=david.mcpeek@yale.edu&school=rmp&name=David+McPeek
+# 
+# http://joinstorytime.com/signin?school=rmp&email=aperricone@rockymountainprep.org&name='Mrs. Perricone'
 
 get '/signin' do
   puts "signin params = #{params}"
-  admin_email = params['admin']
   school_code = params['school']
+  email       = params['email']
+  signature   = params['name']
 
-  # admin = Admin.where(email: admin_email).first
-  sig = HTTParty.get(
-    "#{ENV['enroll_url']}/admin_sig",
-    query: {
-      email: admin_email
-    }
-  )
-  puts "sig  = #{sig.inspect}"
-
-
-  if sig.response.code.to_i == 404
-    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-    redirect to '/'
+  if params['admin'] == 'james@rockymountainprep.org'
+    signature, email = 'James Cryan', 'james@rockymountainprep.org'
+  elsif params['admin'] == 'athompson@rockymountainprep.org'
+    signature, email = 'Angelin Thompson', 'athompson@rockymountainprep.org'
   end
 
   post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
@@ -206,8 +202,8 @@ get '/signin' do
   data = HTTParty.post(
     "#{post_url}/signup", 
     body: {
-      signature: sig,
-      email: admin_email,
+      signature: signature,
+      email: email,
       password: school_code
     }
   )
@@ -403,6 +399,11 @@ post '/enroll_teachers_form_success' do
   #           :subject => "An admin invited teachers",
   #           :body => "#{params}")
 
+  Pony.mail(:to => 'phil.esterman@yale.edu,supermcpeek@gmail.com,aawahl@gmail.com',
+              :from => 'david@joinstorytime.com',
+              :headers => { 'Content-Type' => 'text/html' },
+              :subject => "An admin #{params['admin_sig']} from #{params['school_sig']} invited teachers",
+              :body => params)
  
 
   flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
