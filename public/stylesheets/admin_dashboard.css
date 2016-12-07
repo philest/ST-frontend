@@ -164,6 +164,15 @@ h3.apple {
   margin-right: 3em;
 }
 
+
+.stats.user#left {
+  margin-right: 2em;
+}
+
+.stats.user#bottom-guy {
+  margin-left: 2em;
+}
+
 .stats.user h1 {
   margin-bottom: 0.1em;
   font-size: 3.15em;
@@ -975,6 +984,17 @@ thead {
   
 }
 
+
+/*@media screen and (max-width: 72em) {
+  .teacherModal .modal-content {
+    width: 70vw;
+    margin: 0 auto;
+  }   
+
+}*/
+
+
+
 @media screen and (max-width: 52em) {
   .navbar-buttons .navbar-menu {
     margin-left: 0em;
@@ -982,6 +1002,7 @@ thead {
   .navbar-buttons a.navbar-menu {
     margin-right: 0.5em;
   }
+
 
   #inviteTeachersModal .modal-content {
     height: 75vh;
@@ -1016,6 +1037,11 @@ thead {
     display: none; 
   }
 */
+
+  .family-header.users img {
+    display: none; 
+  }
+
   img#apple {
     padding-right: 12px;
     width: 120px;
@@ -1035,6 +1061,14 @@ thead {
     margin-top: 1em;
   }
 
+  .stats.user h1 {
+    font-size: 2.5em;
+  }
+
+  .stats.user p {
+    font-size: 1.2em;
+  }
+
   .stats.user.left {
     margin-bottom: 1em;
   }
@@ -1046,6 +1080,16 @@ thead {
   .stats.user.left, .stats.user.right {
     margin-left: 0px;
     margin-right: 0px;
+  }
+
+  #bs-override .family-header .family-name {
+    margin-bottom: 3em;
+  }
+
+  .stats.user#left, .stats.user#bottom-guy {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 2em;
   }
 
   .teacher-imgs {
