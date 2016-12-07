@@ -482,7 +482,7 @@
   </div>
 
   <div class="pure-g welcome">
-      <div class="pure-u-1-3">
+      <div class="pure-u-sm-1-3 pure-u-1">
         <% if users.size == 0 %>
           <h2><b>Welcome!</b></h2>
           <h3><i>Let's start by inviting your class.</i></h3>
@@ -499,7 +499,7 @@
         </div>
 
       <% else %>
-        <div class="pure-u-1-3 paper-plane">
+        <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
           <div class="stats-wrapper">
             <div class="stats total" style="text-align: center;">
               <% weekly_books = users.inject(0) {|sum, user| sum += user['this_month'] } %>
@@ -510,7 +510,7 @@
           </div>
           
         </div>
-        <div class="pure-u-1-3 paper-plane">
+        <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
 
           <div class="stats-wrapper" style="text-align: left;">
             <div class="stats total">
@@ -525,10 +525,10 @@
     
   </div>
 
-  <div class="mobile-welcome">
+<!--   <div class="mobile-welcome">
     <h2><b>Welcome back!</b></h2>
     <h3><i>Your class is reading great!</i></h3>
-  </div>
+  </div> -->
 
   
       <div class="big-daddy-data">
