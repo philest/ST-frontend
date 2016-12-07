@@ -281,7 +281,7 @@
               <% if users.size > 0 %>
                   <div class="panel panel-default table-body">
                  
-                    <div class="table-responsive pure-u-2-5 pure-u-sm-1-2">
+                    <div class="table-responsive pure-u-2-5">
                       <table class="table data">
                         <tbody>
                           <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
@@ -299,7 +299,7 @@
                       </table>
                     </div>
                   
-                    <div class="pure-u-2-5 pure-u-sm-1-2 the-data">
+                    <div class="pure-u-3-5 the-data">
                       <div class="default-user-info" style="display: none;">
                           <h2>
                             Click on a family to see how they're reading!
@@ -330,12 +330,12 @@
                             </div>
                           </div>
 
-                          <div class="stats user" style="margin-right: 2em;">
+                          <div class="stats user" id="left">
                             <h1><%= user['this_month'] %></h1>
                             <p>Books</p>
                             <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
                           </div>
-                          <div class="stats user" id="bottom-guy" style="margin-left: 2em;">
+                          <div class="stats user" id="bottom-guy">
 
                             <h1 style="display: inline-block;"><%= (user['this_month'] * 4.6).ceil %></h1>
                             <p>Minutes</p>
