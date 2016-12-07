@@ -67,6 +67,9 @@
 img.apple {
   float: right;
   padding-right: 1.5em;
+
+  width: 150px; 
+  margin-right: -12px;
   /*width: 200px;*/
   /*padding-top: 0.8em;*/
 }
@@ -79,6 +82,8 @@ h3.apple {
 .paper-plane {
   padding-top: 1em;
 }
+
+
 
 /*img#paper-plane {
   margin-top: -2em;
@@ -148,6 +153,14 @@ h3.apple {
 
 .stats.user {
   margin-top: 0em;
+}
+
+.stats.user.left {
+  margin-left: 3em;
+}
+
+.stats.user.right {
+  margin-right: 3em;
 }
 
 .stats.user h1 {
@@ -422,12 +435,16 @@ h3.apple {
   direction:rtl; 
 }
 
-#bs-override .table-responsive.pure-u-12-24 {
+#bs-override .table-responsive.pure-u-1-2 {
+  margin-right: -4px;
+}
+
+#bs-override .table-responsive.pure-u-2-5 {
   margin-right: -4px;
 }
 
 #bs-override .table-responsive .table.data {
-  direction: ltr; 
+  direction: ltr;
 
 }
 .table-responsive .table.data th{
@@ -987,7 +1004,7 @@ thead {
 }
 
 @media screen and (max-width: 35.5em) {
-  .paper-plane {
+/*  .paper-plane {
     display: none;
   }
   .pure-u-1-2 {
@@ -996,6 +1013,79 @@ thead {
 
   .pure-g.welcome {
     display: none; 
+  }
+*/
+
+  #bs-override th.user-name {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .page-header {
+    margin-top: 40px;
+  }
+
+  .stats-user {
+    margin-top: 1em;
+  }
+
+  .stats.user.left {
+    margin-bottom: 1em;
+  }
+
+  .the-whole-teacher-thing {
+    margin-top: 0px;
+  }
+
+  .stats.user.left, .stats.user.right {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .teacher-imgs {
+    display: none;
+  }
+
+  .table-responsive {
+    overflow-y: scroll;
+  }
+
+  .table.fields th {
+    padding-left: 8px;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  .pure-g.welcome {
+    margin-bottom: 3em;
+  }
+
+  .date-joined {
+    display: none;
+  }
+
+  #bs-override .pure-g .pure-u-1 img.apple {
+    padding-right: 0;
+    margin: 0 auto;
+    margin-right: 0px;
+    text-align: center;
+    float: none;
+  }
+
+  h3.apple {
+    text-align: center;
+  }
+
+  .stats-wrapper .stats.total {
+    display: block;
+    text-align: center;
+  }
+
+  .paper-plane {
+    padding-top: 2em;
   }
 
   .mobile-welcome {
@@ -1006,8 +1096,8 @@ thead {
     width: 80%;
     height: 15em;
 
-    background-color: white;
-    background: url('/images/paper-plane.png') no-repeat center; 
+    /*background-color: white;*/
+    /*background: url('/images/paper-plane.png') no-repeat center; */
   }
 
   .page-header h1, .navbar-buttons {

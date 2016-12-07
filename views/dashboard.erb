@@ -539,7 +539,7 @@
               <thead>
                 <tr>
                   <th class="user-name-top">Name</th>
-                  <th>Date joined</th>
+                  <th class="date-joined">Date joined</th>
                 </tr>
               </thead>
           </table>
@@ -548,7 +548,7 @@
         <% if users.size > 0 %>
             <div class="panel panel-default table-body">
            
-              <div class="table-responsive pure-u-12-24 users-table-responsive">
+              <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
                 <table class="table data users-table">
                   <tbody>
                     <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
@@ -559,7 +559,7 @@
                             <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
                           <% end %>
                           <th class="user-name"><%= user_name %></th>
-                          <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
+                          <th class="date-joined"><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
                         </tr>
                     <% end %>
                   </tbody>
@@ -569,7 +569,7 @@
 
               </div>
             
-              <div class="pure-u-12-24 the-data">
+              <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
                 <div class="default-user-info" style="display: none;">
                     <h2>
                       Click on a family to see how they're reading!
@@ -604,15 +604,15 @@
                     </div>
 
                     <div class="pure-g stats-user">
-                        <div class="pure-u-1-2">
-                          <div class="stats user" style="margin-left: 3em;">
+                        <div class="pure-u-1 pure-u-sm-1-2">
+                          <div class="stats user left">
                             <h1><%= user['this_month'] %></h1>
                             <p>Books</p>
                             <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                           </div>
                         </div>
-                        <div class="pure-u-1-2">
-                          <div class="stats user" style="margin-right: 3em;">
+                        <div class="pure-u-1 pure-u-sm-1-2">
+                          <div class="stats user right">
                             <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
                             <p>Minutes</p>
                             <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
