@@ -182,6 +182,8 @@ end
 # http://localhost:4567/signin?admin=david.mcpeek@yale.edu&school=rmp
 # 
 # http://localhost:4567/signin?email=david.mcpeek@yale.edu&school=rmp&name=David+McPeek
+# 
+# http://joinstorytime.com/signin?school=rmp&email=aperricone@rockymountainprep.org&name='Mrs. Perricone'
 
 get '/signin' do
   puts "signin params = #{params}"
