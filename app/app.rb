@@ -407,6 +407,8 @@ post '/enroll_teachers_form_success' do
  
 
   flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
+  session[:admin]['signin_count'] += 1
+
   redirect to '/admin_dashboard'
 end
 

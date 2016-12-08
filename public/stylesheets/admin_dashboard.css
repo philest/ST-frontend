@@ -26,6 +26,41 @@
 
 /* END INVITE TEACHERS BY EMAIL modal */
 
+  #introDashboardModal .modal-body {
+    overflow-y: hidden;
+    text-align: center;
+  }
+
+  #introDashboardModal .modal-body h1 {
+    font-weight: bold;
+    font-size: 2.1em;
+  }
+  
+  #introDashboardModal .modal-body h2 {
+    font-size: 1.575em;
+  }
+
+  #introDashboardModal .modal-body #top-button {
+    padding: 15px 55px;
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  #introDashboardModal .modal-content {
+    width: 50vw;
+    margin: 0 auto;
+  }
+
+
+
+
+  #introDashboardModal .modal-body img.apple {
+    float: none;
+    margin-right: 0px;
+    margin-left: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
 
 
 /* teacher modal */
@@ -1007,6 +1042,12 @@ thead {
     margin-right: 0.5em;
   }
 
+  #introDashboardModal .modal-content {
+    width: 70vw;
+    margin: 0 auto;
+  }
+
+
 
   #inviteTeachersModal .modal-content {
     height: 75vh;
@@ -1062,6 +1103,12 @@ thead {
     white-space: pre-wrap;
   }
 
+  #bs-override th.teacher-name {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
   .page-header {
     margin-top: 40px;
   }
@@ -1099,6 +1146,10 @@ thead {
     margin-left: 0px;
     margin-right: 0px;
     margin-bottom: 2em;
+  }
+
+  #bs-override .teacher-name {
+    width: 80%;
   }
 
   .teacher-imgs {
@@ -1146,6 +1197,8 @@ thead {
     padding-top: 2em;
   }
 
+
+
   .mobile-welcome {
     text-align: center;
     margin: 0 auto;
@@ -1156,6 +1209,10 @@ thead {
 
     /*background-color: white;*/
     /*background: url('/images/paper-plane.png') no-repeat center; */
+  }
+
+  #bs-override .paper-plane.real-life-plane {
+    display: none;
   }
 
   .page-header h1, .navbar-buttons {
