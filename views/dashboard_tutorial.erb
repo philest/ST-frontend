@@ -2,18 +2,42 @@
   { 'signature'=>'Ms. JK Rowling', 'num_families'=>5, 'reading_time'=>123, 'id'=>'1', 'this_month'=>45, 'joined'=>'Jul 31, 1965' },
   { 'signature'=>'Ms. Jennifer Hudson', 'num_families'=>4, 'reading_time'=>123, 'id'=>'2', 'this_month'=>45, 'joined'=> 'Nov 30, 1835' },
   { 'signature'=>'Mr. Mark Twain', 'num_families'=>5, 'reading_time'=>123, 'id'=>'3', 'this_month'=>45, 'joined'=> 'Sep 12, 1981' },
-  { 'signature'=>'Mr. George Lucas', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45, 'joined'=> 'Dec 18, 1946' }
+  { 'signature'=>'Mr. Brad Pitt', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45, 'joined'=> 'Dec 18, 1969' },
+  { 'signature'=>'Ms. Beyonce Knowles', 'num_families'=>5, 'reading_time'=>123, 'id'=>'5', 'this_month'=>45, 'joined'=>'Sep 4, 1981' },
   ]
 %>
 
+<script type="text/javascript">
+  $(window).load(function(){
+    $('#introDashboardModal').modal('show');
+  });
+</script>
+
+  <!-- Invite teachers Modal -->
+  <div class="modal fade" id="introDashboardModal" role="dialog" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h1>Here's an example school on StoryTime</h1>
+          <img class="apple" src="/images/schoolhouse-icon.png" alt="" style="width: 150px; margin-right: -12px;">
+          <h2>Invite teachers to make it yours!</h2>
+          <button type="button" style="display: block; text-align: center; margin: 1em auto;" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-dismiss="modal" data-target="#introDashboardModal">
+                  Okay!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> <%# end invite teachers modal %>
+
+
 <div class="pure-g welcome">
-      <div class="pure-u-1-3">
+      <div class="pure-u-sm-1-3 pure-u-1">
         <img class="apple" src="/images/schoolhouse-icon.png" alt="" style="width: 150px; margin-right: -12px;">
         <h3 class="apple">School Totals</h3>
       </div>
 
 
-      <div class="pure-u-1-3 paper-plane">
+      <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
         <div class="stats-wrapper">
           <div class="stats total" style="text-align: center;">
             <% weekly_books = tutorial_teachers.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
@@ -24,7 +48,7 @@
         </div>
         
       </div>
-      <div class="pure-u-1-3 paper-plane">
+      <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
 
         <div class="stats-wrapper" style="text-align: left;">
           <div class="stats total">
@@ -47,27 +71,24 @@
               <thead>
                 <tr>
                   <th class="user-name-top">Name</th>
-                  <th>Date joined</th>
+                  <th class="date-joined">Date joined</th>
                 </tr>
               </thead>
           </table>
         </div>
-
-
-
 
         <%# teacher_sigs = ['Ms. JK Rowling', 'Mr. Mark Twain', 'Ms. Jennifer Hudson', 'Mr. George Lucas'] %>
         <%# dates = ['Jul 31, 1965', 'Nov 30, 1835', 'Dec 18, 1946', 'May 14, 1944'] %>
 
         <div class="panel panel-default table-body">
 
-          <div class="table-responsive pure-u-12-24 teacher-table-responsive">
+          <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 teacher-table-responsive">
             <table class="table data teacher-table">
               <tbody>
                 <% tutorial_teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
                         <tr class="teacher-info" id=<%= teacher['id'] %> >
                           <th class="teacher-name"><%= teacher['signature'] %></th>
-                          <th><%= teacher['joined'] %></th>
+                          <th class="date-joined"><%= teacher['joined'] %></th>
                         </tr>
                 <% end %>
 
@@ -97,7 +118,7 @@
 
           </div>
         
-          <div class="pure-u-12-24 the-data">
+          <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
             <div class="default-teacher-info" style="display: none;">
                 <h2>
                   Click on a classroom to see how they're reading!
@@ -124,15 +145,15 @@
                 </div>
 
                 <div class="pure-g stats-user">
-                    <div class="pure-u-1-2">
-                      <div class="stats user" style="margin-left: 3em;">
+                    <div class="pure-u-1 pure-u-sm-1-2">
+                      <div class="stats user left">
                         <h1><%= teacher['this_month'] %></h1>
                         <p>Books</p>
                         <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                       </div>
                     </div>
-                    <div class="pure-u-1-2">
-                      <div class="stats user" style="margin-right: 3em;">
+                    <div class="pure-u-1 pure-u-sm-1-2">
+                      <div class="stats user right">
                         <h1 style="display: inline-block;"><%= teacher['reading_time'] %></h1>
                         <p>Minutes</p>
                         <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
