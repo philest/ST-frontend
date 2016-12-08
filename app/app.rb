@@ -412,6 +412,14 @@ post '/enroll_teachers_form_success' do
   redirect to '/admin_dashboard'
 end
 
+get '/teacher/visited_page' do
+  session[:teacher]['signin_count'] += 1
+end
+
+get '/reset' do
+  session[:teacher]['signin_count'] = 0
+end
+
 post '/enroll_families_form_success' do 
 
   enroll_families(params)
