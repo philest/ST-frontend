@@ -1,0 +1,184 @@
+<% tutorial_users = [
+  { 'signature'=>'Ms. JK Rowling', 'last_name'=> 'Rowling', 'num_families'=>5, 'reading_time'=>123, 'id'=>'1', 'this_month'=>45, 'joined'=>'Jul 31, 1965' },
+  { 'signature'=>'Ms. Jennifer Hudson', 'last_name'=> 'Hudson', 'num_families'=>4, 'reading_time'=>123, 'id'=>'2', 'this_month'=>45, 'joined'=> 'Nov 30, 1835' },
+  { 'signature'=>'Mr. Mark Twain', 'last_name'=> 'Twain', 'num_families'=>5, 'reading_time'=>123, 'id'=>'3', 'this_month'=>45, 'joined'=> 'Sep 12, 1981' },
+  { 'signature'=>'Mr. Brad Pitt', 'last_name'=> 'Pitt', 'num_families'=>5, 'reading_time'=>123, 'id'=>'4', 'this_month'=>45, 'joined'=> 'Dec 18, 1969' },
+  { 'signature'=>'Ms. Beyonce Knowles', 'last_name'=> 'Knowles', 'num_families'=>5, 'reading_time'=>123, 'id'=>'5', 'this_month'=>45, 'joined'=>'Sep 4, 1981' },
+  ]
+%>
+
+<script type="text/javascript">
+  $(window).load(function(){
+    $('#introDashboardModal').modal('show');
+  });
+</script>
+
+  <!-- Invite teachers Modal -->
+  <div class="modal fade" id="introDashboardModal" role="dialog" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-body">
+          <h1>Here's an example classroom on StoryTime</h1>
+          <img class="apple" src="/images/fresh-apple-icon.png" alt="" style="width: 150px;">
+          <h2>Invite families to make it yours!</h2>
+          <button type="button" style="display: block; text-align: center; margin: 1em auto;" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-dismiss="modal" data-target="#introDashboardModal">
+                  Okay!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> <%# end invite teachers modal %>
+
+
+<div class="pure-g welcome">
+      <div class="pure-u-sm-1-3 pure-u-1">
+        <img class="apple" src="/images/fresh-apple-icon.png" alt="" style="width: 150px;">
+        <h3 class="apple">Class Totals</h3>
+      </div>
+
+
+      <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
+        <div class="stats-wrapper">
+          <div class="stats total" style="text-align: center;">
+            <% weekly_books = tutorial_users.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
+            <h1><%= weekly_books %></h1>
+            <p>Books</p>
+            <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
+          </div>
+        </div>
+        
+      </div>
+      <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
+
+        <div class="stats-wrapper" style="text-align: left;">
+          <div class="stats total">
+            <h1><%= tutorial_users.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %></h1>
+            <p>Minutes</p>
+            <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
+          </div>
+        </div>
+      </div>
+
+
+    
+</div>
+
+<div class="big-daddy-data">
+        <h4>Example Classroom</h4>
+
+         <div class="panel panel-default header">
+          <table class="table fields">
+              <thead>
+                <tr>
+                  <th class="user-name-top">Name</th>
+                  <th class="date-joined">Date joined</th>
+                </tr>
+              </thead>
+          </table>
+        </div>
+
+        <%# teacher_sigs = ['Ms. JK Rowling', 'Mr. Mark Twain', 'Ms. Jennifer Hudson', 'Mr. George Lucas'] %>
+        <%# dates = ['Jul 31, 1965', 'Nov 30, 1835', 'Dec 18, 1946', 'May 14, 1944'] %>
+
+        <div class="panel panel-default table-body">
+
+          <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 user-table-responsive">
+            <table class="table data user-table">
+              <tbody>
+                <% tutorial_users.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |user| %>
+                        <tr class="user-info" id=<%= user['id'] %> >
+                          <th class="user-name"><%= user['signature'] %></th>
+                          <th class="date-joined"><%= user['joined'] %></th>
+                        </tr>
+                <% end %>
+
+            <!--       <tr class="teacher-info" id='1'>
+                    <th class="teacher-name">Ms. JK Rowling</th>
+                    <th>Jul 31, 1965</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='2'>
+                    <th class="teacher-name">Mr. Mark Twain</th>
+                    <th>Nov 30, 1835</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='4'>
+                    <th class="teacher-name">Ms. Jennifer Hudson</th>
+                    <th>Sep 12, 1981</th>
+                  </tr>
+
+                  <tr class="teacher-info" id='5'>
+                    <th class="teacher-name">Mr. George Lucas</th>
+                    <th>Dec 18, 1946</th>
+                  </tr> -->
+              </tbody>
+            </table>
+
+            <div class="leftover-space"></div>
+
+          </div>
+        
+          <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+            <div class="default-teacher-info" style="display: none;">
+                <h2>
+                  Click on a classroom to see how they're reading!
+                </h2>
+            </div>
+
+            <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+            <% icon_index = 0 %>
+
+            <% tutorial_users.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |user| %>
+              <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none;">
+                <div class="user-imgs">
+                  <div class="user-modal-btn" data-toggle="modal" data-target="#userModal-<%= user['id'] %>">
+                    <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="user-img">
+                    <!-- <img src="/images/right-arrow.png" alt="" class="right-arrow"> -->
+                  </div>
+                </div>
+                <div class="family-header">
+                  <!-- <img src="/images/<%= icons[icon_index] %>-icon.png" alt=""> -->
+                  <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
+                  <% icon_index = (icon_index + 1) % icons.length %>
+                  <div class="family-name">
+                    <% if user['last_name'] %>
+                      <% family_name = user['last_name'] %>
+                    <% elsif user['first_name'] %>
+                      <% family_name = user['first_name'] + "'s" %>
+                    <% else %>
+                      <% family_name = "unnamed" %>
+                    <% end %>
+
+                    <h3><%= family_name %></h3>
+                    <h3>Family</h3>
+
+                  </div>
+                </div>
+
+                <div class="pure-g stats-user">
+                    <div class="pure-u-1 pure-u-sm-1-2">
+                      <div class="stats user left">
+                        <h1><%= user['this_month'] %></h1>
+                        <p>Books</p>
+                        <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
+                      </div>
+                    </div>
+                    <div class="pure-u-1 pure-u-sm-1-2">
+                      <div class="stats user right">
+                        <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                        <p>Minutes</p>
+                        <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
+                      </div>
+                    </div>
+                </div> <%# end nested pure-g %>
+
+              </div>
+            <% end %>
+
+          </div>
+        </div> <%# panel-default table-body %>
+
+            
+
+
+      </div> <%# big-daddy-data %>
