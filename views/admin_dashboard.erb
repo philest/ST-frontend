@@ -459,7 +459,7 @@
     </div>
   </div> <%# end invite teachers modal %>
 
-  <% if session[:educator]['signin_count'] == 0 # the admin has never signed in  %>
+  <% if session[:educator]['signin_count'] == 0 and teachers.select {|t| t['num_families'] > 0 }.size == 0 # the admin has never signed in  %>
       <%= erb :dashboard_tutorial %>
 
   <% else # the admin has signed in before %>

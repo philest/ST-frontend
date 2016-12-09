@@ -491,7 +491,7 @@
     </div>
   </div>
 
-  <% if session[:educator]['signin_count'] == 0 # the admin has never signed in  %>
+  <% if session[:educator]['signin_count'] == 0 and users.size == 0 # the admin has never signed in  %>
 
       <%= erb :dashboard_tutorial_teachers %>
 
