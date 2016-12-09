@@ -190,16 +190,22 @@ end
 
 
 # need to update this for new roles.....
+# need to have a role parameter
+# 
 get '/signin' do
   puts "signin params = #{params}"
   school_code = params['school']
   email       = params['email']
   signature   = params['name']
+  role        = params['role']
 
   if params['admin'] == 'james@rockymountainprep.org'
-    signature, email = 'James Cryan', 'james@rockymountainprep.org'
+    signature, email, role = 'James Cryan', 'james@rockymountainprep.org', 'admin'
   elsif params['admin'] == 'athompson@rockymountainprep.org'
-    signature, email = 'Angelin Thompson', 'athompson@rockymountainprep.org'
+    signature, email, role = 'Angelin Thompson', 'athompson@rockymountainprep.org', 'admin'
+  elsif params['email'].include? 'rockymountainprep' 
+    # everyone else at RMP's a teacher
+    role = 'teacher'
   end
 
   post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
@@ -209,7 +215,8 @@ get '/signin' do
     body: {
       signature: signature,
       email: email,
-      password: school_code
+      password: school_code,
+      role: role
     }
   )
   puts "data = #{data.code.inspect}"
@@ -234,6 +241,7 @@ get '/signin' do
   # session[:educator]  = data['teacher']
   session[:school]   = data['school']
   session[:users]    = data['users']
+  session[:role]     = data['role']
   # session[:educator]    = data['admin']
 
   puts session.inspect
