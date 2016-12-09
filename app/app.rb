@@ -313,6 +313,13 @@ get '/privacy' do
   erb :privacy_policy
 end
 
+get '/illustration-guide' do
+  redirect to "https://docsend.com/view/vnndn8z"
+end 
+
+get '/poetry-guide' do
+  redirect to "https://docsend.com/view/ij6bbnr"
+end 
 
 
 
