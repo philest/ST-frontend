@@ -1,3 +1,7 @@
+#chooseRoleModal .modal-body .pure-g {
+  margin: 0 auto;
+}
+
 body.hide-scroll#override {
     overflow: hidden;
     padding-right: 15px;

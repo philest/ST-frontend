@@ -72,16 +72,9 @@
 
 		<script type="text/javascript">
 			// signature modal
-			$(document).ready(function(){
-				// $("#modalSig").on("show", function () {
-				// 	console.log('showing modal!');
-				//   $("body").addClass("modal-open");
-				// }).on("hidden", function () {
-				//   $("body").removeClass("modal-open");
-				//   console.log('that shit\'s hidden');
-				// });
-
-			});
+			// $(window).load(function(){
+			// 	$('#chooseRoleModal').modal('toggle');
+			// });
 
 
 			$(document).ready(function(){
@@ -141,8 +134,8 @@
 						<li> <a href="https://storytime.zendesk.com">help</a></li>
 						<li class="navbar-button-item">
 							<a>
-								<% if session['teacher'].nil? %>
-									<!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal"> -->
+								<% if session['educator'].nil? %>
+									<!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#chooseRoleModal"> -->
 									<button id="top-button" class="pure-button-primary pure-button signup-button">
 									Log in
 									</button>
@@ -151,7 +144,6 @@
 										<button id="top-button" type="submit" class="pure-button-primary pure-button signup-button">
 											Log in
 										</button>
-
 									</form>
 								<% end %>
 							</a>
@@ -160,145 +152,14 @@
 				</div>
 			</nav>
 
-			<!-- Modal Video -->
-			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-			<div class="modal fade" id="videoModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-
-
-			      <div class="modal-body">
-               <button type="button" id="videoExitButton" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-								<iframe id="raynaVideo" width="100%" height="400" src="https://www.youtube.com/embed/fjwSdLfkPOg?modestbranding=1&autohide=1&showinfo=0" frameborder="0" allowfullscreen></iframe>
-
-			      </div>
-
-			  </div>
-			</div>
-			<!-- end Modal Signup-->
-
-
-			<!-- Modal Signup -->
-			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			        <div class="navbar-logo" id="modal-logo"></div>
-			      </div>
-			      <div class="modal-body">
-			        <h2 class="modal-signup-heading">Log in</h2>
-			        <h3 class="modal-signup-heading">to add your class</h3>
-
-			        <form id="teacher-info"> 
-				      	<div class="signup-setup">
-					        <div class="field" id="signup-field">
-								     <label class="label">Email</label>
-										<input name="email" placeholder="sarah.jones@ymca.org" class="input" required>
-											<label class="label">Password</label>
-										<input name="password" placeholder="your school passcode here" class="input" required>
-										</div>
-						        <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-primary get_update dialog-button">Log in</button> -->
-
-						        <button id="join" data-dismiss='modal' class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Log in</button>
-						 		</div>
-							</form>
-
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			<!-- end Modal Signup-->
-
-
-
-
-					<!-- Modal TeacherName -->
-			<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-			<div class="modal fade" id="modalSig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			  <div class="modal-dialog" role="document">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			        <div class="navbar-logo" id="modal-logo"></div>
-			      </div>
-			      <div class="modal-body">
-			        <h2 class="modal-signup-heading name-heading">What do parents call you?</h2>
-			        <p class="box-header-subtext">Only your class can see your name on StoryTime.</p>
-
-			         <form id='login' action='signin' method="post"> 
-			        <!-- <form id='login'> -->
-				      	<div class="signup-setup">
-					        <div class="field" id="signup-field">
-								     <label class="label">What parents call you</label>
-										<input name="signature" placeholder="Ms. Jones" class="input" required>
-										</div>
-						        <button id="join" class="signup-form-button pure-button pure-button-primary get_update dialog-button"> Continue</button>
-							 </div>
-							</form>
-			      </div>
-			    </div>
-			  </div>
-			</div>
-			<!-- end Modal Teachername-->
-
-<!-- Modal Demo -->
-<div class="modal fade" id="myDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="navbar-logo" id="modal-logo"></div>
-      </div>
-      <div class="modal-body">
-        <h2 class="modal-signup-heading">See Storytime for yourself</h2>
-	        <h3 class="demo-modal modal-subheading">Request a demo for your school or district.</h3>
-
-    			<form class = "enroll-teacher-class" id="demo-form" action="demo_success" method="post">
-				<div class="teacher-info-box">
-					<div class="setup-signature">
-					<div>
-					</div>
-						<div class="setup-signature-name">
-							<label class="label">First Name
-							</label>
-							<div class="field demo-field">
-								<input name="demo_first_name" class="input">
-							</div>
-						</div>
-						<div class="setup-signature-name">
-							<label class="label">Last Name
-							</label>
-							<div class="field demo-field">
-								<input name="demo_last_name" class="input">
-							</div>
-						</div>
-
-						<div class="setup-signature-email">
-							<label class="label">Email
-							</label>
-							<div class="field demo-field">
-								<input name="teacher_email" class="input">
-							</div>
-						</div>
-					</div>
-				</div>
-    
-	      	<div class="signup-setup">
-			        <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Submit</button>
-					</div>
-			</form>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- end Modal Demo-->
+	<!-- modals -->
+		<%= erb :'/modals/rayna-video' %>
+		<%= erb :'/modals/educator-login' %>
+		<%= erb :'/modals/school-role' %>
+		<%= erb :'modals/teacher-name' %>
+		<%= erb :'modals/admin-name' %>
+		<%= erb :'/modals/demo' %>
+	<!-- modals end -->
 
 			<div class="splash">
 				<div class="container" id="splash">

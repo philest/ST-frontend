@@ -218,7 +218,7 @@
     <div class="mobile-navbar">
       <a class="navbar-menu" href="/logout">Logout</a></li>
     </div>
-    <h1><%= session[:teacher]['signature'] %>'s Class</h1>
+    <h1><%= session[:educator]['signature'] %>'s Class</h1>
 
 
     <div class="navbar-buttons">
@@ -311,9 +311,9 @@
             </div>
 
                 <header class="box-header">
-                  <% code_english, code_spanish = session['teacher']['code'].split('|') %>
+                  <% code_english, code_spanish = session['educator']['code'].split('|') %>
                   <% school = session['school']['signature'] %>
-                  <% teacher = session['teacher']['signature'] + "-" + session['teacher']['t_number'].to_s %>
+                  <% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
                   <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
 
 
@@ -353,10 +353,10 @@
 
 
                   <div class="pure-g english-spanish-flyers">
-                      <% code_english = session['teacher']['code'].split('|').first %>
+                      <% code_english = session['educator']['code'].split('|').first %>
                       <% school = session['school']['signature'] %>
-                      <% teacher = session['teacher']['signature'] %>
-                      <% teacher_dir = teacher + "-" + session['teacher']['t_number'].to_s %>
+                      <% teacher = session['educator']['signature'] %>
+                      <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
                       <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
 
 
@@ -491,7 +491,7 @@
     </div>
   </div>
 
-  <% if session[:teacher]['signin_count'] == 0 # the admin has never signed in  %>
+  <% if session[:educator]['signin_count'] == 0 # the admin has never signed in  %>
 
       <%= erb :dashboard_tutorial_teachers %>
 

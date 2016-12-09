@@ -1,0 +1,85 @@
+<style>
+  #chooseRoleModal .pure-u-2-5 {
+    background-color: rgba(236, 239, 241, 0.54);
+    width: 48%;
+    border-color: rgba(236, 239, 241, 0.54);
+  /*border-top: none;*/
+    border-radius: 8px;
+  }
+
+  #chooseRoleModal .pure-u-2-5:hover {
+    background-color: #fdfdfd;
+  }
+
+  #chooseRoleModal .modal-signup-heading {
+    margin-bottom: 1.2em;
+  }
+
+  #chooseRoleModal .pure-u-2-5 p {
+    margin-top: 0em;
+    font-weight: bold;
+  }
+
+  #chooseRoleModal .pure-g {
+    display: block;
+  }
+</style>
+
+
+
+<!-- Modal Signup -->
+<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+<div class="modal fade" id="chooseRoleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="navbar-logo" id="modal-logo"></div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">Sign up for StoryTime as a...</h2>
+        <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
+
+        <div style="width: 60%; margin: 0 auto; text-align: center; margin-bottom: 2em">
+          <div class="pure-g">
+            <a href="#" id="chooseTeacher">
+              <div class="pure-u-2-5"  style="margin-right: 3%">
+                <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
+                <p>Teacher</p>
+              </div>
+            </a>
+
+            <a href="#" id="chooseAdmin">
+              <div class="pure-u-2-5">
+                <img src="/images/schoolhouse-icon.png" style="width: 100px; margin-top: 1em;" alt="">
+                <p>School Leader</p>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <script type='text/javascript'>
+
+            $('#chooseTeacher').click(function(event){
+              $('#chooseRoleModal').modal('toggle');
+              $("body").addClass("hide-scroll");
+              $('#modalSig').modal('toggle');
+            });
+
+            $('#chooseAdmin').click(function(event){
+              $('#chooseRoleModal').modal('toggle');
+              $("body").addClass("hide-scroll");
+              $('#adminSig').modal('toggle');
+            });
+
+        </script>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end Modal Signup-->

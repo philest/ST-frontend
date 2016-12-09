@@ -418,10 +418,10 @@
                           <div class="table-input-container">
                             <div class="table-input-body">
                               <input type="hidden" name="school_id" value=<%= session[:school]['id'] %> />
-                              <input type="hidden" name="admin_id" value=<%= session[:admin]['id'] %> />
+                              <input type="hidden" name="admin_id" value=<%= session[:educator]['id'] %> />
 
                               <input type="hidden" name="school_sig" value=<%= session[:school]['signature'].delete(' ') %> />
-                              <input type="hidden" name="admin_sig" value=<%= session[:admin]['signature'].delete(' ') %> />
+                              <input type="hidden" name="admin_sig" value=<%= session[:educator]['signature'].delete(' ') %> />
                               <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
                                 <span class="table-input-body-row">
                                   <span class="table-input-cell-validation table-input-cell">
@@ -459,7 +459,7 @@
     </div>
   </div> <%# end invite teachers modal %>
 
-  <% if session[:admin]['signin_count'] == 0 # the admin has never signed in  %>
+  <% if session[:educator]['signin_count'] == 0 # the admin has never signed in  %>
       <%= erb :dashboard_tutorial %>
 
   <% else # the admin has signed in before %>
