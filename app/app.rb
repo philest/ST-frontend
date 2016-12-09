@@ -61,20 +61,23 @@ enable :sessions
 
 #root
 get '/' do
-  if session[:teacher]
+  case session[:role]
+  when 'admin'
+    redirect to '/admin_dashboard'
+  when 'teacher'
     redirect to '/dashboard'
-  elsif session[:admin]
-    redirect to 'admin_dashboard'
   else
     erb :main_new
-  end
+  end 
+
 end
 
 get '/test_dashboard' do
-  session[:admin] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
+  session[:educator] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
+  session[:role] = 'admin'
   session[:school] = {"id"=>39, "name"=>"Rocky Mountain Prep", "code"=>"RMP|RMP-es", "signature"=>"RMP"}
   get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
-  data = HTTParty.get("#{get_url}/teachers/#{session[:admin]['id']}")
+  data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
   puts "data dashboard = #{data.body.inspect}"
   erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
 end
@@ -98,32 +101,32 @@ end
 
 
 get '/dashboard' do
-  if session[:teacher].nil?
+  if session[:educator].nil?
     redirect to '/'
   end
-  puts "session[:teacher] = #{session[:teacher]}"
+  puts "session[:educator] = #{session[:educator]}"
 
   get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
-  data = HTTParty.get("#{get_url}/users/#{session[:teacher]['id']}")
+  data = HTTParty.get("#{get_url}/users/#{session[:educator]['id']}")
   puts "data dashboard = #{data.body.inspect}"
 
   erb :dashboard, :locals => {:users => JSON.parse(data)}
 end
 
 get '/admin_dashboard' do
-  if session[:admin].nil?
+  if session[:educator].nil?
     redirect to '/'
   end
-  puts "session[:admin] = #{session[:admin]}"
+  puts "session[:educator] = #{session[:educator]}"
   puts "session[:school] = #{session[:school]}"
   get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
-  data = HTTParty.get("#{get_url}/teachers/#{session[:admin]['id']}")
+  data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
   puts "data dashboard = #{data.body.inspect}"
   erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
 end
 
 get '/signup/spreadsheet' do
-  if session[:teacher].nil?
+  if session[:educator].nil?
     redirect to '/'
   end
 
@@ -131,22 +134,22 @@ get '/signup/spreadsheet' do
 end
 
 get '/logout' do
-  session[:teacher] = nil
-  session[:admin] = nil
+  session[:educator] = nil
   session[:school] = nil
+  session[:role] = nil
 
   redirect to '/'
 end
 
 post '/signup/spreadsheet' do
   # Check if user uploaded a file
-  if params['spreadsheet'] && params['spreadsheet'][:filename] && !session[:teacher].nil?
+  if params['spreadsheet'] && params['spreadsheet'][:filename] && !session[:educator].nil?
     filename = params['spreadsheet'][:filename]
     file = params['spreadsheet'][:tempfile]
 
     teacher_assets = S3.bucket('teacher-materials')
     if teacher_assets.exists?
-      name = "teacher-uploads/#{session[:teacher]['signature']}/#{filename}"
+      name = "teacher-uploads/#{session[:educator]['signature']}/#{filename}"
 
       if teacher_assets.object(name).exists?
           puts "#{name} already exists in the bucket"
@@ -156,7 +159,7 @@ post '/signup/spreadsheet' do
         puts "Uploaded '%s' to S3!" % name
       end
     end
-    # dirname = "./public/uploads/#{session[:teacher]['signature']}"
+    # dirname = "./public/uploads/#{session[:educator]['signature']}"
     # unless File.directory?(dirname)
     #   FileUtils.mkdir_p(dirname)
     # end
@@ -171,7 +174,7 @@ post '/signup/spreadsheet' do
   Pony.mail(:to => 'phil.esterman@yale.edu,david@joinstorytime.com',
             :cc => 'aubrey.wahl@yale.edu',
             :from => 'david.mcpeek@yale.edu',
-            :subject => "ST: #{session[:teacher]['signature']} uploaded a spreadsheet",
+            :subject => "ST: #{session[:educator]['signature']} uploaded a spreadsheet",
             :body => "Check it out. #{filename}")
   flash[:spreadsheet] = "Congrats! We'll send your class a text in a few days."
   redirect to '/signup/spreadsheet'
@@ -185,6 +188,8 @@ end
 # 
 # http://joinstorytime.com/signin?school=rmp&email=aperricone@rockymountainprep.org&name='Mrs. Perricone'
 
+
+# need to update this for new roles.....
 get '/signin' do
   puts "signin params = #{params}"
   school_code = params['school']
@@ -225,10 +230,11 @@ get '/signin' do
   end
 
   # puts params
-  session[:teacher] = data['teacher']
-  session[:school]  = data['school']
-  session[:users]   = data['users']
-  session[:admin]   = data['admin']
+  session[:educator] = data['educator']
+  # session[:educator]  = data['teacher']
+  session[:school]   = data['school']
+  session[:users]    = data['users']
+  # session[:educator]    = data['admin']
 
   puts session.inspect
 
@@ -265,10 +271,11 @@ post '/signin' do
   end
 
   # puts params
-  session[:teacher] = data['teacher']
+  session[:educator] = data['educator']
   session[:school]  = data['school']
   session[:users]   = data['users']
-  session[:admin]   = data['admin']
+  # session[:educator]   = data['admin']
+  session[:role]    = data['role']
 
   puts session.inspect
 
@@ -277,17 +284,26 @@ end
 
 
 get '/signup' do
-  if session[:teacher].nil? and session[:admin].nil?
+  if session['educator'].nil?
     # maybe have a banner saying, "must log in through teacher account"
     flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
     redirect to '/'
   end
 
-  if session[:admin]
+  case session['role']
+  when 'admin'
+    puts "going to admin dashboard"
     redirect to '/admin_dashboard'
-  else
+  when 'teacher'
+    puts "going to teacher dashboard"
     redirect to '/dashboard'
   end
+
+  # if session[:educator]
+  #   redirect to '/admin_dashboard'
+  # else
+  #   redirect to '/dashboard'
+  # end
 
 end
 
@@ -407,17 +423,17 @@ post '/enroll_teachers_form_success' do
  
 
   flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
-  session[:admin]['signin_count'] += 1
+  session[:educator]['signin_count'] += 1
 
   redirect to '/admin_dashboard'
 end
 
 get '/teacher/visited_page' do
-  session[:teacher]['signin_count'] += 1
+  session[:educator]['signin_count'] += 1
 end
 
 get '/reset' do
-  session[:teacher]['signin_count'] = 0
+  session[:educator]['signin_count'] = 0
 end
 
 post '/enroll_families_form_success' do 
@@ -428,7 +444,7 @@ end
 
 
 get '/signup/flyer' do
-  if session[:teacher].nil?
+  if session[:educator].nil?
     redirect to '/'
   end
 
@@ -436,7 +452,7 @@ get '/signup/flyer' do
 end
 
 get '/signup/in-person' do
-  if session[:teacher].nil?
+  if session[:educator].nil?
     redirect to '/'
   end
 

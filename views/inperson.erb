@@ -75,7 +75,7 @@
 
 				<!-- start sidebar -->
 		<div class="sidebar">
-			<h2 class="welcome">Hi, <%= session['teacher']['signature'] %>!</h2>
+			<h2 class="welcome">Hi, <%= session['educator']['signature'] %>!</h2>
 			<div class="sidebar-heading">
 				<h3>Ways to invite people</h3>
 			</div>
@@ -147,9 +147,9 @@
 			</div>
 
 					<header class="box-header">
-						<% code_english, code_spanish = session['teacher']['code'].split('|') %>
+						<% code_english, code_spanish = session['educator']['code'].split('|') %>
 						<% school = session['school']['signature'] %>
-						<% teacher = session['teacher']['signature'] + "-" + session['teacher']['t_number'].to_s %>
+						<% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
 						<% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
 
 

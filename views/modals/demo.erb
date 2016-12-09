@@ -1,0 +1,53 @@
+<!-- Modal Demo -->
+<div class="modal fade" id="myDemo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="navbar-logo" id="modal-logo"></div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">See Storytime for yourself</h2>
+          <h3 class="demo-modal modal-subheading">Request a demo for your school or district.</h3>
+
+          <form class = "enroll-teacher-class" id="demo-form" action="demo_success" method="post">
+        <div class="teacher-info-box">
+          <div class="setup-signature">
+          <div>
+          </div>
+            <div class="setup-signature-name">
+              <label class="label">First Name
+              </label>
+              <div class="field demo-field">
+                <input name="demo_first_name" class="input">
+              </div>
+            </div>
+            <div class="setup-signature-name">
+              <label class="label">Last Name
+              </label>
+              <div class="field demo-field">
+                <input name="demo_last_name" class="input">
+              </div>
+            </div>
+
+            <div class="setup-signature-email">
+              <label class="label">Email
+              </label>
+              <div class="field demo-field">
+                <input name="teacher_email" class="input">
+              </div>
+            </div>
+          </div>
+        </div>
+    
+          <div class="signup-setup">
+              <button id="join" class="demo-form-button pure-button pure-button-primary get_update dialog-button">Submit</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end Modal Demo-->

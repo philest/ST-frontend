@@ -10,6 +10,11 @@ $(document).ready(function () {
     $("body").css("padding-right", '0px');
   });
 
+  $('#adminSig').on('hidden.bs.modal', function(event) {
+    $("body").removeClass("hide-scroll");
+    $("body").css("padding-right", '0px');
+  });
+
   $('.modal').on('hidden.bs.modal', function(event) {
     $('body').addClass('destroy-padding');
     // $("body").css("padding-right", '0px');
@@ -58,26 +63,38 @@ $(document).ready(function () {
       url: 'user_exists',
       // crossDomain: true,
       type: 'get',
-      dataType: 'text',
+      dataType: 'json',
       data: {
         email: email,
         password: password
       },
       success: function(data) {
         console.log(data);
-        if (data == 'false') {
+        if (data.educator == false) {
           // $('body').css("padding-right", '15px');
           $("body").addClass("hide-scroll");
-          $('#modalSig').modal('toggle');
+          $('#chooseRoleModal').modal('toggle');
+          // show a different modal here....
+
         } else { 
-          console.log(data);
-          $("#login input[name='signature']").val(data);
-          $('#login').submit();
+          console.log(typeof(data));
+          var signature = data.educator;
+          var role      = data.role;
+          console.log(signature);
+          console.log(role);
+          var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
+          $('#teacher-info').append($(input));
+
+          var role = $('<input>').attr('type', 'hidden').attr('name', 'role').val(role);
+          $('#teacher-info').append($(role));
+
+          // $("#teacher-info input[name='signature']").val(data);
+          $('#teacher-info').submit();
         } 
       },
       error: function(xhr) {
         d = xhr;
-        console.log('fucker, error');
+        console.log('hey fucker, it\'s an error');
         console.log(xhr);
       }
     });
