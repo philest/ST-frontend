@@ -70,7 +70,7 @@ $(document).ready(function () {
       },
       success: function(data) {
         console.log(data);
-        if (data.educator == false) {
+        if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
           $("body").addClass("hide-scroll");
           $('#chooseRoleModal').modal('toggle');
@@ -98,7 +98,6 @@ $(document).ready(function () {
         console.log(xhr);
       }
     });
-
 
     // if user exists, just log in
 
