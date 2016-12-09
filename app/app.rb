@@ -445,10 +445,15 @@ end
 
 get '/teacher/visited_page' do
   session[:educator]['signin_count'] += 1
+  status 200
+  return session[:educator]['signin_count'].to_s
 end
+
 
 get '/reset' do
   session[:educator]['signin_count'] = 0
+  status 200
+  return session[:educator]['signin_count'].to_s
 end
 
 post '/enroll_families_form_success' do 

@@ -107,6 +107,22 @@
         }
 
       });
+      
+      $(document).ready(function () {
+        $('#top-button.signup-button').click(function() {
+          $.ajax({
+            url: 'teacher/visited_page',
+            type: 'get',
+            dataType: 'text',
+            success: function(data) {
+              console.log('looks like the teacher has viewed the page');
+            },
+            error: function(xhr) {
+              console.log(xhr);
+            }
+          })
+        }); 
+      });
 
       $(document).ready(function () {
         $('.the-whole-teacher-thing').first().css('display', 'block');
