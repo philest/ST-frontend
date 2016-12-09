@@ -466,27 +466,18 @@
 
     <div class="pure-g welcome">
         <div class="pure-u-sm-1-3 pure-u-1">
-          <% if teachers.size == 0 %>
-            <h2><b>Welcome!</b></h2>
-            <h3><i>Let's start by inviting your class.</i></h3>
-          <% else %>
+
             <img class="apple" id="schoolhouse" src="/images/schoolhouse-icon.png" alt="">
             <h3 class="apple">School Totals</h3>
-          <% end %>
 
         </div>
 
-        <% if teachers.select {|t| t['num_families'] > 0 }.size == 0 %>
-          <div class="pure-u-1 pure-u-sm-2-3 paper-plane real-life-plane">      
-            <img id="paper-plane" src="/images/paper-plane.png" alt="">
-          </div>
 
-        <% else %>
           <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
             <div class="stats-wrapper">
               <div class="stats total" style="text-align: center;">
                 <% weekly_books = teachers.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
-                <h1><%= weekly_books %></h1>
+                <h1><%= weekly_books > 0 ? weekly_books : '-' %></h1>
                 <p>Books</p>
                 <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
               </div>
@@ -496,13 +487,13 @@
 
             <div class="stats-wrapper" style="text-align: left;">
               <div class="stats total">
-                <h1><%= teachers.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %></h1>
+                <% reading_time = teachers.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %>
+                <h1><%= reading_time > 0 ? reading_time : '-' %></h1>
                 <p>Minutes</p>
                 <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
               </div>
             </div>
           </div>
-        <% end %>
 
     </div> <%# end pure-g welcome %>
 
@@ -597,20 +588,47 @@
 
               
             <% else %> <%# there are 0 teachers.... %>
-              <div class="panel panel-default">
-                <div class="table-bordered">
-                  <table class="table data">
-                    <tbody>
-                      <tr>
-                        <th>No one has joined yet.</th>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            
-            <% end %>
 
+                <div class="panel panel-default table-body">
+               
+                  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
+                    <table class="table data users-table">
+                      <tbody>
+
+                            <tr class="user-info">
+                              <th class="user-name">No one has joined yet.</th>
+                            </tr>
+                      </tbody>
+                    </table>
+
+                    <div class="leftover-space"></div>
+
+                  </div>
+                
+                  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+                    <div class="default-user-info" style="display: none;">
+                        <h2>
+                          Click on a family to see how they're reading!
+                        </h2>
+                    </div>
+
+                    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
+                    <% icon_index = 0 %>
+
+                    
+                      <div class="the-whole-user-thing" style="display: none; margin-top: 1em;">
+                        <div class="teacher-imgs">
+                            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
+                        </div>
+               
+                       
+
+                      </div>
+
+                  </div>
+                </div> <%# panel-default table-body %>
+                
+              <% end %>
 
         </div> <%# big-daddy-data %>
 
