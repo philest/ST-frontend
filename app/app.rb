@@ -246,7 +246,24 @@ get '/signin' do
 
   puts session.inspect
 
-  redirect to '/signup'
+  if session['educator'].nil?
+    # maybe have a banner saying, "must log in through teacher account"
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+  end
+
+  case session['role']
+  when 'admin'
+    puts "going to admin dashboard"
+    redirect to '/admin_dashboard'
+  when 'teacher'
+    puts "going to teacher dashboard"
+    if params['flyers']
+      redirect to '/dashboard?flyers=' + params['flyers']
+    else
+      redirect to '/dashboard'
+    end
+  end
 
 end
 
@@ -287,7 +304,28 @@ post '/signin' do
 
   puts session.inspect
 
-  redirect to '/signup'
+  # redirect to '/signup'
+
+  if session['educator'].nil?
+    # maybe have a banner saying, "must log in through teacher account"
+    flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
+    redirect to '/'
+  end
+
+  case session['role']
+  when 'admin'
+    puts "going to admin dashboard"
+    redirect to '/admin_dashboard'
+  when 'teacher'
+    puts "going to teacher dashboard"
+    if params['flyers']
+      redirect to '/dashboard?flyers=' + params['flyers']
+    else
+      redirect to '/dashboard'
+    end
+  end
+
+
 end
 
 
@@ -304,14 +342,14 @@ get '/signup' do
     redirect to '/admin_dashboard'
   when 'teacher'
     puts "going to teacher dashboard"
-    redirect to '/dashboard'
+    if params['flyers']
+      redirect to '/dashboard?flyers=' + params['flyers']
+    else
+      redirect to '/dashboard'
+    end
+
   end
 
-  # if session[:educator]
-  #   redirect to '/admin_dashboard'
-  # else
-  #   redirect to '/dashboard'
-  # end
 
 end
 
