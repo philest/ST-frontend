@@ -9,7 +9,7 @@ label.error {
 }
 
 .the-problem .text h2, .the-product .text h2, .join-us .text h2 {
-	font-size: 2em;
+	font-size: 24px;
 	color: #ed7a44;
 	font-family: 'Karla'
 }
@@ -604,7 +604,7 @@ span a {
 .the-problem .text h2, .the-product .text h2, .join-us .text h2 {
 	font-family: 'Karla'; 
 	color: #ed7844;
-	font-size: 2em;
+	font-size: 24px;
 }
 
 
