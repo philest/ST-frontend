@@ -355,9 +355,8 @@ button#join.demo-form-button{
 }
 
 h1#main-banner {
-	font-size: 38px;
+	font-size: 30px;
 	padding-top: 8em;
-	color: rgba(255,255,254,1);
 	margin-bottom: 45px;
 /*	font-size: 3em;
 */}
@@ -376,6 +375,16 @@ div.text {
 	margin: auto;
 }
 
+.girl_reading.real-girl {
+	max-width: 350px;
+}
+
+.girl_reading {
+	max-width: 400px;
+}
+
+
+
 /*curriculum*/
 .the-product .phone img {
 	width: 65%;
@@ -384,6 +393,14 @@ div.text {
 
 .the-problem .text h2, .the-product .text h2, .join-us .text h2, h2 {
 	color: #4a4a4a;
+}
+
+.girl_reading.literacy-phone.small-phone {
+	display: block; 
+}
+
+.girl_reading.literacy-phone.large-phone {
+	display: none; 
 }
 
 h2 {
@@ -423,6 +440,36 @@ div.home--features {
 	max-width: 1024px;
 	margin: auto;
 }
+
+div#divider-mobile {
+	padding-bottom: 2em; 
+}
+
+div.divider {
+	padding-bottom: 2em; 
+}
+
+
+#padded-img{
+	padding-top: 1.4em;
+}
+
+div.mobile-girl{
+	display: block;
+}
+
+div.mobile-text {
+	display: block;
+}
+
+div.desktop-girl {
+	display: none;
+}
+
+div.desktop-text {
+	display: none;
+}
+
 
 
 /*FOOTER*/
@@ -620,16 +667,24 @@ div.home--features {
 	   font-size: 35px;
 	}
 
+
 	h1#sub-tagline {
 	    font-size: 27px;
 	}
 
+	h1#main-banner {
+		font-size: 38px;
+	}
 
 	div.text {
 		padding-top: 200px;
 		text-align: left;
 	}
 	
+	#padded-img{
+		padding-top: 4.4em;
+	}
+
 	.girl_reading {
 		margin-left: 50px;
 		padding: 60px 5px;
@@ -641,9 +696,34 @@ div.home--features {
 		margin-right: 20px;
 	}
 
-	.girl_reading.real-girl {
-		max-width: 430px;
+	.girl_reading {
+		max-width: 480px;
 	}
+
+	.girl_reading.real-girl {
+		max-width: 415px;
+	}
+
+	.girl_reading.literacy-phone {
+		max-width: 660px;
+	}
+
+	div.mobile-girl{
+		display: none;
+	}
+
+	div.mobile-text {
+		display: none;
+	}
+
+	div.desktop-girl {
+		display: block;
+	}
+
+	div.desktop-text {
+		display: block;
+	}
+
 
 
 /*#1d9ffc*/
@@ -744,6 +824,17 @@ div.home--features {
 	#splash .hero-splash-text-container {
 		padding-left: 100px;
 	}
+
+
+	.girl_reading.literacy-phone.small-phone {
+		display: none; 
+	}
+
+	.girl_reading.literacy-phone.large-phone {
+		display: block; 
+	}
+
+
 
 
 }	
