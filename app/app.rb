@@ -84,7 +84,6 @@ end
 
 
 
-
 get '/user_exists' do
   puts "params=#{params}"
 
@@ -113,6 +112,7 @@ get '/dashboard' do
   erb :dashboard, :locals => {:users => JSON.parse(data)}
 end
 
+
 get '/admin_dashboard' do
   if session[:educator].nil?
     redirect to '/'
@@ -122,7 +122,24 @@ get '/admin_dashboard' do
   get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
   data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
   puts "data dashboard = #{data.body.inspect}"
-  erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
+  if data.body != "[]"
+    puts "normal admin dashboard"
+    erb :admin_dashboard, :locals => {:teachers => JSON.parse(data), school_users: nil}
+  else # this is a school with no teachers....
+    # so check for students
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:5000'
+    data = HTTParty.get("#{get_url}/school/users/#{session[:educator]['id']}")
+    puts "data_dashboard2.0 = #{data.body.inspect}"
+    puts "data = #{JSON.parse(data)}"
+    if data != "" # go to the SPECIAL school_dashboard
+      # process locals somehow.........
+      puts "user admin dashboard"
+      erb :admin_dashboard, :locals => {:school_users => JSON.parse(data)}
+    else # regular admin dashboard with no teachers...... :(
+      puts "normal admin dashboard"
+      erb :admin_dashboard, :locals => {:teachers => JSON.parse(data), school_users: nil}
+    end
+  end
 end
 
 get '/signup/spreadsheet' do
