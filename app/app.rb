@@ -438,6 +438,10 @@ get '/team' do
   erb :team
 end
 
+get '/case_study' do 
+  erb :case_study
+end
+
 get '/join' do 
   erb :job_board
 end

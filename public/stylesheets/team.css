@@ -20,6 +20,12 @@ h2.our_team {
 
 }
 
+.team-text{
+	text-align: left;
+	    width: 60%;
+}
+
+
 h2#people a:hover {
 /*    color: #ed7844;
 uncomment to take off the hover color change on team names
