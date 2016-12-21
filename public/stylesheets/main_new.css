@@ -361,7 +361,8 @@ h1#main-banner {
 */}
 
 .girl_reading {
-	width: 325px;
+
+	max-width: 600px;
 }
 
 /*curriculum*/
