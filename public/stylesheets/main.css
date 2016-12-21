@@ -582,7 +582,6 @@ span a {
 
 
 .text {
-	width: 60%;
 	line-height: 1.8em;
 }
 
@@ -597,7 +596,6 @@ span a {
 
 .the-problem .text {
 	text-align: left;
-	float: right;
 		
 }
 
