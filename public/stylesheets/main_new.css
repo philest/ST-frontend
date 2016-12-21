@@ -358,15 +358,22 @@ h1#main-banner {
 	font-size: 38px;
 	padding-top: 8em;
 	color: rgba(255,255,254,1);
+	margin-bottom: 45px;
 /*	font-size: 3em;
 */}
 
 div.text {
-	padding-top: 200px;
+	padding-top: 0px;
+	text-align: center;
+	display: block;
+	margin: auto;
 }
 
 .girl_reading {
+	padding-top: 60px;
 	max-width: 100%;
+	display: block;
+	margin: auto;
 }
 
 /*curriculum*/
@@ -615,6 +622,18 @@ div.home--features {
 
 	h1#sub-tagline {
 	    font-size: 27px;
+	}
+
+
+	div.text {
+		padding-top: 200px;
+		text-align: left;
+	}
+	
+	.girl_reading {
+		margin-left: 50px;
+		padding: 60px 5px;
+
 	}
 
 
