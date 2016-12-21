@@ -1,0 +1,407 @@
+<div class="container">
+  <div class="page-header">
+    <div class="mobile-navbar">
+      <a class="navbar-menu" href="/logout">Logout</a></li>
+    </div>
+    <h1><%= session[:school]['name'] %></h1>
+
+    <div class="navbar-buttons">
+      <a id="logout" class="navbar-menu" href="/logout">Logout</a>
+      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
+                  Invite teachers
+                  </button>
+
+    </div>
+  </div>
+
+  <% teacher_icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+  <% teacher_icon_index = 0 %>
+  <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+    <div class="modal fade teacherModal" tabindex="-1" id="teacherModal-<%= teacher['id'] %>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+          
+          <div class="modal-body">
+            <div class="teacher-title">
+              <!-- <img src="/images/fresh-apple-icon.png" alt=""> -->
+              <img src="/images/<%= teacher_icons[teacher_icon_index] %>-icon.png" alt="">
+              <% teacher_icon_index = (teacher_icon_index + 1) % teacher_icons.length %>
+              <h1><%= teacher['signature'] %>'s Class</h1>
+            </div>
+
+            <% users = teacher['users'] %>
+
+            <!-- THE REAL SHIT -->
+            <div class="big-daddy-data big-user">
+              <h4>Class (<%= users.size %> joined) </h4>
+
+               <div class="panel panel-default header">
+                <table class="table fields">
+                    <thead>
+                      <tr>
+                        <th class="user-name-top">Name</th>
+                        <!-- <th>Date joined</th> -->
+                      </tr>
+                    </thead>
+                </table>
+              </div>
+
+              <% if users.size > 0 %>
+                  <div class="panel panel-default table-body">
+                 
+                    <div class="table-responsive pure-u-2-5">
+                      <table class="table data">
+                        <tbody>
+                          <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                              <tr class="user-info" id=<%= user['id'] %> >
+                                <% if user['first_name'].nil? or user['first_name'].empty? %>
+                                  <% user_name = "(not given)" %>
+                                <% else %>
+                                  <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+                                <% end %>
+                                <th class="user-name"><%= user_name %></th>
+                                <!-- <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th> -->
+                              </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  
+                    <div class="pure-u-3-5 the-data">
+                      <div class="default-user-info" style="display: none;">
+                          <h2>
+                            Click on a family to see how they're reading!
+                          </h2>
+                      </div>
+
+                      <% icons = ['closed-book', 'dinosaur', 'grade-a', 'spaceship', 'globe', 'open-book'] %>
+                      <% icon_index = 0 %>
+
+                      <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                        <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none;">
+                          <div class="family-header users">
+                            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="">
+                            <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
+                            <% icon_index = (icon_index + 1) % icons.length %>
+                            <div class="family-name">
+                              <% if user['last_name'] %>
+                                <% family_name = user['last_name'] %>
+                              <% elsif user['first_name'] %>
+                                <% family_name = user['first_name'] + "'s" %>
+                              <% else %>
+                                <% family_name = "unnamed" %>
+                              <% end %>
+
+                              <h3><%= family_name %></h3>
+                              <h3>Family</h3>
+
+                            </div>
+                          </div>
+
+                          <div class="stats user" id="left">
+                            <h1><%= user['this_month'] %></h1>
+                            <p>Books</p>
+                            <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
+                          </div>
+                          <div class="stats user" id="bottom-guy">
+
+                            <h1 style="display: inline-block;"><%= (user['this_month'] * 4.6).ceil %></h1>
+                            <p>Minutes</p>
+                            <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
+                          </div>
+                        </div>
+                      <% end %>
+
+                    </div>
+                  </div> <%# panel-default table-body %>
+
+
+                <% else %> <%# there are 0 users.... %>
+                  <div class="panel panel-default">
+                    <div class="table-bordered">
+                      <table class="table data">
+                        <tbody>
+                          <tr>
+                            <th>No one has joined yet.</th>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>    
+                <% end %>
+            </div> <%# big-daddy-data %>
+
+            <!-- END THE REAL SHIT -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+  <!-- end Teacher Modal-->
+
+  <!-- Invite teachers Modal -->
+  <div class="modal fade" id="inviteTeachersModal" role="dialog" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  
+        <div class="modal-body">
+
+          <!-- begin invite-by-phone -->
+            <div class="main-box by-phone" id="main-envelope">
+
+              <% @sample_names = ["Mrs. Doe", "Ms. Smith", "Mr. Jones", "Mr. Johnson", "Mr. Vandelay"] %>
+              <% @sample_phones = ["jane.doe@storytime.edu", "alice.smith@storytime.edu", "john.jones@storytime.edu", "bob.johnson@storytime.edu", "art.vanelay@storytime.edu"] %>
+
+                <div id="logo-container">
+                  <div id="jobs">
+                    <h2 class="our_team enroll_header">Invite Teachers.</h2>
+                  </div>
+                </div>
+
+                <!-- <img class="flyer-image phone-image enroll-image" src="https://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+
+                <form class="enroll-teacher-class invite-teachers" action="enroll_teachers_form_success" method="post">     
+                  <div class="enroll group-invite">
+                    <div class="box-header">
+                      <h2 class="box-header-title">Enter emails below</h2>
+                      <h3 class="box-header-subtext">
+                        Teachers will get their classroom flyers to start sharing.
+                      </h3>
+                    </div>
+                    <div class="box-body">
+                      <div class="row row-small">
+                        <div class="table-input">
+                          <header class="table-input-header-row">
+                            <span class="table-input-cell-validation table-input-cell">
+                            </span>
+              
+                            <div class="table-input-header-cell table-input-cell"> Teacher title</div>
+                            <div class="table-input-header-cell table-input-cell"> Teacher email
+                            </div>
+
+                          </header>
+
+                          <div class="table-input-container">
+                            <div class="table-input-body">
+                              <input type="hidden" name="school_id" value=<%= session[:school]['id'] %> />
+                              <input type="hidden" name="admin_id" value=<%= session[:educator]['id'] %> />
+
+                              <input type="hidden" name="school_sig" value=<%= session[:school]['signature'].delete(' ') %> />
+                              <input type="hidden" name="admin_sig" value=<%= session[:educator]['signature'].delete(' ') %> />
+                              <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+                                <span class="table-input-body-row">
+                                  <span class="table-input-cell-validation table-input-cell">
+                                  </span>
+
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
+                                    </div>
+                                  </span>
+                
+                                  <span class="table-input-body-cell table-input-cell">
+                                    <div class="form-cell-input">
+                                      <input name="<%="email_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                                    </div>
+                                  </span>
+                                </span>
+                              <%end%>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+            
+                        <button class="Button-ready" type="submit">Invite class</button>          
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            <!-- end invite-by-phone -->
+
+        </div>
+      </div>
+    </div>
+  </div> <%# end invite teachers modal %>
+
+  <% if session[:educator]['signin_count'] == 0 and teachers.select {|t| t['num_families'] > 0 }.size == 0 # the admin has never signed in  %>
+      <%= erb :dashboard_tutorial %>
+
+  <% else # the admin has signed in before %>
+
+    <div class="pure-g welcome">
+        <div class="pure-u-sm-1-3 pure-u-1">
+
+            <img class="apple" id="schoolhouse" src="/images/schoolhouse-icon.png" alt="">
+            <h3 class="apple">School Totals</h3>
+
+        </div>
+
+
+          <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
+            <div class="stats-wrapper">
+              <div class="stats total" style="text-align: center;">
+                <% weekly_books = teachers.inject(0) {|sum, teacher| sum += teacher['this_month'] } %>
+                <h1><%= weekly_books > 0 ? weekly_books : '-' %></h1>
+                <p>Books</p>
+                <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
+              </div>
+            </div>
+          </div>
+          <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
+
+            <div class="stats-wrapper" style="text-align: left;">
+              <div class="stats total">
+                <% reading_time = teachers.inject(0) {|sum, teacher| sum += teacher['reading_time'] } %>
+                <h1><%= reading_time > 0 ? reading_time : '-' %></h1>
+                <p>Minutes</p>
+                <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
+              </div>
+            </div>
+          </div>
+
+    </div> <%# end pure-g welcome %>
+
+   <!--  <div class="mobile-welcome">
+      <h2><b>Welcome back!</b></h2>
+      <h3><i>Your class is reading great!</i></h3>
+    </div> -->
+
+    
+        <div class="big-daddy-data">
+          <h4>Classrooms (<%= teachers.select {|t| t['num_families'] > 0 }.size %> started) </h4>
+
+           <div class="panel panel-default header">
+            <table class="table fields">
+                <thead>
+                  <tr>
+                    <th class="user-name-top">Name</th>
+                    <th class="date-joined">Date joined</th>
+                  </tr>
+                </thead>
+            </table>
+          </div>
+
+
+          <% if teachers.select {|t| t['num_families'] > 0 }.size > 0 %>
+              <div class="panel panel-default table-body">
+             
+                <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 teacher-table-responsive">
+                  <table class="table data teacher-table">
+                    <tbody>
+                      <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+                          <tr class="teacher-info" id=<%= teacher['id'] %> >
+                            <th class="teacher-name"><%= teacher['signature'] %></th>
+                            <th class="date-joined"><%= Time.parse(teacher['enrolled_on']).strftime("%b %-d, %Y") %></th>
+                          </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                  <div class="leftover-space"></div>
+
+                </div>
+              
+                <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+                  <div class="default-teacher-info" style="display: none;">
+                      <h2>
+                        Click on a classroom to see how they're reading!
+                      </h2>
+                  </div>
+
+                  <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+                  <% icon_index = 0 %>
+
+                  <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+                    <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;">
+                      <div class="teacher-imgs">
+                        <div class="teacher-modal-btn" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
+                          <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
+                          <img src="/images/right-arrow.png" alt="" class="right-arrow">
+                        </div>
+                      </div>
+                      <div class="family-header">
+                        <% icon_index = (icon_index + 1) % icons.length %>
+                        <div class="teacher-name">
+                          <h3><%= teacher['signature'] %></h3>
+                          <h3 id="bottom-mofo">   <%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
+                        </div>
+                      </div>
+
+                      <div class="pure-g stats-user">
+                          <div class="pure-u-1 pure-u-sm-1-2">
+                            <div class="stats user left">
+                              <h1><%= teacher['this_month'] %></h1>
+                              <p>Books</p>
+                              <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
+                            </div>
+                          </div>
+                          <div class="pure-u-1 pure-u-sm-1-2">
+                            <div class="stats user right">
+                              <h1 style="display: inline-block;"><%= teacher['reading_time'] %></h1>
+                              <p>Minutes</p>
+                              <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
+                            </div>
+                          </div>
+                      </div> <%# end nested pure-g %>
+
+                    </div>
+                  <% end %>
+
+                </div>
+              </div> <%# panel-default table-body %>
+
+              
+            <% else %> <%# there are 0 teachers.... %>
+
+                <div class="panel panel-default table-body">
+               
+                  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
+                    <table class="table data users-table">
+                      <tbody>
+
+                            <tr class="user-info">
+                              <th class="user-name">No one has joined yet.</th>
+                            </tr>
+                      </tbody>
+                    </table>
+
+                    <div class="leftover-space"></div>
+
+                  </div>
+                
+                  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+                    <div class="default-user-info" style="display: none;">
+                        <h2>
+                          Click on a family to see how they're reading!
+                        </h2>
+                    </div>
+
+                    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
+                    <% icon_index = 0 %>
+
+                    
+                      <div class="the-whole-user-thing" style="display: none; margin-top: 1em;">
+                        <div class="teacher-imgs">
+                            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
+                        </div>
+               
+                      </div>
+
+                  </div>
+                </div> <%# panel-default table-body %>
+                
+              <% end %>
+
+        </div> <%# big-daddy-data %>
+
+    <% end # the signin-count block %> 
+
+
+</div> <!-- class="container" -->
