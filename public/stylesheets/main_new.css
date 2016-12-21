@@ -46,8 +46,8 @@ body {
 .container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 4.0619%;
+    padding-right: 4.0619%;
 }
 
 /** Navbar **/
@@ -355,14 +355,20 @@ button#join.demo-form-button{
 }
 
 h1#main-banner {
+	font-size: 38px;
 	padding-top: 8em;
 	color: rgba(255,255,254,1);
 /*	font-size: 3em;
 */}
 
+div.text {
+	padding-top: 200px;
+}
+
+
 .girl_reading {
 
-	max-width: 600px;
+	max-width: 100%;
 }
 
 /*curriculum*/
@@ -731,7 +737,7 @@ div.home--features {
 	}
 
 	#splash .hero-splash-text-container {
-		padding-left: 200px;
+		padding-left: 165px;
 	}
 
 
