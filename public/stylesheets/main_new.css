@@ -150,6 +150,10 @@ h1 br.subheading-br {
 	display: inline-block;
 }	
 
+h2 {
+	font-size: 24px;
+}
+
 
 .contact-image {
 	height: 40px;
@@ -346,6 +350,9 @@ button#join.demo-form-button{
 
 /*BELOW THE FOLD*/
 
+.text p {
+	font-size: 18px;
+}
 
 h1#main-banner {
 	padding-top: 8em;
@@ -367,6 +374,13 @@ h1#main-banner {
 	color: #4a4a4a;
 }
 
+h2 {
+	margin-bottom: 20px;
+}
+
+div.text {
+	max-width: 270px;
+}
 
 h1#call-to-action {
 	padding-top: 1em;
@@ -393,6 +407,10 @@ button#start-modal-button.demo-request-button {
 	margin-top: 2em;
 }
 
+div.home--features {
+	max-width: 1024px;
+	margin: auto;
+}
 
 
 /*FOOTER*/
