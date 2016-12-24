@@ -376,6 +376,10 @@ get '/privacy' do
   erb :privacy_policy
 end
 
+get '/terms' do
+  erb :terms
+end
+
 get '/illustration-guide' do
   redirect to "https://docsend.com/view/vnndn8z"
 end 
