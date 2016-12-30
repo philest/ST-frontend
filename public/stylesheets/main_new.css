@@ -69,13 +69,13 @@ button.signup-button {
 }
 
 .navbar-logo {
-	background-image: url("https://st-webpage.s3.amazonaws.com/assets/st-fb-logo.jpg");
-	background-size: 47px 41px;
+	background-image: url("http://d2yudi7y1eei74.cloudfront.net/assets/new-logo/logo-no-circle.png");
+	background-size: 70px 50px;
 	background-position: center;
     background-repeat: no-repeat;
     float: left;
-    height: 110px;
-    width: 88px;
+    height: 114px;
+    width: 162px;
 }
 
 .navbar li {
