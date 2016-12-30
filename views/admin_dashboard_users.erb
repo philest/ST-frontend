@@ -7,7 +7,7 @@
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
-      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="http://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
       <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
                   Invite teachers
@@ -102,7 +102,12 @@
     </div>
   </div> <%# end invite teachers modal %>
 
- <div class="pure-g welcome">
+  <% if session[:educator]['signin_count'] == 0 and school_users.size == 0 # the admin has never signed in  %>
+      <%= erb :dashboard_tutorial %>
+
+  <% else # the admin has signed in before %>
+
+      <div class="pure-g welcome">
           <div class="pure-u-sm-1-3 pure-u-1">
             <% if school_users.size == -1 %>
               <h2><b>Welcome!</b></h2>
@@ -323,6 +328,8 @@
               <% end %>
 
           </div> <%# big-daddy-data %>
+
+      <% end # the signin-count block %> 
 
 
 

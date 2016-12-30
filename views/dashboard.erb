@@ -17,12 +17,12 @@
     <script async type="text/javascript" src="/js/analytics.js"></script>
   
   <!-- Bootstrap modal files -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap modal files -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
 
@@ -30,7 +30,7 @@
 
     <!-- end Boostrap -->
 
-    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
       
@@ -69,7 +69,7 @@
 
     <!-- Load jQuery and  -->
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
@@ -258,7 +258,7 @@
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
-      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="http://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
 
 
@@ -286,8 +286,8 @@
                   <a>
                     <div class="sidebar-item">
                       
-                     <img src="https://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
-        <!--            <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
+                     <img src="http://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
+        <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
          -->            <span>In-person guide </span>
                     </div>
                   </a>
@@ -297,10 +297,10 @@
                 <li id="envelope">
                   <a>
                     <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
+                      <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
 
-          <!--            <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
+          <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
            -->            <span>Invite by phone</span>
                     </div>
                   </a>
@@ -308,7 +308,7 @@
                 <li id="printer" class="active">
                   <a>
                     <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
+                      <img src="http://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
                       <span>Printable flyer</span>
                       
                     </div>
@@ -319,7 +319,7 @@
                 <li id="spreadsheet" class="">
                   <a>
                     <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
+                      <img src="http://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
 
                       <span>Add spreadsheet</span>
                       
@@ -349,7 +349,7 @@
                   <% code_english, code_spanish = session['educator']['code'].split('|') %>
                   <% school = session['school']['signature'] %>
                   <% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
-                  <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
+                  <% aws_url = "http://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
 
 
                   <h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
@@ -392,15 +392,15 @@
                       <% school = session['school']['signature'] %>
                       <% teacher = session['educator']['signature'] %>
                       <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
-                      <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
+                      <% aws_url = "http://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
 
 
                       <div class="pure-u-1-2 english">
-                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
+                          <img class="flyer-image" src="http://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
                           <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank"><button class="Button-ready">Download English</button> </a>  
                       </div>
                       <div class="pure-u-1-2 spanish">
-                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
+                          <img class="flyer-image" src="http://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
                           <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready">Download Spanish</button> </a>
                       </div>
                   </div>
@@ -456,7 +456,7 @@
                   </div>
                 </div>
 
-                <!-- <img class="flyer-image phone-image enroll-image" src="https://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+                <!-- <img class="flyer-image phone-image enroll-image" src="http://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
 
 
 

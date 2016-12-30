@@ -76,6 +76,22 @@ $( document ).ready(function() {
 
     var first_name = $("#admin-login").find("input[name=first_name]").val();
     var last_name = $("#admin-login").find("input[name=last_name]").val();
+
+    var input = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'first_name')
+                    .val(first_name);
+    $('#admin-login').append($(input));
+
+    var input = $('<input>')
+                    .attr('type', 'hidden')
+                    .attr('name', 'last_name')
+                    .val(first_name);
+    $('#admin-login').append($(input));
+
+
+
+
     var signature = first_name + " " + last_name;
     console.log('signature : ' + signature);
     var input = $('<input>')

@@ -215,6 +215,8 @@ get '/signin' do
   email       = params['email']
   signature   = params['name']
   role        = params['role']
+  first_name  = params['first_name']
+  last_name   = params['last_name']
 
   if params['admin'] == 'james@rockymountainprep.org'
     signature, email, role = 'James Cryan', 'james@rockymountainprep.org', 'admin'
@@ -233,7 +235,9 @@ get '/signin' do
       signature: signature,
       email: email,
       password: school_code,
-      role: role
+      role: role,
+      first_name: first_name,
+      last_name: last_name
     }
   )
   puts "data = #{data.code.inspect}"
@@ -272,6 +276,13 @@ get '/signin' do
   case session['role']
   when 'admin'
     puts "going to admin dashboard"
+    if params['invite']
+      redirect to '/admin_dashboard?invite=' + params['invite']
+    else
+      redirect to '/admin_dashboard'
+    end
+
+
     redirect to '/admin_dashboard'
   when 'teacher'
     puts "going to teacher dashboard"
@@ -332,7 +343,13 @@ post '/signin' do
   case session['role']
   when 'admin'
     puts "going to admin dashboard"
-    redirect to '/admin_dashboard'
+
+    if params['invite']
+      redirect to '/admin_dashboard?invite=' + params['invite']
+    else
+      redirect to '/admin_dashboard'
+    end
+
   when 'teacher'
     puts "going to teacher dashboard"
     if params['flyers']
@@ -356,7 +373,13 @@ get '/signup' do
   case session['role']
   when 'admin'
     puts "going to admin dashboard"
-    redirect to '/admin_dashboard'
+
+    if params['invite']
+      redirect to '/admin_dashboard?invite=' + params['invite']
+    else
+      redirect to '/admin_dashboard'
+    end
+
   when 'teacher'
     puts "going to teacher dashboard"
     if params['flyers']
@@ -366,7 +389,6 @@ get '/signup' do
     end
 
   end
-
 
 end
 
