@@ -368,6 +368,11 @@ get '/register' do
 
 end
 
+get '/register/password' do
+  erb :password
+
+end
+
 
 
 
