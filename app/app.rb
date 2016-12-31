@@ -359,8 +359,16 @@ post '/signin' do
     end
   end
 
+end
+
+
+get '/register' do
+
+  erb :register
 
 end
+
+
 
 
 get '/signup' do
