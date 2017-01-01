@@ -58,7 +58,7 @@ body {
 
 #join {
   width: 100%;
-
+  border-radius: 5px;
   line-height: 28px;
   margin-top: 23px;
 }
@@ -114,7 +114,21 @@ label.error {
   color: gray;
 }
 
+.get-app-button {
+  width: 100%;
+}
 
+#app-icon {
+  width: 100%;
+  display: block; 
+}
+
+#app-icon img {
+  width: 105px;
+  height: auto;
+  display: block; 
+  margin: 0 auto;
+}
 
 
 #teacher-icon {
