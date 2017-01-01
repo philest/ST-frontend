@@ -373,6 +373,10 @@ get '/register/password' do
 
 end
 
+get '/register/role' do
+  erb :role
+end
+
 
 
 
