@@ -2,6 +2,21 @@ source 'https://rubygems.org'
 
 ruby '2.3.1'
 
+# st-enroll
+# 
+gem 'createsend', '~> 4.1'
+gem 'sequel'
+gem 'pg'
+gem 'redis'
+gem 'sidekiq'
+gem 'clockwork'
+gem 'i18n'
+# aws and image generation
+
+gem 'gruff'
+gem 'prawn'
+
+# 
 
 gem 'sinatra'
 
@@ -34,14 +49,22 @@ group :development do
 end
 
 group :test do
+  gem 'email_spec'
+  gem 'rack-test'
+  gem 'factory_girl'
 	gem 'rspec'
+  gem 'webmock'
+  gem 'rspec-sidekiq'
+
+  gem 'rspec-mocks'
+
 	gem 'capybara'
 	gem 'selenium-webdriver', "2.48"
 	gem 'database_cleaner'
 	gem 'pry', "= 0.10.0"
 	gem 'pry-nav'
 	gem 'timecop'
-	gem 'factory_girl'
+
 	gem 'fakeredis', :require => 'fakeredis/rspec'
 end
 
