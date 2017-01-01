@@ -362,7 +362,7 @@ post '/signin' do
 end
 
 
-get '/register' do
+get '/register/?' do
 
   erb :register
 

@@ -84,42 +84,47 @@
   <!-- navbar -->
   <%= erb :'components/navbar' %>
 
-  <div class="body">
-    <div class="container">
-      <div class="pure-g">
-          <div class="pure-u-1 class-information">
-            <h1 class="join-header">Join <b>Mr. McPeek's class </b></h1>
-            <p class="school-name">Totoket Valley Elementary School</p>
-          </div>
-
-
-          <div class="pure-u-1 login-form">
-            <form id="teacher-info" action='signin' method="post"> 
-              <div class="signup-setup">
-                <div class="field" id="signup-field">
-                   <label class="label">Full name</label>
-                  <input name="name" placeholder="First and last name" class="input" required>
-                    <label class="label">Phone number</label>
-                  <input name="phone" placeholder="(555) 555-5555" class="input" required>
-                  </div>
-               
-                  <button id="join" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Sign up</button>
+  <div class="wrapper">
+    
+      <div class="body">
+        <div class="container">
+          <div class="pure-g">
+            <div class="pure-u-1">
+              <div class="class-information register">
+                <h1 class="join-header">Join <b>Mr. McPeek's class </b></h1>
+                <p class="school-name">Totoket Valley Elementary School</p>
               </div>
-            </form>
+
+
+              <div class="login-form">
+                <form id="teacher-info" action='signin' method="post"> 
+                  <div class="signup-setup">
+                    <div class="field" id="signup-field">
+                       <label class="label">Full name</label>
+                      <input name="name" placeholder="First and last name" class="input" required>
+                        <label class="label">Phone number</label>
+                      <input name="phone" placeholder="(555) 555-5555" class="input" required>
+                      </div>
+                   
+                      <button id="join" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Sign up</button>
+                  </div>
+                </form>
+              </div>
+
+
+            <div class="privacy-policy">
+              <p>By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b></p>
+            </div>
           </div>
 
-
-        <div class="pure-u-1 privacy-policy">
-          <p>By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b></p>
-        </div>
-
-    </div> <%# end pure-g %>
+        </div> <%# end pure-g %>
 
 
-        
-    </div>
+          
+      </div> <%# container %>
+    </div> <%# body %>
+
   </div>
-
 
 
     
