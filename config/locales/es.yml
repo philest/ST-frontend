@@ -1,0 +1,28 @@
+es:
+  image:
+    teacher: "http://d2p8iyobf0557z.cloudfront.net/day1/twilio-mms-nhv-es.jpg"
+    group: "http://d2p8iyobf0557z.cloudfront.net/day1/twilio-mms-nhv-es.jpg"
+  user_response:
+    learn: "StoryTime envía cuento gratis a través de mensaje texto y Facebook.\n\nPara ayuda: 561-212-5831\nPara dejar de recibir mensahes, responde con ALTO"
+    teacher_reply:
+
+      session: "Veré su mensaje esta noche! Si necesita más ayuda, llame al StoryTime: 561-212-5831"
+      no_session: "¡Hola! Estoy lejos ahora, pero veré su mensaje pronto! Si necesita ayuda, introduce 'learn'"
+  demo: "¡Hola! Estamos lejos ahora, pero vamos a ver su mensaje pronto. Para obtener más información acerca de StoryTime, llame al 561-212-5831."
+  enrollment:
+    body: 
+      has_teacher: "Hola, es %{teacher_name}. Le enviaré mensajes de texto a %{child_name} con StoryTime!\n\nPuedes empezar ahora si tiene Facebook Messenger. Visite este enlace para entrar:\njoinstorytime.com/go"
+      has_school: "Hola, es %{school_signature}. Vamos a enviar mensajes de texto a usted con StoryTime!\n\nPuedes empezar ahora si tiene Facebook Messenger. Visite este enlace para entrar:\njoinstorytime.com/go"
+      has_none: "Hola, es StoryTime. Le enviaremos mensajes de texto con libros de cuento gratis!\n\nPuedes empezar ahora si tiene Facebook Messenger.  Visite este enlace para entrar:\njoinstorytime.com/go"
+
+    body_sprint:
+      has_teacher: 
+        - "Hola, es %{teacher_name}. Le enviaré mensajes de texto a %{child_name} con StoryTime!\n\n"
+        - "Puedes empezar ahora si tiene Facebook Messenger. Visite este enlace para entrar:\njoinstorytime.com/go"
+      has_school: 
+        - "Hola, es %{school_signature}. Vamos enviarle mensajes de texto a usted con StoryTime!\n\n" 
+        - "Puedes empezar ahora si tiene Facebook Messenger. Visite este enlace para entrar:\njoinstorytime.com/go"
+      has_none: 
+        - "Hola, es StoryTime. Vamos enviarle mensajes de texto con libros de cuento gratis!\n\n"
+        - "Puedes empezar ahora si tiene Facebook Messenger.  Visite este enlace para entrar:\njoinstorytime.com/go"
+

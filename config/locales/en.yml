@@ -1,0 +1,31 @@
+en:
+  image:
+    teacher: "http://d2p8iyobf0557z.cloudfront.net/day1/twilio-mms-final.jpg"
+    group: "http://d2p8iyobf0557z.cloudfront.net/day1/twilio-mms-nhv.jpg" 
+  user_response:
+    learn: "StoryTime sends free stories by text and Facebook.\n\nFor help: 561-212-5831\nTo stop, text STOP"
+    teacher_reply:
+      session: "I'll see your message by tonight! If you need more help, call StoryTime at 561-212-5831"
+      no_session: "Hi! I'm away now, but I'll see your message soon :)"
+  demo: "Hi! We're away now, but we'll see your message soon. To learn more about StoryTime, call 561-212-5831."
+  enrollment:
+    body: 
+      has_teacher: "Hi, this is %{teacher_name}. I'll be texting %{child_name} books with StoryTime!\n\nYou can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+      has_school: "Hi, this is %{school_signature}. We'll be texting you free books with StoryTime!\n\nYou can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+      has_none: "Hi, this is StoryTime. We'll be texting you free books!\n\nYou can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+
+    body_sprint:
+      has_teacher: 
+        - "Hi, this is %{teacher_name}. I'll be texting %{child_name} books with StoryTime!\n\n"
+        - "You can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+      has_school: 
+        - "Hi, this is %{school_signature}. We'll be texting you free books with StoryTime!\n\n" 
+        - "You can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+      has_none: 
+        - "Hi, this is StoryTime. We'll be texting you free books!\n\n"
+        - "You can start early if you have Facebook Messenger. Tap here and enter 'go':\njoinstorytime.com/go"
+
+
+  defaults:
+    teacher: "your teacher"
+    child: "your child"
