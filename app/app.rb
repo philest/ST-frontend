@@ -377,6 +377,10 @@ get '/register/role' do
   erb :role
 end
 
+get '/register/app' do
+  erb :'get-app'
+end
+
 
 
 
