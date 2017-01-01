@@ -1,0 +1,128 @@
+
+body {
+  font-family: 'Karla';
+  line-height: 32px;
+  background: #f2f3f5;
+}
+
+.body {
+  background: #f2f3f5;
+  display: table-cell; 
+  height: 80vh;
+  vertical-align: middle;
+  /*display:inline-block;*/
+}
+.class-information {
+  /*margin-top: 20px;*/
+  margin-bottom: 0px;
+}
+
+.class-information p {
+  font-family: 'Karla';
+}
+
+.privacy-policy {
+  color: gray;
+  /*margin-top: 16px;*/
+  font-size: 11px;
+  text-align: center;
+  line-height: 16px;
+}
+
+.class-information h1.join-header {
+  font-family: 'Karla';
+  font-weight: normal
+  line-height: 32px;
+}
+
+.class-information b.join-header {
+  line-height: 32px;
+}
+
+.container {
+  padding: 16px;
+  /*width: 100%;*/
+  background: white;
+  margin: 16px;
+  border-radius: 15px;
+  /*height: 60vh;*/
+  /*display: table-cell;*/
+  /*vertical-align: middle;*/
+  display: inline-block;
+
+}
+
+#teacher-info {
+  /*margin-top*/
+}
+
+#join {
+  width: 100%;
+
+  line-height: 28px;
+  margin-top: 23px;
+}
+
+label.error {
+  color: #C63442;
+  line-height: 2.5em;
+    font-weight: bold;
+    /*margin-bottom: 8px;*/
+}
+
+.field label.label {
+  margin-top: 15px;
+
+}
+.field .input {
+  margin-bottom: 0px;
+}
+
+.password-text {
+  text-align: center;
+  line-height: 20px;
+}
+
+.password-text h1 {
+  text-align: center;
+  font-weight: normal;
+}
+
+#join.password-button {
+  width: 30%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+}
+
+.class-information.password-text p {
+  text-align: center;
+  font-weight: normal;
+}
+
+.role {
+  text-align: center;
+  line-height: 12px;
+}
+
+.role h3 {
+  color: #5e5eb7;
+}
+
+.role p {
+  color: gray;
+}
+
+
+
+
+#teacher-icon {
+  width: 70px;
+  display: block; 
+  margin: 0 auto;
+}
+
+
+  
+
