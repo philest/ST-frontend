@@ -5,6 +5,14 @@ body {
   background: #f2f3f5;
 }
 
+button.role {
+  width: 100%;
+}
+
+form.role {
+  width: 100%;
+}
+
 .body {
   background: #f2f3f5;
   display: table-cell; 

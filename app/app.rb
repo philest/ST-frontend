@@ -362,20 +362,73 @@ post '/signin' do
 end
 
 
-get '/register/?' do
+get '/class/:teacher_id' do
+  # teacher code, right?
+  # right now we're searching by teacher_id
+  
+  # get_teacher() <- from st-enroll, i suppose, unless we get the db over here.
+  # teacher = Teacher.where(id: params[:teacher_id]).first
+  # if teacher.nil?
+    # return
+    # erb :fail_page
+  # end
 
-  erb :register
+
+  # school = teacher.school
+
+  # session[:teacher_id] = teacher.id 
+  # session[:teacher_sig] = teacher.signature
+  # session[:school_id] = school.id
+  # session[:school_sig] = school.signature
+
+
+  school = "ST Elementary"
+
+  session[:teacher_id] = 1
+  session[:teacher_sig] = "Mr. McPeek"
+  session[:school_id] = 1
+  session[:school_sig] = "ST Elementary"
+
+  erb :register, locals: {teacher: "Mr. McPeek", school: "ST Elementary"}
 
 end
 
-get '/register/password' do
-  erb :password
-
+post '/register' do
+  puts "#{params}"
+  # get user data from POST params
+  # create user
+  # session[:user_id] = new_user.id
+  redirect to '/register/role'
 end
+
 
 get '/register/role' do
   erb :role
 end
+
+post '/register/role' do
+  puts "in register/role"
+  # get role, save it in user record 
+  redirect to '/register/password'
+end
+
+
+get '/register/password' do
+  erb :password
+end
+
+
+
+
+post '/register/password' do
+  # get params
+  # encrypt/store password
+
+  redirect to  '/register/app'
+
+end
+
+
 
 get '/register/app' do
   erb :'get-app'
