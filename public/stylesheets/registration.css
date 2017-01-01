@@ -10,6 +10,7 @@ body {
   display: table-cell; 
   height: 80vh;
   vertical-align: middle;
+  text-align: center;
   /*display:inline-block;*/
 }
 .class-information {
@@ -29,6 +30,11 @@ body {
   line-height: 16px;
 }
 
+.register.class-information {
+  text-align: left;
+}
+
+
 .class-information h1.join-header {
   font-family: 'Karla';
   font-weight: normal
@@ -37,6 +43,11 @@ body {
 
 .class-information b.join-header {
   line-height: 32px;
+}
+
+.wrapper {
+  display: table;
+  width: 100%;
 }
 
 .container {
@@ -48,8 +59,15 @@ body {
   /*height: 60vh;*/
   /*display: table-cell;*/
   /*vertical-align: middle;*/
-  display: inline-block;
+  /*display: inline-block;*/
 
+}
+
+.role .container {
+  width: 60%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #teacher-info {
@@ -135,6 +153,38 @@ label.error {
   width: 70px;
   display: block; 
   margin: 0 auto;
+}
+
+@media screen and (min-width: 35.5em) {
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .role .container {
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .container {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .role .container {
+    width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
 }
 
 
