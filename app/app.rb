@@ -411,7 +411,7 @@ get '/poetry-guide' do
 end 
 
 
-get '/class/:code'
+get '/class/:code' do
   erb :maintenance
 end
 
