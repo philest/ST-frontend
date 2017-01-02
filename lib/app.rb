@@ -6,6 +6,7 @@
 
 #sinatra dependencies 
 require 'sinatra/base'
+require "sinatra/reloader"
 require 'twilio-ruby'
 require 'sidekiq'
 require 'sidekiq/web'
@@ -29,6 +30,10 @@ class Enroll < Sinatra::Base
   include TwilioTextingHelpers
 
   use Airbrake::Rack::Middleware
+
+  configure :development do
+    register Sinatra::Reloader
+  end
 
   enable :sessions
 
@@ -182,6 +187,7 @@ class Enroll < Sinatra::Base
         when 'teacher'
           school.signup_teacher(educator)
           educator.reload
+          puts "now creating flyer"
           FlyerWorker.perform_async(educator.id, school.id) if new_signup
           if new_signup # send notification email
             WelcomeTeacherWorker.perform_async(educator.id)

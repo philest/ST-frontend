@@ -10,7 +10,8 @@ require 'bundler/setup'
 
 #siantra dependencies 
 require 'sinatra/base'
-require "sinatra/reloader" if ENV['RACK_ENV'] == 'development'
+require "sinatra/reloader"
+
 
 require 'twilio-ruby'
 
@@ -30,6 +31,9 @@ class App < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
   register Sinatra::Flash
 
+  configure :development do
+    register Sinatra::Reloader
+  end
 
   configure :production do
     require 'newrelic_rpm'
