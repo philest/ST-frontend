@@ -496,10 +496,16 @@ class App < Sinatra::Base
 
 
 
+
   post '/success' do
     puts params.to_s  
     return params.to_s
   end
+
+get '/:code/class' do
+  erb :maintenance
+end
+
 
   # post '/success' do  
     # create_invite(params) 

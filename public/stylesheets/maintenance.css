@@ -1,0 +1,199 @@
+
+body {
+  font-family: 'Karla';
+  line-height: 32px;
+  background: #f2f3f5;
+}
+
+button.role {
+  width: 100%;
+}
+
+form.role {
+  width: 100%;
+}
+
+.body {
+  background: #f2f3f5;
+  display: table-cell; 
+  height: 80vh;
+  vertical-align: middle;
+  text-align: center;
+  /*display:inline-block;*/
+}
+.class-information {
+  /*margin-top: 20px;*/
+  margin-bottom: 0px;
+}
+
+.class-information p {
+  font-family: 'Karla';
+}
+
+.privacy-policy {
+  color: gray;
+  /*margin-top: 16px;*/
+  font-size: 11px;
+  text-align: center;
+  line-height: 16px;
+}
+
+.register.class-information {
+  text-align: left;
+}
+
+
+h1 {
+  display: block;
+  line-height: 0.8em;
+}
+
+.class-information b.join-header {
+  line-height: 32px;
+}
+
+.wrapper {
+  display: table;
+  width: 100%;
+}
+
+.container {
+  padding: 16px;
+  /*width: 100%;*/
+  background: white;
+  margin: 16px;
+  border-radius: 15px;
+  /*height: 60vh;*/
+  /*display: table-cell;*/
+  /*vertical-align: middle;*/
+  /*display: inline-block;*/
+
+}
+
+.role .container {
+  width: 60%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#teacher-info {
+  /*margin-top*/
+}
+
+#join {
+  width: 100%;
+  border-radius: 5px;
+  line-height: 28px;
+  margin-top: 23px;
+}
+
+label.error {
+  color: #C63442;
+  line-height: 2.5em;
+    font-weight: bold;
+    /*margin-bottom: 8px;*/
+}
+
+.field label.label {
+  margin-top: 15px;
+
+}
+.field .input {
+  margin-bottom: 0px;
+}
+
+.password-text {
+  text-align: center;
+  line-height: 20px;
+}
+
+.password-text h1 {
+  text-align: center;
+  font-weight: normal;
+}
+
+#join.password-button {
+  width: 30%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 5px;
+}
+
+.class-information.password-text p {
+  text-align: center;
+  font-weight: normal;
+}
+
+.role {
+  text-align: center;
+  line-height: 12px;
+}
+
+.role h3 {
+  color: #5e5eb7;
+}
+
+.role p {
+  color: gray;
+}
+
+.get-app-button {
+  width: 100%;
+}
+
+#app-icon {
+  width: 100%;
+  display: block; 
+}
+
+#app-icon img {
+  width: 200px;
+  height: auto;
+  display: block; 
+  margin: 0 auto;
+}
+
+
+#teacher-icon {
+  width: 70px;
+  display: block; 
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 35.5em) {
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .role .container {
+    width: 60%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+@media screen and (min-width: 48em) {
+  .container {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .role .container {
+    width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+
+  
+
