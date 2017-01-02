@@ -411,6 +411,10 @@ get '/poetry-guide' do
 end 
 
 
+get '/class/:code'
+  erb :maintenance
+end
+
 
 post '/success' do
   puts params.to_s  
