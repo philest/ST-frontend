@@ -43,10 +43,9 @@ form.role {
 }
 
 
-.class-information h1.join-header {
-  font-family: 'Karla';
-  font-weight: normal
-  line-height: 32px;
+h1 {
+  display: block;
+  line-height: 0.8em;
 }
 
 .class-information b.join-header {
@@ -150,7 +149,7 @@ label.error {
 }
 
 #app-icon img {
-  width: 105px;
+  width: 200px;
   height: auto;
   display: block; 
   margin: 0 auto;
