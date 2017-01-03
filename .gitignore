@@ -1,8 +1,8 @@
+.env
 .DS_store
 twilio
 twilio/*
 iron/iron.json
 bootup
 lib/bootup
-.env
 demo_users.rb
