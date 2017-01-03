@@ -126,8 +126,10 @@ label.error {
 }
 
 #join.password-button {
-  width: 30%;
+  /*width: 100%;*/
   display: block;
+  font-weight: bold;
+  font-size: 14px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 5px;
@@ -138,17 +140,25 @@ label.error {
   font-weight: normal;
 }
 
+.container.first-page {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        border-radius: 0px;
+      }
+
 .role {
   text-align: center;
   line-height: 12px;
 }
 
 .role h3 {
-  color: #5e5eb7;
+  /*color: #5e5eb7;*/
+  color: #0b7fbd;
 }
 
 .role p {
-  color: gray;
+  color: #a0a0a0;
+  line-height: 19px;
 }
 
 .get-app-button {
@@ -169,7 +179,7 @@ label.error {
 
 
 #teacher-icon {
-  width: 70px;
+  width: 55px;
   display: block; 
   margin: 0 auto;
 }
