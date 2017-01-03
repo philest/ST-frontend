@@ -50,7 +50,6 @@ module TwilioTextingHelpers
         :to => to_phone,     
         :from => from_phone,
       )
-
     end
 
     puts "Sent SMS to #{to_phone}. Body: \"#{body}\"" 
@@ -89,7 +88,6 @@ module TwilioTextingHelpers
     # TODO: collect error_code and status information and react accordingly.  
   end
 
-
   # TODO: DO THE SAME FOR SEND_JOINT AS YOU DID FOR SEND_SMS AND SEND_MMS
   def send_joint(media_url, body, to_phone, from_phone)
     client = Twilio::REST::Client.new ENV['TW_ACCOUNT_SID'], ENV['TW_AUTH_TOKEN']
@@ -122,7 +120,6 @@ module TwilioTextingHelpers
     twiml.text
   end
 
-
   def get_carrier(phone)
     # Get the user's phone carrier. 
     @lookups_client = Twilio::REST::LookupsClient.new ENV["TW_ACCOUNT_SID"], ENV["TW_AUTH_TOKEN"]
@@ -150,7 +147,6 @@ module TwilioTextingHelpers
     else
       MessageWorker.perform_async(subject, david, ENV['ST_USER_REPLIES_NO'])
       MessageWorker.perform_async(subject, phil, ENV['ST_USER_REPLIES_NO'])
-
     end
   end
 
