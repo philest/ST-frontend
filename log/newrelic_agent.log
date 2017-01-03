@@ -280,3 +280,75 @@
 [2017-01-02 18:31:37 -0800 Davids-MacBook-Air-4.local (49512)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
 [2017-01-02 18:38:58 -0800 Davids-MacBook-Air-4.local (49513)] ERROR : Invalid license key, please contact support@newrelic.com
 [2017-01-02 18:38:58 -0800 Davids-MacBook-Air-4.local (49513)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Environment: development
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Dispatcher: sidekiq
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Application: development
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing Net instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:06:07 -0800 Davids-Air-4 (51207)] INFO : Finished instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Environment: development
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Dispatcher: puma
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Application: development
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Net instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Sinatra instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:06:12 -0800 Davids-Air-4 (51206)] INFO : Finished instrumentation
+[2017-01-02 22:06:13 -0800 Davids-Air-4 (51206)] INFO : Doing deferred dependency-detection before Rack startup
+[2017-01-02 22:06:21 -0800 Davids-Air-4 (51206)] ERROR : Invalid license key, please contact support@newrelic.com
+[2017-01-02 22:06:21 -0800 Davids-Air-4 (51206)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Environment: development
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Dispatcher: sidekiq
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Application: development
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing Net instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:12:28 -0800 Davids-Air-4 (51351)] INFO : Finished instrumentation
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] INFO : Environment: development
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] INFO : Dispatcher: puma
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] INFO : Application: development
+[2017-01-02 22:12:32 -0800 Davids-Air-4 (51350)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Net instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Sinatra instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Finished instrumentation
+[2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Doing deferred dependency-detection before Rack startup
+[2017-01-02 22:12:37 -0800 Davids-Air-4 (51350)] ERROR : Invalid license key, please contact support@newrelic.com
+[2017-01-02 22:12:37 -0800 Davids-Air-4 (51350)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
