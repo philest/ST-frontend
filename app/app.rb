@@ -418,7 +418,7 @@ class App < Sinatra::Base
     text = {}
     if locale == 'es'
       text[:call_to_action] = "Anótate"
-      text[:class] = "en la clase de #{teacher.signature}"
+      text[:class] = "en la Clase de #{teacher.signature}"
       text[:full_name] = "Nombre completo"
       text[:full_name_placeholder] = "Nombre y apellido"
       text[:phone_number] = "Teléfono"
