@@ -380,7 +380,7 @@ class App < Sinatra::Base
   end
 
 
-  get '/:class_code/class' do
+  get '/:class_code/class/?' do
     # teacher code, right?
     # right now we're searching by teacher_id
     
@@ -432,7 +432,7 @@ class App < Sinatra::Base
 
   end
 
-  post '/register' do
+  post '/register/?' do
     puts "params = #{params}"
     puts "session = #{session.inspect}"
     name = params['name']
@@ -476,7 +476,7 @@ class App < Sinatra::Base
   end
 
 
-  get '/register/role' do
+  get '/register/role/?' do
     puts "params = #{params}"
     puts "session = #{session.inspect}"
 
@@ -501,7 +501,7 @@ class App < Sinatra::Base
     erb :role, locals: {text: text}
   end
 
-  post '/register/role' do
+  post '/register/role/?' do
     puts "in register/role"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
@@ -522,7 +522,7 @@ class App < Sinatra::Base
   end
 
 
-  get '/register/password' do
+  get '/register/password/?' do
     puts "params = #{params}"
     puts "session = #{session.inspect}"
 
@@ -547,7 +547,7 @@ class App < Sinatra::Base
   end
 
 
-  post '/register/password' do
+  post '/register/password/?' do
     puts "params = #{params}"
     puts "session = #{session.inspect}"
 
@@ -567,7 +567,7 @@ class App < Sinatra::Base
   end
 
 
-  get '/register/app' do
+  get '/register/app/?' do
     # erb :'get-app'
     puts "params = #{params}"
     puts "session = #{session.inspect}"
