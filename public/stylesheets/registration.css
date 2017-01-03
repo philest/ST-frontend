@@ -32,6 +32,7 @@ p.school-name {
 
 .class-information p {
   font-family: 'Karla';
+  font-size: 17px;
 }
 
 .privacy-policy {
@@ -45,6 +46,7 @@ p.school-name {
 .register.class-information {
   text-align: left;
 }
+
 
 
 .class-information h1.join-header {
@@ -91,6 +93,11 @@ p.school-name {
   border-radius: 5px;
   line-height: 28px;
   margin-top: 23px;
+  background-color: #ed7a44 
+}
+
+.label {
+  font-weight: 400;
 }
 
 label.error {
