@@ -24,8 +24,6 @@ run Rack::URLMap.new({
   '/sidekiq' => Sidekiq::Web
 })
 
-
-
 # run Rack::URLMap.new('/' => Sinatra::Application)
 
 
