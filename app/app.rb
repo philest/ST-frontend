@@ -693,7 +693,7 @@ class App < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "El <b>lunes</b> le enviaremos la aplicación"
+      text[:info] = "El <b>lunes</b> le envíaremos la aplicación"
       
 
 
