@@ -507,9 +507,9 @@ class App < Sinatra::Base
     else
       text[:header] = "Tell us about yourself"
       text[:identity] = {}
-      text[:identity][:parent] = ["I'm a parent", "Parent or guardian"]
-      text[:identity][:teacher] = ["I'm a teacher", "Teacher, coach, club adviser, etc"]
-      text[:identity][:admin] = ["I'm an administrator","Superintendent, principal, tech coordinator, etc."]
+      text[:identity][:parent] = ["I'm a parent", "Parent, guardian, or family"]
+      text[:identity][:teacher] = ["I'm a teacher", "Teacher or assistant teacher"]
+      text[:identity][:admin] = ["I'm an administrator","School leaders, academic directors"]
     end
 
     erb :role, locals: {text: text}
@@ -579,7 +579,8 @@ class App < Sinatra::Base
     # encrypt/store password
     # encrypt that shit!
 
-    redirect to  '/register/app'
+    # redirect to  '/register/app'
+    redirect to  '/coming-soon'
 
   end
 
