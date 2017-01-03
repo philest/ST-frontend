@@ -703,10 +703,8 @@ class App < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "El <b>lunes</b> le envíaremos la aplicación"
+      text[:info] = "Le envíaremos un texto pronto con los libros de #{session[:teacher_sig]}" 
       
-
-
       text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
     else
       text[:exclaim] = "Great!"
@@ -714,7 +712,7 @@ class App < Sinatra::Base
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "On <b>Monday</b> we will send you the app!"
+      text[:info] = "We'll text you in a few days with #{session[:teacher_sig]}'s books!"
 
 
       text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
