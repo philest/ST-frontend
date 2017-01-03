@@ -4,7 +4,7 @@ module SchoolCodeMatcher
      # get all available codes...
       all_codes =  School.map(:code).compact
       all_codes += Teacher.map(:code).compact
-      puts "all codes (teachers, schools) = #{all_codes}"
+      # puts "all codes (teachers, schools) = #{all_codes}"
       all_codes = all_codes.map {|c| c.delete(' ').delete('-').downcase }
       # need to split up the codes by individual english/spanish
       all_codes = all_codes.inject([]) do |result, elt|
@@ -33,11 +33,7 @@ module SchoolCodeMatcher
 
           elsif body_text == sp
             return {locale: 'es', type: 'school', educator: school}
-          else 
-            puts "#{code} did not match with #{school.name} regex!"
           end
-        else
-          puts "code #{body_text} doesn't match with #{school.signature}'s code #{school.code}"
         end
       end
 
@@ -54,13 +50,11 @@ module SchoolCodeMatcher
             return {locale: 'en', type: 'teacher', educator: teacher}
           elsif body_text == sp
             return {locale: 'es', type: 'teacher', educator: teacher}
-          else 
-            puts "#{code} did not match with #{teacher.name} regex!"
           end
-        else
-          puts "code #{body_text} doesn't match with #{teacher.signature}'s code #{teacher.code}"
         end # if code.include? body_text
       end # Teacher.each do |teacher|
+
+      return false
 
   end
 

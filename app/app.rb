@@ -27,6 +27,9 @@ require_relative '../helpers/school_code_helper'
 require 'airbrake'
 require_relative '../config/initializers/airbrake'
 
+
+require_relative '../lib/workers'
+
 require 'sinatra/flash'
 
 class App < Sinatra::Base
@@ -54,7 +57,6 @@ class App < Sinatra::Base
 
   use Airbrake::Rack::Middleware
 
-
   #set mode (production or test)
   MODE ||= ENV['RACK_ENV']
   PRO ||= "production"
@@ -66,6 +68,7 @@ class App < Sinatra::Base
   include RoutesHelper
   helpers RoutesHelper
   helpers SchoolCodeMatcher
+  helpers TwilioTextingHelpers
 
   set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
   enable :sessions
@@ -389,15 +392,16 @@ class App < Sinatra::Base
     # get teacher, then get language
 
     educator = educator?(params[:class_code])
+    puts "educator = #{educator.inspect}"
     if educator
       locale = educator[:locale]
       type   = educator[:type]
       teacher = educator[:educator]
       if type == 'school'
-        return
+        halt erb :error
       end 
     else
-      return
+      halt erb :error
     end
 
     # let's just assume it's a teacher for now...........
@@ -412,7 +416,16 @@ class App < Sinatra::Base
 
     # locale stuff.....
     text = {}
-    if locale == 'en'
+    if locale == 'es'
+      text[:call_to_action] = "Anótate"
+      text[:class] = "en la clase de #{teacher.signature}"
+      text[:full_name] = "Nombre completo"
+      text[:full_name_placeholder] = "Nombre y apellido"
+      text[:phone_number] = "Teléfono"
+      text[:sign_up] = "Inscribirse"
+      text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
+
+    else # default to english
       text[:call_to_action] = "Join"
       text[:class] = "#{teacher.signature}'s Class"
       text[:full_name] = "Full name"
@@ -420,15 +433,8 @@ class App < Sinatra::Base
       text[:phone_number] = "Phone number"
       text[:sign_up] = "Sign up"
       text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
-    elsif locale == 'es'
-      text[:call_to_action] = "Anótate"
-      text[:class] = "en la clase de #{teacher.signature}"
-      text[:full_name] = "Nombre completo"
-      text[:full_name_placeholder] = "Nombre y apellido"
-      text[:phone_number] = "Número de teléfono"
-      text[:sign_up] = "Regístrate"
-      text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
     end
+
       
     erb :register, locals: {text: text, teacher: teacher.signature, school: school.signature}
 
@@ -441,7 +447,7 @@ class App < Sinatra::Base
     phone = params['phone']
     os = params['mobile_os']
 
-    if name and phone and os and os != 'unknown'
+    if name and phone and os # and os != 'unknown'
 
       phone = phone.delete(' ').delete('-').delete('(').delete(')')
       user = User.where(phone: phone).first
@@ -460,7 +466,9 @@ class App < Sinatra::Base
       # get first and last name
       terms = name.split(' ')
       if terms.size < 1
-        return ''
+        # return ''
+        # have a more informative error message?
+        halt erb :error
       elsif terms.size == 1 # just the first name
         first_name = terms.first[0].upcase + terms.first[1..-1]
         new_user.update(first_name: first_name)
@@ -471,8 +479,11 @@ class App < Sinatra::Base
       end
 
       session[:user_id] = new_user.id
+
+      notify_admins("user with phone #{phone} registered on web app", params.to_s)
+
     else
-      return
+      halt erb :error
     end
 
     redirect to '/register/role'
@@ -486,19 +497,18 @@ class App < Sinatra::Base
 
     text = {}
     case session[:locale]
-    when 'en'
+    when 'es'
+      text[:header] = "Cuéntanos algo sobre ti"
+      text[:identity] = {}
+      text[:identity][:parent] = ["Soy padre", "Padre, guardián, o familia"]
+      text[:identity][:teacher] = ["Soy profesor", "Profesor o profesor auxiliar"]
+      text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
+    else
       text[:header] = "Tell us about yourself"
       text[:identity] = {}
       text[:identity][:parent] = ["I'm a parent", "Parent or guardian"]
       text[:identity][:teacher] = ["I'm a teacher", "Teacher, coach, club adviser, etc"]
       text[:identity][:admin] = ["I'm an administrator","Superintendent, principal, tech coordinator, etc."]
-
-    when 'es'
-      text[:header] = "Cuéntanos acerca de tí"
-      text[:identity] = {}
-      text[:identity][:parent] = ["Soy un padre", "Padre o guardián"]
-      text[:identity][:teacher] = ["Soy un maestro", "Maestro, entrenador, asesor del club, etc."]
-      text[:identity][:admin] = ["Soy un administrador","Superintendente, director, coordinador de tecnología, etc."]
     end
 
     erb :role, locals: {text: text}
@@ -508,10 +518,11 @@ class App < Sinatra::Base
     puts "in register/role"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
+    # where do i redirect if there's no session?
 
     user = User.where(id: session[:user_id]).first
     if user.nil?
-      return
+      halt erb :error
     end
     # add validations for the enroll
     if ['parent', 'teacher', 'admin'].include? params['role']
@@ -519,7 +530,7 @@ class App < Sinatra::Base
       # get role, save it in user record 
       redirect to '/register/password'
     else
-      return
+      halt erb :error
     end
 
   end
@@ -532,19 +543,19 @@ class App < Sinatra::Base
 
     text = {}
     case session[:locale]
-    when 'en'
+    when 'es'
+      text[:header] = "Último paso"
+      text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
+      text[:label] = "Crear una contraseña"
+      text[:placeholder] = "Contraseña"
+      text[:button] = "Terminar"
+
+    else
       text[:header] = "Last step"
       text[:subtitle] = "Your password must contain at least six characters."
       text[:label] = "Choose password"
       text[:placeholder] = "Password"
       text[:button] = "Save"
-
-    when 'es'
-      text[:header] = "Último paso"
-      text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
-      text[:label] = "Crea una contraseña"
-      text[:placeholder] = "Contraseña"
-      text[:button] = "Guardar"
 
     end
 
@@ -558,7 +569,7 @@ class App < Sinatra::Base
 
     user = User.where(id: session[:user_id]).first
     if user.nil?
-      return
+      halt erb :error
     end
 
     user.set_password(params['password'])
@@ -579,15 +590,6 @@ class App < Sinatra::Base
 
     text = {}
     case session[:locale]
-    when 'en'
-      text[:header] = "starts soon!"
-      text[:return] = "Come back on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th!"
-
-      text[:header] = "Get the StoryTime app"
-      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
-
     when 'es'
       text[:header] = "empieza pronto!"
       text[:return] = "Vuelve"
@@ -596,12 +598,27 @@ class App < Sinatra::Base
 
       text[:header] = "Consigue StoryTime"
       text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+    else
+      text[:header] = "starts soon!"
+      text[:return] = "Come back on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th!"
+
+      text[:header] = "Get the StoryTime app"
+      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
     end
+
+    # notify_admins("user id=#{session[:user_id]} finished registration", "")
 
     erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
     # erb :maintenance, locals: {school: session[:school_sig], text: text}
   end
 
+
+  get '/error' do
+    halt erb :error 
+  end
 
 
 
@@ -669,22 +686,28 @@ class App < Sinatra::Base
 
     text = {}
     case session[:locale]
-    when 'en'
-      text[:header] = "starts soon!"
-      text[:return] = "We will text you on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th to start!"
-
-      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
-
     when 'es'
+      text[:exclaim] = "¡Muy bien!"
       text[:header] = "empieza pronto!"
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
+      text[:info] = "El <b>lunes</b> le enviaremos la aplicación"
+      
 
 
       text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+    else
+      text[:exclaim] = "Great!"
+      text[:header] = "starts soon!"
+      text[:return] = "We will text you on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th to start!"
+      text[:info] = "On <b>Monday</b> we will send you the app!"
+
+
+      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
     end
 
     # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
@@ -692,6 +715,7 @@ class App < Sinatra::Base
 
     erb :maintenance, locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
   end
+
 
 
   # post '/success' do  
