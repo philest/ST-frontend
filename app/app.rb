@@ -10,7 +10,8 @@ require 'bundler/setup'
 
 #siantra dependencies 
 require 'sinatra/base'
-require "sinatra/reloader"
+require "bundler/setup"
+require "sinatra/reloader" if development? 
 
 
 require 'twilio-ruby'
