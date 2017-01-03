@@ -135,7 +135,7 @@
           <div class="pure-g">
             <div class="pure-u-1">
               <div class="class-information register">
-                <h1 class="join-header">Join <b><%= teacher %>'s class </b></h1>
+                <h1 class="join-header"><%= text[:call_to_action] %></h1>
                 <p class="school-name"><%= school %></p>
               </div>
 
@@ -144,20 +144,20 @@
                 <form id="register" action='/register' method="post"> 
                   <div class="signup-setup">
                     <div class="field" id="signup-field">
-                       <label class="label">Full name</label>
-                      <input name="name" placeholder="First and last name" class="input" required>
-                        <label class="label">Phone number</label>
+                       <label class="label"><%= text[:full_name] %></label>
+                      <input name="name" placeholder="<%= text[:full_name_placeholder] %>" class="input" required>
+                        <label class="label"><%= text[:phone_number] %></label>
                       <input name="phone" placeholder="(555) 555-5555" class="input" required>
                       </div>
                    
-                      <button id="join" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Sign up</button>
+                      <button id="join" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button"><%= text[:sign_up] %></button>
                   </div>
                 </form>
               </div>
 
 
             <div class="privacy-policy">
-              <p>By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b></p>
+              <p><%= text[:privacy_policy] %></p>
             </div>
           </div>
 
