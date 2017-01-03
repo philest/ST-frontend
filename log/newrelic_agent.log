@@ -352,3 +352,37 @@
 [2017-01-02 22:12:33 -0800 Davids-Air-4 (51350)] INFO : Doing deferred dependency-detection before Rack startup
 [2017-01-02 22:12:37 -0800 Davids-Air-4 (51350)] ERROR : Invalid license key, please contact support@newrelic.com
 [2017-01-02 22:12:37 -0800 Davids-Air-4 (51350)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] INFO : Environment: development
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] INFO : Dispatcher: sidekiq
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] INFO : Application: development
+[2017-01-02 22:58:55 -0800 Davids-Air-4 (52890)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing Net instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:58:56 -0800 Davids-Air-4 (52890)] INFO : Finished instrumentation
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] INFO : Environment: development
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] INFO : Dispatcher: puma
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] INFO : Application: development
+[2017-01-02 22:59:00 -0800 Davids-Air-4 (52889)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Net instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Sinatra instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Redis Instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Sequel instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 22:59:01 -0800 Davids-Air-4 (52889)] INFO : Finished instrumentation
+[2017-01-02 22:59:02 -0800 Davids-Air-4 (52889)] INFO : Doing deferred dependency-detection before Rack startup

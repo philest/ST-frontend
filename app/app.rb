@@ -413,14 +413,16 @@ class App < Sinatra::Base
     # locale stuff.....
     text = {}
     if locale == 'en'
-      text[:call_to_action] = "Join #{teacher.signature}'s Class"
+      text[:call_to_action] = "Join"
+      text[:class] = "#{teacher.signature}'s Class"
       text[:full_name] = "Full name"
       text[:full_name_placeholder] = "First and last name"
       text[:phone_number] = "Phone number"
       text[:sign_up] = "Sign up"
       text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
     elsif locale == 'es'
-      text[:call_to_action] = "Anótate en la clase de #{teacher.signature}"
+      text[:call_to_action] = "Anótate"
+      text[:class] = "en la clase de #{teacher.signature}"
       text[:full_name] = "Nombre completo"
       text[:full_name_placeholder] = "Nombre y apellido"
       text[:phone_number] = "Número de teléfono"
@@ -531,14 +533,16 @@ class App < Sinatra::Base
     text = {}
     case session[:locale]
     when 'en'
-      text[:header] = "Create a password"
+      text[:header] = "Last step"
       text[:subtitle] = "Your password must contain at least six characters."
+      text[:label] = "Choose password"
       text[:placeholder] = "Password"
       text[:button] = "Save"
 
     when 'es'
-      text[:header] = "Crea una contraseña"
+      text[:header] = "Último paso"
       text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
+      text[:label] = "Crea una contraseña"
       text[:placeholder] = "Contraseña"
       text[:button] = "Guardar"
 
@@ -569,7 +573,7 @@ class App < Sinatra::Base
 
 
   get '/register/app/?' do
-    # erb :'get-app'
+    # 
     puts "params = #{params}"
     puts "session = #{session.inspect}"
 
@@ -581,15 +585,21 @@ class App < Sinatra::Base
       text[:weekday] = "Thursday"
       text[:date] = "January 4th!"
 
+      text[:header] = "Get the StoryTime app"
+      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
     when 'es'
       text[:header] = "empieza pronto!"
       text[:return] = "Vuelve"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero!"
+
+      text[:header] = "Consigue StoryTime"
+      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
     end
 
-
-    erb :maintenance, locals: {school: session[:school_sig], text: text}
+    erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
+    # erb :maintenance, locals: {school: session[:school_sig], text: text}
   end
 
 

@@ -13,6 +13,10 @@ form.role {
   width: 100%;
 }
 
+p.school-name {
+  margin-top: 0px;
+}
+
 .body {
   background: #f2f3f5;
   display: table-cell; 
