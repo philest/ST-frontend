@@ -36,7 +36,7 @@
 
     <link rel="stylesheet" href="../stylesheets/teacher-form-input.css" type="text/css" />
 
-    <link rel="stylesheet" href="../stylesheets/maintenance.css" type="text/css">
+    <link rel="stylesheet" href="../stylesheets/registration.css" type="text/css">
 
 
     <link rel="stylesheet" href="../stylesheets/pure-push-pull.css" type="text/css" />
@@ -86,25 +86,27 @@
 
 <body>
   <!-- navbar -->
-
+  <%= erb :'components/navbar' %>
   <div class="wrapper">
       <div class="body">
-
+        <div class="pure-u-1 class-information password-text">
+               <h1 class="">Get the StoryTime app</h1>
+                <p>Get books instantly on your phone</p>
+              </div>
+      
         <div class="container">
           <div class="pure-g">
-            <div class="pure-u-1">
-                <div id="app-icon">
-                  <img src="/images/app-icon.png"  alt="">
-                </div>
-                <div style="margin-bottom: 60px;">
-                  <h1><%= school %> StoryTime</h1>
-                  <h1><%= text[:header] %></h1>
-                </div>
+            
+            <div id="app-icon">
+              <img src="/images/app-icon.png" alt="">    
+            </div>  
+                       
+            <a href="#" style="width: 100%;">
+              <button id="join" class="get-app-button signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Download StoryTime app</button>
+            </a>
 
-                <p><%= text[:return] %></p>
-                <h1 style="line-height: 0em;"><%= text[:weekday] %></h1>
-                <p><%= text[:date] %></p>
-            </div>
+
+
           </div> <%# end pure-g %>
 
         </div>
