@@ -91,20 +91,21 @@
   <div class="wrapper role">
       <div class="body">
         <div class="pure-u-1 class-information password-text">
-                <h1 class="">Tell us about yourself</h1>
+                <h1 class=""><%= text[:header] %></h1>
               </div>
       
         <div class="container">
           <div class="pure-g">
 
             <form class="role" action="/register/role" method="post">
+              <input type="hidden" name="role" value="parent">
               
               <button class="role" type="submit">
                   <div class="pure-u-1 role-form">
                     <div class="role">
                         <img src="/images/fresh-apple-icon.png" id="teacher-icon" alt="">
-                        <h3>I'm a parent</h3>
-                        <p>Parent or guardian</p>
+                        <h3><%= text[:identity][:parent][0] %></h3>
+                        <p><%= text[:identity][:parent][1] %></p>
                     </div>
                   </div>
               </button>
@@ -118,14 +119,15 @@
         <div class="container">
           <div class="pure-g">
             <form class="role" action="/register/role" method="post">
+              <input type="hidden" name="role" value="teacher">
               
               <button class="role" type="submit">
 
                 <div class="pure-u-1 role-form">
                   <div class="role">
                       <img src="/images/fresh-apple-icon.png" id="teacher-icon" alt="">
-                      <h3>I'm a teacher</h3>
-                      <p>Teacher, coach, club adviser, etc.</p>
+                      <h3><%= text[:identity][:teacher][0] %></h3>
+                      <p><%= text[:identity][:teacher][1] %></p>
                   </div>
                 </div>
               </button>
@@ -137,14 +139,14 @@
 
         <div class="container">
           <div class="pure-g">
-
             <form class="role" action="/register/role" method="post">
+              <input type="hidden" name="role" value="admin">
               <button class="role" type="submit">
                 <div class="pure-u-1 role-form">
                   <div class="role">
                       <img src="/images/fresh-apple-icon.png" id="teacher-icon" alt="">
-                      <h3>I'm an administrator</h3>
-                      <p>Superintendent, principal, tech coordinator, etc.</p>
+                      <h3><%= text[:identity][:admin][0] %></h3>
+                      <p><%= text[:identity][:admin][1] %></p>
                   </div>
                 </div>
               </button>

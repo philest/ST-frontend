@@ -385,15 +385,19 @@ class App < Sinatra::Base
 
     # get teacher, then get language
 
-    
-
-
-    teacher = Teacher.where(id: params[:teacher_id]).first
-    if teacher.nil?
+    educator = educator?(params[:class_code])
+    if educator
+      locale = educator[:locale]
+      type   = educator[:type]
+      teacher = educator[:educator]
+      if type == 'school'
+        return
+      end 
+    else
       return
-      # erb :fail_page
     end
 
+    # let's just assume it's a teacher for now...........
 
     school = teacher.school
 
@@ -401,49 +405,163 @@ class App < Sinatra::Base
     session[:teacher_sig] = teacher.signature
     session[:school_id] = school.id
     session[:school_sig] = school.signature
+    session[:locale] = locale
 
-
-    school = "ST Elementary"
-
-    session[:teacher_id] = 1
-    session[:teacher_sig] = "Mr. McPeek"
-    session[:school_id] = 1
-    session[:school_sig] = "ST Elementary"
-
-    erb :register, locals: {teacher: "Mr. McPeek", school: "ST Elementary"}
+    # locale stuff.....
+    text = {}
+    if locale == 'en'
+      text[:call_to_action] = "Join #{teacher.signature}'s Class"
+      text[:full_name] = "Full name"
+      text[:full_name_placeholder] = "First and last name"
+      text[:phone_number] = "Phone number"
+      text[:sign_up] = "Sign up"
+      text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
+    elsif locale == 'es'
+      text[:call_to_action] = "Anótate en la clase de #{teacher.signature}"
+      text[:full_name] = "Nombre completo"
+      text[:full_name_placeholder] = "Nombre y apellido"
+      text[:phone_number] = "Número de teléfono"
+      text[:sign_up] = "Regístrate"
+      text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
+    end
+      
+    erb :register, locals: {text: text, teacher: teacher.signature, school: school.signature}
 
   end
 
   post '/register' do
-    puts "#{params}"
-    # get user data from POST params
-    # create user
-    # session[:user_id] = new_user.id
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+    name = params['name']
+    phone = params['phone']
+    os = params['mobile_os']
+
+    if name and phone and os and os != 'unknown'
+
+      user = User.where(phone: phone).first
+
+      if user
+        new_user = user
+      else
+        new_user = User.create(phone: phone, platform: os)
+      end
+
+      # get session and create associations
+      teacher = Teacher.where(id: session[:teacher_id]).first
+      teacher.signup_user(new_user)
+
+      # get first and last name
+      terms = name.split(' ')
+      if terms.size < 1
+        return ''
+      elsif terms.size == 1 # just the first name
+        first_name = terms.first[0].upcase + terms.first[1..-1]
+        new_user.update(first_name: first_name)
+      elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
+        first_name = terms.first[0].upcase + terms.first[1..-1] 
+        last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
+        new_user.update(first_name: first_name, last_name: last_name)
+      end
+
+      session[:user_id] = new_user.id
+    else
+      return
+    end
+
     redirect to '/register/role'
   end
 
 
   get '/register/role' do
-    erb :role
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+
+    text = {}
+    case session[:locale]
+    when 'en'
+      text[:header] = "Tell us about yourself"
+      text[:identity] = {}
+      text[:identity][:parent] = ["I'm a parent", "Parent or guardian"]
+      text[:identity][:teacher] = ["I'm a teacher", "Teacher, coach, club adviser, etc"]
+      text[:identity][:admin] = ["I'm an administrator","Superintendent, principal, tech coordinator, etc."]
+
+    when 'es'
+      text[:header] = "Cuéntanos acerca de tí"
+      text[:identity] = {}
+      text[:identity][:parent] = ["Soy un padre", "Padre o guardián"]
+      text[:identity][:teacher] = ["Soy un maestro", "Maestro, entrenador, asesor del club, etc."]
+      text[:identity][:admin] = ["Soy un administrador","Superintendente, director, coordinador de tecnología, etc."]
+    end
+
+    erb :role, locals: {text: text}
   end
 
   post '/register/role' do
     puts "in register/role"
-    # get role, save it in user record 
-    redirect to '/register/password'
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+    user = User.where(id: session[:user_id]).first
+    if user.nil?
+      return
+    end
+
+    # add validations for the enroll
+
+    if ['parent', 'teacher', 'admin'].include? role
+      user.update(role: params['role'])
+      # get role, save it in user record 
+      redirect to '/register/password'
+    else
+      return
+    end
+
+
   end
 
 
   get '/register/password' do
-    erb :password
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+
+    text = {}
+    case session[:locale]
+    when 'en'
+      text[:header] = "Create a password"
+      text[:subtitle] = "Your password must contain at least six characters."
+      text[:placeholder] = "Password"
+      text[:button] = "Save"
+
+    when 'es'
+      text[:header] = "Crea una contraseña"
+      text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
+      text[:placeholder] = "Contraseña"
+      text[:button] = "Guardar"
+
+    end
+
+    erb :password, locals: {text: text}
   end
 
 
 
 
   post '/register/password' do
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+    user = User.where(id: session[:user_id]).first
+    if user.nil?
+      return
+    end
+
+    user.set_password(params['password'])
+
     # get params
     # encrypt/store password
+    # encrypt that shit!
 
     redirect to  '/register/app'
 
