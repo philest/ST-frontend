@@ -444,6 +444,7 @@ class App < Sinatra::Base
         new_user = user
       else
         new_user = User.create(phone: phone, platform: os)
+        new_user.state_table.update(subscribed?: false)
       end
 
       # get session and create associations
@@ -517,7 +518,6 @@ class App < Sinatra::Base
       return
     end
 
-
   end
 
 
@@ -546,8 +546,6 @@ class App < Sinatra::Base
   end
 
 
-
-
   post '/register/password' do
     puts "params = #{params}"
     puts "session = #{session.inspect}"
@@ -568,9 +566,28 @@ class App < Sinatra::Base
   end
 
 
-
   get '/register/app' do
-    erb :'get-app'
+    # erb :'get-app'
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+    text = {}
+    case session[:locale]
+    when 'en'
+      text[:header] = "starts soon!"
+      text[:return] = "Come back on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th!"
+
+    when 'es'
+      text[:header] = "empieza pronto!"
+      text[:return] = "Vuelve"
+      text[:weekday] = "el jueves"
+      text[:date] = "4 de enero!"
+    end
+
+
+    erb :maintenance, locals: {school: session[:school_sig], text: text}
   end
 
 
