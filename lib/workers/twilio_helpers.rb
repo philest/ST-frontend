@@ -141,6 +141,7 @@ module TwilioTextingHelpers
     email_admins(subject, body)
     text_body   = subject + ":\n" + body
     david, phil = '+18186897323', '+15612125831'
+    puts "NOTIFYING ADMINS......."
     if text_body.length < 360
       MessageWorker.perform_async(text_body, david, ENV['ST_USER_REPLIES_NO'])
       MessageWorker.perform_async(text_body, phil, ENV['ST_USER_REPLIES_NO'])

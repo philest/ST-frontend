@@ -480,6 +480,7 @@ class App < Sinatra::Base
 
       session[:user_id] = new_user.id
 
+      puts "ABOUT TO NOTIFY ADMINS"
       notify_admins("user with phone #{phone} registered on web app", params.to_s)
 
     else
