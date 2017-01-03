@@ -445,6 +445,7 @@ class App < Sinatra::Base
   end
 
   post '/register/?' do
+    puts "in post /register"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
     name = params['name']
@@ -485,7 +486,7 @@ class App < Sinatra::Base
       session[:user_id] = new_user.id
 
       puts "ABOUT TO NOTIFY ADMINS"
-      notify_admins("user with phone #{phone} registered on web app", params.to_s)
+      notify_admins("user with id #{new_user.id} started registration", params.to_s)
 
     else
       halt erb :error
@@ -496,7 +497,8 @@ class App < Sinatra::Base
 
 
   get '/register/role/?' do
-    puts "params = #{params}"
+    puts "in get /register/role"
+    # puts "params = #{params}"
     puts "session = #{session.inspect}"
 
 
@@ -520,7 +522,7 @@ class App < Sinatra::Base
   end
 
   post '/register/role/?' do
-    puts "in register/role"
+    puts "in post /register/role"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
     # where do i redirect if there's no session?
@@ -542,7 +544,8 @@ class App < Sinatra::Base
 
 
   get '/register/password/?' do
-    puts "params = #{params}"
+    # puts "params = #{params}"
+    puts "in get /register/password"
     puts "session = #{session.inspect}"
 
 
@@ -569,6 +572,7 @@ class App < Sinatra::Base
 
 
   post '/register/password/?' do
+    puts "in post /register/password"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
 
@@ -591,7 +595,8 @@ class App < Sinatra::Base
 
   get '/register/app/?' do
     # 
-    puts "params = #{params}"
+    puts "in get /register/app"
+    # puts "params = #{params}"
     puts "session = #{session.inspect}"
 
     text = {}
@@ -615,7 +620,7 @@ class App < Sinatra::Base
 
     end
 
-    # notify_admins("user id=#{session[:user_id]} finished registration", "")
+    notify_admins("user id=#{session[:user_id]} finished registration", "")
 
     erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
     # erb :maintenance, locals: {school: session[:school_sig], text: text}
