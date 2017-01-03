@@ -507,10 +507,8 @@ class App < Sinatra::Base
     if user.nil?
       return
     end
-
     # add validations for the enroll
-
-    if ['parent', 'teacher', 'admin'].include? role
+    if ['parent', 'teacher', 'admin'].include? params['role']
       user.update(role: params['role'])
       # get role, save it in user record 
       redirect to '/register/password'
