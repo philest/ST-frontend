@@ -574,3 +574,4 @@
 [2017-01-03 04:12:52 -0800 Davids-MacBook-Air-4.local (55629)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
 [2017-01-03 04:25:47 -0800 Davids-MacBook-Air-4.local (55630)] ERROR : Invalid license key, please contact support@newrelic.com
 [2017-01-03 04:25:47 -0800 Davids-MacBook-Air-4.local (55630)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-03 04:30:37 -0800 Davids-MacBook-Air-4.local (55630)] INFO : Starting Agent shutdown
