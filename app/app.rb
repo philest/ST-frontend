@@ -11,7 +11,7 @@ require 'bundler/setup'
 #siantra dependencies 
 require 'sinatra/base'
 require "bundler/setup"
-require "sinatra/reloader" if development? 
+
 
 
 require 'twilio-ruby'
@@ -32,6 +32,8 @@ require 'sinatra/flash'
 class App < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
   register Sinatra::Flash
+
+  require "sinatra/reloader" if development? 
 
   configure :development do
     register Sinatra::Reloader
