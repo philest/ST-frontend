@@ -20,6 +20,7 @@ require_relative '../config/initializers/aws'
 
 #helpers
 require_relative '../helpers/routes_helper'
+require_relative '../helpers/school_code_helper'
 
 # Error tracking. 
 require 'airbrake'
@@ -61,6 +62,7 @@ class App < Sinatra::Base
   # Admin authentication, from Sinatra.
   include RoutesHelper
   helpers RoutesHelper
+  helpers SchoolCodeMatcher
 
   set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
   enable :sessions
@@ -79,7 +81,10 @@ class App < Sinatra::Base
     else
       erb :main_new
     end 
+  end
 
+  get '/test' do
+    UnionWorker.perform_async
   end
 
   get '/test_dashboard' do
@@ -372,24 +377,30 @@ class App < Sinatra::Base
   end
 
 
-  get '/class/:teacher_id' do
+  get '/:class_code/class' do
     # teacher code, right?
     # right now we're searching by teacher_id
     
     # get_teacher() <- from st-enroll, i suppose, unless we get the db over here.
-    # teacher = Teacher.where(id: params[:teacher_id]).first
-    # if teacher.nil?
-      # return
+
+    # get teacher, then get language
+
+    
+
+
+    teacher = Teacher.where(id: params[:teacher_id]).first
+    if teacher.nil?
+      return
       # erb :fail_page
-    # end
+    end
 
 
-    # school = teacher.school
+    school = teacher.school
 
-    # session[:teacher_id] = teacher.id 
-    # session[:teacher_sig] = teacher.signature
-    # session[:school_id] = school.id
-    # session[:school_sig] = school.signature
+    session[:teacher_id] = teacher.id 
+    session[:teacher_sig] = teacher.signature
+    session[:school_id] = school.id
+    session[:school_sig] = school.signature
 
 
     school = "ST Elementary"
@@ -502,9 +513,9 @@ class App < Sinatra::Base
     return params.to_s
   end
 
-get '/:code/class' do
-  erb :maintenance
-end
+  get '/:code/class' do
+    erb :maintenance
+  end
 
 
   # post '/success' do  

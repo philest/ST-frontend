@@ -6,6 +6,7 @@ class FlyerWorker
     teacher = Teacher.where(id: teacher_id).first
     school  = School.where(id: school_id).first
 
+    puts "in flyerworker...."
     PhoneImage.new.create_image(teacher, school)
     FlyerImage.new.create_image(teacher, school)
   end

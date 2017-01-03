@@ -1,4 +1,5 @@
-require 'rmagick'
+require 'prawn'
+require 'gruff'
 require 'fileutils'
 require_relative '../config/initializers/aws'
 
@@ -54,13 +55,10 @@ end
 
 class FlyerImage
 
-
-
-  @@TEACHER_SIG_FONTSIZE = 52
-  @@SUBTITLE_BANNER_X = 84
-
-
   def create_image(teacher_obj, school_obj)
+
+    puts "DOING THE FLYER IMAGES"
+
     code = teacher_obj.code
     teacher = teacher_obj.signature
     school = school_obj.signature
@@ -69,149 +67,199 @@ class FlyerImage
 
     puts "code_en = #{code_en}"
     puts "code_es = #{code_es}"
+    
+    # 612 x 792
 
-    path = File.expand_path("#{File.dirname(__FILE__)}/English-Flyer-New.jpg")
+    # ENGLISH!!!!!!
+    tmpfile = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class.pdf")
+    Prawn::Document.generate(tmpfile, page_size: 'LETTER') do
+      bounding_box([12, 720], :width => 512, :height => 720) do
+        # stroke_bounds
+        dir = File.expand_path(File.dirname(__FILE__))
+        puts "dir = #{dir}"
+        image dir + "/white-bird.jpg", position: :left, width: 50
+        image dir + "/intro-storytime.jpg", at: [55, 705], width: 125
 
-    canvas = Magick::Image.from_blob(IO.read(path))[0]
+        font_families.update(
+          "Karla" => {
+            :normal => dir + "/../public/fonts/Karla-Regular.ttf",
+            :bold => dir + "/../public/fonts/Karla-Bold.ttf",
+            :italic => dir + "/../public/fonts/Karla-Italic.ttf"
+          },
 
-    text = Magick::Draw.new
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
+          "Avenir" => {
+            :normal => dir + "/../public/fonts/avenir-lt-65-medium.ttf",
+            :bold => dir + "/../public/fonts/avenir-lt-95-black.ttf",
+            :light => dir + "/../public/fonts/AvenirLTStd-Light.ttf"
+          }
+        )
+        # move_up 30
+        font("Avenir", style: :bold) do
+          font_size 18
+          # text_box "STORYTIME", at: [60, 705]
+          move_down 20
+          font_size 36
+          text "Get free books from"
+          move_down 5
+          text "#{teacher}."
+        end
 
-    text.pointsize = 29
-    x_start  = 198
-    x_mid = 225
-    y_start = 493
+        font("Avenir", style: :light) do
+          move_down 20
+          font_size 12
+          text "Get free books for <b>#{school}</b> sent right to your phone-- no running around.", inline_format: true
 
-    # on the phone
-    img_txt_d = text.get_type_metrics("#{code_en}")
+          font_size 18
+          text_box "On your phone, go to the web link:", width: 180, height: 50, at: [40, 450]
+        end
+
+        bounding_box([25, 400], width: 200, height: 50) do
+          # stroke_bounds
+          font("Avenir", style: :bold) do
+            fill_color 'ff0000'
+            font_size 18
+            text_box "stbooks.org/#{code_en}", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+        end
+
+        stroke do
+          stroke_color 'A9A9A9'
+          rounded_rectangle [25,400], 200, 50, 5
+        end
+
+        # phone image
+        image dir + "/phone-no-icon.jpg", at: [250, 500], width: 285
+
+        bounding_box([288, 455], width: 84, height: 12) do
+          # stroke_bounds
+          fill_color '000000'
+          font_size 10
+          font("Karla", style: :normal) do
+            text_box "stbooks.org/#{code_en}", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+        end
+
+        bounding_box([285, 425], width: 140, height: 18) do
+          # stroke_bounds
+          fill_color '000000'
+          font_size 13
+          font("Karla", style: :normal) do
+            text_box "Join #{teacher}'s class", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+
+        end
+
+        image dir + "/complete-by-monday.jpg", at: [40, 220], width: 150
+
+        image dir + "/hero-child.jpg", at: [250, 310], width: 260
 
 
-    phone_code_x = 413
-    phone_code_y = 571
-    text.annotate(canvas, 0, 0, phone_code_x, phone_code_y, code_en)
+        move_down 380
+        font_size 10
+        font "Avenir", style: :normal 
+        text_box "<b>No smartphone?</b> Get stories by text. Text <b><color rgb='ff0000'>#{code_en}</color></b> to the phone number <b><color rgb='ff0000'>(203) 202-3505</color></b>.", at:[25, 40], inline_format: true
+      end 
+    end # english
+
+    # spanish
+
+    tmpfile_es = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class (Spanish).pdf")
+    Prawn::Document.generate(tmpfile_es, page_size: 'LETTER') do
+      bounding_box([12, 720], :width => 512, :height => 720) do
+        # stroke_bounds
+        dir = File.expand_path(File.dirname(__FILE__))
+        puts "dir = #{dir}"
+        image dir + "/white-bird.jpg", position: :left, width: 50
+        image dir + "/intro-storytime.jpg", at: [55, 705], width: 125
+
+        font_families.update(
+          "Karla" => {
+            :normal => dir + "/../public/fonts/Karla-Regular.ttf",
+            :bold => dir + "/../public/fonts/Karla-Bold.ttf",
+            :italic => dir + "/../public/fonts/Karla-Italic.ttf"
+            },
 
 
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-    # 406, 511
-    text.annotate(canvas, 0, 0, x_mid - (img_txt_d.width/2), y_start, "#{code_en}")
-    # text.annote
+          "Avenir" => {
+            :normal => dir + "/../public/fonts/avenir-lt-65-medium.ttf",
+            :bold => dir + "/../public/fonts/avenir-lt-95-black.ttf",
+            :light => dir + "/../public/fonts/AvenirLTStd-Light.ttf"
+          }
+        )
+        # move_up 30
+        font("Avenir", style: :bold) do
+          font_size 18
+          # text_box "STORYTIME", at: [60, 705]
+          move_down 20
+          font_size 36
+          text "Consigue libros gratis de"
+          move_down 5
+          text "#{teacher}"
+        end
 
+        font("Avenir", style: :light) do
+          move_down 20
+          font_size 12
+          text "Consigue libros de parte de <b>#{school}</b> directamente en su celular.", inline_format: true
 
-    # 597 x 553
-    # text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
+          font_size 18
+          text_box "En su celular, abre el navegador y usa este enlace:", width: 180, height: 50, at: [40, 450]
+        end
 
+        bounding_box([25, 400], width: 200, height: 50) do
+          # stroke_bounds
+          font("Avenir", style: :bold) do
+            fill_color 'ff0000'
 
+            font_size 18
+            text_box "stbooks.org/#{code_es}", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+        end
 
-    # then the upper title...
-    # 200, 737
-    # text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-    text.pointsize = @@TEACHER_SIG_FONTSIZE
-    text.annotate(canvas, 0, 0, @@SUBTITLE_BANNER_X, 263, "#{teacher}.")
+        stroke do
+          stroke_color 'A9A9A9'
+          rounded_rectangle [25,400], 200, 50, 5
+        end
 
-    # 200, 875
-    text.pointsize = 17
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
-    dimensions = text.get_type_metrics("Get free books from ")
-    text.annotate(canvas, 0, 0, @@SUBTITLE_BANNER_X, 303, "Get free books from ")
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-    text.annotate(canvas, 0, 0, @@SUBTITLE_BANNER_X + dimensions.width, 303, "#{school} ")
+        # phone image
+        image dir + "/phone-no-icon.jpg", at: [250, 500], width: 285
 
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
-    x_width = text.get_type_metrics("Get free books from #{school} ").width
-    if "#{school}".length >= 7
-        add_space = 8
-    else
-        add_space = 0
+        bounding_box([288, 455], width: 84, height: 12) do
+          # stroke_bounds
+          fill_color '000000'
+          font_size 10
+          font("Karla", style: :normal) do
+            text_box "stbooks.org/#{code_es}", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+
+        end
+
+        bounding_box([285, 425], width: 140, height: 18) do
+          # stroke_bounds
+          fill_color '000000'
+          font_size 13
+          font("Karla", style: :normal) do
+            text_box "Anótate en la clase de #{teacher}", valign: :center, align: :center, overflow: :shrink_to_fit, single_line: :true
+          end
+
+        end
+
+        image dir + "/spanish-complete-by-monday.jpg", at: [40, 220], width: 150
+
+        image dir + "/luna.jpg", at: [255, 310], width: 230
+
+        move_down 380
+        font_size 10
+        font "Avenir", style: :normal 
+        text_box "<b>¿No tiene un smartphone?</b> Consigue libros de mensaje. Mensajéa <b><color rgb='ff0000'>#{code_es}</color></b> al numero <b><color rgb='ff0000'>(203) 202-3505</color></b>.", at:[25, 30], inline_format: true
+
+      end
+
     end
-    text.annotate(canvas, 0, 0, @@SUBTITLE_BANNER_X + x_width + add_space, 303, "sent right to your phone- no running around.")
-
-    img_path = File.expand_path("#{File.dirname(__FILE__)}/../../public/enroll-flyer/#{code_en}-flyer.png")
-
-    # canvas.write(img_path)
-
-    # write .png to aws
-    # 
-    # 
-    # 
-    # 
-    # end write to aws
-
-    # spanish now   
-
-    path = File.expand_path("#{File.dirname(__FILE__)}/Spanish-Flyer-New.jpg")
-
-    canvas_es = Magick::Image.from_blob(IO.read(path))[0]
-
-    text = Magick::Draw.new
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
-    text.pointsize = 29
-    # x_start, x_end = 198
-    # y_start, y_end = 473
-
-    # on the phone
-    puts "code spanish = #{code_es}"
-    text.annotate(canvas_es, 0, 0, phone_code_x, phone_code_y - 10, code_es)
-
-
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-    img_txt_d = text.get_type_metrics("#{code_es}")
-    # 406, 511
-    text.annotate(canvas_es, 0, 0, x_mid - (img_txt_d.width/2) - 6, y_start + 5, "#{code_es}")
-
-    # then the upper title...
-    # text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-
-    text.pointsize = @@TEACHER_SIG_FONTSIZE
-    puts "teacher name = #{teacher}"
-    text.annotate(canvas_es, 0, 0, 84, 260, "#{teacher}.")
-    # text.annotate(canvas_es, 0, 0, 70, 235, "de parte de #{teacher}.")
-
-    text.pointsize = 17
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
-    dimensions = text.get_type_metrics("Obtén libros de parte de ")
-    text.annotate(canvas_es, 0, 0, 84, 300, "Obtén libros de parte de ")
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Black.otf")
-    text.annotate(canvas_es, 0, 0, 84 + dimensions.width, 300, "#{school} ")
-
-    text.font = File.expand_path("#{File.dirname(__FILE__)}/../public/fonts/AvenirLTStd-Medium.otf")
-    x_width = dimensions.width + text.get_type_metrics("#{school} ").width
-
-    if "#{school}".length >= 7
-        add_space = 8
-    else
-        add_space = 0
-    end
-
-    text.annotate(canvas_es, 0, 0, 84 + x_width + add_space, 300, "directamente en tu celular.")
 
     flyers = S3.bucket('teacher-materials')
 
     if flyers.exists?
-        # teacher_dir = "#{teacher}-#{teacher_obj.t_number}" 
-        # name = "#{school}/#{teacher_dir}/flyers/#{code_en}-flyer.png"
-        # if flyers.object(name).exists?
-        #     puts "#{name} already exists in the bucket"
-        # else
-        #   obj = flyers.object(name)
-        #   obj.put(body: canvas.to_blob, acl: "public-read")
-        #   puts "Uploaded '%s' to S3!" % name
-        # end
-
-        # name_es = "#{school}/#{teacher_dir}/flyers/#{code_en}-flyer-es.png"
-        # if flyers.object(name_es).exists?
-        #     puts "#{name_es} already exists in the bucket"
-        # else
-        #     obj = flyers.object(name_es)
-        #     obj.put(body: canvas_es.to_blob, acl: "public-read")
-        #     puts "Uploaded '%s' to S3!" % name_es
-        # end
-
-        pdf = Magick::ImageList.new
-        pdf.from_blob(canvas.to_blob)
-
-        tmpfile = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class.pdf")
-        pdf.write(tmpfile)
-
 
         teacher_dir = "#{teacher}-#{teacher_obj.t_number}"
         name = "#{school}/#{teacher_dir}/flyers/StoryTime-Invite-Flyer-#{teacher}.pdf"
@@ -225,23 +273,19 @@ class FlyerImage
         end
 
         FileUtils.rm(tmpfile)
-
-        pdf_es = Magick::ImageList.new
-        pdf_es.from_blob(canvas_es.to_blob)
-
-        tmpfile = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class (Spanish).pdf")
-        pdf_es.write(tmpfile)
+        
+        tmpfile_es = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class (Spanish).pdf")
         name = "#{school}/#{teacher_dir}/flyers/StoryTime-Invite-Flyer-#{teacher}-Spanish.pdf"
         if flyers.object(name).exists?
             puts "#{name} already exists in the bucket"
         else
           obj = flyers.object(name)
           # obj.put(body: pdf.to_blob, acl: "public-read")
-          obj.upload_file(tmpfile, acl: "public-read")
+          obj.upload_file(tmpfile_es, acl: "public-read")
           puts "Uploaded '%s' to S3!" % name
         end
 
-        FileUtils.rm(tmpfile)
+        FileUtils.rm(tmpfile_es)
     end
 
   end

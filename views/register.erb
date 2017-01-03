@@ -74,7 +74,51 @@
     <!-- <script type="text/javascript" src="/js/validations.js"></script> -->
     <!-- <script type="text/javascript" src="/js/appendform.js"></script> -->
 
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+
+      $(document).ready(function () {
+        /**
+         * Determine the mobile operating system.
+         * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+         *
+         * @returns {String}
+         */
+        function getMobileOperatingSystem() {
+          var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+              // Windows Phone must come first because its UA also contains "Android"
+            if (/windows phone/i.test(userAgent)) {
+                return "Windows";
+            }
+
+            if (/android/i.test(userAgent)) {
+                return "Android";
+            }
+
+            // iOS detection from: http://stackoverflow.com/a/9039885/177710
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+            }
+
+            return "unknown";
+        }
+
+        var os = getMobileOperatingSystem();
+
+        console.log(os);
+
+        var operating_system = $('<input>')
+                  .attr('type', 'hidden')
+                  .attr('name', 'mobile_os')
+                  .val(os);
+        $('#register').append($(operating_system));
+
+      });
+
+
+    </script>
+
+
 
  
  
@@ -97,7 +141,7 @@
 
 
               <div class="login-form">
-                <form id="teacher-info" action='/register' method="post"> 
+                <form id="register" action='/register' method="post"> 
                   <div class="signup-setup">
                     <div class="field" id="signup-field">
                        <label class="label">Full name</label>

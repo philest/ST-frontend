@@ -19,6 +19,7 @@ gem 'prawn'
 # 
 
 gem 'sinatra'
+gem 'bcrypt'
 
 gem 'puma'
 gem "twilio-ruby"

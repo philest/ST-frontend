@@ -6,5 +6,4 @@ class StateTable < Sequel::Model(:state_tables)
 	
 	add_association_dependencies user: :nullify
 
-
 end
