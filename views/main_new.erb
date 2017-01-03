@@ -179,7 +179,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 							</h1>
 
 			              <a href="/case_study" target="_blank">
-				              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+				              <button type="button" onclick="CaseStudyClicked();" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
 				                Case Study
 				              </button>
 			              </a>		
@@ -362,6 +362,13 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 					<a class="footer--nav--link" href="https://storytime.zendesk.com/hc/en-us" target="_blank">Support</a>
 			</nav> 
 		 </div> 
+
+		 <script>
+		 	function CaseStudyClicked() {
+		 		mixpanel.track("Case Study Clicked")
+		 	}
+		 	
+		 </script>
 	
 
 	</footer>
