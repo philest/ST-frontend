@@ -660,8 +660,37 @@ class App < Sinatra::Base
     return params.to_s
   end
 
-  get '/:code/class' do
-    erb :maintenance
+  # get '/:code/class' do
+  #   erb :maintenance
+  # end
+  get '/coming-soon' do
+    puts "params = #{params}"
+    puts "session = #{session.inspect}"
+
+    text = {}
+    case session[:locale]
+    when 'en'
+      text[:header] = "starts soon!"
+      text[:return] = "We will text you on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th to start!"
+
+      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
+    when 'es'
+      text[:header] = "empieza pronto!"
+      text[:return] = "Le enviaremos un mensaje de texto"
+      text[:weekday] = "el jueves"
+      text[:date] = "4 de enero para empezar!"
+
+
+      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+    end
+
+    # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
+    # erb :maintenance, locals: {school: session[:school_sig], text: text}
+
+    erb :maintenance, locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
   end
 
 
