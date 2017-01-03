@@ -226,7 +226,6 @@ class App < Sinatra::Base
   # 
   # http://joinstorytime.com/signin?school=rmp&email=aperricone@rockymountainprep.org&name='Mrs. Perricone'
 
-
   # need to update this for new roles.....
   # need to have a role parameter
   # 
@@ -439,6 +438,7 @@ class App < Sinatra::Base
       text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
     end
 
+    email_admins("Someone from class #{params[:class_code]} accessed web app")
       
     erb :register, locals: {text: text, teacher: teacher.signature, school: school.signature}
 
@@ -704,7 +704,7 @@ class App < Sinatra::Base
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
       text[:info] = "Le envíaremos un texto pronto con los libros de #{session[:teacher_sig]}" 
-      
+
       text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
     else
       text[:exclaim] = "Great!"
