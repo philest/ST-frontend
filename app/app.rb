@@ -586,6 +586,7 @@ class App < Sinatra::Base
     # get params
     # encrypt/store password
     # encrypt that shit!
+    notify_admins("user id=#{session[:user_id]} finished registration", "")
 
     # redirect to  '/register/app'
     redirect to  '/coming-soon'
@@ -620,7 +621,7 @@ class App < Sinatra::Base
 
     end
 
-    notify_admins("user id=#{session[:user_id]} finished registration", "")
+    
 
     erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
     # erb :maintenance, locals: {school: session[:school_sig], text: text}
