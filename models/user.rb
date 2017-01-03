@@ -70,7 +70,7 @@ class User < Sequel::Model(:users)
       # self.state_table.update(subscribed?: true)
     end
 
-		if not ['fb', 'app'].include? self.platform
+		if ['sms', 'feature'].include? self.platform
 			self.code = generate_code
 		end
 		# puts "start code = #{self.code}"

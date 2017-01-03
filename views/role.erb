@@ -74,10 +74,25 @@
     <!-- <script type="text/javascript" src="/js/validations.js"></script> -->
     <!-- <script type="text/javascript" src="/js/appendform.js"></script> -->
 
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.container').click(function(event) {
+          // get the id
+          var id = $(this).attr('id');
+          console.log(id);
+          // get the form
+          var form = $("form#" + id + '-form');
+          console.log(form);
+          form.submit();
+        });
+      });
+    </script>
 
     <style>
-      
+      .container {
+        cursor: pointer; 
+        cursor: hand;
+      }
     </style>
 
     
@@ -94,64 +109,61 @@
                 <h1 class=""><%= text[:header] %></h1>
               </div>
       
-        <div class="container">
+        <div class="container" id="parent">
           <div class="pure-g">
-
-            <form class="role" action="/register/role" method="post">
-              <input type="hidden" name="role" value="parent">
-              
-              <button class="role" type="submit">
-                  <div class="pure-u-1 role-form">
+            <div class="pure-u-1 role-form">
                     <div class="role">
                         <img src="/images/icons/heart.png" id="teacher-icon" alt="">
                         <h3><%= text[:identity][:parent][0] %></h3>
                         <p><%= text[:identity][:parent][1] %></p>
                     </div>
                   </div>
-              </button>
 
+            <form class="role" id="parent-form" action="/register/role" method="post" style="display: none;">
+              <input type="hidden" name="role" value="parent">
             </form>
-
-          </div> <%# end pure-g %>
-        </div>
-
-
-        <div class="container">
-          <div class="pure-g">
-            <form class="role" action="/register/role" method="post">
-              <input type="hidden" name="role" value="teacher">
               
-              <button class="role" type="submit">
+              <!-- <button class="role" type="submit"> -->
+              <!-- </button> -->
 
-                <div class="pure-u-1 role-form">
-                  <div class="role">
-                      <img src="/images/icons/apple.png" id="teacher-icon" alt="">
-                      <h3><%= text[:identity][:teacher][0] %></h3>
-                      <p><%= text[:identity][:teacher][1] %></p>
-                  </div>
-                </div>
-              </button>
-
-            </form>
 
           </div> <%# end pure-g %>
         </div>
 
-        <div class="container">
-          <div class="pure-g">
-            <form class="role" action="/register/role" method="post">
-              <input type="hidden" name="role" value="admin">
-              <button class="role" type="submit">
-                <div class="pure-u-1 role-form">
-                  <div class="role">
-                      <img src="/images/icons/bell.png" id="teacher-icon" alt="">
-                      <h3><%= text[:identity][:admin][0] %></h3>
-                      <p><%= text[:identity][:admin][1] %></p>
-                  </div>
-                </div>
-              </button>
 
+        <div class="container" id="teacher">
+          <div class="pure-g">
+            <div class="pure-u-1 role-form">
+              <div class="role">
+                  <img src="/images/icons/apple.png" id="teacher-icon" alt="">
+                  <h3><%= text[:identity][:teacher][0] %></h3>
+                  <p><%= text[:identity][:teacher][1] %></p>
+              </div>
+            </div>
+            <form class="role" id="teacher-form" action="/register/role" method="post" style="display: none;">
+              <input type="hidden" name="role" value="teacher">
             </form>
+              <!-- <button class="role" type="submit"> -->
+              <!-- </button> -->
+
+          </div> <%# end pure-g %>
+        </div>
+
+        <div class="container" id="admin">
+          <div class="pure-g">
+            <div class="pure-u-1 role-form">
+              <div class="role">
+                  <img src="/images/icons/bell.png" id="teacher-icon" alt="">
+                  <h3><%= text[:identity][:admin][0] %></h3>
+                  <p><%= text[:identity][:admin][1] %></p>
+              </div>
+            </div>
+            <form class="role" id="admin-form" action="/register/role" method="post">
+              <input type="hidden" name="role" value="admin">
+            </form>
+              <!-- <button class="role" type="submit"> -->
+              <!-- </button> -->
+
 
           </div> <%# end pure-g %>
         </div>
