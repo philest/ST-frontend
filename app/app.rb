@@ -382,6 +382,10 @@ class App < Sinatra::Base
 
   end
 
+  get '/class' do
+    redirect to '/'
+  end
+
 
   get '/:class_code/class/?' do
     # teacher code, right?
