@@ -167,3 +167,41 @@
 [2017-01-02 14:53:53 -0800 Davids-MacBook-Air-4.local (43909)] INFO : Doing deferred dependency-detection before Rack startup
 [2017-01-02 15:05:03 -0800 Davids-MacBook-Air-4.local (43909)] ERROR : Invalid license key, please contact support@newrelic.com
 [2017-01-02 15:05:03 -0800 Davids-MacBook-Air-4.local (43909)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Environment: development
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Dispatcher: sidekiq
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Application: development
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing Net instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing Redis Instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing Sequel instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 15:54:54 -0800 Davids-MacBook-Air-4.local (45495)] INFO : Finished instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Starting the New Relic agent in "development" environment.
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : To prevent agent startup add a NEW_RELIC_AGENT_ENABLED=false environment variable or modify the "development" section of your newrelic.yml.
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] WARN : No configuration file found. Working directory = /Users/jdmcpeek/joinstorytime
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] WARN : Looked in these locations (based on defaults): /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/joinstorytime/config/newrelic.yml, /Users/jdmcpeek/joinstorytime/newrelic.yml, /Users/jdmcpeek/.newrelic/newrelic.yml, /Users/jdmcpeek/newrelic.yml
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Environment: development
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Dispatcher: puma
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Application: development
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] WARN : No license key found. This often means your newrelic.yml file was not found, or it lacks a section for the running environment, 'development'. You may also want to try linting your newrelic.yml to ensure it is valid YML.
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Net instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Sinatra instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing deferred Rack::Builder instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Rack::Builder middleware instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing deferred Puma::Rack::Builder instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Puma::Rack::Builder middleware instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Redis Instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Sequel instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Installing Sidekiq instrumentation
+[2017-01-02 15:54:58 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Finished instrumentation
+[2017-01-02 15:54:59 -0800 Davids-MacBook-Air-4.local (45494)] INFO : Doing deferred dependency-detection before Rack startup
+[2017-01-02 15:55:00 -0800 Davids-MacBook-Air-4.local (45495)] ERROR : Invalid license key, please contact support@newrelic.com
+[2017-01-02 15:55:00 -0800 Davids-MacBook-Air-4.local (45495)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
+[2017-01-02 15:56:22 -0800 Davids-MacBook-Air-4.local (45494)] ERROR : Invalid license key, please contact support@newrelic.com
+[2017-01-02 15:56:22 -0800 Davids-MacBook-Air-4.local (45494)] ERROR : Visit NewRelic.com to obtain a valid license key, or to upgrade your account.
