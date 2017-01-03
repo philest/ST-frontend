@@ -441,6 +441,7 @@ class App < Sinatra::Base
 
     if name and phone and os and os != 'unknown'
 
+      phone = phone.delete(' ').delete('-').delete('(').delete(')')
       user = User.where(phone: phone).first
 
       if user
