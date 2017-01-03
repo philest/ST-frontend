@@ -166,7 +166,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                       <input name="phone" placeholder="(555) 555-5555" class="input" required>
                       </div>
                    
-                      <button id="join" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button"><%= text[:sign_up] %></button>
+                      <button id="join" onclick="SignupButtonClicked();" ="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button"><%= text[:sign_up] %></button>
                   </div>
                 </form>
               </div>
@@ -186,7 +186,19 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
   </div>
 
+<footer>
 
+     <script>
+      function SignupButtonClicked() {
+        mixpanel.track("Signup Button Clicked");
+      }
+      
+      mixpanel.track_forms('#register', 'Created Account');
+
+
+    </script>
+
+</footer>
     
 
 

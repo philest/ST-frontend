@@ -187,7 +187,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 			              <!-- Button trigger modal   -->
 
 
-				              <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button inline-button-right" id="start-modal-button" data-toggle="modal" data-target="#videoModal ">
+				              <button type="button" onclick="VideoButtonClicked();" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button inline-button-right" id="start-modal-button" data-toggle="modal" data-target="#videoModal ">
 				                Watch Video
 				              </button>
 
@@ -326,7 +326,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 							<div class="demo" data-toggle="modal" data-target="#myDemo">
 
-				              <button type="button" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+				              <button type="button" onclick="DemoButtonClicked();" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
 				                Request a Demo
 				              </button>
 							</div>
@@ -365,8 +365,17 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 		 <script>
 		 	function CaseStudyClicked() {
-		 		mixpanel.track("Case Study Clicked")
+		 		mixpanel.track("Case Study Clicked");
 		 	}
+
+		 	function VideoButtonClicked() {
+		 		mixpanel.track("Video Modal Clicked");
+		 	}
+
+		 	function DemoButtonClicked() {
+		 		mixpanel.track("Demo Button Clicked");
+		 	}
+
 		 	
 		 </script>
 	
