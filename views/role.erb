@@ -188,7 +188,20 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
   </div> <%# wrapper %>
 
 
-    
+<footer>
+
+<!-- Mixpanel Form tracking -->
+     <script>
+     function formTracker() { 
+        mixpanel.track_forms('#teacher-form', 'Selected Teacher Role');
+        mixpanel.track_forms('#parent-form', 'Selected Parent Role');
+        mixpanel.track_forms('#admin-form', 'Selected Admin Role');
+      }
+      window.onload = formTracker;
+
+    </script>
+
+</footer>
 
 
 
