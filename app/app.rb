@@ -454,20 +454,24 @@ class App < Sinatra::Base
     puts "in post /register"
     puts "params = #{params}"
     puts "session = #{session.inspect}"
-    name = params['name']
-    phone = params['phone']
-    os = params['mobile_os']
+    full_name = params['name']
+    phone_no = params['phone']
+    mobile_os = params['mobile_os']
 
-    if name and phone and os # and os != 'unknown'
+    if !full_name.nil? && !phone_no.nil? && !mobile_os.nil? && !full_name.empty? && !phone_no.empty? && !mobile_os.empty? # and os != 'unknown'
 
-      phone = phone.delete(' ').delete('-').delete('(').delete(')')
+      phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
       user = User.where(phone: phone).first
 
-      if user
-        new_user = user
+      hist = "new"
+
+      if !user.nil? # if user exists!!!!!!!
+        new_user = User.where(phone: phone).first
+        hist = "old"
       else
-        new_user = User.create(phone: phone, platform: os)
+        new_user = User.create(phone: phone, platform: mobile_os)
         new_user.state_table.update(subscribed?: false)
+        hist = "new"
       end
 
       # get session and create associations
@@ -475,7 +479,7 @@ class App < Sinatra::Base
       teacher.signup_user(new_user)
 
       # get first and last name
-      terms = name.split(' ')
+      terms = full_name.split(' ')
       if terms.size < 1
         # return ''
         # have a more informative error message?
@@ -501,7 +505,7 @@ class App < Sinatra::Base
 
 
       puts "ABOUT TO NOTIFY ADMINS"
-      notify_admins("user with id #{new_user.id} started registration", params.to_s)
+      notify_admins("#{hist} user with id #{new_user.id} started registration", params.to_s)
 
     else
       halt erb :error
