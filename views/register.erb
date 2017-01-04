@@ -195,6 +195,11 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       
       mixpanel.track_forms('#register', 'Created Account');
 
+      function SignupPageVisited() {
+            mixpanel.track("First Signup Page Visited");
+      }
+      window.onload = SignupPageVisited;
+
 
     </script>
 
