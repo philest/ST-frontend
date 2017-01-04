@@ -16,7 +16,7 @@ gem 'i18n'
 gem 'gruff'
 gem 'prawn'
 
-# 
+gem 'mixpanel-ruby'
 
 gem 'sinatra'
 gem 'bcrypt'

@@ -27,6 +27,8 @@ require_relative '../helpers/school_code_helper'
 require 'airbrake'
 require_relative '../config/initializers/airbrake'
 
+#analytics
+require 'mixpanel-ruby'
 
 require_relative '../lib/workers'
 
@@ -61,6 +63,10 @@ class App < Sinatra::Base
   MODE ||= ENV['RACK_ENV']
   PRO ||= "production"
   TEST ||= "test"
+
+  tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
+
+
 
   #########  ROUTES  #########
 
@@ -484,6 +490,15 @@ class App < Sinatra::Base
       end
 
       session[:user_id] = new_user.id
+
+      # Create a user profile on Mixpanel
+      tracker.people.set(new_user.id, {
+          '$first_name'       => new_user.first_name,
+          '$last_name'        => new_user.last_name,
+          '$phone'            => new_user.phone,
+          'platform'    => new_user.platform
+      });
+
 
       puts "ABOUT TO NOTIFY ADMINS"
       notify_admins("user with id #{new_user.id} started registration", params.to_s)
