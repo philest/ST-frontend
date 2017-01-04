@@ -467,10 +467,12 @@ class App < Sinatra::Base
 
       if !user.nil? # if user exists!!!!!!!
         new_user = User.where(phone: phone).first
+        new_user.update(locale: 'es') if session[:locale] == 'es'
         hist = "old"
       else
         new_user = User.create(phone: phone, platform: mobile_os)
         new_user.state_table.update(subscribed?: false)
+        new_user.update(locale: 'es') if session[:locale] == 'es'
         hist = "new"
       end
 
