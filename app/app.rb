@@ -49,12 +49,12 @@ class App < Sinatra::Base
     set :static_cache_control, [:public, :max_age => 600]
   end
 
-  before do
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-    headers['Access-Control-Allow-Origin'] = "#{ENV['enroll_url']}"
-    headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
-    headers['Access-Control-Allow-Credentials'] = 'true'
-  end
+  # before do
+  #   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+  #   headers['Access-Control-Allow-Origin'] = "#{ENV['enroll_url']}"
+  #   headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
+  #   headers['Access-Control-Allow-Credentials'] = 'true'
+  # end
 
 
   use Airbrake::Rack::Middleware
@@ -76,8 +76,12 @@ class App < Sinatra::Base
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
 
-  set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
-  enable :sessions
+  # set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
+  # enable :sessions
+
+  use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :secret => '328479283uf923fu8932fu923uf9832f23f232'
 
   # use Rack::Session::Cookie, :key => 'rack.session',
                              # :path => '/',
