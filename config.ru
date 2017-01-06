@@ -6,6 +6,7 @@ require 'rack'
 require_relative 'config/environment'
 get_db_connection()
 require_relative 'app/app'
+require_relative 'app/register'
 require 'sass/plugin/rack'
 require_relative 'lib/app'
 require_relative 'config/initializers/locale' # language files
@@ -20,7 +21,8 @@ use Airbrake::Rack::Middleware
 
 run Rack::URLMap.new({
   '/' => App,
-  '/enroll' => Enroll, 
+  '/enroll' => Enroll,
+  '/register' => Register,
   '/sidekiq' => Sidekiq::Web
 })
 
