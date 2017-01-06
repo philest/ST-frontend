@@ -392,9 +392,9 @@ class App < Sinatra::Base
     redirect to '/'
   end
 
-  get '/:class_code/class/?' do
-    redirect to "/register/#{params[:class_code]}/class"
-  end
+  # get '/:class_code/class/?' do
+  #   redirect to "/register/#{params[:class_code]}/class"
+  # end
 
   # get '/:class_code/class/?' do
   #   # teacher code, right?
@@ -454,203 +454,203 @@ class App < Sinatra::Base
 
   # end
 
-  post '/register/?' do
-    puts "in post /register"
-    puts "params = #{params}"
-    puts "session = #{session.inspect}"
-    full_name = params['name']
-    phone_no = params['phone']
-    mobile_os = params['mobile_os']
+  # post '/register/?' do
+  #   puts "in post /register"
+  #   puts "params = #{params}"
+  #   puts "session = #{session.inspect}"
+  #   full_name = params['name']
+  #   phone_no = params['phone']
+  #   mobile_os = params['mobile_os']
 
-    if !full_name.nil? && !phone_no.nil? && !mobile_os.nil? && !full_name.empty? && !phone_no.empty? && !mobile_os.empty? # and os != 'unknown'
+  #   if !full_name.nil? && !phone_no.nil? && !mobile_os.nil? && !full_name.empty? && !phone_no.empty? && !mobile_os.empty? # and os != 'unknown'
 
-      phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
-      user = User.where(phone: phone).first
+  #     phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
+  #     user = User.where(phone: phone).first
 
-      hist = "new"
+  #     hist = "new"
 
-      if !user.nil? # if user exists!!!!!!!
-        new_user = User.where(phone: phone).first
-        new_user.update(locale: 'es') if session[:locale] == 'es'
-        hist = "old"
-      else
-        new_user = User.create(phone: phone, platform: mobile_os)
-        new_user.state_table.update(subscribed?: false)
-        new_user.update(locale: 'es') if session[:locale] == 'es'
-        hist = "new"
-      end
+  #     if !user.nil? # if user exists!!!!!!!
+  #       new_user = User.where(phone: phone).first
+  #       new_user.update(locale: 'es') if session[:locale] == 'es'
+  #       hist = "old"
+  #     else
+  #       new_user = User.create(phone: phone, platform: mobile_os)
+  #       new_user.state_table.update(subscribed?: false)
+  #       new_user.update(locale: 'es') if session[:locale] == 'es'
+  #       hist = "new"
+  #     end
 
-      # get session and create associations
-      teacher = Teacher.where(id: session[:teacher_id]).first
-      teacher.signup_user(new_user)
+  #     # get session and create associations
+  #     teacher = Teacher.where(id: session[:teacher_id]).first
+  #     teacher.signup_user(new_user)
 
-      # get first and last name
-      terms = full_name.split(' ')
-      if terms.size < 1
-        # return ''
-        # have a more informative error message?
-        halt erb :error
-      elsif terms.size == 1 # just the first name
-        first_name = terms.first[0].upcase + terms.first[1..-1]
-        new_user.update(first_name: first_name)
-      elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
-        first_name = terms.first[0].upcase + terms.first[1..-1] 
-        last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
-        new_user.update(first_name: first_name, last_name: last_name)
-      end
+  #     # get first and last name
+  #     terms = full_name.split(' ')
+  #     if terms.size < 1
+  #       # return ''
+  #       # have a more informative error message?
+  #       halt erb :error
+  #     elsif terms.size == 1 # just the first name
+  #       first_name = terms.first[0].upcase + terms.first[1..-1]
+  #       new_user.update(first_name: first_name)
+  #     elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
+  #       first_name = terms.first[0].upcase + terms.first[1..-1] 
+  #       last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
+  #       new_user.update(first_name: first_name, last_name: last_name)
+  #     end
 
-      session[:user_id] = new_user.id
+  #     session[:user_id] = new_user.id
 
-      # Create a user profile on Mixpanel
-      tracker.people.set(new_user.id, {
-          '$first_name'       => new_user.first_name,
-          '$last_name'        => new_user.last_name,
-          '$phone'            => new_user.phone,
-          'platform'    => new_user.platform
-      });
-
-
-      puts "ABOUT TO NOTIFY ADMINS"
-      notify_admins("#{hist} user with id #{new_user.id} started registration", params.to_s)
-
-    else
-      halt erb :error
-    end
-
-    redirect to '/register/role'
-  end
+  #     # Create a user profile on Mixpanel
+  #     tracker.people.set(new_user.id, {
+  #         '$first_name'       => new_user.first_name,
+  #         '$last_name'        => new_user.last_name,
+  #         '$phone'            => new_user.phone,
+  #         'platform'    => new_user.platform
+  #     });
 
 
-  get '/register/role/?' do
-    puts "in get /register/role"
-    # puts "params = #{params}"
-    puts "session = #{session.inspect}"
+  #     puts "ABOUT TO NOTIFY ADMINS"
+  #     notify_admins("#{hist} user with id #{new_user.id} started registration", params.to_s)
+
+  #   else
+  #     halt erb :error
+  #   end
+
+  #   redirect to '/register/role'
+  # end
 
 
-    text = {}
-    case session[:locale]
-    when 'es'
-      text[:header] = "Cuéntanos algo sobre ti"
-      text[:identity] = {}
-      text[:identity][:parent] = ["Soy padre", "Padre, guardián, o familia"]
-      text[:identity][:teacher] = ["Soy profesor", "Profesor o profesor auxiliar"]
-      text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
-    else
-      text[:header] = "Tell us about yourself"
-      text[:identity] = {}
-      text[:identity][:parent] = ["I'm a parent", "Parent, guardian, or family"]
-      text[:identity][:teacher] = ["I'm a teacher", "Teacher or assistant teacher"]
-      text[:identity][:admin] = ["I'm an administrator","School leaders, academic directors"]
-    end
-
-    erb :role, locals: {text: text}
-  end
-
-  post '/register/role/?' do
-    puts "in post /register/role"
-    puts "params = #{params}"
-    puts "session = #{session.inspect}"
-    # where do i redirect if there's no session?
-
-    user = User.where(id: session[:user_id]).first
-    if user.nil?
-      halt erb :error
-    end
-    # add validations for the enroll
-    if ['parent', 'teacher', 'admin'].include? params['role']
-      user.update(role: params['role'])
-      # get role, save it in user record 
-      redirect to '/register/password'
-    else
-      halt erb :error
-    end
-
-  end
+  # get '/register/role/?' do
+  #   puts "in get /register/role"
+  #   # puts "params = #{params}"
+  #   puts "session = #{session.inspect}"
 
 
-  get '/register/password/?' do
-    # puts "params = #{params}"
-    puts "in get /register/password"
-    puts "session = #{session.inspect}"
+  #   text = {}
+  #   case session[:locale]
+  #   when 'es'
+  #     text[:header] = "Cuéntanos algo sobre ti"
+  #     text[:identity] = {}
+  #     text[:identity][:parent] = ["Soy padre", "Padre, guardián, o familia"]
+  #     text[:identity][:teacher] = ["Soy profesor", "Profesor o profesor auxiliar"]
+  #     text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
+  #   else
+  #     text[:header] = "Tell us about yourself"
+  #     text[:identity] = {}
+  #     text[:identity][:parent] = ["I'm a parent", "Parent, guardian, or family"]
+  #     text[:identity][:teacher] = ["I'm a teacher", "Teacher or assistant teacher"]
+  #     text[:identity][:admin] = ["I'm an administrator","School leaders, academic directors"]
+  #   end
+
+  #   erb :role, locals: {text: text}
+  # end
+
+  # post '/register/role/?' do
+  #   puts "in post /register/role"
+  #   puts "params = #{params}"
+  #   puts "session = #{session.inspect}"
+  #   # where do i redirect if there's no session?
+
+  #   user = User.where(id: session[:user_id]).first
+  #   if user.nil?
+  #     halt erb :error
+  #   end
+  #   # add validations for the enroll
+  #   if ['parent', 'teacher', 'admin'].include? params['role']
+  #     user.update(role: params['role'])
+  #     # get role, save it in user record 
+  #     redirect to '/register/password'
+  #   else
+  #     halt erb :error
+  #   end
+
+  # end
 
 
-    text = {}
-    case session[:locale]
-    when 'es'
-      text[:header] = "Último paso"
-      text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
-      text[:label] = "Crear una contraseña"
-      text[:placeholder] = "Contraseña"
-      text[:button] = "Terminar"
-
-    else
-      text[:header] = "Last step"
-      text[:subtitle] = "Your password must contain at least six characters."
-      text[:label] = "Choose password"
-      text[:placeholder] = "Password"
-      text[:button] = "Save"
-
-    end
-
-    erb :password, locals: {text: text}
-  end
+  # get '/register/password/?' do
+  #   # puts "params = #{params}"
+  #   puts "in get /register/password"
+  #   puts "session = #{session.inspect}"
 
 
-  post '/register/password/?' do
-    puts "in post /register/password"
-    puts "params = #{params}"
-    puts "session = #{session.inspect}"
+  #   text = {}
+  #   case session[:locale]
+  #   when 'es'
+  #     text[:header] = "Último paso"
+  #     text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
+  #     text[:label] = "Crear una contraseña"
+  #     text[:placeholder] = "Contraseña"
+  #     text[:button] = "Terminar"
 
-    user = User.where(id: session[:user_id]).first
-    if user.nil?
-      halt erb :error
-    end
+  #   else
+  #     text[:header] = "Last step"
+  #     text[:subtitle] = "Your password must contain at least six characters."
+  #     text[:label] = "Choose password"
+  #     text[:placeholder] = "Password"
+  #     text[:button] = "Save"
 
-    user.set_password(params['password'])
+  #   end
 
-    # get params
-    # encrypt/store password
-    # encrypt that shit!
-    notify_admins("user id=#{session[:user_id]} finished registration", "")
-
-    # redirect to  '/register/app'
-    redirect to  '/coming-soon'
-
-  end
+  #   erb :password, locals: {text: text}
+  # end
 
 
-  get '/register/app/?' do
-    # 
-    puts "in get /register/app"
-    # puts "params = #{params}"
-    puts "session = #{session.inspect}"
+  # post '/register/password/?' do
+  #   puts "in post /register/password"
+  #   puts "params = #{params}"
+  #   puts "session = #{session.inspect}"
 
-    text = {}
-    case session[:locale]
-    when 'es'
-      text[:header] = "empieza pronto!"
-      text[:return] = "Vuelve"
-      text[:weekday] = "el jueves"
-      text[:date] = "4 de enero!"
+  #   user = User.where(id: session[:user_id]).first
+  #   if user.nil?
+  #     halt erb :error
+  #   end
 
-      text[:header] = "Consigue StoryTime"
-      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
-    else
-      text[:header] = "starts soon!"
-      text[:return] = "Come back on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th!"
+  #   user.set_password(params['password'])
 
-      text[:header] = "Get the StoryTime app"
-      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+  #   # get params
+  #   # encrypt/store password
+  #   # encrypt that shit!
+  #   notify_admins("user id=#{session[:user_id]} finished registration", "")
 
-    end
+  #   # redirect to  '/register/app'
+  #   redirect to  '/coming-soon'
+
+  # end
+
+
+  # get '/register/app/?' do
+  #   # 
+  #   puts "in get /register/app"
+  #   # puts "params = #{params}"
+  #   puts "session = #{session.inspect}"
+
+  #   text = {}
+  #   case session[:locale]
+  #   when 'es'
+  #     text[:header] = "empieza pronto!"
+  #     text[:return] = "Vuelve"
+  #     text[:weekday] = "el jueves"
+  #     text[:date] = "4 de enero!"
+
+  #     text[:header] = "Consigue StoryTime"
+  #     text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+  #   else
+  #     text[:header] = "starts soon!"
+  #     text[:return] = "Come back on"
+  #     text[:weekday] = "Thursday"
+  #     text[:date] = "January 4th!"
+
+  #     text[:header] = "Get the StoryTime app"
+  #     text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
+  #   end
 
     
 
-    erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
-    # erb :maintenance, locals: {school: session[:school_sig], text: text}
-  end
+  #   erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
+  #   # erb :maintenance, locals: {school: session[:school_sig], text: text}
+  # end
 
 
   get '/error' do
