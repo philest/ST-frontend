@@ -14,6 +14,8 @@ require_relative '../lib/workers'
 class Register < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
 
+  disable :sessions
+
   # use Airbrake::Rack::Middleware
 
   # require "sinatra/reloader" if development? 
