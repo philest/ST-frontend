@@ -3,31 +3,31 @@ require 'sinatra/base'
 require_relative '../helpers/school_code_helper'
 
 # Error tracking. 
-require 'airbrake'
-require_relative '../config/initializers/airbrake'
+# require 'airbrake'
+# require_relative '../config/initializers/airbrake'
 
 #analytics
-require 'mixpanel-ruby'
+# require 'mixpanel-ruby'
 
 require_relative '../lib/workers'
 
 class Register < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
 
-  use Airbrake::Rack::Middleware
+  # use Airbrake::Rack::Middleware
 
-  require "sinatra/reloader" if development? 
+  # require "sinatra/reloader" if development? 
 
-  configure :development do
-    register Sinatra::Reloader
-  end
+  # configure :development do
+    # register Sinatra::Reloader
+  # end
 
   #set mode (production or test)
   MODE ||= ENV['RACK_ENV']
   PRO ||= "production"
   TEST ||= "test"
 
-  tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
+  # tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
 
   #########  ROUTES  #########
 
@@ -37,10 +37,9 @@ class Register < Sinatra::Base
   get '/class/?' do
     redirect to '/'
   end
-  
-  # get '/:class_code/'
 
   get '/class/:class_code/?' do
+    puts "IN REGISTER /CLASS/:CLASS_CODE"
 
     educator = educator?(params[:class_code])
     puts "educator = #{educator.inspect}"
@@ -54,9 +53,7 @@ class Register < Sinatra::Base
     else
       halt erb :error
     end
-
     # let's just assume it's a teacher for now...........
-
     school = teacher.school
 
     # locale stuff.....
@@ -87,7 +84,8 @@ class Register < Sinatra::Base
   end
 
   post '/' do
-    puts "in post /register"
+    puts "IN POST / FOR REGISTER"
+
     puts "params = #{params}"
     full_name = params['name']
     phone_no = params['phone']
@@ -132,12 +130,12 @@ class Register < Sinatra::Base
       end
 
       # Create a user profile on Mixpanel
-      tracker.people.set(new_user.id, {
-          '$first_name'       => new_user.first_name,
-          '$last_name'        => new_user.last_name,
-          '$phone'            => new_user.phone,
-          'platform'          => new_user.platform
-      });
+      # tracker.people.set(new_user.id, {
+      #     '$first_name'       => new_user.first_name,
+      #     '$last_name'        => new_user.last_name,
+      #     '$phone'            => new_user.phone,
+      #     'platform'          => new_user.platform
+      # });
 
 
       puts "ABOUT TO NOTIFY ADMINS"
@@ -159,6 +157,7 @@ class Register < Sinatra::Base
   #   erb :maintenance
   # end
   get '/coming-soon' do
+    puts "IN /COMING-SOON FOR REGISTER"
     puts "params = #{params}"
     teacher_sig = params['teacher']
     locale = params['locale']
