@@ -107,7 +107,7 @@ class Register < Sinatra::Base
         new_user.update(locale: 'es') if locale == 'es'
         hist = "old"
       else
-        new_user = User.create(phone: phone, platform: mobile_os)
+        new_user = User.create(phone: phone, platform: mobile_os.downcase)
         new_user.state_table.update(subscribed?: false)
         new_user.update(locale: 'es') if locale == 'es'
         hist = "new"
@@ -187,6 +187,5 @@ class Register < Sinatra::Base
 
     erb :maintenance, locals: {teacher: teacher_sig, text: text}
   end
-
 
 end
