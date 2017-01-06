@@ -16,6 +16,12 @@ class Register < Sinatra::Base
 
   use Airbrake::Rack::Middleware
 
+  require "sinatra/reloader" if development? 
+
+  configure :development do
+    register Sinatra::Reloader
+  end
+
   #set mode (production or test)
   MODE ||= ENV['RACK_ENV']
   PRO ||= "production"
@@ -28,11 +34,13 @@ class Register < Sinatra::Base
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
 
-  get '/class' do
+  get '/class/?' do
     redirect to '/'
   end
+  
+  # get '/:class_code/'
 
-  get '/:class_code/class/?' do
+  get '/class/:class_code/?' do
 
     educator = educator?(params[:class_code])
     puts "educator = #{educator.inspect}"
