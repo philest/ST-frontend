@@ -392,64 +392,67 @@ class App < Sinatra::Base
     redirect to '/'
   end
 
-
   get '/:class_code/class/?' do
-    # teacher code, right?
-    # right now we're searching by teacher_id
-    
-    # get_teacher() <- from st-enroll, i suppose, unless we get the db over here.
-
-    # get teacher, then get language
-
-    educator = educator?(params[:class_code])
-    puts "educator = #{educator.inspect}"
-    if educator
-      locale = educator[:locale]
-      type   = educator[:type]
-      teacher = educator[:educator]
-      if type == 'school'
-        halt erb :error
-      end 
-    else
-      halt erb :error
-    end
-
-    # let's just assume it's a teacher for now...........
-
-    school = teacher.school
-
-    session[:teacher_id] = teacher.id 
-    session[:teacher_sig] = teacher.signature
-    session[:school_id] = school.id
-    session[:school_sig] = school.signature
-    session[:locale] = locale
-
-    # locale stuff.....
-    text = {}
-    if locale == 'es'
-      text[:call_to_action] = "Anótate"
-      text[:class] = "en la Clase de<br>#{teacher.signature}"
-      text[:full_name] = "Nombre completo"
-      text[:full_name_placeholder] = "Nombre y apellido"
-      text[:phone_number] = "Teléfono"
-      text[:sign_up] = "Inscribirse"
-      text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
-
-    else # default to english
-      text[:call_to_action] = "Join"
-      text[:class] = "#{teacher.signature}'s Class"
-      text[:full_name] = "Full name"
-      text[:full_name_placeholder] = "First and last name"
-      text[:phone_number] = "Phone number"
-      text[:sign_up] = "Sign up"
-      text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
-    end
-
-    email_admins("Someone from class #{params[:class_code]} accessed web app")
-      
-    erb :register, locals: {text: text, teacher: teacher.signature, school: school.signature}
-
+    redirect to "/register/#{params[:class_code]}/class"
   end
+
+  # get '/:class_code/class/?' do
+  #   # teacher code, right?
+  #   # right now we're searching by teacher_id
+    
+  #   # get_teacher() <- from st-enroll, i suppose, unless we get the db over here.
+
+  #   # get teacher, then get language
+
+  #   educator = educator?(params[:class_code])
+  #   puts "educator = #{educator.inspect}"
+  #   if educator
+  #     locale = educator[:locale]
+  #     type   = educator[:type]
+  #     teacher = educator[:educator]
+  #     if type == 'school'
+  #       halt erb :error
+  #     end 
+  #   else
+  #     halt erb :error
+  #   end
+
+  #   # let's just assume it's a teacher for now...........
+
+  #   school = teacher.school
+
+  #   session[:teacher_id] = teacher.id 
+  #   session[:teacher_sig] = teacher.signature
+  #   session[:school_id] = school.id
+  #   session[:school_sig] = school.signature
+  #   session[:locale] = locale
+
+  #   # locale stuff.....
+  #   text = {}
+  #   if locale == 'es'
+  #     text[:call_to_action] = "Anótate"
+  #     text[:class] = "en la Clase de<br>#{teacher.signature}"
+  #     text[:full_name] = "Nombre completo"
+  #     text[:full_name_placeholder] = "Nombre y apellido"
+  #     text[:phone_number] = "Teléfono"
+  #     text[:sign_up] = "Inscribirse"
+  #     text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
+
+  #   else # default to english
+  #     text[:call_to_action] = "Join"
+  #     text[:class] = "#{teacher.signature}'s Class"
+  #     text[:full_name] = "Full name"
+  #     text[:full_name_placeholder] = "First and last name"
+  #     text[:phone_number] = "Phone number"
+  #     text[:sign_up] = "Sign up"
+  #     text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
+  #   end
+
+  #   email_admins("Someone from class #{params[:class_code]} accessed web app")
+      
+  #   erb :register, locals: {text: text, teacher: teacher.signature, school: school.signature}
+
+  # end
 
   post '/register/?' do
     puts "in post /register"
