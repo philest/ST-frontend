@@ -97,23 +97,26 @@ class FlyerImage
         font("Avenir", style: :bold) do
           font_size 18
           # text_box "STORYTIME", at: [60, 705]
-          move_down 20
-          font_size 36
-          text "Get free books from"
-          move_down 5
-          text "#{teacher}."
+          move_down 40
+          font_size 30
+          text "Get free books from #{teacher}."
+          # move_down 5
+          # text "#{teacher}."
         end
 
         font("Avenir", style: :light) do
-          move_down 20
+          move_down 18
           font_size 12
           text "Get free books for <b>#{school}</b> sent right to your phone-- no running around.", inline_format: true
 
-          font_size 18
-          text_box "On your phone, go to the web link:", width: 180, height: 50, at: [40, 450]
         end
 
-        bounding_box([25, 400], width: 200, height: 50) do
+        font("Avenir", style: :normal) do
+          font_size 18
+          text_box "On your phone, go to the web link:", width: 180, height: 50, at: [40, 490]
+        end
+
+        bounding_box([25, 435], width: 200, height: 50) do
           # stroke_bounds
           font("Avenir", style: :bold) do
             fill_color 'ff0000'
@@ -122,15 +125,21 @@ class FlyerImage
           end
         end
 
+        font("Avenir", style: :normal) do
+          fill_color '847f6a'
+          font_size 9
+          text_box "Sign up, then you will get the app with books.", at: [30, 380]
+        end
+
         stroke do
           stroke_color 'A9A9A9'
-          rounded_rectangle [25,400], 200, 50, 5
+          rounded_rectangle [25,435], 200, 50, 5
         end
 
         # phone image
-        image dir + "/phone-no-icon.jpg", at: [250, 500], width: 285
+        image dir + "/phone-no-icon.jpg", at: [250, 500 + 40], width: 285
 
-        bounding_box([288, 455], width: 84, height: 12) do
+        bounding_box([288, 455 + 40], width: 84, height: 12) do
           # stroke_bounds
           fill_color '000000'
           font_size 10
@@ -139,7 +148,7 @@ class FlyerImage
           end
         end
 
-        bounding_box([285, 425], width: 140, height: 18) do
+        bounding_box([285, 425 + 40], width: 140, height: 18) do
           # stroke_bounds
           fill_color '000000'
           font_size 13
@@ -149,15 +158,15 @@ class FlyerImage
 
         end
 
-        image dir + "/complete-by-monday.jpg", at: [40, 220], width: 150
+        image dir + "/complete-by-monday.jpg", at: [40, 220 + 40], width: 150
 
-        image dir + "/hero-child.jpg", at: [250, 310], width: 260
+        image dir + "/hero-child.jpg", at: [250, 310 + 40], width: 260
 
 
-        move_down 380
-        font_size 10
+        move_down 380 
+        font_size 11
         font "Avenir", style: :normal 
-        text_box "<b>No smartphone?</b> Get stories by text. Text <b><color rgb='ff0000'>#{code_en}</color></b> to the phone number <b><color rgb='ff0000'>(203) 202-3505</color></b>.", at:[25, 40], inline_format: true
+        text_box "<b>No smartphone?</b> Get stories by text message. Text <b><color rgb='ff0000'>#{code_en}</color></b> to <b><color rgb='ff0000'>(203) 202-3505</color></b>.", at:[25, 40 + 40], inline_format: true
       end 
     end # english
 
@@ -272,7 +281,7 @@ class FlyerImage
           puts "Uploaded '%s' to S3!" % name
         end
 
-        FileUtils.rm(tmpfile)
+        # FileUtils.rm(tmpfile)
         
         tmpfile_es = File.expand_path("#{File.dirname(__FILE__)}/StoryTime Invite Flyers for #{teacher}'s Class (Spanish).pdf")
         name = "#{school}/#{teacher_dir}/flyers/StoryTime-Invite-Flyer-#{teacher}-Spanish.pdf"
@@ -285,7 +294,7 @@ class FlyerImage
           puts "Uploaded '%s' to S3!" % name
         end
 
-        FileUtils.rm(tmpfile_es)
+        # FileUtils.rm(tmpfile_es)
     end
 
   end
