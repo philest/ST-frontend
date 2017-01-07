@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,MAAO,CACL,OAAO,CAAE,KAAK,CACd,MAAM,CAAE,IAAI,CAGd,IAAK,CACH,WAAW,CAAE,OAAO,CAGtB,IAAK,CACH,SAAS,CAAE,GAAG",
+"sources": ["sass/case_study.scss"],
+"names": [],
+"file": "case_study.css"
+}
