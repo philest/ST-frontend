@@ -1,8 +1,7 @@
 // script to append the first modal's field values to the form
 $( document ).ready(function() {
 
-  smoothScroll.init();
-  
+
   $('button.demo-form-button').click(function(){
       $('form#demo-form').each(function(){
           $(this).submit();

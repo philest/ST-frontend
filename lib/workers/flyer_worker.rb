@@ -1,4 +1,5 @@
 require_relative '../generate_phone_image'
+require_relative '../generate_flyers'
 
 class FlyerWorker
   include Sidekiq::Worker

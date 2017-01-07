@@ -235,7 +235,7 @@ class FlyerImage
           obj.upload_file(args[:tmpfile], acl: "public-read")
           puts "Uploaded '%s' to S3!" % name
         end
-        # FileUtils.rm(args[:tmpfile])
+        FileUtils.rm(args[:tmpfile])
       end
 
     end # prawn doc
