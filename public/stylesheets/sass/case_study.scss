@@ -7,6 +7,13 @@ body {
   font-family: "Karla"
 }
 
-.ass {
-  font-size: 200;
+.centered {
+  display: block;
+  margin: 0 auto;
+  text-align: center; 
 }
+
+.citation {
+  text-align: right;
+}
+
