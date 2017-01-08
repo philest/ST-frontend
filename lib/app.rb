@@ -32,12 +32,12 @@ class Enroll < Sinatra::Base
 
   enable :sessions
 
-  before do
-    headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-    headers['Access-Control-Allow-Origin'] = 'http://localhost:4567'
-    headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
-    headers['Access-Control-Allow-Credentials'] = 'true'
-  end
+  # before do
+  #   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+  #   headers['Access-Control-Allow-Origin'] = 'http://localhost:4567'
+  #   headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
+  #   headers['Access-Control-Allow-Credentials'] = 'true'
+  # end
 
 
   get '/user_exists' do
