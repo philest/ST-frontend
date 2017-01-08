@@ -1,0 +1,238 @@
+body#override .splash {
+  background-color: #F5F5F3
+}
+
+.product-display {
+  h1 {
+    margin-top: 0em;
+    padding-top: 0.67em;
+  }
+
+  .pure-g {
+    width: 60%;
+    margin: 0 auto;
+  
+  }
+
+  &#support-families {
+    background-color: #F5F5F3
+  }
+
+  &#better-teachers {
+    background-color: #676487;
+    h1 {
+      color: white;
+    }
+    .pure-g {
+      width: 70%;
+    }
+  }
+
+  &#any-family {
+    background-color: #F5F5F3;
+    .pure-g {
+      width: 80%;
+      padding-bottom: 7em;
+    }
+    border-bottom: 1px solid #676487
+  }
+
+}
+
+.little-box {
+  background-color: white;
+  border-radius: 0.5em;
+  // width: 
+  position: relative;
+  height: 16em;
+  margin-right: 1em;
+  margin-left: 1em;
+  text-align: center;
+  img {
+    margin: 0 auto; 
+    display: block;
+    padding-top: 1em;
+    width: 8em;
+  }
+  p {
+    position: absolute;
+    bottom: 0;
+    // width: 90%;
+    display: block;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+
+}
+
+.product-text {
+  font-size: 1em;
+  text-align: left;
+  margin-top: 6em;
+
+  ul {
+    list-style-type: none;
+    padding-left: 1em;
+  }
+
+  
+  #better-teachers & {
+    p {
+      color: white;
+    }
+    width: 15em;
+    text-align: justify;
+  }
+}
+
+.product-img {
+  img {
+    display: block;
+    margin: 0 auto;
+    width: 21em;
+
+    #better-teachers & {
+      width: 18em;
+    }
+
+  }
+}
+
+h1.section-banner {
+  font-size: 2.5em;
+  font-weight: bold;
+
+  padding-top: 2.4em;
+  margin-bottom: 1em;
+
+  #any-family & {
+    font-size: 2em;
+  }
+}
+
+// THIS IS THE MOBILE SHIT
+// everything up to pure-u-md
+// all the new shit
+@media (max-width: 768px) {
+  body#override .splash {
+    background-color: white; 
+    min-height: 0px;
+  }
+
+  h1.section-banner {
+    font-size: 1.7em;
+    font-weight: bold;
+
+    padding-top: 2.4em;
+    margin-bottom: 1em;
+
+    #any-family & {
+      font-size: 1.8em;
+    }
+  }
+
+  .product-display {
+    h1 {
+      margin-top: 0em;
+      padding-top: 0.67em;
+    }
+
+    .pure-g {
+      width: 100%;
+      margin: 0 auto;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+
+    &#support-families {
+      background-color: #F5F5F3
+    }
+
+    &#better-teachers {
+      background-color: #676487;
+      h1 {
+        color: white;
+      }
+      .pure-g {
+        width: 100%;
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+    }
+
+    &#any-family {
+      background-color: #F5F5F3;
+      .pure-g {
+        width: 80%;
+        padding-bottom: 2em;
+      }
+      border-bottom: 1px solid #676487
+    }
+
+  }
+
+  .little-box {
+    background-color: white;
+    border-radius: 0.5em;
+    // width: 
+    position: relative;
+    height: 16em;
+    margin-right: 1em;
+    margin-left: 1em;
+    text-align: center;
+    margin-bottom: 1.8em;
+    img {
+      margin: 0 auto; 
+      display: block;
+      padding-top: 1em;
+      width: 8em;
+    }
+    p {
+      position: absolute;
+      bottom: 0;
+      // width: 90%;
+      display: block;
+      margin-left: 1em;
+      margin-right: 1em;
+    }
+
+  }
+
+  .product-text {
+    font-size: 1em;
+    text-align: center;
+    margin-top: 1em;
+
+    ul {
+      list-style-type: none;
+      padding-left: 0em;
+    }
+
+    
+    #better-teachers & {
+      p {
+        color: white;
+      }
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .product-img {
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 21em;
+
+      #better-teachers & {
+        width: 18em;
+      }
+
+    }
+  }
+
+
+
+  
+}
+
