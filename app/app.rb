@@ -84,6 +84,8 @@ class App < Sinatra::Base
   #                          :secret => '328479283uf923fu8932fu923uf9832f23f232'
 
 
+
+
   #root
   get '/' do
     case session[:role]
@@ -92,12 +94,12 @@ class App < Sinatra::Base
     when 'teacher'
       redirect to '/dashboard'
     else
-      erb :main_new
+      erb :homepage
     end 
   end
 
   get '/test' do
-    UnionWorker.perform_async
+    erb :test
   end
 
   get '/test_dashboard' do
