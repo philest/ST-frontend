@@ -67,13 +67,38 @@ body {
 }
 
 .navbar {
+
+
   position: fixed;
   top: 0;
   left: 0;
   z-index: 300;
   width: 100%;
-  height: 90px;
-  background-color: white;
+  height: 4em;
+  background-color: transparent;
+
+  -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+
+  &.highlighted { 
+    -webkit-box-shadow:0px 1px 1px #dcdee2;
+    -moz-box-shadow:0px 1px 1px #dcdee2;
+      box-shadow: 0 0 1px 1px #dcdee2;
+    background-color: white;
+    a#navbar-title div {
+      color: #ed7844;
+    }
+  
+    li a {
+      text-decoration: none;
+      color: #ed7844;
+    }
+
+
+  }
+
 }
 
 button#top-button {
@@ -105,12 +130,13 @@ button.signup-button {
 }
 
 .navbar li {
-  padding-top: 19.5px;
-    padding-bottom: 40.5px;
+  padding-top: 0.5em;
+    padding-bottom: 2.5em;
     float: left;
     margin-left: 2em;
     font-size: 1em;
-    color: #ed7844;
+    // color: #ed7844;
+    color: white;
 }
 
 .nav > li {
@@ -119,12 +145,14 @@ button.signup-button {
 }
 
 .navbar li.navbar-button-item {
-  padding-top: 12.5px; 
+  padding-top: 0em; 
 }
 
 .navbar-right li a {
   text-decoration: none;
-  color: #ed7844;
+  // color: #ed7844;
+  color: white;
+
 
 }
 
@@ -606,7 +634,7 @@ div.desktop-text {
 }
 
 /***** Portrait mode, small tablet ******/
-@media (min-width: 568px) {
+@media (min-width: 35.5em) { // 568px
 
 
   .navbar-right{
@@ -707,14 +735,15 @@ div.desktop-text {
 
 
 /***** Large tablet ******/
-@media (min-width: 768px) {
+@media (min-width: 48em) { // 768px
 
   .navbar-right {
     display: block;
   }
 
   .container {
-      width: 750px;
+      // width: 750px;
+      width: 92%;
   }
   
   h1#main-tagline {
@@ -872,7 +901,7 @@ div.desktop-text {
 /***** Smaller desktop screen ******/
 @media (min-width: 992px) {
   .container {
-      width: 970px;
+      width: 92%;
   }
 
   #splash .hero-splash-text-container {
@@ -895,16 +924,17 @@ div.desktop-text {
 
 
 /***** Small (std) desktop screen ******/
-@media (min-width: 1026px) {
+@media (min-width: 64em) { // 1024px
 
 
 }
 
 
 /***** Large desktop screen ******/
-@media (min-width: 1200px) {
+@media (min-width: 80em) { // 1280px
   .container {
-      width: 1170px;
+      // width: 1170px;
+      width: 92%;
   }
 
   #splash .hero-splash-text-container {

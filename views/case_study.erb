@@ -25,7 +25,8 @@
 
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
-		<link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" />
+		<link rel="stylesheet" href="stylesheets/homepage.css" type="text/css" />
+		<link rel="stylesheet" href="stylesheets/main_panels.css" type="text/css" />
 
 		<link rel="stylesheet" href="stylesheets/case_study.css" type="text/css">
 
@@ -54,41 +55,8 @@
 	<body>
 		<!-- Notify about form submission -->
 	
-			<nav class="navbar" role="navigation">
-				<div class="container">
-					<a href="/">
-					<div class="navbar-logo">
-					</div>
-					</a>
-					<ul class="navbar-right">
-						<li><a href="team">people</a></li>
-						<li><a href="case study">case study</a></li>
-						<li><a href="https://docsend.com/view/nhzqgin" target="_blank">product</a></li>
-						<li class="navbar-button-item">
-							<a>
-								<% if session['educator'].nil? %>
-									<button id="top-button" class=" pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#myModal">
-									Log in
-									</button>
-								<% else %>
-									<form action="signup" method="get">									
-										<button id="top-button" type="submit" class=" pure-button-primary pure-button signup-button">
-											Log in
-										</button>
-									</form>
-								<% end %>
-							</a>
-						</li>
-					</ul>
-				</div>
-			</nav>
+		<%= erb :'components/nav' %>
 
-
-
-
-
-		<div class="navbar" id="fake-nav">
-		</div>
 
 
 		<br class="mobile_only">

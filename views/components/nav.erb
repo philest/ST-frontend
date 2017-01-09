@@ -1,0 +1,37 @@
+
+      <nav class="navbar highlighted" role="navigation">
+        <div class="container">
+          <a href="/" id="navbar-title">
+     <!--      <div class="navbar-logo">
+          </div> -->
+          <div>
+            StoryTime
+          </div>
+          <!-- <h1 class="navbar-title">StoryTime</h1> -->
+          </a>
+          <ul class="navbar-right">
+            <li><a href="case_study">case study</a></li>
+            <li><a href="team">people</a></li>
+            <!-- <li><a href="https://docsend.com/view/nhzqgin" target="_blank">product</a></li> -->
+            <li class="navbar-button-item">
+              <a>
+                <% if session['educator'].nil? %>
+                  <!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#chooseRoleModal"> -->
+                  <button id="top-button" class="pure-button-primary pure-button signup-button">
+                  Log in
+                  </button>
+                <% else %>
+                  <form action="signup" method="get">                 
+                    <button id="top-button" type="submit" class="pure-button-primary pure-button signup-button">
+                      Log in
+                    </button>
+                  </form>
+                <% end %>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div style="height: 90px;">
+    </div>
