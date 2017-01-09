@@ -6,6 +6,16 @@
 		<meta name="description" content="StoryTime - Free stories by text message. For every family without books. We're closing the word gap at scale.">
 		
 		<meta property="og:image" content="http://www.joinstorytime.com/images/modules/st-og-image.png">
+
+		 <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+    <!-- grids -->
+    <!-- <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css"> -->
+    <!-- <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css"> -->
+
+    <!-- end Boostrap -->
 		
 		<script type="text/javascript" src="/js/analytics.js"></script>
 		
@@ -27,6 +37,10 @@
 		<link rel="stylesheet" href="stylesheets/pure-push-pull.css" type="text/css" />
 
 		<link rel="stylesheet" href="stylesheets/homepage.css" type="text/css" />
+
+		<script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/appendform.js"></script>
+    <script type="text/javascript" src="/js/videoModal.js"></script>
 
 
 		<!-- Favicon and App icon images -->
@@ -56,6 +70,14 @@
 		<%= erb :'components/nav' %>
 
 
+		  <!-- modals -->
+    <%= erb :'/modals/rayna-video' %>
+    <%= erb :'/modals/educator-login' %>
+    <%= erb :'/modals/school-role' %>
+    <%= erb :'modals/teacher-name' %>
+    <%= erb :'modals/admin-name' %>
+    <%= erb :'/modals/demo' %>
+  <!-- modals end -->
 
 
 

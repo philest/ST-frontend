@@ -39,7 +39,7 @@ a#navbar-title {
   display: block;
   margin: 0 auto;
   h1 {
-    line-height: 1em;
+    line-height: 1.2em;
   }
   // background-image: url('/images/splash-image.jpg'); 
   // min-height: 0px;
@@ -48,7 +48,7 @@ a#navbar-title {
     text-align: center;
     color: white;
     padding-top: 8em; 
-    width: 15em;
+    width: 90%;
     margin: 0 auto;
     font-size: 1.5em;
     font-weight: bold;
@@ -183,10 +183,12 @@ h1.section-banner {
   img {
     display: block;
     margin: 0 auto;
-    width: 21em;
+    width: 90%;
+    max-width: 18em;
 
     #better-teachers & {
-      width: 18em;
+      width: 90%;
+      max-width: 16em;
     }
 
   }
@@ -346,9 +348,11 @@ h1.section-banner {
       display: block;
       margin: 0 auto;
       width: 21em;
+      max-width: 21em;
 
       #better-teachers & {
         width: 15em;
+        max-width: 18em;
         padding-left: 1em;
         padding-right: 1em;
       }

@@ -8,6 +8,16 @@
 		<meta property="og:image" content="http://www.joinstorytime.com/images/modules/st-og-image.png">
 		
 		<script type="text/javascript" src="/js/analytics.js"></script>
+
+		 <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+    <!-- grids -->
+    <!-- <link rel="stylesheet" href="stylesheets/bootstrap.min.css" type="text/css"> -->
+    <!-- <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css" type="text/css"> -->
+
+    <!-- end Boostrap -->
 		
 		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
@@ -29,6 +39,10 @@
 		<link rel="stylesheet" href="stylesheets/main_panels.css" type="text/css" />
 
 		<link rel="stylesheet" href="stylesheets/case_study.css" type="text/css">
+
+		<script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/appendform.js"></script>
+    <script type="text/javascript" src="/js/videoModal.js"></script>
 
 
 		<!-- Favicon and App icon images -->
@@ -56,6 +70,15 @@
 		<!-- Notify about form submission -->
 	
 		<%= erb :'components/nav' %>
+
+		  <!-- modals -->
+    <%= erb :'/modals/rayna-video' %>
+    <%= erb :'/modals/educator-login' %>
+    <%= erb :'/modals/school-role' %>
+    <%= erb :'modals/teacher-name' %>
+    <%= erb :'modals/admin-name' %>
+    <%= erb :'/modals/demo' %>
+  	<!-- modals end -->
 
 
 
