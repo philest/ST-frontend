@@ -26,6 +26,28 @@ div.team-text{
 }
 
 
+@media (max-width: 48em) {
+	div.team-text{
+		text-align: left;
+		width: 90%;
+		/*margin: 0 auto;*/
+	}
+}
+
+
+
+@media (max-width: 35.5em) {
+	div.team-text{
+		text-align: center;
+		width: 80%;
+		margin: 0 auto;
+	}
+}
+
+
+
+
+
 h2#people a:hover {
 /*    color: #ed7844;
 uncomment to take off the hover color change on team names

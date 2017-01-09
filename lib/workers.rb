@@ -3,8 +3,8 @@ require 'active_support/time'
 require 'rack'
 require 'airbrake'
 require 'airbrake/sidekiq/error_handler'
-# redis_url = ENV['REDIS_URL'] || 'redis://localhost:6379/12'
-redis_url = ENV['REDIS_URL'] || 'redis://localhost:6380/12'
+redis_url = ENV['REDIS_URL'] || 'redis://localhost:6379/12'
+# redis_url = ENV['REDIS_URL'] || 'redis://localhost:6380/12'
 # hopefull this will work out
 # I'm giving 6 to puma and 1 to clock
 Sidekiq.configure_client do |config|
