@@ -50,6 +50,10 @@ body {
   font-family: 'Karla', sans-serif;
 }
 
+.modal {
+  z-index: 9999;
+}
+
 .container {
     margin-right: auto;
     margin-left: auto;
@@ -59,7 +63,17 @@ body {
 
 /** Navbar **/
 .navbar {
-  min-height: 90px;
+  // min-height: 90px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  width: 100%;
+  height: 90px;
+  background-color: white;
 }
 
 button#top-button {
@@ -129,9 +143,7 @@ button.signup-button {
     // height: 36em;
 }
 
-.splash {
-  min-height: 750px;
-}
+
 
 
 
@@ -198,7 +210,7 @@ img#background-phone.hero-animation, #my-video {
 
 #my-video2 {
   width: 240px;
-  z-index: 800;
+  z-index: 100;
   margin-top: 71px;
   margin-left: 64px;
 }
@@ -215,7 +227,7 @@ img#background-phone.hero-animation, #my-video {
     width: 240px;
     margin-left: 63px;
     margin-top: 100px;
-    z-index: 800;
+    z-index: 100;
 }
 
 
@@ -796,7 +808,7 @@ div.desktop-text {
     width: 18em;
 
 /*    width: 345px;
-*/    z-index: 801;
+*/    z-index: 200;
     margin-left: 0px;
 /* Undo until get the pencil image*/
 /*    margin-left: -21px; 
