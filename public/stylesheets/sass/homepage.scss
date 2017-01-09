@@ -67,11 +67,14 @@ body {
 }
 
 .navbar {
-
+  max-width: 1435px;
+  margin-left: auto;
+  margin-right: auto;
 
   position: fixed;
   top: 0;
-  left: 0;
+  left: 0; // to center
+  right: 0; // to center
   z-index: 300;
   width: 100%;
   height: 4em;
