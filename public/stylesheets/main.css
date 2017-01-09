@@ -69,10 +69,10 @@ label.error {
 }
 
 
-.navbar {
+/*.navbar {
 	min-height: 100px;
 }
-
+*/
 
 .navbar-logo {
 	background-image: url("/images/modules/bird.gif");
@@ -174,7 +174,7 @@ h1.banner {
     padding-top: 1em;
 	text-align: left;
 	/*large screen only*/
-	height: 36em;
+	/*height: 36em;*/
 
 }
 
