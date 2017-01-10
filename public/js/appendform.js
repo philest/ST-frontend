@@ -29,6 +29,8 @@ $( document ).ready(function() {
 
     console.log($(this).serializeArray());
 
+    event.preventDefault();
+
   });
 
 

@@ -112,6 +112,18 @@ $(document).ready(function () {
     $("body").css("padding-right", '0px');
   });
 
+  $('#signupEmail').on('hidden.bs.modal', function(event) {
+    $("body").removeClass("hide-scroll");
+    $("body").css("padding-right", '0px');
+  });
+
+  $('#signupNamePassword').on('hidden.bs.modal', function(event) {
+    $("body").removeClass("hide-scroll");
+    $("body").css("padding-right", '0px');
+  });
+
+  
+
   $('.modal').on('hidden.bs.modal', function(event) {
     $('body').addClass('destroy-padding');
     // $("body").css("padding-right", '0px');
