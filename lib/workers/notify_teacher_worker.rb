@@ -180,7 +180,7 @@ class NotifyTeacherWorker
   end
 
   def perform(params)
-    
+
       25.times do |i|
         signature = params["name_#{i}"]
         email     = params["email_#{i}"]
@@ -188,7 +188,6 @@ class NotifyTeacherWorker
           send_invite(signature, email, params['school_id'], params['admin_id'])
         end
       end
-
 
   end # perform
 

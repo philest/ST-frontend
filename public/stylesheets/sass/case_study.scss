@@ -1,3 +1,10 @@
+html{ font-size:100%; }
+
+body {
+  font-size: 1em;
+}
+
+
 iframe {
   display: block;
   margin: auto;
@@ -7,13 +14,167 @@ body {
   font-family: "Karla"
 }
 
-.centered {
-  display: block;
-  margin: 0 auto;
-  text-align: center; 
+
+
+@media (min-width: 35.5em) { // 568px
+
+  section {
+    padding-top: 3em;
+    padding-bottom: 3em;
+  }
+
+  .main-quote {
+
+    .rmp-banner & {
+      max-width: 40em;
+    }
+
+    .reading-challenges & {
+      max-width: 51em; 
+    }
+
+    .reading-habits & {
+      max-width: 48em;
+    }
+
+    .the-results & {
+      max-width: 63em;
+    }
+
+    .citation {
+      text-align: right;
+      margin: 0px;
+      font-size: 1.1em;
+
+      &:first-child {
+        font-weight: bold;
+      }
+
+      &:last-child {
+        font-weight: normal; 
+        font-style: italic;
+      }
+
+    }
+  }
+
+  .centered {
+    display: block;
+    margin: 0 auto;
+    text-align: center; 
+  }
+
+  .more-info {
+    padding-left: 5%;
+
+    .testimony-sub {
+      padding-left: 7%;
+    }
+
+  }
+
+  .section-divider {
+    width: 100%;
+    text-align: center;
+    min-height: 30em;
+    padding-top: 8em;
+    p, h2 {
+      color: white;
+      font-weight: normal;
+    }
+    h2 {
+      font-size: 2em;
+    }
+
+
+    &#part-1 {
+      background: url('/images/case-study/Creekside1.jpg') center top/cover no-repeat #03686b;
+    }
+
+    &#part-2 {
+      background: url('/images/case-study/Creekside2.jpg') center top/cover no-repeat #03686b;
+    }
+
+    &#part-3 {
+      background: url('/images/case-study/Creekside5.jpg') center top/cover no-repeat #03686b;
+    }
+
+    .circle-title {
+      border-radius: 50%;
+      background-color: red;
+      width: 6em;
+      height: 6em; 
+      margin: 0 auto;
+      /* width and height can be anything, as long as they're equal */ 
+      p {
+        padding-top: 1.2em;
+        font-size: 1.5em;
+      }
+    }
+
+
+  }
+
+  #inner-main-quote {
+    font-size: 1.3em;
+    line-height: 2.2em;
+    text-align: left;
+  }
+
+  .bigger-lines {
+    line-height: 2.2em;
+  }
+
+
+  .key-results {
+    padding-top: 4em;
+    min-height: 25em;
+    background-color: #F5F8F9;
+    border-top: 1px solid #BDBDBE;
+    border-bottom: 1px solid #BDBDBE;
+
+    h1 {
+      margin-bottom: 2em;
+    }
+
+
+    .pure-g {
+      width: 80%;
+      margin: 0 auto;
+    }
+  
+
+    .inner-wrapper {
+      width: 14.5em;
+      font-size: 0.9em;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 0em;
+    }
+    
+  }
+
+
 }
 
-.citation {
-  text-align: right;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
