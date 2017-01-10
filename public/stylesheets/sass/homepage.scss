@@ -404,12 +404,16 @@ h3.modal-subheading {
     padding: 12px;
     line-height: normal;
 }
+
+.signup-email-button {
+
+}
             
 
 h2.modal-signup-heading{
   font-size: 1.8em;
   text-align: center;
-  line-height: 0.5em;
+  line-height: 1.2em;
   color: #4a4a4a;
   font-family: 'Karla';
 }
@@ -433,7 +437,14 @@ div#signup-field {
   /*margin-left: 6%;*/
   width: 65%;
     margin-top: 13px;
+    width: 95%;
 }   
+
+#signup-email-button.dialog-button {
+  width: 95%;
+}
+
+
 
 button#join.dialog-button {
   display: block;
@@ -455,7 +466,7 @@ button.dialog-button {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 255px;
+  width: 95%;
 
   font-size: 17px;
   /*display: inline-block;*/
@@ -764,6 +775,10 @@ div.desktop-text {
 
     width: 65%;
 
+  }
+
+  #signup-email-button.dialog-button {
+    width: 65%;
   }
   
   button#join.dialog-button.signup-form-button {
