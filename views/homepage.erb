@@ -68,7 +68,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-
     <!-- Load jQuery and  -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
@@ -76,6 +75,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <!-- our scripts -->
     <script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/modals.js"></script>
     <script type="text/javascript" src="/js/appendform.js"></script>
     <script type="text/javascript" src="/js/videoModal.js"></script>
 
@@ -86,6 +86,9 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       // });
 
       $(document).ready(function(){
+        $('#myModal').modal('toggle');
+
+
         $(window).scroll(function (event) {
           var scroll = $(window).scrollTop();
             // Do something
@@ -121,9 +124,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
   <% end %>
 
 
-
-
-
       <nav class="navbar" role="navigation">
         <div class="container">
           <a href="/" id="navbar-title">
@@ -154,6 +154,14 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                 <% end %>
               </a>
             </li>
+
+            <li class="navbar-button-item">
+              <a>       
+                  <button id="top-button" data-toggle="modal" data-target="#signupEmail" class="pure-button-primary pure-button signup-button">
+                    Sign up
+                  </button>
+              </a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -164,12 +172,20 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       </nav> -->
 
   <!-- modals -->
-    <%= erb :'/modals/rayna-video' %>
-    <%= erb :'/modals/educator-login' %>
-    <%= erb :'/modals/school-role' %>
-    <%= erb :'modals/teacher-name' %>
-    <%= erb :'modals/admin-name' %>
-    <%= erb :'/modals/demo' %>
+  <div>
+      <%= erb :'/modals/signup-signature' %>
+      <%= erb :'/modals/signup-school-role' %>
+      <%= erb :'/modals/school-info' %>
+      <%= erb :'/modals/rayna-video' %>
+      <%= erb :'/modals/school-role' %>
+      <%= erb :'/modals/teacher-name' %>
+      <%= erb :'/modals/admin-name' %>
+      <%= erb :'/modals/signup-name-password' %>
+      <%= erb :'/modals/educator-login' %>
+      <%= erb :'/modals/demo' %>
+      <%= erb :'/modals/signup-email' %>
+      <%= erb :'/modals/main-signup-form' %>
+  </div>
   <!-- modals end -->
 
   <div class="splash-new">
@@ -204,7 +220,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         <ul>
           <p><b>No extra work.</b> Nightly books are already scheduled.</p>
           <p><b>Build literacy.</b> Parents just tap for questions to ask.</p>
-          <p><b>Based on Stanford research.</b> Shown to increase at home reading by 160%.</p>
+          <p><b>Based on Stanford research.</b> Shown to more than double reading at home.</p>
         </ul>
       </div>
     </div>

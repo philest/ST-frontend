@@ -8,30 +8,28 @@ $( document ).ready(function() {
       });
   });
 
-  // $('#teacher-info').on('submit', function(event) {
-  //   // event.preventDefault();
-  //   var teacherinfo = $("#teacher-info").serializeArray();
-  //   console.log(teacherinfo);
 
+  $('#main-signup-form').submit(function(event) {
+    $('.signup-form').each(function(index) {
+      var info = $(this).serializeArray();
+      console.log(info);
 
-  //   for (var i = 0; i < teacherinfo.length; i++) {
-  //     console.log(teacherinfo[i]);
-  //     var input = $('<input>')
-  //                   .attr('type', 'hidden')
-  //                   .attr('name', teacherinfo[i]['name'])
-  //                   .val(teacherinfo[i]['value']);
-  //     $('#login').append($(input));
-  //   }
+      for (var i = 0; i < info.length; i++) {
+        console.log(info[i]);
+        var input = $('<input>')
+                      .attr('type', 'hidden')
+                      .attr('name', info[i]['name'])
+                      .val(info[i]['value']);
+        $('#main-signup-form').append($(input));
+      }
 
-  //   var role = $('<input>')
-  //                 .attr('type', 'hidden')
-  //                 .attr('name', 'role')
-  //                 .val('teacher');
-  //   $('#login').append($(role));
+      console.log($(this).serializeArray());
 
-  //   console.log($(this).serializeArray());
+    });
 
-  // });
+    console.log($(this).serializeArray());
+
+  });
 
 
   $('#login').on('submit', function(event) {
@@ -61,6 +59,8 @@ $( document ).ready(function() {
 
 
   $('#admin-login').submit(function(event) {
+
+    // event.preventDefault();
 
     var adminInfo = $('#teacher-info').serializeArray();
     console.log(adminInfo);

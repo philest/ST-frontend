@@ -1,0 +1,106 @@
+<style>
+  #signupSchoolRole .pure-u-2-5 {
+    background-color: rgba(236, 239, 241, 0.54);
+    width: 48%;
+    border-color: rgba(236, 239, 241, 0.54);
+  /*border-top: none;*/
+    border-radius: 8px;
+  }
+
+  #signupSchoolRole .pure-u-2-5:hover {
+    background-color: #fdfdfd;
+  }
+
+  #signupSchoolRole .modal-signup-heading {
+    margin-bottom: 1.2em;
+  }
+
+  #signupSchoolRole .pure-u-2-5 p {
+    margin-top: 0em;
+    font-weight: bold;
+  }
+
+  #signupSchoolRole .pure-g {
+    display: block;
+  }
+</style>
+
+
+
+<!-- Modal Signup -->
+<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+<div class="modal fade" id="signupSchoolRole" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="navbar-logo" id="modal-logo"></div>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-signup-heading">Sign up for StoryTime as a...</h2>
+        <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
+        <form id="signup-school-role" class="signup-form" style="display: none;">
+          <input type="hidden" name="role" value="">
+        </form>
+
+        <div style="width: 60%; margin: 0 auto; text-align: center; margin-bottom: 2em">
+          <div class="pure-g">
+            <a href="#" id="signupChooseTeacher">
+              <div class="pure-u-2-5"  style="margin-right: 3%">
+                <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
+                <p>Teacher</p>
+              </div>
+            </a>
+
+            <a href="#" id="signupChooseAdmin">
+              <div class="pure-u-2-5">
+                <img src="/images/schoolhouse-icon.png" style="width: 100px; margin-top: 1em;" alt="">
+                <p>School Leader</p>
+              </div>
+            </a>
+
+          </div>
+        </div>
+
+        <script type='text/javascript'>
+
+            // $('#signupChooseTeacher').click(function(event){
+            //   // add a hidden input to this form with 'teacher' as role
+
+            //   $('#signupSchoolRole').modal('toggle');
+            //   $("body").addClass("hide-scroll");
+            //   // var role = $('<input>')
+            //   //     .attr('type', 'hidden')
+            //   //     .attr('name', 'role')
+            //   //     .val('teacher');
+            //   console.log('changing form value to teacher (hopefully)');
+            //   // $('form#signup-school-role').find('input[name=role]').val('teacher');
+
+            //   $('#signupSignature').modal('toggle');
+            // });
+
+            // $('#signupChooseAdmin').click(function(event){
+            //   // add a hidden input to this form with 'admin' as role
+            //   $('#signupSchoolRole').modal('toggle');
+            //   $("body").addClass("hide-scroll");
+            //   // var role = $('<input>')
+            //   //     .attr('type', 'hidden')
+            //   //     .attr('name', 'role')
+            //   //     .val('admin');
+            //   // $('form#signup-school-role').append($(role));
+            //   console.log('changing form value to admin (hopefully)');
+            //   // $('form#signup-school-role').find('input[name=role]').val('admin');
+              
+            //   $('#signupSignature').modal('toggle');
+            // });
+
+        </script>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end Modal Signup-->
