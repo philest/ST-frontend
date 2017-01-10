@@ -86,7 +86,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       // });
 
       $(document).ready(function(){
-        // $('#myModal').modal('toggle');
+        // $('#congratsModal').modal('toggle');
 
 
         $(window).scroll(function (event) {
@@ -185,6 +185,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       <%= erb :'/modals/demo' %>
       <%= erb :'/modals/signup-email' %>
       <%= erb :'/modals/main-signup-form' %>
+      <%= erb :'/modals/congrats-modal' %>
   </div>
   <!-- modals end -->
 
@@ -193,7 +194,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       <div class="title">
         <h1>Get families reading with books by text.</h1>
         <h4 style="font-size: 18px;">Text children's books home without extra work— for free.</h4>
-        <button type="button" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button">
+        <button type="button" data-toggle="modal" data-target="#signupEmail" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button">
                     Sign up
                   </button>
       </div>

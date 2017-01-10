@@ -12,10 +12,10 @@ $( document ).ready(function() {
   $('#main-signup-form').submit(function(event) {
     $('.signup-form').each(function(index) {
       var info = $(this).serializeArray();
-      console.log(info);
+      // console.log(info);
 
       for (var i = 0; i < info.length; i++) {
-        console.log(info[i]);
+        // console.log(info[i]);
         var input = $('<input>')
                       .attr('type', 'hidden')
                       .attr('name', info[i]['name'])
@@ -23,25 +23,29 @@ $( document ).ready(function() {
         $('#main-signup-form').append($(input));
       }
 
-      console.log($(this).serializeArray());
+      // console.log($(this).serializeArray());
 
     });
 
-    console.log($(this).serializeArray());
+    // console.log($(this).serializeArray());
 
     event.preventDefault();
 
+    $.post('freemium-signup', $('#main-signup-form').serialize())
+          .done(function(data) {
+            $('#congratsModal').modal('toggle');
+          });
   });
 
 
   $('#login').on('submit', function(event) {
     // event.preventDefault();
     var teacherinfo = $("#teacher-info").serializeArray();
-    console.log(teacherinfo);
+    // console.log(teacherinfo);
 
 
     for (var i = 0; i < teacherinfo.length; i++) {
-      console.log(teacherinfo[i]);
+      // console.log(teacherinfo[i]);
       var input = $('<input>')
                     .attr('type', 'hidden')
                     .attr('name', teacherinfo[i]['name'])
@@ -55,7 +59,7 @@ $( document ).ready(function() {
                   .val('teacher');
     $('#login').append($(role));
 
-    console.log($(this).serializeArray());
+    // console.log($(this).serializeArray());
 
   });
 

@@ -8,10 +8,10 @@ $(document).ready(function () {
 
     $('#signup-email').validate({ // initialize the plugin
         rules: {
-            // email: {
-            //     required: true,
-            //     // email: true
-            // }
+            email: {
+                required: true,
+                // email: true
+            }
         }
     }).form();
 
@@ -28,15 +28,15 @@ $(document).ready(function () {
     event.preventDefault();
     $('#signup-name-password').validate({ // initialize the plugin
         rules: {
-            // first_name: {
-            //     required: true
-            // },
-            // last_name: {
-            //   required: true
-            // },
-            // password: {
-            //     required: true
-            // }
+            first_name: {
+                required: true
+            },
+            last_name: {
+              required: true
+            },
+            password: {
+                required: true
+            }
         }
     }).form();
 
@@ -57,9 +57,9 @@ $(document).ready(function () {
     event.preventDefault();
     $('#signup-signature').validate({ // initialize the plugin
         rules: {
-            // signature: {
-            //     required: true
-            // }
+            signature: {
+                required: true
+            }
         }
     }).form();
 
@@ -75,9 +75,9 @@ $(document).ready(function () {
     event.preventDefault();
     $('#school-info').validate({ // initialize the plugin
         rules: {
-            // school_name:  {required:true},
-            // school_city:  {required:true},
-            // school_state: {required:true}
+            school_name:  {required:true},
+            school_city:  {required:true},
+            school_state: {required:true}
         }
     }).form();
 
@@ -102,42 +102,7 @@ $(document).ready(function () {
     $('#myModal').modal('toggle');
   });
 
-  $('#modalSig').on('hidden.bs.modal', function(event) {
-    $("body").removeClass("hide-scroll");
-    $("body").css("padding-right", '0px');
-  });
-
-  $('#adminSig').on('hidden.bs.modal', function(event) {
-    $("body").removeClass("hide-scroll");
-    $("body").css("padding-right", '0px');
-  });
-
-  $('#signupEmail').on('hidden.bs.modal', function(event) {
-    $("body").removeClass("hide-scroll");
-    $("body").css("padding-right", '0px');
-  });
-
-  $('#signupNamePassword').on('hidden.bs.modal', function(event) {
-    $("body").removeClass("hide-scroll");
-    $("body").css("padding-right", '0px');
-  });
-
   
-
-  $('.modal').on('hidden.bs.modal', function(event) {
-    $('body').addClass('destroy-padding');
-    // $("body").css("padding-right", '0px');
-  });
-
-  $('.modal').on('shown.bs.modal', function(event) {
-    $('body').removeClass('destroy-padding');
-    // $('body').css("padding-right", '15px');
-  });
-
-
-  // $('.modal').on('shown.bs.modal', function(event) {
-  //   $('body').removeClass('destroy-padding');
-  // });
 
   $("#join.signature-modal").on('click', function(event) {
     event.preventDefault();
@@ -181,7 +146,7 @@ $(document).ready(function () {
         console.log(data);
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
-          $("body").addClass("hide-scroll");
+          // $("body").addClass("hide-scroll");
           $('#chooseRoleModal').modal('toggle');
           // show a different modal here....
 
