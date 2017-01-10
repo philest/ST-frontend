@@ -403,6 +403,22 @@ button#join.dialog-button {
   margin-bottom: 15px;
 
 }
+
+button.dialog-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 255px;
+
+  font-size: 17px;
+  /*display: inline-block;*/
+/*  padding-top: 10px;
+*/  /*match other*/
+  font-weight: 100;
+  background-color: #ed7844;
+  margin-bottom: 15px;
+
+}
 /*END SIGNUP MODAL*/
 
 /*DEMO Modal*/
@@ -417,6 +433,12 @@ button#join.dialog-button {
 }
 
 button#join.demo-form-button{
+  margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+button.demo-form-button{
   margin-left: auto;
     margin-right: auto;
     display: block;
@@ -514,6 +536,7 @@ button#start-modal-button.demo-request-button {
   margin-right: auto;
   margin-top: 2em;
 }
+
 
 div.home--features {
   max-width: 1024px;
@@ -701,6 +724,15 @@ div.desktop-text {
     margin-left: auto;
     margin-right: auto;
     width: 65%;
+
+  }
+
+  button.signup-form-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
+    margin-top: 1em;
 
   }
 
