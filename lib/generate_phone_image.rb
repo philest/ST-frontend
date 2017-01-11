@@ -11,7 +11,7 @@ class PhoneImage
     teacher = teacher_obj.signature
     school = school_obj.signature
 
-    path = File.expand_path("#{File.dirname(__FILE__)}/assets/phone-text-blank.png")
+    path = File.expand_path("#{File.dirname(__FILE__)}/assets/phone-text-blank.jpg")
 
     canvas = Magick::Image.from_blob(IO.read(path))[0]
     text = Magick::Draw.new
