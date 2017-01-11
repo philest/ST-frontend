@@ -102,7 +102,18 @@ $(document).ready(function () {
     $('#myModal').modal('toggle');
   });
 
-  
+  $('.modal').on('hidden.bs.modal', function(event) {
+     $('body').addClass('destroy-padding');
+     $('body').removeClass('hide-scroll');
+     $("body").css("padding-right", '0px');
+  });
+
+  $('.modal').on('shown.bs.modal', function(event) {
+    $('body').removeClass('destroy-padding');
+    $('body').addClass('hide-scroll');
+
+    $('body').css("padding-right", '15px');
+  });
 
   $("#join.signature-modal").on('click', function(event) {
     event.preventDefault();
@@ -146,7 +157,7 @@ $(document).ready(function () {
         console.log(data);
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
-          // $("body").addClass("hide-scroll");
+          $("body").addClass("hide-scroll");
           $('#chooseRoleModal').modal('toggle');
           // show a different modal here....
 

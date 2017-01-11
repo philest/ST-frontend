@@ -116,14 +116,12 @@ class App < Sinatra::Base
   post '/freemium-signup' do
     puts "in /freemium-signup new educator #{params} wants to sign up!"
 
-    notify_admins("Someone just joined freemium", params.to_s)
+    # notify_admins("Someone just joined freemium", params.to_s)
 
     return 200
   end
 
-  post '/ass' do
-    puts "ASS!"
-  end
+
 
   get '/user_exists' do
     puts "params=#{params}"
