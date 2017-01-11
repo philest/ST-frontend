@@ -41,7 +41,7 @@ class PhoneImage
     if flyers.exists?
         # in case a teacher has multiple classrooms (same signature), use their code to differentiate
         teacher_dir = "#{teacher}-#{teacher_obj.t_number}" 
-        name = "#{school}/#{teacher_dir}/phone-imgs/#{img_txt}-phone.png"
+        name = "#{school}/#{teacher_dir}/phone-imgs/#{img_txt}-phone.jpg"
         if flyers.object(name).exists?
             puts "#{name} already exists in the bucket"
         else
