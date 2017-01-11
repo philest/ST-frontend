@@ -7,12 +7,13 @@
     margin-bottom: 2em;
   }
 
-  #signupChooseTeacher {
+  #signupChooseTeacher, #signupChooseAdmin {
     display: block;
-  }
-
-  #signupChooseAdmin {
-    display: block;
+    background-color: rgba(236, 239, 241, 0.54);
+    width: 48%;
+    border-color: rgba(236, 239, 241, 0.54);
+  /*border-top: none;*/
+    border-radius: 8px;
   }
 
   #signupSchoolRole .a-btn {
@@ -88,18 +89,18 @@
 
         <div class="outer">
           <!-- <div class="pure-g"> -->
-            <a href="#" id="signupChooseTeacher">
-              <div class="pure-u-1 a-btn"  style="margin-right: 3%; margin-bottom:1em;">
+            <a href="#" id="signupChooseTeacher" class="pure-u-1 pure-u-sm-1-2">
+              <!-- <div class="pure-u-1 a-btn"  style="margin-right: 3%; margin-bottom:1em;"> -->
                 <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
                 <p>Teacher</p>
-              </div>
+              <!-- </div> -->
             </a>
 
-            <a href="#" id="signupChooseAdmin">
-              <div class="pure-u-1 a-btn">
+            <a href="#" id="signupChooseAdmin" class="pure-u-1 pure-u-sm-1-2">
+              <!-- <div class="pure-u-1 pure-u-sm-1-2"> -->
                 <img src="/images/schoolhouse-icon.png" style="width: 100px; margin-top: 1em;" alt="">
                 <p>School Leader</p>
-              </div>
+              <!-- </div> -->
             </a>
 
           <!-- </div> -->
