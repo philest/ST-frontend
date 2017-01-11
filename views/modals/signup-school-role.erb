@@ -1,28 +1,69 @@
 <style>
-  #signupSchoolRole .a-btn {
-    background-color: rgba(236, 239, 241, 0.54);
-    width: 48%;
-    border-color: rgba(236, 239, 241, 0.54);
-  /*border-top: none;*/
-    border-radius: 8px;
+
+  .outer {
+    width: 100%; 
+    margin: 0 auto; 
+    text-align: center; 
+    margin-bottom: 2em;
   }
 
-  #signupSchoolRole .a-btn:hover {
-    background-color: #fdfdfd;
-  }
-
-  #signupSchoolRole .modal-signup-heading {
-    margin-bottom: 1.2em;
-  }
-
-  #signupSchoolRole .a-btn p {
-    margin-top: 0em;
-    font-weight: bold;
-  }
-
-  #signupSchoolRole .pure-g {
+  #signupChooseTeacher {
     display: block;
   }
+
+  #signupChooseAdmin {
+    display: block;
+  }
+
+  #signupSchoolRole .a-btn {
+      background-color: rgba(236, 239, 241, 0.54);
+      width: 100%;
+      border-color: rgba(236, 239, 241, 0.54);
+    /*border-top: none;*/
+      border-radius: 8px;
+  }
+
+    #signupSchoolRole .a-btn:hover {
+      background-color: #fdfdfd;
+    }
+
+    #signupSchoolRole .modal-signup-heading {
+      margin-bottom: 1.2em;
+    }
+
+    #signupSchoolRole .a-btn p {
+      margin-top: 0em;
+      font-weight: bold;
+    }
+
+    #signupSchoolRole .pure-g {
+      display: block;
+    }
+  }
+
+    #signupSchoolRole .a-btn {
+      background-color: rgba(236, 239, 241, 0.54);
+      /*width: 48%;*/
+      border-color: rgba(236, 239, 241, 0.54);
+    /*border-top: none;*/
+      border-radius: 8px;
+    }
+
+
+  @media (min-width: 35.5em) { // 568px
+
+
+
+  @media (min-width: 48em) {
+    .outer {
+        width: 60%; 
+        margin: 0 auto; 
+        text-align: center; 
+        margin-bottom: 2em;
+      }
+  }
+
+
 </style>
 
 
@@ -45,23 +86,23 @@
           <input type="hidden" name="role" value="">
         </form>
 
-        <div style="width: 60%; margin: 0 auto; text-align: center; margin-bottom: 2em">
-          <div class="pure-g">
+        <div class="outer">
+          <!-- <div class="pure-g"> -->
             <a href="#" id="signupChooseTeacher">
-              <div class="pure-u-md-2-5 a-btn"  style="margin-right: 3%">
+              <div class="pure-u-1 a-btn"  style="margin-right: 3%; margin-bottom:1em;">
                 <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
                 <p>Teacher</p>
               </div>
             </a>
 
             <a href="#" id="signupChooseAdmin">
-              <div class="pure-u-md-2-5 a-btn">
+              <div class="pure-u-1 a-btn">
                 <img src="/images/schoolhouse-icon.png" style="width: 100px; margin-top: 1em;" alt="">
                 <p>School Leader</p>
               </div>
             </a>
 
-          </div>
+          <!-- </div> -->
         </div>
 
         <script type='text/javascript'>
