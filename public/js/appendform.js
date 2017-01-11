@@ -8,6 +8,24 @@ $( document ).ready(function() {
       });
   });
 
+  $('#signup-name-password').submit(function(event) {
+    var email = $('#signup-email input[name=email]').val()
+    var input = $('<input>')
+                      .attr('type', 'hidden')
+                      .attr('name', 'email')
+                      .val(email);
+    $('#signup-name-password').append($(input));
+
+    event.preventDefault();
+
+    $.post('freemium-signup-register', $('#signup-name-password').serialize())
+          .done(function(data) {
+            // $('#congratsModal').modal('toggle');
+            // delete the extra form data
+            $("#signup-name-password input[type='hidden'][name='email']").remove();
+          });
+  });
+
 
   $('#main-signup-form').submit(function(event) {
     $('.signup-form').each(function(index) {
@@ -26,9 +44,7 @@ $( document ).ready(function() {
       // console.log($(this).serializeArray());
 
     });
-
     // console.log($(this).serializeArray());
-
     event.preventDefault();
 
     $.post('freemium-signup', $('#main-signup-form').serialize())
