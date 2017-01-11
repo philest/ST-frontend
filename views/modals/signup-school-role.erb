@@ -1,59 +1,50 @@
 <style>
 
-  .outer {
-    width: 100%; 
-    margin: 0 auto; 
-    text-align: center; 
-    margin-bottom: 2em;
+  #signupSchoolRole .modal-body .pure-g {
+    margin-bottom: 1em;
   }
 
   #signupChooseTeacher, #signupChooseAdmin {
-    display: block;
-    background-color: rgba(236, 239, 241, 0.54);
-    width: 48%;
-    border-color: rgba(236, 239, 241, 0.54);
-  /*border-top: none;*/
-    border-radius: 8px;
-  }
-
-  #signupSchoolRole .a-btn {
-      background-color: rgba(236, 239, 241, 0.54);
-      width: 100%;
-      border-color: rgba(236, 239, 241, 0.54);
+    /*width: 48%;*/
+    /*border-color: rgba(236, 239, 241, 0.54);*/
     /*border-top: none;*/
-      border-radius: 8px;
-  }
-
-    #signupSchoolRole .a-btn:hover {
-      background-color: #fdfdfd;
-    }
-
-    #signupSchoolRole .modal-signup-heading {
-      margin-bottom: 1.2em;
-    }
-
-    #signupSchoolRole .a-btn p {
-      margin-top: 0em;
-      font-weight: bold;
-    }
-
-    #signupSchoolRole .pure-g {
+    text-align: center; 
+    img {
       display: block;
+      margin: 0 auto;
     }
   }
 
-    #signupSchoolRole .a-btn {
-      background-color: rgba(236, 239, 241, 0.54);
-      /*width: 48%;*/
-      border-color: rgba(236, 239, 241, 0.54);
-    /*border-top: none;*/
-      border-radius: 8px;
-    }
+  .inner-apple-wrapper {
+    background-color: #f9f5f5;
+    cursor: pointer; cursor: hand;
+    border-radius: 8px;
+    margin-left:5%;
+    margin-right:5%;
+    padding-bottom: 0.1em;
+    margin-bottom: 1em;
+    /*width: 90%;*/
+  }
+
+  .inner-apple-wrapper:hover {
+    background-color: #fdfdfd;
+    /*border: 1px solid #F9F5F5;*/
+  }
+
+  #signupSchoolRole .modal-signup-heading {
+    margin-bottom: 1.2em;
+  }
+
+
+  #signupSchoolRole .pure-g {
+    display: block;
+  }
+
 
 
   @media (min-width: 35.5em) { // 568px
 
-
+  }
 
   @media (min-width: 48em) {
     .outer {
@@ -87,24 +78,30 @@
           <input type="hidden" name="role" value="">
         </form>
 
-        <div class="outer">
-          <!-- <div class="pure-g"> -->
-            <a href="#" id="signupChooseTeacher" class="pure-u-1 pure-u-sm-1-2">
-              <!-- <div class="pure-u-1 a-btn"  style="margin-right: 3%; margin-bottom:1em;"> -->
-                <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
-                <p>Teacher</p>
-              <!-- </div> -->
-            </a>
 
-            <a href="#" id="signupChooseAdmin" class="pure-u-1 pure-u-sm-1-2">
-              <!-- <div class="pure-u-1 pure-u-sm-1-2"> -->
-                <img src="/images/schoolhouse-icon.png" style="width: 100px; margin-top: 1em;" alt="">
-                <p>School Leader</p>
-              <!-- </div> -->
-            </a>
+        <!-- correct form -->
+        <div class="pure-g">
+          <div id="signupChooseTeacher" class="pure-u-1 pure-u-sm-1-2">
+            <div class="inner-apple-wrapper">
+              <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
+              <p>Teacher</p>
 
-          <!-- </div> -->
+            </div>
+          </div>
+
+          <div id="signupChooseAdmin" class="pure-u-1 pure-u-sm-1-2">
+            <div class="inner-apple-wrapper">
+              <img src="/images/schoolhouse-icon.png" alt="" style="width:100px; margin-top: 1em;">
+              <p>School Leader</p>
+            </div>
+          </div>
+
         </div>
+
+
+
+        <!-- correct form -->
+
 
         <script type='text/javascript'>
 
