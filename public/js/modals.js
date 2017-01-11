@@ -46,6 +46,10 @@ $(document).ready(function () {
         return false;
     }
 
+    // we want to POST this, clear the first-signup-form, the move on to the next modal
+    $('#signup-name-password').submit();
+
+    // move on to next modal
     $('#signupSchoolRole').modal('toggle');
   });
 
