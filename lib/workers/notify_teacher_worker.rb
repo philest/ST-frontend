@@ -17,7 +17,7 @@ class UpdateAdminWorker
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
 
       message = {
-        'To' => 'supermcpeek@gmail.com',
+        'To' => email,
         'Data' => {
           'adminfirstname' => sig,
           'teacher_count' => count,
