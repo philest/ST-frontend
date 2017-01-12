@@ -5,7 +5,7 @@ $(document).ready(function () {
   $('.modal').on('hidden.bs.modal', function(event) {
      // $('body').addClass('destroy-padding');
      // $('body').removeClass('hide-scroll');
-     // $("body").css("padding-right", '0px');
+     $("body").css("padding-right", '0px');
 
      console.log('closing modal'); 
     $("body").removeClass("my-modal-open");
@@ -14,8 +14,7 @@ $(document).ready(function () {
   $('.modal').on('shown.bs.modal', function(event) {
     // $('body').removeClass('destroy-padding');
     // $('body').addClass('hide-scroll');
-    // $('body').css("padding-right", '15px');
-
+    $('body').css("padding-right", '0px');
     $("body").addClass("my-modal-open");
     console.log('opening modal');
   });
@@ -40,7 +39,7 @@ $(document).ready(function () {
 
     $('#signupNamePassword').modal('toggle');
 
-    $("body").addClass("modal-open");
+    // $("body").addClass("modal-open");
   });
 
   $('#signup-name-password-button').click(function(event) {
@@ -71,12 +70,12 @@ $(document).ready(function () {
 
     // move on to next modal
     $('#signupSchoolRole').modal('toggle');
-    $("body").addClass("modal-open");
+    // $("body").addClass("modal-open");
   });
 
   $('#signup-school-role-button').click(function(event) {
     $('#signupSignature').modal('toggle');
-    $("body").addClass("modal-open");
+    // $("body").addClass("modal-open");
   });
 
   $('#signup-signature-button').click(function(event) {
@@ -94,7 +93,7 @@ $(document).ready(function () {
         return false;
     }
     $('#schoolInfo').modal('toggle');
-    $("body").addClass("modal-open");
+    // $("body").addClass("modal-open");
   });
 
   $('#school-info-button').click(function(event) {
