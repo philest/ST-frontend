@@ -133,8 +133,13 @@ body {
   font-size: 1em;
 }
 
-body.modal-open {
+body.my-modal-open {
   padding-right: 0px;
+}
+
+body.my-modal-open {
+    overflow: hidden;
+    position: fixed;
 }
 
 body.hide-scroll#override {
