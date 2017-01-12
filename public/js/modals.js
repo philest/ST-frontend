@@ -107,16 +107,21 @@ $(document).ready(function () {
   });
 
   $('.modal').on('hidden.bs.modal', function(event) {
-     $('body').addClass('destroy-padding');
-     $('body').removeClass('hide-scroll');
-     $("body").css("padding-right", '0px');
+     // $('body').addClass('destroy-padding');
+     // $('body').removeClass('hide-scroll');
+     // $("body").css("padding-right", '0px');
+
+     console.log('closing modal'); 
+    $("body").removeClass("modal-open");
   });
 
   $('.modal').on('shown.bs.modal', function(event) {
-    $('body').removeClass('destroy-padding');
-    $('body').addClass('hide-scroll');
+    // $('body').removeClass('destroy-padding');
+    // $('body').addClass('hide-scroll');
+    // $('body').css("padding-right", '15px');
 
-    $('body').css("padding-right", '15px');
+    $("body").addClass("modal-open");
+    console.log('opening modal');
   });
 
   $("#join.signature-modal").on('click', function(event) {
@@ -138,11 +143,8 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
-
     $('#myModal').modal('toggle');
-
     // animate a loading gif...
-
     var teacher_data = $("#teacher-info").serializeArray();
     // var teacher_data = $("#teacher-info").serialize();
     var email = teacher_data[0]['value'];
@@ -162,7 +164,7 @@ $(document).ready(function () {
         console.log(data);
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
-          $("body").addClass("hide-scroll");
+          // $("body").addClass("hide-scroll");
           $('#chooseRoleModal').modal('toggle');
           // show a different modal here....
 
