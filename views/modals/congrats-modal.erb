@@ -1,10 +1,84 @@
+<style>
+  
+  #congratsModal img.apple {
+    width: 100px; 
+    margin-right: -12px;
+  }
+
+  #congratsModal .modal-body h2 {
+    font-size: 1.1em;
+    font-weight: 100;
+  }
+
+  #congratsModal .modal-body {
+    overflow-y: hidden;
+    text-align: center;
+  }
+
+  #congratsModal .modal-body img.apple {
+    float: none;
+    margin-right: 0px;
+    margin-left: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+
+  #congratsModal .modal-body h1 {
+    font-weight: bold;
+    font-size: 2.1em;
+  }
+  
+  #congratsModal .modal-body #top-button {
+    padding: 15px 55px;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+
+  #congratsModal .modal-content {
+    width: 90vw;
+    margin: 0 auto;
+  }
+  #congratsModal .modal-body #top-button {
+    padding: 15px 55px;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+
+  #congratsModal .modal-content {
+    width: 90vw;
+    margin: 0 auto;
+  }
+
+
+
+  @media (min-width: 35.5em) {
+    #congratsModal img.apple {
+      width: 150px;
+    }
+
+    #congratsModal .modal-body h2 {
+      font-size: 1.3em;
+    }
+
+  }
+
+  @media (min-width: 48em) {
+    #congratsModal .modal-content {
+      width: 50vw;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+
   <!-- Invite teachers Modal -->
   <div class="modal fade" id="congratsModal" role="dialog" tabindex='-1'>
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-body">
           <h1>Congrats!</h1>
-          <img class="apple" src="/images/schoolhouse-icon.png" alt="" style="width: 150px; margin-right: -12px;">
+          <img class="apple" src="/images/schoolhouse-icon.png" alt="">
           <h2>You're on the waitlist for StoryTime!</h2>
           <h2>We'll email you soon with instructions on how to start.</h2>
           <button type="button" style="display: block; text-align: center; margin: 1em auto;" id="top-button" class="pure-button btn btn-primary btn-lg outline navbar-menu signup-button" data-dismiss="modal">

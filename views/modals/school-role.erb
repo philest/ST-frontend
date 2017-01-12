@@ -1,70 +1,6 @@
 <style>
-  #chooseRoleModal .pure-u-2-5 {
-    background-color: rgba(236, 239, 241, 0.54);
-    width: 48%;
-    border-color: rgba(236, 239, 241, 0.54);
-    border-top: none;
-    border-radius: 8px;
 
-    background-color: #f9f5f5;
-    /* width: 48%; */
-    /* border-color: rgba(236, 239, 241, 0.54); */
-    /* border-top: none; */
-    border-radius: 8px;
-  }
 
-  #chooseTeacher, #chooseAdmin {
-    /*width: 48%;*/
-    /*border-color: rgba(236, 239, 241, 0.54);*/
-    /*border-top: none;*/
-    text-align: center; 
-    img {
-      display: block;
-      margin: 0 auto;
-    }
-  }
-
-  #chooseRoleModal .modal-body .pure-g {
-    margin-bottom: 1em;
-  }
-
-  .inner-apple-wrapper {
-    background-color: #f9f5f5;
-    cursor: pointer; cursor: hand;
-    border-radius: 8px;
-    margin-left:5%;
-    margin-right:5%;
-    padding-bottom: 0.1em;
-    margin-bottom: 1em;
-    /*width: 90%;*/
-  }
-
-  .inner-apple-wrapper:hover {
-    background-color: #fdfdfd;
-    /*border: 1px solid #F9F5F5;*/
-  }
-
- /* #chooseTeacher:hover, #chooseAdmin:hover {
-  }*/
-
-  #chooseRoleModal .modal-signup-heading {
-    margin-bottom: 0.5em;
-  }
-
-  #chooseRoleModal .pure-u-2-5 p {
-    margin-top: 0em;
-    font-weight: bold;
-  }
-
-  #chooseRoleModal .pure-g {
-    display: block;
-  }
-
-  @media (min-width: 35.5em) {
-    #chooseRoleModal .modal-signup-heading {
-      margin-bottom: 1.2em;
-    }
-  }
 </style>
 
 
@@ -87,16 +23,16 @@
         <div class="pure-g">
           <div id="chooseTeacher" class="pure-u-1 pure-u-sm-1-2">
             <div class="inner-apple-wrapper">
-              <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
-              <p>Teacher</p>
+              <img id="first-apple" src="/images/fresh-apple-icon.png" alt="">
+              <p class="role-title">Teacher</p>
 
             </div>
           </div>
 
           <div id="chooseAdmin" class="pure-u-1 pure-u-sm-1-2">
             <div class="inner-apple-wrapper">
-              <img src="/images/schoolhouse-icon.png" alt="" style="width:100px; margin-top: 1em;">
-              <p>School Leader</p>
+              <img id="last-schoolhouse" src="/images/schoolhouse-icon.png" alt="">
+              <p class="role-title">School Leader</p>
             </div>
           </div>
 

@@ -112,11 +112,12 @@ class App < Sinatra::Base
     erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
   end
 
-
   post '/freemium-signup-register' do
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
 
-    notify_admins("Educator joined freemium", params.to_s)
+    if params['first_name'].downcase != 'test'
+      notify_admins("Educator joined freemium", params.to_s)
+    end
 
     return 200
   end
@@ -125,12 +126,12 @@ class App < Sinatra::Base
   post '/freemium-signup' do
     puts "in /freemium-signup new educator #{params} wants to sign up!"
 
-    notify_admins("Educator finished freemium signup", params.to_s)
+    if params['first_name'].downcase != 'test'
+      notify_admins("Educator finished freemium signup", params.to_s)
+    end
 
     return 200
   end
-
-
 
   get '/user_exists' do
     puts "params=#{params}"

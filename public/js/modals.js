@@ -120,6 +120,7 @@ $(document).ready(function () {
   });
 
   $("#join.signature-modal").on('click', function(event) {
+    console.log('signing in modal')
     event.preventDefault();
     $('#teacher-info').validate({ // initialize the plugin
         rules: {
