@@ -304,9 +304,34 @@ button.signup-button {
   text-decoration: none;
   // color: #ed7844;
   color: white;
-
-
 }
+
+// .navbar li {
+//   padding-top: 40.5px;
+//     padding-bottom: 40.5px;
+//     float: left;
+//     margin-left: 30px;
+//     font-size: 1.25em;
+//     color: #ed7844;
+
+// }
+
+
+
+// .navbar-right li a {
+//   text-decoration: none;
+//   // color: #ed7844;
+
+// }
+
+.navbar-right { 
+  float: right !important;
+  list-style: none;
+  display: none;
+
+ }
+
+
 
 .navbar-right { 
   float: right !important;
@@ -789,7 +814,7 @@ div.desktop-text {
 
 
 
-@media (min-width: 450px) {
+@media (min-width: 28.125em) {
   #logo-new {
 /*    width: 310px;
 */
@@ -821,16 +846,17 @@ div.desktop-text {
 
 }
 
+
+
 /***** Portrait mode, small tablet ******/
 @media (min-width: 35.5em) { // 568px
 
 
-
-  .navbar-right{
-    display: block;
-    margin-right: 20px;
-      margin-bottom: 6px;
-  }
+  // .navbar-right{
+  //   display: block;
+  //   margin-right: 20px;
+  //     margin-bottom: 6px;
+  // }
 
   #splash {
     padding-top: 3em;
@@ -840,9 +866,7 @@ div.desktop-text {
     margin-top: 2em;
   }
 
-  .navbar-right {
-    display: none;
-  }
+
 
   h1#main-banner {
     padding-top: 12em;
@@ -939,11 +963,22 @@ div.desktop-text {
 /***** Large tablet ******/
 @media (min-width: 48em) { // 768px
 
-
-
   .navbar-right {
     display: block;
+    // margin-right: 20px;
+    margin-bottom: 6px;
+
+    // margin-left: 1em;
   }
+
+  .navbar-right li {
+    margin-left: 1em; 
+  }
+
+
+  // .navbar-right {
+  //   display: block;
+  // }
 
   .container {
       // width: 750px;
@@ -1083,6 +1118,12 @@ div.desktop-text {
 
 
 } 
+
+@media (min-width: 54em) {
+  .navbar-right li {
+    margin-left: 2em;
+  }
+}
 
 @media (min-width: 820px) {
   h1#main-tagline {
