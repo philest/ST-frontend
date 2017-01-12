@@ -1,59 +1,9 @@
-<style>
-
-  #signupSchoolRole .modal-body .pure-g {
-    margin-bottom: 1em;
-  }
-
-  #signupChooseTeacher, #signupChooseAdmin {
-    /*width: 48%;*/
-    /*border-color: rgba(236, 239, 241, 0.54);*/
-    /*border-top: none;*/
-    text-align: center; 
-    img {
-      display: block;
-      margin: 0 auto;
-    }
-  }
-
-  .inner-apple-wrapper {
-    background-color: #f9f5f5;
-    cursor: pointer; cursor: hand;
-    border-radius: 8px;
-    margin-left:5%;
-    margin-right:5%;
-    padding-bottom: 0.1em;
-    margin-bottom: 1em;
-    /*width: 90%;*/
-  }
-
-  .inner-apple-wrapper:hover {
-    background-color: #fdfdfd;
-    /*border: 1px solid #F9F5F5;*/
-  }
-
-  #signupSchoolRole .modal-signup-heading {
-    margin-bottom: 1.2em;
-  }
-
-
-  #signupSchoolRole .pure-g {
-    display: block;
-  }
+  <style>
 
 
 
-  @media (min-width: 35.5em) { // 568px
 
-  }
 
-  @media (min-width: 48em) {
-    .outer {
-        width: 60%; 
-        margin: 0 auto; 
-        text-align: center; 
-        margin-bottom: 2em;
-      }
-  }
 
 
 </style>
@@ -83,16 +33,16 @@
         <div class="pure-g">
           <div id="signupChooseTeacher" class="pure-u-1 pure-u-sm-1-2">
             <div class="inner-apple-wrapper">
-              <img src="/images/fresh-apple-icon.png" alt="" style="margin-top: 1em;">
-              <p>Teacher</p>
+              <img id="first-apple" src="/images/fresh-apple-icon.png" alt="">
+              <p class="role-title">Teacher</p>
 
             </div>
           </div>
 
           <div id="signupChooseAdmin" class="pure-u-1 pure-u-sm-1-2">
             <div class="inner-apple-wrapper">
-              <img src="/images/schoolhouse-icon.png" alt="" style="width:100px; margin-top: 1em;">
-              <p>School Leader</p>
+              <img id="last-schoolhouse" src="/images/schoolhouse-icon.png" alt="">
+              <p class="role-title">School Leader</p>
             </div>
           </div>
 

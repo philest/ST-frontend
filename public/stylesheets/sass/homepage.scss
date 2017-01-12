@@ -1,3 +1,121 @@
+// end signin
+  // #chooseRoleModal .pure-u-2-5 {
+  //   background-color: rgba(236, 239, 241, 0.54);
+  //   width: 48%;
+  //   border-color: rgba(236, 239, 241, 0.54);
+  //   border-top: none;
+  //   border-radius: 8px;
+
+  //   background-color: #f9f5f5;
+  //   /* width: 48%; */
+  //   /* border-color: rgba(236, 239, 241, 0.54); */
+  //   /* border-top: none; */
+  //   border-radius: 8px;
+  // }
+
+
+  #chooseRoleModal .modal-body .pure-g {
+    margin-bottom: 1em;
+  }
+
+  .inner-apple-wrapper {
+    background-color: #f9f5f5;
+    cursor: pointer; cursor: hand;
+    border-radius: 8px;
+    margin-left:5%;
+    margin-right:5%;
+    padding-bottom: 0.1em;
+    margin-bottom: 1em;
+    /*width: 90%;*/
+
+    img#first-apple {
+      margin-top: 0em;
+    }
+    img#last-schoolhouse {
+      margin-top: 0em;
+      width: 100px;
+    }
+
+  }
+
+  .inner-apple-wrapper:hover {
+    background-color: #fdfdfd;
+    /*border: 1px solid #F9F5F5;*/
+  }
+
+ /* #chooseTeacher:hover, #chooseAdmin:hover {
+  }*/
+
+  #chooseRoleModal .modal-signup-heading {
+    margin-bottom: 0.5em;
+  }
+
+  #chooseRoleModal .pure-u-2-5 p {
+    margin-top: 0em;
+    font-weight: bold;
+  }
+
+  #chooseRoleModal .pure-g {
+    display: block;
+  }
+
+  @media (min-width: 35.5em) {
+    #chooseRoleModal .modal-signup-heading {
+      margin-bottom: 1.2em;
+    }
+  }
+
+  // end signin
+
+
+
+  #signupSchoolRole .modal-body .pure-g {
+    margin-bottom: 1em;
+  }
+
+  #signupChooseTeacher, #signupChooseAdmin, #chooseTeacher, #chooseAdmin {
+    /*width: 48%;*/
+    /*border-color: rgba(236, 239, 241, 0.54);*/
+    /*border-top: none;*/
+    text-align: center; 
+    img {
+      display: block;
+      margin: 0 auto;
+      margin-top: 0em;
+      padding-top: 0.5em;
+    }
+  }
+
+  .role-title {
+      margin-top: 0em;
+      margin-bottom: 0em;
+  }
+
+  // .inner-apple-wrapper p {
+  //   margin-top: 0px;
+  //   margin-bottom: 0px;
+  // }
+
+  #signupSchoolRole .modal-signup-heading {
+    margin-bottom: 1.2em;
+  }
+
+
+  #signupSchoolRole .pure-g {
+    display: block;
+  }
+
+  @media (min-width: 35.5em) { // 568px
+    .role-title {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+
+  }
+
+
+
+
 #chooseRoleModal .modal-body .pure-g {
   margin: 0 auto;
 }
@@ -21,31 +139,8 @@ body.hide-scroll.destroy-padding#override {
   padding-right: 15px;
 }
 
- #congratsModal .modal-body {
-    overflow-y: hidden;
-    text-align: center;
-  }
 
-  #congratsModal .modal-body h1 {
-    font-weight: bold;
-    font-size: 2.1em;
-  }
-  
-  #congratsModal .modal-body h2 {
-    font-size: 1.3em;
-    font-weight: 100;
-  }
 
-  #congratsModal .modal-body #top-button {
-    padding: 15px 55px;
-    font-size: 1.3em;
-    font-weight: bold;
-  }
-
-  #congratsModal .modal-content {
-    width: 90vw;
-    margin: 0 auto;
-  }
 
   .btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
   background-color: #f3976f;
@@ -58,13 +153,6 @@ body.hide-scroll.destroy-padding#override {
   
 }
 
-  #congratsModal .modal-body img.apple {
-    float: none;
-    margin-right: 0px;
-    margin-left: 0px;
-    padding-right: 0px;
-    padding-left: 0px;
-  }
 
 
 /*body#override {
@@ -694,10 +782,6 @@ div.desktop-text {
   }
 
 
-  // #congratsModal .modal-content {
-  //   width: 80vw;
-  //   margin: 0 auto;
-  // }
 
   h1#main-tagline {
     font-size: 32px;
@@ -839,10 +923,6 @@ div.desktop-text {
 /***** Large tablet ******/
 @media (min-width: 48em) { // 768px
 
-    #congratsModal .modal-content {
-      width: 50vw;
-      margin: 0 auto;
-    }
 
 
   .navbar-right {
