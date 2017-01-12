@@ -5,20 +5,6 @@
 }
 
 
-// end signin
-  // #chooseRoleModal .pure-u-2-5 {
-  //   background-color: rgba(236, 239, 241, 0.54);
-  //   width: 48%;
-  //   border-color: rgba(236, 239, 241, 0.54);
-  //   border-top: none;
-  //   border-radius: 8px;
-
-  //   background-color: #f9f5f5;
-  //   /* width: 48%; */
-  //   /* border-color: rgba(236, 239, 241, 0.54); */
-  //   /* border-top: none; */
-  //   border-radius: 8px;
-  // }
 
 
   #chooseRoleModal .modal-body .pure-g {
@@ -142,23 +128,29 @@ body.my-modal-open {
     position: fixed;
 }
 
-body.hide-scroll#override {
-    overflow: hidden;
-    // padding-right: 15px;
-}
-
-body.destroy-padding#override {
+body.modal-open {
   padding-right: 0px;
 }
 
-body.hide-scroll.destroy-padding#override {
-  // padding-right: 15px;
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
 }
 
+// body.hide-scroll#override {
+//     overflow: hidden;
+//     // padding-right: 15px;
+// }
 
+// body.destroy-padding#override {
+//   padding-right: 0px;
+// }
 
+// body.hide-scroll.destroy-padding#override {
+//   // padding-right: 15px;
+// }
 
-  .btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
+.btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
   background-color: #f3976f;
   transition-duration: 400ms;
 }
@@ -168,8 +160,6 @@ body.hide-scroll.destroy-padding#override {
   background-color: #ed7844;
   
 }
-
-
 
 /*body#override {
   padding-right: 0px;
@@ -857,6 +847,13 @@ div.desktop-text {
   //   margin-right: 20px;
   //     margin-bottom: 6px;
   // }
+
+  .container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 
   #splash {
     padding-top: 3em;
