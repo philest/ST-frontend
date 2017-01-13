@@ -243,6 +243,16 @@ h1.section-banner {
 
 }
 
+
+@media (min-width: 35em) { // 5XX px
+
+  p {
+    font-size: 1.12em;
+  }
+
+} 
+
+
 // THIS IS THE TABLET SHIT
 @media (min-width: 48em) { // 768px
 
@@ -328,7 +338,7 @@ h1.section-banner {
 
     ul {
       list-style-type: none;
-      padding-left: 1em;
+      padding-left: 0em;
     }
 
     
@@ -450,7 +460,7 @@ h1.section-banner {
 
     ul {
       list-style-type: none;
-      padding-left: 1em;
+      padding-left: 0em;
     }
 
     

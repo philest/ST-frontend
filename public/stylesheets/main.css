@@ -664,8 +664,8 @@ body {
 p {
     font-family: 'Karla', sans-serif;
     font-weight: 200;
-    font-size: 1.12em;
-    line-height: 1.6;
+/*    font-size: 1.12em;
+*/    line-height: 1.6;
     color: rgba(0,0,0,0.85);
 
 }
