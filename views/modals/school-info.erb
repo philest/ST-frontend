@@ -11,12 +11,12 @@
       <div class="modal fade" id="schoolInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" data-dismiss="modal">
+            <!-- <div class="modal-header" data-dismiss="modal">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-              <!-- <div class="navbar-logo" id="modal-logo"></div>  -->
-            </div>
+              <div class="navbar-logo" id="modal-logo"></div> 
+            </div> -->
             <div class="modal-body">
               <h2 class="modal-signup-heading">Add your school</h2>
               <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
@@ -25,9 +25,9 @@
                 <div class="signup-setup">
                   <div class="field" id="signup-field">
                      <label class="label">School name</label>
-                    <input name="school_name" placeholder="" class="input" required>
+                    <input name="school_name" autocomplete="off" placeholder="" class="input" required>
                       <label class="label">City</label>
-                    <input name="school_city" placeholder="" class="input" required>
+                    <input name="school_city" autocomplete="off" placeholder="" class="input" required>
                     <label class="label">State</label>
                     <select class="form-control" id="state" name="school_state">
                         <option value="">N/A</option>
