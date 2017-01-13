@@ -42,12 +42,14 @@
         <script type='text/javascript'>
 
             $('#chooseTeacher').click(function(event){
+              $('body').addClass('modalTransition');
               $('#chooseRoleModal').modal('toggle');
               // $("body").addClass("hide-scroll");
               $('#modalSig').modal('toggle');
             });
 
             $('#chooseAdmin').click(function(event){
+              $('body').addClass('modalTransition');
               $('#chooseRoleModal').modal('toggle');
               // $("body").addClass("hide-scroll");
               $('#adminSig').modal('toggle');

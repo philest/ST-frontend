@@ -57,7 +57,7 @@
 
             $('#signupChooseTeacher').click(function(event){
               // add a hidden input to this form with 'teacher' as role
-
+              $('body').addClass('modalTransition');
               $('#signupSchoolRole').modal('toggle');
               // $("body").addClass("hide-scroll");
               // var role = $('<input>')
@@ -72,6 +72,7 @@
 
             $('#signupChooseAdmin').click(function(event){
               // add a hidden input to this form with 'admin' as role
+              $('body').addClass('modalTransition');
               $('#signupSchoolRole').modal('toggle');
               // $("body").addClass("hide-scroll");
               // var role = $('<input>')

@@ -7,16 +7,31 @@ $(document).ready(function () {
      // $('body').removeClass('hide-scroll');
      $("body").css("padding-right", '0px');
 
-     console.log('closing modal'); 
-    $("body").removeClass("my-modal-open");
+     console.log('A');
+
+    // console.log('closing modal'); 
+    // if body has the class modal transition,
+    //  don't remove my-modal-open
+    //  remove modalTransition
+    // else
+    //  remove my-modal-open
+    if ($('body').hasClass("modalTransition")) {
+      console.log("we're in a transition");
+      $('body').removeClass("modalTransition");
+    } else {
+      console.log("has modal transition");
+      $("body").removeClass("my-modal-open");
+    }
+
   });
 
   $('.modal').on('shown.bs.modal', function(event) {
     // $('body').removeClass('destroy-padding');
     // $('body').addClass('hide-scroll');
+    console.log('C');
     $('body').css("padding-right", '0px');
     $("body").addClass("my-modal-open");
-    console.log('opening modal');
+    // console.log('opening modal');
   });
 
   $('#signup-email-button').click(function(event) {
@@ -36,6 +51,9 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
+    console.log('B');
+
+    $('body').addClass('modalTransition');
 
     $('#signupNamePassword').modal('toggle');
 
@@ -68,12 +86,14 @@ $(document).ready(function () {
     // we want to POST this, clear the first-signup-form, the move on to the next modal
     $('#signup-name-password').submit();
 
+    $('body').addClass('modalTransition');
     // move on to next modal
     $('#signupSchoolRole').modal('toggle');
     // $("body").addClass("modal-open");
   });
 
   $('#signup-school-role-button').click(function(event) {
+    $('body').addClass('modalTransition');
     $('#signupSignature').modal('toggle');
     // $("body").addClass("modal-open");
   });
@@ -92,6 +112,7 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
+    $('body').addClass('modalTransition');
     $('#schoolInfo').modal('toggle');
     // $("body").addClass("modal-open");
   });
@@ -113,7 +134,7 @@ $(document).ready(function () {
     }
 
     // otherwise, gather everything from the forms!
-
+    $('body').addClass('modalTransition');
     $('#main-signup-form').submit();
 
 
@@ -171,6 +192,7 @@ $(document).ready(function () {
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
           // $("body").addClass("hide-scroll");
+          $('body').addClass('modalTransition');
           $('#chooseRoleModal').modal('toggle');
           // show a different modal here....
 

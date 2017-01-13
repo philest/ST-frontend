@@ -6,6 +6,11 @@
 
 html { overflow-y: scroll; }
 
+
+body.modalTransition {
+  overflow-y: hidden;
+}
+
 // button.close {
 //   width: 2em;
 //   height: 2em;
