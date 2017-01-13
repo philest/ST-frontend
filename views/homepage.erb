@@ -90,7 +90,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       // });
 
       $(document).ready(function(){
-        // $('#chooseRoleModal').modal('toggle');
+        $('#signupNamePassword').modal('toggle');
  
         $(window).scroll(function (event) {
           var scroll = $(window).scrollTop();
@@ -103,6 +103,25 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
           }
 
         });
+
+        $('.modal input').on('click', function () {
+          $(this).focus();
+        })
+
+        if(/Android 4\.[0-3]/.test(navigator.appVersion)){
+          console.log("it's android!");
+
+
+          window.addEventListener("resize", function(){
+              if(document.activeElement.tagName=="INPUT"){
+                 window.setTimeout(function(){
+                    document.activeElement.scrollIntoViewIfNeeded();
+                 },0);
+              }
+           })
+        }
+
+
       });
 
 
