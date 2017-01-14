@@ -1,9 +1,30 @@
+.isMobile .modal {
+  overflow-y: scroll !important;
+}
+
+.modal .modal-content {
+  // to work on scroll
+  height: 100%; 
+}
+
 // scrolling problem!
 .modal .modal-body {
     max-height: 420px;
     overflow-y: auto;
+
 }
 
+html { overflow-y: scroll; }
+
+
+body.modalTransition {
+  overflow-y: hidden;
+
+  .modal .modal-body {
+    overflow: auto;
+  }
+
+}
 
 // button.close {
 //   width: 2em;
@@ -125,6 +146,7 @@ body {
 
 body.my-modal-open {
   padding-right: 0px;
+  padding-right: 0 !important
 }
 
 body.my-modal-open {
@@ -134,6 +156,7 @@ body.my-modal-open {
 
 body.modal-open {
   padding-right: 0px;
+  padding-right: 0 !important
 }
 
 body.modal-open {
@@ -855,8 +878,8 @@ div.desktop-text {
   .container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 4.0619%;
+    padding-right: 4.0619%;
   }
 
   #splash {

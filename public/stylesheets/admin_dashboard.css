@@ -1,7 +1,7 @@
 /* INVITE TEACHERS BY EMAIL modal */
 
 #inviteTeachersModal .modal-body {
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 .teacher-modal-btn {
@@ -27,7 +27,7 @@
 /* END INVITE TEACHERS BY EMAIL modal */
 
   #introDashboardModal .modal-body {
-    overflow-y: hidden;
+    overflow-y: auto;
     text-align: center;
   }
 
@@ -65,7 +65,8 @@
 
 /* teacher modal */
 .teacherModal .modal-body {
-  overflow-y: hidden;
+  overflow-y: auto;
+
 }
 
 .teacherModal .modal-content {

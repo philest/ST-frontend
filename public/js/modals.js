@@ -7,8 +7,18 @@ $(document).ready(function () {
      // $('body').removeClass('hide-scroll');
      $("body").css("padding-right", '0px');
 
-     console.log('closing modal'); 
-    $("body").removeClass("my-modal-open");
+
+    // if body has the class modal transition,
+    //  don't remove my-modal-open
+    //  remove modalTransition
+    // else
+    //  remove my-modal-open
+    if ($('body').hasClass("modalTransition")) {
+      $('body').removeClass("modalTransition");
+    } else {
+      $("body").removeClass("my-modal-open");
+    }
+
   });
 
   $('.modal').on('shown.bs.modal', function(event) {
@@ -16,11 +26,9 @@ $(document).ready(function () {
     // $('body').addClass('hide-scroll');
     $('body').css("padding-right", '0px');
     $("body").addClass("my-modal-open");
-    console.log('opening modal');
   });
 
   $('#signup-email-button').click(function(event) {
-    console.log('opening signup-name-password....');
     event.preventDefault();
 
     $('#signup-email').validate({ // initialize the plugin
@@ -37,13 +45,14 @@ $(document).ready(function () {
         return false;
     }
 
+    $('body').addClass('modalTransition');
+
     $('#signupNamePassword').modal('toggle');
 
     // $("body").addClass("modal-open");
   });
 
   $('#signup-name-password-button').click(function(event) {
-    console.log('opening signup school role....');
     event.preventDefault();
     $('#signup-name-password').validate({ // initialize the plugin
         rules: {
@@ -60,7 +69,6 @@ $(document).ready(function () {
     }).form();
 
     var ValidStatus = $("#signup-name-password").valid();
-    console.log(ValidStatus);
     if (ValidStatus == false) {
         return false;
     }
@@ -68,12 +76,14 @@ $(document).ready(function () {
     // we want to POST this, clear the first-signup-form, the move on to the next modal
     $('#signup-name-password').submit();
 
+    $('body').addClass('modalTransition');
     // move on to next modal
     $('#signupSchoolRole').modal('toggle');
     // $("body").addClass("modal-open");
   });
 
   $('#signup-school-role-button').click(function(event) {
+    $('body').addClass('modalTransition');
     $('#signupSignature').modal('toggle');
     // $("body").addClass("modal-open");
   });
@@ -92,6 +102,7 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
+    $('body').addClass('modalTransition');
     $('#schoolInfo').modal('toggle');
     // $("body").addClass("modal-open");
   });
@@ -113,7 +124,7 @@ $(document).ready(function () {
     }
 
     // otherwise, gather everything from the forms!
-
+    $('body').addClass('modalTransition');
     $('#main-signup-form').submit();
 
 
@@ -124,14 +135,12 @@ $(document).ready(function () {
   // YUP, SIGNUP FLOW, RIGHT ABOVE ME!!!!!
 
   $('#top-button').click(function(event) {
-    console.log('opening modal....');
     $('#myModal').modal('toggle');
   });
 
 
 
   $("#join.signature-modal").on('click', function(event) {
-    console.log('signing in modal')
     event.preventDefault();
     $('#teacher-info').validate({ // initialize the plugin
         rules: {
@@ -167,19 +176,16 @@ $(document).ready(function () {
         password: password
       },
       success: function(data) {
-        console.log(data);
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
           // $("body").addClass("hide-scroll");
+          $('body').addClass('modalTransition');
           $('#chooseRoleModal').modal('toggle');
           // show a different modal here....
 
         } else { 
-          console.log(typeof(data));
           var signature = data.educator;
           var role      = data.role;
-          console.log(signature);
-          console.log(role);
           var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
           $('#teacher-info').append($(input));
 
@@ -192,7 +198,7 @@ $(document).ready(function () {
       },
       error: function(xhr) {
         d = xhr;
-        console.log('hey fucker, it\'s an error');
+        console.log('error');
         console.log(xhr);
       }
     }); // $.ajax()
