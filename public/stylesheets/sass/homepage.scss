@@ -1,3 +1,7 @@
+.isMobile .modal {
+  overflow-y: scroll !important;
+}
+
 .modal .modal-content {
   // to work on scroll
   height: 100%; 
@@ -8,17 +12,6 @@
     max-height: 420px;
     overflow-y: auto;
 
-    /* cover the modal */
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // width: 100%;
-    // height: 100%;
-
-
-    // /* let it scroll */
-    // overflow: auto;
-
 }
 
 html { overflow-y: scroll; }
@@ -26,6 +19,11 @@ html { overflow-y: scroll; }
 
 body.modalTransition {
   overflow-y: hidden;
+
+  .modal .modal-body {
+    overflow: auto;
+  }
+
 }
 
 // button.close {
