@@ -1,7 +1,24 @@
+.modal .modal-content {
+  // to work on scroll
+  height: 100%; 
+}
+
 // scrolling problem!
 .modal .modal-body {
     max-height: 420px;
     overflow-y: auto;
+
+    /* cover the modal */
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // width: 100%;
+    // height: 100%;
+
+
+    // /* let it scroll */
+    // overflow: auto;
+
 }
 
 html { overflow-y: scroll; }
@@ -863,8 +880,8 @@ div.desktop-text {
   .container {
     margin-right: auto;
     margin-left: auto;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 4.0619%;
+    padding-right: 4.0619%;
   }
 
   #splash {
