@@ -190,23 +190,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         
       </nav> -->
 
-  <!-- modals -->
-  <div>
-      <%= erb :'/modals/signup-signature' %>
-      <%= erb :'/modals/signup-school-role' %>
-      <%= erb :'/modals/school-info' %>
-      <%= erb :'/modals/rayna-video' %>
-      <%= erb :'/modals/school-role' %>
-      <%= erb :'/modals/teacher-name' %>
-      <%= erb :'/modals/admin-name' %>
-      <%= erb :'/modals/signup-name-password' %>
-      <%= erb :'/modals/educator-login' %>
-      <%= erb :'/modals/demo' %>
-      <%= erb :'/modals/signup-email' %>
-      <%= erb :'/modals/main-signup-form' %>
-      <%= erb :'/modals/congrats-modal' %>
-  </div>
-  <!-- modals end -->
+
 
   <div class="splash-new">
     <div class="splash-container">
@@ -384,6 +368,27 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
             </a>
 
   </div>
+
+    <!-- modals -->
+  <div>
+      <%= erb :'/modals/signup-signature' %>
+      <%= erb :'/modals/signup-school-role' %>
+      <%= erb :'/modals/school-info' %>
+      <%= erb :'/modals/rayna-video' %>
+      <%= erb :'/modals/school-role' %>
+      <%= erb :'/modals/teacher-name' %>
+      <%= erb :'/modals/admin-name' %>
+      <%= erb :'/modals/signup-name-password' %>
+      <%= erb :'/modals/educator-login' %>
+      <%= erb :'/modals/demo' %>
+      <%= erb :'/modals/signup-email' %>
+      <%= erb :'/modals/main-signup-form' %>
+      <%= erb :'/modals/congrats-modal' %>
+  </div>
+  <!-- modals end -->
+
+  <%= erb :'components/footer' %> 
+
   <script>
       function CaseStudyClicked() {
         mixpanel.track("Case Study Clicked");
@@ -402,7 +407,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
   </body>
 
-    <%= erb :'components/footer' %> 
+    
 
      
   

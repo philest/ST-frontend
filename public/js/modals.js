@@ -7,19 +7,15 @@ $(document).ready(function () {
      // $('body').removeClass('hide-scroll');
      $("body").css("padding-right", '0px');
 
-     console.log('A');
 
-    // console.log('closing modal'); 
     // if body has the class modal transition,
     //  don't remove my-modal-open
     //  remove modalTransition
     // else
     //  remove my-modal-open
     if ($('body').hasClass("modalTransition")) {
-      console.log("we're in a transition");
       $('body').removeClass("modalTransition");
     } else {
-      console.log("has modal transition");
       $("body").removeClass("my-modal-open");
     }
 
@@ -28,14 +24,11 @@ $(document).ready(function () {
   $('.modal').on('shown.bs.modal', function(event) {
     // $('body').removeClass('destroy-padding');
     // $('body').addClass('hide-scroll');
-    console.log('C');
     $('body').css("padding-right", '0px');
     $("body").addClass("my-modal-open");
-    // console.log('opening modal');
   });
 
   $('#signup-email-button').click(function(event) {
-    console.log('opening signup-name-password....');
     event.preventDefault();
 
     $('#signup-email').validate({ // initialize the plugin
@@ -51,7 +44,6 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
-    console.log('B');
 
     $('body').addClass('modalTransition');
 
@@ -61,7 +53,6 @@ $(document).ready(function () {
   });
 
   $('#signup-name-password-button').click(function(event) {
-    console.log('opening signup school role....');
     event.preventDefault();
     $('#signup-name-password').validate({ // initialize the plugin
         rules: {
@@ -78,7 +69,6 @@ $(document).ready(function () {
     }).form();
 
     var ValidStatus = $("#signup-name-password").valid();
-    console.log(ValidStatus);
     if (ValidStatus == false) {
         return false;
     }
@@ -145,14 +135,12 @@ $(document).ready(function () {
   // YUP, SIGNUP FLOW, RIGHT ABOVE ME!!!!!
 
   $('#top-button').click(function(event) {
-    console.log('opening modal....');
     $('#myModal').modal('toggle');
   });
 
 
 
   $("#join.signature-modal").on('click', function(event) {
-    console.log('signing in modal')
     event.preventDefault();
     $('#teacher-info').validate({ // initialize the plugin
         rules: {
@@ -188,7 +176,6 @@ $(document).ready(function () {
         password: password
       },
       success: function(data) {
-        console.log(data);
         if (data.educator == 'false') {
           // $('body').css("padding-right", '15px');
           // $("body").addClass("hide-scroll");
@@ -197,11 +184,8 @@ $(document).ready(function () {
           // show a different modal here....
 
         } else { 
-          console.log(typeof(data));
           var signature = data.educator;
           var role      = data.role;
-          console.log(signature);
-          console.log(role);
           var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
           $('#teacher-info').append($(input));
 
@@ -214,7 +198,7 @@ $(document).ready(function () {
       },
       error: function(xhr) {
         d = xhr;
-        console.log('hey fucker, it\'s an error');
+        console.log('error');
         console.log(xhr);
       }
     }); // $.ajax()
