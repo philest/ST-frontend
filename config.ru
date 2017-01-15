@@ -14,6 +14,14 @@ require_relative 'config/initializers/locale' # language files
 require_relative 'config/initializers/airbrake'
 require_relative 'config/initializers/aws'
 
+
+puts ENV['RACK_ENV']
+if ENV['RACK_ENV'] == 'production'
+  puts "it is!"
+  require 'rack/ssl'
+  use Rack::SSL
+end
+
 Sass::Plugin.options[:style] = :compressed
 use Sass::Plugin::Rack
 
