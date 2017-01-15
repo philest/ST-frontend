@@ -11,7 +11,7 @@ gem 'redis'
 gem 'sidekiq'
 gem 'clockwork'
 gem 'i18n'
-# gem 'rack-ssl'
+gem 'rack-ssl'
 # aws and image generation
 
 gem 'gruff'
