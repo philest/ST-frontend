@@ -83,9 +83,6 @@ class App < Sinatra::Base
   #                          :path => '/',
   #                          :secret => '328479283uf923fu8932fu923uf9832f23f232'
 
-
-
-
   #root
   get '/' do
     case session[:role]
@@ -98,12 +95,12 @@ class App < Sinatra::Base
     end 
   end
 
-  get '/test' do
-    puts "params = #{params}"
-    params['fun'] = "this is actually not very fun"
-    puts "adjusted params = #{params}"
-    # erb :test
-  end
+  # get '/test' do
+  #   puts "params = #{params}"
+  #   params['fun'] = "this is actually not very fun"
+  #   puts "adjusted params = #{params}"
+  #   # erb :test
+  # end
 
   get '/test_dashboard' do
     session[:educator] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
@@ -117,8 +114,12 @@ class App < Sinatra::Base
 
 
   post '/freemium-signup-register' do
-    puts "in /freemium-signup-register new educator #{params} wants to sign up!"
 
+    require 'bcrypt'
+    puts "in /freemium-signup-register new educator #{params} wants to sign up!"
+    params['password'] = BCrypt::Password.create params['password']
+    puts "in /freemium-signup-register new educator #{params} wants to sign up!"
+    
     if params['first_name'].downcase != 'test'
       notify_admins("Educator joined freemium", params.to_s)
     end
@@ -128,6 +129,11 @@ class App < Sinatra::Base
 
 
   post '/freemium-signup' do
+
+    # get password
+    require 'bcrypt'
+    puts "in /freemium-signup new educator #{params} wants to sign up!"
+    params['password'] = BCrypt::Password.create params['password']
     puts "in /freemium-signup new educator #{params} wants to sign up!"
 
     if params['first_name'].downcase != 'test'
