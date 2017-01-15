@@ -99,7 +99,10 @@ class App < Sinatra::Base
   end
 
   get '/test' do
-    erb :test
+    puts "params = #{params}"
+    params['fun'] = "this is actually not very fun"
+    puts "adjusted params = #{params}"
+    # erb :test
   end
 
   get '/test_dashboard' do
@@ -111,6 +114,7 @@ class App < Sinatra::Base
     puts "data dashboard = #{data.body.inspect}"
     erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
   end
+
 
   post '/freemium-signup-register' do
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
@@ -817,11 +821,11 @@ class App < Sinatra::Base
     redirect to('/resources')
   end 
 
-  get '/team' do 
+  get '/team/?' do 
     erb :team
   end
 
-  get '/case_study' do 
+  get '/case_study/?' do 
     erb :case_study
   end
 
