@@ -7,7 +7,7 @@
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
-      <a href="http://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
       <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
                   Invite teachers
@@ -370,7 +370,6 @@
         }
 
         var flyers = getParameterByName('flyers'); // "lorem"
-        console.log(flyers);
 
         if (flyers == '1') {
             // get signup modal
@@ -386,7 +385,6 @@
                 $('#main-' + arr[i]).css('display', 'none'); 
                 $('#' + arr[i]).removeClass('active');
             }
-            console.log(arr)
             $('#main-' + id).css('display', 'block');
             $('#printer').addClass('active');
         }
@@ -402,10 +400,10 @@
       //       type: 'get',
       //       dataType: 'text',
       //       success: function(data) {
-      //         console.log('looks like the teacher has viewed the page');
+    
       //       },
       //       error: function(xhr) {
-      //         console.log(xhr);
+    
       //       }
       //     })
       //   }); 
@@ -440,10 +438,8 @@
         // 
          // get a border on the bottom of the left table panel
         var rows_height = $('.users-table').height();
-        console.log('rows_height = ' + rows_height);
         // check if this is greater than the height of the table, 27.5em
         var table_height = $('.users-table-responsive').height();
-        console.log('table_height = ' + table_height);
 
         var leftover_height;
 
@@ -453,7 +449,6 @@
           leftover_height = table_height - rows_height;
         }
 
-        console.log('leftovers = ' + leftover_height);
 
         $('.leftover-space').css('height', leftover_height);
 

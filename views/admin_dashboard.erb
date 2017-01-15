@@ -6,9 +6,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="description" content="StoryTime lets early grade teachers send books by text message to their class's families. Made at Yale, it builds 1 year of literacy growth after just 14 weeks.">
-<!--    <meta property="og:url" content="http://joinstorytime.com">
- -->
-    <meta property="og:image" content="http://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
+
+    <meta property="og:image" content="https://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
     <meta property="og:title" content="Storytime | Books by text.">
     <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
 
@@ -23,20 +22,20 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
   
   <!-- Bootstrap modal files -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap modal files -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
     <!-- end Boostrap -->
 
     <!-- end Boostrap -->
 
-    <link href='http://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
       
@@ -45,8 +44,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
     
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
 
     <link rel="stylesheet" href="stylesheets/admin_dashboard.css" type="text/css" />
 
@@ -76,11 +75,11 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <meta name="theme-color" content="#ffffff">
 
     <!-- Load jQuery and  -->
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
 
     <script>
       // hover effect for right arrow
@@ -120,7 +119,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
             type: 'get',
             dataType: 'text',
             success: function(data) {
-              console.log('looks like the teacher has viewed the page');
             },
             error: function(xhr) {
               console.log(xhr);
@@ -135,7 +133,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         $('.teacher-info').slice(1).addClass('user-info-first-box');
         $('.user-info:first-child').addClass('user-spotlight first-row');
         $('.teacherModal').each(function(index, value) {
-          // console.log('index: ' + index + ', value: ' + value);
+        
           $(this).find('.the-whole-user-thing').first().css('display', 'block');
           $(this).find('.user-info').slice(1).addClass('user-info-first-box');
         });
@@ -189,10 +187,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
         // get a border on the bottom of the left table panel
         var rows_height = $('.teacher-table').height();
-        console.log('rows_height = ' + rows_height);
         // check if this is greater than the height of the table, 27.5em
         var table_height = $('.teacher-table-responsive').height();
-        console.log('table_height = ' + table_height);
 
         var leftover_height;
 
@@ -202,7 +198,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
           leftover_height = table_height - rows_height;
         }
 
-        console.log('leftovers = ' + leftover_height);
 
         $('.leftover-space').css('height', leftover_height);
 
@@ -220,7 +215,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
               return item !== id;
           });
 
-          console.log(arr)
 
           for (var i = 0; i < arr.length; i++) {
               $('#main-' + arr[i]).css('display', 'none'); 
@@ -251,7 +245,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         }
 
         var invite = getParameterByName('invite'); // "lorem"
-        console.log(invite);
 
         if (invite == '1') {
             // activate the invite portion
