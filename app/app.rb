@@ -76,8 +76,8 @@ class App < Sinatra::Base
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
 
-  # set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
   enable :sessions
+  set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
 
   # use Rack::Session::Cookie, :key => 'rack.session',
   #                          :path => '/',
@@ -886,6 +886,8 @@ class App < Sinatra::Base
   end
 
   get '/teacher/visited_page' do
+    puts "visited page session = #{session.inspect}"
+    puts "in visited page"
     session[:educator]['signin_count'] += 1
     status 200
     return session[:educator]['signin_count'].to_s

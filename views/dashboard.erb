@@ -6,9 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="description" content="StoryTime lets early grade teachers send books by text message to their class's families. Made at Yale, it builds 1 year of literacy growth after just 14 weeks.">
-<!--    <meta property="og:url" content="http://joinstorytime.com">
- -->
-    <meta property="og:image" content="http://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
+    <meta property="og:image" content="https://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
     <meta property="og:title" content="Storytime | Books by text.">
     <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
 
@@ -22,20 +20,20 @@ for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElemen
 mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
   
   <!-- Bootstrap modal files -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Bootstrap modal files -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
     <!-- end Boostrap -->
 
     <!-- end Boostrap -->
 
-    <link href='http://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
       
@@ -44,8 +42,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
     
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
 
     <link rel="stylesheet" href="stylesheets/admin_dashboard.css" type="text/css" />
 
@@ -73,11 +71,11 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <meta name="theme-color" content="#ffffff">
 
     <!-- Load jQuery and  -->
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
 
     <script>
 
@@ -114,7 +112,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         }
 
         var flyers = getParameterByName('flyers'); // "lorem"
-        console.log(flyers);
 
         if (flyers == '1') {
             // get signup modal
@@ -130,7 +127,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                 $('#main-' + arr[i]).css('display', 'none'); 
                 $('#' + arr[i]).removeClass('active');
             }
-            console.log(arr)
             $('#main-' + id).css('display', 'block');
             $('#printer').addClass('active');
         }
@@ -146,10 +142,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
             type: 'get',
             dataType: 'text',
             success: function(data) {
-              console.log('looks like the teacher has viewed the page');
             },
             error: function(xhr) {
-              console.log(xhr);
             }
           })
         }); 
@@ -184,10 +178,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         // 
          // get a border on the bottom of the left table panel
         var rows_height = $('.users-table').height();
-        console.log('rows_height = ' + rows_height);
         // check if this is greater than the height of the table, 27.5em
         var table_height = $('.users-table-responsive').height();
-        console.log('table_height = ' + table_height);
 
         var leftover_height;
 
@@ -197,7 +189,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
           leftover_height = table_height - rows_height;
         }
 
-        console.log('leftovers = ' + leftover_height);
 
         $('.leftover-space').css('height', leftover_height);
 
@@ -216,7 +207,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
               return item !== id;
           });
 
-          console.log(arr)
 
           for (var i = 0; i < arr.length; i++) {
               $('#main-' + arr[i]).css('display', 'none'); 
@@ -233,12 +223,10 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       $(document).ready(function () {
 
         document.getElementById("uploadBtn").onchange = function () {
-          console.log(this.value);
           var string = this.value
           regex = 
           string = string.split(/[\\/]/);
 
-          console.log(string)
           document.getElementById("uploadFile").value = string[string.length - 1];
         };
 
@@ -263,7 +251,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
-      <a href="http://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
 
 
@@ -291,7 +279,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                   <a>
                     <div class="sidebar-item">
                       
-                     <img src="http://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
+                     <img src="https://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
         <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
          -->            <span>In-person guide </span>
                     </div>
@@ -302,7 +290,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                 <li id="envelope">
                   <a>
                     <div class="sidebar-item">
-                      <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
 
           <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
@@ -313,7 +301,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                 <li id="printer" class="active">
                   <a>
                     <div class="sidebar-item">
-                      <img src="http://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
                       <span>Printable flyer</span>
                       
                     </div>
@@ -324,7 +312,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                 <li id="spreadsheet" class="">
                   <a>
                     <div class="sidebar-item">
-                      <img src="http://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
+                      <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
 
                       <span>Add spreadsheet</span>
                       
@@ -354,7 +342,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                   <% code_english, code_spanish = session['educator']['code'].split('|') %>
                   <% school = session['school']['signature'] %>
                   <% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
-                  <% aws_url = "http://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
+                  <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
 
 
                   <h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
@@ -397,15 +385,15 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                       <% school = session['school']['signature'] %>
                       <% teacher = session['educator']['signature'] %>
                       <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
-                      <% aws_url = "http://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
+                      <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
 
 
                       <div class="pure-u-1-2 english">
-                          <img class="flyer-image" src="http://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
+                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
                           <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank"><button class="Button-ready">Download English</button> </a>  
                       </div>
                       <div class="pure-u-1-2 spanish">
-                          <img class="flyer-image" src="http://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
+                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
                           <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready">Download Spanish</button> </a>
                       </div>
                   </div>

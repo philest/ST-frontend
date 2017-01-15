@@ -6,8 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="description" content="StoryTime is a free app that lets teachers send children's books to families on any phone. It is shown to build literacy and double reading at home.">
-<!--    <meta property="og:url" content="http://joinstorytime.com">
- -->
+
     <meta property="og:image" content="https://s3.amazonaws.com/st-webpage/assets/st-og-image-3.png">
     <meta property="og:title" content="StoryTime | Books by Text">
     <meta property="og:description" content="StoryTime is a free app that lets teachers send children's books to families on any phone. It is shown to build literacy and double reading at home.">
@@ -23,8 +22,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
   
   <!-- Bootstrap modal files -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="http://d2yudi7y1eei74.cloudfront.net/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://d2yudi7y1eei74.cloudfront.net/stylesheets/bootstrap.min.css">
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
     <!-- end Boostrap -->
 
@@ -47,8 +46,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <link rel="stylesheet" href="../stylesheets/fonts.css" type="text/css">
     
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
     <!-- Favicon and App icon images -->
     <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -71,7 +70,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <!-- Load jQuery and  -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
     <!-- our scripts -->
