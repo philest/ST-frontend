@@ -43,6 +43,10 @@ class Register < Sinatra::Base
   get '/class/:class_code/?' do
     puts "IN REGISTER /CLASS/:CLASS_CODE"
 
+    if params[:class_code].downcase == 'app'
+      redirect to 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime'
+    end
+
     educator = educator?(params[:class_code])
     puts "educator = #{educator.inspect}"
     if educator
@@ -224,12 +228,11 @@ class Register < Sinatra::Base
     puts "user = #{user.inspect}"
     puts "teacher = #{user.teacher.inspect}"
 
-    # notify_admins("#{hist} user with id #{user.id} started registration", params.to_s)
+    notify_admins("#{hist} user with id #{user.id} started registration", params.to_s)
 
     return 201
 
   end
-
 
   # maybe have an endpoint mid-registration after phone number...........
   post '/user-finish-registration' do
@@ -299,13 +302,47 @@ class Register < Sinatra::Base
 
 
     puts "ABOUT TO NOTIFY ADMINS"
-    # notify_admins("user with id #{user.id} finished registration", params.to_s)
+    params['password'] = user.password_digest
+    notify_admins("user with id #{user.id} finished registration", params.to_s)
 
     puts "user = #{user.inspect}"
     puts "teacher = #{user.teacher.inspect}"
 
     return 201
     # redirect to '/get-app'
+  end
+
+  get '/coming-soon' do
+    puts "params = #{params}"
+
+    text = {}
+    case params[:locale]
+    when 'es'
+      text[:exclaim] = "¡Muy bien!"
+      text[:header] = "empieza pronto!"
+      text[:return] = "Le enviaremos un mensaje de texto"
+      text[:weekday] = "el jueves"
+      text[:date] = "4 de enero para empezar!"
+      text[:info] = "Le envíaremos un texto pronto con los libros de #{params[:teacher_sig]}" 
+
+      text[:subtitle] = "Consigue libros gratis de #{params[:teacher_sig]} directamente en su celular"
+    else
+      text[:exclaim] = "Great!"
+      text[:header] = "starts soon!"
+      text[:return] = "We will text you on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th to start!"
+      text[:info] = "We'll text you in a few days with #{params[:teacher_sig]}'s books!"
+
+
+      text[:subtitle] = "Get free books from #{params[:teacher_sig]} right on your phone"
+
+    end
+
+    # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
+    # erb :maintenance, locals: {school: session[:school_sig], text: text}
+
+    erb :maintenance, locals: {school: params[:school_sig], teacher: params[:teacher_sig], text: text}
   end
 
 
