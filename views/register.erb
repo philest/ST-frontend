@@ -23,12 +23,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
 </script><!-- end Mixpanel -->
 
   
-  <!-- Bootstrap modal files -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
-    <!-- end Boostrap -->
 
     <!-- Jquery Mobile -->
     <!-- Include meta tag to ensure proper rendering and touch zooming -->
@@ -44,6 +39,14 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
     <!-- END Jquery Mobile -->
+
+
+      <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
+
+    <!-- end Boostrap -->
 
     <!-- Karla!!!! -->
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -156,9 +159,8 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
 
 <body>
   <!-- navbar -->
-  <%= erb :'components/navbar' %>
   <% locals = {text: text,class_code:class_code, locale:locale,teacher_id:teacher_id, teacher: teacher, school: school} %>
-  <%= erb :'register/name-password', locals: locals %>
+  <%= erb :'register/user-name-phone', locals: locals %>
   <%= erb :'register/role', locals: locals %>
   <%= erb :'register/password', locals: locals %>
 

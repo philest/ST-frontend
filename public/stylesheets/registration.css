@@ -1,3 +1,10 @@
+html{ font-size:100%; }
+
+body {
+  font-size: 1em;
+}
+
+
 
 body {
   font-family: 'Karla';
@@ -15,6 +22,8 @@ form.role {
 
 p.school-name {
   margin-top: 0px;
+  color: #6C6C6E;
+  font-size: 1.4em; 
 }
 
 #page1, #page2, #page3 {
@@ -80,11 +89,11 @@ p.school-name {
 }
 
 .container {
-  padding: 16px;
+  padding: 1em;
   /*width: 100%;*/
   background: white;
   margin: 16px;
-  border-radius: 15px;
+  border-radius: 0.5em;
   /*height: 60vh;*/
   /*display: table-cell;*/
   /*vertical-align: middle;*/
@@ -92,8 +101,17 @@ p.school-name {
 
 }
 
+.password.container {
+  padding-top: 1.5em;
+  margin-top: 0em;
+  border-top-left-radius: 0em;
+  border-top-right-radius: 0em;
+
+}
+
 .role .container {
-  width: 60%;
+  width: 14em;
+  height: 10.6em;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -132,6 +150,7 @@ label.error {
 }
 .field .input {
   margin-bottom: 0px;
+  line-height: 2.5em;
 }
 
 .password-text {
@@ -182,6 +201,11 @@ label.error {
 
 .get-app-button {
   width: 100%;
+}
+
+button#join {
+  color: white;
+  font-weight: normal;
 }
 
 #app-icon {
