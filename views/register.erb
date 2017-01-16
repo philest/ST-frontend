@@ -157,16 +157,96 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
  
 </head>
 
-<body>
+<body id="override">
   <!-- navbar -->
   <% locals = {text: text,class_code:class_code, locale:locale,teacher_id:teacher_id, teacher: teacher, school: school} %>
   <%= erb :'register/user-name-phone', locals: locals %>
   <%= erb :'register/role', locals: locals %>
   <%= erb :'register/password', locals: locals %>
+  <%= erb :'register/get-app', locals: locals %>
 
 <footer>
 
      <script>
+
+     $('#page1link').click(function(event) {
+        // get name/email
+        console.log($('#register').serialize());
+        $.post('/register/user-start-registration', $('#register').serialize());
+          // .done(function(data) {
+          //   // $('#congratsModal').modal('toggle');
+          //   // delete the extra form data
+          //   $("#signup-name-password input[type='hidden'][name='email']").remove();
+          // });
+        // transition to #page4
+     });
+
+
+     $('#page3link').click(function(event) {
+        // get name/email
+        var signupInfo = $("#register").serializeArray();
+
+        for (var i = 0; i < signupInfo.length; i++) {
+          var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', signupInfo[i]['name'])
+                        .val(signupInfo[i]['value']);
+          $('#password-form').append($(input));
+        }
+
+        // get role
+        // already gotten from earlier script
+        // submit password form using AJAX request
+        console.log($('#password-form').serialize());
+        $.post('/register/user-finish-registration', $('#password-form').serialize());
+          // .done(function(data) {
+          //   // $('#congratsModal').modal('toggle');
+          //   // delete the extra form data
+          //   $("#signup-name-password input[type='hidden'][name='email']").remove();
+          // });
+        // transition to #page4
+     });
+
+
+      $(document).on("pagebeforeshow","#page1",function(){ // When entering page1
+        alert("page1 is about to be shown");
+      });
+      $(document).on("pageshow","#page1",function(){ // When entering page1
+        alert("page1 is now shown");
+      });
+      $(document).on("pagebeforehide","#page1",function(){ // When leaving page1
+        alert("page1 is about to be hidden");
+      });
+      $(document).on("pagehide","#page1",function(){ // When leaving page1
+        alert("page1 is now hidden");
+      });
+
+      // $('#register').validate({ // initialize the plugin
+      //         rules: {
+      //             name: {
+      //                 required: true
+      //             },
+      //             phone: {
+      //                 required: true
+      //             }
+      //         }
+      //     });
+
+        // // validations
+        // $('#page1link').click(function(event) {
+        //   // event.preventDefault();
+        //   console.log('page1link clicked');
+        //   // event.preventDefault();
+        //   // event.stopPropagation();
+        //   validateForm();
+
+        // });
+
+        // function validateForm() {
+        //   console.log('validating, i guess...');
+          
+
+        // }
 
 
         // $('.transition-link').click(function(event) {
@@ -177,16 +257,16 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
         // });
 
 
-      // function SignupButtonClicked() {
-      //   mixpanel.track("Signup Button Clicked");
-      // }
+      function SignupButtonClicked() {
+        mixpanel.track("Signup Button Clicked");
+      }
       
-      // mixpanel.track_forms('#register', 'Created Account');
+      mixpanel.track_forms('#register', 'Created Account');
 
-      // function SignupPageVisited() {
-      //       mixpanel.track("First Signup Page Visited");
-      // }
-      // window.onload = SignupPageVisited;
+      function SignupPageVisited() {
+            mixpanel.track("First Signup Page Visited");
+      }
+      window.onload = SignupPageVisited;
 
     </script>
 

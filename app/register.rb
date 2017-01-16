@@ -55,8 +55,10 @@ class Register < Sinatra::Base
     else
       halt erb :error
     end
+
     # let's just assume it's a teacher for now...........
     school = teacher.school
+    puts "school = #{school.inspect}"
 
     # locale stuff.....
     text = {}
@@ -85,12 +87,15 @@ class Register < Sinatra::Base
 
       # coming-soon
       text[:exclaim] = "¡Muy bien!"
-      text[:header_app] = "empieza pronto!"
+      text[:header_maintenance] = "empieza pronto!"
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Le envíaremos un texto pronto con los libros de #{session[:teacher_sig]}" 
-      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+      text[:info] = "Le envíaremos un texto pronto con los libros de #{teacher.signature}" 
+      text[:subtitle_maintenance] = "Consigue libros gratis de #{teacher.signature} directamente en su celular"
+
+      text[:header_app] = "Consigue StoryTime"
+      text[:subtitle_app] = "Consigue libros gratis de #{teacher.signature} directamente en su celular"
 
     else # default to english
       text[:call_to_action] = "Join"
@@ -117,12 +122,16 @@ class Register < Sinatra::Base
 
       # coming-soon
       text[:exclaim] = "Great!"
-      text[:header_app] = "starts soon!"
+      text[:header_maintenance] = "starts soon!"
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "We'll text you in a few days with #{session[:teacher_sig]}'s books!"
-      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+      text[:info] = "We'll text you in a few days with #{teacher.signature}'s books!"
+      text[:subtitle_maintenance] = "Get free books from #{teacher.signature} right on your phone"
+
+      # get-app
+      text[:header_app] = "Get the StoryTime app"
+      text[:subtitle_app] = "Get free books from #{teacher.signature} right on your phone"
 
     end
 
@@ -132,6 +141,18 @@ class Register < Sinatra::Base
     erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.signature}
 
   end
+
+
+
+
+  # get 'get-app' do
+
+
+
+
+
+  # end
+
 
   get '/role/?' do
     puts "in get /register/role"
@@ -149,15 +170,157 @@ class Register < Sinatra::Base
     erb :'role', locals: {text: text}
   end
 
+  post '/user-start-registration' do
+    puts "new user is starting registration.... #{params}"
+    if params.values.include? nil or params.values.include? ""
+      # return 400 # or something...
+      return [400, { 'Content-Type' => 'text/plain' }, ['Params missing.']]
+    end
+
+    full_name     = params['name']
+    phone_no      = params['phone']
+    mobile_os     = params['mobile_os']
+    teacher_id    = params['teacher_id']
+    locale        = params['locale']
+    class_code    = params['class_code']
+
+    phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
+
+    user = User.where(phone: phone).first
+
+    hist = "new"
+    if !user.nil? # if user exists!!!!!!!
+      user = User.where(phone: phone).first
+      user.update(platform: mobile_os.downcase)
+      user.update(locale: 'es') if locale == 'es'
+      hist = "old"
+    else
+      user = User.create(phone: phone, platform: mobile_os.downcase)
+      user.state_table.update(subscribed?: false)
+      user.update(locale: 'es') if locale == 'es'
+      hist = "new"
+    end
+
+    teacher = Teacher.where(id: teacher_id).first
+    teacher.signup_user(user) if teacher
+
+    # get first and last name
+    terms = full_name.split(' ')
+    if terms.size < 1
+      # return ''
+      # have a more informative error message?
+      halt erb :error
+    elsif terms.size == 1 # just the first name
+      first_name = terms.first[0].upcase + terms.first[1..-1]
+      user.update(first_name: first_name)
+    elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
+      first_name = terms.first[0].upcase + terms.first[1..-1] 
+      last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
+      user.update(first_name: first_name, last_name: last_name)
+    end
+
+    puts "ABOUT TO NOTIFY ADMINS"
+
+    puts "user = #{user.inspect}"
+    puts "teacher = #{user.teacher.inspect}"
+
+    # notify_admins("#{hist} user with id #{user.id} started registration", params.to_s)
+
+    return 201
+
+  end
+
+
+  # maybe have an endpoint mid-registration after phone number...........
+  post '/user-finish-registration' do
+    # do stuff.... 
+    puts "creating user.... #{params}"
+
+    if params.values.include? nil or params.values.include? ""
+      return [400, { 'Content-Type' => 'text/plain' }, ['Params missing.']]
+      # return 400 # or something...
+    end
+
+    full_name     = params['name']
+    phone_no      = params['phone']
+    mobile_os     = params['mobile_os']
+    teacher_id    = params['teacher_id']
+    locale        = params['locale']
+    
+    role          = params['role']
+    password      = params['password']
+    class_code    = params['class_code']
+
+    phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
+
+    user = User.where(phone: phone).first
+
+    if !user.nil? # if user exists!!!!!!!
+      user = User.where(phone: phone).first
+      user.update(platform: mobile_os.downcase)
+      user.update(locale: 'es') if locale == 'es'
+    else
+      user = User.create(phone: phone, platform: mobile_os.downcase)
+      user.state_table.update(subscribed?: false)
+      user.update(locale: 'es') if locale == 'es'
+    end
+
+    teacher = Teacher.where(id: teacher_id).first
+    teacher.signup_user(user) if teacher
+
+    # set password
+    user.set_password(password)
+
+    # update the rest
+    user.update(role: role, class_code: class_code)
+
+    # get first and last name
+    terms = full_name.split(' ')
+    if terms.size < 1
+      # return ''
+      # have a more informative error message?
+      halt erb :error
+    elsif terms.size == 1 # just the first name
+      first_name = terms.first[0].upcase + terms.first[1..-1]
+      user.update(first_name: first_name)
+    elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
+      first_name = terms.first[0].upcase + terms.first[1..-1] 
+      last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
+      user.update(first_name: first_name, last_name: last_name)
+    end
+
+    # Create a user profile on Mixpanel
+    # tracker.people.set(user.id, {
+    #     '$first_name'       => user.first_name,
+    #     '$last_name'        => user.last_name,
+    #     '$phone'            => user.phone,
+    #     'platform'          => user.platform
+    # });
+
+
+    puts "ABOUT TO NOTIFY ADMINS"
+    # notify_admins("user with id #{user.id} finished registration", params.to_s)
+
+    puts "user = #{user.inspect}"
+    puts "teacher = #{user.teacher.inspect}"
+
+    return 201
+    # redirect to '/get-app'
+  end
+
+
   post '/' do
     puts "IN POST / FOR REGISTER"
 
     puts "params = #{params}"
+
+
     full_name = params['name']
     phone_no = params['phone']
     mobile_os = params['mobile_os']
     teacher_id = params['teacher_id']
     locale = params['locale']
+
 
     if !full_name.nil? && !phone_no.nil? && !mobile_os.nil? && !full_name.empty? && !phone_no.empty? && !mobile_os.empty? # and os != 'unknown'
 
