@@ -270,6 +270,7 @@ body {
 
 }
 
+
 button#top-button {
   background-color: #ed7844;
   font-family: 'Karla', sans-serif;
@@ -281,6 +282,14 @@ button.signup-button {
     padding: 12px 12px 8px;
     text-transform: uppercase;
 
+}
+
+button.log-in-fake-button {
+    background-color: transparent !important;
+    text-transform: none;
+    margin-top: 0px;
+    border: none;
+    padding-top: 7px;
 }
 
 .navbar-logo {
