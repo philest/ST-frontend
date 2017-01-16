@@ -12,8 +12,6 @@ require 'bundler/setup'
 require 'sinatra/base'
 require "bundler/setup"
 
-
-
 require 'twilio-ruby'
 
 #for access in views

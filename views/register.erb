@@ -16,10 +16,10 @@
     <script async type="text/javascript" src="/js/analytics.js"></script>
 
 <!-- start Mixpanel --><script async type="text/javascript">
-/*(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
 0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
 for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
-mixpanel.init("358fa62873cd7120591bdc455b6098db");*/
+mixpanel.init("358fa62873cd7120591bdc455b6098db");
 </script><!-- end Mixpanel -->
 
   
@@ -29,6 +29,21 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");*/
     <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
     <!-- end Boostrap -->
+
+    <!-- Jquery Mobile -->
+    <!-- Include meta tag to ensure proper rendering and touch zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Include jQuery Mobile stylesheets -->
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+    <!-- Include the jQuery library -->
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <!-- Include the jQuery Mobile library -->
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+    <!-- END Jquery Mobile -->
 
     <!-- Karla!!!! -->
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -142,56 +157,24 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");*/
 <body>
   <!-- navbar -->
   <%= erb :'components/navbar' %>
-
-  <div class="wrapper">
-    
-      <div class="body">
-        <div class="container first-page">
-          <div class="pure-g">
-            <div class="pure-u-1">
-              <div class="class-information register" style="margin-bottom: 40px;">
-                <h1 class="join-header" style="font-size: 1.8em; font-weight: normal; display: inline-block;margin-bottom:0px;"><%= text[:call_to_action] %></h1>
-                <img src="/images/icons/apple-fun.png" style="display:inline-block;width: 40px; height: auto; margin-top:-10px;" alt="">
-                <h1 style="margin-top: 0px; margin-bottom: 0px;font-size:1.8em;"><%= text[:class] %></h1>
-                <p class="school-name"><%= school %></p>
-              </div>
-
-              <div class="login-form">
-                <form id="register" action='/register' method="post"> 
-                  <div class="signup-setup">
-                    <div class="field" id="signup-field">
-                       <label class="label"><%= text[:full_name] %></label>
-                      <input name="name" placeholder="<%= text[:full_name_placeholder] %>" class="input" required>
-                        <label class="label"><%= text[:phone_number] %></label>
-                      <input name="phone" placeholder="(555) 555-5555" class="input" required>
-                      <input type="hidden" name="teacher_id" value="<%= teacher_id %>">
-                      <input type="hidden" name="locale" value="<%= locale %>">
-                      <input type="hidden" name="class_code" value="<%= class_code %>">
-                    </div>
-                   
-                      <button id="join" onclick="SignupButtonClicked();" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button"><%= text[:sign_up] %></button>
-                  </div>
-                </form>
-              </div>
-
-
-            <div class="privacy-policy">
-              <p><%= text[:privacy_policy] %></p>
-            </div>
-          </div>
-
-        </div> <%# end pure-g %>
-
-
-          
-      </div> <%# container %>
-    </div> <%# body %>
-
-  </div>
+  <% locals = {text: text,class_code:class_code, locale:locale,teacher_id:teacher_id, teacher: teacher, school: school} %>
+  <%= erb :'register/name-password', locals: locals %>
+  <%= erb :'register/role', locals: locals %>
+  <%= erb :'register/password', locals: locals %>
 
 <footer>
 
      <script>
+
+
+        // $('.transition-link').click(function(event) {
+        //   var href = $(this).attr('href');
+        //   console.log('href = ' + href);
+        //   $(href).removeClass('hiddenPage');
+        //   $('.wrapper').not(href).addClass('hiddenPage');
+        // });
+
+
       // function SignupButtonClicked() {
       //   mixpanel.track("Signup Button Clicked");
       // }

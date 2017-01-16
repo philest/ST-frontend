@@ -18,11 +18,11 @@ class Register < Sinatra::Base
 
   # use Airbrake::Rack::Middleware
 
-  # require "sinatra/reloader" if development? 
+  require "sinatra/reloader" if development? 
 
-  # configure :development do
-    # register Sinatra::Reloader
-  # end
+  configure :development do
+    register Sinatra::Reloader
+  end
 
   #set mode (production or test)
   MODE ||= ENV['RACK_ENV']
@@ -69,6 +69,29 @@ class Register < Sinatra::Base
       text[:sign_up] = "Inscribirse"
       text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
 
+      # role
+      text[:header_role] = "Cuéntanos algo sobre ti"
+      text[:identity] = {}
+      text[:identity][:parent] = ["Soy padre", "Padre, guardián, o familia"]
+      text[:identity][:teacher] = ["Soy profesor", "Profesor o profesor auxiliar"]
+      text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
+
+      # password
+      text[:header_password] = "Último paso"
+      text[:subtitle] = "Su contraseña debe contener al menos seis caracteres."
+      text[:label] = "Crear una contraseña"
+      text[:placeholder] = "Contraseña"
+      text[:button] = "Terminar"
+
+      # coming-soon
+      text[:exclaim] = "¡Muy bien!"
+      text[:header_app] = "empieza pronto!"
+      text[:return] = "Le enviaremos un mensaje de texto"
+      text[:weekday] = "el jueves"
+      text[:date] = "4 de enero para empezar!"
+      text[:info] = "Le envíaremos un texto pronto con los libros de #{session[:teacher_sig]}" 
+      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
+
     else # default to english
       text[:call_to_action] = "Join"
       text[:class] = "#{teacher.signature}'s Class"
@@ -77,12 +100,53 @@ class Register < Sinatra::Base
       text[:phone_number] = "Phone number"
       text[:sign_up] = "Sign up"
       text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
+
+      # role
+      text[:header_role] = "Tell us about yourself"
+      text[:identity] = {}
+      text[:identity][:parent] = ["I'm a parent", "Parent, guardian, or family"]
+      text[:identity][:teacher] = ["I'm a teacher", "Teacher or assistant teacher"]
+      text[:identity][:admin] = ["I'm an administrator","School leaders, academic directors"]
+
+      # password
+      text[:header_password] = "Last step"
+      text[:subtitle] = "Your password must contain at least six characters."
+      text[:label] = "Choose password"
+      text[:placeholder] = "Password"
+      text[:button] = "Save"
+
+      # coming-soon
+      text[:exclaim] = "Great!"
+      text[:header_app] = "starts soon!"
+      text[:return] = "We will text you on"
+      text[:weekday] = "Thursday"
+      text[:date] = "January 4th to start!"
+      text[:info] = "We'll text you in a few days with #{session[:teacher_sig]}'s books!"
+      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
+
     end
 
     email_admins("Someone from class #{params[:class_code]} accessed web app")
-      
+
+
     erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.signature}
 
+  end
+
+  get '/role/?' do
+    puts "in get /register/role"
+    # puts "params = #{params}"
+
+    text = {}
+
+      text[:header] = "Cuéntanos algo sobre ti"
+      text[:identity] = {}
+      text[:identity][:parent] = ["Soy padre", "Padre, guardián, o familia"]
+      text[:identity][:teacher] = ["Soy profesor", "Profesor o profesor auxiliar"]
+      text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
+
+
+    erb :'role', locals: {text: text}
   end
 
   post '/' do
