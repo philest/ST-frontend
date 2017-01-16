@@ -22,7 +22,12 @@ for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElemen
 mixpanel.init("358fa62873cd7120591bdc455b6098db");
 </script><!-- end Mixpanel -->
 
-  
+          <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
+
+    <!-- end Boostrap -->
 
 
     <!-- Jquery Mobile -->
@@ -41,12 +46,10 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
     <!-- END Jquery Mobile -->
 
 
-      <!-- Bootstrap modal files -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
-
-    <!-- end Boostrap -->
+    <!-- Load jQuery and  -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
     <!-- Karla!!!! -->
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
@@ -89,10 +92,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
     <meta name="theme-color" content="#ffffff">
 
 
-    <!-- Load jQuery and  -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
 
     <!-- our scripts -->
     <!-- <script type="text/javascript" src="/js/validations.js"></script> -->
@@ -208,29 +208,57 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");
      });
 
 
-      $(document).on("pagebeforeshow","#page1",function(){ // When entering page1
-        alert("page1 is about to be shown");
-      });
-      $(document).on("pageshow","#page1",function(){ // When entering page1
-        alert("page1 is now shown");
-      });
-      $(document).on("pagebeforehide","#page1",function(){ // When leaving page1
-        alert("page1 is about to be hidden");
-      });
-      $(document).on("pagehide","#page1",function(){ // When leaving page1
-        alert("page1 is now hidden");
+      $(document).on('click', '#page1link',function(event){
+
+        var ValidStatus = $("#register").valid();
+        console.log(ValidStatus);
+        if (ValidStatus == false) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
       });
 
-      // $('#register').validate({ // initialize the plugin
-      //         rules: {
-      //             name: {
-      //                 required: true
-      //             },
-      //             phone: {
-      //                 required: true
-      //             }
-      //         }
-      //     });
+      $(document).on('click', '#page3link',function(event){
+
+        var ValidStatus = $("#password-form").valid();
+        console.log(ValidStatus);
+        if (ValidStatus == false) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+      });
+
+     // $(document).on('pageinit', function(){
+  
+     //        $(document).on("pagebeforehide","#page1",function(){ // When leaving page1
+     //          console.log('leaving page1');
+     //          console.log(event);
+
+    
+
+     //          // $('#register').validate({ // initialize the plugin
+     //          //     rules: {
+     //          //         name: {
+     //          //             required: true
+     //          //         },
+     //          //         phone: {
+     //          //             required: true
+     //          //         }
+     //          //     }
+     //          // }).form();
+
+              
+
+     //        });
+     //        // $(document).on("pagehide","#page1",function(){ // When leaving page1
+     //          // alert("page1 is now hidden");
+     //        // });
+
+     // });
+
+  
 
         // // validations
         // $('#page1link').click(function(event) {

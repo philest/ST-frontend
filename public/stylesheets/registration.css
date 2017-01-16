@@ -143,12 +143,23 @@ p.school-name {
   font-weight: 400;
 }
 
-label.error {
+/*label.error {
   color: #C63442;
   line-height: 2.5em;
     font-weight: bold;
-    /*margin-bottom: 8px;*/
+
 }
+*/
+label.error { 
+  float: left; 
+  color: red; 
+  padding-top: 0em; 
+  vertical-align: top; 
+  font-weight:bold;
+  width: 100%;
+  text-align: left;
+}
+
 
 .field label.label {
   margin-top: 15px;
