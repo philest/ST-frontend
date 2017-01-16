@@ -11,6 +11,10 @@ body {
 }
 
 
+a.transition-link {
+  text-decoration: none;
+}  
+
 
 body {
   font-family: 'Karla';
@@ -96,7 +100,7 @@ p.school-name {
 
 .container {
   padding: 1em;
-  /*width: 100%;*/
+  width: 100%;
   background: white;
   margin: 16px;
   border-radius: 0.5em;
@@ -178,6 +182,8 @@ label.error {
 .password-text h1 {
   text-align: center;
   font-weight: normal;
+  line-height: 1.2em; 
+  font-family: 'Karla';
 }
 
 #join.password-button {
@@ -193,6 +199,11 @@ label.error {
 .class-information.password-text p {
   text-align: center;
   font-weight: normal;
+  width: 80%; 
+  display: block; 
+  margin: 0 auto; 
+  color: #808287; 
+  line-height: 1.4em;
 }
 
 .container.first-page {
