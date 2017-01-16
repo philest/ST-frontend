@@ -4,6 +4,12 @@ body {
   font-size: 1em;
 }
 
+#override a.web-mobile-signup-button {
+  background-color: #ed7a44;
+  color: white;
+  font-weight: normal;
+}
+
 
 
 body {

@@ -14,7 +14,7 @@
               </div>
 
               <div class="login-form">
-                <form id="register" action='/register' method="post"> 
+                <form id="register"> 
                   <div class="signup-setup">
                     <div class="field" id="signup-field">
                        <label class="label"><%= text[:full_name] %></label>
@@ -26,9 +26,12 @@
                       <input type="hidden" name="class_code" value="<%= class_code %>">
                     </div>
                    
-                        <a class="transition-link" href="#page2" data-transition="fade">   
-                          <button id="join" onclick="SignupButtonClicked();" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button"><%= text[:sign_up] %></button>
+                        <a id="page1link" class="transition-link ui-btn web-mobile-signup-button" href="#page2" data-transition="fade">  
+                          <%= text[:sign_up] %>
+                          <!-- <button data-transition="fade" action="#page2" class="web-mobile-signup-button" type="submit"><%= text[:sign_up] %></button> -->
                         </a>
+
+
                   </div>
                 </form>
               </div>
