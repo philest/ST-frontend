@@ -17,13 +17,28 @@ p.school-name {
   margin-top: 0px;
 }
 
+#page1, #page2, #page3 {
+  background: #f2f3f5;
+}
+
+.wrapper.hiddenPage {
+  display: none;
+}
+
+/*.wrapper#page2:not('.ui-page') {
+  height: 100vh;
+  overflow-y: hidden;
+}*/
+
 .body {
   background: #f2f3f5;
-  display: table-cell; 
-  height: 80vh;
+  /*display: table-cell; */
+  /*height: 100vh;*/
   vertical-align: middle;
   text-align: center;
   /*display:inline-block;*/
+  display: flex;
+  align-items: center;
 }
 .class-information {
   /*margin-top: 20px;*/
@@ -82,6 +97,10 @@ p.school-name {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.role .body {
+  display: block;
 }
 
 #teacher-info {
@@ -197,6 +216,11 @@ label.error {
     margin-right: auto;
     margin-top: 16px;
     margin-bottom: 16px;
+  }
+
+  .role .body {
+    display: block;
+    padding-top: 2em;
   }
 }
 
