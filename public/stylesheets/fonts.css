@@ -12,6 +12,13 @@
 }
 
 @font-face {
+    font-family: 'dk_cool_crayon';
+    src: url('fonts/DKCoolCrayon.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'avenir';
     src: url('fonts/avenir-lt-65-medium.ttf') format('ttf'),
          url('fonts/avenir-lt-95-black.ttf') format('ttf');
