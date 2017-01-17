@@ -170,22 +170,68 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
   <%= erb :'register/password', locals: locals %>
   <%= erb :'register/get-app', locals: locals %>
 
+  <form id="hidden-inputs">
+    <input type="hidden" name="teacher_sig" value="<%= teacher %>">
+  </form>
+
+
 <footer>
 
      <script>
+
+      // Trigger on first sign up button tap
+      function IdentifyUser() { 
+
+          // TODO: phone_num = grab the user's phone number (string)
+          // TDOO: full_name = grab the user's full name
+         // TODO: teacher_name = grab the teacher name
+          var phone_num = $('#register input[name=phone]').val();
+          console.log(phone_num);
+          mixpanel.identify(phone_num);
+          var full_name = $('#register input[name=name]').val();
+          console.log(full_name);
+
+          var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
+          console.log(teacher_name);
+          mixpanel.people.set({
+            "full_name": full_name,
+            "phone": phone_num,
+            "teacher_name": teacher_name
+          });
+
+      }
+
+      // Trigger when the first signup button is Tapped. 
+      function SignupButtonClicked() {
+        console.log('signup button clicked');
+        mixpanel.track("Signup Button Clicked");
+      }
+
+      // Trigger when the Password button is tapped. 
+      function PasswordButtonClicked() {
+        console.log('password button clicked');
+        mixpanel.track("Password Button Clicked");
+      }
+
+      // Trigger when the app download prompt is tapped.
+      function AppPromptClicked() {
+        console.log('app prompt clicked');
+        mixpanel.track("App Download Prompt Clicked");
+      }
 
      $('#page1link').click(function(event) {
         // get name/email
         console.log($('#register').serialize());
         $.post('/register/user-start-registration', $('#register').serialize());
-          // .done(function(data) {
-          //   // $('#congratsModal').modal('toggle');
-          //   // delete the extra form data
-          //   $("#signup-name-password input[type='hidden'][name='email']").remove();
-          // });
-        // transition to #page4
+
+        SignupButtonClicked();
+        IdentifyUser();
      });
 
+
+     $('#app-link').click(function(event) {
+        AppPromptClicked();
+     });
 
      $('#page3link').click(function(event) {
         // get name/email
@@ -204,19 +250,16 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
         // submit password form using AJAX request
         console.log($('#password-form').serialize());
         $.post('/register/user-finish-registration', $('#password-form').serialize());
-          // .done(function(data) {
-          //   // $('#congratsModal').modal('toggle');
-          //   // delete the extra form data
-          //   $("#signup-name-password input[type='hidden'][name='email']").remove();
-          // });
-        // transition to #page4
+
+        PasswordButtonClicked();
+
      });
 
 
       $(document).on('click', '#page1link',function(event){
 
         var ValidStatus = $("#register").valid();
-        console.log(ValidStatus);
+        // console.log(ValidStatus);
         if (ValidStatus == false) {
             event.preventDefault();
             event.stopPropagation();
@@ -227,82 +270,25 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
       $(document).on('click', '#page3link',function(event){
 
         var ValidStatus = $("#password-form").valid();
-        console.log(ValidStatus);
+        // console.log(ValidStatus);
         if (ValidStatus == false) {
             event.preventDefault();
             event.stopPropagation();
             return false;
         }
       });
-
-     // $(document).on('pageinit', function(){
-  
-     //        $(document).on("pagebeforehide","#page1",function(){ // When leaving page1
-     //          console.log('leaving page1');
-     //          console.log(event);
-
-    
-
-     //          // $('#register').validate({ // initialize the plugin
-     //          //     rules: {
-     //          //         name: {
-     //          //             required: true
-     //          //         },
-     //          //         phone: {
-     //          //             required: true
-     //          //         }
-     //          //     }
-     //          // }).form();
-
-              
-
-     //        });
-     //        // $(document).on("pagehide","#page1",function(){ // When leaving page1
-     //          // alert("page1 is now hidden");
-     //        // });
-
-     // });
-
-  
-
-        // // validations
-        // $('#page1link').click(function(event) {
-        //   // event.preventDefault();
-        //   console.log('page1link clicked');
-        //   // event.preventDefault();
-        //   // event.stopPropagation();
-        //   validateForm();
-
-        // });
-
-        // function validateForm() {
-        //   console.log('validating, i guess...');
-          
-
-        // }
-
-
-        // $('.transition-link').click(function(event) {
-        //   var href = $(this).attr('href');
-        //   console.log('href = ' + href);
-        //   $(href).removeClass('hiddenPage');
-        //   $('.wrapper').not(href).addClass('hiddenPage');
-        // });
-
-
       
       function SignupPageVisited() {
             mixpanel.track("First Signup Page Visited");
       }
       window.onload = SignupPageVisited;
 
+
+
     </script>
 
 </footer>
     
-
-
-
 </body>
 
 
