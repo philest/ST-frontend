@@ -46,8 +46,8 @@ class Enroll < Sinatra::Base
     school = School.where(Sequel.like(:code, password_regexp)).first
 
     if school
-      teacher = Teacher.where(email: params['email']).first
-      admin = Admin.where(email: params['email']).first
+      teacher = Teacher.where(Sequel.ilike(:email, params['email'])).first
+      admin = Admin.where(Sequel.ilike(:email, params['email'])).first
 
       if teacher and !teacher.signature.nil? and teacher.school.id == school.id
         puts teacher.signature
@@ -133,19 +133,19 @@ class Enroll < Sinatra::Base
 
     new_signup = true
     if role == 'admin'
-      educator = Admin.where(email: email).first
+      educator = Admin.where(Sequel.ilike(:email, email)).first
       puts "admin = #{educator.inspect}"
       if educator.nil?
-        educator = Admin.create(email: email)
+        educator = Admin.create(email: email.downcase)
         new_signup = true
       else
         new_signup = false
       end
     elsif role == 'teacher'
-      educator = Teacher.where(email: email).first
+      educator = Teacher.where(Sequel.ilike(:email, email)).first
       puts "teacher = #{educator.inspect}"
       if educator.nil?
-        educator = Teacher.create(email: email)
+        educator = Teacher.create(email: email.downcase)
         new_signup = true
       else
         new_signup = false
@@ -322,20 +322,17 @@ class Enroll < Sinatra::Base
     end
 
     return users_hash.to_json
-
   end
 
   get '/admin_sig' do
     puts "admin_sig params = #{params}"
-    admin = Admin.where(email: params['email']).first
+    admin = Admin.where(Sequel.ilike(:email, params['email'])).first
     puts "admin = #{admin.inspect}"
     if admin
       return admin.signature
     end
-
     return 404
   end
-
 
   get '/' do
      'Hello World'
@@ -343,7 +340,6 @@ class Enroll < Sinatra::Base
 
   # DO WE WANT to have a secret key or some other validation so that someone can't overload the system with CURL requests to phone numbers?
   # that's a later challenge.
-
 
 end
 
