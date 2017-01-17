@@ -6,7 +6,7 @@ require_relative '../config/initializers/aws'
 
 class FlyerImage
 
-  def create_image(teacher_obj, school_obj)
+  def create_image(teacher_obj, school_obj, delete_local=true)
 
     code = teacher_obj.code
     teacher = teacher_obj.signature
@@ -222,7 +222,7 @@ class FlyerImage
 
           text_box args[:bottom_txt], at:[0, 37], inline_format: true, width:page_width,height:15,overflow: :shrink_to_fit 
         end 
-      end # english
+      end # prawn doc
 
       flyers = S3.bucket('teacher-materials')
       if flyers.exists?
@@ -235,10 +235,10 @@ class FlyerImage
           obj.upload_file(args[:tmpfile], acl: "public-read")
           puts "Uploaded '%s' to S3!" % name
         end
-        FileUtils.rm(args[:tmpfile])
+        FileUtils.rm(args[:tmpfile]) if delete_local
       end
 
-    end # prawn doc
+    end # spanish, english 
 
 
   end # def create_image
