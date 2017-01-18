@@ -172,6 +172,9 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
 
   <form id="hidden-inputs">
     <input type="hidden" name="teacher_sig" value="<%= teacher %>">
+    <input type="hidden" name="teacher_id" value="<%= teacher_id %>">
+    <input type="hidden" name="locale" value="<%= locale %>">
+    <input type="hidden" name="class_code" value="<%= class_code %>">
   </form>
 
 
@@ -192,10 +195,11 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
 
           var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
           console.log(teacher_name);
-          mixpanel.people.set({
+
+          mixpanel.people.append({
             "full_name": full_name,
-            "phone": phone_num,
-            "teacher_name": teacher_name
+            "phone": phone_num
+            // "teacher_name": teacher_name
           });
 
       }
@@ -280,7 +284,17 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
       });
       
       function SignupPageVisited() {
-            mixpanel.track("First Signup Page Visited");
+          var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
+          var class_code = $('#hidden-inputs input[name=class_code]').val();
+          var teacher_id = $('#hidden-inputs input[name=teacher_id]').val();
+          var locale = $('#hidden-inputs input[name=locale]').val();
+          mixpanel.people.append({
+            "teacher_name": teacher_name,
+            "class_code": class_code,
+            "teacher_id": teacher_id,
+            "locale": locale
+          });
+          mixpanel.track("First Signup Page Visited");
       }
 
       $(document).ready(function() {
