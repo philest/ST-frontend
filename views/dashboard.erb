@@ -586,6 +586,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
             </div>
 
             <% if users.size > 0 %>
+
                 <div class="panel panel-default table-body">
                
                   <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
@@ -643,17 +644,20 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                           </div>
                         </div>
 
+                        <% this_month =  user['this_month'].to_i > 0 ? user['this_month'] : '—' %>
+                        <% reading_time =  user['reading_time'].to_i > 0 ? user['reading_time'] : '—' %>
+
                         <div class="pure-g stats-user">
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user left">
-                                <h1><%= user['this_month'] %></h1>
+                                <h1><%= this_month %></h1>
                                 <p>Books</p>
                                 <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                               </div>
                             </div>
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                                <h1 style="display: inline-block;"><%= reading_time  %></h1>
                                 <p>Minutes</p>
                                 <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                               </div>
@@ -719,17 +723,21 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                           </div>
                         </div>
 
+                        <% this_month =  user['this_month'].to_i > 0 ? user['this_month'] : '—' %>
+                        <% reading_time =  user['reading_time'].to_i > 0 ? user['reading_time'] : '—' %>
+
+                    
                         <div class="pure-g stats-user">
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user left">
-                                <h1><%= user['this_month'] %></h1>
+                                <h1><%= this_month %></h1>
                                 <p>Books</p>
                                 <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                               </div>
                             </div>
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                                <h1 style="display: inline-block;"><%= reading_time %></h1>
                                 <p>Minutes</p>
                                 <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                               </div>

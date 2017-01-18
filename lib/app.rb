@@ -305,17 +305,30 @@ class Enroll < Sinatra::Base
       return 404
     end
 
-    users_hash = teacher.users.map do |u|
+    parents = teacher.users.select {|u| u.role == 'parent' }
+
+    users_hash = parents.map do |u|
       h = u.to_hash.select {|k,v| [:id, :first_name, :last_name, :phone, :enrolled_on, :locale, :code, :platform].include? k }
       h[:story_number] = u.state_table.story_number
       time_enrolled = (Time.now - u.enrolled_on) / 1.month
       if time_enrolled >= 1
         h[:this_month] = 8 + (u.id % 4)
       else
-        h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
+        time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.week
+        if time_enrolled_by_week >= 1 # enrolled for
+          h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
+        else
+          h[:this_month] = 0
+        end
+
       end
       h[:this_week] = 2 + (u.id % 3)
-      h[:reading_time] = (h[:this_month] * 4.6).ceil
+
+      if h[:this_month] == 0
+        h[:reading_time] = 0
+      else 
+        h[:reading_time] = (h[:this_month] * 4.6).ceil
+      end
 
       puts "month = #{h[:this_month]}, reading_time = #{h[:reading_time]}"
       h
