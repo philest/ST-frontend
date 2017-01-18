@@ -282,7 +282,10 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
       function SignupPageVisited() {
             mixpanel.track("First Signup Page Visited");
       }
-      window.onload = SignupPageVisited;
+
+      $(document).ready(function() {
+        SignupPageVisited();
+      });
 
 
 
