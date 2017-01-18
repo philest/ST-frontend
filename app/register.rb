@@ -228,7 +228,13 @@ class Register < Sinatra::Base
     puts "user = #{user.inspect}"
     puts "teacher = #{user.teacher.inspect}"
 
-    notify_admins("#{hist} user with id #{user.id} started registration", params.to_s)
+    test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
+
+    if test_code.match(class_code).nil?
+      notify_admins("#{hist} user with id #{user.id} started registration", params.to_s)
+    else
+      puts "it's just a test, no reason for concern gentlemen...."
+    end
 
     return 201
 
@@ -303,7 +309,14 @@ class Register < Sinatra::Base
 
     puts "ABOUT TO NOTIFY ADMINS"
     params['password'] = user.password_digest
-    notify_admins("user with id #{user.id} finished registration", params.to_s)
+
+    test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
+
+    if test_code.match(class_code).nil?
+      notify_admins("user with id #{user.id} finished registration", params.to_s)
+    else
+      puts "it's just a test, no worries fellas..."
+    end
 
     puts "user = #{user.inspect}"
     puts "teacher = #{user.teacher.inspect}"
