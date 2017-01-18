@@ -223,8 +223,10 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1");
         console.log($('#register').serialize());
         $.post('/register/user-start-registration', $('#register').serialize());
 
-        SignupButtonClicked();
+        // first identify user
         IdentifyUser();
+        // then do other stuff
+        SignupButtonClicked();
      });
 
 
