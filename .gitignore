@@ -7,4 +7,4 @@ bootup
 lib/bootup
 demo_users.rb
 log/newrelic_agent.log
-dump.rbd
+dump.rdb
