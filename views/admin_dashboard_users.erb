@@ -152,7 +152,7 @@
         
       </div>
 
-      
+
           <div class="big-daddy-data">
             <h4><%= session[:school]['signature'] %> Familes (<%= school_users.size %> joined) </h4>
 
@@ -230,14 +230,14 @@
                         <div class="pure-g stats-user">
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user left">
-                                <h1><%= user['this_month'] %></h1>
+                                <h1><%= user['this_month'] > 0 ? user['this_month'] : '-' %></h1>
                                 <p>Books</p>
                                 <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                               </div>
                             </div>
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= user['reading_time'] %></h1>
+                                <h1 style="display: inline-block;"><%= user['reading_time'] > 0 ? user['reading_time'] : '-' %></h1>
                                 <p>Minutes</p>
                                 <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                               </div>
