@@ -161,6 +161,7 @@
                   <thead>
                     <tr>
                       <th class="user-name-top">Name</th>
+                      <th class="user-role-top">Role</th>
                       <th class="date-joined">Date joined</th>
                     </tr>
                   </thead>
@@ -181,6 +182,7 @@
                                 <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
                               <% end %>
                               <th class="user-name"><%= user_name %></th>
+                              <th class="user-role"><%= user['role'] %></th>
                               <th class="date-joined"><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
                             </tr>
                         <% end %>

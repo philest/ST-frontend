@@ -579,6 +579,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                   <thead>
                     <tr>
                       <th class="user-name-top">Name</th>
+                      <th class="user-role-top">Role</th>
                       <th class="date-joined">Date joined</th>
                     </tr>
                   </thead>
@@ -600,6 +601,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                                 <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
                               <% end %>
                               <th class="user-name"><%= user_name %></th>
+                              <th class="user-role"><%= user['role'] %></th>
                               <th class="date-joined"><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
                             </tr>
                         <% end %>
@@ -657,7 +659,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                             </div>
                             <div class="pure-u-1 pure-u-sm-1-2">
                               <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= reading_time  %></h1>
+                                <h1 style="display: inline-block;"><%= reading_time %></h1>
                                 <p>Minutes</p>
                                 <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                               </div>

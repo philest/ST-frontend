@@ -75,7 +75,7 @@ class App < Sinatra::Base
   helpers TwilioTextingHelpers
 
   enable :sessions
-  set :session_secret, "328479283uf923fu8932fu923uf9832f23f232"
+  set :session_secret, ENV['SESSION_SECRET']
 
   # use Rack::Session::Cookie, :key => 'rack.session',
   #                          :path => '/',

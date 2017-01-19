@@ -466,11 +466,30 @@ h3.apple {
 }
 
 #bs-override .user-name {
-  width: 50%;
+  /*width: 50%;*/
+  width: 34%;
 }
 
 .user-name-top {
+  /*width: 24.5%;*/
+  width: 16%;
+}
+
+.admin.user-name-top {
+  /*width: 24.5%;*/
   width: 24.5%;
+}
+
+.teacher-panel.user-name-top {
+  width: 5.5%;
+}
+
+.user-role-top {
+  width: 16%;
+}
+
+.user-role {
+  width: 32%;
 }
 
 .leftover-space {
@@ -1033,7 +1052,13 @@ thead {
 
 }*/
 
-
+@media screen and (max-width: 59em) {
+  .teacherModal .modal-content {
+    width: 68vw;
+    margin: 0 auto;
+    /*margin-left: -10vw;*/
+  }
+}
 
 @media screen and (max-width: 52em) {
   .navbar-buttons .navbar-menu {
@@ -1064,10 +1089,17 @@ thead {
 
 }
 
-
 @media screen and (max-width: 46em) {
   button.navbar-menu {
     display: none;
+  }
+}
+
+@media screen and (max-width: 43em) {
+  .teacherModal .modal-content {
+    width: 96vw;
+    margin: 0 auto;
+    /*margin-left: -10vw;*/
   }
 }
 
@@ -1083,6 +1115,19 @@ thead {
     display: none; 
   }
 */
+
+  .teacherModal .modal-content {
+    width: 95vw;
+    margin: 0 auto;
+    /*margin-left: -10vw;*/
+  }
+  #bs-override th.user-name-top {
+    width: 1%;
+  }
+
+  #bs-override th.admin.user-name-top {
+    width: 1%;
+  }
 
   .family-header.users img {
     display: none; 
@@ -1103,6 +1148,8 @@ thead {
     overflow-wrap: break-word;
     white-space: pre-wrap;
   }
+
+
 
   #bs-override th.teacher-name {
     word-wrap: break-word;
@@ -1198,8 +1245,6 @@ thead {
     padding-top: 2em;
   }
 
-
-
   .mobile-welcome {
     text-align: center;
     margin: 0 auto;
@@ -1248,6 +1293,9 @@ thead {
 
 
 }
+
+
+/*@media (max-width: )*/
 
 /* navbar shit */
 
