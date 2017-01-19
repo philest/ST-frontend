@@ -1097,7 +1097,7 @@ thead {
 
 @media screen and (max-width: 43em) {
   .teacherModal .modal-content {
-    width: 96vw;
+    width: 97vw;
     margin: 0 auto;
     /*margin-left: -10vw;*/
   }
