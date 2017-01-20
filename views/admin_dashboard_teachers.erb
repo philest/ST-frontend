@@ -7,7 +7,7 @@
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/logout">Logout</a>
-      <a href="https://storytime.zendesk.com/hc/en-us"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="mailto:hello@joinstorytime.com?&subject=Storytime Help"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
       <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
       <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
                   Invite teachers
@@ -42,8 +42,7 @@
                 <table class="table fields">
                     <thead>
                       <tr>
-                        <th class="user-name-top teacher-panel">Name</th>
-                        <th class="user-role teacher-panel">Role</th>
+                        <th class="user-name-top">Name</th>
                         <!-- <th>Date joined</th> -->
                       </tr>
                     </thead>
@@ -64,7 +63,6 @@
                                   <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
                                 <% end %>
                                 <th class="user-name"><%= user_name %></th>
-                                <th class="user-role"><%= user['role'] %></th>
                                 <!-- <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th> -->
                               </tr>
                           <% end %>
@@ -104,14 +102,13 @@
                           </div>
 
                           <div class="stats user" id="left">
-                            <h1><%= user['this_month'] > 0 ? user['this_month'] : '-' %></h1>
+                            <h1><%= user['this_month'] %></h1>
                             <p>Books</p>
                             <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
                           </div>
                           <div class="stats user" id="bottom-guy">
-  
-                            <% reading_time_month = (user['this_month'] * 4.6).ceil %>
-                            <h1 style="display: inline-block;"><%= reading_time_month > 0 ? reading_time_month : '-' %></h1>
+
+                            <h1 style="display: inline-block;"><%= (user['this_month'] * 4.6).ceil %></h1>
                             <p>Minutes</p>
                             <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
                           </div>
@@ -284,8 +281,7 @@
             <table class="table fields">
                 <thead>
                   <tr>
-                    <th class="user-name-top admin">Name</th>
-
+                    <th class="user-name-top">Name</th>
                     <th class="date-joined">Date joined</th>
                   </tr>
                 </thead>
@@ -334,21 +330,21 @@
                         <% icon_index = (icon_index + 1) % icons.length %>
                         <div class="teacher-name">
                           <h3><%= teacher['signature'] %></h3>
-                          <h3 id="bottom-mofo">   <%= teacher['num_families'] %> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
+                          <h3 id="bottom-mofo">   <span><%= teacher['num_families'] %></span> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
                         </div>
                       </div>
 
                       <div class="pure-g stats-user">
                           <div class="pure-u-1 pure-u-sm-1-2">
                             <div class="stats user left">
-                              <h1><%= teacher['this_month'] > 0 ? teacher['this_month'] : '-' %></h1>
+                              <h1><%= teacher['this_month'] %></h1>
                               <p>Books</p>
                               <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
                             </div>
                           </div>
                           <div class="pure-u-1 pure-u-sm-1-2">
                             <div class="stats user right">
-                              <h1 style="display: inline-block;"><%= teacher['reading_time'] > 0 ? teacher['reading_time'] : '-' %></h1>
+                              <h1 style="display: inline-block;"><%= teacher['reading_time'] %></h1>
                               <p>Minutes</p>
                               <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
                             </div>
