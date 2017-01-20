@@ -72,7 +72,6 @@ $(document).ready(function () {
     if (ValidStatus == false) {
         return false;
     }
-
     // we want to POST this, clear the first-signup-form, the move on to the next modal
     $('#signup-name-password').submit();
 
