@@ -95,7 +95,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhone llega en la semana que viene! Le enviamos la app con libros en el Viernes."
+      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
       text[:subtitle_maintenance] = "Consigue libros gratis de #{teacher.signature} directamente en su celular"
 
       text[:header_app] = "Consigue StoryTime"
@@ -336,7 +336,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhone llega en la semana que viene! Le enviamos la app con libros en el Viernes."
+      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
 
       text[:subtitle] = "Consigue libros gratis de #{params[:teacher_sig]} directamente en su celular"
     else
@@ -449,7 +449,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Le envíaremos un texto pronto con los libros de #{teacher_sig}" 
+      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
       text[:subtitle] = "Consigue libros gratis de #{teacher_sig} directamente en su celular"
     else
       text[:exclaim] = "Great!"
