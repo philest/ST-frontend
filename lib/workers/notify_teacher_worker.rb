@@ -7,6 +7,8 @@ Dotenv.load if ENV['RACK_ENV'] != 'production'
 class UpdateAdminWorker
   include Sidekiq::Worker
 
+  sidekiq_options :retry => false # job will be discarded immediately if failed
+
   def perform(sig, email, count, teacher_or_teachers, list_o_names, quicklink)
      # Authenticate with your API key
     auth = { :api_key => ENV['CREATESEND_API_KEY'] }
@@ -17,7 +19,7 @@ class UpdateAdminWorker
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
 
       message = {
-        'To' => email,
+        'To' => 'josedmcpeek@gmail.com',
         'Data' => {
           'adminfirstname' => sig,
           'teacher_count' => count,
@@ -37,6 +39,8 @@ end
 class UpdateTeacherWorker
   include Sidekiq::Worker
 
+  sidekiq_options :retry => false # job will be discarded immediately if failed
+
   def perform(sig, email, count, family, list_o_names, quicklink)
      # Authenticate with your API key
     auth = { :api_key => ENV['CREATESEND_API_KEY'] }
@@ -47,7 +51,7 @@ class UpdateTeacherWorker
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
 
       message = {
-        'To' => email,
+        'To' => 'josedmcpeek@gmail.com',
         'Data' => {
           'signature' => sig,
           'family_count' => count,
@@ -65,6 +69,8 @@ end
 class WelcomeAdminWorker
   include Sidekiq::Worker
 
+  sidekiq_options :retry => false # job will be discarded immediately if failed
+
   def perform(admin_id)
     admin = Admin.where(id: admin_id).first
     # Authenticate with your API key
@@ -76,7 +82,7 @@ class WelcomeAdminWorker
     # Create a new mailer and define your message
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
     message = {
-      'To' => admin.email,
+      'To' => 'josedmcpeek@gmail.com',
       'Data' => {
         'dash_invite_teachers_link' => admin.quicklink + '&invite=1',
         'quicklink' => admin.quicklink,
@@ -96,6 +102,8 @@ end
 class WelcomeTeacherWorker
   include Sidekiq::Worker
 
+  sidekiq_options :retry => false # job will be discarded immediately if failed
+
   def perform(teacher_id)
     teacher = Teacher.where(id: teacher_id).first
     # Authenticate with your API key
@@ -107,7 +115,7 @@ class WelcomeTeacherWorker
     # Create a new mailer and define your message
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
     message = {
-      'To' => teacher.email,
+      'To' => 'josedmcpeek@gmail.com',
       'Data' => {
         'flyers_link' => teacher.quicklink + '&flyers=1',
         'quicklink' => teacher.quicklink,
@@ -126,6 +134,7 @@ end
 class NotifyTeacherWorker
   include Sidekiq::Worker
   # include CreateSend
+  sidekiq_options :retry => false # job will be discarded immediately if failed
 
   def send_invite(signature, email, school_id, admin_id)
       # Authenticate with your API key
