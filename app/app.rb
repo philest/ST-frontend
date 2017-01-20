@@ -122,7 +122,13 @@ class App < Sinatra::Base
       notify_admins("Educator joined freemium", params.to_s)
     end
 
-    return 200
+    # session[:pas]
+
+    redirect to "/freemium-signup"
+  end
+
+  get '/freemium-signup' do
+
   end
 
 

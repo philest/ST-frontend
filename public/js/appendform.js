@@ -16,14 +16,17 @@ $( document ).ready(function() {
                       .val(email);
     $('#signup-name-password').append($(input));
 
-    event.preventDefault();
 
-    $.post('freemium-signup-register', $('#signup-name-password').serialize())
-          .done(function(data) {
-            // $('#congratsModal').modal('toggle');
-            // delete the extra form data
-            $("#signup-name-password input[type='hidden'][name='email']").remove();
-          });
+    $('#signup-name-password').submit();
+
+    // event.preventDefault();
+
+    // $.post('freemium-signup-register', $('#signup-name-password').serialize())
+    //       .done(function(data) {
+    //         // $('#congratsModal').modal('toggle');
+    //         // delete the extra form data
+    //         $("#signup-name-password input[type='hidden'][name='email']").remove();
+    //       });
   });
 
 
