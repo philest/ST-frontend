@@ -220,14 +220,27 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       <h4>Send picture books home without extra work— for free.</h4>
 
       <script>
+
         function transitionToNamePassword() {
-          $('#signup-email-mobile').slideUp();
-          $('.signup-name-password-mobile').slideDown();
+          $('#signup-email-mobile').validate({ // initialize the plugin
+              rules: {
+                  email: {
+                      required: true
+                  }
+              }
+          }).form();
+
+          var ValidStatus = $("#signup-email-mobile").valid();
+          if (ValidStatus == false) {
+              return false;
+          } else {
+            $('#signup-email-mobile').slideUp();
+            $('.signup-name-password-mobile').slideDown();
+          }
+
         }
 
       </script>
-
-
 
       <form id="signup-email-mobile" class="signup-form"> 
           <div class="signup-setup">
@@ -236,7 +249,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                   
               </div>
 
-                <button onclick="transitionToNamePassword();" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
+                <button onclick="transitionToNamePassword();" type="button" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
           </div>
       </form>
 
@@ -251,7 +264,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                       <input name="last_name" autocomplete="off" placeholder="Last name" class="input" required>
                       <input name="password" autocomplete="off" placeholder="Password" type="password" class="input" required>
                   </div>
-                  <button id="signup-name-password-button-mobile" data-dismiss='modal' class="signup-form-button pure-button pure-button-primary get_update dialog-button">Complete sign up</button>
+                  <button id="signup-name-password-button-mobile" type="button" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Complete sign up</button>
                </div>
         </form>
       </div>
