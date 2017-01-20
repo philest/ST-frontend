@@ -8,6 +8,16 @@ $( document ).ready(function() {
       });
   });
 
+
+  $('#signup-name-password-mobile').submit(function(event) {
+    var email = $('#signup-email-mobile input[name=email]').val();
+    var input = $('<input>')
+                      .attr('type', 'hidden')
+                      .attr('name', 'email')
+                      .val(email);
+    $('#signup-name-password-mobile').append($(input));
+  });
+
   $('#signup-name-password').submit(function(event) {
     var email = $('#signup-email input[name=email]').val()
     var input = $('<input>')
@@ -17,7 +27,7 @@ $( document ).ready(function() {
     $('#signup-name-password').append($(input));
 
 
-    $('#signup-name-password').submit();
+    // $('#signup-name-password').submit();
 
     // event.preventDefault();
 

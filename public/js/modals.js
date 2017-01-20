@@ -52,6 +52,32 @@ $(document).ready(function () {
     // $("body").addClass("modal-open");
   });
 
+  $('#signup-name-password-button-mobile').click(function(event) {
+    event.preventDefault();
+    $('#signup-name-password-mobile').validate({ // initialize the plugin
+        rules: {
+            first_name: {
+                required: true
+            },
+            last_name: {
+              required: true
+            },
+            password: {
+                required: true
+            }
+        }
+    }).form();
+
+    var ValidStatus = $("#signup-name-password-mobile").valid();
+    if (ValidStatus == false) {
+        return false;
+    }
+
+     // we want to POST this, clear the first-signup-form, the move on to the next modal
+    $('#signup-name-password-mobile').submit();
+
+  });
+
   $('#signup-name-password-button').click(function(event) {
     event.preventDefault();
     $('#signup-name-password').validate({ // initialize the plugin
@@ -75,9 +101,9 @@ $(document).ready(function () {
     // we want to POST this, clear the first-signup-form, the move on to the next modal
     $('#signup-name-password').submit();
 
-    $('body').addClass('modalTransition');
+    // $('body').addClass('modalTransition');
     // move on to next modal
-    $('#signupSchoolRole').modal('toggle');
+    // $('#signupSchoolRole').modal('toggle');
     // $("body").addClass("modal-open");
   });
 
