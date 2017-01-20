@@ -719,6 +719,10 @@ h2 {
   margin-bottom: 20px;
 }
 
+h2.modal-signup-heading {
+  margin-bottom: 2em;
+}
+
 div.text {
   max-width: 270px;
 }
@@ -938,13 +942,11 @@ div.desktop-text {
 
 @media (min-width: 520px) {
   div#signup-field {
-
-    width: 65%;
-
+    width: 90%;
   }
 
   #signup-email-button.dialog-button {
-    width: 65%;
+    width: 90%;
   }
   
   button#join.dialog-button.signup-form-button {
@@ -960,7 +962,7 @@ div.desktop-text {
     margin-left: auto;
     margin-right: auto;
     width: 65%;
-    margin-top: 1em;
+    margin-top: 0em;
 
   }
 
