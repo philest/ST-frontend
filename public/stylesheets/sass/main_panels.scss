@@ -29,47 +29,76 @@ a#navbar-title {
   }
 }
 
+.signup-name-password-mobile {
+  h2 {
+    text-align: center;
+    color: #6B6E72;
+    font-size: 1.1em;
+  }
+}
+
+
 button#main-signup-button {
   width: 12em;
   line-height: 2em;
 }
 
+
+// this shouldn't be shown on mobile!
 .splash-new .splash-container {
-  max-width: 1445px;
+  display: none;
+} // end splash container (which shouldn't be shown on mobile!!!!)
+
+
+.splash-new-mobile {
+
   min-height: 720px; // 720px
-  display: block;
+  display: flex;
+  align-items: center; 
   margin: 0 auto;
-  h1 {
-    line-height: 1.2em;
+  background: url('https://d2yudi7y1eei74.cloudfront.net/assets/splash-new.jpg') center top/cover no-repeat #ba9e70;
+
+
+  .splash-container {
+    background-color: #EEEDEC;
+    margin: 1em;
+    width: 100%;
+    border-radius: 0.3em;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
-  background: url('https://d2yudi7y1eei74.cloudfront.net/assets/splash-new.jpg') center top/cover no-repeat #ba9e70;
   .title {
     text-align: center;
     color: white;
     padding-top: 8em; 
-    width: 90%;
+    width: 20em;
     margin: 0 auto;
     font-size: 1.5em;
+
     font-weight: bold;
 
     h1 {
-      font-size: 1.6em;
+      font-size: 2em;
     }
   }
 
-
   h1 {
-    color: white; 
+    color: black; 
     text-align: center;
+    padding-top: 1em;
   }
 
   h4 {
-    color: white;
+    color: black;
     text-align: center;
   }
 
 }
+
+
+
+
 
 h1.section-banner {
   margin-top: 0em;

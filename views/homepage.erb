@@ -39,13 +39,23 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
 
 
+
+
+
     <!-- pure -->
     <!-- <link rel="stylesheet" href="/stylesheets/imports/pure-min.css"> -->
     <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
 
     <!-- responsive grids -->
     <!-- <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css"> -->
-    <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
+    <!-- <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css"> -->
+
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
+    <!--<![endif]-->
 
 
     <link rel="stylesheet" href="/stylesheets/pure-push-pull.css" type="text/css" />
@@ -201,6 +211,57 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
       <nav style="height: 90px;">
         
       </nav> -->
+
+
+  <!-- mobile splash -->
+    <div class="splash-new-mobile">
+    <div class="splash-container">
+      <h1>Get families reading to grow readers.</h1>
+      <h4>Send picture books home without extra work— for free.</h4>
+
+      <script>
+        function transitionToNamePassword() {
+          $('#signup-email-mobile').slideUp();
+          $('.signup-name-password-mobile').slideDown();
+        }
+
+      </script>
+
+
+
+      <form id="signup-email-mobile" class="signup-form"> 
+          <div class="signup-setup">
+              <div class="field" id="signup-field">
+                <input name="email" placeholder="Enter your email or phone number" class="input" required>
+                  
+              </div>
+
+                <button onclick="transitionToNamePassword();" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
+          </div>
+      </form>
+
+
+      <div class="signup-name-password-mobile" style="display: none;">
+        <h2>Enter your name and a password</h2>
+        <form id='signup-name-password-mobile' class="signup-form"> 
+              <!-- <form id='login'> -->
+                <div class="signup-setup">
+                  <div class="field" id="signup-field">
+                      <input name="first_name" autocomplete="off" placeholder="First name" class="input" required>
+                      <input name="last_name" autocomplete="off" placeholder="Last name" class="input" required>
+                      <input name="password" autocomplete="off" placeholder="Password" type="password" class="input" required>
+                  </div>
+                  <button id="signup-name-password-button-mobile" data-dismiss='modal' class="signup-form-button pure-button pure-button-primary get_update dialog-button">Complete sign up</button>
+               </div>
+        </form>
+      </div>
+
+    </div>
+    <!-- End container -->
+  </div> 
+
+
+  <!-- end mobile splash -->
 
 
 
