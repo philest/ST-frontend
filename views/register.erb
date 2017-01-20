@@ -96,9 +96,6 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
     <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
-
-
-
     <!-- our scripts -->
     <!-- <script type="text/javascript" src="/js/validations.js"></script> -->
     <!-- <script type="text/javascript" src="/js/appendform.js"></script> -->
@@ -147,6 +144,10 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
           $('#app-link').attr('href', 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime');
         }
 
+        if (os.toLowerCase() == 'ios') {
+          $('#page3link').attr('href', '#page5');
+        }
+
       });
 
 
@@ -174,6 +175,7 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
   <%= erb :'register/role', locals: locals %>
   <%= erb :'register/password', locals: locals %>
   <%= erb :'register/get-app', locals: locals %>
+  <%= erb :'register/maintenance', locals: locals %>
 
   <form id="hidden-inputs">
     <input type="hidden" name="teacher_sig" value="<%= teacher %>">
