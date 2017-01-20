@@ -95,7 +95,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Le envíaremos un texto pronto con los libros de #{teacher.signature}" 
+      text[:info] = "Storytime para iPhone llega en la semana que viene! Le enviamos la app con libros en el Viernes."
       text[:subtitle_maintenance] = "Consigue libros gratis de #{teacher.signature} directamente en su celular"
 
       text[:header_app] = "Consigue StoryTime"
@@ -130,7 +130,7 @@ class Register < Sinatra::Base
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "We'll text you in a few days with #{teacher.signature}'s books!"
+      text[:info] = "Storytime for iPhone comes out in one week! We will text you the app with books next Friday"
       text[:subtitle_maintenance] = "Get free books from #{teacher.signature} right on your phone"
 
       # get-app
@@ -336,7 +336,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Le envíaremos un texto pronto con los libros de #{params[:teacher_sig]}" 
+      text[:info] = "Storytime para iPhone llega en la semana que viene! Le enviamos la app con libros en el Viernes."
 
       text[:subtitle] = "Consigue libros gratis de #{params[:teacher_sig]} directamente en su celular"
     else
@@ -345,7 +345,7 @@ class Register < Sinatra::Base
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "We'll text you in a few days with #{params[:teacher_sig]}'s books!"
+      text[:info] = "Storytime for iPhone comes out in one week! We will text you the app with books next Friday"
 
 
       text[:subtitle] = "Get free books from #{params[:teacher_sig]} right on your phone"
