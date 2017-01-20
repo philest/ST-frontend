@@ -125,8 +125,6 @@ $(document).ready(function () {
     // otherwise, gather everything from the forms!
     $('body').addClass('modalTransition');
     $('#main-signup-form').submit();
-
-
   });
 
   // 
