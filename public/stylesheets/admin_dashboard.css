@@ -9,6 +9,19 @@
   display: inline-block;
 }
 
+.teacher-modal-btn img {
+  opacity: .7;
+  filter: alpha(opacity=70); /* For IE8 and earlier */
+
+}
+
+.teacher-modal-btn:hover img {
+  opacity: 1;
+  filter: alpha(opacity=70); /* For IE8 and earlier */
+  transition-duration: 400ms;
+}
+
+
 #inviteTeachersModal .modal-content {
   height: 85vh;
   width: 55vw;
