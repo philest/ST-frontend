@@ -118,7 +118,8 @@ class App < Sinatra::Base
     params['password'] = BCrypt::Password.create params['password']
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
     
-    if params['first_name'].downcase != 'test' or (ENV['RACK_ENV'] == 'development')
+
+    if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
       notify_admins("Educator joined freemium", params.to_s)
     end
 
@@ -131,8 +132,8 @@ class App < Sinatra::Base
   end
 
   get '/freemium-signup' do
-    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
-       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
+    if [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? nil or
+       [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? ''
        redirect to '/'
     end
 
@@ -148,7 +149,7 @@ class App < Sinatra::Base
     params['password'] = BCrypt::Password.create params['password']
     puts "in /freemium-signup new educator #{params} wants to sign up!"
 
-    if params['first_name'].downcase != 'test' or (ENV['RACK_ENV'] == 'development')
+    if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
       notify_admins("Educator finished freemium signup", params.to_s)
     end
 
