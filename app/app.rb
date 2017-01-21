@@ -122,17 +122,17 @@ class App < Sinatra::Base
       notify_admins("Educator joined freemium", params.to_s)
     end
 
-    flash[:first_name] = params['first_name']
-    flash[:last_name]  = params['last_name']
-    flash[:email]      = params['email']
-    flash[:password]   = params['password']
+    session[:first_name] = params['first_name']
+    session[:last_name]  = params['last_name']
+    session[:email]      = params['email']
+    session[:password_digest]   = params['password']
 
     redirect to "/freemium-signup"
   end
 
   get '/freemium-signup' do
-    if [flash[:first_name], flash[:last_name], flash[:email], flash[:password]].include? nil or
-       [flash[:first_name], flash[:last_name], flash[:email], flash[:password]].include? ''
+    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
+       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
        redirect to '/'
     end
 
