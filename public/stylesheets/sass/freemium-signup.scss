@@ -74,6 +74,8 @@ p.school-name {
   display: flex;
   align-items: center;
 
+  
+
   &.invite-teacher {
     height: 85vh;
 
@@ -297,6 +299,11 @@ label.error {
   width: 100%;
 }
 
+#backToHome {
+    width: 75%;
+    margin: 0 auto;
+  }
+
 button#join {
   color: white;
   font-weight: normal;
@@ -326,6 +333,17 @@ button#join {
   .container {
     width: 80%;
     margin: 0 auto;
+
+  }
+
+  #invite-teacher-form, #educator-signature-form {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  #backToHome {
+    width: 60%;
+    margin: 0 auto;
   }
 
   .role .container {
@@ -346,6 +364,25 @@ button#join {
 @media screen and (min-width: 48em) {
   .container {
     width: 50%;
+    margin: 0 auto;
+
+     &#parent {
+      float: right;
+    }
+
+    &#parent, &#admin, &#teacher {
+      min-width: 14em;
+      width: 60%;
+    }
+
+    &#admin {
+      float: left;
+    }
+
+  }
+
+  #invite-teacher-form, #educator-signature-form {
+    width: 65%;
     margin: 0 auto;
   }
 
