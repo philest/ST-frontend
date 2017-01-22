@@ -172,134 +172,135 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
   <!-- navbar -->
 
   <%= erb :'freemium-signup/role' %>
-  <%= erb :'freemium-signup/password' %>
-
-  <%= erb :'freemium-signup/maintenance' %>
+  <%= erb :'freemium-signup/invite-teacher' %>
+  <%= erb :'freemium-signup/signature' %>
+  <%= erb :'freemium-signup/school-info' %>
+  <%= erb :'freemium-signup/success' %>
 
 <footer>
 
      <script>
 
-      // Trigger on first sign up button tap
-      function IdentifyUser() { 
-          // TODO: phone_num = grab the user's phone number (string)
-          // TDOO: full_name = grab the user's full name
-         // TODO: teacher_name = grab the teacher name
-          var phone_num = $('#register input[name=phone]').val();
-          console.log(phone_num);
+      // // Trigger on first sign up button tap
+      // function IdentifyUser() { 
+      //     // TODO: phone_num = grab the user's phone number (string)
+      //     // TDOO: full_name = grab the user's full name
+      //    // TODO: teacher_name = grab the teacher name
+      //     var phone_num = $('#register input[name=phone]').val();
+      //     console.log(phone_num);
 
-          var full_name = $('#register input[name=name]').val();
-          console.log(full_name);
+      //     var full_name = $('#register input[name=name]').val();
+      //     console.log(full_name);
 
-          var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
-          console.log(teacher_name);
+      //     var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
+      //     console.log(teacher_name);
 
-          mixpanel.people.append({
-            "full_name": full_name,
-            "phone": phone_num
-            // "teacher_name": teacher_name
-          });
+      //     mixpanel.people.append({
+      //       "full_name": full_name,
+      //       "phone": phone_num
+      //       // "teacher_name": teacher_name
+      //     });
 
-      }
+      // }
 
-      // Trigger when the first signup button is Tapped. 
-      function SignupButtonClicked() {
-        console.log('signup button clicked');
-        mixpanel.track("Signup Button Clicked");
-      }
+      // // Trigger when the first signup button is Tapped. 
+      // function SignupButtonClicked() {
+      //   console.log('signup button clicked');
+      //   mixpanel.track("Signup Button Clicked");
+      // }
 
-      // Trigger when the Password button is tapped. 
-      function PasswordButtonClicked() {
-        console.log('password button clicked');
-        mixpanel.track("Password Button Clicked");
-      }
+      // // Trigger when the Password button is tapped. 
+      // function PasswordButtonClicked() {
+      //   console.log('password button clicked');
+      //   mixpanel.track("Password Button Clicked");
+      // }
 
-      // Trigger when the app download prompt is tapped.
-      function AppPromptClicked() {
-        console.log('app prompt clicked');
-        mixpanel.track("App Download Prompt Clicked");
-      }
+      // // Trigger when the app download prompt is tapped.
+      // function AppPromptClicked() {
+      //   console.log('app prompt clicked');
+      //   mixpanel.track("App Download Prompt Clicked");
+      // }
 
-     $('#page1link').click(function(event) {
-        // get name/email
-        console.log($('#register').serialize());
-        $.post('/register/user-start-registration', $('#register').serialize());
+     // $('#page1link').click(function(event) {
+     //    // get name/email
+     //    console.log($('#register').serialize());
+     //    $.post('/register/user-start-registration', $('#register').serialize());
 
-        // first identify user
-        IdentifyUser();
-        // then do other stuff
-        SignupButtonClicked();
-     });
-
-
-     $('#app-link').click(function(event) {
-        AppPromptClicked();
-     });
-
-     $('#page3link').click(function(event) {
-        // get name/email
-        var signupInfo = $("#register").serializeArray();
-
-        for (var i = 0; i < signupInfo.length; i++) {
-          var input = $('<input>')
-                        .attr('type', 'hidden')
-                        .attr('name', signupInfo[i]['name'])
-                        .val(signupInfo[i]['value']);
-          $('#password-form').append($(input));
-        }
-
-        // get role
-        // already gotten from earlier script
-        // submit password form using AJAX request
-        console.log($('#password-form').serialize());
-        $.post('/register/user-finish-registration', $('#password-form').serialize());
-
-        PasswordButtonClicked();
-
-     });
+     //    // first identify user
+     //    IdentifyUser();
+     //    // then do other stuff
+     //    SignupButtonClicked();
+     // });
 
 
-      $(document).on('click', '#page1link',function(event){
+     // $('#app-link').click(function(event) {
+     //    AppPromptClicked();
+     // });
 
-        var ValidStatus = $("#register").valid();
-        // console.log(ValidStatus);
-        if (ValidStatus == false) {
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-        }
-      });
+     // $('#page3link').click(function(event) {
+     //    // get name/email
+     //    var signupInfo = $("#register").serializeArray();
 
-      $(document).on('click', '#page3link',function(event){
+     //    for (var i = 0; i < signupInfo.length; i++) {
+     //      var input = $('<input>')
+     //                    .attr('type', 'hidden')
+     //                    .attr('name', signupInfo[i]['name'])
+     //                    .val(signupInfo[i]['value']);
+     //      $('#password-form').append($(input));
+     //    }
 
-        var ValidStatus = $("#password-form").valid();
-        // console.log(ValidStatus);
-        if (ValidStatus == false) {
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-        }
-      });
+     //    // get role
+     //    // already gotten from earlier script
+     //    // submit password form using AJAX request
+     //    console.log($('#password-form').serialize());
+     //    $.post('/register/user-finish-registration', $('#password-form').serialize());
+
+     //    PasswordButtonClicked();
+
+     // });
+
+
+      // $(document).on('click', '#page1link',function(event){
+
+      //   var ValidStatus = $("#register").valid();
+      //   // console.log(ValidStatus);
+      //   if (ValidStatus == false) {
+      //       event.preventDefault();
+      //       event.stopPropagation();
+      //       return false;
+      //   }
+      // });
+
+      // $(document).on('click', '#page3link',function(event){
+
+      //   var ValidStatus = $("#password-form").valid();
+      //   // console.log(ValidStatus);
+      //   if (ValidStatus == false) {
+      //       event.preventDefault();
+      //       event.stopPropagation();
+      //       return false;
+      //   }
+      // });
       
-      function SignupPageVisited() {
-          var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
-          var class_code = $('#hidden-inputs input[name=class_code]').val();
-          var teacher_id = $('#hidden-inputs input[name=teacher_id]').val();
-          var locale = $('#hidden-inputs input[name=locale]').val();
-          mixpanel.people.append({
-            "teacher_name": teacher_name,
-            "class_code": class_code,
-            "teacher_id": teacher_id,
-            "locale": locale
-          });
-          mixpanel.track("First Signup Page Visited");
-      }
+      // function SignupPageVisited() {
+      //     var teacher_name = $('#hidden-inputs input[name=teacher_sig]').val();
+      //     var class_code = $('#hidden-inputs input[name=class_code]').val();
+      //     var teacher_id = $('#hidden-inputs input[name=teacher_id]').val();
+      //     var locale = $('#hidden-inputs input[name=locale]').val();
+      //     mixpanel.people.append({
+      //       "teacher_name": teacher_name,
+      //       "class_code": class_code,
+      //       "teacher_id": teacher_id,
+      //       "locale": locale
+      //     });
+      //     mixpanel.track("First Signup Page Visited");
+      // }
 
-      $(document).ready(function() {
-        SignupPageVisited();
+      // $(document).ready(function() {
+      //   SignupPageVisited();
 
-        // console.log('distinct_id = ' +distinct_id);
-      });
+      //   // console.log('distinct_id = ' +distinct_id);
+      // });
 
 
 

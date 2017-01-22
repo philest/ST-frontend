@@ -20,6 +20,8 @@
         <input type="hidden" name="role" value="">
       </form>
         
+
+        <!-- fades to page2, which is the teacher invite modal -->
         <a class="transition-link" href="#page2" data-transition="fade">
           
           <div class="container choose-educator-role" id="parent">
@@ -32,18 +34,13 @@
                       </div>
                     </div>
 
-   
-                
-                <!-- <button class="role" type="submit"> -->
-                <!-- </button> -->
-
-
             </div> <%# end pure-g %>
           </div>
         </a>
         
 
-        <a class="transition-link" href="#page2" data-transition="fade">
+      <!-- redirect to page3: the teacher signature modal -->
+        <a class="transition-link" href="#page3" data-transition="fade">
           <div class="container choose-educator-role" id="teacher">
             <div class="pure-g">
               <div class="pure-u-1 role-form">
@@ -54,14 +51,14 @@
                 </div>
               </div>
 
-                <!-- <button class="role" type="submit"> -->
-                <!-- </button> -->
+
 
             </div> <%# end pure-g %>
           </div>
         </a>
         
-        <a class="transition-link" href="#page2" data-transition="fade">
+        <!-- redirect to page3: the teacher signature modal -->
+        <a class="transition-link" href="#page3" data-transition="fade">
           <div class="container choose-educator-role" id="admin">
             <div class="pure-g">
               <div class="pure-u-1 role-form">
@@ -72,8 +69,6 @@
                 </div>
               </div>
 
-                <!-- <button class="role" type="submit"> -->
-                <!-- </button> -->
             </div> <%# end pure-g %>
           </div>
         </a>
@@ -82,32 +77,28 @@
 
   </div> <%# wrapper %>
 
-
 <!-- scripts and styles -->
  <script type="text/javascript">
       $(document).ready(function() {
         $('.container.choose-educator-role').click(function(event) {
           // get the id
           var role = $(this).attr('id');
-
-          $('form#password-form').find('input[name=role]').val(role);
+          $('form#choose-educator-role-form').find('input[name=role]').val(role);
+          $('form#invite-teacher-form').find('input[name=role]').val(role);
           
         });
       });
-
-
-
 </script>
 
 
   <!-- Mixpanel Form tracking -->
  <script>
- function formTracker() { 
-    mixpanel.track_forms('#teacher-form', 'Selected Teacher Role');
-    mixpanel.track_forms('#parent-form', 'Selected Parent Role');
-    mixpanel.track_forms('#admin-form', 'Selected Admin Role');
-  }
-  window.onload = formTracker;
+ // function formTracker() { 
+ //    mixpanel.track_forms('#teacher-form', 'Selected Teacher Role');
+ //    mixpanel.track_forms('#parent-form', 'Selected Parent Role');
+ //    mixpanel.track_forms('#admin-form', 'Selected Admin Role');
+ //  }
+ //  window.onload = formTracker;
 
 </script>
 
