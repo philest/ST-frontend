@@ -8,16 +8,12 @@
 
       <!-- Modal Signup -->
       <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-      <div class="modal fade" id="schoolInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <!-- <div class="modal-header" data-dismiss="modal">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              <div class="navbar-logo" id="modal-logo"></div> 
-            </div> -->
-            <div class="modal-body">
+      <div data-role="page" class="wrapper" id="page4">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body">
+
+          <div class="container">
               <h2 class="modal-signup-heading">Add your school</h2>
               <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
 
@@ -86,12 +82,34 @@
                       </select>
                     </div>
                     <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
-
-                    <button id="school-info-button" data-dismiss='modal' class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
+                     
                 </div>
-              </form>
 
-            </div>
+                <input type="hidden" name="role" value="">
+                <input type="hidden" name="signature" value="">
+
+                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+                  Continue
+                </a>
+      
+                <script>
+                  $('#page4link').click(function(event){
+                    // get post data from 
+                    //  1. role
+                    //  2. signature
+                    // append to this form.
+                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                    $('form#school-info').find('input[name=role]').val(role);
+
+                    var sig = $('form#educator-signature-form').find('input[name=role]').val();
+                    $('form#school-info').find('input[name=signature]').val(sig);                
+
+                    $.post('/freemium-signup', $('form#school-info').serialize());
+                  });
+
+                </script>
+
+              </form>
           </div>
         </div>
       </div>

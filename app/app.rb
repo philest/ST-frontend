@@ -142,17 +142,24 @@ class App < Sinatra::Base
 
 
   post '/freemium-signup' do
-
-    # get password
-    require 'bcrypt'
-    puts "in /freemium-signup new educator #{params} wants to sign up!"
-    params['password'] = BCrypt::Password.create params['password']
-    puts "in /freemium-signup new educator #{params} wants to sign up!"
-
-    if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
-      notify_admins("Educator finished freemium signup", params.to_s)
+    # handle session data and email us with new info
+    case params['role']
+    when 'parent'
+      puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
+    when 'teacher', 'admin'
+      puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
+    else
+      puts "failure, missing some params. params=#{params} and session=#{session.inspect}"
     end
+    # # get password
+    # require 'bcrypt'
+    # puts "in /freemium-signup new educator #{params} wants to sign up!"
+    # params['password'] = BCrypt::Password.create params['password']
+    # puts "in /freemium-signup new educator #{params} wants to sign up!"
 
+    # if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+    #   notify_admins("Educator finished freemium signup", params.to_s)
+    # end
     return 200
   end
 
