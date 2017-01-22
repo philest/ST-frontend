@@ -6,22 +6,34 @@
             display: block;
             margin: 0 auto;
      }
+
+     .wrapper {
+        background: #3F3F5E;
+     }
 </style>
 
 <div data-role="page" class="wrapper" id="page5">
   <%= erb :'components/navbar' %>
 
-        <div data-role="main" class="pure-g">
-          <div class="pure-u-1">
-              <div id="app-icon">
-                <img style="margin-top:40px;" src="/images/logo-large.png"  alt="">
-              </div>
-              <div id="monday" style="margin-bottom: 60px;">
-                <h1>Congrats!</h1>
-                <h2 style="font-weight: normal;">We'll let you know soon when your invite is ready.</h2>
-              </div>
+        <div data-role="main" class="body pure-g">
+          <div class="container">
+            <div class="pure-u-1">
+           
+                <div id="monday">
+                  <h1>Congrats!</h1>
+                  <h2 style="font-weight: normal;">We'll let you know soon when your invite is ready.</h2>
+                </div>
 
-             
+                <div id="app-icon">
+                  <img src="/images/logo-large.png"  alt="">
+                </div>
+
+
+                <a id="backToHome" data-ajax="false" class="transition-link ui-btn web-mobile-signup-button" href="/">
+                    Back to HomePage
+                </a>
+               
+            </div>
           </div>
         </div> <%# end pure-g %>
 

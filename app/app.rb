@@ -143,23 +143,31 @@ class App < Sinatra::Base
 
   post '/freemium-signup' do
     # handle session data and email us with new info
+    if [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? nil or
+       [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? ''
+       redirect to '/'
+    end
+
     case params['role']
     when 'parent'
       puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
+      # check that teacher email is there
+
+      if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+        notify_admins("Parent finished freemium signup", session.merge(params).to_s)
+      end
+
     when 'teacher', 'admin'
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
+
+      if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+        notify_admins("#{params['role']} finished freemium signup", session.merge(params).to_s)
+      end
     else
       puts "failure, missing some params. params=#{params} and session=#{session.inspect}"
+      redirect to '/'
     end
-    # # get password
-    # require 'bcrypt'
-    # puts "in /freemium-signup new educator #{params} wants to sign up!"
-    # params['password'] = BCrypt::Password.create params['password']
-    # puts "in /freemium-signup new educator #{params} wants to sign up!"
 
-    # if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
-    #   notify_admins("Educator finished freemium signup", params.to_s)
-    # end
     return 200
   end
 

@@ -3,6 +3,7 @@ html{ font-size:100%; }
 body {
   font-size: 1em;
   font-family: 'Karla';
+  color: white;
 }
 
 #override a.web-mobile-signup-button {
@@ -24,6 +25,7 @@ a.transition-link {
   &.ui-btn {
     margin-top: 1.2em;
     margin-bottom: 3em;
+    border-radius: 0.5em;
   }
 
 }  
@@ -50,7 +52,7 @@ p.school-name {
 }
 
 #page1, #page2, #page3 {
-  background: #f2f3f5;
+  background: #3F3F5E;
 }
 
 .wrapper.hiddenPage {
@@ -63,7 +65,7 @@ p.school-name {
 }*/
 
 .body {
-  background: #f2f3f5;
+  background: #3F3F5E;
   /*display: table-cell; */
   /*height: 100vh;*/
   vertical-align: middle;
@@ -71,6 +73,18 @@ p.school-name {
   /*display:inline-block;*/
   display: flex;
   align-items: center;
+
+  &.invite-teacher {
+    height: 85vh;
+
+    .container {
+      border-top-left-radius: 0.5em;
+      border-top-right-radius: 0.5em;
+      
+    }
+
+  }
+
 }
 .class-information {
   /*margin-top: 20px;*/
@@ -193,6 +207,34 @@ label.error {
 .password-text {
   text-align: center;
   line-height: 20px;
+  color: white;
+}
+
+.invite-teacher {
+  h1 {
+    font-family: 'Karla';
+    display: inline-block;
+    font-weight:600;
+    font-size:1.8em;
+  }
+
+  h3 {
+    font-family: 'Karla';
+    color: #4A4A4A;
+    font-weight: normal;
+    line-height: 1.3em;
+    max-width: 90%;
+    margin: 0 auto;
+    margin-bottom: 1.5em;
+  }
+
+}
+
+#invite-teacher-form {
+  a {
+    font-size: 1.3em;
+    border-radius: 0.5em; 
+  }
 }
 
 .password-text h1 {
@@ -266,10 +308,11 @@ button#join {
 }
 
 #app-icon img {
-  width: 105px;
+  width: 11em;
   height: auto;
   display: block; 
   margin: 0 auto;
+  padding-right: 2em;
 }
 
 
