@@ -107,6 +107,17 @@
                     $.post('/freemium-signup', $('form#school-info').serialize());
                   });
 
+                  $(document).on('click', '#page4link',function(event){
+
+                    var ValidStatus = $("#school-info").valid();
+                    // console.log(ValidStatus);
+                    if (ValidStatus == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return false;
+                    }
+                  });
+
                 </script>
 
               </form>

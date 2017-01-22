@@ -23,6 +23,21 @@
                       $('#page2link').click(function(event){
                         $.post('/freemium-signup', $('#invite-teacher-form').serialize());
                       });
+
+                      $(document).on('click', '#page2link',function(event){
+
+                        var ValidStatus = $("#invite-teacher-form").valid();
+                        // console.log(ValidStatus);
+                        if (ValidStatus == false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            return false;
+                        }
+                      });
+
+                      
+
+
                     </script>
 
                   </div>

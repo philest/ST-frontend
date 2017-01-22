@@ -17,6 +17,20 @@
                         <%= "Save" %>
                      </a>
 
+                     <script>
+                       $(document).on('click', '#page3link',function(event){
+
+                        var ValidStatus = $("#educator-signature-form").valid();
+                        // console.log(ValidStatus);
+                        if (ValidStatus == false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            return false;
+                        }
+                      });
+
+                     </script>
+
                   </div>
                 </form>
               </div>
