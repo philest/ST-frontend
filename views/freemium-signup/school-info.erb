@@ -101,7 +101,8 @@
                     var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                     $('form#school-info').find('input[name=role]').val(role);
 
-                    var sig = $('form#educator-signature-form').find('input[name=role]').val();
+                    var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
                     $('form#school-info').find('input[name=signature]').val(sig);                
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
