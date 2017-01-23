@@ -25,7 +25,7 @@ $( document ).ready(function() {
     console.log(data);
     mixpanel.people.set(data);
 
-    mixpanel.track('freemium registration submitted (mobile)'); 
+    mixpanel.track('freemium registration submitted', {'platform':'mobile'}); 
 
   });
 
@@ -45,7 +45,7 @@ $( document ).ready(function() {
     console.log(data);
     mixpanel.people.set(data);
 
-    mixpanel.track('freemium registration submitted (desktop)'); 
+    mixpanel.track('freemium registration submitted', {'platform':'desktop'}); 
 
     // $('#signup-name-password').submit();
 
