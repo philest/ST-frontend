@@ -4,6 +4,13 @@ body {
   font-size: 1em;
   font-family: 'Karla';
   color: transparent;
+  text-shadow: none !important;
+}
+
+#override .ui-page-theme-a {
+  h1 {
+    text-shadow: none;
+  }
 }
 
 #override a.web-mobile-signup-button {
