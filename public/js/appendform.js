@@ -16,6 +16,17 @@ $( document ).ready(function() {
                       .attr('name', 'email')
                       .val(email);
     $('#signup-name-password-mobile').append($(input));
+
+    var formdata = $("form#signup-name-password-mobile").serializeArray();
+    var data = {};
+    $(formdata).each(function(index, obj){
+        data[obj.name] = obj.value;
+    });
+    console.log(data);
+    mixpanel.people.set(data);
+
+    mixpanel.track('freemium registration submitted (mobile)'); 
+
   });
 
   $('#signup-name-password').submit(function(event) {
@@ -26,6 +37,15 @@ $( document ).ready(function() {
                       .val(email);
     $('#signup-name-password').append($(input));
 
+    var formdata = $("form#signup-name-password").serializeArray();
+    var data = {};
+    $(formdata).each(function(index, obj){
+        data[obj.name] = obj.value;
+    });
+    console.log(data);
+    mixpanel.people.set(data);
+
+    mixpanel.track('freemium registration submitted (desktop)'); 
 
     // $('#signup-name-password').submit();
 

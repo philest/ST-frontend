@@ -31,6 +31,8 @@ $(document).ready(function () {
   $('#signup-email-button').click(function(event) {
     event.preventDefault();
 
+
+
     $('#signup-email').validate({ // initialize the plugin
         rules: {
             email: {
@@ -42,12 +44,15 @@ $(document).ready(function () {
 
     var ValidStatus = $("#signup-email").valid();
     if (ValidStatus == false) {
+        mixpanel.track('invalid email given', {'platform':'desktop'});
         return false;
     }
 
     $('body').addClass('modalTransition');
 
     $('#signupNamePassword').modal('toggle');
+
+    mixpanel.track('email given', {'platform':'desktop'});
 
     // $("body").addClass("modal-open");
   });
@@ -70,6 +75,7 @@ $(document).ready(function () {
 
     var ValidStatus = $("#signup-name-password-mobile").valid();
     if (ValidStatus == false) {
+        mixpanel.track('invalid name-password given', {'platform':'mobile'});
         return false;
     }
 
@@ -96,6 +102,7 @@ $(document).ready(function () {
 
     var ValidStatus = $("#signup-name-password").valid();
     if (ValidStatus == false) {
+        mixpanel.track('invalid name-password given', {'platform':'desktop'});
         return false;
     }
     // we want to POST this, clear the first-signup-form, the move on to the next modal

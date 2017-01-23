@@ -20,9 +20,6 @@
                      </a>
 
                     <script>
-                      $('#page2link').click(function(event){
-                        $.post('/freemium-signup', $('#invite-teacher-form').serialize());
-                      });
 
                       $(document).on('click', '#page2link',function(event){
 
@@ -31,12 +28,22 @@
                         if (ValidStatus == false) {
                             event.preventDefault();
                             event.stopPropagation();
+                            mixpanel.track('invalid teacher email given'); 
                             return false;
                         }
+
+                        $.post('/freemium-signup', $('#invite-teacher-form').serialize());
+                        
+                        var formdata = $("form#invite-teacher-form").serializeArray();
+                        var data = {};
+                        $(formdata).each(function(index, obj){
+                            data[obj.name] = obj.value;
+                        });
+                        console.log(data);
+                        mixpanel.people.set(data);
+                        mixpanel('finished freemium signup');
+
                       });
-
-                      
-
 
                     </script>
 

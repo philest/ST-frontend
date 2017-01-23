@@ -54,7 +54,6 @@ class App < Sinatra::Base
   #   headers['Access-Control-Allow-Credentials'] = 'true'
   # end
 
-
   use Airbrake::Rack::Middleware
 
   #set mode (production or test)
@@ -63,8 +62,6 @@ class App < Sinatra::Base
   TEST ||= "test"
 
   tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
-
-
 
   #########  ROUTES  #########
 
@@ -89,7 +86,7 @@ class App < Sinatra::Base
     when 'teacher'
       redirect to '/dashboard'
     else
-      erb :homepage
+      erb :homepage, locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
   end
 
@@ -136,8 +133,8 @@ class App < Sinatra::Base
        [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? ''
        redirect to '/'
     end
-
-    erb :'purple-modal-form'
+    
+    erb :'purple-modal-form', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
   end
 
 
