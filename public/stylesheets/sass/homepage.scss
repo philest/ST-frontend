@@ -534,6 +534,11 @@ h3.modal-subheading {
 }
 .field .input {
   margin: 0 0 8px;
+
+  #signup-email & {
+    margin-bottom: 12px;
+  }
+
 }
 
 .field {
