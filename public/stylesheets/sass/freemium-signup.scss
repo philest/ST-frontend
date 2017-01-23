@@ -3,13 +3,18 @@ html{ font-size:100%; }
 body {
   font-size: 1em;
   font-family: 'Karla';
-  color: white;
+  color: transparent;
 }
 
 #override a.web-mobile-signup-button {
   background-color: #ed7a44;
   color: white;
   font-weight: normal;
+}
+
+.pure-g.all-roles {
+  width: 100%;
+  margin: 0 auto;
 }
 
 
@@ -23,9 +28,12 @@ a.transition-link {
   font-family: 'Karla';
 
   &.ui-btn {
-    margin-top: 1.2em;
+    margin-top: 1em;
     margin-bottom: 3em;
     border-radius: 0.5em;
+    border:none;
+    padding: .5em 1em;
+    text-shadow: none;
   }
 
 }  
@@ -34,8 +42,13 @@ a.transition-link {
 body {
   font-family: 'Karla';
   line-height: 32px;
-  background: #f2f3f5;
+  // background: #f2f3f5;
+  background: #3E415E;
+
+
 }
+
+
 
 button.role {
   width: 100%;
@@ -51,8 +64,13 @@ p.school-name {
   font-size: 1.4em; 
 }
 
+#page4link {
+  margin-top: 2em;
+}
+
 #page1, #page2, #page3 {
-  background: #3F3F5E;
+  // background: #3F3F5E;
+  background: #3E415E;
 }
 
 .wrapper.hiddenPage {
@@ -65,7 +83,8 @@ p.school-name {
 }*/
 
 .body {
-  background: #3F3F5E;
+  // background: #3F3F5E;
+  background: #3E415E;
   /*display: table-cell; */
   /*height: 100vh;*/
   vertical-align: middle;
@@ -140,6 +159,8 @@ p.school-name {
 
 }
 
+
+
 .password.container {
   padding-top: 1.5em;
   margin-top: 0em;
@@ -155,6 +176,12 @@ p.school-name {
   display: block;
   margin-left: auto;
   margin-right: auto;
+
+  &:hover {
+    background: #E7ECEF;
+  }
+
+
 }
 
 .role .body {
@@ -202,7 +229,7 @@ label.error {
 }
 .field .input {
   margin-bottom: 0px;
-  line-height: 2.5em;
+  line-height: 2em;
   font-size: 1em;
 }
 
@@ -285,6 +312,8 @@ label.error {
   /*color: #5e5eb7;*/
   color: #0b7fbd;
   line-height: 100%;
+  font-size: 1.05em;
+  font-family: 'Karla';
 }
 
 .role p {
@@ -293,6 +322,8 @@ label.error {
   font-weight: normal;
   width: 90%;
   margin: 0 auto;
+  font-size: 0.9em;
+  font-family: 'Karla';
 }
 
 .get-app-button {
@@ -302,6 +333,7 @@ label.error {
 #backToHome {
     width: 75%;
     margin: 0 auto;
+    margin-bottom: 1em;
   }
 
 button#join {
@@ -320,6 +352,7 @@ button#join {
   display: block; 
   margin: 0 auto;
   padding-right: 2em;
+  margin-bottom: 1em;
 }
 
 
@@ -336,6 +369,10 @@ button#join {
 
   }
 
+  .pure-g.all-roles {
+    width: 80%;
+  }
+
   #invite-teacher-form, #educator-signature-form {
     width: 80%;
     margin: 0 auto;
@@ -344,6 +381,7 @@ button#join {
   #backToHome {
     width: 60%;
     margin: 0 auto;
+    margin-bottom: 1em;
   }
 
   .role .container {
@@ -357,7 +395,7 @@ button#join {
 
   .role .body {
     display: block;
-    padding-top: 2em;
+    padding-top: 0em;
   }
 }
 
@@ -366,13 +404,13 @@ button#join {
     width: 50%;
     margin: 0 auto;
 
-     &#parent {
+     &#teacher {
       float: right;
     }
 
     &#parent, &#admin, &#teacher {
       min-width: 14em;
-      width: 60%;
+      width: 80%;
     }
 
     &#admin {
@@ -381,8 +419,16 @@ button#join {
 
   }
 
+  .role .body {
+    padding-top: 7em;
+  }
+
+  .pure-g.all-roles {
+    width: 100%;
+  }
+
   #invite-teacher-form, #educator-signature-form {
-    width: 65%;
+    width: 72%;
     margin: 0 auto;
   }
 
@@ -393,6 +439,12 @@ button#join {
     margin-right: auto;
     margin-top: 16px;
     margin-bottom: 16px;
+  }
+}
+
+@media screen and (min-width: 64em) {
+  .pure-g.all-roles {
+    width: 70%;
   }
 }
 

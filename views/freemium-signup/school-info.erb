@@ -25,7 +25,8 @@
                     <input name="school_city" autocomplete="off" placeholder="" class="input" required>
                     <label class="label">State</label>
                     <select class="form-control" id="state" name="school_state">
-                        <option value="">N/A</option>
+                        <option value="">Select your state</option>
+                        <option value="International">International</option>
                         <option value="AK">Alaska</option>
                         <option value="AL">Alabama</option>
                         <option value="AR">Arkansas</option>
@@ -115,7 +116,6 @@
                     $('form#school-info').find('input[name=signature]').val(sig);                
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
-
 
                     var formdata = $("form#school-info").serializeArray();
                     var data = {};
