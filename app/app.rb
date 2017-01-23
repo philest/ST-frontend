@@ -90,6 +90,10 @@ class App < Sinatra::Base
     end 
   end
 
+  get '/app' do
+    erb :'get-the-app'
+  end
+
   # get '/test' do
   #   puts "params = #{params}"
   #   params['fun'] = "this is actually not very fun"

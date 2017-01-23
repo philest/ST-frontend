@@ -44,7 +44,8 @@ class Register < Sinatra::Base
     puts "IN REGISTER /CLASS/:CLASS_CODE"
 
     if params[:class_code].downcase == 'app'
-      redirect to 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime'
+      redirect to '../../app'
+      # redirect to 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime'
     end
 
     educator = educator?(params[:class_code])
