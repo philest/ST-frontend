@@ -87,6 +87,8 @@
           var role = $(this).attr('id');
           $('form#choose-educator-role-form').find('input[name=role]').val(role);
           $('form#invite-teacher-form').find('input[name=role]').val(role);
+
+          mixpanel.track('role ' + role + ' chosen');
           
         });
       });

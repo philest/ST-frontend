@@ -5,7 +5,6 @@
     margin-bottom: 0.5em;
   }
 </style>
-
       <!-- Modal Signup -->
       <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
       <div data-role="page" class="wrapper" id="page4">
@@ -82,7 +81,6 @@
                       </select>
                     </div>
                     <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
-                     
                 </div>
 
                 <input type="hidden" name="role" value="">
@@ -93,7 +91,18 @@
                 </a>
       
                 <script>
-                  $('#page4link').click(function(event){
+        
+                  $(document).on('click', '#page4link',function(event){
+
+                    var ValidStatus = $("#school-info").valid();
+                    // console.log(ValidStatus);
+                    if (ValidStatus == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        mixpanel.track('invalid school info given');
+                        return false;
+                    }
+
                     // get post data from 
                     //  1. role
                     //  2. signature
@@ -106,17 +115,16 @@
                     $('form#school-info').find('input[name=signature]').val(sig);                
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
-                  });
 
-                  $(document).on('click', '#page4link',function(event){
 
-                    var ValidStatus = $("#school-info").valid();
-                    // console.log(ValidStatus);
-                    if (ValidStatus == false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        return false;
-                    }
+                    var formdata = $("form#school-info").serializeArray();
+                    var data = {};
+                    $(formdata).each(function(index, obj){
+                        data[obj.name] = obj.value;
+                    });
+                    console.log(data);
+                    mixpanel.people.set(data);
+                    mixpanel('finished freemium signup');
                   });
 
                 </script>
