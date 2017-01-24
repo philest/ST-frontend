@@ -22,7 +22,6 @@ module RoutesHelper
     Follower.create(name: "none",
                   email: params[:email])
   
-    if MODE == PRO
 
       # Report new followers.
       Pony.mail(:to => 'phil.esterman@yale.edu',
@@ -31,7 +30,6 @@ module RoutesHelper
             :subject => "ST: #{params[:email]} subscribed for updates.",
             :body => "Now, \
                       there's #{Follower.count} people subscribed.")
-    end
     flash[:notice] = "Great! We'll keep you updated."
 
   end
@@ -42,14 +40,12 @@ module RoutesHelper
     # HTTParty.post(ENV['demo_url'], body: params)
     # puts "\nPosting demo params to #{ENV['demo_url']}\n"
     
-    if MODE == PRO
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: Demo requested.",
             :body => "Here's all the details so you can follow-up:\n #{params}")
-    end
 
   end
 
@@ -57,14 +53,12 @@ module RoutesHelper
 
     Invite.create(email: params[:email]) 
 
-    if MODE == PRO
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: A new person (#{params[:email]}) signed up.",
             :body => "They're on the list to get an invite.")
-    end
 
   end
 
@@ -80,7 +74,6 @@ module RoutesHelper
 
     puts "Posted #{params} to #{ENV['birdv_url']}"
 
-    if MODE == PRO
 
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
@@ -90,7 +83,6 @@ module RoutesHelper
                            #{(params.count / 2)-1} student.",
             :body => "They enrolled: \
                       #{params}.")
-    end
     flash[:notice] = "Great! Your class was successfully added."
   end
 
