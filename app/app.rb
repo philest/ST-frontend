@@ -953,9 +953,70 @@ class App < Sinatra::Base
   end
 
   post '/enroll_families_form_success' do 
+    puts "params = #{params}"
 
-    enroll_families(params)
-    erb :internal_success
+    puts "session = #{session.inspect}"
+
+    teacher = Teacher.where(id: session['educator']['id']).first
+    if teacher.nil?
+      return 404
+    end
+
+    25.times do |idx| # TODO: this loop is shit
+      
+      if ![nil, ''].include? params["phone_#{idx}"]
+        phone_num   = params["phone_#{idx}"]
+        child_name  = params["name_#{idx}"]
+      else 
+        next      
+      end
+
+      # TODO some day: when insertion fails, let teacher know that parent already exists
+      # and that if they click confirm, they may be changing the kid's number (make this
+      # happen in seperate worker?)
+      begin
+        # I sure hope the phone number made it in!
+        parent = User.where(phone: phone_num).first
+
+        # create new parent if didn't already exists
+        if parent.nil? then 
+          parent = User.create(:phone => phone_num, platform: 'app')
+          parent.state_table.update(subscribed?: false)
+          # parent.state_table.update(story_number: 0)
+        end
+
+        # update parent's student name
+        if not child_name.nil? then parent.update(:child_name => child_name) end
+
+        # add parent to teacher!
+        teacher.signup_user(parent)
+        puts "added #{parent.child_name if not params["name_#{idx}"].nil?}, phone => #{parent.phone}"
+
+
+        # issue the text messages
+        preschooler = child_name.split.first
+        msg = "Hi it's #{teacher.school.signature}! #{teacher.signature} is using StoryTime to send free books for #{preschooler}.\n\nGet it at stbooks.org/#{teacher.code.split('|').first}"
+        MessageWorker.perform_async(msg, phone_num, STORYTIME_NO)
+      
+      rescue Sequel::Error => e
+        puts e.message
+      end     
+    end
+
+
+
+    # Report new enrollees.
+    Pony.mail(:to => 'phil.esterman@yale.edu',
+          :cc => 'david.mcpeek@yale.edu',
+          :from => 'phil.esterman@yale.edu',
+          :subject => "ST: A new teacher (#{params[:teacher_signature]}) enrolled \
+                         #{(params.count / 2)-1} student.",
+          :body => "They enrolled: \
+                    #{params}.")
+    # flash[:notice] = "Great! Your class was successfully added."
+
+    return 200
+
   end
 
 

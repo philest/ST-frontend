@@ -69,10 +69,48 @@ module RoutesHelper
     params = params.delete_if { |k, v| v.empty? }
     puts params
 
-    # send the families to birdv
-    HTTParty.post(ENV['birdv_url'], body: params)
+    puts "Posted #{params} to #{ENV['birdv_url']}" 
 
-    puts "Posted #{params} to #{ENV['birdv_url']}"
+    # Create the parents
+    25.times do |idx| # TODO: this loop is shit
+      
+      if params["phone_#{idx}"] != nil
+        phone_num   = params["phone_#{idx}"]
+        child_name  = params["name_#{idx}"]
+      else 
+        next      
+      end
+
+      # TODO some day: when insertion fails, let teacher know that parent already exists
+      # and that if they click confirm, they may be changing the kid's number (make this
+      # happen in seperate worker?)
+      begin
+        # I sure hope the phone number made it in!
+        parent = User.where(phone: phone_num).first
+
+        # create new parent if didn't already exists
+        if parent.nil? then 
+          parent = User.create(:phone => phone_num, platform: 'app')
+          parent.state_table.update(subscribed?: false)
+          # parent.state_table.update(story_number: 0)
+        end
+
+        # update parent's student name
+        if not child_name.nil? then parent.update(:child_name => child_name) end
+
+        # add parent to teacher!
+        teacher.add_user(parent)
+        puts "added #{parent.child_name if not params["name_#{idx}"].nil?}, phone => #{parent.phone}"
+
+        if !teacher.school.nil? # if this teacher belongs to a school
+          teacher.school.add_user(parent)
+        end
+      
+      rescue Sequel::Error => e
+        puts e.message
+        # TODO: send email to Phil...
+      end     
+    end
 
 
       # Report new enrollees.
