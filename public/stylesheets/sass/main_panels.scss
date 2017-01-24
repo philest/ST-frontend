@@ -34,6 +34,7 @@ a#navbar-title {
     text-align: center;
     color: #6B6E72;
     font-size: 1.1em;
+    font-weight: normal;
   }
 }
 
@@ -50,17 +51,20 @@ button#main-signup-button {
 } // end splash container (which shouldn't be shown on mobile!!!!)
 
 
+.pure-button {
+  border-radius: 7px;
+}
 .splash-new-mobile {
 
   min-height: 550px; // 550px
   display: flex;
   align-items: center; 
   margin: 0 auto;
-  background: url('https://d2yudi7y1eei74.cloudfront.net/assets/splash-new.jpg') center top/cover no-repeat #ba9e70;
+  background: url('https://d2yudi7y1eei74.cloudfront.net/assets/splash-new.jpg') right -178px top 0px ;
 
 
   .splash-container {
-    background-color: #EEEDEC;
+    background-color: rgba(238, 237, 236, 0.9);
     margin: 1em;
     width: 100%;
     border-radius: 0.3em;

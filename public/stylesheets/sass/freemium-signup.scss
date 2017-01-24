@@ -13,6 +13,14 @@ body {
   }
 }
 
+#parent-mobile {
+  display: block;
+}
+
+#parent-desktop {
+  display: none;
+}
+
 #override a.web-mobile-signup-button {
   background-color: #ed7a44;
   color: white;
@@ -36,7 +44,7 @@ a.transition-link {
 
   &.ui-btn {
     margin-top: 1em;
-    margin-bottom: 3em;
+    margin-bottom: 2.2em;
     border-radius: 0.5em;
     border:none;
     padding: .5em 1em;
@@ -266,11 +274,20 @@ label.error {
 
 }
 
+#override .purple-subtitle {
+  color:#7B7B7B;
+
+
+}
+
 #invite-teacher-form {
   a {
     font-size: 1.3em;
     border-radius: 0.5em; 
   }
+
+  max-width: 85%;
+  margin: 0 auto;
 }
 
 .password-text h1 {
@@ -376,6 +393,7 @@ button#join {
 
   }
 
+
   .pure-g.all-roles {
     width: 80%;
   }
@@ -386,7 +404,7 @@ button#join {
   }
 
   #backToHome {
-    width: 60%;
+    width: 50%;
     margin: 0 auto;
     margin-bottom: 1em;
   }
@@ -407,6 +425,14 @@ button#join {
 }
 
 @media screen and (min-width: 48em) {
+
+  #parent-mobile {
+    display: none;
+  }
+
+  #parent-desktop {
+    display: block;
+  }
   .container {
     width: 50%;
     margin: 0 auto;
