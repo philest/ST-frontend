@@ -96,9 +96,10 @@ class App < Sinatra::Base
 
   post '/get-app/send-app-link' do
     phone = params['phone']
-
-    puts phone
-
+    puts "in /get-app/send-app-link, phone = #{phone}"
+    msg = "Download the Storytime app here: stbooks.org/app"
+    MessageWorker.perform_async(msg, phone, STORYTIME_NO)
+    return 200
   end
 
   # get '/test' do

@@ -32,8 +32,9 @@ body.modalTransition {
 // }
 
 .text-wrapper {
-  margin: 0 auto;
-  width: 60%;
+  margin-left: auto;
+  width: 80%;
+  padding-right: 1em;
   font-family: 'Karla';
   font-weight: normal;
 
@@ -50,6 +51,7 @@ body.modalTransition {
 }
 
 #text-me-link-form {
+  width: 90%;
 
 }
 
@@ -1193,6 +1195,29 @@ div.desktop-text {
   .navbar-right li {
     margin-left: 2em;
   }
+
+  #text-me-link-form {
+    width: 20em;
+    max-width: 80%;
+  }
+
+  .text-wrapper {
+    margin-left: auto;
+    width: 80%;
+    font-family: 'Karla';
+    font-weight: normal;
+
+    h2 {
+      font-weight: normal;
+      margin-bottom: 0px;
+    }
+
+    p {
+      margin-top: 0.5em;
+      font-size: 1em;
+      color: #7E7E7E;
+    }
+  }
 }
 
 @media (min-width: 820px) {
@@ -1240,7 +1265,7 @@ div.desktop-text {
 
 /***** Small (std) desktop screen ******/
 @media (min-width: 64em) { // 1024px
-  
+
 }
 
 
@@ -1249,6 +1274,11 @@ div.desktop-text {
   .container {
       // width: 1170px;
       width: 92%;
+  }
+
+  #text-me-link-form {
+    width: 20em;
+    max-width: 80%;
   }
 
   #splash .hero-splash-text-container {
