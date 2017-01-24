@@ -32,8 +32,12 @@ body.modalTransition {
 // }
 
 .text-wrapper {
-  margin-left: auto;
-  width: 80%;
+  letter-spacing: 0px;
+  margin: 0 auto;
+  width: 70%;
+  min-width: 19em;
+  // max-width: 25em;
+  margin-bottom: 2em;
   padding-right: 1em;
   font-family: 'Karla';
   font-weight: normal;
@@ -41,17 +45,33 @@ body.modalTransition {
   h2 {
     font-weight: normal;
     margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+
   }
 
   p {
     margin-top: 0.5em;
     font-size: 1em;
     color: #7E7E7E;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+#apps-on-phones {
+  margin: 0 auto;
+  img {
+    width: 80%;
+    margin: 0 auto;
+    display: block;
   }
 }
 
 #text-me-link-form {
   width: 90%;
+  // min-width: 16em;
+  // max-width: 25em;
 
 }
 
@@ -104,6 +124,37 @@ body.modalTransition {
   @media (min-width: 35.5em) {
     #chooseRoleModal .modal-signup-heading {
       margin-bottom: 1.2em;
+    }
+
+    #text-me-link-form {
+      width: 80%;
+      margin-left: 80px;
+      margin-right: 0em;
+      // min-width: 16em;
+      // max-width: 25em;
+
+    }
+
+    .text-wrapper {
+    
+
+      h2 {
+        font-weight: normal;
+        margin-bottom: 0px;
+        // width: 80%;
+        margin-left: 80px;
+        margin-right: 0px;
+
+      }
+
+      p {
+        margin-top: 0.5em;
+        font-size: 1em;
+        color: #7E7E7E;
+        // width: 80%;
+        margin-left: 80px;
+        margin-right: 0px;
+      }
     }
   }
 
@@ -921,6 +972,7 @@ div.desktop-text {
   //     margin-bottom: 6px;
   // }
 
+
   .container {
     margin-right: auto;
     margin-left: auto;
@@ -1034,6 +1086,45 @@ div.desktop-text {
 
 /***** Large tablet ******/
 @media (min-width: 48em) { // 768px
+
+  #apps-on-phones {
+    img {
+      width: 545px;
+    }
+  }
+
+  #text-me-link-form {
+
+    margin-left: 0em;
+    margin-right: 0em;
+    // min-width: 16em;
+    // max-width: 25em;
+
+  }
+
+
+  .text-wrapper {
+    margin-right: 0px;
+    margin-left: auto;
+    width: 80%;
+    font-family: 'Karla';
+    font-weight: normal;
+
+    h2 {
+      font-weight: normal;
+      margin-bottom: 0px;
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+
+    p {
+      margin-top: 0.5em;
+      font-size: 1em;
+      color: #7E7E7E;
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+  }
 
   .navbar-right {
     display: block;
@@ -1201,23 +1292,7 @@ div.desktop-text {
     max-width: 80%;
   }
 
-  .text-wrapper {
-    margin-left: auto;
-    width: 80%;
-    font-family: 'Karla';
-    font-weight: normal;
-
-    h2 {
-      font-weight: normal;
-      margin-bottom: 0px;
-    }
-
-    p {
-      margin-top: 0.5em;
-      font-size: 1em;
-      color: #7E7E7E;
-    }
-  }
+  
 }
 
 @media (min-width: 820px) {

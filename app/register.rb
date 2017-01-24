@@ -346,7 +346,7 @@ class Register < Sinatra::Base
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "Storytime for iPhone comes out in one week! We will text you the app with books next Friday"
+      text[:info] = "Storytime for iPhone comes out in <b>one week</b>! We will text you the app with books <b>next Friday</b>"
 
 
       text[:subtitle] = "Get free books from #{params[:teacher_sig]} right on your phone"
@@ -433,37 +433,5 @@ class Register < Sinatra::Base
   end
 
 
-  # get '/:code/class' do
-  #   erb :maintenance
-  # end
-  get '/coming-soon' do
-    puts "IN /COMING-SOON FOR REGISTER"
-    puts "params = #{params}"
-    teacher_sig = params['teacher']
-    locale = params['locale']
-
-    text = {}
-    case locale
-    when 'es'
-      text[:exclaim] = "¡Muy bien!"
-      text[:header] = "empieza pronto!"
-      text[:return] = "Le enviaremos un mensaje de texto"
-      text[:weekday] = "el jueves"
-      text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
-      text[:subtitle] = "Consigue libros gratis de #{teacher_sig} directamente en su celular"
-    else
-      text[:exclaim] = "Great!"
-      text[:header] = "starts soon!"
-      text[:return] = "We will text you on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th to start!"
-      text[:info] = "We'll text you in a few days with #{teacher_sig}'s books!"
-      text[:subtitle] = "Get free books from #{teacher_sig} right on your phone"
-
-    end
-
-    erb :maintenance, locals: {teacher: teacher_sig, text: text}
-  end
 
 end
