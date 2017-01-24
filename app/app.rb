@@ -983,6 +983,10 @@ class App < Sinatra::Base
           parent = User.create(:phone => phone_num, platform: 'app')
           parent.state_table.update(subscribed?: false)
           # parent.state_table.update(story_number: 0)
+        else # parent exists
+          # we don't want to send them multiple texts.....
+          puts "parent already exists, don't send them a text plz....."
+          next 
         end
 
         # update parent's student name

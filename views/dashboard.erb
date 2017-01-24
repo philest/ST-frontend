@@ -133,6 +133,12 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
       });
 
+      $(document).ready(function(){
+        $('#myModal').on('hidden.bs.modal', function(event) {
+          $('#invite-parents-success').hide(); 
+        });
+      });
+
 
 
       $(document).ready(function () {
@@ -239,6 +245,9 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 </head>
 <body id="bs-override">
+
+
+
 
 <div class="container">
   <div class="page-header">
@@ -453,7 +462,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 
 
-                <form class="enroll-teacher-class" action="enroll_families_form_success" method="post">     
+                <form class="enroll-teacher-class" id="enroll-teacher-class">     
                   <div class="enroll group-invite">
                     <div class="box-header">
                       <h2 class="box-header-title">Enter phone numbers</h2>
@@ -504,7 +513,25 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                         Families will be able to get their first book next week. We'll keep you updated by email. 
                         </span>
                       </div>
-                        <button class="Button-ready" type="submit">Invite class</button>          
+
+                        <button class="Button-ready" onclick="inviteFamilies();" type="button">Invite class</button>  
+
+
+                        <h2 id="invite-parents-success" style="display:none;font-size:18px;text-align:center;">Great! They'll get an invite to join your class.</h2>
+
+                        <script>
+                          function inviteFamilies() {
+
+                            $.post('/enroll_families_form_success', $('form#enroll-teacher-class').serialize());
+
+                            $('#invite-parents-success').hide();
+                            $('#invite-parents-success').slideDown(); 
+
+                          }
+                        </script>
+
+                
+
                     </div>
                   </div>
                 </form>
