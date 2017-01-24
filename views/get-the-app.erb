@@ -108,17 +108,7 @@
       $(document).ready(function(){
         // $('#signupNamePassword').modal('toggle');
  
-        $(window).scroll(function (event) {
-          var scroll = $(window).scrollTop();
-            // Do something
-          // console.log(scroll);
-          if (scroll < 645) {
-            $('.navbar').removeClass('highlighted');
-          } else {
-            $('.navbar').addClass('highlighted');
-          }
-
-        });
+        
 
         $('.modal input').on('click', function () {
           $(this).focus();
@@ -148,9 +138,9 @@
         margin-top: 0.8em;
       }
 
-      #text-me-link-form {
-        width: 60%;
-      }
+  /*    #text-me-link-form {
+        width: 80%;
+      }*/
 
 
     </style>
@@ -186,7 +176,7 @@
 
         <form id="text-me-link-form" action="/text-link-to-app" method="post">
           <div class="input-group">
-            <input type="text" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
+            <input type="text" style="height: 3.5em;" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
             <span style="background: #ed7844;color:white;" class="input-group-addon" id="text-me-link-button">Text me a link</span>
           </div>
         </form>
