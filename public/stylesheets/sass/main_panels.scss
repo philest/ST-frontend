@@ -29,6 +29,13 @@ a#navbar-title {
   }
 }
 
+#override .modal-dialog {
+  width: 35em;
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 0.7em;
+}
+
 .signup-name-password-mobile {
   h2 {
     text-align: center;
@@ -304,6 +311,14 @@ h1.section-banner {
 
 // THIS IS THE TABLET SHIT
 @media (min-width: 48em) { // 768px
+
+  #override .modal-dialog {
+    // width: 35em;
+    // max-width: 100%;
+    margin: 0 auto;
+    padding-left: 0em;
+  }
+
 
 
   .splash {
