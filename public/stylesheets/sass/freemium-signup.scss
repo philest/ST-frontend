@@ -13,13 +13,13 @@ body {
   }
 }
 
-#parent-mobile {
-  display: block;
-}
+// #parent-mobile {
+//   display: block;
+// }
 
-#parent-desktop {
-  display: none;
-}
+// #parent-desktop {
+//   display: none;
+// }
 
 #override a.web-mobile-signup-button {
   background-color: #ed7a44;
@@ -43,11 +43,12 @@ a.transition-link {
   font-family: 'Karla';
 
   &.ui-btn {
+    font-size: 1.5em;
     margin-top: 1em;
-    margin-bottom: 2.2em;
+    margin-bottom: 1.2em;
     border-radius: 0.5em;
     border:none;
-    padding: .5em 1em;
+    padding: .4em 1em;
     text-shadow: none;
   }
 
@@ -426,13 +427,14 @@ button#join {
 
 @media screen and (min-width: 48em) {
 
-  #parent-mobile {
-    display: none;
-  }
+  // #parent-mobile {
+  //   display: none;
+  // }
 
-  #parent-desktop {
-    display: block;
-  }
+  // #parent-desktop {
+  //   display: block;
+  // }
+
   .container {
     width: 50%;
     margin: 0 auto;
