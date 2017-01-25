@@ -81,7 +81,8 @@ p.school-name {
 }
 
 #page4link {
-  margin-top: 2em;
+  margin-top: 1.5em;
+  margin-bottom: 0em;
 }
 
 #page1, #page2, #page3 {
@@ -91,6 +92,10 @@ p.school-name {
 
 .wrapper.hiddenPage {
   display: none;
+}
+
+#modal-signup-heading {
+  margin-top: 0.5em;
 }
 
 /*.wrapper#page2:not('.ui-page') {
@@ -427,6 +432,14 @@ button#join {
 
 @media screen and (min-width: 48em) {
 
+  #page4link {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+
+  #modal-signup-heading {
+    margin-top: 1em;
+  }
   // #parent-mobile {
   //   display: none;
   // }
