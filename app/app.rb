@@ -47,18 +47,11 @@ class App < Sinatra::Base
     set :static_cache_control, [:public, :max_age => 600]
   end
 
-  # before do
-  #   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
-  #   headers['Access-Control-Allow-Origin'] = "#{ENV['enroll_url']}"
-  #   headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
-  #   headers['Access-Control-Allow-Credentials'] = 'true'
-  # end
-
   use Airbrake::Rack::Middleware
 
   #set mode (production or test)
   MODE ||= ENV['RACK_ENV']
-  PRO ||= "production"
+  PRO  ||= "production"
   TEST ||= "test"
 
   tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
@@ -170,6 +163,37 @@ class App < Sinatra::Base
       if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
         notify_admins("Parent finished freemium signup", params.to_s)
       end
+
+      # school = School.where(signature: "Freemium School", name: "Unnamed").first
+      # teacher = Teacher.create(email: params['signature'])
+      # school.signup_teacher(teacher)
+
+
+      # # how do we know if it's a phone or an email?
+      # user_info = {
+      #   first_name: params['first_name'],
+      #   last_name: params['last_name'],
+      #   email: params['email'],
+      #   phone: params['email'],
+      #   password_digest: params['password_digest']
+      # }
+
+      # user = User.create(user_info)
+
+
+      # have a single freemium school 
+      # create teacher with email, link to school
+      # link user to that school
+      # 
+
+      # create a user here
+      # unsubscribed
+      # platform: app
+
+      # create a fake teacher using the invite form they did
+      # user = User.create()
+
+
 
     when 'teacher', 'admin'
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"

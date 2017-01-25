@@ -41,7 +41,7 @@
                         });
                         console.log(data);
                         mixpanel.people.set(data);
-                        mixpanel('finished freemium signup');
+                        mixpanel.track('finished freemium signup');
 
                       });
 
