@@ -70,7 +70,8 @@ h1#pitch {
   display: flex;
   align-items: center; 
   margin: 0 auto;
-  background: url('https://d2yudi7y1eei74.cloudfront.net/assets/splash-new.jpg') right -178px top 0px ;
+  padding-top: 6em;
+  background: url('/images/main-splash-mobile.jpg') center top/cover no-repeat #ba9e70;
 
 
   .splash-container {
