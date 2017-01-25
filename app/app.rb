@@ -164,36 +164,43 @@ class App < Sinatra::Base
         notify_admins("Parent finished freemium signup", params.to_s)
       end
 
-      # school = School.where(signature: "Freemium School", name: "Unnamed").first
-      # teacher = Teacher.create(email: params['signature'])
-      # school.signup_teacher(teacher)
+      begin
+        school = School.where(signature: "Freemium", name: "Unnamed").first
+        if school.nil?
+          puts "creating freemium school..."
+          school = School.create(signature: "Freemium", name: "Unnamed", code: 'freemium|freemium-es')
+        end
+
+        teacher = Teacher.where(email:params['teacher_email']).first
+        if teacher.nil?
+          teacher = Teacher.create(email: params['teacher_email'])
+          school.signup_teacher(teacher)
+        end
 
 
-      # # how do we know if it's a phone or an email?
-      # user_info = {
-      #   first_name: params['first_name'],
-      #   last_name: params['last_name'],
-      #   email: params['email'],
-      #   phone: params['email'],
-      #   password_digest: params['password_digest']
-      # }
+        # maybe do server-side processing to figure out if it's an email or phone....
+        # could also try this on the client side and update the input name. validations.
 
-      # user = User.create(user_info)
+        # how do we know if it's a phone or an email?
+        user_info = {
+          first_name: params['first_name'],
+          last_name: params['last_name'],
+          email: params['email'],
+          phone: params['email'],
+          password_digest: params['password_digest']
+        }
 
+        # user1 = User.where(phone: params['phone']).first
+        # user2 = User.where(email: params['email']).first
 
-      # have a single freemium school 
-      # create teacher with email, link to school
-      # link user to that school
-      # 
+        # user = user1 || user2 || User.create(user_info)
+        user = User.create(user_info)
 
-      # create a user here
-      # unsubscribed
-      # platform: app
+        teacher.signup_user(user)
 
-      # create a fake teacher using the invite form they did
-      # user = User.create()
-
-
+      rescue => e
+        p e.message
+      end
 
     when 'teacher', 'admin'
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
@@ -201,6 +208,42 @@ class App < Sinatra::Base
       if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
         notify_admins("#{params['role']} finished freemium signup", params.to_s)
       end
+
+      begin
+        school_info = {
+          signature: "Freemium School",
+          name: params['school_name'],
+          city: params['school_city'],
+          state: params['school_state'],
+          code: 'unofficial|unofficial-es'
+        }
+
+        school = School.where(school_info).first || School.create(school_info)
+
+        educator_info = {
+          signature: params['signature'],
+          first_name: params['first_name'],
+          last_name: params['last_name'],
+          email: params['email'],
+          phone: params['email'],
+          password_digest: params['password_digest']
+        }
+
+        if params['role'] == 'teacher'
+          # am i overwriting anything here?
+
+          educator = Teacher.where(educator_info).first || Teacher.create(educator_info)
+          school.signup_teacher(educator)
+        else
+          educator = Admin.where(educator_info).first || Admin.create(educator_info)
+          school.add_admin(educator)
+        end
+
+      rescue => e
+        p e.message
+      end
+        # # maybe do server-side processing to figure out if it's an email or phone....
+        # # could also try this on the client side and update the input name. validations.
     else
       puts "failure, missing some params. params=#{params} and session=#{session.inspect}"
       redirect to '/'
