@@ -257,7 +257,7 @@ class Enroll < Sinatra::Base
           x[:this_month] = 8 + (u.id % 4)
         else
 
-          time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.week
+          time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
           if time_enrolled_by_week >= 1 # enrolled for
             x[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
           else
@@ -313,7 +313,7 @@ class Enroll < Sinatra::Base
       else
         # h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
 
-        time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.week
+        time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
         if time_enrolled_by_week >= 1 # enrolled for
           h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
         else
@@ -361,7 +361,7 @@ class Enroll < Sinatra::Base
       if time_enrolled >= 1
         h[:this_month] = 8 + (u.id % 4)
       else
-        time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.week
+        time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
         if time_enrolled_by_week >= 1 # enrolled for
           h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
         else
