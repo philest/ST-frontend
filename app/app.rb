@@ -1,4 +1,4 @@
-#  app.rb                                     Phil Esterman     
+#  app.rb          Phil Esterman, David McPeek, Aubrey Wahl     
 # 
 #  The routes controller. Uses helpers to reply to SMS. 
 #  --------------------------------------------------------
@@ -64,7 +64,7 @@ class App < Sinatra::Base
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
 
-  enable :sessions
+  enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
   # use Rack::Session::Cookie, :key => 'rack.session',
@@ -160,10 +160,6 @@ class App < Sinatra::Base
       puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
       # check that teacher email is there
 
-      if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
-        notify_admins("Parent finished freemium signup", params.to_s)
-      end
-
       begin
         school = School.where(signature: "Freemium", name: "Unnamed").first
         if school.nil?
@@ -171,17 +167,6 @@ class App < Sinatra::Base
           school = School.create(signature: "Freemium", name: "Unnamed", code: 'freemium|freemium-es')
         end
 
-        teacher = Teacher.where(email:params['teacher_email']).first
-        if teacher.nil?
-          teacher = Teacher.create(email: params['teacher_email'])
-          school.signup_teacher(teacher)
-        end
-
-
-        # maybe do server-side processing to figure out if it's an email or phone....
-        # could also try this on the client side and update the input name. validations.
-
-        # how do we know if it's a phone or an email?
         user_info = {
           first_name: params['first_name'],
           last_name: params['last_name'],
@@ -189,14 +174,25 @@ class App < Sinatra::Base
           phone: params['email'],
           password_digest: params['password_digest']
         }
-
-        # user1 = User.where(phone: params['phone']).first
-        # user2 = User.where(email: params['email']).first
-
-        # user = user1 || user2 || User.create(user_info)
         user = User.create(user_info)
 
-        teacher.signup_user(user)
+        teacher = Teacher.where(email:params['teacher_email']).first
+        puts "teacher = #{teacher.inspect}"
+        if teacher.nil? # new teacher
+          puts "it's a new teacher"
+          teacher = Teacher.create(email: params['teacher_email'])
+          school.signup_teacher(teacher)
+          teacher.signup_user(user)
+          msg = "Parent finished freemium signup"
+        else # existing teacher
+          puts "it's an existing teacher"
+          teacher.signup_user(user)
+          msg = "Parent finished freemium signup with existing teacher"
+        end
+
+        if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+          notify_admins(msg, params.to_s)
+        end
 
       rescue => e
         p e.message
