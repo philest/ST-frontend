@@ -179,6 +179,7 @@ class User < Sequel::Model(:users)
     validates_unique :code, :allow_nil=>true, :message => "#{code} is already taken (users)"
     validates_unique :phone, :allow_nil=>true, :message => "#{phone} is already taken (users)"
     validates_unique :fb_id, :allow_nil=>true, :message => "#{fb_id} is already taken (users)"
+    validates_unique :email, :allow_nil=>true, :message => "#{email} is already taken (users)"
   end
 
 end

@@ -66,10 +66,6 @@ RSpec.configure do |config|
       DatabaseCleaner.clean_with(:truncation)
     end
 
-    config.before(:each, :js => true) do
-      DatabaseCleaner.strategy = :deletion
-    end
-
     config.before(:each) do
       WebMock.enable!
       WebMock.disable_net_connect!(allow_localhost:false, allow: [])
@@ -80,9 +76,6 @@ RSpec.configure do |config|
         example.run
       end
     end
-
-
-
 
   # rspec-expectations config goes here. You can use an alternate
   # # assertion/expectation library such as wrong or the stdlib/minitest # assertions if you prefer.
