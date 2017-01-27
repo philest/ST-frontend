@@ -257,7 +257,7 @@ class Enroll < Sinatra::Base
           x[:this_month] = 8 + (u.id % 4)
         else
 
-          time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
+          time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.weeks
           if time_enrolled_by_week >= 1 # enrolled for
             x[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
           else
@@ -272,7 +272,25 @@ class Enroll < Sinatra::Base
         if x[:this_month] == 0
           x[:reading_time] = 0
         else 
-          x[:reading_time] = (x[:this_month] * 4.6).ceil
+
+          # get string value of their name
+          if x[:first_name].nil?
+            puts "factor = 4.6"
+            factor = 4.6
+          else
+            # do what must be done, lord vader.... do not hesitate; show no mercy.
+
+            factor = ((x[:first_name].split('').reduce(0) {|sum, n| sum += n.ord}) % 4) + 2
+            puts "factor = #{factor}"
+          end
+
+
+          x[:reading_time] = (x[:this_month] * factor).ceil
+        end
+
+        if u.platform.downcase == 'ios'
+          x[:this_month] = 0
+          x[:reading_time] = 0
         end
 
         if ['admin', 'teacher'].include? u.role
@@ -313,7 +331,7 @@ class Enroll < Sinatra::Base
       else
         # h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
 
-        time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
+        time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.weeks
         if time_enrolled_by_week >= 1 # enrolled for
           h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
         else
@@ -326,8 +344,21 @@ class Enroll < Sinatra::Base
 
       if h[:this_month] == 0
         h[:reading_time] = 0
-      else 
-        h[:reading_time] = (h[:this_month] * 4.6).ceil
+      else
+        # get string value of their name
+        if h[:first_name].nil?
+          factor = 4.6
+        else
+          # do what must be done, lord vader.... do not hesitate; show no mercy.
+          factor = ((h[:first_name].split('').reduce(0) {|sum, n| sum += n.ord}) % 4) + 2
+        end
+
+        h[:reading_time] = (h[:this_month] * factor).ceil
+      end
+
+      if u.platform.downcase == 'ios'
+        h[:this_month] = 0
+        h[:reading_time] = 0
       end
 
       if ['admin', 'teacher'].include? u.role
@@ -361,7 +392,7 @@ class Enroll < Sinatra::Base
       if time_enrolled >= 1
         h[:this_month] = 8 + (u.id % 4)
       else
-        time_enrolled_by_week = (Time.now - u.enrolled_on) / 3.weeks
+        time_enrolled_by_week = (Time.now - u.enrolled_on) / 1.weeks
         if time_enrolled_by_week >= 1 # enrolled for
           h[:this_month] = ((8 + (u.id % 4)) * time_enrolled).ceil
         else
@@ -373,8 +404,24 @@ class Enroll < Sinatra::Base
 
       if h[:this_month] == 0
         h[:reading_time] = 0
-      else 
-        h[:reading_time] = (h[:this_month] * 4.6).ceil
+      else
+        # get string value of their name
+        if h[:first_name].nil?
+          factor = 4.6
+        else
+          # do what must be done, lord vader.... do not hesitate; show no mercy.
+          factor = ((h[:first_name].split('').reduce(0) {|sum, n| sum += n.ord}) % 4) + 2
+        end
+
+
+        h[:reading_time] = (h[:this_month] * factor).ceil
+
+
+      end
+
+      if u.platform.downcase == 'ios'
+        h[:this_month] = 0
+        h[:reading_time] = 0
       end
 
       if ['admin', 'teacher'].include? u.role

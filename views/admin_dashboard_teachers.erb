@@ -110,7 +110,7 @@
                           </div>
                           <div class="stats user" id="bottom-guy">
   
-                            <% reading_time_month = (user['this_month'] * 4.6).ceil %>
+                            <% reading_time_month = user['reading_time'] %>
                             <h1 style="display: inline-block;"><%= reading_time_month > 0 ? reading_time_month : '-' %></h1>
                             <p>Minutes</p>
                             <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
