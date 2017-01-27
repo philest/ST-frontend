@@ -174,21 +174,31 @@ class App < Sinatra::Base
           phone: params['email'],
           password_digest: params['password_digest']
         }
-        user = User.create(user_info)
+        user = User.new(user_info)
+        
+        # check that new user is valid! 
+        # decide if we should create that user
+        if user.valid?
 
-        teacher = Teacher.where(email:params['teacher_email']).first
-        puts "teacher = #{teacher.inspect}"
-        if teacher.nil? # new teacher
-          puts "it's a new teacher"
-          teacher = Teacher.create(email: params['teacher_email'])
-          school.signup_teacher(teacher)
-          teacher.signup_user(user)
-          msg = "Parent finished freemium signup"
-        else # existing teacher
-          puts "it's an existing teacher"
-          teacher.signup_user(user)
-          msg = "Parent finished freemium signup with existing teacher"
+          teacher = Teacher.where(email:params['teacher_email']).first
+          puts "teacher = #{teacher.inspect}"
+          if teacher.nil? # new teacher
+            puts "it's a new teacher"
+            teacher = Teacher.create(email: params['teacher_email'])
+            school.signup_teacher(teacher)
+            teacher.signup_user(user)
+            msg = "Parent finished freemium signup"
+          else # existing teacher
+            puts "it's an existing teacher"
+            teacher.signup_user(user)
+            msg = "Parent finished freemium signup with existing teacher"
+          end
+
         end
+
+        # if user isn't new, DON'T DO ANYTHING TO THAT USER! 
+        # don't reassign teacher, don't do jack shit
+
 
         if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
           notify_admins(msg, params.to_s)
@@ -227,8 +237,12 @@ class App < Sinatra::Base
 
         if params['role'] == 'teacher'
           # am i overwriting anything here?
+          puts "i'm a teacher, look at MEEEEEEE"
+          educator = Teacher.where(educator_info).first 
+          if educator.nil?
+            educator = Teacher.create(educator_info)
+          end
 
-          educator = Teacher.where(educator_info).first || Teacher.create(educator_info)
           school.signup_teacher(educator)
         else
           educator = Admin.where(educator_info).first || Admin.create(educator_info)
