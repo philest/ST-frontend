@@ -19,7 +19,7 @@ class UpdateAdminWorker
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
 
       message = {
-        'To' => 'josedmcpeek@gmail.com',
+        'To' => email,
         'Data' => {
           'adminfirstname' => sig,
           'teacher_count' => count,
@@ -51,7 +51,7 @@ class UpdateTeacherWorker
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
 
       message = {
-        'To' => 'josedmcpeek@gmail.com',
+        'To' => email,
         'Data' => {
           'signature' => sig,
           'family_count' => count,
@@ -82,7 +82,7 @@ class WelcomeAdminWorker
     # Create a new mailer and define your message
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
     message = {
-      'To' => 'josedmcpeek@gmail.com',
+      'To' => admin.email,
       'Data' => {
         'dash_invite_teachers_link' => admin.quicklink + '&invite=1',
         'quicklink' => admin.quicklink,
@@ -115,7 +115,7 @@ class WelcomeTeacherWorker
     # Create a new mailer and define your message
     tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
     message = {
-      'To' => 'josedmcpeek@gmail.com',
+      'To' => teacher.email,
       'Data' => {
         'flyers_link' => teacher.quicklink + '&flyers=1',
         'quicklink' => teacher.quicklink,
