@@ -225,7 +225,7 @@
           $('#signup-email-mobile').validate({ // initialize the plugin
               rules: {
                   email: {
-                      required: true
+                      validateEmailPhone: true
                   }
               }
           }).form();
