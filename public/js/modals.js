@@ -38,8 +38,6 @@ $(document).ready(function () {
       }
   }
 
-
-
   $('.modal').on('hidden.bs.modal', function(event) {
      // $('body').addClass('destroy-padding');
      // $('body').removeClass('hide-scroll');
