@@ -1,7 +1,45 @@
 $(document).ready(function () {
   // THIS IS WHERE I'LL DO THE SIGNUP FLOW
   // 
-  // 
+
+  jQuery.validator.addMethod("validateEmailPhone", function(value, element) {
+    return ValidateEmail(value) || validatePhone(value);
+  }, "Invalid email or phone number.");
+
+
+  function ValidateEmail(mail)   
+  {  
+   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))  
+    {  
+      return (true)  
+    }  
+
+    return (false)  
+  }  
+
+  function validatePhone(phone) {
+      var error = "";
+      var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+     if (stripped == "") {
+          error = "You didn't enter a phone number.";
+          return false;
+      } else if (isNaN(parseInt(stripped))) {
+          phone = "";
+          error = "The phone number contains illegal characters.";
+          return false;
+
+      } else if (!(stripped.length == 10 || stripped.length == 11)) {
+          phone = "";
+          error = "The phone number is the wrong length. Make sure you included an area code.\n";
+          return false;
+      } else {
+        return true;
+      }
+  }
+
+
+
   $('.modal').on('hidden.bs.modal', function(event) {
      // $('body').addClass('destroy-padding');
      // $('body').removeClass('hide-scroll');
@@ -31,13 +69,10 @@ $(document).ready(function () {
   $('#signup-email-button').click(function(event) {
     event.preventDefault();
 
-
-
     $('#signup-email').validate({ // initialize the plugin
         rules: {
             email: {
-                required: true,
-                // email: true
+                validateEmailPhone: true
             }
         }
     }).form();
