@@ -96,7 +96,7 @@ class Register < Sinatra::Base
       text[:return] = "Le enviaremos un mensaje de texto"
       text[:weekday] = "el jueves"
       text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
+      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el viernes 10 de febrero.</b>"
       text[:subtitle_maintenance] = "Consigue libros gratis de #{teacher.signature} directamente en su celular"
 
       text[:header_app] = "Consigue StoryTime"
