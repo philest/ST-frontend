@@ -131,7 +131,7 @@ class Register < Sinatra::Base
       text[:return] = "We will text you on"
       text[:weekday] = "Thursday"
       text[:date] = "January 4th to start!"
-      text[:info] = "Storytime for iPhone comes out in <b>one week</b>! We will text you the app with books <b>next Friday</b>"
+      text[:info] = "Storytime for iPhone will be just ONE more week! We will text you the app with books by <b>Friday, February 10.</b>"
       text[:subtitle_maintenance] = "Get free books from #{teacher.signature} right on your phone"
 
       # get-app

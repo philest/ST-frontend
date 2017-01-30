@@ -167,6 +167,9 @@ class App < Sinatra::Base
           school = School.create(signature: "Freemium", name: "Unnamed", code: 'freemium|freemium-es')
         end
 
+        # distinguish between emails/phone here, i guess
+
+
         user_info = {
           first_name: params['first_name'],
           last_name: params['last_name'],
