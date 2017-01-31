@@ -175,7 +175,8 @@ class App < Sinatra::Base
           last_name: params['last_name'],
           email: params['email'],
           phone: params['email'],
-          password_digest: params['password_digest']
+          password_digest: params['password_digest'],
+          platform:'app'
         }
         user = User.new(user_info)
         
