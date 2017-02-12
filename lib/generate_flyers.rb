@@ -227,7 +227,7 @@ class FlyerImage
       flyers = S3.bucket('teacher-materials')
       if flyers.exists?
         name = args[:aws_filename]
-        if flyers.object(name).exists?
+        if false && flyers.object(name).exists?
             puts "#{name} already exists in the bucket"
         else
           obj = flyers.object(name)
