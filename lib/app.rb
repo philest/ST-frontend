@@ -189,7 +189,7 @@ class Enroll < Sinatra::Base
           school.signup_teacher(educator)
           educator.reload
           puts "about to do flyerworker thing...."
-          FlyerWorker.perform_async(educator.id, school.id) if new_signup
+          FlyerWorker.perform_async(educator.id, school.id) # if new_signup
           if new_signup # send notification email
             WelcomeTeacherWorker.perform_async(educator.id)
           end
