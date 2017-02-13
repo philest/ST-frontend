@@ -103,6 +103,21 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
     <script type="text/javascript">
 
       $(document).ready(function () {
+        /** 
+         * Determine the user's timezone
+         */
+        function getUserTimezone() {
+          return (((new Date()).getTimezoneOffset() / 60) - 1) * -1
+        }
+
+        var timezone = getUserTimezone();
+
+        var tz = $('<input>')
+                  .attr('type', 'hidden')
+                  .attr('name', 'time_zone')
+                  .val(timezone);
+        $('#register').append($(tz));
+
         /**
          * Determine the mobile operating system.
          * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
@@ -214,6 +229,60 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 
       }
 
+      function validatePhone(phone) {
+          var error = "";
+          console.log('phone = ' + phone)
+          var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+         if (stripped == "") {
+              error = "You didn't enter a phone number.";
+              console.log(error);
+              return 0;
+          } else if (/^[0-9]+$/.test(stripped) == false) {
+              phone = "";
+              error = "The phone number contains illegal characters.";
+              console.log(error);
+              return 1;
+
+          } else if (!(stripped.length == 10 || stripped.length == 11)) {
+              phone = "";
+              error = "The phone number is the wrong length. Make sure you included an area code.\n";
+              console.log(error);
+              return 2;
+          } else {
+            return 3;
+          }
+      }
+
+      jQuery.validator.addMethod("validatePhone", function(value, element) {
+        var val = validatePhone(value); 
+        console.log('what we deserve = ' + String(val));
+        switch (val) {
+          case 0:
+            return false;
+          case 1:
+            return false;
+          case 2:
+            return false;
+          default:
+            return true;
+        }
+      }, function(value, element) {
+        console.log('value of thing = ' + val);
+        console.log('element = ' + val);
+        var val = validatePhone(value); 
+        switch (val) {
+          case 0:
+            return "You didn't enter a phone number.";
+          case 1:
+            return "The phone number contains illegal characters.";
+          case 2:
+            return "The phone number is the wrong length. Make sure you included an area code.";
+          default:
+            return true;
+        }
+      });
+
       // Trigger when the first signup button is Tapped. 
       function SignupButtonClicked() {
         console.log('signup button clicked');
@@ -232,16 +301,6 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
         mixpanel.track("App Download Prompt Clicked");
       }
 
-     $('#page1link').click(function(event) {
-        // get name/email
-        console.log($('#register').serialize());
-        $.post('/register/user-start-registration', $('#register').serialize());
-
-        // first identify user
-        IdentifyUser();
-        // then do other stuff
-        SignupButtonClicked();
-     });
 
 
      $('#app-link').click(function(event) {
@@ -273,13 +332,43 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 
       $(document).on('click', '#page1link',function(event){
 
+
+
+
+        
+        $('#register').validate({
+          rules: {
+            phone: {
+              required: true,
+              validatePhone: true 
+            }
+          }
+        });
+
         var ValidStatus = $("#register").valid();
+        // var pattern = /[\-\(\)\s]+/g
+        // var phone_number = $("#register input[name=phone]").val();
+        // var stripped = phone_number.replace(pattern, '');
+
+        // var valid_phone = /^[0-9]{10}$/.test(stripped);
+
         // console.log(ValidStatus);
         if (ValidStatus == false) {
             event.preventDefault();
             event.stopPropagation();
             return false;
         }
+
+        // get name/email
+        console.log($('#register').serialize());
+        $.post('/register/user-start-registration', $('#register').serialize());
+
+        // first identify user
+        IdentifyUser();
+        // then do other stuff
+        SignupButtonClicked();
+
+
       });
 
       $(document).on('click', '#page3link',function(event){
