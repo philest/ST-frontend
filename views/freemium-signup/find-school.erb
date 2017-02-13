@@ -5,11 +5,49 @@
     margin-bottom: 0.5em;
   }
 
-  input[name=school_name] {
+  #page4 input[name=school_name] {
     background: url(images/icons/magnifying-glass.png) no-repeat scroll 7px 7px;
     padding-left: 45px;
     background-size: 30px;
   }
+
+  ul.ui-autocomplete.ui-menu { 
+    overflow-y: scroll;
+    max-height: 250px;
+    overflow-x: hidden;
+  }
+
+  ul.ui-autocomplete.ui-menu li {
+    max-height: 75px;
+    /*padding-top: 10px;*/
+    /*padding-bottom: 10px;*/
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+  }
+
+  ul.ui-autocomplete.ui-menu li a {
+    /*border-bottom: none;*/
+    line-height: 23px;
+    display: block;
+    text-decoration: none;
+    margin-bottom: 0px;
+    margin-top: 0px;
+/*    padding-bottom: 0px;
+    padding-top: 0px;*/
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  ul.ui-autocomplete.ui-menu li a span{
+    margin-top: -30px;
+    font-size: 12px;
+  }
+
+  /*background F2F3F5*/
+
+  /*bottom border DCDEE2*/
+
 
 </style>
       <!-- Modal Signup -->
@@ -20,7 +58,7 @@
         <div data-role="main" class="body invite-teacher">
 
           <div class="container" style="padding-top:0em;">
-              <h2 class="modal-signup-heading" id="modal-signup-heading">Add your school maybe</h2>
+              <h2 class="modal-signup-heading" id="modal-signup-heading">Add your school</h2>
               <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
 
               <form id="school-info" class="signup-form"> 
@@ -42,20 +80,25 @@
       
                 <script>
 
-                  $( function() {
+                  $( function() {  
                     // get the damn schools here and store in a javscript object
                     var availableSchools = []
 
                     var response = $.getJSON('/list-of-schools', function(data) {
                       console.log(data);
                       availableSchools = availableSchools.concat(data);
-                    });
+                      
+                      $( "#page4 input[name=school_name]" ).autocomplete({
+                        source: availableSchools
+                      }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                         return $( "<li>" )
+                         .append( "<a>" + item.value + "<br><span class='city'>" + item.desc + "</span></a>" )
+                         .appendTo( ul );
+                      };
 
 
-                    $( "#page4 form input[name=school_name]" ).autocomplete({
-                      source: availableSchools
                     });
-                    
+
                   });
                     
                   // $( function() {
@@ -119,7 +162,7 @@
                     });
                     console.log(data);
                     mixpanel.people.set(data);
-                    mixpanel('finished freemium signup');
+                    mixpanel.track('finished freemium signup');
                   });
 
                 </script>
