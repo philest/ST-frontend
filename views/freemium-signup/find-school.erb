@@ -64,7 +64,7 @@
               <form id="school-info" class="signup-form"> 
                 <div class="signup-setup">
                     <div class="field" id="signup-field">
-                       <label class="label">School name</label>
+                       <label class="label">School</label>
                       <input name="school_name" autocomplete="off" placeholder="" class="input" required>
                        
                     </div>
@@ -74,7 +74,11 @@
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
-                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+
+                <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade" href="">Add one now.</a></p>
+
+
+                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" style="display: none;" data-transition="fade">
                   Continue
                 </a>
       
@@ -91,7 +95,16 @@
                       $( "#page4 input[name=school_name]" ).autocomplete({
                         source: availableSchools
                       }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                         return $( "<li>" )
+                        return $( "<li>", {
+                            class: 'school-selector',
+                            click: function(event) {
+                              console.log('this shit was clicked');
+                              $('#page4 input[name=school_name]').focus();
+                              $('#page4 input[name=school_name]').blur();
+                              $('#page4link').slideDown();
+
+                            }
+                         })
                          .append( "<a>" + item.value + "<br><span class='city'>" + item.desc + "</span></a>" )
                          .appendTo( ul );
                       };
@@ -101,35 +114,7 @@
 
                   });
                     
-                  // $( function() {
-                  //     var availableTags = [
-                  //       "ActionScript",
-                  //       "AppleScript",
-                  //       "Asp",
-                  //       "BASIC",
-                  //       "C",
-                  //       "C++",
-                  //       "Clojure",
-                  //       "COBOL",
-                  //       "ColdFusion",
-                  //       "Erlang",
-                  //       "Fortran",
-                  //       "Groovy",
-                  //       "Haskell",
-                  //       "Java",
-                  //       "JavaScript",
-                  //       "Lisp",
-                  //       "Perl",
-                  //       "PHP",
-                  //       "Python",
-                  //       "Ruby",
-                  //       "Scala",
-                  //       "Scheme"
-                  //     ];
-                  //     $( "input[name=school_name]" ).autocomplete({
-                  //       source: availableTags
-                  //     });
-                  //   } );
+
         
                   $(document).on('click', '#page4link',function(event){
 
