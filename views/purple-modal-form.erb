@@ -37,8 +37,15 @@ mixpanel.init('<%= mixpanel_homepage_key %>', {
     <!-- Include jQuery Mobile stylesheets -->
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 
+    <!-- jquery ui stylesheets -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <!-- Include the jQuery library -->
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+
+    <!-- jquery-ui -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Include the jQuery Mobile library -->
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -157,16 +164,16 @@ mixpanel.init('<%= mixpanel_homepage_key %>', {
 
 <body id="override">
   <!-- navbar -->
-
   <%= erb :'freemium-signup/role' %>
   <%= erb :'freemium-signup/invite-teacher' %>
   <%= erb :'freemium-signup/signature' %>
+  <%= erb :'freemium-signup/find-school' %>
   <%= erb :'freemium-signup/school-info' %>
   <%= erb :'freemium-signup/success' %>
 
 <footer>
 
-     <script>
+    <script>
     </script>
 
 </footer>
