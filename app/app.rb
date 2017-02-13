@@ -647,7 +647,30 @@ class App < Sinatra::Base
 
 
   get '/list-of-schools' do
-    School.map(:signature).to_json
+    blacklist = [
+      'StoryTime', 
+      'Freemium', 
+      'Freemium School',
+      'ST Elementary'
+    ]
+    School.where(signature: blacklist).invert.map do |school|
+      location = ''
+      puts "school vals = #{school.city}, #{school.state}"
+      if school.city and school.state
+        puts "1"
+        location = "#{school.city}, #{school.state}"
+      elsif school.city
+        puts "2"
+        location = "#{school.city}"
+      elsif school.state
+        puts "3"
+        location = "#{school.state}"
+      end
+      {
+        value: school.signature,
+        desc: location
+      }
+    end.to_json
   end
 
 
