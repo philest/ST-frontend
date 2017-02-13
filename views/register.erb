@@ -231,57 +231,31 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 
       function validatePhone(phone) {
           var error = "";
-          console.log('phone = ' + phone)
           var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
 
          if (stripped == "") {
               error = "You didn't enter a phone number.";
               console.log(error);
-              return 0;
+              return false;
           } else if (/^[0-9]+$/.test(stripped) == false) {
               phone = "";
               error = "The phone number contains illegal characters.";
               console.log(error);
-              return 1;
+              return false;
 
           } else if (!(stripped.length == 10 || stripped.length == 11)) {
               phone = "";
               error = "The phone number is the wrong length. Make sure you included an area code.\n";
               console.log(error);
-              return 2;
+              return false;
           } else {
-            return 3;
+            return true;
           }
       }
 
       jQuery.validator.addMethod("validatePhone", function(value, element) {
-        var val = validatePhone(value); 
-        console.log('what we deserve = ' + String(val));
-        switch (val) {
-          case 0:
-            return false;
-          case 1:
-            return false;
-          case 2:
-            return false;
-          default:
-            return true;
-        }
-      }, function(value, element) {
-        console.log('value of thing = ' + val);
-        console.log('element = ' + val);
-        var val = validatePhone(value); 
-        switch (val) {
-          case 0:
-            return "You didn't enter a phone number.";
-          case 1:
-            return "The phone number contains illegal characters.";
-          case 2:
-            return "The phone number is the wrong length. Make sure you included an area code.";
-          default:
-            return true;
-        }
-      });
+        return validatePhone(value); 
+      }, 'Please enter a valid phone number.');
 
       // Trigger when the first signup button is Tapped. 
       function SignupButtonClicked() {
