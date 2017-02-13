@@ -1,0 +1,131 @@
+<style>
+  #state {
+    border: 0.5px solid gray;
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+
+  input[name=school_name] {
+    background: url(images/icons/magnifying-glass.png) no-repeat scroll 7px 7px;
+    padding-left: 45px;
+    background-size: 30px;
+  }
+
+</style>
+      <!-- Modal Signup -->
+      <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+      <div data-role="page" class="wrapper" id="page4">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body invite-teacher">
+
+          <div class="container" style="padding-top:0em;">
+              <h2 class="modal-signup-heading" id="modal-signup-heading">Add your school maybe</h2>
+              <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
+
+              <form id="school-info" class="signup-form"> 
+                <div class="signup-setup">
+                    <div class="field" id="signup-field">
+                       <label class="label">School name</label>
+                      <input name="school_name" autocomplete="off" placeholder="" class="input" required>
+                       
+                    </div>
+                    <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
+                </div>
+
+                <input type="hidden" name="role" value="">
+                <input type="hidden" name="signature" value="">
+
+                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+                  Continue
+                </a>
+      
+                <script>
+
+                  $( function() {
+                    // get the damn schools here and store in a javscript object
+                    var availableSchools = []
+
+                    var response = $.getJSON('/list-of-schools', function(data) {
+                      console.log(data);
+                      availableSchools = availableSchools.concat(data);
+                    });
+
+
+                    $( "#page4 form input[name=school_name]" ).autocomplete({
+                      source: availableSchools
+                    });
+                    
+                  });
+                    
+                  // $( function() {
+                  //     var availableTags = [
+                  //       "ActionScript",
+                  //       "AppleScript",
+                  //       "Asp",
+                  //       "BASIC",
+                  //       "C",
+                  //       "C++",
+                  //       "Clojure",
+                  //       "COBOL",
+                  //       "ColdFusion",
+                  //       "Erlang",
+                  //       "Fortran",
+                  //       "Groovy",
+                  //       "Haskell",
+                  //       "Java",
+                  //       "JavaScript",
+                  //       "Lisp",
+                  //       "Perl",
+                  //       "PHP",
+                  //       "Python",
+                  //       "Ruby",
+                  //       "Scala",
+                  //       "Scheme"
+                  //     ];
+                  //     $( "input[name=school_name]" ).autocomplete({
+                  //       source: availableTags
+                  //     });
+                  //   } );
+        
+                  $(document).on('click', '#page4link',function(event){
+
+                    var ValidStatus = $("#school-info").valid();
+                    // console.log(ValidStatus);
+                    if (ValidStatus == false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        mixpanel.track('invalid school info given');
+                        return false;
+                    }
+
+                    // get post data from 
+                    //  1. role
+                    //  2. signature
+                    // append to this form.
+                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                    $('form#school-info').find('input[name=role]').val(role);
+
+                    var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
+                    $('form#school-info').find('input[name=signature]').val(sig);    
+
+                    $.post('/freemium-signup', $('form#school-info').serialize());
+
+                    var formdata = $("form#school-info").serializeArray();
+                    var data = {};
+                    $(formdata).each(function(index, obj){
+                        data[obj.name] = obj.value;
+                    });
+                    console.log(data);
+                    mixpanel.people.set(data);
+                    mixpanel('finished freemium signup');
+                  });
+
+                </script>
+
+              </form>
+          </div>
+        </div>
+      </div>
+      <!-- end Modal Signup-->

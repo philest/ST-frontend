@@ -7,7 +7,7 @@
 </style>
       <!-- Modal Signup -->
       <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-      <div data-role="page" class="wrapper" id="page4">
+      <div data-role="page" class="wrapper" id="page6">
         <%= erb :'components/navbar' %>
      
         <div data-role="main" class="body invite-teacher">
@@ -92,6 +92,39 @@
                 </a>
       
                 <script>
+                    
+                  // $( function() {
+                  //     var availableTags = [
+                  //       "ass me hard",
+                  //       "ActionScript",
+                  //       "AppleScript",
+                  //       "Asp",
+                  //       "BASIC",
+                  //       "C",
+                  //       "C++",
+                  //       "Clojure",
+                  //       "COBOL",
+                  //       "ColdFusion",
+                  //       "Erlang",
+                  //       "Fortran",
+                  //       "Groovy",
+                  //       "Haskell",
+                  //       "Java",
+                  //       "JavaScript",
+                  //       "Lisp",
+                  //       "Perl",
+                  //       "PHP",
+                  //       "Python",
+                  //       "Ruby",
+                  //       "Scala",
+                  //       "Scheme"
+                  //     ];
+                  //     $( "input[name=school_name]" ).autocomplete({
+                  //       source: availableTags
+                  //     });
+                  //   } );
+
+
         
                   $(document).on('click', '#page4link',function(event){
 
@@ -113,7 +146,7 @@
 
                     var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
-                    $('form#school-info').find('input[name=signature]').val(sig);                
+                    $('form#school-info').find('input[name=signature]').val(sig);    
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
 
