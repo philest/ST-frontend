@@ -23,8 +23,12 @@
     /*padding-bottom: 10px;*/
     margin-top: 0px;
     margin-bottom: 0px;
+    text-align: left;
+    color: black;
 
   }
+
+ 
 
   ul.ui-autocomplete.ui-menu li a {
     /*border-bottom: none;*/
@@ -37,6 +41,12 @@
     padding-top: 0px;*/
     padding-top: 10px;
     padding-bottom: 10px;
+  }
+
+  ul.ui-autocomplete.ui-menu li a:hover {
+
+    color: white !important;
+
   }
 
   ul.ui-autocomplete.ui-menu li a span{
@@ -65,35 +75,76 @@
                 <div class="signup-setup">
                     <div class="field" id="signup-field">
                        <label class="label">School</label>
-                      <input name="school_name" autocomplete="off" placeholder="" class="input" required>
+                      <input name="school_name" autocomplete="off" placeholder="Search for a school" class="input" required>
                        
                     </div>
                     <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
                 </div>
 
+                <!-- create the dropdown menu here -->
+                <div class="dropdown-menu" style="display: none;">
+                  <div id="just-to-append">
+                    <div id="status-text">
+                      <p><i>Suggested schools for you</i></p>
+                    </div>
+                  </div>
+
+      
+                  <div id="add-your-school-link">
+                    <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade" href="">Add one now.</a></p>
+                  </div>
+
+
+                </div>
+
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
-
-                <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade" href="">Add one now.</a></p>
-
-
-                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" style="display: none;" data-transition="fade">
+                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
                   Continue
                 </a>
       
                 <script>
+                  var last_selected = '';
 
-                  $( function() {  
+                  $(function() {  
                     // get the damn schools here and store in a javscript object
-                    var availableSchools = []
+                    var availableSchools = [];
 
                     var response = $.getJSON('/list-of-schools', function(data) {
                       console.log(data);
                       availableSchools = availableSchools.concat(data);
                       
                       $( "#page4 input[name=school_name]" ).autocomplete({
-                        source: availableSchools
+                        source: availableSchools,
+                        appendTo: "#just-to-append",
+                        position: { my: "left top", at: "left bottom", of: "#status-text" },
+                        response: function(event, ui) {
+                          var len = ui.content.length;
+                          console.log(ui.content.length); //in this moment you get count results you 
+                          if (len >= 1) {
+                            console.log('some results!');
+                            $('#status-text p i').text('Suggested schools for you');
+                          } else {
+                            console.log('no results');
+                            $('#status-text p i').text('No results found.');
+                          }
+                        },
+                        close: function(event, ui) {
+                          console.log('this shit got CLOSED, son!');
+                          return false;
+                        },
+                        focus: function(event, ui) {
+                          // add the dropdown menu here (or make it visible)
+                          console.log('focusing.... FOCUSING....');
+                          return false;
+                        },
+                        select: function(event, ui) {
+                          console.log('selected item');
+                          $('#page4 input[name=school_name]').blur();
+                          last_selected = ui.item.value;
+                          // return false;
+                        }
                       }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                         return $( "<li>", {
                             class: 'school-selector',
@@ -108,13 +159,28 @@
                          .append( "<a>" + item.value + "<br><span class='city'>" + item.desc + "</span></a>" )
                          .appendTo( ul );
                       };
-
-
                     });
-
                   });
-                    
 
+                  // $("#page4 input[name=school_name]").on("input propertychange paste", function(event,ui) {
+                  //   console.log('TOTALLY changed');
+
+
+                  // });
+
+                    
+                  $('#page4 input[name=school_name]').focus(function() {
+                    $('.dropdown-menu').css('display', 'block');
+                  });
+
+                  $('#page4 input[name=school_name]').blur(function() {
+                    // check to see if we selected something nice
+                    var input_val = $('#page4 input[name=school_name]').val();
+                    
+                    $('#page4 input[name=school_name]').val(last_selected);
+
+                    $('.dropdown-menu').css('display', 'none');
+                  });
         
                   $(document).on('click', '#page4link',function(event){
 
@@ -136,14 +202,19 @@
 
                     var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
-                    $('form#school-info').find('input[name=signature]').val(sig);    
+                    $('#page4 form#school-info').find('input[name=signature]').val(sig);    
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
 
                     var formdata = $("form#school-info").serializeArray();
+                    console.log(formdata);
                     var data = {};
+                    console.log('MY ASSHOLE');
                     $(formdata).each(function(index, obj){
+                      console.log(obj.name);
+                      console.log(obj.value);
                         data[obj.name] = obj.value;
+                        console.log(data);
                     });
                     console.log(data);
                     mixpanel.people.set(data);
@@ -151,7 +222,6 @@
                   });
 
                 </script>
-
               </form>
           </div>
         </div>

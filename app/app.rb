@@ -169,7 +169,6 @@ class App < Sinatra::Base
 
         # distinguish between emails/phone here, i guess
 
-
         user_info = {
           first_name: params['first_name'],
           last_name: params['last_name'],
