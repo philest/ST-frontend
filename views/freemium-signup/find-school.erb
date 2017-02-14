@@ -91,8 +91,12 @@
 
       
                   <div id="add-your-school-link">
-                    <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade" href="">Add one now.</a></p>
+                    <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade">Add one now.</a></p>
                   </div>
+
+                  <script>
+                    
+                  </script>
 
 
                 </div>
@@ -129,15 +133,16 @@
                             console.log('no results');
                             $('#status-text p i').text('No results found.');
                           }
+                          // return false;
                         },
                         close: function(event, ui) {
                           console.log('this shit got CLOSED, son!');
-                          return false;
+                          // return false;
                         },
                         focus: function(event, ui) {
                           // add the dropdown menu here (or make it visible)
                           console.log('focusing.... FOCUSING....');
-                          return false;
+                          // return false;
                         },
                         select: function(event, ui) {
                           console.log('selected item');
@@ -150,8 +155,8 @@
                             class: 'school-selector',
                             click: function(event) {
                               console.log('this shit was clicked');
-                              $('#page4 input[name=school_name]').focus();
-                              $('#page4 input[name=school_name]').blur();
+                              // $('#page4 input[name=school_name]').focus();
+                              // $('#page4 input[name=school_name]').blur();
                               $('#page4link').slideDown();
 
                             }
@@ -173,7 +178,16 @@
                     $('.dropdown-menu').css('display', 'block');
                   });
 
+                  $('#page4link-add-school').on('mousedown', function(event) {
+                    console.log('add-school-link clicked');
+                    // event.stopImmediatePropagation();
+                    event.preventDefault(); 
+                  });
+                  
+
                   $('#page4 input[name=school_name]').blur(function() {
+
+                    console.log("I'M BLURRING, I'M BLURRING!!");
                     // check to see if we selected something nice
                     var input_val = $('#page4 input[name=school_name]').val();
                     
@@ -181,7 +195,8 @@
 
                     $('.dropdown-menu').css('display', 'none');
                   });
-        
+
+
                   $(document).on('click', '#page4link',function(event){
 
                     var ValidStatus = $("#school-info").valid();
