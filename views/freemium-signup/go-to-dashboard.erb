@@ -36,7 +36,7 @@
                   <img src="https://s3.amazonaws.com/st-webpage/assets/logo/logo-large.png"  alt="">
                 </div>
 
-                <form id='log-into-dat-account' action='signin' method='post'>
+                <form id='log-into-dat-account' action='signin' method='post' data-ajax="false">
                   <input type="hidden" name='email' value='<%= session[:email] %>'>
                   <input type="hidden" name='signature' value=''>
                   <input type="hidden" name='password' value=''>
@@ -48,13 +48,16 @@
                   </button>
 
                   <script>
-                    $('form#log-into-dat-account').submit(function(event) {
+                    $('form#log-into-dat-account').on('submit', function(event) {
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                       $('form#log-into-dat-account').find('input[name=role]').val(role);
 
                       var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
                       $('form#log-into-dat-account').find('input[name=signature]').val(sig);
+
+
+                      // $('form#log-into-dat-account').submit();
                     });
                   </script>
 
