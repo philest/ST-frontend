@@ -94,13 +94,9 @@
                     <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade">Add one now.</a></p>
                   </div>
 
-                  <script>
-                    
-                  </script>
-
-
                 </div>
 
+                <input type="hidden" name="school_id" value="">
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
@@ -147,8 +143,16 @@
                         select: function(event, ui) {
                           console.log('selected item');
                           $('#page4 input[name=school_name]').blur();
-                          last_selected = ui.item.value;
-                          // return false;
+                          last_selected = ui.item.label;
+
+                          // add a school_id field and populate it
+                          console.log('chose school with id = ' + String(ui.item.value));
+                          $('#page4 input[name=school_id]').val(ui.item.value);
+
+                          // but make sure we populate form input with label....
+                          $('#page4 input[name=school_name]').val(ui.item.label);
+
+                          return false;
                         }
                       }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                         return $( "<li>", {
@@ -157,21 +161,15 @@
                               console.log('this shit was clicked');
                               // $('#page4 input[name=school_name]').focus();
                               // $('#page4 input[name=school_name]').blur();
-                              $('#page4link').slideDown();
-
+                              // $('#page4link').slideDown();
                             }
                          })
-                         .append( "<a>" + item.value + "<br><span class='city'>" + item.desc + "</span></a>" )
+                         .append( "<a>" + item.label + "<br><span class='city'>" + item.desc + "</span></a>" )
                          .appendTo( ul );
                       };
                     });
                   });
 
-                  // $("#page4 input[name=school_name]").on("input propertychange paste", function(event,ui) {
-                  //   console.log('TOTALLY changed');
-
-
-                  // });
 
                     
                   $('#page4 input[name=school_name]').focus(function() {
@@ -197,9 +195,9 @@
                   });
 
 
-                  $(document).on('click', '#page4link',function(event){
+                  $(document).on('click', '#page4 #page4link',function(event){
 
-                    var ValidStatus = $("#school-info").valid();
+                    var ValidStatus = $("#page4 #school-info").valid();
                     // console.log(ValidStatus);
                     if (ValidStatus == false) {
                         event.preventDefault();
@@ -219,12 +217,23 @@
 
                     $('#page4 form#school-info').find('input[name=signature]').val(sig);    
 
-                    $.post('/freemium-signup', $('form#school-info').serialize());
+                    $.ajax({
+                      url: '/freemium-signup',
+                      type: 'post',
+                      data: $('form#school-info').serialize()
+                    }).done(function(data, statusText, xhr) {
+                        console.log(data);
+                        console.log(statusText);
+                        console.log(xhr);
+                        // then move to the next screen, I guess
+
+                      });
+                    // have a do
+                    // ne() callback, decide on where we go from here
 
                     var formdata = $("form#school-info").serializeArray();
                     console.log(formdata);
                     var data = {};
-                    console.log('MY ASSHOLE');
                     $(formdata).each(function(index, obj){
                       console.log(obj.name);
                       console.log(obj.value);
