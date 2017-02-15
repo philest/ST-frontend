@@ -24,7 +24,7 @@
                       <label class="label">City</label>
                     <input name="school_city" autocomplete="off" placeholder="" class="input" required>
                     <label class="label">State</label>
-                    <select class="form-control" id="state" name="school_state">
+                    <select class="form-control" id="state" name="school_state" required>
                         <option value="">Select your state</option>
                         <option value="International">International</option>
                         <option value="AK">Alaska</option>
@@ -87,48 +87,14 @@
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
-                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+                <a id="page6link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
                   Continue
                 </a>
-      
+                
                 <script>
-                    
-                  // $( function() {
-                  //     var availableTags = [
-                  //       "ass me hard",
-                  //       "ActionScript",
-                  //       "AppleScript",
-                  //       "Asp",
-                  //       "BASIC",
-                  //       "C",
-                  //       "C++",
-                  //       "Clojure",
-                  //       "COBOL",
-                  //       "ColdFusion",
-                  //       "Erlang",
-                  //       "Fortran",
-                  //       "Groovy",
-                  //       "Haskell",
-                  //       "Java",
-                  //       "JavaScript",
-                  //       "Lisp",
-                  //       "Perl",
-                  //       "PHP",
-                  //       "Python",
-                  //       "Ruby",
-                  //       "Scala",
-                  //       "Scheme"
-                  //     ];
-                  //     $( "input[name=school_name]" ).autocomplete({
-                  //       source: availableTags
-                  //     });
-                  //   } );
+                  $(document).on('click', '#page6link',function(event){
 
-
-        
-                  $(document).on('click', '#page4link',function(event){
-
-                    var ValidStatus = $("#school-info").valid();
+                    var ValidStatus = $("#page6 #school-info").valid();
                     // console.log(ValidStatus);
                     if (ValidStatus == false) {
                         event.preventDefault();
@@ -136,7 +102,6 @@
                         mixpanel.track('invalid school info given');
                         return false;
                     }
-
                     // get post data from 
                     //  1. role
                     //  2. signature

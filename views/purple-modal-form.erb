@@ -106,6 +106,22 @@ mixpanel.init('<%= mixpanel_homepage_key %>', {
     <script type="text/javascript">
 
       $(document).ready(function () {
+        /** 
+         * Determine the user's timezone
+         */
+        function getUserTimezone() {
+          return (((new Date()).getTimezoneOffset() / 60) - 1) * -1
+        }
+
+        var timezone = getUserTimezone();
+
+        var tz = $('<input>')
+                  .attr('type', 'hidden')
+                  .attr('name', 'time_zone')
+                  .val(timezone);
+        $('#invite-teacher-form').append($(tz));
+        $('#school-info').append($(tz));
+
         /**
          * Determine the mobile operating system.
          * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
@@ -171,7 +187,6 @@ mixpanel.init('<%= mixpanel_homepage_key %>', {
   <%= erb :'freemium-signup/find-school' %>
   <%= erb :'freemium-signup/school-info' %>
   <%= erb :'freemium-signup/success' %>
-
 <footer>
 
     <script>

@@ -114,13 +114,14 @@ class App < Sinatra::Base
 
 
   post '/freemium-signup-register' do
-
     require 'bcrypt'
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
+    # STORE PASSWORD, NOT PASSWORD DIGEST
+
+    plaintext_password = params['password']
     params['password'] = BCrypt::Password.create params['password']
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
     
-
     if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
       notify_admins("Educator joined freemium", params.to_s)
     end
@@ -128,140 +129,245 @@ class App < Sinatra::Base
     session[:first_name] = params['first_name']
     session[:last_name]  = params['last_name']
     session[:email]      = params['email']
-    session[:password_digest]   = params['password']
+    session[:password]   = plaintext_password
 
     redirect to "/freemium-signup"
   end
 
   get '/freemium-signup' do
-    if [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? nil or
-       [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? ''
+    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
+       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
        redirect to '/'
     end
-    
     erb :'purple-modal-form', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
   end
 
+  # post '/freemium-signup' do
+    # # {
+    #   phone:,
+    #   first_name:,
+    #   last_name:,
+    #   password:,
+    #   class_code:,
+    #   time_zone:,
+    #   role:,
+    # }
+    # 
+    # REMEMBER that we authenticate and create users in birdv, not here. 
+    # if it's only a user, do that
+    # 
+
+    # goal: 
+    # 
+    # if USER:
+    #   autheticate on birdv
+    #   if response is 201, return 201
+    #   
+    # if TEACHER/ADMIN:
+    #   create a user with login credentials for app, authenticate on birdv
+    #   handle response if 201 or 404
+    # 
+  # end
+
+
+  # QUESTIONS FOR AUBREY
+    # HOW DO WE DO CLASS CODE??????? 
+    # IS THERE A WAY TO DO WITHOUT?
+
 
   post '/freemium-signup' do
+    # # {
+    #   phone:,
+    #   first_name:,
+    #   last_name:,
+    #   password:,
+    #   class_code:,
+    #   time_zone:,
+    #   role:,
+    # }
     # handle session data and email us with new info
-    if [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? nil or
-       [session[:first_name], session[:last_name], session[:email], session[:password_digest]].include? ''
-       redirect to '/'
+    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
+       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
+       return 400
     end
 
     params['first_name'] = session[:first_name]
     params['last_name'] = session[:last_name]
     params['email'] = session[:email]
-    params['password_digest'] = session[:password_digest]
+    params['password'] = session[:password]
+
 
     case params['role']
     when 'parent'
       puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
       # check that teacher email is there
 
-      begin
-        school = School.where(signature: "Freemium", name: "Unnamed").first
-        if school.nil?
-          puts "creating freemium school..."
-          school = School.create(signature: "Freemium", name: "Unnamed", code: 'freemium|freemium-es')
-        end
+      # need phone in params....
+      params['phone'] = params['email']
 
-        # distinguish between emails/phone here, i guess
+      # POST to birdv baby!!!!
+      response = HTTParty.post(
+                  ENV['birdv_url'] + 'api/auth/signup_free_agent',
+                  body: params
+                )
+      # yyyyyyeaaeaaaah baby
 
-        user_info = {
-          first_name: params['first_name'],
-          last_name: params['last_name'],
-          email: params['email'],
-          phone: params['email'],
-          password_digest: params['password_digest'],
-          platform:'app'
-        }
-        user = User.new(user_info)
-        
-        # check that new user is valid! 
-        # decide if we should create that user
-        if user.valid?
-
-          teacher = Teacher.where(email:params['teacher_email']).first
-          puts "teacher = #{teacher.inspect}"
-          if teacher.nil? # new teacher
-            puts "it's a new teacher"
-            teacher = Teacher.create(email: params['teacher_email'])
-            school.signup_teacher(teacher)
-            teacher.signup_user(user)
-            msg = "Parent finished freemium signup"
-          else # existing teacher
-            puts "it's an existing teacher"
-            teacher.signup_user(user)
-            msg = "Parent finished freemium signup with existing teacher"
-          end
-
-        end
-
-        # if user isn't new, DON'T DO ANYTHING TO THAT USER! 
-        # don't reassign teacher, don't do jack shit
-
-
-        if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
-          notify_admins(msg, params.to_s)
-        end
-
-      rescue => e
-        p e.message
-      end
+      return response.code
 
     when 'teacher', 'admin'
+      puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
+      # just add the school id as the value of the autocomplete
+      # OOH and that way, if the value is empty, that means 
+      # it doesn't exist in our db
+      # 
+
+      # we KNOW that if the teacher/admin is signing up for an existing school,
+      # then we'll have the proper teacher/school code to give them
+      # and their app experience will probably be like anyone in their class
+
+
+      # what we DON'T KNOW is... what's the app experience for teachers who sign 
+      # up and CREATE a school???
+      # 
+      # oh.... we don't need to worry about that right now....
+      # 
+      # 
+      # first, we check to see if the school they indicated exists.............
+      # how do we do that?
+      # we have the 
+
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
 
       if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
-        notify_admins("#{params['role']} finished freemium signup", params.to_s)
+        # don't send the actual password! 
+        notify_params = {
+          first_name: params['first_name'],
+          last_name: params['last_name'],
+          email: params['email'],
+          phone: params['email']
+        }
+        notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
       end
 
       begin
-        school_info = {
-          signature: "Freemium School",
-          name: params['school_name'],
-          city: params['school_city'],
-          state: params['school_state'],
-          code: 'unofficial|unofficial-es'
-        }
+        # get the school id! 
+        school_id = params['school_id'].to_i
 
-        school = School.where(school_info).first || School.create(school_info)
+        school = School.where(id: school_id).first 
 
+        puts "HERE'S OUR SCHOOL BROOOO!!!! #{school.inspect}"
+
+        password_digest = BCrypt::Password.create params['password']
+
+        # FOR BOTH FIND-SCHOOL AUTOCOMPLETE AND ADD-SCHOOL,
+        # NEED TO HAVE ALL THESE PARAMS!!
+        # so add params to autocomplete.....
+        # but you don't need to worry about this now, 
+        # because for now the only way to add schools is through 
+        # the add-school form, which requires all these elements.
+        # so do this tomorrow.
+        if school.nil?
+          # this school doesn't exist bro!
+          # will need to create it! 
+          puts "THIS SCHOOL DOESN'T FUCKING EXIST BRO!!!!!!!!"
+
+          free_ass_class_code = "#{params['school_name']}_#{params['school_city']}_#{params['school_state']}"
+          school_info = {
+            signature: params['school_name'],
+            name: params['school_name'],
+            city: params['school_city'],
+            state: params['school_state'],
+            code: "#{free_ass_class_code}|#{free_ass_class_code}-es",
+            plan: 'free'
+          }
+
+          school = School.where(school_info).first || School.create(school_info)
+        
+        end # if school.nil? 
+
+        # create teacher/admin
         educator_info = {
           signature: params['signature'],
           first_name: params['first_name'],
           last_name: params['last_name'],
           email: params['email'],
           phone: params['email'],
-          password_digest: params['password_digest']
+          password_digest: password_digest
         }
 
         if params['role'] == 'teacher'
           # am i overwriting anything here?
           puts "i'm a teacher, look at MEEEEEEE"
-          educator = Teacher.where(educator_info).first 
+          educator = Teacher.where(email: params['email']).or(phone: params['email']).first 
+          # if the teacher already exists, don't do JACK SHIT!!!!!
           if educator.nil?
             educator = Teacher.create(educator_info)
+
+            school.signup_teacher(educator)
+
+            params['class_code'] = educator.code.split('|').first
+
+            # need phone in params....
+            params['phone'] = params['email']
+
+            # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
+            response = HTTParty.post(
+              ENV['birdv_url'] + '/api/auth/signup',
+              body: params
+            )
+            puts "response = #{response.inspect}"
+            return response.code
+            # yyyyyyeaaeaaaah baby
           end
 
-          school.signup_teacher(educator)
+          # and THEN create the user!
+          # with the correct class code the way you normally would!!!!!!!!!
         else
-          educator = Admin.where(educator_info).first || Admin.create(educator_info)
-          school.add_admin(educator)
+          puts "I'M AN ADMIN YO!"
+          educator = Admin.where(email: params['email']).or(phone: params['email']).first 
+          if educator.nil?
+            educator = Admin.where(educator_info).first || Admin.create(educator_info)
+            school.add_admin(educator)
+
+            params['class_code'] = school.code.split('|').first
+
+            # need phone in params....
+            params['phone'] = params['email']
+
+            # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
+            response = HTTParty.post(
+              ENV['birdv_url'] + '/api/auth/signup',
+              body: params
+            )
+
+            puts "response = #{response.inspect}"
+            return response.code
+            # yyyyyyeaaeaaaah baby
+
+          end
+
         end
+
+        # um..... how are we dealing with class codes?
+
+        puts "returning 200, i guess"
+        return 200 # i guess
+
 
       rescue => e
         p e.message
+        puts "returning 404, i guess"
+        return 404
       end
         # # maybe do server-side processing to figure out if it's an email or phone....
         # # could also try this on the client side and update the input name. validations.
     else
       puts "failure, missing some params. params=#{params} and session=#{session.inspect}"
-      redirect to '/'
+      return 400
+      # redirect to '/'
     end
 
+    puts "returning 200, i guess"
     return 200
   end
 
@@ -666,7 +772,8 @@ class App < Sinatra::Base
         location = "#{school.state}"
       end
       {
-        value: school.signature,
+        label: school.signature,
+        value: school.id,
         desc: location
       }
     end.to_json
