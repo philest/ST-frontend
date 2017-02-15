@@ -32,8 +32,19 @@
                             return false;
                         }
 
-                        $.post('/freemium-signup', $('#invite-teacher-form').serialize());
-                        
+                        // send that goddamn mothafucken ajax request
+                        $.ajax({
+                          url: '/freemium-signup', 
+                          type: 'post',
+                          data: $('#invite-teacher-form').serialize()
+                        }).done(function(data, statusText, xhr) {
+                          console.log(data);
+                          console.log(statusText);
+                          console.log(xhr);
+                          // then move to the next screen, I guess
+
+                        });
+                          
                         var formdata = $("form#invite-teacher-form").serializeArray();
                         var data = {};
                         $(formdata).each(function(index, obj){
