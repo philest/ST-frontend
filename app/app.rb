@@ -207,10 +207,12 @@ class App < Sinatra::Base
 
       # POST to birdv baby!!!!
       response = HTTParty.post(
-                  ENV['birdv_url'] + 'api/auth/signup_free_agent',
+                  ENV['birdv_url'] + '/api/auth/signup_free_agent',
                   body: params
                 )
       # yyyyyyeaaeaaaah baby
+
+      puts "response = #{response.inspect}"
 
       return response.code
 
