@@ -112,6 +112,13 @@
       // });
 
       $(document).ready(function(){
+
+        // $('.signup-button').click(function(event) {
+        //   console.log('clicked the top button');
+        //   $('#myModal').modal('toggle');
+        // });
+
+
         // $('#signupNamePassword').modal('toggle');
  
         $(window).scroll(function (event) {
@@ -203,12 +210,12 @@
               <a>
                 <% if session['educator'].nil? %>
                   <!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#chooseRoleModal"> -->
-                  <button id="top-button" class="signup-button log-in-fake-button">
+                  <button id="top-button" class="signup-button logger-in log-in-fake-button">
                   Log in
                   </button>
                 <% else %>
                   <form action="signup" method="get">                 
-                    <button id="top-button" type="submit" class="signup-button log-in-fake-button">
+                    <button id="top-button" type="submit" class="signup-button logger-in log-in-fake-button">
                       Log in
                     </button>
                   </form>

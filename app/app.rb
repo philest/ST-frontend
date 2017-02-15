@@ -303,9 +303,12 @@ class App < Sinatra::Base
           educator = Teacher.where(email: params['email']).or(phone: params['email']).first 
           # if the teacher already exists, don't do JACK SHIT!!!!!
           if educator.nil?
+
             educator = Teacher.create(educator_info)
 
             school.signup_teacher(educator)
+
+            # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
 
             params['class_code'] = educator.code.split('|').first
 
@@ -318,7 +321,7 @@ class App < Sinatra::Base
               body: params
             )
             puts "response = #{response.inspect}"
-            return response.code
+
             # yyyyyyeaaeaaaah baby
           end
 
@@ -343,17 +346,18 @@ class App < Sinatra::Base
             )
 
             puts "response = #{response.inspect}"
-            return response.code
+
             # yyyyyyeaaeaaaah baby
 
           end
+
 
         end
 
         # um..... how are we dealing with class codes?
 
-        puts "returning 200, i guess"
-        return 200 # i guess
+        # BOTH
+        return school.code.split('|').first
 
 
       rescue => e

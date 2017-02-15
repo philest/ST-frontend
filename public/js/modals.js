@@ -197,7 +197,8 @@ $(document).ready(function () {
   // 
   // YUP, SIGNUP FLOW, RIGHT ABOVE ME!!!!!
 
-  $('#top-button').click(function(event) {
+  $('.logger-in.signup-button#top-button').click(function(event) {
+    console.log('clicked the top button');
     $('#myModal').modal('toggle');
   });
 
