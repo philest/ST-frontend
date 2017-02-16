@@ -268,7 +268,13 @@ class App < Sinatra::Base
         # because for now the only way to add schools is through 
         # the add-school form, which requires all these elements.
         # so do this tomorrow.
+
+        new_school = false
+
         if school.nil?
+
+          new_school = true
+
           # this school doesn't exist bro!
           # will need to create it! 
           puts "THIS SCHOOL DOESN'T FUCKING EXIST BRO!!!!!!!!"
@@ -351,13 +357,24 @@ class App < Sinatra::Base
             # yyyyyyeaaeaaaah baby
           end
 
-
         end
 
-        # um..... how are we dealing with class codes?
+        if new_school
+          # we just don't want peeps signing into their dashboard.
+          # so we send them an invalid code in case they wander
+          # to the page7 modal
+          return 'invalid_code'
+        else
+          return school.code.split('|').first
+        end
 
-        # BOTH
-        return school.code.split('|').first
+        
+
+        
+
+        
+
+
 
 
       rescue => e
@@ -761,7 +778,13 @@ class App < Sinatra::Base
       'Freemium School',
       'ST Elementary'
     ]
-    School.where(signature: blacklist).invert.map do |school|
+
+    regex = "%#{params['term']}%"
+
+    puts "regex = #{regex}"
+
+    School.where(signature: blacklist).invert
+          .where(Sequel.ilike(:signature, regex)).map do |school|
       location = ''
       puts "school vals = #{school.city}, #{school.state}"
       if school.city and school.state
@@ -777,7 +800,9 @@ class App < Sinatra::Base
       {
         label: school.signature,
         value: school.id,
-        desc: location
+        desc: location,
+        city: school.city,
+        state: school.state
       }
     end.to_json
   end

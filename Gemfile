@@ -5,8 +5,9 @@ ruby '2.3.1'
 # st-enroll
 # 
 gem 'createsend', '~> 4.1'
-gem 'sequel'
 gem 'pg'
+gem 'sequel'
+gem 'sequel_pg', '~> 1.6', '>= 1.6.13'
 gem 'redis'
 gem 'sidekiq'
 gem 'clockwork'

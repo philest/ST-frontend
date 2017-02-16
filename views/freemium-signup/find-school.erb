@@ -114,6 +114,11 @@
                       var availableSchools = [];
 
                       var response = $.getJSON('/list-of-schools', function(data) {
+                        // query the Ed list
+                        // get school_name, school_city, school_state and leave school_id blank
+                        //    that's all you need to ensure a school is added
+
+
                         console.log(data);
                         availableSchools = availableSchools.concat(data);
                         
@@ -208,10 +213,14 @@
                           return false;
                       }
 
-                      // get post data from 
-                      //  1. role
-                      //  2. signature
-                      // append to this form.
+                      // IF THE SCHOOL WE CHOSE HAD A BLANK VALUE (NO SCHOOL_ID), THEN
+                      // SIMPLY FADE IN PAGE6 (THE 'CONGRATS' PAGE) SO WE DON'T PRETEND WE'RE
+                      // GOING TO THE WEB APP.... BITCH
+
+                      
+                      
+
+
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                       $('form#school-info').find('input[name=role]').val(role);
 
