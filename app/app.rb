@@ -214,7 +214,7 @@ class App < Sinatra::Base
 
       puts "response = #{response.inspect}"
 
-      return response.code
+      return response.code 
 
     when 'teacher', 'admin'
       puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
@@ -283,7 +283,7 @@ class App < Sinatra::Base
             plan: 'free'
           }
 
-          school = School.where(school_info).first || School.create(school_info)
+            school = School.where(school_info).first || School.create(school_info)
         
         end # if school.nil? 
 
@@ -307,6 +307,8 @@ class App < Sinatra::Base
             educator = Teacher.create(educator_info)
 
             school.signup_teacher(educator)
+
+            FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
             # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
 
@@ -346,9 +348,7 @@ class App < Sinatra::Base
             )
 
             puts "response = #{response.inspect}"
-
             # yyyyyyeaaeaaaah baby
-
           end
 
 
@@ -663,7 +663,6 @@ class App < Sinatra::Base
   end
 
 
-
   get '/signup' do
     if session['educator'].nil?
       # maybe have a banner saying, "must log in through teacher account"
@@ -690,9 +689,7 @@ class App < Sinatra::Base
       end
 
     end
-
   end
-
 
 
   get '/privacy' do

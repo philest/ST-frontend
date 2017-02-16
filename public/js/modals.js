@@ -202,8 +202,6 @@ $(document).ready(function () {
     $('#myModal').modal('toggle');
   });
 
-
-
   $("#join.signature-modal").on('click', function(event) {
     event.preventDefault();
     $('#teacher-info').validate({ // initialize the plugin
