@@ -243,6 +243,7 @@ class Register < Sinatra::Base
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
     if test_code.match(class_code).nil?
+      params.delete 'password'
       notify_admins("user with phone #{phone_no} finished registration", params.to_s)
     else
       puts "it's just a test, no worries fellas..."
