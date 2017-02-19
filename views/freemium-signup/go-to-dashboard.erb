@@ -1,0 +1,72 @@
+<style>
+     #monday {
+            font-weight: normal;
+            text-align: center;
+            width: 80%;
+            display: block;
+            margin: 0 auto;
+     }
+
+     .wrapper {
+        background: #3F3F5E;
+     }
+
+     button#go-to-dashboard {
+       background-color: #ED7A44;
+       color: white;
+       font-family: 'Karla';
+       text-shadow: none;
+
+     }
+</style>
+
+<div data-role="page" class="wrapper" id="page7">
+  <%= erb :'components/navbar' %>
+
+        <div data-role="main" class="body invite-teacher pure-g">
+          <div class="container">
+            <div class="pure-u-1">
+           
+                <div id="monday">
+                  <h1 style="margin-bottom: 0px;">Congrats!</h1>
+                  <h2 style="margin-bottom:0.5em;margin-top:0.5em;font-family:'Karla';font-size:1em;font-weight:normal;line-height: 1.3em;" class="purple-subtitle">We've created your account.</h2>
+                </div>
+
+                <div id="app-icon">
+                  <img src="https://s3.amazonaws.com/st-webpage/assets/logo/logo-large.png"  alt="">
+                </div>
+
+                <form id='log-into-dat-account' action='signin' method='post' data-ajax="false">
+                  <input type="hidden" name='email' value='<%= session[:email] %>'>
+                  <input type="hidden" name='signature' value=''>
+                  <input type="hidden" name='password' value=''>
+                  <input type="hidden" name='role' value=''>
+
+                  <!-- HERE IS THE LOCUS OF PRODUCTION -->
+                  <button id="go-to-dashboard" data-ajax="false" style="font-size: 1.2em;" type="submit">
+                      Log in
+                  </button>
+
+                  <script>
+                    $('form#log-into-dat-account').on('submit', function(event) {
+                      var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                      $('form#log-into-dat-account').find('input[name=role]').val(role);
+
+                      var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
+                      $('form#log-into-dat-account').find('input[name=signature]').val(sig);
+
+
+                      // $('form#log-into-dat-account').submit();
+                    });
+                  </script>
+
+                </form>
+               
+            </div>
+          </div>
+        </div> <%# end pure-g %>
+
+
+
+</div> <%# wrapper %>

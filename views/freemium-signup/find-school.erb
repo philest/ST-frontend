@@ -1,0 +1,271 @@
+<style>
+  #state {
+    border: 0.5px solid gray;
+    width: 100%;
+    margin-bottom: 0.5em;
+  }
+
+  #page4 input[name=school_name] {
+    background: url(images/icons/magnifying-glass.png) no-repeat scroll 7px 7px;
+    padding-left: 45px;
+    background-size: 30px;
+  }
+
+  ul.ui-autocomplete.ui-menu { 
+    overflow-y: scroll;
+    max-height: 250px;
+    overflow-x: hidden;
+  }
+
+  ul.ui-autocomplete.ui-menu li {
+    max-height: 75px;
+    /*padding-top: 10px;*/
+    /*padding-bottom: 10px;*/
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-align: left;
+    color: black;
+
+  }
+
+ 
+
+  ul.ui-autocomplete.ui-menu li a {
+    /*border-bottom: none;*/
+    line-height: 23px;
+    display: block;
+    text-decoration: none;
+    margin-bottom: 0px;
+    margin-top: 0px;
+/*    padding-bottom: 0px;
+    padding-top: 0px;*/
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  ul.ui-autocomplete.ui-menu li a:hover {
+
+    color: white !important;
+
+  }
+
+  ul.ui-autocomplete.ui-menu li a span{
+    margin-top: -30px;
+    font-size: 12px;
+  }
+
+  /*background F2F3F5*/
+
+  /*bottom border DCDEE2*/
+
+
+</style>
+      <!-- Modal Signup -->
+      <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
+      <div data-role="page" class="wrapper" id="page4">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body invite-teacher">
+
+          <div class="container" style="padding-top:0em;">
+            <div class="content-wrapper">
+            
+                <h2 class="modal-signup-heading" id="modal-signup-heading">Add your school</h2>
+                <!-- <h3 class="modal-signup-heading">to add your class</h3> -->
+
+                <form id="school-info" class="signup-form"> 
+                  <div class="signup-setup">
+                      <div class="field" id="signup-field">
+                         <label class="label">School</label>
+                        <input name="school_name" autocomplete="off" placeholder="Search for a school" class="input" required>
+                         
+                      </div>
+                      <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
+                  </div>
+
+                  <!-- create the dropdown menu here -->
+                  <div class="dropdown-menu" style="display: none;">
+                    <div id="just-to-append">
+                      <div id="status-text">
+                        <p><i>Suggested schools for you</i></p>
+                      </div>
+                    </div>
+
+        
+                    <div id="add-your-school-link">
+                      <p>Can't find your school? <a id="page4link-add-school" href="#page6" data-transition="fade">Add one now.</a></p>
+                    </div>
+
+                  </div>
+
+                  <input type="hidden" name="school_id" value="">
+                  <input type="hidden" name="role" value="">
+                  <input type="hidden" name="signature" value="">
+
+                  <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page7" data-transition="fade">
+                    Continue
+                  </a>
+        
+                  <script>
+                    var last_selected = '';
+
+                    $(function() {  
+                      // get the damn schools here and store in a javscript object
+                      var availableSchools = [];
+
+                      var response = $.getJSON('/list-of-schools', function(data) {
+                        // query the Ed list
+                        // get school_name, school_city, school_state and leave school_id blank
+                        //    that's all you need to ensure a school is added
+
+
+                        console.log(data);
+                        availableSchools = availableSchools.concat(data);
+                        
+                        $( "#page4 input[name=school_name]" ).autocomplete({
+                          source: availableSchools,
+                          appendTo: "#just-to-append",
+                          position: { my: "left top", at: "left bottom", of: "#status-text" },
+                          response: function(event, ui) {
+                            var len = ui.content.length;
+                            console.log(ui.content.length); //in this moment you get count results you 
+                            if (len >= 1) {
+                              console.log('some results!');
+                              $('#status-text p i').text('Suggested schools for you');
+                            } else {
+                              console.log('no results');
+                              $('#status-text p i').text('No results found.');
+                            }
+                            // return false;
+                          },
+                          close: function(event, ui) {
+                            console.log('this shit got CLOSED, son!');
+                            // return false;
+                          },
+                          focus: function(event, ui) {
+                            // add the dropdown menu here (or make it visible)
+                            console.log('focusing.... FOCUSING....');
+                            // return false;
+                          },
+                          select: function(event, ui) {
+                            console.log('selected item');
+                            $('#page4 input[name=school_name]').blur();
+                            last_selected = ui.item.label;
+
+                            // add a school_id field and populate it
+                            console.log('chose school with id = ' + String(ui.item.value));
+                            $('#page4 input[name=school_id]').val(ui.item.value);
+
+                            // but make sure we populate form input with label....
+                            $('#page4 input[name=school_name]').val(ui.item.label);
+
+                            return false;
+                          }
+                        }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                          return $( "<li>", {
+                              class: 'school-selector',
+                              click: function(event) {
+                                console.log('this shit was clicked');
+                                // $('#page4 input[name=school_name]').focus();
+                                // $('#page4 input[name=school_name]').blur();
+                                // $('#page4link').slideDown();
+                              }
+                           })
+                           .append( "<a>" + item.label + "<br><span class='city'>" + item.desc + "</span></a>" )
+                           .appendTo( ul );
+                        };
+                      });
+                    });
+
+
+                      
+                    $('#page4 input[name=school_name]').focus(function() {
+                      $('.dropdown-menu').css('display', 'block');
+                    });
+
+                    $('#page4link-add-school').on('mousedown', function(event) {
+                      console.log('add-school-link clicked');
+                      // event.stopImmediatePropagation();
+                      event.preventDefault(); 
+                    });
+                    
+
+                    $('#page4 input[name=school_name]').blur(function() {
+
+                      console.log("I'M BLURRING, I'M BLURRING!!");
+                      // check to see if we selected something nice
+                      var input_val = $('#page4 input[name=school_name]').val();
+                      
+                      $('#page4 input[name=school_name]').val(last_selected);
+
+                      $('.dropdown-menu').css('display', 'none');
+                    });
+
+
+                    $(document).on('click', '#page4 #page4link',function(event){
+
+                      var ValidStatus = $("#page4 #school-info").valid();
+                      // console.log(ValidStatus);
+                      if (ValidStatus == false) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          mixpanel.track('invalid school info given');
+                          return false;
+                      }
+
+                      // IF THE SCHOOL WE CHOSE HAD A BLANK VALUE (NO SCHOOL_ID), THEN
+                      // SIMPLY FADE IN PAGE6 (THE 'CONGRATS' PAGE) SO WE DON'T PRETEND WE'RE
+                      // GOING TO THE WEB APP.... BITCH
+
+                      
+                      
+
+
+                      var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                      $('form#school-info').find('input[name=role]').val(role);
+
+                      var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
+                      $('#page4 form#school-info').find('input[name=signature]').val(sig);    
+
+                      $.ajax({
+                        url: '/freemium-signup',
+                        type: 'post',
+                        data: $('form#school-info').serialize()
+                      }).done(function(data, statusText, xhr) {
+                        console.log('logging this gosh darn data');
+                          console.log(data);
+                          console.log(statusText);
+                          console.log(xhr);
+
+                          // so people can sign the fuck in
+
+                          $('form#log-into-dat-account input[name=password]').val(data);
+                          // then move to the next screen, I guess
+                          
+                          // log into their account, I guess
+                          // window.location.href = "/app";
+                          
+
+                        });
+                      // have a do
+                      // ne() callback, decide on where we go from here
+
+                      var formdata = $("form#school-info").serializeArray();
+                      console.log(formdata);
+                      var data = {};
+                      $(formdata).each(function(index, obj){
+                          data[obj.name] = obj.value;
+                      });
+                      console.log(data);
+                      mixpanel.people.set(data);
+                      mixpanel.track('finished freemium signup');
+                    });
+
+                  </script>
+                </form>
+              </div>
+          </div> <%# container %>
+        </div>
+      </div>
+      <!-- end Modal Signup-->
