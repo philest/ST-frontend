@@ -1,5 +1,6 @@
 require 'pg'
 require 'sequel'
+require 'bcrypt'
 
 def get_db_connection(max_connections=6)
   #The environment variable DATABASE_URL should be in the following format:

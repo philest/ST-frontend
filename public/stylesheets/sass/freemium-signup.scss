@@ -7,6 +7,27 @@ body {
   text-shadow: none !important;
 }
 
+  
+
+
+#school-info.signup-form {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+  border: solid #DCDEE2 1px;
+  border-radius: 5px;
+
+  #status-text {
+    border-bottom: solid #DCDEE2 1px;
+  }
+
+}
+
 #override .ui-page-theme-a {
   h1 {
     text-shadow: none;
@@ -82,6 +103,7 @@ p.school-name {
 
 #page4link {
   margin-top: 1.5em;
+  // margin-top: 0em;
   margin-bottom: 0em;
 }
 
@@ -114,17 +136,12 @@ p.school-name {
   display: flex;
   align-items: center;
 
-  
-
   &.invite-teacher {
     height: 85vh;
-
     .container {
       border-top-left-radius: 0.5em;
       border-top-right-radius: 0.5em;
-      
     }
-
   }
 
 }

@@ -112,6 +112,13 @@
       // });
 
       $(document).ready(function(){
+
+        // $('.signup-button').click(function(event) {
+        //   console.log('clicked the top button');
+        //   $('#myModal').modal('toggle');
+        // });
+
+
         // $('#signupNamePassword').modal('toggle');
  
         $(window).scroll(function (event) {
@@ -165,6 +172,26 @@
         <a class="alert" href="#alert">Incorrect login info. Check with your admin for the correct school code!</a>
     </div>
   <% end %>
+
+    <!-- modals -->
+  <div>
+      <%= erb :'/modals/signup-signature' %>
+      <%= erb :'/modals/signup-school-role' %>
+      <%= erb :'/modals/school-info' %>
+      <%= erb :'/modals/rayna-video' %>
+      <%= erb :'/modals/school-role' %>
+      <%= erb :'/modals/teacher-name' %>
+      <%= erb :'/modals/admin-name' %>
+      <%= erb :'/modals/signup-name-password' %>
+      <%= erb :'/modals/educator-login' %>
+      <%= erb :'/modals/demo' %>
+      <%= erb :'/modals/signup-email' %>
+      <%= erb :'/modals/main-signup-form' %>
+      <%= erb :'/modals/congrats-modal' %>
+  </div>
+  <!-- modals end -->
+
+
       <nav class="navbar" role="navigation">
         <div class="container">
           <a href="/" id="navbar-title">
@@ -183,12 +210,12 @@
               <a>
                 <% if session['educator'].nil? %>
                   <!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#chooseRoleModal"> -->
-                  <button id="top-button" class="signup-button log-in-fake-button">
+                  <button id="top-button" class="signup-button logger-in log-in-fake-button">
                   Log in
                   </button>
                 <% else %>
                   <form action="signup" method="get">                 
-                    <button id="top-button" type="submit" class="signup-button log-in-fake-button">
+                    <button id="top-button" type="submit" class="signup-button logger-in log-in-fake-button">
                       Log in
                     </button>
                   </form>
@@ -443,23 +470,7 @@
 
   </div>
 
-    <!-- modals -->
-  <div>
-      <%= erb :'/modals/signup-signature' %>
-      <%= erb :'/modals/signup-school-role' %>
-      <%= erb :'/modals/school-info' %>
-      <%= erb :'/modals/rayna-video' %>
-      <%= erb :'/modals/school-role' %>
-      <%= erb :'/modals/teacher-name' %>
-      <%= erb :'/modals/admin-name' %>
-      <%= erb :'/modals/signup-name-password' %>
-      <%= erb :'/modals/educator-login' %>
-      <%= erb :'/modals/demo' %>
-      <%= erb :'/modals/signup-email' %>
-      <%= erb :'/modals/main-signup-form' %>
-      <%= erb :'/modals/congrats-modal' %>
-  </div>
-  <!-- modals end -->
+ 
 
   <%= erb :'components/footer' %> 
 

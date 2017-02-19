@@ -171,6 +171,9 @@ GEM
       rubyzip (~> 1.0)
       websocket (~> 1.0)
     sequel (4.42.1)
+    sequel_pg (1.6.17)
+      pg (>= 0.8.0)
+      sequel (>= 4.0.0)
     shellany (0.0.1)
     sidekiq (4.2.9)
       concurrent-ruby (~> 1.0)
@@ -256,6 +259,7 @@ DEPENDENCIES
   sass
   selenium-webdriver (= 2.48)
   sequel
+  sequel_pg (~> 1.6, >= 1.6.13)
   sidekiq
   sinatra
   sinatra-contrib

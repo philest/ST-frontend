@@ -7,7 +7,7 @@
 </style>
       <!-- Modal Signup -->
       <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> -->
-      <div data-role="page" class="wrapper" id="page4">
+      <div data-role="page" class="wrapper" id="page6">
         <%= erb :'components/navbar' %>
      
         <div data-role="main" class="body invite-teacher">
@@ -24,7 +24,7 @@
                       <label class="label">City</label>
                     <input name="school_city" autocomplete="off" placeholder="" class="input" required>
                     <label class="label">State</label>
-                    <select class="form-control" id="state" name="school_state">
+                    <select class="form-control" id="state" name="school_state" required>
                         <option value="">Select your state</option>
                         <option value="International">International</option>
                         <option value="AK">Alaska</option>
@@ -87,15 +87,14 @@
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
-                <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+                <a id="page6link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
                   Continue
                 </a>
-      
+                
                 <script>
-        
-                  $(document).on('click', '#page4link',function(event){
+                  $(document).on('click', '#page6link',function(event){
 
-                    var ValidStatus = $("#school-info").valid();
+                    var ValidStatus = $("#page6 #school-info").valid();
                     // console.log(ValidStatus);
                     if (ValidStatus == false) {
                         event.preventDefault();
@@ -103,7 +102,6 @@
                         mixpanel.track('invalid school info given');
                         return false;
                     }
-
                     // get post data from 
                     //  1. role
                     //  2. signature
@@ -113,7 +111,7 @@
 
                     var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
-                    $('form#school-info').find('input[name=signature]').val(sig);                
+                    $('form#school-info').find('input[name=signature]').val(sig);    
 
                     $.post('/freemium-signup', $('form#school-info').serialize());
 
@@ -124,11 +122,10 @@
                     });
                     console.log(data);
                     mixpanel.people.set(data);
-                    mixpanel('finished freemium signup');
+                    mixpanel.track('finished freemium signup');
                   });
 
                 </script>
-
               </form>
           </div>
         </div>
