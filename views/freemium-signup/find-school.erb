@@ -127,7 +127,8 @@
 
                           },
                           focus: function(event, ui) {
-
+                              $('#page4 input[name=school_name]').val(ui.item.label);
+                              return false;
                           },
                           select: function(event, ui) {
                             $('#page4 input[name=school_name]').blur();
