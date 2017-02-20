@@ -549,6 +549,11 @@ class App < Sinatra::Base
       puts "ass me!!!!!!!"
     end
 
+    if data.code == 303
+      flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
+      redirect '/'
+    end
+
     data = JSON.parse(data)
 
     puts data
