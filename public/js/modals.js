@@ -81,9 +81,29 @@ $(document).ready(function () {
         return false;
     }
 
-    $('body').addClass('modalTransition');
+    // now check to see if anyone exists by that name/email
+    var email = $('#signup-email input[name=email]').val();
 
-    $('#signupNamePassword').modal('toggle');
+    $.ajax({
+      url: '/user_exists',
+      type: 'get',
+      data: {
+        email: email
+      },
+      success: function(data) {
+        // a user already exists with this email/phone, so log that user in
+        $('#myModal').modal('toggle'); 
+      },
+      error: function (xhr, ajaxOptions, thrownError){
+          if(xhr.status==404) {
+            // a user doesn't exist with this phone/email
+            $('body').addClass('modalTransition');
+            $('#signupNamePassword').modal('toggle');
+              // alert(thrownError);
+          }
+      }
+
+    });
 
     mixpanel.track('email given', {'platform':'desktop'});
 

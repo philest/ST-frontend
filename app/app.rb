@@ -328,15 +328,21 @@ class App < Sinatra::Base
   get '/user_exists' do
     puts "params=#{params}"
 
-    res = HTTParty.get(
-      "#{ENV['enroll_url']}/user_exists",
-      query: {
-        password: params['password'],
-        email: params['email']
-      }
-    )
-    puts res.inspect
-    return res.parsed_response
+    if params['email'].nil? or params['email'].empty?
+      return 404
+    end
+
+    exists = Teacher.where(email: params['email']).first
+    exists ||= Teacher.where(phone: params['email']).first
+    exists ||= Admin.where(email: params['email']).first
+    exists ||= Admin.where(phone: params['email']).first
+
+    if exists
+      return 200
+    else
+      return 404
+    end
+
   end
 
 
