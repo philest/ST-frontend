@@ -783,9 +783,14 @@ class App < Sinatra::Base
 
     puts "regex = #{regex}"
 
+    puts "first FREEMIUMSCHOOL = #{FreemiumSchool.first.inspect}"
+
     # only send the first 50 results, let's say
     matching_schools = FreemiumSchool.where(Sequel.ilike(:signature, regex))
                                         .limit(50).map do |school|
+
+
+      puts "school = #{school.inspect}"
 
       location = ''
       puts "school vals = #{school.city}, #{school.state}"
