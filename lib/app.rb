@@ -148,6 +148,12 @@ class Enroll < Sinatra::Base
 
     school = educator.school
 
+    if school and school.plan == 'free'
+      # shouldn't log this guy in
+      return 303
+    end
+
+
     puts "password = #{password}"
     puts "authenticate = #{educator.authenticate password}"
 

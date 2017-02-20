@@ -173,6 +173,13 @@
     </div>
   <% end %>
 
+
+  <% if flash[:freemium_permission_error] %>
+    <div id="alert">
+        <a class="alert" href="#alert">Your free StoryTime trial is almost ready! We'll let you know when you're off the waitlist.</a>
+    </div>
+  <% end %>
+
     <!-- modals -->
   <div>
       <%= erb :'/modals/signup-signature' %>
