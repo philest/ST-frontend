@@ -202,69 +202,69 @@ $(document).ready(function () {
     $('#myModal').modal('toggle');
   });
 
-  $("#join.signature-modal").on('click', function(event) {
-    event.preventDefault();
-    $('#teacher-info').validate({ // initialize the plugin
-        rules: {
-            email: {
-                required: true,
-                email: true
-            },
-            password: {
-                required: true
-            }
-        }
-    }).form();
+  // $("#join.signature-modal").on('click', function(event) {
+  //   event.preventDefault();
+  //   $('#teacher-info').validate({ // initialize the plugin
+  //       rules: {
+  //           email: {
+  //               required: true,
+  //               email: true
+  //           },
+  //           password: {
+  //               required: true
+  //           }
+  //       }
+  //   }).form();
 
-    var ValidStatus = $("#teacher-info").valid();
-    if (ValidStatus == false) {
-        return false;
-    }
-    $('#myModal').modal('toggle');
-    // animate a loading gif...
-    var teacher_data = $("#teacher-info").serializeArray();
-    // var teacher_data = $("#teacher-info").serialize();
-    var email = teacher_data[0]['value'];
-    var password = teacher_data[1]['value'];
+  //   var ValidStatus = $("#teacher-info").valid();
+  //   if (ValidStatus == false) {
+  //       return false;
+  //   }
+  //   $('#myModal').modal('toggle');
+  //   // animate a loading gif...
+  //   var teacher_data = $("#teacher-info").serializeArray();
+  //   // var teacher_data = $("#teacher-info").serialize();
+  //   var email = teacher_data[0]['value'];
+  //   var password = teacher_data[1]['value'];
 
-    // then AJAX req existing user....
-    $.ajax({
-      url: 'user_exists',
-      // crossDomain: true,
-      type: 'get',
-      dataType: 'json',
-      data: {
-        email: email,
-        password: password
-      },
-      success: function(data) {
-        if (data.educator == 'false') {
-          // $('body').css("padding-right", '15px');
-          // $("body").addClass("hide-scroll");
-          $('body').addClass('modalTransition');
-          $('#chooseRoleModal').modal('toggle');
-          // show a different modal here....
+  //   // then AJAX req existing user....
+  //   $.ajax({
+  //     url: 'user_exists',
+  //     // crossDomain: true,
+  //     type: 'get',
+  //     dataType: 'json',
+  //     data: {
+  //       email: email,
+  //       password: password
+  //     },
+  //     success: function(data) {
+  //       if (data.educator == 'false') {
+  //         // $('body').css("padding-right", '15px');
+  //         // $("body").addClass("hide-scroll");
+  //         $('body').addClass('modalTransition');
+  //         $('#chooseRoleModal').modal('toggle');
+  //         // show a different modal here....
 
-        } else { 
-          var signature = data.educator;
-          var role      = data.role;
-          var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
-          $('#teacher-info').append($(input));
+  //       } else { 
+  //         var signature = data.educator;
+  //         var role      = data.role;
+  //         var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
+  //         $('#teacher-info').append($(input));
 
-          var role = $('<input>').attr('type', 'hidden').attr('name', 'role').val(role);
-          $('#teacher-info').append($(role));
+  //         var role = $('<input>').attr('type', 'hidden').attr('name', 'role').val(role);
+  //         $('#teacher-info').append($(role));
 
-          // $("#teacher-info input[name='signature']").val(data);
-          $('#teacher-info').submit();
-        } 
-      },
-      error: function(xhr) {
-        d = xhr;
-        console.log('error');
-        console.log(xhr);
-      }
-    }); // $.ajax()
+  //         // $("#teacher-info input[name='signature']").val(data);
+  //         $('#teacher-info').submit();
+  //       } 
+  //     },
+  //     error: function(xhr) {
+  //       d = xhr;
+  //       console.log('error');
+  //       console.log(xhr);
+  //     }
+  //   }); // $.ajax()
 
-  }); // join signature modal
+  // }); // join signature modal
 
 }); // on document ready

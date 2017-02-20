@@ -1,4 +1,8 @@
+require_relative 'auth.rb'
+
 class Teacher < Sequel::Model(:teachers)
+  include AuthenticateModel
+
   plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true
   plugin :validation_helpers
   plugin :association_dependencies
@@ -12,13 +16,14 @@ class Teacher < Sequel::Model(:teachers)
 
   def quicklink
     if email and signature and self.school
-      "#{ENV['STORYTIME_URL']}/signin?email=#{email}&name=#{signature.split(' ').join('+')}&school=#{self.school.code.split('|')[0]}&role=teacher"
+      "#{ENV['STORYTIME_URL']}/signin?email=#{email}&digest=#{self.password_digest}&role=teacher"
     else
       ''
     end
   rescue => e
     p e + " -> possibly missing a teacher field."
   end
+
 
   def signup_user(user)
     # write this method

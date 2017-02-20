@@ -119,9 +119,12 @@ class App < Sinatra::Base
     # STORE PASSWORD, NOT PASSWORD DIGEST
 
     plaintext_password = params['password']
-    params['password'] = BCrypt::Password.create params['password']
+    params['password_digest'] = BCrypt::Password.create params['password']
+    
     puts "in /freemium-signup-register new educator #{params} wants to sign up!"
     
+    params.delete 'password'
+
     if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
       notify_admins("Educator joined freemium", params.to_s)
     end
@@ -142,49 +145,9 @@ class App < Sinatra::Base
     erb :'purple-modal-form', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
   end
 
-  # post '/freemium-signup' do
-    # # {
-    #   phone:,
-    #   first_name:,
-    #   last_name:,
-    #   password:,
-    #   class_code:,
-    #   time_zone:,
-    #   role:,
-    # }
-    # 
-    # REMEMBER that we authenticate and create users in birdv, not here. 
-    # if it's only a user, do that
-    # 
-
-    # goal: 
-    # 
-    # if USER:
-    #   autheticate on birdv
-    #   if response is 201, return 201
-    #   
-    # if TEACHER/ADMIN:
-    #   create a user with login credentials for app, authenticate on birdv
-    #   handle response if 201 or 404
-    # 
-  # end
-
-
-  # QUESTIONS FOR AUBREY
-    # HOW DO WE DO CLASS CODE??????? 
-    # IS THERE A WAY TO DO WITHOUT?
-
 
   post '/freemium-signup' do
-    # # {
-    #   phone:,
-    #   first_name:,
-    #   last_name:,
-    #   password:,
-    #   class_code:,
-    #   time_zone:,
-    #   role:,
-    # }
+
     # handle session data and email us with new info
     if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
        [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
@@ -205,12 +168,11 @@ class App < Sinatra::Base
       # need phone in params....
       params['phone'] = params['email']
 
-      # POST to birdv baby!!!!
+      # POST to birdv 
       response = HTTParty.post(
                   ENV['birdv_url'] + '/api/auth/signup_free_agent',
                   body: params
                 )
-      # yyyyyyeaaeaaaah baby
 
       puts "response = #{response.inspect}"
 
@@ -218,35 +180,17 @@ class App < Sinatra::Base
 
     when 'teacher', 'admin'
       puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
-      # just add the school id as the value of the autocomplete
-      # OOH and that way, if the value is empty, that means 
-      # it doesn't exist in our db
-      # 
 
-      # we KNOW that if the teacher/admin is signing up for an existing school,
-      # then we'll have the proper teacher/school code to give them
-      # and their app experience will probably be like anyone in their class
-
-
-      # what we DON'T KNOW is... what's the app experience for teachers who sign 
-      # up and CREATE a school???
-      # 
-      # oh.... we don't need to worry about that right now....
-      # 
-      # 
-      # first, we check to see if the school they indicated exists.............
-      # how do we do that?
-      # we have the 
 
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
 
       if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
         # don't send the actual password! 
         notify_params = {
-          first_name: params['first_name'],
-          last_name: params['last_name'],
-          email: params['email'],
-          phone: params['email']
+          first_name: session[:first_name],
+          last_name: session[:last_name],
+          email: session[:email],
+          phone: session[:email]
         }
         notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
       end
@@ -261,14 +205,6 @@ class App < Sinatra::Base
 
         password_digest = BCrypt::Password.create params['password']
 
-        # FOR BOTH FIND-SCHOOL AUTOCOMPLETE AND ADD-SCHOOL,
-        # NEED TO HAVE ALL THESE PARAMS!!
-        # so add params to autocomplete.....
-        # but you don't need to worry about this now, 
-        # because for now the only way to add schools is through 
-        # the add-school form, which requires all these elements.
-        # so do this tomorrow.
-
         new_school = false
 
         if school.nil?
@@ -277,7 +213,7 @@ class App < Sinatra::Base
 
           # this school doesn't exist bro!
           # will need to create it! 
-          puts "THIS SCHOOL DOESN'T FUCKING EXIST BRO!!!!!!!!"
+          puts "THIS SCHOOL DOESN'T EXIST BRO!!!!!!!!"
 
           free_ass_class_code = "#{params['school_name']}_#{params['school_city']}_#{params['school_state']}"
           school_info = {
@@ -317,6 +253,7 @@ class App < Sinatra::Base
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
             # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
+            WelcomeTeacherWorker.perform_async(educator.id)
 
             params['class_code'] = educator.code.split('|').first
 
@@ -344,6 +281,8 @@ class App < Sinatra::Base
 
             params['class_code'] = school.code.split('|').first
 
+            WelcomeAdminWorker.perform_async(educator.id)
+
             # need phone in params....
             params['phone'] = params['email']
 
@@ -368,15 +307,7 @@ class App < Sinatra::Base
           return school.code.split('|').first
         end
 
-        
-
-        
-
-        
-
-
-
-
+      
       rescue => e
         p e.message
         puts "returning 404, i guess"
@@ -520,33 +451,18 @@ class App < Sinatra::Base
   # 
   get '/signin' do
     puts "signin params = #{params}"
-    school_code = params['school']
-    email       = params['email']
-    signature   = params['name']
-    role        = params['role']
-    first_name  = params['first_name']
-    last_name   = params['last_name']
-
-    if params['admin'] == 'james@rockymountainprep.org'
-      signature, email, role = 'James Cryan', 'james@rockymountainprep.org', 'admin'
-    elsif params['admin'] == 'athompson@rockymountainprep.org'
-      signature, email, role = 'Angelin Thompson', 'athompson@rockymountainprep.org', 'admin'
-    elsif params['email'].include? 'rockymountainprep' 
-      # everyone else at RMP's a teacher
-      role = 'teacher'
-    end
+    password_digest = params['digest']
+    email           = params['email']
+    role            = params['role']
 
     post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
     puts "post_url = #{post_url}"
     data = HTTParty.post(
       "#{post_url}/signup", 
       body: {
-        signature: signature,
         email: email,
-        password: school_code,
-        role: role,
-        first_name: first_name,
-        last_name: last_name
+        password: password_digest,
+        role: role
       }
     )
     puts "data = #{data.code.inspect}"
@@ -568,10 +484,10 @@ class App < Sinatra::Base
 
     # puts params
     session[:educator] = data['educator']
-    # session[:educator]  = data['teacher']
     session[:school]   = data['school']
-    session[:users]    = data['users']
     session[:role]     = data['role']
+    # session[:educator]  = data['teacher']
+    session[:users]    = data['users']
     # session[:educator]    = data['admin']
 
     puts session.inspect

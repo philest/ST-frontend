@@ -169,7 +169,7 @@
       <!-- Notify about form submission -->
   <% if flash[:signin_error] %>
     <div id="alert">
-        <a class="alert" href="#alert">Incorrect login info. Check with your admin for the correct school code!</a>
+        <a class="alert" href="#alert">Incorrect login info. Check that your password is spelled correctly!</a>
     </div>
   <% end %>
 
@@ -179,9 +179,6 @@
       <%= erb :'/modals/signup-school-role' %>
       <%= erb :'/modals/school-info' %>
       <%= erb :'/modals/rayna-video' %>
-      <%= erb :'/modals/school-role' %>
-      <%= erb :'/modals/teacher-name' %>
-      <%= erb :'/modals/admin-name' %>
       <%= erb :'/modals/signup-name-password' %>
       <%= erb :'/modals/educator-login' %>
       <%= erb :'/modals/demo' %>
@@ -266,7 +263,6 @@
             mixpanel.track('email given', {"platform": "mobile"});
           }
         }
-
       </script>
 
       <form id="signup-email-mobile" class="signup-form"> 

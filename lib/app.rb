@@ -109,115 +109,75 @@ class Enroll < Sinatra::Base
 
     # create teacher here
     email       = params[:email]
-    signature   = params[:signature]
     password    = params[:password]
     role        = params[:role]
 
-    puts "st-enroll params = #{params}"
+    puts "st-enroll (but really joinstorytime) params = #{params}"
 
-    if email.nil? or signature.nil? or password.nil? or email.empty? or signature.empty? or password.empty? 
-      txt = "Email: #{email.inspect}, Signature: #{signature.inspect}, Password: #{password.inspect}"
+    if email.nil? or password.nil? or email.empty? or password.empty? 
+      txt = "Email: #{email.inspect}, Password: #{password.inspect}"
 
       missing = []
       missing << "email" if (email.nil? or email.empty?)
       missing << "password" if (password.nil? or password.empty?)
-      missing << "signature" if (signature.nil? or signature.empty?)
 
       notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
       return 500
     end
 
-    password_regexp = Regexp.new("^#{password}\\|.+$", 'i')
-    
-    # note: when we give out passwords, we just do the english version of a school
-    school = School.where(Sequel.like(:code, password_regexp)).first
-    puts "school = #{school.inspect}"
-    puts "this is shit"
-    if school.nil?
-      return 501
-    end
-
-    new_signup = true
-    if role == 'admin'
+    # add phone number functionality later
+    case role
+    when 'admin'
       educator = Admin.where(Sequel.ilike(:email, email)).first
-      puts "admin = #{educator.inspect}"
-      if educator.nil?
-        educator = Admin.create(email: email.downcase)
-        new_signup = true
-      else
-        new_signup = false
-      end
-    elsif role == 'teacher'
+    when 'teacher'
       educator = Teacher.where(Sequel.ilike(:email, email)).first
-      puts "teacher = #{educator.inspect}"
-      if educator.nil?
-        educator = Teacher.create(email: email.downcase)
-        new_signup = true
-      else
-        new_signup = false
-      end
     else
-      puts "no role given"
-      # teacher = Teacher.where(email: email).first
-      # admin = Admin.where(email: email).first
-      # educator = teacher
-      educator = nil
+      educator = Admin.where(Sequel.ilike(:email, email)).first
+      if educator.nil?
+        educator = Teacher.where(Sequel.ilike(:email, email)).first
+        role = 'teacher'
+      else
+        role = 'admin'
+      end
     end
 
-    if educator # bitxh plz
-        puts "educator = #{educator.inspect}"
-        puts "their school = #{educator.school.inspect}"
+    if educator.nil?
+      # never existed
+      return 500
+    end
 
-        educator.update(signature: signature)
-        
-        case role
-        when 'admin'
-          first_name = params[:first_name]
-          last_name  = params[:last_name] 
+    school = educator.school
 
-          if first_name and last_name and !first_name.empty? and !last_name.empty?
-            educator.update(first_name: params[:first_name], last_name: params[:last_name]) 
-          end
+    puts "password = #{password}"
+    puts "authenticate = #{educator.authenticate password}"
 
-          school.add_admin(educator) if new_signup
+    # now authenticate
+    if educator.authenticate(password) == false
+      # wrong password!
+      puts "incorrect password! lol"
+      return 500
+    end
 
-          if new_signup
-            WelcomeAdminWorker.perform_async(educator.id)
-          end
+    puts "educator = #{educator.inspect}"
+    puts "their school = #{educator.school.inspect}"
 
-        when 'teacher'
-          school.signup_teacher(educator)
-          educator.reload
-          puts "about to do flyerworker thing...."
-          FlyerWorker.perform_async(educator.id, school.id) # if new_signup
-          if new_signup # send notification email
-            WelcomeTeacherWorker.perform_async(educator.id)
-          end
-        end
+    educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :code, :t_number, :signin_count].include? k}
+    school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
 
-        educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :code, :t_number, :signin_count].include? k}
-        school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
+    unless password.downcase == 'test' or password.downcase == 'read' or ENV['RACK_ENV'] == 'development'
+      email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed into their account")
+    end
 
-        unless password.downcase == 'test' or password.downcase == 'read'
-          if new_signup
-            email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed up for StoryTime", "Email #{educator.email}")
-          else
-            email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed into their account")
-          end
-        end
+    status 200
 
-        status 200
+    educator.update(signin_count: educator.signin_count + 1)
 
-        educator.update(signin_count: educator.signin_count + 1)
-
-        return {
-          educator: educator_hash,
-          school: school_hash,
-          secret: 'our little secret',
-          role: role
-        }.to_json
-
-    end # if educator
+    return {
+      educator: educator_hash,
+      school: school_hash,
+      secret: 'our little secret',
+      role: role
+    }.to_json
 
   end
 
@@ -233,7 +193,7 @@ class Enroll < Sinatra::Base
   end
 
   get '/teachers/:admin_id' do
-    puts "FUCK YOU! #{params[:admin_id]}"
+    puts "admin id = #{params[:admin_id]}"
 
     admin = Admin.where(id: params[:admin_id]).first
 
@@ -413,9 +373,7 @@ class Enroll < Sinatra::Base
           factor = ((h[:first_name].split('').reduce(0) {|sum, n| sum += n.ord}) % 4) + 2
         end
 
-
         h[:reading_time] = (h[:this_month] * factor).ceil
-
 
       end
 
