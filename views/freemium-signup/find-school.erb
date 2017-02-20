@@ -99,6 +99,9 @@
                   </div>
 
                   <input type="hidden" name="school_id" value="">
+                  <input type="hidden" name="school_name" value="">
+                  <input type="hidden" name="school_city" value="">
+                  <input type="hidden" name="school_state" value="">
                   <input type="hidden" name="role" value="">
                   <input type="hidden" name="signature" value="">
 
@@ -113,38 +116,39 @@
                       // get the damn schools here and store in a javscript object
                       var availableSchools = [];
 
-                      var response = $.getJSON('/list-of-schools', function(data) {
-                        // query the Ed list
-                        // get school_name, school_city, school_state and leave school_id blank
-                        //    that's all you need to ensure a school is added
+                      // var response = $.getJSON('/list-of-schools', function(data) {
+                      //   // query the Ed list
+                      //   // get school_name, school_city, school_state and leave school_id blank
+                      //   //    that's all you need to ensure a school is added
 
 
-                        console.log(data);
-                        availableSchools = availableSchools.concat(data);
+                      //   console.log(data);
+                      //   availableSchools = availableSchools.concat(data);
                         
                         $( "#page4 input[name=school_name]" ).autocomplete({
-                          source: availableSchools,
+                          source: '/list-of-schools',
+                          minLength: 2,
                           appendTo: "#just-to-append",
                           position: { my: "left top", at: "left bottom", of: "#status-text" },
                           response: function(event, ui) {
                             var len = ui.content.length;
-                            console.log(ui.content.length); //in this moment you get count results you 
+                            // console.log(ui.content.length); //in this moment you get count results you 
                             if (len >= 1) {
                               console.log('some results!');
                               $('#status-text p i').text('Suggested schools for you');
                             } else {
-                              console.log('no results');
+                              // console.log('no results');
                               $('#status-text p i').text('No results found.');
                             }
                             // return false;
                           },
                           close: function(event, ui) {
-                            console.log('this shit got CLOSED, son!');
+                            // console.log('this shit got CLOSED, son!');
                             // return false;
                           },
                           focus: function(event, ui) {
                             // add the dropdown menu here (or make it visible)
-                            console.log('focusing.... FOCUSING....');
+                            // console.log('focusing.... FOCUSING....');
                             // return false;
                           },
                           select: function(event, ui) {
@@ -152,12 +156,32 @@
                             $('#page4 input[name=school_name]').blur();
                             last_selected = ui.item.label;
 
+                            // WHY ARE WE GETTING THE SCHOOL NAME AS AN ID VALUE????????
+
                             // add a school_id field and populate it
                             console.log('chose school with id = ' + String(ui.item.value));
+                            console.log(ui.item);
                             $('#page4 input[name=school_id]').val(ui.item.value);
 
                             // but make sure we populate form input with label....
                             $('#page4 input[name=school_name]').val(ui.item.label);
+
+
+                            // and also add school name/city/state information BITCH
+                            $('#page4 input[name=school_city]').val(ui.item.city);
+                            $('#page4 input[name=school_state]').val(ui.item.state); 
+
+                            console.log('chose school with name = ' + String(ui.item.label));
+                            console.log('chose school with city = ' + String(ui.item.city));
+                            console.log('chose school with state = ' + String(ui.item.state));
+
+
+                           // AND if we chose a school that's an invalid school bro, link to a different page! 
+                           if (ui.item.value === 'free_school_value') {
+                              $('#page4link').attr('href', '#page5');
+                           } else {
+                              $('#page4link').attr('href', '#page7');
+                           }
 
                             return false;
                           }
@@ -175,8 +199,7 @@
                            .appendTo( ul );
                         };
                       });
-                    });
-
+                    // });
 
                       
                     $('#page4 input[name=school_name]').focus(function() {
@@ -184,7 +207,7 @@
                     });
 
                     $('#page4link-add-school').on('mousedown', function(event) {
-                      console.log('add-school-link clicked');
+                      // console.log('add-school-link clicked');
                       // event.stopImmediatePropagation();
                       event.preventDefault(); 
                     });
@@ -192,7 +215,7 @@
 
                     $('#page4 input[name=school_name]').blur(function() {
 
-                      console.log("I'M BLURRING, I'M BLURRING!!");
+                      // console.log("I'M BLURRING, I'M BLURRING!!");
                       // check to see if we selected something nice
                       var input_val = $('#page4 input[name=school_name]').val();
                       
@@ -217,41 +240,32 @@
                       // SIMPLY FADE IN PAGE6 (THE 'CONGRATS' PAGE) SO WE DON'T PRETEND WE'RE
                       // GOING TO THE WEB APP.... BITCH
 
-                      
-                      
-
-
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
-                      $('form#school-info').find('input[name=role]').val(role);
+                      $('#page4 form#school-info').find('input[name=role]').val(role);
 
                       var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
                       $('#page4 form#school-info').find('input[name=signature]').val(sig);    
 
+
+                      // console.log('what we are posting: ' + $('form#school-info').serialize());
+
                       $.ajax({
                         url: '/freemium-signup',
                         type: 'post',
-                        data: $('form#school-info').serialize()
+                        data: $('#page4 form#school-info').serialize()
                       }).done(function(data, statusText, xhr) {
                         console.log('logging this gosh darn data');
                           console.log(data);
                           console.log(statusText);
                           console.log(xhr);
-
                           // so people can sign the fuck in
-
                           $('form#log-into-dat-account input[name=password]').val(data);
-                          // then move to the next screen, I guess
-                          
-                          // log into their account, I guess
-                          // window.location.href = "/app";
-                          
-
-                        });
+                      });
                       // have a do
                       // ne() callback, decide on where we go from here
 
-                      var formdata = $("form#school-info").serializeArray();
+                      var formdata = $("#page4 form#school-info").serializeArray();
                       console.log(formdata);
                       var data = {};
                       $(formdata).each(function(index, obj){

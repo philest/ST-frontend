@@ -289,7 +289,7 @@ class App < Sinatra::Base
             plan: 'free'
           }
 
-            school = School.where(school_info).first || School.create(school_info)
+          school = School.where(school_info).first || School.create(school_info)
         
         end # if school.nil? 
 
@@ -783,7 +783,35 @@ class App < Sinatra::Base
 
     puts "regex = #{regex}"
 
-    School.where(signature: blacklist).invert
+    # only send the first 50 results, let's say
+    matching_schools = FreemiumSchool.where(Sequel.ilike(:signature, regex))
+                                        .limit(50).map do |school|
+
+      location = ''
+      puts "school vals = #{school.city}, #{school.state}"
+      if school.city and school.state
+        puts "1"
+        location = "#{school.city}, #{school.state}"
+      elsif school.city
+        puts "2"
+        location = "#{school.city}"
+      elsif school.state
+        puts "3"
+        location = "#{school.state}"
+      end
+
+      {
+        label: school.signature,
+        value: 'free_school_value',
+        desc: location,
+        city: school.city,
+        state: school.state
+      }
+
+    end
+
+
+    matching_schools += School.where(signature: blacklist).invert
           .where(Sequel.ilike(:signature, regex)).map do |school|
       location = ''
       puts "school vals = #{school.city}, #{school.state}"
@@ -804,7 +832,10 @@ class App < Sinatra::Base
         city: school.city,
         state: school.state
       }
-    end.to_json
+    end 
+
+    matching_schools.to_json
+
   end
 
 
