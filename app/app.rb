@@ -253,7 +253,9 @@ class App < Sinatra::Base
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
             # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
-            WelcomeTeacherWorker.perform_async(educator.id)
+            if new_school == false
+              WelcomeTeacherWorker.perform_async(educator.id)
+            end
 
             params['class_code'] = educator.code.split('|').first
 
@@ -281,7 +283,9 @@ class App < Sinatra::Base
 
             params['class_code'] = school.code.split('|').first
 
-            WelcomeAdminWorker.perform_async(educator.id)
+            if new_school == false
+              WelcomeAdminWorker.perform_async(educator.id)
+            end
 
             # need phone in params....
             params['phone'] = params['email']

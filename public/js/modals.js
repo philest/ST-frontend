@@ -92,6 +92,7 @@ $(document).ready(function () {
       },
       success: function(data) {
         // a user already exists with this email/phone, so log that user in
+        $('#teacher-info input[name=email]').val(email);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){
