@@ -95,17 +95,14 @@
                   $(document).on('click', '#page6link',function(event){
 
                     var ValidStatus = $("#page6 #school-info").valid();
-                    // console.log(ValidStatus);
+                    
                     if (ValidStatus == false) {
                         event.preventDefault();
                         event.stopPropagation();
                         mixpanel.track('invalid school info given');
                         return false;
                     }
-                    // get post data from 
-                    //  1. role
-                    //  2. signature
-                    // append to this form.
+
                     var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                     $('form#school-info').find('input[name=role]').val(role);
 

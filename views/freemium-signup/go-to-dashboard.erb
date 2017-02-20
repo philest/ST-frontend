@@ -39,7 +39,7 @@
                 <form id='log-into-dat-account' action='signin' method='post' data-ajax="false">
                   <input type="hidden" name='email' value='<%= session[:email] %>'>
                   <input type="hidden" name='signature' value=''>
-                  <input type="hidden" name='password' value=''>
+                  <input type="hidden" name='password' value='<%= session[:password] %>'>
                   <input type="hidden" name='role' value=''>
 
                   <!-- HERE IS THE LOCUS OF PRODUCTION -->

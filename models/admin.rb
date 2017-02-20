@@ -1,4 +1,7 @@
+require_relative 'auth.rb'
+
 class Admin < Sequel::Model(:admins)
+  include AuthenticateModel
   plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true
   plugin :validation_helpers
   plugin :association_dependencies
@@ -8,7 +11,7 @@ class Admin < Sequel::Model(:admins)
 
   def quicklink
     if email and signature and self.school
-      "#{ENV['STORYTIME_URL']}/signin?email=#{email}&name=#{signature.split(' ').join('+')}&school=#{self.school.code.split('|')[0]}&role=admin"
+      "#{ENV['STORYTIME_URL']}/signin?email=#{email}&digest=#{self.password_digest}&role=admin"
     else
       ''
     end

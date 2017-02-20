@@ -47,16 +47,6 @@ $( document ).ready(function() {
 
     mixpanel.track('freemium registration submitted', {'platform':'desktop'}); 
 
-    // $('#signup-name-password').submit();
-
-    // event.preventDefault();
-
-    // $.post('freemium-signup-register', $('#signup-name-password').serialize())
-    //       .done(function(data) {
-    //         // $('#congratsModal').modal('toggle');
-    //         // delete the extra form data
-    //         $("#signup-name-password input[type='hidden'][name='email']").remove();
-    //       });
   });
 
 
@@ -102,13 +92,10 @@ $( document ).ready(function() {
                   .val('teacher');
     $('#login').append($(role));
 
-
   });
 
 
   $('#admin-login').submit(function(event) {
-
-    // event.preventDefault();
 
     var adminInfo = $('#teacher-info').serializeArray();
 
@@ -133,9 +120,6 @@ $( document ).ready(function() {
                     .attr('name', 'last_name')
                     .val(first_name);
     $('#admin-login').append($(input));
-
-
-
 
     var signature = first_name + " " + last_name;
     var input = $('<input>')
