@@ -213,16 +213,23 @@
                           <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
                           <% icon_index = (icon_index + 1) % icons.length %>
                           <div class="family-name">
-                            <% if user['last_name'] %>
-                              <% family_name = user['last_name'] %>
-                            <% elsif user['first_name'] %>
-                              <% family_name = user['first_name'] + "'s" %>
-                            <% else %>
-                              <% family_name = "unnamed" %>
-                            <% end %>
+                            <% if user['role'] != 'teacher' and user['role'] != 'admin' %>                              
+                              <% if user['last_name'] %>
+                                <% family_name = user['last_name'] %>
+                              <% elsif user['first_name'] %>
+                                <% family_name = user['first_name'] + "'s" %>
+                              <% else %>
+                                <% family_name = "unnamed" %>
+                              <% end %>
 
-                            <h3><%= family_name %></h3>
-                            <h3>Family</h3>
+                              <h3><%= family_name %></h3>
+                              <h3>Family</h3>
+                            <% else %>
+
+                              <h3><%= user['first_name'] %></h3>
+                              <h3><%= user['last_name'] %></h3>
+
+                            <% end %>
 
                           </div>
                         </div>
