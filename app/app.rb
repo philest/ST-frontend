@@ -747,8 +747,7 @@ class App < Sinatra::Base
     end
 
 
-    matching_schools += School.where(signature: blacklist).invert
-          .where(Sequel.ilike(:signature, regex)).map do |school|
+    matching_schools += School.where(Sequel.ilike(:signature, regex)).map do |school|
       location = ''
       puts "school vals = #{school.city}, #{school.state}"
       if school.city and school.state
