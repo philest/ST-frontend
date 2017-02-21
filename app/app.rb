@@ -253,7 +253,11 @@ class App < Sinatra::Base
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
             # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
+
+            puts "new_school = #{new_school}"
+
             if new_school == false
+              puts "DOING WelcomeTeacherWorker NOW!"
               WelcomeTeacherWorker.perform_async(educator.id)
             end
 
@@ -270,6 +274,9 @@ class App < Sinatra::Base
             puts "response = #{response.inspect}"
 
             # yyyyyyeaaeaaaah baby
+
+          else
+            puts "this teacher already exists...."
           end
 
           # and THEN create the user!

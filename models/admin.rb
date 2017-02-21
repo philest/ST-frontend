@@ -9,9 +9,11 @@ class Admin < Sequel::Model(:admins)
 
   many_to_one :school
 
-  def quicklink
-    if email and signature and self.school
-      "#{ENV['STORYTIME_URL']}/signin?email=#{email}&digest=#{self.password_digest}&role=admin"
+  def quicklink(prod=false)
+    st_url = prod ? "https://www.joinstorytime.com" : ENV['STORYTIME_URL']
+
+    if email and signature and self.school and password_digest
+      "#{st_url}/signin?email=#{email}&digest=#{self.password_digest}&role=admin"
     else
       ''
     end
