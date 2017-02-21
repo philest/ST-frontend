@@ -470,9 +470,9 @@ class App < Sinatra::Base
     data = HTTParty.post(
       "#{post_url}/signup", 
       body: {
-        email: email,
-        password: password_digest,
-        role: role
+        digest: params['digest'],
+        email: params['email'],
+        role: params['role']
       }
     )
     puts "data = #{data.code.inspect}"
@@ -481,6 +481,11 @@ class App < Sinatra::Base
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
       # return 
+    end
+
+    if data.code == 303
+      flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
+      redirect '/'
     end
 
     data = JSON.parse(data)
