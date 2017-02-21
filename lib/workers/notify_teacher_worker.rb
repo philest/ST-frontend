@@ -105,6 +105,8 @@ class WelcomeTeacherWorker
   sidekiq_options :retry => false # job will be discarded immediately if failed
 
   def perform(teacher_id)
+
+    puts "in WelcomeTeacherWorker....."
     teacher = Teacher.where(id: teacher_id).first
     # Authenticate with your API key
     auth = { :api_key => ENV['CREATESEND_API_KEY'] }
@@ -124,6 +126,7 @@ class WelcomeTeacherWorker
     }
 
     puts "sending welcome email to #{teacher.signature} - #{teacher.email}"
+    puts "quicklink = #{teacher.quicklink}&flyers=1"
     # Send the message and save the response
     response = tx_smart_mailer.send(message)
 
