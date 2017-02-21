@@ -315,7 +315,7 @@ class App < Sinatra::Base
           # to the page7 modal
           return 'invalid_code'
         else
-          return school.code.split('|').first
+          return 'valid_code'
         end
 
       

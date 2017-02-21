@@ -145,7 +145,7 @@
                            if (ui.item.value === 'free_school_value') {
                               $('#page4link').attr('href', '#page5');
                            } else {
-                              $('#page4link').attr('href', '#page7');
+                              $('#page4link').attr('href', '#');
                            }
 
                             return false;
@@ -195,7 +195,6 @@
                           return false;
                       }
 
-
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                       $('#page4 form#school-info').find('input[name=role]').val(role);
 
@@ -208,9 +207,18 @@
                         type: 'post',
                         data: $('#page4 form#school-info').serialize()
                       }).done(function(data, statusText, xhr) {
-                          // console.log(data);
-                          // console.log(statusText);
-                          // console.log(xhr);
+                          console.log(data);
+                          console.log('statusText is:');
+                          console.log(statusText);
+                          console.log(xhr);
+                          
+                          if (data == 'invalid_code') {
+                            console.log('this is an invalid school');
+                            return false;
+                          } else if (data == 'valid_code') {
+                            $('form#log-into-dat-account').submit();
+                          }
+
                           // $('form#log-into-dat-account input[name=password]').val(data);
                       });
 
@@ -227,6 +235,37 @@
 
                   </script>
                 </form>
+
+                <!-- submit form -->
+                <form id='log-into-dat-account' action='signin' method='post' data-ajax="false" style="display: none;">
+                  <input type="hidden" name='email' value='<%= session[:email] %>'>
+                  <input type="hidden" name='signature' value=''>
+                  <input type="hidden" name='password' value='<%= session[:password] %>'>
+                  <input type="hidden" name='role' value=''>
+
+                  <!-- HERE IS THE LOCUS OF PRODUCTION -->
+ <!--                  <button id="go-to-dashboard" data-ajax="false" style="font-size: 1.2em;" type="submit">
+                      Log in
+                  </button> -->
+
+                  <script>
+                    $('form#log-into-dat-account').on('submit', function(event) {
+                      var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                      $('form#log-into-dat-account').find('input[name=role]').val(role);
+
+                      var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
+                      $('form#log-into-dat-account').find('input[name=signature]').val(sig);
+
+
+                      // $('form#log-into-dat-account').submit();
+                    });
+                  </script>
+
+                </form>
+                <!-- submit form -->
+
+
               </div>
           </div> <%# container %>
         </div>
