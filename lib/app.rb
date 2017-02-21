@@ -112,6 +112,11 @@ class Enroll < Sinatra::Base
     password    = params[:password]
     role        = params[:role]
 
+    if not params[:digest].nil? and not params[:digest].empty?
+      password = params[:password] = params[:digest]
+    end
+
+
     puts "st-enroll (but really joinstorytime) params = #{params}"
 
     if email.nil? or password.nil? or email.empty? or password.empty? 
@@ -153,17 +158,27 @@ class Enroll < Sinatra::Base
       return 303
     end
 
+    if not params[:digest].nil? and not params[:digest].empty?
+      puts "digest exists!"
+      puts "authenticate = #{educator.password_digest == params[:digest]}"
+      if educator.password_digest != params[:digest]
+        puts "incorrect password digest lol"
+        return 500
+      end
 
-    puts "password = #{password}"
-    puts "authenticate = #{educator.authenticate password}"
+    else
+      puts "password = #{password}"
+      puts "authenticate = #{educator.authenticate password}"
 
-    # now authenticate
-    if educator.authenticate(password) == false
-      # wrong password!
-      puts "incorrect password! lol"
-      return 500
+      # now authenticate
+      if educator.authenticate(password) == false
+        # wrong password!
+        puts "incorrect password! lol"
+        return 500
+      end
     end
 
+      
     puts "educator = #{educator.inspect}"
     puts "their school = #{educator.school.inspect}"
 
