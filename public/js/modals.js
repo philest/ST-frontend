@@ -2,7 +2,7 @@ $(document).ready(function () {
   // THIS IS WHERE I'LL DO THE SIGNUP FLOW
   // 
 
-  jQuery.validator.addMethod("validateEmailPhone", function(value, element) {
+  jQuery.validator.addMethod("validateContactId", function(value, element) {
     return ValidateEmail(value) || validatePhone(value);
   }, "Invalid email or phone number.");
 
@@ -69,8 +69,8 @@ $(document).ready(function () {
 
     $('#signup-email').validate({ // initialize the plugin
         rules: {
-            email: {
-                validateEmailPhone: true
+            contact_id: {
+                validateContactId: true
             }
         }
     }).form();
@@ -82,17 +82,17 @@ $(document).ready(function () {
     }
 
     // now check to see if anyone exists by that name/email
-    var email = $('#signup-email input[name=email]').val();
+    var email = $('#signup-email input[name=contact_id]').val();
 
     $.ajax({
       url: '/user_exists',
       type: 'get',
       data: {
-        email: email
+        contact_id: email
       },
       success: function(data) {
         // a user already exists with this email/phone, so log that user in
-        $('#teacher-info input[name=email]').val(email);
+        $('#teacher-info input[name=contact_id]').val(email);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){
@@ -223,69 +223,6 @@ $(document).ready(function () {
     $('#myModal').modal('toggle');
   });
 
-  // $("#join.signature-modal").on('click', function(event) {
-  //   event.preventDefault();
-  //   $('#teacher-info').validate({ // initialize the plugin
-  //       rules: {
-  //           email: {
-  //               required: true,
-  //               email: true
-  //           },
-  //           password: {
-  //               required: true
-  //           }
-  //       }
-  //   }).form();
 
-  //   var ValidStatus = $("#teacher-info").valid();
-  //   if (ValidStatus == false) {
-  //       return false;
-  //   }
-  //   $('#myModal').modal('toggle');
-  //   // animate a loading gif...
-  //   var teacher_data = $("#teacher-info").serializeArray();
-  //   // var teacher_data = $("#teacher-info").serialize();
-  //   var email = teacher_data[0]['value'];
-  //   var password = teacher_data[1]['value'];
-
-  //   // then AJAX req existing user....
-  //   $.ajax({
-  //     url: 'user_exists',
-  //     // crossDomain: true,
-  //     type: 'get',
-  //     dataType: 'json',
-  //     data: {
-  //       email: email,
-  //       password: password
-  //     },
-  //     success: function(data) {
-  //       if (data.educator == 'false') {
-  //         // $('body').css("padding-right", '15px');
-  //         // $("body").addClass("hide-scroll");
-  //         $('body').addClass('modalTransition');
-  //         $('#chooseRoleModal').modal('toggle');
-  //         // show a different modal here....
-
-  //       } else { 
-  //         var signature = data.educator;
-  //         var role      = data.role;
-  //         var input = $('<input>').attr('type', 'hidden').attr('name', 'signature').val(signature);
-  //         $('#teacher-info').append($(input));
-
-  //         var role = $('<input>').attr('type', 'hidden').attr('name', 'role').val(role);
-  //         $('#teacher-info').append($(role));
-
-  //         // $("#teacher-info input[name='signature']").val(data);
-  //         $('#teacher-info').submit();
-  //       } 
-  //     },
-  //     error: function(xhr) {
-  //       d = xhr;
-  //       console.log('error');
-  //       console.log(xhr);
-  //     }
-  //   }); // $.ajax()
-
-  // }); // join signature modal
 
 }); // on document ready
