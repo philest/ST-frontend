@@ -20,14 +20,14 @@ module RoutesHelper
   # Create a follower from the HTML form, notify us by email. 
   def create_follower(params)
     Follower.create(name: "none",
-                  email: params[:email])
+                  email: params[:contact_id])
   
 
       # Report new followers.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             # :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: #{params[:email]} subscribed for updates.",
+            :subject => "ST: #{params[:contact_id]} subscribed for updates.",
             :body => "Now, \
                       there's #{Follower.count} people subscribed.")
     flash[:notice] = "Great! We'll keep you updated."
@@ -51,13 +51,13 @@ module RoutesHelper
 
   def create_invite(params)
 
-    Invite.create(email: params[:email]) 
+    Invite.create(email: params[:contact_id]) 
 
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
             :cc => 'david.mcpeek@yale.edu',
             :from => 'phil.esterman@yale.edu',
-            :subject => "ST: A new person (#{params[:email]}) signed up.",
+            :subject => "ST: A new person (#{params[:contact_id]}) signed up.",
             :body => "They're on the list to get an invite.")
 
   end

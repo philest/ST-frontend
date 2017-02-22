@@ -52,8 +52,8 @@ class Enroll < Sinatra::Base
     school = School.where(Sequel.like(:code, password_regexp)).first
 
     if school
-      teacher = Teacher.where(Sequel.ilike(:email, params['email'])).first
-      admin = Admin.where(Sequel.ilike(:email, params['email'])).first
+      teacher = Teacher.where(Sequel.ilike(:email, params['contact_id'])).first
+      admin = Admin.where(Sequel.ilike(:email, params['contact_id'])).first
 
       if teacher and !teacher.signature.nil? and teacher.school.id == school.id
         puts teacher.signature
@@ -79,7 +79,7 @@ class Enroll < Sinatra::Base
 
   post '/update_admin' do
     UpdateAdminWorker.perform_async(params[:sig], 
-                                      params[:email], 
+                                      params[:contact_id], 
                                       params[:count], 
                                       params[:teacher_or_teachers], 
                                       params[:list_o_names], 
@@ -92,7 +92,7 @@ class Enroll < Sinatra::Base
 
   post '/update_teacher' do
     UpdateTeacherWorker.perform_async(params[:sig], 
-                                      params[:email], 
+                                      params[:contact_id], 
                                       params[:count], 
                                       params[:family], 
                                       params[:list_o_names], 
@@ -108,7 +108,7 @@ class Enroll < Sinatra::Base
     puts "RACK_ENV = #{ENV['RACK_ENV']}"
 
     # create teacher here
-    email       = params[:email]
+    email       = params[:contact_id]
     password    = params[:password]
     role        = params[:role]
 
@@ -417,7 +417,7 @@ class Enroll < Sinatra::Base
 
   get '/admin_sig' do
     puts "admin_sig params = #{params}"
-    admin = Admin.where(Sequel.ilike(:email, params['email'])).first
+    admin = Admin.where(Sequel.ilike(:email, params['contact_id'])).first
     puts "admin = #{admin.inspect}"
     if admin
       return admin.signature

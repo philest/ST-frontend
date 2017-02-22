@@ -176,9 +176,9 @@ describe 'freemium signup' do
       it "associate new user with freemium school and freemium teacher" do
         post '/freemium-signup', @params, 'rack.session' => @session
 
-        expect(User.where(email:@session[:email]).first.school.id).to eq @freemium_default.id
+        expect(User.where(email:@session[:contact_id]).first.school.id).to eq @freemium_default.id
 
-        expect(User.where(email:@session[:email]).first.teacher.id).to eq Teacher.where(email:@params[:teacher_email]).first.id
+        expect(User.where(email:@session[:contact_id]).first.teacher.id).to eq Teacher.where(email:@params[:teacher_email]).first.id
 
       end
 
@@ -220,7 +220,7 @@ describe 'freemium signup' do
         
         post '/freemium-signup', @params, 'rack.session' => @session
 
-        teacher = Teacher.where(email: @session[:email]).first
+        teacher = Teacher.where(email: @session[:contact_id]).first
         expect(teacher.school.id).to eq @freemium_school.id
 
 
@@ -270,7 +270,7 @@ describe 'freemium signup' do
       end
 
       it "doesn't assign the existing teacher to a new school! it doesn't do JACK SHIT" do
-        existing_t = Teacher.where(email: @session[:email]).first
+        existing_t = Teacher.where(email: @session[:contact_id]).first
         puts "existing = #{existing_t.inspect}"
 
         expect {
@@ -313,7 +313,7 @@ describe 'freemium signup' do
             post '/freemium-signup', @params, 'rack.session' => @session
         }.to change{Teacher.count}.by 1
 
-        teacher = Teacher.where(email: @session[:email]).first
+        teacher = Teacher.where(email: @session[:contact_id]).first
         expect(teacher).to_not be_nil
       end
 
@@ -352,7 +352,7 @@ describe 'freemium signup' do
         
         post '/freemium-signup', @params, 'rack.session' => @session
 
-        admin = Admin.where(email: @session[:email]).first
+        admin = Admin.where(email: @session[:contact_id]).first
         expect(admin.school.id).to eq @freemium_school.id
 
 
@@ -404,7 +404,7 @@ describe 'freemium signup' do
       end
 
       it "doesn't assign the existing admin to a new school! it doesn't do JACK SHIT" do
-        existing_t = Admin.where(email: @session[:email]).first
+        existing_t = Admin.where(email: @session[:contact_id]).first
         puts "existing = #{existing_t.inspect}"
 
         expect {
@@ -448,7 +448,7 @@ describe 'freemium signup' do
             post '/freemium-signup', @params, 'rack.session' => @session
         }.to change{Admin.count}.by 1
 
-        admin = Admin.where(email: @session[:email]).first
+        admin = Admin.where(email: @session[:contact_id]).first
         expect(admin).to_not be_nil
 
 
