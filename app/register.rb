@@ -159,7 +159,7 @@ class Register < Sinatra::Base
     email_admins("Someone from class #{params[:class_code]} accessed web app")
 
 
-    erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.signature}
+    erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.name}
 
   end
 
