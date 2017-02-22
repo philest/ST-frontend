@@ -151,6 +151,11 @@ class Enroll < Sinatra::Base
       return 500
     end
 
+    if role == 'teacher'
+      puts "about to do flyerworker thing...."
+      FlyerWorker.perform_async(educator.id, school.id) # if new_signup
+    end
+
     school = educator.school
 
     if school and school.plan == 'free'
