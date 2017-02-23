@@ -116,7 +116,6 @@ class Enroll < Sinatra::Base
       password = params[:password] = params[:digest]
     end
 
-
     puts "st-enroll (but really joinstorytime) params = #{params}"
 
     if username.nil? or password.nil? or username.empty? or password.empty? 

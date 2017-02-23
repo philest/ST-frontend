@@ -69,7 +69,7 @@ $(document).ready(function () {
 
     $('#signup-email').validate({ // initialize the plugin
         rules: {
-            username: {
+            usernameDisplay: {
                 validateContactId: true
             }
         }
@@ -81,23 +81,35 @@ $(document).ready(function () {
         return false;
     }
 
+    var username = $('form#signup-email input[name=usernameDisplay]').val();
+    if (validatePhone(username)) {
+      console.log(validatePhone(username));
+      var phone = username; 
+
+      phone = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+
+      $('form#signup-email input[name=username]').val(phone);
+
+    }
+
     // now check to see if anyone exists by that name/email
-    var email = $('#signup-email input[name=username]').val();
+    var username = $('#signup-email input[name=username]').val();
 
     $.ajax({
       url: '/user_exists',
       type: 'get',
       data: {
-        username: email
+        username: username
       },
       success: function(data) {
-        // a user already exists with this email/phone, so log that user in
-        $('#teacher-info input[name=username]').val(email);
+        // a user already exists with this username/phone, so log that user in
+        $('#teacher-info input[name=username]').val(username);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){
           if(xhr.status==404) {
-            // a user doesn't exist with this phone/email
+            // a user doesn't exist with this phone/username
             $('body').addClass('modalTransition');
             $('#signupNamePassword').modal('toggle');
               // alert(thrownError);

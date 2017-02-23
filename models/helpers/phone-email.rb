@@ -8,6 +8,8 @@ class NilClass
 end
 
 
+
+
 class String
   @@email_regex = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   @@phone_regex = /^\d+$/
