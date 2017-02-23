@@ -34,4 +34,8 @@ def destroy
     Teacher.where(email: 'david.mcpeek@yale.edu').or(phone: 'david.mcpeek@yale.edu').first.destroy
   end
 
+  User.where_username_is('8186897323').destroy if User.where_username_is('8186897323')
+
+  Teacher.where_username_is('8186897323').destroy if Teacher.where_username_is('8186897323')
+
 end

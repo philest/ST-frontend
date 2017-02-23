@@ -1,8 +1,10 @@
-require_relative 'auth.rb'
+require_relative 'helpers/auth.rb'
+require_relative 'helpers/phone-email.rb'
 
 class Teacher < Sequel::Model(:teachers)
   include AuthenticateModel
-
+  extend SearchByUsername
+  
   plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true
   plugin :validation_helpers
   plugin :association_dependencies
@@ -15,19 +17,25 @@ class Teacher < Sequel::Model(:teachers)
   add_association_dependencies users: :nullify
 
   def quicklink(prod=false)
+
     st_url = prod ? "https://www.joinstorytime.com" : ENV['STORYTIME_URL']
 
     st_url = st_url.sub(/^https?\:\/\//, '').sub(/^www./,'')
 
-    if email and signature and self.school and password_digest
-      "#{st_url}/signin?email=#{email}&digest=#{self.password_digest}&role=teacher"
+    username = email
+    if email.nil? or email.empty?
+      username = phone
+    end
+
+
+    if username and signature and self.school and password_digest
+      "#{st_url}/signin?username=#{username}&digest=#{self.password_digest}&role=teacher"
     else
       ''
     end
   rescue => e
     p e + " -> possibly missing a teacher field."
   end
-
 
   def signup_user(user)
     # write this method

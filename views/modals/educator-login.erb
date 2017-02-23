@@ -8,15 +8,78 @@
               <form id="teacher-info" action='signin' method="post"> 
                 <div class="signup-setup">
                   <div class="field" id="signup-field">
-                     <label class="label">Email</label>
-                    <input name="email" placeholder="sarah.jones@ymca.org" class="input" required>
+                     <label class="label">Email address or phone number</label>
+                    <input name="usernameDisplay" placeholder="Email address or phone number" class="input" required>
                       <label class="label">Password</label>
                     <input name="password" type="password" placeholder="password" class="input" required>
+                    <input type="hidden" name='username'>
+                    
                     </div>
                     <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
 
-                    <button id="join" type="submit" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
+                    <button id="join" class="signature-modal signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
                 </div>
+
+                <script>
+                  function validatePhone(phone) {
+                      var error = "";
+                      var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+                     if (stripped == "") {
+                          error = "You didn't enter a phone number.";
+                          return false;
+                      } else if (isNaN(parseInt(stripped))) {
+                          phone = "";
+                          error = "The phone number contains illegal characters.";
+                          return false;
+
+                      } else if (!(stripped.length == 10 || stripped.length == 11)) {
+                          phone = "";
+                          error = "The phone number is the wrong length. Make sure you included an area code.\n";
+                          return false;
+                      } else {
+                        return true;
+                      }
+                  }
+
+
+
+                  $('form#teacher-info').on('submit', function(event) {
+
+                    
+                    $('form#teacher-info').validate({ // initialize the plugin
+                        rules: {
+                            usernameDisplay: {
+                                validateContactId: true
+                            }
+                        }
+                    }).form();
+
+                    var ValidStatus = $("form#teacher-info").valid();
+                    if (ValidStatus == false) {
+                        mixpanel.track('invalid email or phone given', {'platform':'desktop'});
+                        return false;
+                    }
+
+
+                    var username = $('form#teacher-info input[name=usernameDisplay]').val();
+                    if (validatePhone(username)) {
+                      console.log(validatePhone(username));
+                      var phone = username; 
+
+                      phone = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+
+                      $('form#teacher-info input[name=username]').val(phone);
+
+                    }
+                    // $()
+
+
+                    
+                  });
+                </script>
+
               </form>
 
             </div>
