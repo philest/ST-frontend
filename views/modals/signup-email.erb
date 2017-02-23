@@ -23,7 +23,16 @@
 
                     <button id="signup-email-button" data-dismiss='modal' class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
                 </div>
+
+                <script>
+                  $('form#signup-email input[name=usernameDisplay]').change(function(event) {
+                    var usernameDisplay = $('form#signup-email input[name=usernameDisplay]').val();
+                    $('form#signup-email input[name=username]').val(usernameDisplay);
+                  });
+                </script>
+
               </form>
+
 
             </div>
           </div>

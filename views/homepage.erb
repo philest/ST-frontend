@@ -316,6 +316,14 @@
 
                 <button onclick="transitionToNamePassword();" type="button" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
           </div>
+          
+          <script>
+            $('form#signup-email-mobile input[name=usernameDisplay]').change(function(event) {
+              var usernameDisplay = $('form#signup-email-mobile input[name=usernameDisplay]').val();
+              $('form#signup-email-mobile input[name=username]').val(usernameDisplay);
+            });
+          </script>
+
       </form>
 
       <div class="signup-name-password-mobile" style="display: none;">

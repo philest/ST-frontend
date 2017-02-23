@@ -82,6 +82,7 @@ $(document).ready(function () {
     }
 
     var username = $('form#signup-email input[name=usernameDisplay]').val();
+    var usernameDisplay = username;
     if (validatePhone(username)) {
       console.log(validatePhone(username));
       var phone = username; 
@@ -91,10 +92,10 @@ $(document).ready(function () {
 
       $('form#signup-email input[name=username]').val(phone);
 
+      username = phone;
+
     }
 
-    // now check to see if anyone exists by that name/email
-    var username = $('#signup-email input[name=username]').val();
 
     $.ajax({
       url: '/user_exists',
@@ -104,7 +105,7 @@ $(document).ready(function () {
       },
       success: function(data) {
         // a user already exists with this username/phone, so log that user in
-        $('#teacher-info input[name=username]').val(username);
+        $('#teacher-info input[name=usernameDisplay]').val(usernameDisplay);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){
