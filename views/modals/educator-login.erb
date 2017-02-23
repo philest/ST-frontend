@@ -43,10 +43,14 @@
                   }
 
 
+                  $('form#teacher-info input[name=usernameDisplay]').change(function(event) {
+                    var usernameDisplay = $('form#teacher-info input[name=usernameDisplay]').val();
+                    $('form#teacher-info input[name=username]').val(usernameDisplay);
+                  });
+
 
                   $('form#teacher-info').on('submit', function(event) {
 
-                    
                     $('form#teacher-info').validate({ // initialize the plugin
                         rules: {
                             usernameDisplay: {
@@ -73,9 +77,6 @@
                       $('form#teacher-info input[name=username]').val(phone);
 
                     }
-                    // $()
-
-
                     
                   });
                 </script>

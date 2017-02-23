@@ -52,8 +52,8 @@ class Enroll < Sinatra::Base
     school = School.where(Sequel.like(:code, password_regexp)).first
 
     if school
-      teacher = Teacher.where(Sequel.ilike(:email, params['username'])).first
-      admin = Admin.where(Sequel.ilike(:email, params['username'])).first
+      teacher = Teacher.where_username_is(params['username'])
+      admin = Admin.where_username_is(params['username'])
 
       if teacher and !teacher.signature.nil? and teacher.school.id == school.id
         puts teacher.signature
