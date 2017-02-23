@@ -13,19 +13,22 @@ class School < Sequel::Model(:schools)
 
   def signup_teacher(teacher)
     if self.teachers.select {|t| t.id == teacher.id }.size == 0
-      teacher_i = self.teacher_index
-      while true
-        teacher_i += 1
-        code = self.code.split('|').map{|c| "#{c}#{teacher_i}" }.join('|')
-        # puts "teacher_i = #{teacher_i}"  
-        if Teacher.where(code: code).first.nil? 
-          teacher.update(code: code)
-          teacher.update(t_number: teacher_i)
-          break
-        end
-      end
+      teacher_i = self.teacher_index + 1
+
+
+      # while true
+      #   teacher_i += 1
+      #   code = self.code.split('|').map{|c| "#{c}#{teacher_i}" }.join('|')
+      #   # puts "teacher_i = #{teacher_i}"  
+      #   if Teacher.where(code: code).first.nil? 
+      #     teacher.update(code: code)
+      #     teacher.update(t_number: teacher_i)
+      #     break
+      #   end
+      # end
 
       self.update(teacher_index: teacher_i)
+      teacher.update(t_number: teacher_i)
 
       self.add_teacher(teacher)
 
