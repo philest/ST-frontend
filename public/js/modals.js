@@ -9,7 +9,7 @@ $(document).ready(function () {
 
   function ValidateEmail(mail)   
   {  
-   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))  
+   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(mail))  
     {  
       return (true)  
     }  
@@ -95,7 +95,6 @@ $(document).ready(function () {
       username = phone;
 
     }
-
 
     $.ajax({
       url: '/user_exists',

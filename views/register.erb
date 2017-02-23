@@ -213,8 +213,8 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
           // TODO: phone_num = grab the user's phone number (string)
           // TDOO: full_name = grab the user's full name
          // TODO: teacher_name = grab the teacher name
-          var phone_num = $('#register input[name=phone]').val();
-          console.log(phone_num);
+          var username = $('#register input[name=username]').val();
+          console.log(username);
 
           var full_name = $('#register input[name=name]').val();
           console.log(full_name);
@@ -224,11 +224,26 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 
           mixpanel.people.append({
             "full_name": full_name,
-            "phone": phone_num
+            "username": username
             // "teacher_name": teacher_name
           });
 
       }
+
+      jQuery.validator.addMethod("validateContactId", function(value, element) {
+        return ValidateEmail(value) || validatePhone(value);
+      }, "Invalid email or phone number.");
+
+
+      function ValidateEmail(mail)   
+      {  
+       if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(mail))  
+        {  
+          return (true)  
+        }  
+
+        return (false)  
+      }  
 
       function validatePhone(phone) {
           var error = "";
@@ -236,27 +251,20 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 
          if (stripped == "") {
               error = "You didn't enter a phone number.";
-              console.log(error);
               return false;
-          } else if (/^[0-9]+$/.test(stripped) == false) {
+          } else if (isNaN(parseInt(stripped))) {
               phone = "";
               error = "The phone number contains illegal characters.";
-              console.log(error);
               return false;
 
           } else if (!(stripped.length == 10 || stripped.length == 11)) {
               phone = "";
               error = "The phone number is the wrong length. Make sure you included an area code.\n";
-              console.log(error);
               return false;
           } else {
             return true;
           }
       }
-
-      jQuery.validator.addMethod("validatePhone", function(value, element) {
-        return validatePhone(value); 
-      }, 'Please enter a valid phone number.');
 
       // Trigger when the first signup button is Tapped. 
       function SignupButtonClicked() {
@@ -308,30 +316,35 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
       $(document).on('click', '#page1link',function(event){
 
 
-
-
-        
         $('#register').validate({
           rules: {
-            phone: {
+            usernameDisplay: {
               required: true,
-              validatePhone: true 
+              validateContactId: true 
             }
           }
         });
 
         var ValidStatus = $("#register").valid();
-        // var pattern = /[\-\(\)\s]+/g
-        // var phone_number = $("#register input[name=phone]").val();
-        // var stripped = phone_number.replace(pattern, '');
 
-        // var valid_phone = /^[0-9]{10}$/.test(stripped);
 
         // console.log(ValidStatus);
         if (ValidStatus == false) {
             event.preventDefault();
             event.stopPropagation();
             return false;
+        }
+
+        var username = $('form#register input[name=usernameDisplay]').val();
+        if (validatePhone(username)) {
+          console.log(validatePhone(username));
+          var phone = username; 
+
+          phone = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+
+          $('form#register input[name=username]').val(phone);
+
         }
 
         // get name/email
