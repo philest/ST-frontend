@@ -39,3 +39,5 @@ def destroy
   Teacher.where_username_is('8186897323').destroy if Teacher.where_username_is('8186897323')
 
 end
+
+destroy

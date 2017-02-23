@@ -16,6 +16,21 @@ class Teacher < Sequel::Model(:teachers)
 
   add_association_dependencies users: :nullify
 
+  def generate_code
+    code = Array.new(3){[*'a'..'z'].sample}.join
+    code = code + '|' + "#{code}-es"
+  end
+
+
+  def after_create
+    self.code = generate_code
+    while !self.valid?
+      self.code = generate_code
+    end  
+    self.save_changes
+  end
+
+
   def quicklink(prod=false)
 
     st_url = prod ? "https://www.joinstorytime.com" : ENV['STORYTIME_URL']
@@ -48,6 +63,7 @@ class Teacher < Sequel::Model(:teachers)
 
   def validate
     super
+    validates_unique :code, :allow_nil=>true, :message => "#{code} is already taken (teachers)"
     validates_unique :phone, :allow_nil=>true, :message => "phone #{phone} is already taken (teachers)"
     validates_unique :email, :allow_nil=>true, :message => "email #{email} is already taken (teachers)"
     validates_unique :fb_id, :allow_nil=>true, :message => "fb_id #{fb_id} is already taken (teachers)"

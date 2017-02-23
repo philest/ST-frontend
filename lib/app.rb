@@ -46,36 +46,7 @@ class Enroll < Sinatra::Base
   # end
 
 
-  get '/user_exists' do
-    puts "params=#{params}"
-    password_regexp = Regexp.new("^#{params['password']}\\|.+$", 'i')
-    school = School.where(Sequel.like(:code, password_regexp)).first
 
-    if school
-      teacher = Teacher.where_username_is(params['username'])
-      admin = Admin.where_username_is(params['username'])
-
-      if teacher and !teacher.signature.nil? and teacher.school.id == school.id
-        puts teacher.signature
-        return {
-          educator: teacher.signature,
-          role: 'teacher'
-        }.to_json
-      end
-      
-      if admin and !admin.signature.nil? and admin.school.id == school.id
-        puts admin.signature
-        return {
-          educator: admin.signature,
-          role: 'admin'
-        }.to_json
-      end
-    end
-
-    puts "false"
-    return {educator: 'false', role: 'false'}.to_json
-
-  end
 
   post '/update_admin' do
     UpdateAdminWorker.perform_async(params[:sig], 
