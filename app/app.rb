@@ -64,6 +64,12 @@ class App < Sinatra::Base
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
 
+  helpers do
+    def base_url
+      @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
+    end
+  end
+
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
@@ -86,6 +92,7 @@ class App < Sinatra::Base
   get '/app' do
     erb :'get-the-app'
   end
+
 
   post '/get-app/send-app-link' do
     phone = params['phone']
@@ -131,15 +138,15 @@ class App < Sinatra::Base
 
     session[:first_name] = params['first_name']
     session[:last_name]  = params['last_name']
-    session[:email]      = params['email']
+    session[:username]      = params['username']
     session[:password]   = plaintext_password
 
     redirect to "/freemium-signup"
   end
 
   get '/freemium-signup' do
-    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
-       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
+    if [session[:first_name], session[:last_name], session[:username], session[:password]].include? nil or
+       [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
        redirect to '/'
     end
     erb :'purple-modal-form', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
@@ -149,14 +156,14 @@ class App < Sinatra::Base
   post '/freemium-signup' do
 
     # handle session data and email us with new info
-    if [session[:first_name], session[:last_name], session[:email], session[:password]].include? nil or
-       [session[:first_name], session[:last_name], session[:email], session[:password]].include? ''
+    if [session[:first_name], session[:last_name], session[:username], session[:password]].include? nil or
+       [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
        return 400
     end
 
     params['first_name'] = session[:first_name]
     params['last_name'] = session[:last_name]
-    params['email'] = session[:email]
+    params['username'] = session[:username]
     params['password'] = session[:password]
 
 
@@ -166,7 +173,8 @@ class App < Sinatra::Base
       # check that teacher email is there
 
       # need phone in params....
-      params['phone'] = params['email']
+      # actually, now I don't
+      # params['phone'] = params['username']
 
       # POST to birdv 
       response = HTTParty.post(
@@ -186,11 +194,12 @@ class App < Sinatra::Base
 
       if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
         # don't send the actual password! 
+        # 
+        # CHANGE THIS SHIT
         notify_params = {
           first_name: session[:first_name],
           last_name: session[:last_name],
-          email: session[:email],
-          phone: session[:email]
+          username: session[:username]
         }
         notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
       end
@@ -234,15 +243,27 @@ class App < Sinatra::Base
           signature: params['signature'],
           first_name: params['first_name'],
           last_name: params['last_name'],
-          email: params['email'],
-          phone: params['email'],
           password_digest: password_digest
         }
+
+
+
+        if session[:username].is_email?
+          contactType = 'email'
+        elsif session[:username].is_phone?
+          contactType = 'phone'
+        else
+          return 401 # for invalid username/phone/email
+        end
+            
+
+        educator_info[contactType] = session[:username]
+
 
         if params['role'] == 'teacher'
           # am i overwriting anything here?
           puts "i'm a teacher, look at MEEEEEEE"
-          educator = Teacher.where(email: params['email']).or(phone: params['email']).first 
+          educator = Teacher.where_username_is(session[:username])
           # if the teacher already exists, don't do JACK SHIT!!!!!
           if educator.nil?
 
@@ -264,7 +285,8 @@ class App < Sinatra::Base
             params['class_code'] = educator.code.split('|').first
 
             # need phone in params....
-            params['phone'] = params['email']
+            # don't need that anymore!
+            # params['phone'] = params['username']
 
             # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
             response = HTTParty.post(
@@ -283,9 +305,9 @@ class App < Sinatra::Base
           # with the correct class code the way you normally would!!!!!!!!!
         else
           puts "I'M AN ADMIN YO!"
-          educator = Admin.where(email: params['email']).or(phone: params['email']).first 
+          educator = Admin.where_username_is(session[:username])
           if educator.nil?
-            educator = Admin.where(educator_info).first || Admin.create(educator_info)
+            educator = Admin.create(educator_info)
             school.add_admin(educator)
 
             params['class_code'] = school.code.split('|').first
@@ -295,7 +317,8 @@ class App < Sinatra::Base
             end
 
             # need phone in params....
-            params['phone'] = params['email']
+            # don't need this anymore!
+            # params['phone'] = params['username']
 
             # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
             response = HTTParty.post(
@@ -339,14 +362,12 @@ class App < Sinatra::Base
   get '/user_exists' do
     puts "params=#{params}"
 
-    if params['email'].nil? or params['email'].empty?
+    if params['username'].nil? or params['username'].empty?
       return 404
     end
 
-    exists = Teacher.where(email: params['email']).first
-    exists ||= Teacher.where(phone: params['email']).first
-    exists ||= Admin.where(email: params['email']).first
-    exists ||= Admin.where(phone: params['email']).first
+    exists = Teacher.where_username_is(params['username'])
+    exists ||= Admin.where_username_is(params['username'])
 
     if exists
       return 200
@@ -469,7 +490,7 @@ class App < Sinatra::Base
   get '/signin' do
     puts "signin params = #{params}"
     password_digest = params['digest']
-    email           = params['email']
+    username        = params['username']
     role            = params['role']
 
     post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
@@ -478,7 +499,7 @@ class App < Sinatra::Base
       "#{post_url}/signup", 
       body: {
         digest: params['digest'],
-        email: params['email'],
+        username: params['username'],
         role: params['role']
       }
     )
@@ -528,8 +549,6 @@ class App < Sinatra::Base
       else
         redirect to '/admin_dashboard'
       end
-
-
       redirect to '/admin_dashboard'
     when 'teacher'
       puts "going to teacher dashboard"

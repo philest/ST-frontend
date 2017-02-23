@@ -1,70 +1,102 @@
-require_relative 'auth.rb'
+require_relative 'helpers/auth.rb'
+require_relative 'helpers/phone-email.rb'
+# require_relative '../lib/api/helpers/authentication'
 
 class User < Sequel::Model(:users)
   include AuthenticateModel
-
-	plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true
-	plugin :validation_helpers
-	plugin :association_dependencies
-	plugin :json_serializer
-
-	many_to_one :classroom
-	many_to_one :teacher
-	many_to_one :school
-	one_to_many :button_press_logs
-	one_to_one :enrollment_queue
-	one_to_one :state_table
-
-	add_association_dependencies enrollment_queue: :destroy, button_press_logs: :destroy, state_table: :destroy
-  
-	def story_number
-		self.state_table.story_number
-	end
-
-	def generate_code 
-		Array.new(2){[*'0'..'9'].sample}.join
-	end
-
-	# ensure that user is added EnrollmentQueue upon creation
-	def after_create
-		super
-		# associate an enrollment queue
-		eq = EnrollmentQueue.create(user_id: self.id)
-		self.enrollment_queue = eq
-		eq.user = self
-		# associate a state table
-		st = StateTable.create(user_id: self.id)
-		self.state_table = st
-		st.user = self
+  # include AuthenticationHelpers
+  extend SearchByUsername
 
 
-    if self.platform != 'app'
-		  self.state_table.update(subscribed?: false) unless ENV['RACK_ENV'] == 'test'
+  plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true
+  plugin :validation_helpers
+  plugin :association_dependencies
+  plugin :json_serializer
+
+  many_to_one :classroom
+  many_to_one :teacher
+  many_to_one :school
+  one_to_many :button_press_logs
+  one_to_one :enrollment_queue
+  one_to_one :state_table
+
+  add_association_dependencies enrollment_queue: :destroy, button_press_logs: :destroy, state_table: :destroy
+
+
+  def set_reset_password_token(token)
+    return false if token.empty? or token.nil?
+    digest = Password.create(token)
+    self.update(reset_password_token_digest: digest)
+    return digest
+  end
+
+
+  def authenticate_reset_password_token(tkn=nil)
+    begin
+      return false if tkn.nil? || tkn.empty?
+      # return false if self.password_digest.nil?
+      digest  = self.reset_password_token_digest
+      db_token   = Password.new(digest)
+
+      return db_token == tkn
+    rescue => e
+      p e
+      return false
+    end
+  end
+
+
+
+  def story_number
+    self.state_table.story_number
+  end
+
+
+  def generate_code
+    Array.new(2){[*'0'..'9'].sample}.join
+  end
+
+
+  # ensure that user is added EnrollmentQueue upon creation
+  def after_create
+    super
+    # associate an enrollment queue
+    eq = EnrollmentQueue.create(user_id: self.id)
+    self.enrollment_queue = eq
+    eq.user = self
+    # associate a state table
+    st = StateTable.create(user_id: self.id)
+    self.state_table = st
+    st.user = self
+
+
+    if not ['app', 'android', 'ios'].include? self.platform
+      self.state_table.update(subscribed?: false) unless ENV['RACK_ENV'] == 'test'
       # self.state_table.update(subscribed?: true)
     end
 
-		if ['sms', 'feature'].include? self.platform
-			self.code = generate_code
-		end
-		# puts "start code = #{self.code}"
-		while !self.valid?
-			self.code = (self.code.to_i + 1).to_s
-			# puts "new code = #{self.code}"
-		end
-		# set default curriculum version
-		ENV["CURRICULUM_VERSION"] ||= '0'
-		self.update(curriculum_version: ENV["CURRICULUM_VERSION"].to_i)
+    if not ['fb', 'app', 'android', 'ios'].include? self.platform
+      self.code = generate_code
+    end
+    # puts "start code = #{self.code}"
+    while !self.valid?
+      self.code = (self.code.to_i + 1).to_s
+      # puts "new code = #{self.code}"
+    end
+    # set default curriculum version
+    ENV["CURRICULUM_VERSION"] ||= '0'
+    self.update(curriculum_version: ENV["CURRICULUM_VERSION"].to_i)
 
-		# we would want to do 
-		# self.save_changes
-		# self.state_table.save_changes
-		# but this is already done for us with self.update and self.state_table.update
+    # we would want to do
+    # self.save_changes
+    # self.state_table.save_changes
+    # but this is already done for us with self.update and self.state_table.update
 
-	rescue => e
-		p e.message + " could not create and associate a state_table, enrollment_queue, or curriculum_version for this user"
-	end
+  rescue => e
+    p e.message + " could not create and associate a state_table, enrollment_queue, or curriculum_version for this user"
+  end
 
-	def match_school(body_text)
+  def match_school(body_text)
       School.each do |school|
         code = school.code
         if code.nil?
@@ -90,7 +122,7 @@ class User < Sequel::Model(:users)
             # puts "school info: #{school.signature}, #{school.inspect}"
             school.add_user(self)
             return school
-          else 
+          else
             puts "#{code} did not match with #{school.name} regex!"
           end
         else
@@ -136,7 +168,7 @@ class User < Sequel::Model(:users)
               teacher.school.add_user(self)
             end
             return teacher
-          else 
+          else
             puts "#{code} did not match with #{teacher.name} regex!"
           end
         else
@@ -147,12 +179,12 @@ class User < Sequel::Model(:users)
   end
 
 
-	def validate
+  def validate
     super
     validates_unique :code, :allow_nil=>true, :message => "#{code} is already taken (users)"
     validates_unique :phone, :allow_nil=>true, :message => "#{phone} is already taken (users)"
-    validates_unique :fb_id, :allow_nil=>true, :message => "#{fb_id} is already taken (users)"
     validates_unique :email, :allow_nil=>true, :message => "#{email} is already taken (users)"
+    validates_unique :fb_id, :allow_nil=>true, :message => "#{fb_id} is already taken (users)"
   end
 
 end

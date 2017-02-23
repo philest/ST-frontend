@@ -251,11 +251,33 @@
       <h4>Send children's books home to any phone— for free.</h4>
 
       <script>
+        function validatePhone(phone) {
+            var error = "";
+            var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+           if (stripped == "") {
+                error = "You didn't enter a phone number.";
+                return false;
+            } else if (isNaN(parseInt(stripped))) {
+                phone = "";
+                error = "The phone number contains illegal characters.";
+                return false;
+
+            } else if (!(stripped.length == 10 || stripped.length == 11)) {
+                phone = "";
+                error = "The phone number is the wrong length. Make sure you included an area code.\n";
+                return false;
+            } else {
+              return true;
+            }
+        }
+
+
         function transitionToNamePassword() {
           $('#signup-email-mobile').validate({ // initialize the plugin
               rules: {
-                  email: {
-                      validateEmailPhone: true
+                  usernameDisplay: {
+                      validateContactId: true
                   }
               }
           }).form();
@@ -263,8 +285,21 @@
           var ValidStatus = $("#signup-email-mobile").valid();
           if (ValidStatus == false) {
               return false;
-              mixpanel.track('invalid email given', {"platform": "mobile"});
+              mixpanel.track('invalid username given', {"platform": "mobile"});
           } else {
+            var username = $('form#signup-email-mobile input[name=usernameDisplay]').val();
+            if (validatePhone(username)) {
+              console.log(validatePhone(username));
+              var phone = username; 
+
+              phone = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+
+              $('form#signup-email-mobile input[name=username]').val(phone);
+
+            }
+
+
             $('#signup-email-mobile').slideUp();
             $('.signup-name-password-mobile').slideDown();
             mixpanel.track('email given', {"platform": "mobile"});
@@ -275,14 +310,13 @@
       <form id="signup-email-mobile" class="signup-form"> 
           <div class="signup-setup">
               <div class="field" id="signup-field">
-                <input name="email" placeholder="Enter your email or phone number" class="input" required>
-                  
+                <input name="usernameDisplay" placeholder="Enter your email or phone number" class="input" required> 
+                <input type="hidden" name='username'>
               </div>
 
                 <button onclick="transitionToNamePassword();" type="button" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
           </div>
       </form>
-
 
       <div class="signup-name-password-mobile" style="display: none;">
         <h2>Enter your name and a password</h2>
