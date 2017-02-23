@@ -37,7 +37,7 @@ class Register < Sinatra::Base
   helpers TwilioTextingHelpers
 
   get '/class/?' do
-    redirect to '/'
+    redirect to '../'
   end
 
   get '/role/?' do
@@ -88,7 +88,7 @@ class Register < Sinatra::Base
       text[:class] = "en la Clase de<br>#{teacher.signature}"
       text[:full_name] = "Nombre completo"
       text[:full_name_placeholder] = "Nombre y apellido"
-      text[:phone_number] = "Teléfono"
+      text[:phone_number] = "Teléfono o correo electrónico"
       text[:sign_up] = "Inscribirse"
       text[:privacy_policy] = "Al registrarse, acepta nuestras <b>Condiciones de servicio</b> y <b>Política de privacidad</b>"
 
@@ -123,7 +123,7 @@ class Register < Sinatra::Base
       text[:class] = "#{teacher.signature}'s Class"
       text[:full_name] = "Full name"
       text[:full_name_placeholder] = "First and last name"
-      text[:phone_number] = "Phone number"
+      text[:phone_number] = "Phone number or email address"
       text[:sign_up] = "Sign up"
       text[:privacy_policy] = "By signing up, you agree to our <b>Terms of Service</b> and <b>Privacy Policy</b>"
 
@@ -172,7 +172,7 @@ class Register < Sinatra::Base
     end
 
     full_name     = params['name']
-    phone_no      = params['phone']
+    username      = params['username']
     mobile_os     = params['mobile_os']
     teacher_id    = params['teacher_id']
     locale        = params['locale']
@@ -180,8 +180,8 @@ class Register < Sinatra::Base
 
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil?
-      notify_admins("user with phone #{phone_no} started registration", params.to_s)
+    if test_code.match(class_code).nil? and (ENV['RACK_ENV'] != 'development')
+      notify_admins("user with phone #{username} started registration", params.to_s)
     else
       puts "it's just a test, no reason for concern gentlemen...."
     end
@@ -199,7 +199,7 @@ class Register < Sinatra::Base
     end
 
     full_name     = params['name']
-    phone_no      = params['phone']
+    username      = params['username']
     mobile_os     = params['mobile_os']
     teacher_id    = params['teacher_id']
     locale        = params['locale']
@@ -226,7 +226,7 @@ class Register < Sinatra::Base
     params['first_name'] = first_name
     params['last_name']  = last_name
 
-    phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
+    # username = username.delete(' ').delete('-').delete('(').delete(')')
 
     # submit this to birdv
     res = HTTParty.post("#{ENV['birdv_url']}/api/auth/signup", body: params)
@@ -242,9 +242,9 @@ class Register < Sinatra::Base
     puts "ABOUT TO NOTIFY ADMINS"
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil?
+    if test_code.match(class_code).nil? and (ENV['RACK_ENV'] != 'development')
       params.delete 'password'
-      notify_admins("user with phone #{phone_no} finished registration", params.to_s)
+      notify_admins("user with username #{username} finished registration", params.to_s)
     else
       puts "it's just a test, no worries fellas..."
     end
@@ -286,72 +286,6 @@ class Register < Sinatra::Base
   end
 
 
-  post '/' do
-    puts "IN POST / FOR REGISTER"
-
-    puts "params = #{params}"
-
-
-    full_name = params['name']
-    phone_no = params['phone']
-    mobile_os = params['mobile_os']
-    teacher_id = params['teacher_id']
-    locale = params['locale']
-
-
-    if !full_name.nil? && !phone_no.nil? && !mobile_os.nil? && !full_name.empty? && !phone_no.empty? && !mobile_os.empty? # and os != 'unknown'
-
-      phone = phone_no.delete(' ').delete('-').delete('(').delete(')')
-      user = User.where(phone: phone).first
-
-      hist = "new"
-
-      if !user.nil? # if user exists!!!!!!!
-        new_user = User.where(phone: phone).first
-        new_user.update(locale: 'es') if locale == 'es'
-        hist = "old"
-      else
-        new_user = User.create(phone: phone, platform: mobile_os.downcase)
-        new_user.state_table.update(subscribed?: false)
-        new_user.update(locale: 'es') if locale == 'es'
-        hist = "new"
-      end
-
-      teacher = Teacher.where(id: teacher_id).first
-      teacher.signup_user(new_user)
-
-      # get first and last name
-      terms = full_name.split(' ')
-      if terms.size < 1
-        # return ''
-        # have a more informative error message?
-        halt erb :error
-      elsif terms.size == 1 # just the first name
-        first_name = terms.first[0].upcase + terms.first[1..-1]
-        new_user.update(first_name: first_name)
-      elsif terms.size > 1 # first and last names, baby!!!!!! it's a gold mine over here!!!!
-        first_name = terms.first[0].upcase + terms.first[1..-1] 
-        last_name = terms[1..-1].inject("") {|sum, n| sum+" "+(n[0].upcase+n[1..-1])}.strip
-        new_user.update(first_name: first_name, last_name: last_name)
-      end
-
-      # Create a user profile on Mixpanel
-      # tracker.people.set(new_user.id, {
-      #     '$first_name'       => new_user.first_name,
-      #     '$last_name'        => new_user.last_name,
-      #     '$phone'            => new_user.phone,
-      #     'platform'          => new_user.platform
-      # });
-
-      puts "ABOUT TO NOTIFY ADMINS"
-      notify_admins("#{hist} user with id #{new_user.id} started registration", params.to_s)
-
-    else
-      halt erb :error
-    end
-
-    redirect to "/coming-soon?teacher=#{teacher.signature}&locale=#{locale}"
-  end
 
   get '/error' do
     halt erb :error 

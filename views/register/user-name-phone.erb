@@ -20,7 +20,8 @@
                        <label class="label"><%= text[:full_name] %></label>
                       <input name="name" placeholder="<%= text[:full_name_placeholder] %>" class="input" required>
                         <label class="label"><%= text[:phone_number] %></label>
-                      <input name="phone" placeholder="(555) 555-5555" class="input">
+                      <input name="usernameDisplay" placeholder="Enter your email or phone number" class="input" required>
+                      <input type="hidden" name='username'>
                       <input type="hidden" name="teacher_id" value="<%= teacher_id %>">
                       <input type="hidden" name="locale" value="<%= locale %>">
                       <input type="hidden" name="class_code" value="<%= class_code %>">
@@ -33,6 +34,16 @@
 
 
                   </div>
+
+                  <script>
+                      $('form#register input[name=usernameDisplay]').change(function(event) {
+                        var usernameDisplay = $('form#register input[name=usernameDisplay]').val();
+                        $('form#register input[name=username]').val(usernameDisplay);
+                      });
+                    </script>
+
+                  </script>
+
                 </form>
               </div>
 
