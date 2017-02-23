@@ -279,7 +279,10 @@ class App < Sinatra::Base
 
             if new_school == false
               puts "DOING WelcomeTeacherWorker NOW!"
-              WelcomeTeacherWorker.perform_async(educator.id)
+              if !educator.email.nil?
+                WelcomeTeacherWorker.perform_async(educator.id) 
+              end
+
             end
 
             params['class_code'] = educator.code.split('|').first
@@ -313,7 +316,9 @@ class App < Sinatra::Base
             params['class_code'] = school.code.split('|').first
 
             if new_school == false
-              WelcomeAdminWorker.perform_async(educator.id)
+              if !educator.email.nil?
+                WelcomeAdminWorker.perform_async(educator.id)
+              end
             end
 
             # need phone in params....
