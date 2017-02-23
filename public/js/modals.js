@@ -69,7 +69,7 @@ $(document).ready(function () {
 
     $('#signup-email').validate({ // initialize the plugin
         rules: {
-            contact_id: {
+            username: {
                 validateContactId: true
             }
         }
@@ -82,17 +82,17 @@ $(document).ready(function () {
     }
 
     // now check to see if anyone exists by that name/email
-    var email = $('#signup-email input[name=contact_id]').val();
+    var email = $('#signup-email input[name=username]').val();
 
     $.ajax({
       url: '/user_exists',
       type: 'get',
       data: {
-        contact_id: email
+        username: email
       },
       success: function(data) {
         // a user already exists with this email/phone, so log that user in
-        $('#teacher-info input[name=contact_id]').val(email);
+        $('#teacher-info input[name=username]').val(email);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){

@@ -10,11 +10,11 @@ $( document ).ready(function() {
 
 
   $('#signup-name-password-mobile').submit(function(event) {
-    var contact_id = $('#signup-email-mobile input[name=contact_id]').val();
+    var username = $('#signup-email-mobile input[name=username]').val();
     var input = $('<input>')
                       .attr('type', 'hidden')
-                      .attr('name', 'contact_id')
-                      .val(contact_id);
+                      .attr('name', 'username')
+                      .val(username);
     $('#signup-name-password-mobile').append($(input));
 
     var formdata = $("form#signup-name-password-mobile").serializeArray();
@@ -30,11 +30,11 @@ $( document ).ready(function() {
   });
 
   $('#signup-name-password').submit(function(event) {
-    var contact_id = $('#signup-email input[name=contact_id]').val()
+    var username = $('#signup-email input[name=username]').val()
     var input = $('<input>')
                       .attr('type', 'hidden')
-                      .attr('name', 'contact_id')
-                      .val(contact_id);
+                      .attr('name', 'username')
+                      .val(username);
     $('#signup-name-password').append($(input));
 
     var formdata = $("form#signup-name-password").serializeArray();

@@ -13,6 +13,7 @@ gem 'sidekiq'
 gem 'clockwork'
 gem 'i18n'
 gem 'rack-ssl'
+gem 'rack-contrib', '~> 1.4'
 # aws and image generation
 
 gem 'gruff'

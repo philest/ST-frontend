@@ -52,8 +52,8 @@ class Enroll < Sinatra::Base
     school = School.where(Sequel.like(:code, password_regexp)).first
 
     if school
-      teacher = Teacher.where(Sequel.ilike(:email, params['contact_id'])).first
-      admin = Admin.where(Sequel.ilike(:email, params['contact_id'])).first
+      teacher = Teacher.where(Sequel.ilike(:email, params['username'])).first
+      admin = Admin.where(Sequel.ilike(:email, params['username'])).first
 
       if teacher and !teacher.signature.nil? and teacher.school.id == school.id
         puts teacher.signature
@@ -79,7 +79,7 @@ class Enroll < Sinatra::Base
 
   post '/update_admin' do
     UpdateAdminWorker.perform_async(params[:sig], 
-                                      params[:contact_id], 
+                                      params[:username], 
                                       params[:count], 
                                       params[:teacher_or_teachers], 
                                       params[:list_o_names], 
@@ -92,7 +92,7 @@ class Enroll < Sinatra::Base
 
   post '/update_teacher' do
     UpdateTeacherWorker.perform_async(params[:sig], 
-                                      params[:contact_id], 
+                                      params[:username], 
                                       params[:count], 
                                       params[:family], 
                                       params[:list_o_names], 
@@ -108,7 +108,7 @@ class Enroll < Sinatra::Base
     puts "RACK_ENV = #{ENV['RACK_ENV']}"
 
     # create teacher here
-    email       = params[:contact_id]
+    username    = params[:username]
     password    = params[:password]
     role        = params[:role]
 
@@ -119,11 +119,11 @@ class Enroll < Sinatra::Base
 
     puts "st-enroll (but really joinstorytime) params = #{params}"
 
-    if email.nil? or password.nil? or email.empty? or password.empty? 
-      txt = "Email: #{email.inspect}, Password: #{password.inspect}"
+    if username.nil? or password.nil? or username.empty? or password.empty? 
+      txt = "username: #{username.inspect}, Password: #{password.inspect}"
 
       missing = []
-      missing << "email" if (email.nil? or email.empty?)
+      missing << "username" if (username.nil? or username.empty?)
       missing << "password" if (password.nil? or password.empty?)
 
       notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
@@ -133,13 +133,13 @@ class Enroll < Sinatra::Base
     # add phone number functionality later
     case role
     when 'admin'
-      educator = Admin.where(Sequel.ilike(:email, email)).first
+      educator = Admin.where_username_is(username)
     when 'teacher'
-      educator = Teacher.where(Sequel.ilike(:email, email)).first
+      educator = Teacher.where_username_is(username)
     else
-      educator = Admin.where(Sequel.ilike(:email, email)).first
+      educator = Admin.where_username_is(username)
       if educator.nil?
-        educator = Teacher.where(Sequel.ilike(:email, email)).first
+        educator = Teacher.where_username_is(username)
         role = 'teacher'
       else
         role = 'admin'
@@ -182,7 +182,7 @@ class Enroll < Sinatra::Base
     puts "educator = #{educator.inspect}"
     puts "their school = #{educator.school.inspect}"
 
-    educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :code, :t_number, :signin_count].include? k}
+    educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :phone, :code, :t_number, :signin_count].include? k}
     school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
 
     unless password.downcase == 'test' or password.downcase == 'read' or ENV['RACK_ENV'] == 'development'
@@ -417,7 +417,7 @@ class Enroll < Sinatra::Base
 
   get '/admin_sig' do
     puts "admin_sig params = #{params}"
-    admin = Admin.where(Sequel.ilike(:email, params['contact_id'])).first
+    admin = Admin.where(Sequel.ilike(:email, params['username'])).first
     puts "admin = #{admin.inspect}"
     if admin
       return admin.signature
