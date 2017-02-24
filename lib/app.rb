@@ -17,6 +17,8 @@ require_relative '../config/pony'
 require_relative 'workers' # including twilio_helpers
 require_relative '../config/initializers/airbrake'
 
+require_relative '../helpers/is_not_us'
+
 require_relative 'generate_phone_image'
 
 # aubrey  3013328953
@@ -38,14 +40,14 @@ class Enroll < Sinatra::Base
     register Sinatra::Reloader
   end
 
+  helpers IsNotUs
+
   # before do
   #   headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
   #   headers['Access-Control-Allow-Origin'] = 'http://localhost:4567'
   #   headers['Access-Control-Allow-Headers'] = 'accept, authorization, origin'
   #   headers['Access-Control-Allow-Credentials'] = 'true'
   # end
-
-
 
 
   post '/update_admin' do

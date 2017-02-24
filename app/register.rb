@@ -1,6 +1,7 @@
 require 'sinatra/base'
 
 require_relative '../helpers/school_code_helper'
+require_relative '../helpers/is_not_us'
 
 # Error tracking. 
 # require 'airbrake'
@@ -35,6 +36,7 @@ class Register < Sinatra::Base
 
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
+  helpers IsNotUs
 
   get '/class/?' do
     redirect to '../'
@@ -180,7 +182,7 @@ class Register < Sinatra::Base
 
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil? and (ENV['RACK_ENV'] != 'development')
+    if test_code.match(class_code).nil? and is_not_us?(username)
       notify_admins("user with phone #{username} started registration", params.to_s)
     else
       puts "it's just a test, no reason for concern gentlemen...."
@@ -242,7 +244,7 @@ class Register < Sinatra::Base
     puts "ABOUT TO NOTIFY ADMINS"
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil? and (ENV['RACK_ENV'] != 'development')
+    if test_code.match(class_code).nil? and is_not_us?(username) and is_not_us?(password)
       params.delete 'password'
       notify_admins("user with username #{username} finished registration", params.to_s)
     else
