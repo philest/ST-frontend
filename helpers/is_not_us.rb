@@ -9,7 +9,7 @@ end
 
 module IsNotUs
   include BCrypt
-
+  
   def is_not_us?(thingy)
     if ENV['RACK_ENV'] == 'development' or ENV['RACK_ENV'] == 'test'
       puts "it's just us! (development)"
@@ -55,7 +55,7 @@ module IsNotUs
       return false 
     end
     if email_blacklist.include? thingy
-      puts "it's just us! (phone)"
+      puts "it's just us! (email)"
       return false 
     end
     if Password.new(password_blacklist) == thingy
