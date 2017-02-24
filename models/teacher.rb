@@ -1,8 +1,10 @@
 require_relative 'helpers/auth.rb'
 require_relative 'helpers/phone-email.rb'
+require_relative '../helpers/is_not_us'
 
 class Teacher < Sequel::Model(:teachers)
   include AuthenticateModel
+  include PersonIsNotUs
   extend SearchByUsername
   
   plugin :timestamps, :create=>:enrolled_on, :update=>:updated_at, :update_on_create=>true

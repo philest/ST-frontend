@@ -20,6 +20,7 @@ require_relative '../config/initializers/aws'
 #helpers
 require_relative '../helpers/routes_helper'
 require_relative '../helpers/school_code_helper'
+require_relative '../helpers/is_not_us'
 
 # Error tracking. 
 require 'airbrake'
@@ -69,6 +70,8 @@ class App < Sinatra::Base
       @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
     end
   end
+
+  helpers IsNotUs
 
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
@@ -132,13 +135,13 @@ class App < Sinatra::Base
     
     params.delete 'password'
 
-    if params['first_name'].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+    if is_not_us?(params['first_name'])
       notify_admins("Educator joined freemium", params.to_s)
     end
 
     session[:first_name] = params['first_name']
     session[:last_name]  = params['last_name']
-    session[:username]      = params['username']
+    session[:username]   = params['username']
     session[:password]   = plaintext_password
 
     redirect to "/freemium-signup"
@@ -192,7 +195,7 @@ class App < Sinatra::Base
 
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
 
-      if session[:first_name].downcase != 'test' and (ENV['RACK_ENV'] != 'development')
+      if is_not_us?(session[:first_name])
         # don't send the actual password! 
         # 
         # CHANGE THIS SHIT
@@ -201,6 +204,7 @@ class App < Sinatra::Base
           last_name: session[:last_name],
           username: session[:username]
         }
+
         notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
       end
 
