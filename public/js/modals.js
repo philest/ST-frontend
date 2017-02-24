@@ -105,6 +105,7 @@ $(document).ready(function () {
       success: function(data) {
         // a user already exists with this username/phone, so log that user in
         $('#teacher-info input[name=usernameDisplay]').val(usernameDisplay);
+        $('#teacher-info input[name=username]').val(username);
         $('#myModal').modal('toggle'); 
       },
       error: function (xhr, ajaxOptions, thrownError){

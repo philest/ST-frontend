@@ -182,7 +182,7 @@ class Register < Sinatra::Base
 
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil? and is_not_us?(username)
+    if test_code.match(class_code).nil? and is_not_us?(username) and is_not_us?(full_name)
       notify_admins("user with phone #{username} started registration", params.to_s)
     else
       puts "it's just a test, no reason for concern gentlemen...."
@@ -244,7 +244,7 @@ class Register < Sinatra::Base
     puts "ABOUT TO NOTIFY ADMINS"
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
-    if test_code.match(class_code).nil? and is_not_us?(username) and is_not_us?(password)
+    if test_code.match(class_code).nil? and is_not_us?(username) and is_not_us?(password) and is_not_us?(full_name)
       params.delete 'password'
       notify_admins("user with username #{username} finished registration", params.to_s)
     else

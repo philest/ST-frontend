@@ -8,6 +8,8 @@ end
 
 
 module IsNotUs
+  include BCrypt
+
   def is_not_us?(thingy)
     if ENV['RACK_ENV'] == 'development' or ENV['RACK_ENV'] == 'test'
       puts "it's just us! (development)"

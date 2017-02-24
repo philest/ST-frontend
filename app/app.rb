@@ -135,7 +135,7 @@ class App < Sinatra::Base
     
     params.delete 'password'
 
-    if is_not_us?(params['first_name'])
+    if is_not_us?(params['first_name']) and is_not_us?(params['username']) and is_not_us?(plaintext_password) and is_not_us?(params['last_name'])
       notify_admins("Educator joined freemium", params.to_s)
     end
 
@@ -192,10 +192,9 @@ class App < Sinatra::Base
     when 'teacher', 'admin'
       puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
 
-
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
 
-      if is_not_us?(session[:first_name])
+      if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
         # don't send the actual password! 
         # 
         # CHANGE THIS SHIT
