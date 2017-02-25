@@ -80,6 +80,16 @@
                         <option value="WV">West Virginia</option>
                         <option value="WY">Wyoming</option>
                       </select>
+
+                      <label class="label">Grade level</label>
+                      <select class="form-control" id="classroom_grade" name="classroom_grade" required>
+                        <option value="">Select your grade</option>
+                        <option value="infant">Infant</option>
+                        <option value="prek">Preschool</option>
+                        <option value="kindergarten">Kindergarten</option>
+                        <option value="1st">1st Grade</option>
+                        <option value="2nd">2nd Grade</option>
+                      </select>
                     </div>
                     <!-- <button id="join" data-dismiss='modal' data-toggle='modal' data-target="#modalSig"  class="signup-form-button pure-button pure-button-prry get_update dialog-button">Log in</button> -->
                 </div>
@@ -87,11 +97,30 @@
                 <input type="hidden" name="role" value="">
                 <input type="hidden" name="signature" value="">
 
-                <a id="page6link" class="transition-link ui-btn web-mobile-signup-button" href="#page5" data-transition="fade">
+                <a id="page6link" class="transition-link ui-btn web-mobile-signup-button" href="#" data-transition="fade">
                   Continue
                 </a>
                 
                 <script>
+
+                  $('#page6 select[name=classroom_grade]').change(function(event){
+                    // get the grade
+                    var grade = $('#page6 select[name=classroom_grade]').val();
+
+                    if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                      $('#page6link').attr('href', '#');
+                      // we're going to go to the dashboard.
+                    } else {
+                      $('#page6link').attr('href', '#page7');
+                      // change the page5 text maybe?
+                      // or maybe just have a separated page with that text
+                    }
+                    // check which one
+
+                    // change link based on that
+
+                  });
+
                   $(document).on('click', '#page6link',function(event){
 
                     var ValidStatus = $("#page6 #school-info").valid();
@@ -110,7 +139,30 @@
 
                     $('form#school-info').find('input[name=signature]').val(sig);    
 
-                    $.post('/freemium-signup', $('form#school-info').serialize());
+                    // $.post('/freemium-signup', $('form#school-info').serialize());
+
+                    $.ajax({
+                      url: '/freemium-signup',
+                      type: 'post',
+                      data: $('#page6 form#school-info').serialize()
+                    }).done(function(data, statusText, xhr) {
+                        console.log(data);
+                        console.log('statusText is:');
+                        console.log(statusText);
+                        console.log(xhr);
+
+                        var grade = $('#page6 select[name=classroom_grade]').val();
+
+                        if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                          console.log('yup, gonna submit');
+                          $('#page6 form#log-into-dat-account').submit();
+                          // we're going to go to the dashboard.
+                        }
+
+
+                        // $('form#log-into-dat-account input[name=password]').val(data);
+                    });
+
 
                     var formdata = $("form#school-info").serializeArray();
                     var data = {};
@@ -120,10 +172,37 @@
                     console.log(data);
                     mixpanel.people.set(data);
                     mixpanel.track('finished freemium signup');
+
+
                   });
 
                 </script>
               </form>
+
+             <!-- submit form -->
+             <form id='log-into-dat-account' action='signin' method='post' data-ajax="false" style="display: none;">
+               <input type="hidden" name='username' value='<%= session[:username] %>'>
+               <input type="hidden" name='signature' value=''>
+               <input type="hidden" name='password' value='<%= session[:password] %>'>
+               <input type="hidden" name='role' value=''>
+
+
+               <script>
+                 $('#page6 form#log-into-dat-account').on('submit', function(event) {
+                  console.log('submitting this form...');
+                   var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                   $(this).find('input[name=role]').val(role);
+
+                   var sig = $('form#educator-signature-form').find('input[name=signature]').val();
+
+                   $(this).find('input[name=signature]').val(sig);
+
+                   // $('form#log-into-dat-account').submit();
+                 });
+               </script>
+
+             </form>
+             <!-- submit form -->
           </div>
         </div>
       </div>

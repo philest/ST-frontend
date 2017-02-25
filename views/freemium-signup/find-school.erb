@@ -38,9 +38,7 @@
   }
 
   ul.ui-autocomplete.ui-menu li a:hover {
-
     color: white !important;
-
   }
 
   ul.ui-autocomplete.ui-menu li a span{
@@ -68,9 +66,7 @@
                       <div class="field" id="signup-field">
                          <label class="label">School</label>
                         <input name="school_name" autocomplete="off" placeholder="Search for a school" class="input" required>
-                         
                       </div>
-
                   </div>
 
                   <!-- create the dropdown menu here -->
@@ -102,7 +98,7 @@
                   <input type="hidden" name="role" value="">
                   <input type="hidden" name="signature" value="">
 
-                  <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#page7" data-transition="fade">
+                  <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#" data-transition="fade">
                     Continue
                   </a>
         
@@ -149,11 +145,11 @@
 
                             $('#page4 input[name=school_state]').val(ui.item.state); 
 
-                           if (ui.item.value === 'free_school_value') {
-                              $('#page4link').attr('href', '#page5');
-                           } else {
-                              $('#page4link').attr('href', '#');
-                           }
+                           // if (ui.item.value === 'free_school_value') {
+                           //    $('#page4link').attr('href', '#page5');
+                           // } else {
+                           //    $('#page4link').attr('href', '#');
+                           // }
 
                             return false;
                           }
@@ -181,7 +177,6 @@
                     
 
                     $('#page4 input[name=school_name]').blur(function() {
-
                       // check to see if we selected something nice
                       var input_val = $('#page4 input[name=school_name]').val();
                       
@@ -190,9 +185,27 @@
                       $('.dropdown-menu').css('display', 'none');
                     });
 
+                    $('#page4 select[name=classroom_grade]').change(function(event){
+                      // get the grade
+                      var grade = $('#page4 select[name=classroom_grade]').val();
+
+                      if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                        $('#page4link').attr('href', '#');
+                        // we're going to go to the dashboard.
+                      } else {
+                        $('#page4link').attr('href', '#page7');
+                        // change the page5 text maybe?
+                        // or maybe just have a separated page with that text
+                      }
+
+                      // check which one
+
+                      // change link based on that
+
+                    });
+
 
                     $(document).on('click', '#page4 #page4link',function(event){
-
                       var ValidStatus = $("#page4 #school-info").valid();
                       // console.log(ValidStatus);
                       if (ValidStatus == false) {
@@ -209,6 +222,13 @@
 
                       $('#page4 form#school-info').find('input[name=signature]').val(sig);    
 
+                      // check if preschool or below
+                      // if preschool, perform the regular action of logging in
+                      // 
+                      // if not, forward to page6 or whatever and change the text to say that we don't do older grades
+                      // 
+
+
                       $.ajax({
                         url: '/freemium-signup',
                         type: 'post',
@@ -218,14 +238,13 @@
                           console.log('statusText is:');
                           console.log(statusText);
                           console.log(xhr);
-                          
-                          if (data == 'invalid_code') {
-                            console.log('this is an invalid school');
-                            return false;
-                          } else if (data == 'valid_code') {
-                            $('form#log-into-dat-account').submit();
-                          }
 
+                          var grade = $('#page4 select[name=classroom_grade]').val();
+
+                          if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                            $('#page6 form#log-into-dat-account').submit();
+                            // we're going to go to the dashboard.
+                          }
                           // $('form#log-into-dat-account input[name=password]').val(data);
                       });
 
@@ -256,7 +275,7 @@
                   </button> -->
 
                   <script>
-                    $('form#log-into-dat-account').on('submit', function(event) {
+                    $('#page4 form#log-into-dat-account').on('submit', function(event) {
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                       $('form#log-into-dat-account').find('input[name=role]').val(role);
 

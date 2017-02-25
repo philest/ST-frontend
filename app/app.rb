@@ -246,10 +246,9 @@ class App < Sinatra::Base
           signature: params['signature'],
           first_name: params['first_name'],
           last_name: params['last_name'],
-          password_digest: password_digest
+          password_digest: password_digest,
+          grade: params['classroom_grade']
         }
-
-
 
         if session[:username].is_email?
           contactType = 'email'
@@ -258,7 +257,7 @@ class App < Sinatra::Base
         else
           return 401 # for invalid username/phone/email
         end
-            
+
 
         educator_info[contactType] = session[:username]
 
@@ -524,6 +523,11 @@ class App < Sinatra::Base
       redirect '/'
     end
 
+    if data.code == 305
+      flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
+      redirect '/'
+    end
+
     data = JSON.parse(data)
 
     puts data
@@ -590,6 +594,11 @@ class App < Sinatra::Base
 
     if data.code == 303
       flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
+      redirect '/'
+    end
+
+    if data.code == 305
+      flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
       redirect '/'
     end
 

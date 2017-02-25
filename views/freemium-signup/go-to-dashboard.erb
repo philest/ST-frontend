@@ -10,14 +10,6 @@
      .wrapper {
         background: #3F3F5E;
      }
-
-     button#go-to-dashboard {
-       background-color: #ED7A44;
-       color: white;
-       font-family: 'Karla';
-       text-shadow: none;
-
-     }
 </style>
 
 <div data-role="page" class="wrapper" id="page7">
@@ -28,44 +20,21 @@
             <div class="pure-u-1">
            
                 <div id="monday">
-                  <h1 style="margin-bottom: 0px;">Congrats!</h1>
-                  <h2 style="margin-bottom:0.5em;margin-top:0.5em;font-family:'Karla';font-size:1em;font-weight:normal;line-height: 1.3em;" class="purple-subtitle">We've created your account.</h2>
+                  <h1 style="margin-bottom: 0px;">Thanks!</h1>
+                  <h2 style="margin-bottom:0.5em;margin-top:0.5em;font-family:'Karla';font-size:1em;font-weight:normal;line-height: 1.3em;" class="purple-subtitle">Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!</h2>
                 </div>
 
                 <div id="app-icon">
                   <img src="https://s3.amazonaws.com/st-webpage/assets/logo/logo-large.png"  alt="">
                 </div>
 
-                <form id='log-into-dat-account' action='signin' method='post' data-ajax="false">
-                  <input type="hidden" name='username' value='<%= session[:username] %>'>
-                  <input type="hidden" name='signature' value=''>
-                  <input type="hidden" name='password' value='<%= session[:password] %>'>
-                  <input type="hidden" name='role' value=''>
 
-                  <!-- HERE IS THE LOCUS OF PRODUCTION -->
-                  <button id="go-to-dashboard" data-ajax="false" style="font-size: 1.2em;" type="submit">
-                      Log in
-                  </button>
-
-                  <script>
-                    $('form#log-into-dat-account').on('submit', function(event) {
-                      var role = $('form#choose-educator-role-form').find('input[name=role]').val();
-                      $('form#log-into-dat-account').find('input[name=role]').val(role);
-
-                      var sig = $('form#educator-signature-form').find('input[name=signature]').val();
-
-                      $('form#log-into-dat-account').find('input[name=signature]').val(sig);
-
-                      // $('form#log-into-dat-account').submit();
-                    });
-                  </script>
-
-                </form>
+                <a id="backToHome" data-ajax="false" class="transition-link ui-btn web-mobile-signup-button" href="/" style="font-size: 1.2em;">
+                    Back to HomePage
+                </a>
                
             </div>
           </div>
         </div> <%# end pure-g %>
-
-
 
 </div> <%# wrapper %>
