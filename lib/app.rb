@@ -123,13 +123,29 @@ class Enroll < Sinatra::Base
       return 500
     end
 
+    if !['infant', 'prek', 'kindergarten'].include? educator.grade
+      # not the right grade!
+      if educator.is_not_us
+        notify_admins("educator id=#{educator.id} of grade #{educator.grade} was refused access to the dashboard because they don't teach prek")
+      end
+      return 305
+    end
+
 
     school = educator.school
 
-    if school and school.plan == 'free'
-      # shouldn't log this guy in
-      return 303
-    end
+    # if school and school.plan == 'free'
+    #   # change to if school.plan == 'waitlist' or something. free is allowed.
+    #   if educator.is_not_us
+    #     notify_admins("educator id=#{educator.id} was refused access to the dashboard because they don't teach prek")
+    #   end
+
+    #   # shouldn't log this guy in
+    #   return 303
+    # end
+
+
+
 
     if not params[:digest].nil? and not params[:digest].empty?
       puts "digest exists!"

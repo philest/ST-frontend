@@ -180,7 +180,13 @@
     </div>
   <% end %>
 
-    <!-- modals -->
+  <% if flash[:wrong_grade_level_error] %>
+    <div id="alert">
+        <a class="alert" href="#alert">Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!</a>
+    </div>
+  <% end %>
+
+  <!-- modals -->
   <div>
       <%= erb :'/modals/signup-signature' %>
       <%= erb :'/modals/signup-school-role' %>
