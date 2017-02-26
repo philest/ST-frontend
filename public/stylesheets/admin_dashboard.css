@@ -1,5 +1,16 @@
 /* INVITE TEACHERS BY EMAIL modal */
 
+#get-dat-app-link {
+  display: none;
+}
+
+
+@media screen and (min-width: 63em) {
+  #get-dat-app-link {
+     display: inline-block; 
+  }
+}
+
 #inviteTeachersModal .modal-body {
   overflow-y: auto;
 }
@@ -1072,7 +1083,12 @@ thead {
   }
 }
 
+
+
 @media screen and (max-width: 52em) {
+
+
+
   .navbar-buttons .navbar-menu {
     margin-left: 0em;
   }
