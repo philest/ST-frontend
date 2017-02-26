@@ -339,7 +339,16 @@ body {
       text-decoration: none;
       color: #ed7844;
     }
+  }
 
+  display: none;
+
+  &.navbar-mobile {
+    display: block;
+
+    .navbar-right {
+      padding-left: 0px;
+    }
 
   }
 
@@ -433,7 +442,10 @@ button.log-in-fake-button {
   float: right !important;
   list-style: none;
   display: none;
+ }
 
+ .navbar.navbar-mobile .navbar-right {
+  display: block;
  }
 
 
@@ -1123,6 +1135,23 @@ div.desktop-text {
       color: #7E7E7E;
       margin-left: 0px;
       margin-right: 0px;
+    }
+  }
+
+  .navbar.navbar-mobile {
+    display: none; 
+  }
+
+
+  // .navbar.navbar-mobile .navbar-right {
+  //  display: none;
+  // }
+
+  .navbar {
+    display: block; 
+
+    &.navbar-mobile {
+      display: none; 
     }
   }
 

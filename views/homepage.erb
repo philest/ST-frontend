@@ -169,7 +169,7 @@
       <!-- Notify about form submission -->
   <% if flash[:signin_error] %>
     <div id="alert">
-        <a class="alert" href="#alert">Incorrect login info. Check that your password is spelled correctly!</a>
+        <a class="alert" href="#alert">Incorrect login info.</a>
     </div>
   <% end %>
 
@@ -200,6 +200,40 @@
       <%= erb :'/modals/congrats-modal' %>
   </div>
   <!-- modals end -->
+
+   <nav class="navbar navbar-mobile" role="navigation">
+     <div class="container">
+       <a href="/" id="navbar-title">
+  <!--      <div class="navbar-logo">
+       </div> -->
+       <div>
+         StoryTime
+       </div>
+       <!-- <h1 class="navbar-title">StoryTime</h1> -->
+       </a>
+       <ul class="navbar-right">
+         
+         <li class="navbar-button-item">
+           <a>
+             <% if session['educator'].nil? %>
+               <!-- <button id="top-button" class="pure-button-primary pure-button signup-button" data-toggle="modal" data-target="#chooseRoleModal"> -->
+               <button id="top-button" class="signup-button logger-in log-in-fake-button">
+               Log in
+               </button>
+             <% else %>
+               <form action="signup" method="get">                 
+                 <button id="top-button" type="submit" class="signup-button logger-in log-in-fake-button">
+                   Log in
+                 </button>
+               </form>
+             <% end %>
+           </a>
+         </li>
+
+       </ul>
+     </div>
+   </nav>
+
 
 
       <nav class="navbar" role="navigation">
