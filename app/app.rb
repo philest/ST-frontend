@@ -501,7 +501,7 @@ class App < Sinatra::Base
     username        = params['username']
     role            = params['role']
 
-    if !params['email'].empty? and !params['email'].nil?
+    if !params['email'].nil? and !params['email'].empty?
       params['username'] = params['email']
     end
 
