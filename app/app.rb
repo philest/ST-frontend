@@ -496,9 +496,14 @@ class App < Sinatra::Base
   # 
   get '/signin' do
     puts "signin params = #{params}"
+
     password_digest = params['digest']
     username        = params['username']
     role            = params['role']
+
+    if !params['email'].empty? and !params['email'].nil?
+      params['username'] = params['email']
+    end
 
     post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
     puts "post_url = #{post_url}"
