@@ -247,7 +247,7 @@ class App < Sinatra::Base
           first_name: params['first_name'],
           last_name: params['last_name'],
           password_digest: password_digest,
-          grade: params['classroom_grade']
+          grade: params['classroom_grade'].to_i
         }
 
         if session[:username].is_email?
