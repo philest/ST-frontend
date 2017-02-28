@@ -145,7 +145,7 @@ class Enroll < Sinatra::Base
     # end
 
 
-
+    # $2a$10$igTTGBPk9b.pgXdlCbF5D.Wjv7Y7OXV06JpPNGrSWTguPTht7f67.
 
     if not params[:digest].nil? and not params[:digest].empty?
       puts "digest exists!"

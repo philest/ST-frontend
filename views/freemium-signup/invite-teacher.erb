@@ -38,14 +38,14 @@
                           data: $('#invite-teacher-form').serialize(),
                           statusCode: {
                               404: function() {
-                                window.location.href = "/app";
+                                // window.location.href = "/app";
                               }
                             }
                         }).done(function(data, statusText, xhr) {
                           console.log(data);
                           console.log(statusText);
                           console.log(xhr);
-                          window.location.href = "/app";
+                          // window.location.href = "/app";
 
                         });
                           
@@ -57,6 +57,8 @@
                         console.log(data);
                         mixpanel.people.set(data);
                         mixpanel.track('finished freemium signup');
+
+                        window.location = "/app";
 
                       });
 
