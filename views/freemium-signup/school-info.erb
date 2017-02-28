@@ -113,8 +113,9 @@
                   $('#page6 select[name=classroom_grade]').change(function(event){
                     // get the grade
                     var grade = $('#page6 select[name=classroom_grade]').val();
+                    grade = parseInt(grade); 
 
-                    if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                    if (grade <= 3) {
                       $('#page6link').attr('href', '#');
                       // we're going to go to the dashboard.
                     } else {
@@ -159,8 +160,9 @@
                         console.log(xhr);
 
                         var grade = $('#page6 select[name=classroom_grade]').val();
+                        grade = parseInt(grade); 
 
-                        if (grade == 'infant' || grade == 'prek' || grade == 'kindergarten') {
+                        if (grade <= 3) {
                           console.log('yup, gonna submit');
                           $('#page6 form#log-into-dat-account').submit();
                           // we're going to go to the dashboard.
