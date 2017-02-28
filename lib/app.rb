@@ -123,13 +123,21 @@ class Enroll < Sinatra::Base
       return 500
     end
 
-    if !['infant', 'prek', 'kindergarten'].include? educator.grade
+    if educator.grade.nil? or educator.grade > 3 # kindergarten
       # not the right grade!
       if educator.is_not_us
-        notify_admins("educator id=#{educator.id} of grade #{educator.grade} was refused access to the dashboard because they don't teach prek")
+        notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
       end
       return 305
     end
+
+    # if !['infant', 'prek', 'kindergarten'].include? educator.grade
+    #   # not the right grade!
+    #   if educator.is_not_us
+    #     notify_admins("educator id=#{educator.id} of grade #{educator.grade} was refused access to the dashboard because they don't teach prek")
+    #   end
+    #   return 305
+    # end
 
 
     school = educator.school
