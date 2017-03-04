@@ -136,7 +136,7 @@ class App < Sinatra::Base
     params.delete 'password'
 
     if is_not_us?(params['first_name']) and is_not_us?(params['username']) and is_not_us?(plaintext_password) and is_not_us?(params['last_name'])
-      notify_admins("Educator joined freemium", params.to_s)
+      notify_admins("Someone joined freemium", params.to_s)
     end
 
     session[:first_name] = params['first_name']
@@ -175,9 +175,6 @@ class App < Sinatra::Base
       puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
       # check that teacher email is there
 
-      # need phone in params....
-      # actually, now I don't
-      # params['phone'] = params['username']
 
       # POST to birdv 
       response = HTTParty.post(
@@ -193,19 +190,6 @@ class App < Sinatra::Base
       puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
 
       puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
-
-      if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
-        # don't send the actual password! 
-        # 
-        # CHANGE THIS SHIT
-        notify_params = {
-          first_name: session[:first_name],
-          last_name: session[:last_name],
-          username: session[:username]
-        }
-
-        notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
-      end
 
       begin
         # get the school id! 
@@ -337,6 +321,20 @@ class App < Sinatra::Base
             # yyyyyyeaaeaaaah baby
           end
 
+        end
+
+        if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
+          # don't send the actual password! 
+          # 
+          # CHANGE THIS SHIT
+          notify_params = {
+            first_name: session[:first_name],
+            last_name: session[:last_name],
+            username: session[:username],
+            params: params.to_s
+          }
+
+          notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
         end
 
         if new_school
