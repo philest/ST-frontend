@@ -42,6 +42,12 @@ class Register < Sinatra::Base
     redirect to '../'
   end
 
+
+  get '/class/readup' do
+    redirect to 'https://invis.io/W3BCF5O2T#/229525683_Details' 
+  end
+
+
   get '/role/?' do
     puts "in get /register/role"
     # puts "params = #{params}"
