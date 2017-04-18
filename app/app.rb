@@ -848,6 +848,9 @@ class App < Sinatra::Base
     redirect to('http://m.me/490917624435792')
   end
 
+  get '/readup' do
+    redirect to('https://invis.io/W3BCF5O2T#/229525683_Details')
+  end
 
   # Documenation. 
   get '/doc/' do 
