@@ -225,6 +225,8 @@ class App < Sinatra::Base
         
         end # if school.nil? 
 
+        puts "school is not nil"
+
         # create teacher/admin
         educator_info = {
           signature: params['signature'],
@@ -241,6 +243,8 @@ class App < Sinatra::Base
         else
           return 401 # for invalid username/phone/email
         end
+
+        puts "valid username submitted"
 
 
         educator_info[contactType] = session[:username]

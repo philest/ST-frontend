@@ -29,9 +29,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
 
-    <!-- end Boostrap -->
-
-    <!-- end Boostrap -->
 
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
@@ -44,7 +41,6 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     
     <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
     <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
-
     <link rel="stylesheet" href="/stylesheets/admin_dashboard.css" type="text/css" />
 
 <!--     <link rel="stylesheet" href="/stylesheets/main_new.css" type="text/css" />
@@ -548,7 +544,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     </div>
   </div>
 
-  <% if session[:educator]['signin_count'] == 0 and users.size == 0 # the admin has never signed in  %>
+  <% if users.size <=1 # No parents have joined the class  %>
 
       <%= erb :dashboard_tutorial_teachers %>
 
