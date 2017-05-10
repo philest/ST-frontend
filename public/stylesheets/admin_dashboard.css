@@ -46,10 +46,11 @@
   font-size: 20px;
 }
 
-.sub-heading-text {
+.sub-heading-text, .sub-heading-text-mobile {
   font-size: 15px;
   color: #6b6e72;
 }
+
 
 /*END Empty Dashboard screen*/
 
