@@ -393,14 +393,10 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                       <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
                       <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
 
-
-                      <div class="pure-u-1-2 english">
+                      <div class="pure-u-1 english">
                           <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
                           <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank"><button class="Button-ready">Download English</button> </a>  
-                      </div>
-                      <div class="pure-u-1-2 spanish">
-                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-ES.png">  
-                          <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready">Download Spanish</button> </a>
+                          <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready flyer-button" id="spanish-flyer">Download Spanish</button> </a>
                       </div>
                   </div>
      

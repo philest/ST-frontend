@@ -783,6 +783,18 @@ b, i {
     margin-top: 2em;
   }
 
+  .flyer-button {
+    font-size: 13px;
+
+  }
+
+  #spanish-flyer {
+    margin-top: 4px;
+    color: #6b6e72;
+    background: white;
+    font-size: 13px;
+  }
+
 
   img.phone-image.enroll-image {
     margin-left: auto;
@@ -809,7 +821,7 @@ b, i {
   /* begin flyers */
 
   .english-spanish-flyers {
-    margin-top: 2em;
+    margin-top: 1.25em;
   }
 
   .Button-ready {
