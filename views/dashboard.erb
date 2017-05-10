@@ -294,18 +294,17 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
                    
                 </li>
 
-                <li id="envelope">
+                <li id="envelope" class="active">
                   <a>
                     <div class="sidebar-item">
                       <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
 
 
-          <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
-           -->            <span>Invite by phone</span>
+                        <span>Invite by phone</span>
                     </div>
                   </a>
                 </li>
-                <li id="printer" class="active">
+                <li id="printer">
                   <a>
                     <div class="sidebar-item">
                       <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
@@ -371,7 +370,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 
           <!-- begin flyers -->
-          <div class="main-box flyers" id="main-printer">
+          <div class="main-box flyers" id="main-printer" style="display: none;">
 
               <div id="logo-container">
                 <div id="jobs">
@@ -445,7 +444,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 
             <!-- begin invite-by-phone -->
-            <div class="main-box by-phone" id="main-envelope" style="display: none;">
+            <div class="main-box by-phone" id="main-envelope">
 
               <% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
               <% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
