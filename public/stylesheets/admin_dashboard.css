@@ -46,6 +46,12 @@
   font-size: 20px;
 }
 
+h2.heading.why-parents{
+    color: #337ab7;
+    font-size: 15px;
+    cursor: pointer;
+}
+
 .sub-heading-text, .sub-heading-text-mobile {
   font-size: 15px;
   color: #6b6e72;
