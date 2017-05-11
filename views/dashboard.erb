@@ -10,9 +10,9 @@
     <meta property="og:title" content="Storytime | Books by text.">
     <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
 
-
-
     <script async type="text/javascript" src="/js/analytics.js"></script>
+
+
 
 <!-- start Mixpanel --><script async type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
 0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
@@ -33,6 +33,9 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
     <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="/stylesheets/alert.css" type="text/css" />
+
+    <link rel="stylesheet" href="/stylesheets/what-parents-do.css" type="text/css" />
+
       
     <!-- This is only needed for below-the-fold content. -->
     <link rel="stylesheet" href="/stylesheets/pure-push-pull.css" type="text/css" />
@@ -72,6 +75,7 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
     <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
     <link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
+
 
     <script>
 
@@ -259,6 +263,39 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
         }
       });
     </script>
+
+
+    <!-- Make the modal progress -->
+    <script>
+    $(document).ready(function() {
+      $(".next-button").click( function() 
+          { $("#shot-title").replaceWith( "<p id=\"shot-title\">This is the next text</p>");
+            $(".modal-screenshot").attr("src", "https://s3.amazonaws.com/st-webpage/assets/shot-2.png");
+            $(".done-button").show();
+            $(".next-button").hide();
+          }
+        );
+
+      $(".done-button").click( function() 
+          {
+            $(".next-button").show();
+            $(".done-button").hide();
+            $("#shot-title").replaceWith( "<p id=\"shot-title\">Get books from you and reply</p>");
+                        $(".modal-screenshot").attr("src", "https://s3.amazonaws.com/st-webpage/assets/shot-1.png");
+
+
+          }
+        );
+        
+
+    });
+
+
+
+
+
+    </script>
+
 
 </head>
 <body id="bs-override">
