@@ -225,6 +225,8 @@ class App < Sinatra::Base
         
         end # if school.nil? 
 
+        puts "school is not nil"
+
         # create teacher/admin
         educator_info = {
           signature: params['signature'],
@@ -241,6 +243,8 @@ class App < Sinatra::Base
         else
           return 401 # for invalid username/phone/email
         end
+
+        puts "valid username submitted"
 
 
         educator_info[contactType] = session[:username]
@@ -848,6 +852,9 @@ class App < Sinatra::Base
     redirect to('http://m.me/490917624435792')
   end
 
+  get '/readup' do
+    redirect to('https://invis.io/W3BCF5O2T#/229525683_Details')
+  end
 
   # Documenation. 
   get '/doc/' do 
