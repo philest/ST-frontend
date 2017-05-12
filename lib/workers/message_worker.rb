@@ -1,5 +1,5 @@
 require_relative 'twilio_helpers'
-
+ 
 class MessageWorker 
   include Sidekiq::Worker
   include TwilioTextingHelpers
