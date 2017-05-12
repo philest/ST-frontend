@@ -1,0 +1,27 @@
+h2.modal-signup-heading {
+    font-size: 1.4em;
+    text-align: center;
+    line-height: 1.2em;
+    color: #4a4a4a;
+    font-family: 'Karla';
+}
+
+img.modal-screenshot {
+	display: block;
+	margin: 0 auto;
+}
+
+.modal-body {
+	padding-bottom: 0px;
+}
+
+.modal-body p {
+	text-align: center;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+button.btn.btn-primary.modal-btn {
+	background-color: #ed7a44;
+	border-color: #ed7a44;
+}
