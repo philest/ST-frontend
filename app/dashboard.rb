@@ -34,6 +34,12 @@ require_relative '../lib/workers'
 require 'sinatra/flash'
 
 class Dashboard < Sinatra::Base
+  # sets root as the parent-directory of the current file
+  set :root, File.join(File.dirname(__FILE__), '../')
+  # sets the view directory correctly
+  set :views, Proc.new { File.join(root, "views") }
+
+
   register Sinatra::Flash
 
   require "sinatra/reloader" if development? 
@@ -95,11 +101,12 @@ class Dashboard < Sinatra::Base
     erb :'get-the-app'
   end
 
+
   get '/test_dashboard' do
     session[:educator] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
     session[:role] = 'admin'
     session[:school] = {"id"=>39, "name"=>"Rocky Mountain Prep", "code"=>"RMP|RMP-es", "signature"=>"RMP"}
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
     puts "data dashboard = #{data.body.inspect}"
     erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
@@ -111,7 +118,7 @@ class Dashboard < Sinatra::Base
     end
     puts "session[:educator] = #{session[:educator]}"
 
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/users/#{session[:educator]['id']}")
     puts "data dashboard = #{data.body.inspect}"
 
@@ -125,7 +132,7 @@ class Dashboard < Sinatra::Base
     end
     puts "session[:educator] = #{session[:educator]}"
     puts "session[:school] = #{session[:school]}"
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
     puts "data dashboard = #{data.body.inspect}"
     if data.body != "[]"
@@ -133,7 +140,7 @@ class Dashboard < Sinatra::Base
       erb :admin_dashboard, :locals => {:teachers => JSON.parse(data), school_users: nil}
     else # this is a school with no teachers....
       # so check for students
-      get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+      get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
       data = HTTParty.get("#{get_url}/school/users/#{session[:educator]['id']}")
       puts "data_dashboard2.0 = #{data.body.inspect}"
       puts "data = #{JSON.parse(data)}"

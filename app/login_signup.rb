@@ -71,6 +71,11 @@ class LoginSignup < Sinatra::Base
     def base_url
       @base_url ||= "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}"
     end
+
+    def root
+      '../'
+    end
+
   end
 
   helpers IsNotUs
@@ -348,7 +353,7 @@ class LoginSignup < Sinatra::Base
     session[:school] = nil
     session[:role] = nil
 
-    redirect to '/'
+    redirect to root
   end
 
   # http://localhost:4567/signin?admin=david.mcpeek@yale.edu&school=rmp
@@ -371,7 +376,7 @@ class LoginSignup < Sinatra::Base
       params['username'] = params['email']
     end
 
-    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
     puts "post_url = #{post_url}"
     data = HTTParty.post(
       "#{post_url}/signup", 
@@ -428,17 +433,17 @@ class LoginSignup < Sinatra::Base
     when 'admin'
       puts "going to admin dashboard"
       if params['invite']
-        redirect to '/admin_dashboard?invite=' + params['invite']
+        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
-        redirect to '/admin_dashboard'
+        redirect to root + 'dashboard/admin_dashboard'
       end
-      redirect to '/admin_dashboard'
+      redirect to root + 'dashboard/admin_dashboard'
     when 'teacher'
       puts "going to teacher dashboard"
       if params['flyers']
-        redirect to '/dashboard?flyers=' + params['flyers']
+        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
-        redirect to '/dashboard'
+        redirect to root + 'dashboard/dashboard'
       end
     end
 
@@ -448,7 +453,7 @@ class LoginSignup < Sinatra::Base
   # users sign in. posted from st-enroll.
   post '/signin' do
     puts "params = #{params}"
-    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/enroll'
+    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
     puts "post_url = #{post_url}"
     data = HTTParty.post(
       "#{post_url}/signup", 
@@ -504,17 +509,17 @@ class LoginSignup < Sinatra::Base
       puts "going to admin dashboard"
 
       if params['invite']
-        redirect to '/admin_dashboard?invite=' + params['invite']
+        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
-        redirect to '/admin_dashboard'
+        redirect to root + 'dashboard/admin_dashboard'
       end
 
     when 'teacher'
       puts "going to teacher dashboard"
       if params['flyers']
-        redirect to '/dashboard?flyers=' + params['flyers']
+        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
-        redirect to '/dashboard'
+        redirect to root + 'dashboard/dashboard'
       end
     end
 
@@ -532,17 +537,17 @@ class LoginSignup < Sinatra::Base
       puts "going to admin dashboard"
 
       if params['invite']
-        redirect to '/admin_dashboard?invite=' + params['invite']
+        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
-        redirect to '/admin_dashboard'
+        redirect to root + 'dashboard/admin_dashboard'
       end
 
     when 'teacher'
       puts "going to teacher dashboard"
       if params['flyers']
-        redirect to '/dashboard?flyers=' + params['flyers']
+        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
-        redirect to '/dashboard'
+        redirect to root + 'dashboard/dashboard'
       end
 
     end
@@ -660,7 +665,7 @@ class LoginSignup < Sinatra::Base
 
   ######### ENROLL STUFF NAO ###############
 
-  post '/signup' do
+  post '/enroll/signup' do
 
     puts "RACK_ENV = #{ENV['RACK_ENV']}"
 
@@ -787,9 +792,6 @@ class LoginSignup < Sinatra::Base
     }.to_json
 
   end
-
-  
-
 
 
                           

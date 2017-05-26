@@ -97,7 +97,7 @@ $(document).ready(function () {
     }
 
     $.ajax({
-      url: '/user_exists',
+      url: 'auth/user_exists',
       type: 'get',
       data: {
         username: username

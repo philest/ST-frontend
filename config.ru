@@ -37,7 +37,7 @@ use Airbrake::Rack::Middleware
 
 run Rack::URLMap.new({
   '/' => App,
-  '/login_signup' => LoginSignup,
+  '/auth' => LoginSignup,
   '/dashboard' => Dashboard,
   '/enroll' => Enroll,
   '/register' => Register,
