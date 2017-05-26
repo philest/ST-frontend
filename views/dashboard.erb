@@ -307,13 +307,13 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
   <div class="page-header">
 
     <div class="mobile-navbar">
-      <a class="navbar-menu" href="/logout">Logout</a></li>
+      <a class="navbar-menu" href="/auth/logout">Logout</a></li>
     </div>
     <h1><%= session[:educator]['signature'] %>'s Class</h1>
 
 
     <div class="navbar-buttons">
-      <a id="logout" class="navbar-menu" href="/logout">Logout</a>
+      <a id="logout" class="navbar-menu" href="/auth/logout">Logout</a>
       <a href="mailto:hello@joinstorytime.com?&subject=Storytime Help"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
 
       <a href="/app" id="get-dat-app-link" target="_blank"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get the app</button></a>
