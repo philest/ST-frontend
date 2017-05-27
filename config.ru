@@ -13,13 +13,10 @@ require_relative 'app/login_signup'
 require_relative 'app/dashboard'
 require_relative 'app/register'
 require 'sass/plugin/rack'
-require_relative 'lib/app'
 require_relative 'config/initializers/locale' # language files
 
 require_relative 'config/initializers/airbrake'
 require_relative 'config/initializers/aws'
-
-
 
 puts ENV['RACK_ENV']
 if ENV['RACK_ENV'] == 'production'
@@ -31,7 +28,6 @@ end
 Sass::Plugin.options[:style] = :compressed
 use Sass::Plugin::Rack
 
-
 use ::Rack::PostBodyContentTypeParser
 use Airbrake::Rack::Middleware
 
@@ -39,15 +35,9 @@ run Rack::URLMap.new({
   '/' => App,
   '/auth' => LoginSignup,
   '/dashboard' => Dashboard,
-  '/enroll' => Enroll,
   '/register' => Register,
   '/sidekiq' => Sidekiq::Web
 })
-
-
-
-
-
 
 
 

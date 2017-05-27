@@ -114,7 +114,7 @@ class LoginSignup < Sinatra::Base
        [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
        redirect to '/'
     end
-    erb :'purple-modal-form', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
+    erb :'signup/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
   end
 
 
@@ -553,42 +553,6 @@ class LoginSignup < Sinatra::Base
     end
   end
 
-  # get '/:code/class' do
-  #   erb :maintenance
-  # end
-  get '/coming-soon' do
-    puts "params = #{params}"
-    puts "session = #{session.inspect}"
-
-    text = {}
-    case session[:locale]
-    when 'es'
-      text[:exclaim] = "¡Muy bien!"
-      text[:header] = "empieza pronto!"
-      text[:return] = "Le enviaremos un mensaje de texto"
-      text[:weekday] = "el jueves"
-      text[:date] = "4 de enero para empezar!"
-      text[:info] = "Le envíaremos un texto pronto con los libros de #{session[:teacher_sig]}" 
-
-      text[:subtitle] = "Consigue libros gratis de #{session[:teacher_sig]} directamente en su celular"
-    else
-      text[:exclaim] = "Great!"
-      text[:header] = "starts soon!"
-      text[:return] = "We will text you on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th to start!"
-      text[:info] = "We'll text you in a few days with #{session[:teacher_sig]}'s books!"
-
-
-      text[:subtitle] = "Get free books from #{session[:teacher_sig]} right on your phone"
-
-    end
-
-    # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
-    # erb :maintenance, locals: {school: session[:school_sig], text: text}
-
-    erb :maintenance, locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
-  end
 
 
   get '/list-of-schools' do

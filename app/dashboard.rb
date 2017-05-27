@@ -93,12 +93,12 @@ class Dashboard < Sinatra::Base
     when 'teacher'
       redirect to '/dashboard'
     else
-      erb :homepage, locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
+      erb :'homepage/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
   end
 
   get '/app' do
-    erb :'get-the-app'
+    erb :'pages/get-the-app'
   end
 
 
@@ -109,7 +109,7 @@ class Dashboard < Sinatra::Base
     get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
     puts "data dashboard = #{data.body.inspect}"
-    erb :admin_dashboard, :locals => {:teachers => JSON.parse(data)}
+    erb :'dashboard/dashboard', :locals => {:teachers => JSON.parse(data)}
   end
 
   get '/dashboard' do
@@ -122,7 +122,7 @@ class Dashboard < Sinatra::Base
     data = HTTParty.get("#{get_url}/users/#{session[:educator]['id']}")
     puts "data dashboard = #{data.body.inspect}"
 
-    erb :dashboard, :locals => {:users => JSON.parse(data)}
+    erb :'dashboard/dashboard', :locals => {:users => JSON.parse(data)}
   end
 
 
@@ -137,7 +137,7 @@ class Dashboard < Sinatra::Base
     puts "data dashboard = #{data.body.inspect}"
     if data.body != "[]"
       puts "normal admin dashboard"
-      erb :admin_dashboard, :locals => {:teachers => JSON.parse(data), school_users: nil}
+      erb :'dashboard/admin_dashboard', :locals => {:teachers => JSON.parse(data), school_users: nil}
     else # this is a school with no teachers....
       # so check for students
       get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
@@ -147,10 +147,10 @@ class Dashboard < Sinatra::Base
       if data != "" # go to the SPECIAL school_dashboard
         # process locals somehow.........
         puts "user admin dashboard"
-        erb :admin_dashboard, :locals => {:school_users => JSON.parse(data)}
+        erb :'dashboard/admin_dashboard', :locals => {:school_users => JSON.parse(data)}
       else # regular admin dashboard with no teachers...... :(
         puts "normal admin dashboard"
-        erb :admin_dashboard, :locals => {:teachers => JSON.parse(data), school_users: nil}
+        erb :'dashboard/admin_dashboard', :locals => {:teachers => JSON.parse(data), school_users: nil}
       end
     end
   end
