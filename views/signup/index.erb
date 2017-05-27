@@ -100,76 +100,12 @@ mixpanel.init('<%= mixpanel_homepage_key %>', {
     <meta name="theme-color" content="#ffffff">
 
     <!-- our scripts -->
-    <!-- <script type="text/javascript" src="/js/validations.js"></script> -->
-    <!-- <script type="text/javascript" src="/js/appendform.js"></script> -->
+    <script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+    <script type="text/javascript" src="/js/signup.js"></script>
 
-    <script type="text/javascript">
+<!-- <script type="text/javascript" src="/js/homepage.js"></script> -->
 
-      $(document).ready(function () {
-        /** 
-         * Determine the user's timezone
-         */
-        function getUserTimezone() {
-          return (((new Date()).getTimezoneOffset() / 60) - 1) * -1
-        }
-
-        var timezone = getUserTimezone();
-
-        var tz = $('<input>')
-                  .attr('type', 'hidden')
-                  .attr('name', 'time_zone')
-                  .val(timezone);
-        $('#invite-teacher-form').append($(tz));
-        $('#school-info').append($(tz));
-
-        /**
-         * Determine the mobile operating system.
-         * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
-         *
-         * @returns {String}
-         */
-        function getMobileOperatingSystem() {
-          var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-              // Windows Phone must come first because its UA also contains "Android"
-            if (/windows phone/i.test(userAgent)) {
-                return "Windows";
-            }
-
-            if (/android/i.test(userAgent)) {
-                return "Android";
-            }
-
-            // iOS detection from: http://stackoverflow.com/a/9039885/177710
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                return "iOS";
-            }
-
-            return "unknown";
-        }
-
-        var os = getMobileOperatingSystem();
-
-        // console.https://s3.amazonaws.com/st-webpage/assets/logo/logo-large.png(os);
-
-        var operating_system = $('<input>')
-                  .attr('type', 'hidden')
-                  .attr('name', 'mobile_os')
-                  .val(os);
-        $('#register').append($(operating_system));
-
-
-        // if (os.toLowerCase() == 'android') {
-        //   $('#app-link').attr('href', 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime');
-        // }
-
-        // if (os.toLowerCase() == 'ios') {
-        //   $('#page3link').attr('href', '#page5');
-        // }
-
-      });
-
-    </script>
 
     <style>
         ul#navbar-header {
