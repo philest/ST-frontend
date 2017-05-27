@@ -104,7 +104,7 @@
   </div> <%# end invite teachers modal %>
 
   <% if session[:educator]['signin_count'] == 0 and school_users.size == 0 # the admin has never signed in  %>
-      <%= erb :dashboard_tutorial %>
+      <%= erb :'dashboard/dashboard_tutorial' %>
 
   <% else # the admin has signed in before %>
 

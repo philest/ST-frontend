@@ -88,7 +88,7 @@ class App < Sinatra::Base
     when 'teacher'
       redirect to '/dashboard'
     else
-      erb :homepage, locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
+      erb :'homepage/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
   end
 
@@ -112,7 +112,7 @@ class App < Sinatra::Base
 
 
   get '/error' do
-    halt erb :error 
+    halt erb :'register/error'
   end
 
 
@@ -173,7 +173,7 @@ class App < Sinatra::Base
   # Resources
   get '/resources' do 
     protected!
-    erb :resources
+    erb :'pages/resources'
   end
 
   get '/resources/' do 
@@ -181,39 +181,39 @@ class App < Sinatra::Base
   end 
 
   get '/team/?' do 
-    erb :team
+    erb :'pages/team'
   end
 
   get '/case_study/?' do 
-    erb :case_study
+    erb :'pages/case_study'
   end
 
   get '/join' do 
-    erb :job_board
+    erb :'pages/job_board'
   end
 
   get '/product_lead' do 
-    erb :"jobs/product"
+    erb :'pages/jobs/product'
   end
 
   get '/developer' do 
-    erb :"jobs/developer"
+    erb :'pages/jobs/developer'
   end 
 
   get '/pilots' do 
-    erb :"jobs/pilots"
+    erb :'pages/jobs/pilots'
   end 
 
   get '/schools' do 
-    erb :"jobs/schools"
+    erb :'pages/jobs/schools'
   end 
 
   get '/illustrator' do 
-    erb :"jobs/illustrator"
+    erb :'pages/jobs/illustrator'
   end 
 
   get '/design' do 
-    erb :"jobs/design"
+    erb :'pages/jobs/design'
   end 
 
 

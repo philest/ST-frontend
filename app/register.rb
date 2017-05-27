@@ -79,10 +79,10 @@ class Register < Sinatra::Base
       type   = educator[:type]
       teacher = educator[:educator]
       if type == 'school'
-        halt erb :error
+        halt erb :'register/error'
       end 
     else
-      halt erb :error
+      halt erb :'register/error'
     end
 
     # let's just assume it's a teacher for now...........
@@ -222,7 +222,7 @@ class Register < Sinatra::Base
     if terms.size < 1
       # return ''
       # have a more informative error message?
-      halt erb :error
+      halt erb :'register/error'
     elsif terms.size == 1 # just the first name
       first_name = terms.first[0].upcase + terms.first[1..-1]
       last_name  = ''
@@ -242,7 +242,7 @@ class Register < Sinatra::Base
     puts "res = #{res.inspect}"
 
     if res.code != 201
-      halt erb :error
+      halt erb :'register/error'
     end
 
     # do something with return if not 201
@@ -260,43 +260,10 @@ class Register < Sinatra::Base
     return 201
   end
 
-  get '/coming-soon' do
-    puts "params = #{params}"
-
-    text = {}
-    case params[:locale]
-    when 'es'
-      text[:exclaim] = "¡Muy bien!"
-      text[:header] = "empieza pronto!"
-      text[:return] = "Le enviaremos un mensaje de texto"
-      text[:weekday] = "el jueves"
-      text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
-
-      text[:subtitle] = "Consigue libros gratis de #{params[:teacher_sig]} directamente en su celular"
-    else
-      text[:exclaim] = "Great!"
-      text[:header] = "starts soon!"
-      text[:return] = "We will text you on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th to start!"
-      text[:info] = "Storytime for iPhone comes out in <b>one week</b>! We will text you the app with books <b>next Friday</b>"
-
-
-      text[:subtitle] = "Get free books from #{params[:teacher_sig]} right on your phone"
-
-    end
-
-    # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
-    # erb :maintenance, locals: {school: session[:school_sig], text: text}
-
-    erb :maintenance, locals: {school: params[:school_sig], teacher: params[:teacher_sig], text: text}
-  end
-
 
 
   get '/error' do
-    halt erb :error 
+    halt erb :'register/error' 
   end
 
 

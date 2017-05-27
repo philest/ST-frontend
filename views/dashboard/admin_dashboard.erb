@@ -268,10 +268,10 @@ mixpanel.init("358fa62873cd7120591bdc455b6098db");</script><!-- end Mixpanel -->
 
 
   <% if school_users.nil? %>
-    <%= erb :admin_dashboard_teachers, locals: {teachers: teachers} %>
+    <%= erb :'dashboard/admin_dashboard_teachers', locals: {teachers: teachers} %>
 
   <% else %>
-    <%= erb :admin_dashboard_users, locals: {school_users: school_users} %>
+    <%= erb :'dashboard/admin_dashboard_users', locals: {school_users: school_users} %>
 
   <% end %>
   

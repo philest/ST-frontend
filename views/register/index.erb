@@ -188,11 +188,11 @@ mixpanel.init("0a08296311bd71d58d58e3a759f0b4d1", {
 <body id="override">
   <!-- navbar -->
   <% locals = {text: text,class_code:class_code, locale:locale,teacher_id:teacher_id, teacher: teacher, school: school} %>
-  <%= erb :'register/user-name-phone', locals: locals %>
-  <%= erb :'register/role', locals: locals %>
-  <%= erb :'register/password', locals: locals %>
-  <%= erb :'register/get-app', locals: locals %>
-  <%= erb :'register/maintenance', locals: locals %>
+  <%= erb :'register/modals/user-name-phone', locals: locals %>
+  <%= erb :'register/modals/role', locals: locals %>
+  <%= erb :'register/modals/password', locals: locals %>
+  <%= erb :'register/modals/get-app', locals: locals %>
+  <%= erb :'register/modals/maintenance', locals: locals %>
 
   <form id="hidden-inputs">
     <input type="hidden" name="teacher_sig" value="<%= teacher %>">
