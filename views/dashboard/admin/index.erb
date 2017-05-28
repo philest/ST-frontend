@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StoryTime - Your Class Dashboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="description" content="StoryTime lets early grade teachers send books by text message to their class's families. Made at Yale, it builds 1 year of literacy growth after just 14 weeks.">
+
+    <meta property="og:image" content="https://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
+    <meta property="og:title" content="Storytime | Books by text.">
+    <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
+
+    <%= erb :'dashboard/admin/headers/mixpanel' %>
+
+    <%= erb :'dashboard/admin/headers/libraries' %>
+
+    <%= erb :'components/favicon' %>
+
+    <!-- our scripts -->
+    <script async type="text/javascript" src="/js/analytics.js"></script>
+    <script type="text/javascript" src="/js/dashboard/admin.js"></script>
+
+</head>
+<body id="bs-override">
+
+  <!-- Notify about form submission -->
+  <% if flash[:teacher_invite_success] %>
+    <div id="alert">
+        <a class="alert" href="#alert" style="padding: 0px;">Great! We'll send your teachers an invite to join StoryTime.</a>
+    </div>
+  <% end %>
+
+
+  <% if school_users.nil? %>
+    <%= erb :'dashboard/admin_dashboard_teachers', locals: {teachers: teachers} %>
+
+  <% else %>
+    <%= erb :'dashboard/admin_dashboard_users', locals: {school_users: school_users} %>
+
+  <% end %>
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
