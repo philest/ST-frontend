@@ -96,6 +96,10 @@ class App < Sinatra::Base
     erb :'get-the-app'
   end
 
+  get '/test' do
+    erb :test
+  end
+
 
   post '/get-app/send-app-link' do
     phone = params['phone']
