@@ -10,6 +10,7 @@
     <meta property="og:title" content="Storytime | Books by text.">
     <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
     <%= erb :'dashboard/teachers/headers/mixpanel' %>
+    <%= erb :'dashboard/teachers/headers/libraries' %>
     <%= erb :'components/favicon' %>
     <!-- our scripts -->
     <script async type="text/javascript" src="/js/analytics.js"></script>
@@ -26,10 +27,8 @@
         }
       });
     </script>
-
-
-
 </head>
+
 <body id="bs-override">
 
 <div class="container">
@@ -39,7 +38,6 @@
       <a class="navbar-menu" href="/auth/logout">Logout</a></li>
     </div>
     <h1><%= session[:educator]['signature'] %>'s Class</h1>
-
 
     <div class="navbar-buttons">
       <a id="logout" class="navbar-menu" href="/auth/logout">Logout</a>
@@ -62,506 +60,49 @@
       <div class="modal-content">
   
         <div class="modal-body">
-
-          <div class="sidebar">
-            <div class="sidebar-heading">
-              <h3>Ways to invite people</h3>
-            </div>
-            <nav class="tabs">
-              <ul>
-                <li id="easel">
-                  <a>
-                    <div class="sidebar-item">
-                      
-                     <img src="https://st-webpage.s3.amazonaws.com/assets/class-icon.png" alt="printer">
-        <!--            <img src="http://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="envelope">
-         -->            <span>In-person guide </span>
-                    </div>
-                  </a>
-                   
-                </li>
-
-                <li id="envelope" class="active">
-                  <a>
-                    <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/envelope-icon.png" alt="printer">
-
-
-                        <span>Invite by phone</span>
-                    </div>
-                  </a>
-                </li>
-                <li id="printer">
-                  <a>
-                    <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/printer-icon.png" alt="printer">
-                      <span>Printable flyer</span>
-                      
-                    </div>
-                  </a>
-
-                </li>
-
-                <li id="spreadsheet" class="">
-                  <a>
-                    <div class="sidebar-item">
-                      <img src="https://s3.amazonaws.com/st-webpage/assets/excel-icon.png" alt="printer">
-
-                      <span>Add spreadsheet</span>
-                      
-                    </div>
-                  </a>
-                </li>
-
-              </ul>
-            </nav>
-          </div>
-          
-          <!-- end sidebar -->
-
-          <!-- in-person -->
-          <div class="main-box in-person" id="main-easel" style="display: none;">
-            <div id="logo-container">
-              <div id="jobs">
-                <h2 class="our_team enroll_header">Talk with parents.</h2>
-              </div>
-            </div>
-
-            <div id="logo-container">
-          
-            </div>
-
-                <header class="box-header">
-                  <% code_english, code_spanish = session['educator']['code'].split('|') %>
-                  <% school = session['school']['signature'] %>
-                  <% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
-                  <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
-
-
-                  <h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
-                  <h3 class="box-header-subtext">
-                    They'll receive a welcome text from StoryTime.
-                  </h3>
-
-                  <h3 class="box-header-subtext">
-                    For Spanish, text <span><%= code_spanish %></span>
-                  </h3>
-                </header>
-
-                <object class="flyer-image phone-image enroll-image" data="<%= aws_url %>/<%= code_english %>-phone.jpg" type="image/jpg">
-                    <img class="flyer-image phone-image enroll-image" src="/images/phone-text-default.jpg" />
-                </object>
-
-          </div>
-          <!-- end in-person -->
-
-
-          <!-- begin flyers -->
-          <div class="main-box flyers" id="main-printer" style="display: none;">
-
-              <div id="logo-container">
-                <div id="jobs">
-                  <h2 class="our_team enroll_header">Print out flyers.</h2>
-                </div>
-              </div>
-
-                  <header class="box-header">
-                    <h2 class="box-header-title">Send one home with each student.
-                    <h3 class="box-header-subtext">
-                      Then parents can signup and get the app with books.
-                    </h3>
-                  </header>
-
-
-                  <div class="pure-g english-spanish-flyers">
-                      <% code_english = session['educator']['code'].split('|').first %>
-                      <% school = session['school']['signature'] %>
-                      <% teacher = session['educator']['signature'] %>
-                      <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
-                      <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
-
-                      <div class="pure-u-1 english">
-                          <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
-                          <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank"><button class="Button-ready">Download English</button> </a>  
-                          <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready flyer-button" id="spanish-flyer">Download Spanish</button> </a>
-                      </div>
-                  </div>
-     
-
-            </div>
-
-            <!-- end flyers -->
-
-            <!-- begin spreadsheet -->
-            <div class="main-box spreadsheet-upload" id="main-spreadsheet" style="display: none;">
-
-              <div id="logo-container">
-                <div id="jobs">
-                  <h2 class="our_team enroll_header">Add a spreadsheet.</h2>
-                </div>
-              </div>
-
-                  <header class="box-header">
-
-                    <h2 class="box-header-title">Add a spreadsheet with your class's names and numbers</h2>
-                    <h3 class="box-header-subtext">
-                      They'll receive a welcome text from StoryTime.
-                    </h3>
-
-
-                  </header>
-
-
-                <form action="spreadsheet" method="post" enctype="multipart/form-data">
-                  <div class="fileUpload">
-                    <span class="custom-span">+</span>
-                      <p class="custom-para">Upload spreadsheet</p>
-                      <input id="uploadBtn" type="file" class="upload" name="spreadsheet"/>
-                    </div>
-                  <input id="uploadFile" placeholder="0 files selected" disabled="disabled" />
-                  <button class="Button-ready spreadsheet" type="submit">Invite class</button>      
-                </form>
-
-            </div>
-            <!-- end spreadsheet -->
-
-
-            <!-- begin invite-by-phone -->
-            <div class="main-box by-phone" id="main-envelope">
-
-              <% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
-              <% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
-
-                <div id="logo-container">
-                  <div id="jobs">
-                    <h2 class="our_team enroll_header">Invite by phone.</h2>
-                  </div>
-                </div>
-
-                <!-- <img class="flyer-image phone-image enroll-image" src="http://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
-
-
-
-                <form class="enroll-teacher-class" id="enroll-teacher-class">     
-                  <div class="enroll group-invite">
-                    <div class="box-header">
-                      <h2 class="box-header-title">Enter phone numbers</h2>
-                      <h3 class="box-header-subtext">
-                        Enter contact information in the space provided
-                      </h3>
-                    </div>
-                    <div class="box-body">
-                      <div class="row row-small">
-                        <div class="table-input">
-                          <header class="table-input-header-row">
-                            <span class="table-input-cell-validation table-input-cell">
-                            </span>
-              
-                            <div class="table-input-header-cell table-input-cell"> Child name</div>
-                            <div class="table-input-header-cell table-input-cell"> Parent phone
-                            </div>
-
-                          </header>
-
-                          <div class="table-input-container">
-                            <div class="table-input-body">
-                              <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
-                                <span class="table-input-body-row">
-                                  <span class="table-input-cell-validation table-input-cell">
-                                  </span>
-
-                                  <span class="table-input-body-cell table-input-cell">
-                                    <div class="form-cell-input">
-                                      <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
-                                    </div>
-                                  </span>
-                
-                                  <span class="table-input-body-cell table-input-cell">
-                                    <div class="form-cell-input">
-                                      <input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
-                                    </div>
-                                  </span>
-                                </span>
-                              <%end%>
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                      <div class="field legal-field">
-                        <span class="thunder">
-                        Families will be able to get their first book next week. We'll keep you updated by email. 
-                        </span>
-                      </div>
-
-                        <button class="Button-ready" onclick="inviteFamilies();" type="button">Invite class</button>  
-
-
-                        <h2 id="invite-parents-success" style="display:none;font-size:18px;text-align:center;">Great! They'll get an invite to join your class.</h2>
-
-                
-
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-
-            <!-- end invite-by-phone -->
-
+          <%= erb :'dashboard/teachers/components/inviteModal/index' %>        
         </div>
     
       </div>
     </div>
   </div>
 
-  <% if users.size <= 1 # No parents have joined the class  %>
+  <% if users.size <= 1 # No parents have joined the class, show the dashboard tutorial  %>
 
-      <%= erb :'dashboard/dashboard_tutorial_teachers' %>
+      <%= erb :'dashboard/teachers/components/welcome' %>
 
-  <% else # the admin has signed in before %>
+  <% else # the teacher has signed in before, show the regular dashboard %>
 
-      <div class="pure-g welcome">
-          <div class="pure-u-sm-1-3 pure-u-1">
-            <% if users.size == -1 %>
-              <h2><b>Welcome!</b></h2>
-              <h3><i>Let's start by inviting your class.</i></h3>
-            <% else %>
-              <img class="apple" id="apple" src="/images/fresh-apple-icon.png" alt="">
-              <h3 class="apple">Class totals</h3>
-            <% end %>
-
-          </div>
-
-          <% if users.size == -1 %>
-            <div class="pure-u-2-3 paper-plane">      
-              <img id="paper-plane" src="/images/paper-plane.png" alt="">
-            </div>
-
-          <% else %>
-            <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
-              <div class="stats-wrapper">
-                <div class="stats total" style="text-align: center;">
-                  <% weekly_books = users.inject(0) {|sum, user| sum += user['this_month'] } %>
-                  <h1><%= weekly_books > 0 ? weekly_books : '-' %></h1>
-                  <p>Books</p>
-                  <small style="font-size: 1.23em; color: black;"><i>read this month</i></small>
-                </div>
-              </div>
-              
-            </div>
-            <div class="pure-u-sm-1-3 pure-u-1 paper-plane">
-
-              <div class="stats-wrapper" style="text-align: left;">
-                <div class="stats total">
-                  <% reading_time = users.inject(0) {|sum, user| sum += user['reading_time'] } %>
-                  <h1><%= reading_time > 0 ? reading_time : '-' %></h1>
-                  <p>Minutes</p>
-                  <small style="font-size: 1.23em; color: black;"><i>spent reading</i></small>
-                </div>
-              </div>
-            </div>
-          <% end %>
-
-        
-      </div>
+      <%= erb :'dashboard/teachers/components/class-totals', locals: { users: users } %>
 
       
-          <div class="big-daddy-data">
-            <h4>Class (<%= users.size %> joined) </h4>
+      <div class="big-daddy-data">
+        <h4>Class (<%= users.size %> joined) </h4>
 
-             <div class="panel panel-default header">
-              <table class="table fields">
-                  <thead>
-                    <tr>
-                      <th class="user-name-top">Name</th>
-                      <th class="user-role-top">Role</th>
-                      <th class="date-joined">Date joined</th>
-                    </tr>
-                  </thead>
-              </table>
-            </div>
+         <div class="panel panel-default header">
+          <table class="table fields">
+              <thead>
+                <tr>
+                  <th class="user-name-top">Name</th>
+                  <th class="user-role-top">Role</th>
+                  <th class="date-joined">Date joined</th>
+                </tr>
+              </thead>
+          </table>
+        </div>
 
-            <% if users.size > 0 %>
+        <% if users.size > 0 %>
 
-                <div class="panel panel-default table-body">
-               
-                  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
-                    <table class="table data users-table">
-                      <tbody>
-                        <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-                            <tr class="user-info" id=<%= user['id'] %> >
-                              <% if user['first_name'].nil? or user['first_name'].empty? %>
-                                <% user_name = "(not given)" %>
-                              <% else %>
-                                <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
-                              <% end %>
-                              <th class="user-name"><%= user_name %></th>
-                              <th class="user-role"><%= user['role'] %></th>
-                              <th class="date-joined"><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
-                            </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
+          <%= erb :'dashboard/teachers/components/userTable/user-table', locals: { users: users } %>
 
-                    <div class="leftover-space"></div>
+        <% else %> <%# there are 0 users.... %>
 
-                  </div>
-                
-                  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
-                    <div class="default-user-info" style="display: none;">
-                        <h2>
-                          Click on a family to see how they're reading!
-                        </h2>
-                    </div>
+          <%= erb :'dashboard/teachers/components/userTable/no-users-joined', locals: { users: users } %>    
+        <% end %>
 
-                    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
-                    <% icon_index = 0 %>
+      </div> <%# big-daddy-data %>
 
-                    <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-                      <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none; margin-top: 1em;">
-                        <div class="teacher-imgs">
-                            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
-                        </div>
-                        <div class="family-header">
-                          <!-- <img src="/images/<%= icons[icon_index] %>-icon.png" alt=""> -->
-                          <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
-                          <% icon_index = (icon_index + 1) % icons.length %>
-                          <div class="family-name">
-                              <% if user['role'] != 'teacher' and user['role'] != 'admin' %>                              
-                                <% if user['last_name'] %>
-                                  <% family_name = user['last_name'] %>
-                                <% elsif user['first_name'] %>
-                                  <% family_name = user['first_name'] + "'s" %>
-                                <% else %>
-                                  <% family_name = "unnamed" %>
-                                <% end %>
-
-                                <h3><%= family_name %></h3>
-                                <h3>Family</h3>
-
-                              <% else %>
-
-                                <h3><%= user['first_name'] %></h3>
-                                <h3><%= user['last_name'] %></h3>
-
-                              <% end %>
-
-                          </div>
-                        </div>
-
-                        <% this_month =  user['this_month'].to_i > 0 ? user['this_month'] : '—' %>
-                        <% reading_time =  user['reading_time'].to_i > 0 ? user['reading_time'] : '—' %>
-
-                        <div class="pure-g stats-user">
-                            <div class="pure-u-1 pure-u-sm-1-2">
-                              <div class="stats user left">
-                                <h1><%= this_month %></h1>
-                                <p>Books</p>
-                                <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
-                              </div>
-                            </div>
-                            <div class="pure-u-1 pure-u-sm-1-2">
-                              <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= reading_time %></h1>
-                                <p>Minutes</p>
-                                <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
-                              </div>
-                            </div>
-                        </div> <%# end nested pure-g %>
-
-
-                      </div>
-                    <% end %>
-
-                  </div>
-                </div> <%# panel-default table-body %>
-
-
-              <% else %> <%# there are 0 users.... %>
-                       <div class="panel panel-default table-body">
-               
-                  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
-                    <table class="table data users-table">
-                      <tbody>
-
-                            <tr class="user-info">
-                              <th class="user-name">No one has joined yet.</th>
-                            </tr>
-                      </tbody>
-                    </table>
-
-                    <div class="leftover-space"></div>
-
-                  </div>
-                
-                  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
-                    <div class="default-user-info" style="display: none;">
-                        <h2>
-                          Click on a family to see how they're reading!
-                        </h2>
-                    </div>
-
-                    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
-                    <% icon_index = 0 %>
-
-                    <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
-                      <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none; margin-top: 1em;">
-                        <div class="teacher-imgs">
-                            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
-                        </div>
-                        <div class="family-header">
-                          <!-- <img src="/images/<%= icons[icon_index] %>-icon.png" alt=""> -->
-                          <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
-                          <% icon_index = (icon_index + 1) % icons.length %>
-                          <div class="family-name">
-                            <% if user['last_name'] %>
-                              <% family_name = user['last_name'] %>
-                            <% elsif user['first_name'] %>
-                              <% family_name = user['first_name'] + "'s" %>
-                            <% else %>
-                              <% family_name = "unnamed" %>
-                            <% end %>
-
-                            <h3><%= family_name %></h3>
-                            <h3>Family</h3>
-
-                          </div>
-                        </div>
-
-                        <% this_month =  user['this_month'].to_i > 0 ? user['this_month'] : '—' %>
-                        <% reading_time =  user['reading_time'].to_i > 0 ? user['reading_time'] : '—' %>
-
-                    
-                        <div class="pure-g stats-user">
-                            <div class="pure-u-1 pure-u-sm-1-2">
-                              <div class="stats user left">
-                                <h1><%= this_month %></h1>
-                                <p>Books</p>
-                                <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
-                              </div>
-                            </div>
-                            <div class="pure-u-1 pure-u-sm-1-2">
-                              <div class="stats user right">
-                                <h1 style="display: inline-block;"><%= reading_time %></h1>
-                                <p>Minutes</p>
-                                <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
-                              </div>
-                            </div>
-                        </div> <%# end nested pure-g %>
-
-
-                      </div>
-                    <% end %>
-
-                  </div>
-                </div> <%# panel-default table-body %>
-                
-              <% end %>
-
-          </div> <%# big-daddy-data %>
-
-      <% end # the signin-count block %> 
+  <% end # the signin-count block %> 
 
 </div> <!-- class="container" -->
   

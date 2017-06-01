@@ -93,7 +93,7 @@ class App < Sinatra::Base
   end
 
   get '/app' do
-    erb :'get-the-app'
+    erb :'pages/get-the-app'
   end
 
   get '/test' do

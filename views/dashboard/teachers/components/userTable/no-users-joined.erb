@@ -1,0 +1,77 @@
+<div class="panel panel-default table-body">
+
+  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
+    <table class="table data users-table">
+      <tbody>
+
+            <tr class="user-info">
+              <th class="user-name">No one has joined yet.</th>
+            </tr>
+      </tbody>
+    </table>
+
+    <div class="leftover-space"></div>
+
+  </div>
+
+  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+    <div class="default-user-info" style="display: none;">
+        <h2>
+          Click on a family to see how they're reading!
+        </h2>
+    </div>
+
+    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
+    <% icon_index = 0 %>
+
+    <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+      <div class="the-whole-user-thing" id=<%= user['id'] %> style="display: none; margin-top: 1em;">
+        <div class="teacher-imgs">
+            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
+        </div>
+        <div class="family-header">
+          <!-- <img src="/images/<%= icons[icon_index] %>-icon.png" alt=""> -->
+          <% puts "icon-index = #{icon_index}, #{icons[icon_index]}" %>
+          <% icon_index = (icon_index + 1) % icons.length %>
+          <div class="family-name">
+            <% if user['last_name'] %>
+              <% family_name = user['last_name'] %>
+            <% elsif user['first_name'] %>
+              <% family_name = user['first_name'] + "'s" %>
+            <% else %>
+              <% family_name = "unnamed" %>
+            <% end %>
+
+            <h3><%= family_name %></h3>
+            <h3>Family</h3>
+
+          </div>
+        </div>
+
+        <% this_month =  user['this_month'].to_i > 0 ? user['this_month'] : '—' %>
+        <% reading_time =  user['reading_time'].to_i > 0 ? user['reading_time'] : '—' %>
+
+    
+        <div class="pure-g stats-user">
+            <div class="pure-u-1 pure-u-sm-1-2">
+              <div class="stats user left">
+                <h1><%= this_month %></h1>
+                <p>Books</p>
+                <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-sm-1-2">
+              <div class="stats user right">
+                <h1 style="display: inline-block;"><%= reading_time %></h1>
+                <p>Minutes</p>
+                <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
+              </div>
+            </div>
+        </div> <%# end nested pure-g %>
+
+
+      </div>
+    <% end %>
+
+  </div>
+</div> <%# panel-default table-body %>
