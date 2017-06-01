@@ -1,0 +1,35 @@
+<!-- in-person -->
+<div class="main-box in-person" id="main-easel" style="display: none;">
+  <div id="logo-container">
+    <div id="jobs">
+      <h2 class="our_team enroll_header">Talk with parents.</h2>
+    </div>
+  </div>
+
+  <div id="logo-container">
+
+  </div>
+
+      <header class="box-header">
+        <% code_english, code_spanish = session['educator']['code'].split('|') %>
+        <% school = session['school']['signature'] %>
+        <% teacher = session['educator']['signature'] + "-" + session['educator']['t_number'].to_s %>
+        <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher}/phone-imgs" %>
+
+
+        <h2 class="box-header-title">Tell people to text <span><%= code_english %></span> to (203)-202-3505</h2>
+        <h3 class="box-header-subtext">
+          They'll receive a welcome text from StoryTime.
+        </h3>
+
+        <h3 class="box-header-subtext">
+          For Spanish, text <span><%= code_spanish %></span>
+        </h3>
+      </header>
+
+      <object class="flyer-image phone-image enroll-image" data="<%= aws_url %>/<%= code_english %>-phone.jpg" type="image/jpg">
+          <img class="flyer-image phone-image enroll-image" src="/images/phone-text-default.jpg" />
+      </object>
+
+</div>
+<!-- end in-person -->

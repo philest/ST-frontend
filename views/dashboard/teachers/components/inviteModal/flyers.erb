@@ -1,0 +1,35 @@
+<!-- begin flyers -->
+<div class="main-box flyers" id="main-printer" style="display: none;">
+
+    <div id="logo-container">
+      <div id="jobs">
+        <h2 class="our_team enroll_header">Print out flyers.</h2>
+      </div>
+    </div>
+
+        <header class="box-header">
+          <h2 class="box-header-title">Send one home with each student.
+          <h3 class="box-header-subtext">
+            Then parents can signup and get the app with books.
+          </h3>
+        </header>
+
+
+        <div class="pure-g english-spanish-flyers">
+            <% code_english = session['educator']['code'].split('|').first %>
+            <% school = session['school']['signature'] %>
+            <% teacher = session['educator']['signature'] %>
+            <% teacher_dir = teacher + "-" + session['educator']['t_number'].to_s %>
+            <% aws_url = "https://s3.amazonaws.com/teacher-materials/#{school}/#{teacher_dir}/flyers" %>
+
+            <div class="pure-u-1 english">
+                <img class="flyer-image" src="https://s3.amazonaws.com/teacher-materials/ST-flyer-thumb-EN.png">
+                <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>.pdf" target="_blank"><button class="Button-ready">Download English</button> </a>  
+                <a href="<%= aws_url %>/StoryTime-Invite-Flyer-<%= teacher %>-Spanish.pdf" target="_blank"><button class="Button-ready flyer-button" id="spanish-flyer">Download Spanish</button> </a>
+            </div>
+        </div>
+
+
+  </div>
+
+  <!-- end flyers -->
