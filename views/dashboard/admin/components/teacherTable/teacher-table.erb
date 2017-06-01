@@ -1,0 +1,66 @@
+<div class="panel panel-default table-body">
+
+  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 teacher-table-responsive">
+    <table class="table data teacher-table">
+      <tbody>
+        <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+            <tr class="teacher-info" id=<%= teacher['id'] %> >
+              <th class="teacher-name"><%= teacher['signature'] %></th>
+              <th class="date-joined"><%= Time.parse(teacher['enrolled_on']).strftime("%b %-d, %Y") %></th>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div class="leftover-space"></div>
+
+  </div>
+
+  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+    <div class="default-teacher-info" style="display: none;">
+        <h2>
+          Click on a classroom to see how they're reading!
+        </h2>
+    </div>
+
+    <% icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+    <% icon_index = 0 %>
+
+    <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+      <div class="the-whole-teacher-thing" id=<%= teacher['id'] %> style="display: none;">
+        <div class="teacher-imgs">
+          <div class="teacher-modal-btn" data-toggle="modal" data-target="#teacherModal-<%= teacher['id'] %>">
+            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img">
+            <img src="/images/right-arrow.png" alt="" class="right-arrow">
+          </div>
+        </div>
+        <div class="family-header">
+          <% icon_index = (icon_index + 1) % icons.length %>
+          <div class="teacher-name">
+            <h3><%= teacher['signature'] %></h3>
+            <h3 id="bottom-mofo">  <span> <%= teacher['num_families'] %> </span> StoryTime <%= (teacher['num_families'] > 1 or teacher['num_families'] == 0) ? 'families' : 'family' %></h3>
+          </div>
+        </div>
+
+        <div class="pure-g stats-user">
+            <div class="pure-u-1 pure-u-sm-1-2">
+              <div class="stats user left">
+                <h1><%= teacher['this_month'] > 0 ? teacher['this_month'] : '-' %></h1>
+                <p>Books</p>
+                <small style="font-size: 0.945em; color: black;"><i>read this month</i></small>
+              </div>
+            </div>
+            <div class="pure-u-1 pure-u-sm-1-2">
+              <div class="stats user right">
+                <h1 style="display: inline-block;"><%= teacher['reading_time'] > 0 ? teacher['reading_time'] : '-' %></h1>
+                <p>Minutes</p>
+                <small style="font-size: 0.945em; color: black;"><i>spent reading</i></small>
+              </div>
+            </div>
+        </div> <%# end nested pure-g %>
+
+      </div>
+    <% end %>
+
+  </div>
+</div> <%# panel-default table-body %>

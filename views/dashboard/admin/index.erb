@@ -33,10 +33,10 @@
 
 
   <% if school_users.nil? %>
-    <%= erb :'dashboard/admin_dashboard_teachers', locals: {teachers: teachers} %>
+    <%= erb :'dashboard/admin/dash-with-teachers', locals: {teachers: teachers} %>
 
   <% else %>
-    <%= erb :'dashboard/admin_dashboard_users', locals: {school_users: school_users} %>
+    <%= erb :'dashboard/admin/dash-with-only-users', locals: {school_users: school_users} %>
 
   <% end %>
   
