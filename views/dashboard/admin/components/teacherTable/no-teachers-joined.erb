@@ -1,0 +1,36 @@
+<div class="panel panel-default table-body">
+
+  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
+    <table class="table data users-table">
+      <tbody>
+
+            <tr class="user-info">
+              <th class="user-name">No one has joined yet.</th>
+            </tr>
+      </tbody>
+    </table>
+
+    <div class="leftover-space"></div>
+
+  </div>
+
+  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+    <div class="default-user-info" style="display: none;">
+        <h2>
+          Click on a family to see how they're reading!
+        </h2>
+    </div>
+
+    <% icons = ['open-book', 'closed-book', 'grade-a', 'spaceship', 'globe', 'dinosaur'] %>
+    <% icon_index = 0 %>
+
+    
+      <div class="the-whole-user-thing" style="display: none; margin-top: 1em;">
+        <div class="teacher-imgs">
+            <img src="/images/<%= icons[icon_index] %>-icon.png" alt="" id="teacher-img" style="margin-left: 0px;">
+        </div>
+
+      </div>
+
+  </div>
+</div> <%# panel-default table-body %>
