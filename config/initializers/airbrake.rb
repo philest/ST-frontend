@@ -1,8 +1,8 @@
 require 'rack'
 require 'airbrake'
-# require 'airbrake/sidekiq'
+require 'airbrake/sidekiq'
 require 'sidekiq'
-require 'airbrake/sidekiq/error_handler'
+# require 'airbrake/sidekiq/error_handler'
 require 'newrelic_rpm'
 
 Airbrake.configure do |config|
