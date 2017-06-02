@@ -1,40 +1,7 @@
+@import 'dashboard/mediaqueries';
 @import 'dashboard/nav';
+@import 'dashboard/admin/school-totals';
 
-$mobile-width: 35.5em;
-$tablet-small-width: 43em;
-$tablet-medium-width: 52em;
-$tablet-large-width: 59em;
-$desktop-width: 63em;
-
-@mixin mobile {
-  @media (max-width: #{$mobile-width}) {
-    @content;
-  }
-}
-
-@mixin tablet-small {
-  @media (max-width: #{$tablet-small-width}) {
-    @content;
-  }
-}
-
-@mixin tablet-medium {
-  @media (max-width: #{$tablet-medium-width}) {
-    @content;
-  }
-}
-
-@mixin tablet-large {
-  @media (max-width: #{$tablet-large-width}) {
-    @content;
-  }
-}
-
-@mixin desktop {
-  @media (min-width: #{$desktop-width}) {
-    @content;
-  }
-}
 
 
 /*START Empty Dashboard screen*/
@@ -258,41 +225,6 @@ h2.heading.why-parents{
 
 
 
-/* header */
-img.apple {
-  float: right;
-  padding-right: 1.5em;
-
-  width: 150px; 
-  margin-right: -20px;
-  /*width: 200px;*/
-  /*padding-top: 0.8em;*/
-}
-
-img#schoolhouse.apple {
-  margin-right: -10px;
-}
-
-
-h3.apple {
-  clear: right;
-  text-align: right;
-
-  @include mobile {
-    text-align: center; 
-  }
-}
-
-.paper-plane {
-  padding-top: 1em;
-
-  @include mobile {
-    padding-top: 2em;
-  }
-
-}
-
-
 
 .the-whole-teacher-thing {
   position: relative;
@@ -353,68 +285,66 @@ h3.apple {
 .stats {
   display: inline-block;
   margin-top: -0.5em;
-}
 
-.stats.user {
-  margin-top: 0em;
-  position: relative;
-  right: 0px;
-  font-family: 'Karla';
-
-  @include mobile {
-    &.left, &.right, &#left, &#bottom-guy {
-      margin-left: 0px;
-      margin-right: 0px;
-    }
-  }
-
-  &.left {
-    margin-left: 3em;
+  
+  .user {
+    margin-top: 0em;
+    position: relative;
+    right: 0px;
+    font-family: 'Karla';
 
     @include mobile {
-      margin-bottom: 1em;
+      &.left, &.right, &#left {
+        margin-left: 0px;
+        margin-right: 0px;
+      }
     }
-  }
 
-  &.right {
-    margin-right: 3em;
-  }
+    &.left {
+      margin-left: 3em;
 
-  &#left {
-    margin-right: 2em;
-
-    @include mobile {
-      margin-bottom: 2em;
+      @include mobile {
+        margin-bottom: 1em;
+      }
     }
-  }
 
-  &#bottom-guy {
-    margin-left: 2em;
-
-    @include mobile {
-      margin-bottom: 2em;
+    &.right {
+      margin-right: 3em;
     }
-  }
 
-  h1 {
-    margin-bottom: 0.1em;
-    font-size: 3.15em;
+    &#left {
+      margin-right: 2em;
 
-    @include mobile {
-      font-size: 2.5em;
+      @include mobile {
+        margin-bottom: 2em;
+      }
     }
-  }
 
-  p {
-    margin: 0px;
-    font-size: 1.26em;
 
-    @include mobile {
-      font-size: 1.2em;
+    h1 {
+      margin-bottom: 0.1em;
+      font-size: 3.15em;
+
+      @include mobile {
+        font-size: 2.5em;
+      }
     }
+
+    p {
+      margin: 0px;
+      font-size: 1.26em;
+
+      @include mobile {
+        font-size: 1.2em;
+      }
+    }
+
   }
 
-}
+
+} // end .stats
+
+
 
 
 /*border right not working */
@@ -568,9 +498,6 @@ h3.apple {
 }
 
 #teacher-img {
-  /*float: left;*/
-  /*position: absolute;*/
-  /*left: 6em;*/
   display: inline-block;
   text-align: center;
   width: 100px;
@@ -602,16 +529,6 @@ h3.apple {
 }
 
 
-
-/*::-webkit-scrollbar { 
-    display: none; 
-}*/
-#bs-override div.table-responsive.pure-u-1-2 {
-  /*margin-left: -1em;*/
-}
-
-
-
 .stats h1 {
   font-size: 4.2em;
   margin-top: 0.2em;
@@ -623,31 +540,6 @@ h3.apple {
   margin-bottom: 0px;
   font-size: 1.15em;
 }
-
-.stats.total {
-  font-family: 'Karla';
-  text-align: center;
-  /*font-size: 4.5em;*/
-}
-
-.stats.total p {
-  font-size: 1.68em;
-  line-height: 1em;
-}
-
-.stats-wrapper {
-  width: 100%;
-
-  .stats.total {
-    @include mobile {
-      display: block;
-      text-align: center;
-    } 
-  }
-
-}
-
-
 
 
 #bs-override tr.user-info th {
@@ -1191,40 +1083,9 @@ b, i {
 /* end modal */
 
 
-/* welcome back message */
-.pure-g.welcome {
-  text-align: center;
-  margin-top: 3em;
-  margin-bottom: 1.5em;
-  
-  h2, h3 {
-    font-family: 'Karla';
-    font-weight: bold;
-  }
-
-  @include mobile {
-    margin-bottom: 3em;
-  }
-
-}
 
 
-.mobile-welcome {
-  display: none;
 
-  @include mobile {
-    text-align: center;
-    margin: 0 auto;
-    margin-top: 3em;
-    display: block;
-    width: 80%;
-    height: 15em;
-  }
-}
-
-.mobile-navbar {
-  display: none;
-}
 
 thead {
   background-color: #eceff1
@@ -1266,29 +1127,6 @@ thead {
     white-space: pre-wrap;
   }
 
-  .navbar-buttons {
-    display: block;
-    text-align: center;
-    margin-left: 0em;
-  }
-
-  .page-header {
-    margin-top: 40px;
-    background: none;
-
-    h1 {
-      display: block;
-      text-align: center;
-      margin-left: 0em;
-    }
-
-    .mobile-navbar {
-      text-align: right;
-      display: block;
-      clear: both;
-    }
-
-  }
 
 
   #bs-override .family-header .family-name {
