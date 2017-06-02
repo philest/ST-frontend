@@ -1,0 +1,88 @@
+// stats
+.stats-wrapper {
+  width: 100%;
+
+  .stats.total {
+
+    font-family: 'Karla';
+    text-align: center;
+
+    p {
+      font-size: 1.68em;
+      line-height: 1em;
+    }
+
+    @include mobile {
+      display: block;
+      text-align: center;
+    } 
+  }
+
+}
+
+
+/* header */
+img.apple {
+  float: right;
+  padding-right: 1.5em;
+
+  width: 150px; 
+  margin-right: -20px;
+  /*width: 200px;*/
+  /*padding-top: 0.8em;*/
+}
+
+img#schoolhouse.apple {
+  margin-right: -10px;
+}
+
+
+h3.apple {
+  clear: right;
+  text-align: right;
+
+  @include mobile {
+    text-align: center; 
+  }
+}
+
+.paper-plane {
+  padding-top: 1em;
+
+  @include mobile {
+    padding-top: 2em;
+  }
+
+}
+
+
+/* welcome back message */
+.pure-g.welcome {
+  text-align: center;
+  margin-top: 3em;
+  margin-bottom: 1.5em;
+  
+  h2, h3 {
+    font-family: 'Karla';
+    font-weight: bold;
+  }
+
+  @include mobile {
+    margin-bottom: 3em;
+  }
+
+}
+
+
+.mobile-welcome {
+  display: none;
+
+  @include mobile {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 3em;
+    display: block;
+    width: 80%;
+    height: 15em;
+  }
+}

@@ -1,38 +1,84 @@
+@import 'dashboard/mediaqueries';
 /* navbar shit */
 
 .page-header {
   background: url("/images/modules/bird.gif") left no-repeat;
   margin-top: 20px;
   padding-bottom: 11px;
-}
 
-.page-header h1 {
-  margin-left: 4em;
-  font-weight: 800;
-  margin-bottom: 10px;
+  @include mobile {
+    margin-top: 40px;
+    background: none;
+  }
 
-}
+  h1 {
+    margin-left: 4em;
+    font-weight: 800;
+    margin-bottom: 10px;
+    display: inline-block;
 
-.page-header h1, .navbar-buttons {
-  display: inline-block;
-}
+    @include mobile {
+      display: block;
+      text-align: center;
+      margin-left: 0em;
+    }
+  }
+
+  .mobile-navbar {
+    display: none;
+
+    @include mobile {
+      text-align: right;
+      display: block;
+      clear: both;
+    }
+  }
+
+} // end .page-header
 
 .navbar-buttons {
   float: right;
   margin-top: 0.8em;
+  display: inline-block;
+
+  @include mobile {
+    display: block;
+    text-align: center;
+    margin-left: 0em;
+  }
+
+
+  .navbar-menu {
+    margin-left: 0.3em;
+
+    @include tablet-medium {
+      margin-left: 0em;
+    }   
+  }
+
+  a.navbar-menu {
+    @include tablet-medium {
+      margin-right: 0.5em;
+    }
+  }
+
+  @media screen and (max-width: 46em) {
+    button.navbar-menu {
+      display: none;
+    }
+  }
+
+  .btn.outline {
+    background: none;
+    /*padding: 12px 22px;*/
+
+    border: 2px solid #ed7844;
+    color: #ed7844;
+  }
+
 }
 
-.navbar-buttons .navbar-menu{
-  margin-left: 0.3em;
-}
 
-.navbar-buttons .btn.outline {
-  background: none;
-  /*padding: 12px 22px;*/
-
-  border: 2px solid #ed7844;
-  color: #ed7844;
-}
 
 #get-help:hover, #get-help:focus, #get-help:active, #get-help.active, .open > .dropdown-toggle.btn {
   color: white;
@@ -52,24 +98,10 @@
 
 .btn.outline#top-button { 
   color: white;
-  background-color: #ed7844;
-  
+  background-color: #ed7844; 
 }
 
 
 
-@media screen and (max-width: 52em) {
 
-  .navbar-buttons .navbar-menu {
-    margin-left: 0em;
-  }
-  .navbar-buttons a.navbar-menu {
-    margin-right: 0.5em;
-  }
-}
 
-@media screen and (max-width: 46em) {
-  button.navbar-menu {
-    display: none;
-  }
-}
