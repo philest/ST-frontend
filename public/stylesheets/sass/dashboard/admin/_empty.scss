@@ -1,0 +1,61 @@
+/*START Empty Dashboard screen*/
+
+.class-empty div.sub-heading-text, .class-empty h1.heading {
+  letter-spacing: normal;
+}
+
+.class-empty {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 1 1 0%;
+    flex: 1 1 0%;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+    height: 100%;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.class-empty {
+  margin-top: 125px; /*TODO fix. This is a hack because flexbox not working.*/
+}
+
+.class-empty-content {
+   margin: 0 auto 32px;
+   text-align: center;
+}
+
+.add-people-button-class-empty {
+  background: white;
+  color: #ed7a44;
+  border-color: #ed7a44;
+  margin-top: 20px;
+  border-width: 2px;
+  transition: 75ms ease-in-out;
+  transition-property: background,border-color,color,opacity;
+}
+
+.add-people-button-class-empty:hover {
+    border-color: #ed7a44;
+}
+
+.heading {
+  font-size: 20px;
+}
+
+h2.heading.why-parents{
+    color: #337ab7;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.sub-heading-text, .sub-heading-text-mobile {
+  font-size: 15px;
+  color: #6b6e72;
+}
+
+
+/*END Empty Dashboard screen*/
