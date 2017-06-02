@@ -4,6 +4,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'bundler'
 require 'rack'
 require 'rack/contrib'
+require 'sidekiq'
+require 'sidekiq/web'
 require_relative 'config/environment'
 get_db_connection()
 require_relative 'app/app'
@@ -17,6 +19,7 @@ require_relative 'config/initializers/locale' # language files
 
 require_relative 'config/initializers/airbrake'
 require_relative 'config/initializers/aws'
+
 
 puts ENV['RACK_ENV']
 if ENV['RACK_ENV'] == 'production'

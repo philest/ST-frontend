@@ -5,7 +5,7 @@ require 'rack'
 require 'twilio-ruby'
 
 require 'airbrake'
-require 'airbrake/sidekiq/error_handler'
+require 'airbrake/sidekiq'
 require_relative '../config/environment'
 get_db_connection()
 

@@ -50,7 +50,39 @@
               </div>
 
               <% if users.size > 0 %>
-                <%= erb :'dashboard/admin/components/user-table', locals: {users:users} %>
+                <div class="panel panel-default table-body">
+
+                  <div class="table-responsive pure-u-2-5">
+                    <table class="table data">
+                      <tbody>
+                        <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                            <tr class="user-info" id=<%= user['id'] %> >
+                              <% if user['first_name'].nil? or user['first_name'].empty? %>
+                                <% user_name = "(not given)" %>
+                              <% else %>
+                                <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+                              <% end %>
+                              <th class="user-name"><%= user_name %></th>
+                              <th class="user-role"><%= user['role'] %></th>
+                              <!-- <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th> -->
+                            </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pure-u-3-5 the-data">
+                    <div class="default-user-info" style="display: none;">
+                        <h2>
+                          Click on a family to see how they're reading!
+                        </h2>
+                    </div>
+
+
+                    <%= erb :'dashboard/admin/components/user-table-list', locals: {users:users} %>
+
+                  </div>
+                </div> <%# panel-default table-body %>
 
               <% else %> <%# there are 0 users.... %>
 
