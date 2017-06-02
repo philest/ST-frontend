@@ -1,3 +1,5 @@
+@import 'dashboard/nav';
+
 /*START Empty Dashboard screen*/
 
 .class-empty div.sub-heading-text, .class-empty h1.heading {
@@ -1085,72 +1087,8 @@ thead {
   background-color: #eceff1
 }
 
-/* navbar shit */
-
-.page-header {
-  background: url("/images/modules/bird.gif") left no-repeat;
-  margin-top: 20px;
-  padding-bottom: 11px;
-}
-
-.page-header h1 {
-  margin-left: 4em;
-  font-weight: 800;
-  margin-bottom: 10px;
-
-}
-
-.page-header h1, .navbar-buttons {
-  display: inline-block;
-}
-
-.navbar-buttons {
-  float: right;
-  margin-top: 0.8em;
-}
-
-.navbar-buttons .navbar-menu{
-  margin-left: 0.3em;
-}
-
-.navbar-buttons .btn.outline {
-  background: none;
-  /*padding: 12px 22px;*/
-
-  border: 2px solid #ed7844;
-  color: #ed7844;
-}
-
-#get-help:hover, #get-help:focus, #get-help:active, #get-help.active, .open > .dropdown-toggle.btn {
-  color: white;
-  background-color: #ed7844;
-  
-}
-.btn.outline:active, .btn.outline.active {
-  border-color: #007299;
-  color: #007299;
-  box-shadow: none;
-}
-
-.btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
-  background-color: #f3976f;
-  transition-duration: 400ms;
-}
-
-.btn.outline#top-button { 
-  color: white;
-  background-color: #ed7844;
-  
-}
 
 
-/*@media screen and (max-width: 72em) {
-  .teacherModal .modal-content {
-    width: 70vw;
-    margin: 0 auto;
-  }   
-
-}*/
 
 @media screen and (max-width: 59em) {
   .teacherModal .modal-content {
@@ -1166,12 +1104,7 @@ thead {
 
 
 
-  .navbar-buttons .navbar-menu {
-    margin-left: 0em;
-  }
-  .navbar-buttons a.navbar-menu {
-    margin-right: 0.5em;
-  }
+  
 
   #introDashboardModal .modal-content {
     width: 70vw;
@@ -1194,11 +1127,7 @@ thead {
 
 }
 
-@media screen and (max-width: 46em) {
-  button.navbar-menu {
-    display: none;
-  }
-}
+
 
 @media screen and (max-width: 43em) {
   .teacherModal .modal-content {
@@ -1400,9 +1329,6 @@ thead {
 }
 
 
-/*@media (max-width: )*/
-
-/* navbar shit */
 
 
 
