@@ -11,8 +11,6 @@ $(document).ready(function () {
 
   var os = getMobileOperatingSystem();
 
-  // console.https://s3.amazonaws.com/st-webpage/assets/logo/logo-large.png(os);
-
   var operating_system = $('<input>')
             .attr('type', 'hidden')
             .attr('name', 'mobile_os')
