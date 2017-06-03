@@ -344,6 +344,13 @@ body {
     padding-left: 4.0619%;
     padding-right: 4.0619%;
 
+
+    @media (min-width: 35.5em) { // 568px
+      margin-right: auto;
+      margin-left: auto;
+      padding-left: 4.0619%;
+      padding-right: 4.0619%;
+    }
     
     @media (min-width: 48em) { // 768px
       width: 92%;
@@ -527,8 +534,11 @@ button.log-in-fake-button {
 
 #splash {
   padding-top: 1em;
-    text-align: left;
-    // height: 36em;
+  text-align: left;
+
+  @media (min-width: 35.5em) { // 568px
+    padding-top: 3em;
+  }
 }
 
 
@@ -541,6 +551,14 @@ button.log-in-fake-button {
   margin-right: auto;
   display: block;
   margin-top: 0px;
+
+  @media (min-width: 28.125em) {
+    width: 14em; 
+  }
+
+  @media (min-width: 666px) {
+    width: 16em; 
+  }
 
   @media (min-width: 48em) { // 768px
     width: 18em;
@@ -565,6 +583,14 @@ h1#main-tagline {
   margin-top: 10px;
   margin-bottom: 0px;
 
+  @media (min-width: 28.125em) {
+    font-size: 32px; 
+  }
+
+  @media (min-width: 666px) {
+    font-size: 34px; 
+  }
+
   @media (min-width: 48em) { // 768px
     font-size: 35px;
   }
@@ -586,6 +612,14 @@ h1#sub-tagline {
   margin-bottom: 40px;
   font-weight: 100;
 
+  @media (min-width: 28.125em) {
+    font-size: 24px; 
+  }
+
+  @media (min-width: 666px) {
+    font-size: 26px;
+  }
+
 
   @media (min-width: 48em) { // 768px
     font-size: 27px;
@@ -599,6 +633,10 @@ h1#sub-tagline {
 
 h1 br.subheading-br {
   display: inline-block;
+
+  @media (min-width: 28.125em) {
+    display: none; 
+  }
 } 
 
 h2 {
@@ -659,10 +697,15 @@ img#gif-animation.hero-animation {
 
 #splash .animation {
   display: inline-block;
-}
 
-#splash .animation img {
-  margin-left: auto;
+  img {
+    margin-left: auto;
+
+    @media (min-width: 35.5em) { // 568px
+      margin-top: 2em;
+    }
+  }
+
 }
 
 #start-modal-button {
@@ -789,10 +832,18 @@ div#signup-field {
   width: 65%;
     margin-top: 13px;
     width: 95%;
+
+  @media (min-width: 520px) {
+    width: 90%;
+  }
 }   
 
 #signup-email-button.dialog-button {
   width: 95%;
+
+  @media (min-width: 520px) {
+    width: 90%; 
+  }
 }
 
 
@@ -820,9 +871,6 @@ button.dialog-button {
   width: 95%;
 
   font-size: 17px;
-  /*display: inline-block;*/
-/*  padding-top: 10px;
-*/  /*match other*/
   font-weight: 100;
   background-color: #ed7844;
   margin-bottom: 15px;
@@ -835,6 +883,10 @@ button.dialog-button {
 .field.demo-field {
   margin-left: 0px;
   width: 177px;
+
+  @media (min-width: 28.125em) {
+    width: 230px; 
+  }
 }
 
 .demo-modal.modal-subheading {
@@ -868,6 +920,15 @@ h1#main-banner {
   font-size: 1.9em;
   padding-top: 8em;
   margin-bottom: 2.9em;
+
+  @media (min-width: 28.125em) {
+    padding-top: 8em; 
+  }
+
+  @media (min-width: 35.5em) { // 568px
+    padding-top: 12em;
+    color: #4a4a4a;
+  }
 
   @media (min-width: 48em) { // 768px
     padding-top: 6.5em;  
@@ -951,6 +1012,11 @@ div.text {
 .the-product .phone img {
   width: 65%;
 
+  @media (min-width: 35.5em) { // 568px
+    width: 100%;
+    max-width: 370px; 
+  }
+
 }
 
 .the-problem .text h2, .the-product .text h2, .join-us .text h2, h2 {
@@ -962,6 +1028,10 @@ div.text {
 
 h2 {
   margin-bottom: 20px;
+
+  @media (min-width: 35.5em) { // 568px
+    font-size: 24px; 
+  }
 }
 
 h2.modal-signup-heading {
@@ -1062,12 +1132,16 @@ div.desktop-text {
 
 .footer {
   background: #fff;
-    border-top: 1px #dcdee2 solid;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: left;
-    padding-top: 12px;
-    padding-bottom: 12px;
+  border-top: 1px #dcdee2 solid;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  padding-top: 12px;
+  padding-bottom: 12px;
+
+  @media (min-width: 35.5em) { // 568px
+    padding-bottom: 0px; 
+  }
 }
 
 
@@ -1086,6 +1160,10 @@ div.desktop-text {
 
 .footer--nav{
   margin: 0 0 40px 0px;
+
+  @media (min-width: 666px) {
+    margin-right: 40px;
+  }
 }
 
 
@@ -1095,7 +1173,13 @@ div.desktop-text {
 
 .footer--nav--link {
   display: inline-block;
-    padding: 12px 0;
+  padding: 12px 0;
+
+  @media (min-width: 35.5em) { // 568px
+    margin-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 20px;
+  }
 }
 
 .footer--nav--link---terms-privacy {
@@ -1113,104 +1197,9 @@ div.desktop-text {
 
 
 
-@media (min-width: 28.125em) {
-  #logo-new {
-/*    width: 310px;
-*/
-    width: 14em;
-
-  }
-
-
-
-  h1#main-tagline {
-    font-size: 32px;
-  }
-
-  h1#sub-tagline {
-    font-size: 24px;
-  }
-
-  h1 br.subheading-br {
-    display: none;
-  } 
-
-  h1#main-banner {
-  padding-top: 8em;
-  }
-
-  .field.demo-field {
-    width: 230px;
-  }
-
-}
-
-
-
-/***** Portrait mode, small tablet ******/
-@media (min-width: 35.5em) { // 568px
-
-
-  .container {
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 4.0619%;
-    padding-right: 4.0619%;
-  }
-
-  #splash {
-    padding-top: 3em;
-  }
-
-  #splash .animation img {
-    margin-top: 2em;
-  }
-
-
-
-  h1#main-banner {
-    padding-top: 12em;
-    color: #4a4a4a;
-    /*  font-size: 3em;
-  */}
-
-
-  h2 {
-    font-size: 24px;
-  }
-
-  .the-product .phone img {
-    width: 100%;
-    max-width: 370px;
-  }
-
-  .footer {  
-    padding-bottom: 0px;
-  }
-
-  .footer--nav--link {  
-      margin-bottom: 8px;
-      padding-top: 4px;
-      padding-bottom: 20px;
-  }
-
-
-/*  .footer--nav--link---terms-privacy{
-    border-left: 0;
-  }
-*/
-
-} 
 
 
 @media (min-width: 520px) {
-  div#signup-field {
-    width: 90%;
-  }
-
-  #signup-email-button.dialog-button {
-    width: 90%;
-  }
   
   button#join.dialog-button.signup-form-button {
     display: block;
@@ -1229,33 +1218,7 @@ div.desktop-text {
 
   }
 
-
 }
-
-
-@media (min-width: 666px) {
-
-  #logo-new {
-    width: 16em;
-  }
-
-  h1#main-tagline {
-    font-size: 34px;
-  }
-
-  h1#sub-tagline {
-    font-size: 26px;
-  }
-
-  .footer--nav {
-    margin-right: 40px;
-  }
-
-}
-
-
-
-
 
 
 /***** Large tablet ******/
