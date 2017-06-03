@@ -1,0 +1,73 @@
+/**
+ * _footer.scss
+ *
+ * Styling for the homepage footer.
+ */
+
+
+ /*FOOTER*/
+
+ .footer {
+   background: #fff;
+   border-top: 1px #dcdee2 solid;
+   font-size: 13px;
+   font-weight: 600;
+   text-align: left;
+   padding-top: 12px;
+   padding-bottom: 12px;
+
+   @media (min-width: 35.5em) { // 568px
+     padding-bottom: 0px; 
+   }
+ }
+
+
+ .footer--container {
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-align-items: flex-start;
+   -ms-flex-align: start;
+   align-items: flex-start;
+   -webkit-justify-content: space-between;
+   -ms-flex-pack: justify;
+   justify-content: space-between;
+   padding: 0 4.7619%;
+ }
+
+ .footer--nav{
+   margin: 0 0 40px 0px;
+
+   @media (min-width: 666px) {
+     margin-right: 40px;
+   }
+ }
+
+
+ .footer--nav--link:not(:last-child) {
+     margin-right: 16px;
+ }
+
+ .footer--nav--link {
+   display: inline-block;
+   padding: 12px 0;
+
+   @media (min-width: 35.5em) { // 568px
+     margin-bottom: 8px;
+     padding-top: 4px;
+     padding-bottom: 20px;
+   }
+ }
+
+ .footer--nav--link---terms-privacy {
+     color: #5d60a5;
+     border: 1px #dcdee2 solid;
+     border-width: 0 1px;
+     padding-right: 16px;
+     padding-left: 16px;
+     white-space: nowrap;
+ }
+
+
+
+ /*END FOOTER*/

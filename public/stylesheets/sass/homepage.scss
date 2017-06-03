@@ -1,37 +1,15 @@
-.isMobile .modal {
-  overflow-y: scroll !important;
-}
+@import 'homepage/navbar';
+@import 'homepage/main-splash';
+@import 'homepage/footer';
+@import 'homepage/modals';
 
-.modal .modal-content {
-  // to work on scroll
-  height: 100%; 
-}
 
-// scrolling problem!
-.modal .modal-body {
-    max-height: 420px;
-    overflow-y: auto;
-
-}
 
 html { overflow-y: scroll; }
 
 
 
-body.modalTransition {
-  overflow-y: hidden;
-
-  .modal .modal-body {
-    overflow: auto;
-  }
-
-}
-
-// button.close {
-//   width: 2em;
-//   height: 2em;
-// }
-
+// this is actually for get-the-app only
 .text-wrapper {
   letter-spacing: 0px;
   margin: 0 auto;
@@ -42,6 +20,26 @@ body.modalTransition {
   padding-right: 1em;
   font-family: 'Karla';
   font-weight: normal;
+
+  @media (min-width: 35.5em) {
+    h2 {
+      font-weight: normal;
+      margin-bottom: 0px;
+      // width: 80%;
+      margin-left: 80px;
+      margin-right: 0px;
+
+    }
+
+    p {
+      margin-top: 0.5em;
+      font-size: 1em;
+      color: #7E7E7E;
+      // width: 80%;
+      margin-left: 80px;
+      margin-right: 0px;
+    }
+  }
 
 
   @media (min-width: 48em) { // 768px
@@ -85,6 +83,7 @@ body.modalTransition {
 
 }
 
+// get-the-app
 #apps-on-phones {
   margin: 0 auto;
   img {
@@ -101,6 +100,7 @@ body.modalTransition {
 
 }
 
+// get-the-app
 #text-me-link-form {
   width: 90%;
 
@@ -128,133 +128,18 @@ body.modalTransition {
 }
 
 
-  #chooseRoleModal .modal-body .pure-g {
-    margin-bottom: 1em;
-  }
-
-  .inner-apple-wrapper {
-    background-color: #f9f5f5;
-    cursor: pointer; cursor: hand;
-    border-radius: 8px;
-    margin-left:5%;
-    margin-right:5%;
-    padding-bottom: 0.1em;
-    margin-bottom: 1em;
-    /*width: 90%;*/
-
-    img#first-apple {
-      margin-top: 0em;
-    }
-    img#last-schoolhouse {
-      margin-top: 0em;
-      width: 100px;
-    }
-
-  }
-
-  .inner-apple-wrapper:hover {
-    background-color: #fdfdfd;
-    /*border: 1px solid #F9F5F5;*/
-  }
-
- /* #chooseTeacher:hover, #chooseAdmin:hover {
-  }*/
-
-  #chooseRoleModal .modal-signup-heading {
-    margin-bottom: 0.5em;
-  }
-
-  #chooseRoleModal .pure-u-2-5 p {
-    margin-top: 0em;
-    font-weight: bold;
-  }
-
-  #chooseRoleModal .pure-g {
-    display: block;
-  }
-
-  @media (min-width: 35.5em) {
-    #chooseRoleModal .modal-signup-heading {
-      margin-bottom: 1.2em;
-    }
-
-    .text-wrapper {
-    
-
-      h2 {
-        font-weight: normal;
-        margin-bottom: 0px;
-        // width: 80%;
-        margin-left: 80px;
-        margin-right: 0px;
-
-      }
-
-      p {
-        margin-top: 0.5em;
-        font-size: 1em;
-        color: #7E7E7E;
-        // width: 80%;
-        margin-left: 80px;
-        margin-right: 0px;
-      }
-    }
-  }
+  
+  
 
   // end signin
 
 
 
-  #signupSchoolRole .modal-body .pure-g {
-    margin-bottom: 1em;
-  }
-
-  #signupChooseTeacher, #signupChooseAdmin, #chooseTeacher, #chooseAdmin {
-    /*width: 48%;*/
-    /*border-color: rgba(236, 239, 241, 0.54);*/
-    /*border-top: none;*/
-    text-align: center; 
-    img {
-      display: block;
-      margin: 0 auto;
-      margin-top: 0em;
-      padding-top: 0.5em;
-    }
-  }
-
-  .role-title {
-      margin-top: 0em;
-      margin-bottom: 0em;
-  }
-
-  // .inner-apple-wrapper p {
-  //   margin-top: 0px;
-  //   margin-bottom: 0px;
-  // }
-
-  #signupSchoolRole .modal-signup-heading {
-    margin-bottom: 1.2em;
-  }
-
-
-  #signupSchoolRole .pure-g {
-    display: block;
-  }
-
-  @media (min-width: 35.5em) { // 568px
-    .role-title {
-      margin-top: 1em;
-      margin-bottom: 1em;
-    }
-
-  }
+  
 
 
 
 
-#chooseRoleModal .modal-body .pure-g {
-  margin: 0 auto;
-}
 
 html{ font-size:100%; }
 
@@ -262,38 +147,10 @@ body {
   font-size: 1em;
 }
 
-body.my-modal-open {
-  padding-right: 0px;
-  padding-right: 0 !important
-}
 
-body.my-modal-open {
-    overflow: hidden;
-    position: fixed;
-}
 
-body.modal-open {
-  padding-right: 0px;
-  padding-right: 0 !important
-}
 
-body.modal-open {
-    overflow: hidden;
-    position: fixed;
-}
 
-// body.hide-scroll#override {
-//     overflow: hidden;
-//     // padding-right: 15px;
-// }
-
-// body.destroy-padding#override {
-//   padding-right: 0px;
-// }
-
-// body.hide-scroll.destroy-padding#override {
-//   // padding-right: 15px;
-// }
 
 .btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
   background-color: #f3976f;
@@ -306,18 +163,10 @@ body.modal-open {
   
 }
 
-/*body#override {
-  padding-right: 0px;
-}*/
 
-.modal-body iframe {
-        margin: 0 auto;
-        display: block;
-}
 
-#videoModal .modal-body {
-  padding: 0px;
-}
+
+
 
 button.close#videoExitButton {
   display: inline-block;
@@ -334,9 +183,7 @@ body {
   font-family: 'Karla', sans-serif;
 }
 
-.modal {
-  z-index: 9999;
-}
+
 
 .container {
     margin-right: auto;
@@ -366,182 +213,6 @@ body {
     }
 
 }
-
-/** Navbar **/
-
-
-.navbar {
-  max-width: 1445px;
-  margin-left: auto;
-  margin-right: auto;
-
-  position: fixed;
-  top: 0;
-  left: 0; // to center
-  right: 0; // to center
-  z-index: 300;
-  width: 100%;
-  height: 4em;
-  background-color: transparent;
-  display: none;
-
-  @media (min-width: 48em) { // 768px
-    display: block; 
-  }
-
-  -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-
-  &.highlighted { 
-    -webkit-box-shadow:0px 1px 1px #dcdee2;
-    -moz-box-shadow:0px 1px 1px #dcdee2;
-      box-shadow: 0 0 1px 1px #dcdee2;
-    background-color: white;
-    a#navbar-title div {
-      color: #ed7844;
-    }
-  
-    li a {
-      text-decoration: none;
-      color: #ed7844;
-    }
-  }
-
-  
-
-  &.navbar-mobile {
-    display: block;
-
-    @media (min-width: 48em) { // 768px
-      display: none; 
-    }
-
-
-    .navbar-right {
-      padding-left: 0px;
-    }
-
-  }
-
-}
-
-
-button#top-button {
-  background-color: #ed7844;
-  font-family: 'Karla', sans-serif;
-}
-
-button.signup-button {
-  font-weight: 900;
-    font-size: 16px;
-    padding: 12px 12px 8px;
-    text-transform: uppercase;
-
-}
-
-button.log-in-fake-button {
-    background-color: transparent !important;
-    text-transform: none;
-    margin-top: 0px;
-    border: none;
-    padding-top: 7px;
-}
-
-.navbar-logo {
-  background-image: url("https://d2yudi7y1eei74.cloudfront.net/assets/new-logo/logo-no-circle.png");
-  background-size: 70px 50px;
-  background-position: center;
-    background-repeat: no-repeat;
-    float: left;
-    height: 90px;
-    width: 162px;
-}
-
-#override h1.navbar-title {
-  text-align: left;
-  font-family: 'dk_cool_crayonregular'
-}
-
-.navbar li {
-  padding-top: 0.5em;
-    padding-bottom: 2.5em;
-    float: left;
-    margin-left: 2em;
-    font-size: 1em;
-    // color: #ed7844;
-    color: white;
-}
-
-.nav > li {
-  position: relative; 
-    display: block; 
-}
-
-.navbar li.navbar-button-item {
-  padding-top: 0em; 
-}
-
-
-#text-me-link-button {
-  cursor: pointer; cursor: hand;
-}
-
-
-
-.navbar-right { 
-  float: right !important;
-  list-style: none;
-  display: none;
-
-  @media (min-width: 48em) { // 768px
-    display: block;
-    margin-bottom: 6px;
-
-    li {
-      margin-left: 1em;
-    }
-  }
-
-
-  @media (min-width: 54em) {
-    margin-left: 2em;
-  }
-
-
-  li a {
-    text-decoration: none;
-    // color: #ed7844;
-    color: white;
-  }
-}
-
- .navbar.navbar-mobile .navbar-right {
-  display: block;
- }
-
-
-
-.navbar-right { 
-  float: right !important;
-  list-style: none;
-  display: none;
- }
-
-
-/* Splash */
-
-#splash {
-  padding-top: 1em;
-  text-align: left;
-
-  @media (min-width: 35.5em) { // 568px
-    padding-top: 3em;
-  }
-}
-
-
 
 
 
@@ -577,59 +248,7 @@ button.log-in-fake-button {
 
 }
 
-h1#main-tagline {
-  font-size: 30px;
-  color: #3B3F44;
-  margin-top: 10px;
-  margin-bottom: 0px;
 
-  @media (min-width: 28.125em) {
-    font-size: 32px; 
-  }
-
-  @media (min-width: 666px) {
-    font-size: 34px; 
-  }
-
-  @media (min-width: 48em) { // 768px
-    font-size: 35px;
-  }
-
-  @media (min-width: 820px) {
-    font-size: 38px;
-  }
-}
-
-h1.storytime-tagline {
-  text-align: center;
-  line-height: 1.3em;
-  font-family: 'Karla';
-}
-
-h1#sub-tagline {
-  font-size: 22px;
-  margin-top: 10px;
-  margin-bottom: 40px;
-  font-weight: 100;
-
-  @media (min-width: 28.125em) {
-    font-size: 24px; 
-  }
-
-  @media (min-width: 666px) {
-    font-size: 26px;
-  }
-
-
-  @media (min-width: 48em) { // 768px
-    font-size: 27px;
-  }
-
-
-  @media (min-width: 820px) {
-    font-size: 28px;
-  }
-}
 
 h1 br.subheading-br {
   display: inline-block;
@@ -695,34 +314,9 @@ img#gif-animation.hero-animation {
   }
 }
 
-#splash .animation {
-  display: inline-block;
 
-  img {
-    margin-left: auto;
 
-    @media (min-width: 35.5em) { // 568px
-      margin-top: 2em;
-    }
-  }
 
-}
-
-#start-modal-button {
-  font-size: 17px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 11px 30px;
-    background-color: #ed7844;
-    font-family: 'Karla', sans-serif;
-
-  margin-bottom: 30px;
-
-  @media (min-width: 48em) { // 768px
-    margin-left: 0px; 
-  }
-}
 
 p.box-header-subtext {
         color: #6b6e72;
@@ -738,174 +332,12 @@ h2.name-heading {
 }
 
 
-#start-modal-button.inline-button-right {
-  background-color: #337AB7;
-}
-
-a button#start-modal-button:hover {
-  text-decoration: none;
-}
-
-a button#start-modal-button:hover {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
-
-}
-
-
-/*Modal*/
-.modal-subheading-container {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 313px;
-}
-
-h3.modal-subheading {
-  font-weight: 100;
-  text-align: left;
-}
-.field .input {
-  margin: 0 0 8px;
-
-  #signup-email & {
-    margin-bottom: 12px;
-  }
-
-}
-
-.field {
-  display: block;
-    position: relative;
-    text-align: left;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.input {
-  transition: 75ms ease-in-out;
-    transition-property: background,border-color,box-shadow,color;
-    background: #fff;
-    border: 1px solid #c5c7cb;
-    border-radius: 3px;
-    width: 100%;
-    color: #282c31;
-    font-family: 'Karla',sans-serif;
-    font-size: 14px;
-    padding: 12px;
-    line-height: normal;
-}
-
-.signup-email-button {
-
-}
-            
-
-h2.modal-signup-heading{
-  font-size: 1.4em;
-  text-align: center;
-  line-height: 1.2em;
-  color: #4a4a4a;
-  font-family: 'Karla';
-}
-
-h3.modal-signup-heading{
-  font-size: 1.3em;
-  text-align: center;
-  line-height: 0.5em;
-  color: #4a4a4a;
-  font-family: 'Karla';
-  font-weight: 100;
-}
-
-div#modal-logo {
-  float: none;
-  height: 72px;
-  width: 100%;
-}
-
-div#signup-field {
-  /*margin-left: 6%;*/
-  width: 65%;
-    margin-top: 13px;
-    width: 95%;
-
-  @media (min-width: 520px) {
-    width: 90%;
-  }
-}   
-
-#signup-email-button.dialog-button {
-  width: 95%;
-
-  @media (min-width: 520px) {
-    width: 90%; 
-  }
-}
 
 
 
-button#join.dialog-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 255px;
 
-  font-size: 17px;
-  /*display: inline-block;*/
-/*  padding-top: 10px;
-*/  /*match other*/
-  font-weight: 100;
-  background-color: #ed7844;
-  margin-bottom: 15px;
 
-}
 
-button.dialog-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 95%;
-
-  font-size: 17px;
-  font-weight: 100;
-  background-color: #ed7844;
-  margin-bottom: 15px;
-
-}
-/*END SIGNUP MODAL*/
-
-/*DEMO Modal*/
-
-.field.demo-field {
-  margin-left: 0px;
-  width: 177px;
-
-  @media (min-width: 28.125em) {
-    width: 230px; 
-  }
-}
-
-.demo-modal.modal-subheading {
-  text-align: center;
-}
-
-button#join.demo-form-button{
-  margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-button.demo-form-button{
-  margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-/*End Demo Modal*/
 
 
 
@@ -915,29 +347,6 @@ button.demo-form-button{
   font-size: 1.1em;
 }
 
-
-h1#main-banner {
-  font-size: 1.9em;
-  padding-top: 8em;
-  margin-bottom: 2.9em;
-
-  @media (min-width: 28.125em) {
-    padding-top: 8em; 
-  }
-
-  @media (min-width: 35.5em) { // 568px
-    padding-top: 12em;
-    color: #4a4a4a;
-  }
-
-  @media (min-width: 48em) { // 768px
-    padding-top: 6.5em;  
-  }
-  
-  @media (min-width: 48em) { // 768px
-    font-size: 38px;
-  }
-}
 
 div.text {
   padding-top: 0px;
@@ -1034,9 +443,7 @@ h2 {
   }
 }
 
-h2.modal-signup-heading {
-  margin-bottom: 2em;
-}
+
 
 div.text {
   max-width: 270px;
@@ -1064,12 +471,7 @@ h1.banner#call-to-action{
   }
 }
 
-button#start-modal-button.demo-request-button {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 2em;
-}
+
 
 
 div.home--features {
@@ -1128,72 +530,7 @@ div.desktop-text {
 
 
 
-/*FOOTER*/
 
-.footer {
-  background: #fff;
-  border-top: 1px #dcdee2 solid;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: left;
-  padding-top: 12px;
-  padding-bottom: 12px;
-
-  @media (min-width: 35.5em) { // 568px
-    padding-bottom: 0px; 
-  }
-}
-
-
-.footer--container {
-  display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-align-items: flex-start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    -webkit-justify-content: space-between;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    padding: 0 4.7619%
-}
-
-.footer--nav{
-  margin: 0 0 40px 0px;
-
-  @media (min-width: 666px) {
-    margin-right: 40px;
-  }
-}
-
-
-.footer--nav--link:not(:last-child) {
-    margin-right: 16px;
-}
-
-.footer--nav--link {
-  display: inline-block;
-  padding: 12px 0;
-
-  @media (min-width: 35.5em) { // 568px
-    margin-bottom: 8px;
-    padding-top: 4px;
-    padding-bottom: 20px;
-  }
-}
-
-.footer--nav--link---terms-privacy {
-    color: #5d60a5;
-    border: 1px #dcdee2 solid;
-    border-width: 0 1px;
-    padding-right: 16px;
-    padding-left: 16px;
-    white-space: nowrap;
-}
-
-
-
-/*END FOOTER*/
 
 
 
@@ -1224,11 +561,6 @@ div.desktop-text {
 /***** Large tablet ******/
 @media (min-width: 48em) { // 768px
 
-
-  #splash h1.storytime-tagline{
-    text-align: left;
-  }
-
   div.splash-text {
     z-index: 10;
   }
@@ -1246,31 +578,10 @@ div.desktop-text {
     font-size: 26px;
   }
 
-  #splash .hero-splash-text-container {
-    padding-left: 50px;
-  }
-
 } 
 
 
 
-/***** Smaller desktop screen ******/
-@media (min-width: 992px) {
-
-  #splash .hero-splash-text-container {
-    padding-left: 100px;
-  }
 
 
-} 
-
-
-/***** Large desktop screen ******/
-@media (min-width: 80em) { // 1280px
-
-  #splash .hero-splash-text-container {
-    padding-left: 165px;
-  }
-
-} 
 
