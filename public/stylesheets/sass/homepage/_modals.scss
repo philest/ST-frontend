@@ -1,0 +1,358 @@
+/**
+ * _modals.scss
+ *
+ * Styling for all homepage modals.
+ */
+
+
+// general modal stuff
+.isMobile .modal {
+  overflow-y: scroll !important;
+}
+
+.modal .modal-content {
+  // to work on scroll
+  height: 100%; 
+}
+
+// scrolling problem!
+.modal .modal-body {
+    max-height: 420px;
+    overflow-y: auto;
+
+}
+
+body.modalTransition {
+  overflow-y: hidden;
+
+  .modal .modal-body {
+    overflow: auto;
+  }
+
+}
+
+body.my-modal-open {
+  padding-right: 0px;
+  padding-right: 0 !important;
+  overflow: hidden;
+  position: fixed;
+}
+
+
+body.modal-open {
+  padding-right: 0px;
+  padding-right: 0 !important;
+  overflow: hidden;
+  position: fixed;
+}
+
+.modal-body iframe {
+  margin: 0 auto;
+  display: block;
+}
+
+.modal {
+  z-index: 9999;
+}
+
+#start-modal-button {
+  font-size: 17px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 11px 30px;
+  background-color: #ed7844;
+  font-family: 'Karla', sans-serif;
+
+  margin-bottom: 30px;
+
+  @media (min-width: 48em) { // 768px
+    margin-left: 0px; 
+  }
+}
+
+h2.modal-signup-heading {
+  margin-bottom: 2em;
+}
+
+// end general modal stuff
+
+
+
+/* Signup Modal*/
+.modal-subheading-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 313px;
+}
+
+h3.modal-subheading {
+  font-weight: 100;
+  text-align: left;
+}
+.field .input {
+  margin: 0 0 8px;
+
+  #signup-email & {
+    margin-bottom: 12px;
+  }
+
+}
+
+.field {
+  display: block;
+    position: relative;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.input {
+  transition: 75ms ease-in-out;
+    transition-property: background,border-color,box-shadow,color;
+    background: #fff;
+    border: 1px solid #c5c7cb;
+    border-radius: 3px;
+    width: 100%;
+    color: #282c31;
+    font-family: 'Karla',sans-serif;
+    font-size: 14px;
+    padding: 12px;
+    line-height: normal;
+}
+
+.signup-email-button {
+
+}
+            
+
+h2.modal-signup-heading{
+  font-size: 1.4em;
+  text-align: center;
+  line-height: 1.2em;
+  color: #4a4a4a;
+  font-family: 'Karla';
+}
+
+h3.modal-signup-heading{
+  font-size: 1.3em;
+  text-align: center;
+  line-height: 0.5em;
+  color: #4a4a4a;
+  font-family: 'Karla';
+  font-weight: 100;
+}
+
+div#modal-logo {
+  float: none;
+  height: 72px;
+  width: 100%;
+}
+
+div#signup-field {
+  /*margin-left: 6%;*/
+  width: 65%;
+    margin-top: 13px;
+    width: 95%;
+
+  @media (min-width: 520px) {
+    width: 90%;
+  }
+}   
+
+#signup-email-button.dialog-button {
+  width: 95%;
+
+  @media (min-width: 520px) {
+    width: 90%; 
+  }
+}
+
+
+
+button#join.dialog-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 255px;
+  font-size: 17px;
+  font-weight: 100;
+  background-color: #ed7844;
+  margin-bottom: 15px;
+
+}
+
+button.dialog-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+
+  font-size: 17px;
+  font-weight: 100;
+  background-color: #ed7844;
+  margin-bottom: 15px;
+
+}
+/*END SIGNUP MODAL*/
+
+
+/*DEMO Modal*/
+
+.field.demo-field {
+  margin-left: 0px;
+  width: 177px;
+
+  @media (min-width: 28.125em) {
+    width: 230px; 
+  }
+}
+
+.demo-modal.modal-subheading {
+  text-align: center;
+}
+
+button#join.demo-form-button{
+  margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+button.demo-form-button{
+  margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/*End Demo Modal*/
+
+
+
+
+
+// buttons
+#start-modal-button.inline-button-right {
+  background-color: #337AB7;
+}
+
+a button#start-modal-button:hover {
+  text-decoration: none;
+}
+
+a button#start-modal-button:hover {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+
+}
+
+button#start-modal-button.demo-request-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+}
+// end buttons
+
+
+
+
+
+
+
+
+ #chooseRoleModal .modal-body .pure-g {
+   margin-bottom: 1em;
+ }
+
+ .inner-apple-wrapper {
+   background-color: #f9f5f5;
+   cursor: pointer; cursor: hand;
+   border-radius: 8px;
+   margin-left:5%;
+   margin-right:5%;
+   padding-bottom: 0.1em;
+   margin-bottom: 1em;
+   /*width: 90%;*/
+
+   img#first-apple {
+     margin-top: 0em;
+   }
+   img#last-schoolhouse {
+     margin-top: 0em;
+     width: 100px;
+   }
+
+ }
+
+ .inner-apple-wrapper:hover {
+   background-color: #fdfdfd;
+ }
+
+ #chooseRoleModal .modal-signup-heading {
+   margin-bottom: 0.5em;
+
+   @media (min-width: 35.5em) {
+     margin-bottom: 1.2em;    
+   }
+ }
+
+ #chooseRoleModal .pure-u-2-5 p {
+   margin-top: 0em;
+   font-weight: bold;
+ }
+
+ #chooseRoleModal .pure-g {
+   display: block;
+ }
+
+ #signupSchoolRole .modal-body .pure-g {
+   margin-bottom: 1em;
+ }
+
+ #signupChooseTeacher, #signupChooseAdmin, #chooseTeacher, #chooseAdmin {
+   text-align: center; 
+   img {
+     display: block;
+     margin: 0 auto;
+     margin-top: 0em;
+     padding-top: 0.5em;
+   }
+ }
+
+ .role-title {
+     margin-top: 0em;
+     margin-bottom: 0em;
+
+     @media (min-width: 35.5em) { // 568px
+       margin-top: 1em;
+       margin-bottom: 1em;
+     }
+ }
+
+
+ #signupSchoolRole .modal-signup-heading {
+   margin-bottom: 1.2em;
+ }
+
+
+ #signupSchoolRole .pure-g {
+   display: block;
+ }
+
+ #chooseRoleModal .modal-body .pure-g {
+   margin: 0 auto;
+ }
+
+ #videoModal .modal-body {
+   padding: 0px;
+ }
+
+
+
+ 
+
+
