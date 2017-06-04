@@ -83,6 +83,117 @@ class LoginSignup < Sinatra::Base
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
+  helpers do 
+    def loginSignupAttempt(params)
+      puts "RACK_ENV = #{ENV['RACK_ENV']}"
+
+      # create teacher here
+      username    = params[:username]
+      password    = params[:password]
+      role        = params[:role]
+
+      if not params[:digest].nil? and not params[:digest].empty?
+        password = params[:password] = params[:digest]
+      end
+
+      puts "st-enroll (but really joinstorytime) params = #{params}"
+
+      if username.nil? or password.nil? or username.empty? or password.empty? 
+        txt = "username: #{username.inspect}, Password: #{password.inspect}"
+
+        missing = []
+        missing << "username" if (username.nil? or username.empty?)
+        missing << "password" if (password.nil? or password.empty?)
+
+        notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
+        return 500
+      end
+
+      # add phone number functionality later
+      case role
+      when 'admin'
+        educator = Admin.where_username_is(username)
+      when 'teacher'
+        educator = Teacher.where_username_is(username)
+      else
+        educator = Admin.where_username_is(username)
+        if educator.nil?
+          educator = Teacher.where_username_is(username)
+          role = 'teacher'
+        else
+          role = 'admin'
+        end
+      end
+
+      if educator.nil?
+        # never existed
+        return 500
+      end
+
+      if educator.grade.nil? or educator.grade > 3 # kindergarten
+        # not the right grade!
+        if educator.is_not_us
+          notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
+        end
+        return 305
+      end
+
+
+      school = educator.school
+
+
+      if not params[:digest].nil? and not params[:digest].empty?
+        puts "digest exists!"
+        puts "authenticate = #{educator.password_digest == params[:digest]}"
+        if educator.password_digest != params[:digest]
+          puts "incorrect password digest lol"
+          return 500
+        end
+
+      else
+        puts "password = #{password}"
+        puts "authenticate = #{educator.authenticate password}"
+
+        # now authenticate
+        if educator.authenticate(password) == false
+          # wrong password!
+          puts "incorrect password! lol"
+          return 500
+        end
+      end
+
+      if role == 'teacher'
+        puts "about to do flyerworker thing...."
+        FlyerWorker.perform_async(educator.id, school.id) # if new_signup
+      end
+
+        
+      puts "educator = #{educator.inspect}"
+      puts "their school = #{educator.school.inspect}"
+
+      educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :phone, :code, :t_number, :signin_count].include? k}
+      school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
+
+      unless password.downcase == 'test' or password.downcase == 'read' or ENV['RACK_ENV'] == 'development'
+        email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed into their account")
+      end
+
+      # status 200
+
+      educator.update(signin_count: educator.signin_count + 1)
+
+      return {
+        educator: educator_hash,
+        school: school_hash,
+        secret: 'our little secret',
+        role: role
+      }.to_json
+
+
+    end
+
+  end
+
   #########  ROUTES  #########
 
   post '/freemium-signup-register' do
@@ -376,30 +487,35 @@ class LoginSignup < Sinatra::Base
       params['username'] = params['email']
     end
 
-    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
-    puts "post_url = #{post_url}"
-    data = HTTParty.post(
-      "#{post_url}/signup", 
-      body: {
-        digest: params['digest'],
-        username: params['username'],
-        role: params['role']
-      }
-    )
-    puts "data = #{data.code.inspect}"
+    # post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
+    # puts "post_url = #{post_url}"
 
-    if data.code == 500 or data.code == 501
+    data = loginSignupAttempt({
+      digest: params['digest'],
+      username: params['username'],
+      role: params['role']
+    })
+
+    # data = HTTParty.post(
+    #   "#{post_url}/signup", 
+    #   body: {
+        
+    #   }
+    # )
+    # puts "data = #{data.code.inspect}"
+
+    if data == 500 or data == 501
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
       # return 
     end
 
-    if data.code == 303
+    if data == 303
       flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
       redirect '/'
     end
 
-    if data.code == 305
+    if data == 305
       flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
       redirect '/'
     end
@@ -455,25 +571,26 @@ class LoginSignup < Sinatra::Base
     puts "params = #{params}"
     post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
     puts "post_url = #{post_url}"
-    data = HTTParty.post(
-      "#{post_url}/signup", 
-      body: params
-    )
-    puts "data = #{data.code.inspect}"
+    # data = HTTParty.post(
+    #   "#{post_url}/signup", 
+    #   body: params
+    # )
+    # puts "data = #{data.code.inspect}"
+    data = loginSignupAttempt(params)
 
-    if data.code == 500 or data.code == 501
+    if data == 500 or data == 501
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
       # return 
       puts "ass me!!!!!!!"
     end
 
-    if data.code == 303
+    if data == 303
       flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
       redirect '/'
     end
 
-    if data.code == 305
+    if data == 305
       flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
       redirect '/'
     end
@@ -629,133 +746,6 @@ class LoginSignup < Sinatra::Base
 
   ######### ENROLL STUFF NAO ###############
 
-  post '/enroll/signup' do
-
-    puts "RACK_ENV = #{ENV['RACK_ENV']}"
-
-    # create teacher here
-    username    = params[:username]
-    password    = params[:password]
-    role        = params[:role]
-
-    if not params[:digest].nil? and not params[:digest].empty?
-      password = params[:password] = params[:digest]
-    end
-
-    puts "st-enroll (but really joinstorytime) params = #{params}"
-
-    if username.nil? or password.nil? or username.empty? or password.empty? 
-      txt = "username: #{username.inspect}, Password: #{password.inspect}"
-
-      missing = []
-      missing << "username" if (username.nil? or username.empty?)
-      missing << "password" if (password.nil? or password.empty?)
-
-      notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
-      return 500
-    end
-
-    # add phone number functionality later
-    case role
-    when 'admin'
-      educator = Admin.where_username_is(username)
-    when 'teacher'
-      educator = Teacher.where_username_is(username)
-    else
-      educator = Admin.where_username_is(username)
-      if educator.nil?
-        educator = Teacher.where_username_is(username)
-        role = 'teacher'
-      else
-        role = 'admin'
-      end
-    end
-
-    if educator.nil?
-      # never existed
-      return 500
-    end
-
-    if educator.grade.nil? or educator.grade > 3 # kindergarten
-      # not the right grade!
-      if educator.is_not_us
-        notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
-      end
-      return 305
-    end
-
-    # if !['infant', 'prek', 'kindergarten'].include? educator.grade
-    #   # not the right grade!
-    #   if educator.is_not_us
-    #     notify_admins("educator id=#{educator.id} of grade #{educator.grade} was refused access to the dashboard because they don't teach prek")
-    #   end
-    #   return 305
-    # end
-
-
-    school = educator.school
-
-    # if school and school.plan == 'free'
-    #   # change to if school.plan == 'waitlist' or something. free is allowed.
-    #   if educator.is_not_us
-    #     notify_admins("educator id=#{educator.id} was refused access to the dashboard because they don't teach prek")
-    #   end
-
-    #   # shouldn't log this guy in
-    #   return 303
-    # end
-
-
-    # $2a$10$igTTGBPk9b.pgXdlCbF5D.Wjv7Y7OXV06JpPNGrSWTguPTht7f67.
-
-    if not params[:digest].nil? and not params[:digest].empty?
-      puts "digest exists!"
-      puts "authenticate = #{educator.password_digest == params[:digest]}"
-      if educator.password_digest != params[:digest]
-        puts "incorrect password digest lol"
-        return 500
-      end
-
-    else
-      puts "password = #{password}"
-      puts "authenticate = #{educator.authenticate password}"
-
-      # now authenticate
-      if educator.authenticate(password) == false
-        # wrong password!
-        puts "incorrect password! lol"
-        return 500
-      end
-    end
-
-    if role == 'teacher'
-      puts "about to do flyerworker thing...."
-      FlyerWorker.perform_async(educator.id, school.id) # if new_signup
-    end
-
-      
-    puts "educator = #{educator.inspect}"
-    puts "their school = #{educator.school.inspect}"
-
-    educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :phone, :code, :t_number, :signin_count].include? k}
-    school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
-
-    unless password.downcase == 'test' or password.downcase == 'read' or ENV['RACK_ENV'] == 'development'
-      email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed into their account")
-    end
-
-    status 200
-
-    educator.update(signin_count: educator.signin_count + 1)
-
-    return {
-      educator: educator_hash,
-      school: school_hash,
-      secret: 'our little secret',
-      role: role
-    }.to_json
-
-  end
 
 
                           
