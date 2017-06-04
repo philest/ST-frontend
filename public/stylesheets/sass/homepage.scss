@@ -3,186 +3,16 @@
 @import 'homepage/footer';
 @import 'homepage/modals';
 
-
-
-html { overflow-y: scroll; }
-
-
-
-// this is actually for get-the-app only
-.text-wrapper {
-  letter-spacing: 0px;
-  margin: 0 auto;
-  width: 70%;
-  min-width: 19em;
-  // max-width: 25em;
-  margin-bottom: 2em;
-  padding-right: 1em;
-  font-family: 'Karla';
-  font-weight: normal;
-
-  @media (min-width: 35.5em) {
-    h2 {
-      font-weight: normal;
-      margin-bottom: 0px;
-      // width: 80%;
-      margin-left: 80px;
-      margin-right: 0px;
-
-    }
-
-    p {
-      margin-top: 0.5em;
-      font-size: 1em;
-      color: #7E7E7E;
-      // width: 80%;
-      margin-left: 80px;
-      margin-right: 0px;
-    }
-  }
-
-
-  @media (min-width: 48em) { // 768px
-    margin-right: 0px;
-    margin-left: auto;
-    width: 80%;
-    font-family: 'Karla';
-    font-weight: normal;
-  }
-
-  h2 {
-    font-weight: normal;
-    margin-bottom: 0px;
-    margin-left: auto;
-    margin-right: auto;
-
-    @media (min-width: 48em) { // 768px
-      font-weight: normal;
-      margin-bottom: 0px;
-      margin-left: 0px;
-      margin-right: 0px;
-    }
-
-  }
-
-  p {
-    margin-top: 0.5em;
-    font-size: 1em;
-    color: #7E7E7E;
-    margin-left: auto;
-    margin-right: auto;
-
-    @media (min-width: 48em) { // 768px
-      margin-top: 0.5em;
-      font-size: 1em;
-      color: #7E7E7E;
-      margin-left: 0px;
-      margin-right: 0px;
-    }
-  }
-
+html { 
+  overflow-y: scroll;
+  font-size:100%;
 }
 
-// get-the-app
-#apps-on-phones {
-  margin: 0 auto;
-  img {
-    width: 80%;
-    margin: 0 auto;
-    display: block;
-  }
-
-  @media (min-width: 48em) { // 768px
-    img {
-      width: 545px;
-    }
-  }
-
-}
-
-// get-the-app
-#text-me-link-form {
-  width: 90%;
-
-  @media (min-width: 35.5em) {
-    width: 80%;
-    margin-left: 80px;
-    margin-right: 0em;
-  }
-
-  @media (min-width: 48em) { // 768px
-    margin-left: 0em;
-    margin-right: 0em;
-  }
-
-  @media (min-width: 54em) {
-    width: 20em;
-    max-width: 80%;
-  }
-
-  @media (min-width: 80em) { // 1280px
-    width: 20em;
-    max-width: 80%;
-  }
-
-}
-
-
-  
-  
-
-  // end signin
-
-
-
-  
-
-
-
-
-
-html{ font-size:100%; }
 
 body {
   font-size: 1em;
-}
-
-
-
-
-
-
-.btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
-  background-color: #f3976f;
-  transition-duration: 400ms;
-}
-
-.btn.outline#top-button { 
-  color: white;
-  background-color: #ed7844;
-  
-}
-
-
-
-
-
-
-button.close#videoExitButton {
-  display: inline-block;
-  position: relative;
-  top: 40px;
-  right: 8px;
-  font-size: 40px;
-  color:white;
-}
-
-/***** Mobile! ******/
-
-body {
   font-family: 'Karla', sans-serif;
 }
-
 
 
 .container {
@@ -260,84 +90,12 @@ h1 br.subheading-br {
 
 h2 {
   font-size: 21px;
-}
+  margin-bottom: 20px;
 
-
-.contact-image {
-  height: 40px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto; 
-
-  @media (min-width: 48em) { // 768px
-    margin-left: 0px;
-    height: 50px;
+  @media (min-width: 35.5em) { // 568px
+    font-size: 24px; 
   }
 }
-
-#email-image {
-  margin-bottom: 30px;
-}
-
-
-img#background-phone.hero-animation {
-  width: 370px;
-
-  @media (min-width: 48em) { // 768px
-    margin-left: 0px; 
-  }
-
-  @media (min-width: 80em) { // 1280px
-    margin-left: 35px;
-  }
-
-}
-
-
-.background-phone {
-  background-size: 370px; 
-  background-repeat: no-repeat;
-  height: 592px;
-  background-image: url('/images/htc-one-blank-high.png')
-}
-
-
-
-
-img#gif-animation.hero-animation {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-
-  @media (min-width: 48em) { // 768px
-    display: none; 
-  }
-}
-
-
-
-
-
-p.box-header-subtext {
-        color: #6b6e72;
-    font-size: 14px;
-    margin: 6px 0 0;
-    font-weight: 400;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-h2.name-heading {
-  margin-bottom: 10px;
-}
-
-
-
-
-
-
-
-
 
 
 
@@ -353,6 +111,7 @@ div.text {
   text-align: center;
   display: block;
   margin: auto;
+  max-width: 270px;
 
   @media (min-width: 48em) { // 768px
     padding-top: 200px;
@@ -360,61 +119,6 @@ div.text {
   } 
 
 }
-
-.girl_reading {
-  padding-top: 60px;
-  max-width: 100%;
-  display: block;
-  margin: auto;
-
-  @media (min-width: 48em) { // 768px
-    margin-left: 50px;
-    padding: 60px 5px;
-    max-width: 480px; 
-  }
-
-  &.real-girl {
-    max-width: 350px;
-    
-    @media (min-width: 48em) { // 768px
-      max-width: 415px;
-    }
-
-  }
-
-  &.literacy-phone {
-    @media (min-width: 48em) { // 768px
-      float: right;
-      margin-right: 20px; 
-      max-width: 660px; 
-    }
-
-    .small-phone {
-      display: block; 
-
-      @media (min-width: 992px) {
-        display: none; 
-      }
-    }
-
-    .large-phone {
-      display: none; 
-
-      @media (min-width: 992px) {
-        display: block;
-      }
-
-    }
-
-  }
-
-}
-
-
-.girl_reading {
-  max-width: 400px;
-}
-
 
 
 /*curriculum*/
@@ -428,30 +132,6 @@ div.text {
 
 }
 
-.the-problem .text h2, .the-product .text h2, .join-us .text h2, h2 {
-  color: #4a4a4a;
-}
-
-
-
-
-h2 {
-  margin-bottom: 20px;
-
-  @media (min-width: 35.5em) { // 568px
-    font-size: 24px; 
-  }
-}
-
-
-
-div.text {
-  max-width: 270px;
-}
-
-h1#call-to-action {
-  padding-top: 1em;
-}
 
 h3.call-to-action-text {
   text-align: center;
@@ -465,6 +145,7 @@ h3.call-to-action-text {
 h1.banner#call-to-action{
   font-size: 21px;
   margin-bottom: 1em;
+  padding-top: 1em;
 
   @media (min-width: 48em) { // 768px
     font-size: 26px;  
@@ -495,44 +176,6 @@ div.divider {
     padding-top: 4.4em;
   }
 }
-
-div.mobile-girl{
-  display: block;
-
-  @media (min-width: 48em) { // 768px
-    display: none;
-  }
-}
-
-div.mobile-text {
-  display: block;
-
-  @media (min-width: 48em) { // 768px
-    display: none; 
-  }
-}
-
-div.desktop-girl {
-  display: none;
-
-  @media (min-width: 48em) { // 768px
-    display: block;
-  }
-}
-
-div.desktop-text {
-  display: none;
-
-  @media (min-width: 48em) { // 768px
-    display: block;
-  }
-}
-
-
-
-
-
-
 
 
 

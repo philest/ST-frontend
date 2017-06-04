@@ -255,13 +255,45 @@ button#start-modal-button.demo-request-button {
   margin-right: auto;
   margin-top: 2em;
 }
+
+
+button.close#videoExitButton {
+  display: inline-block;
+  position: relative;
+  top: 40px;
+  right: 8px;
+  font-size: 40px;
+  color:white;
+}
+
+.btn.outline#top-button:hover, .btn.outline#top-button:focus, .btn.outline#top-button:active {
+  background-color: #f3976f;
+  transition-duration: 400ms;
+}
+
+.btn.outline#top-button { 
+  color: white;
+  background-color: #ed7844;
+  
+}
+
+
 // end buttons
 
 
 
+p.box-header-subtext {
+        color: #6b6e72;
+    font-size: 14px;
+    margin: 6px 0 0;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-
-
+h2.name-heading {
+  margin-bottom: 10px;
+}
 
 
  #chooseRoleModal .modal-body .pure-g {

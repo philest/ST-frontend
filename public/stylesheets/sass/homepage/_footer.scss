@@ -1,4 +1,4 @@
-/**
+/*
  * _footer.scss
  *
  * Styling for the homepage footer.
@@ -68,6 +68,26 @@
      white-space: nowrap;
  }
 
+/* request a demo section */
+
+.contact-image {
+  height: 40px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto; 
+
+  @media (min-width: 48em) { // 768px
+    margin-left: 0px;
+    height: 50px;
+  }
+}
+
+#email-image {
+  margin-bottom: 30px;
+}
+
+/* end request a demo section */
 
 
- /*END FOOTER*/
+
+/* END FOOTER */
