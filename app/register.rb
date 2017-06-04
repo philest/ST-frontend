@@ -61,7 +61,7 @@ class Register < Sinatra::Base
       text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
 
 
-    erb :'role', locals: {text: text}
+    erb :'register/modals/role', locals: {text: text}
   end
 
   get '/class/:class_code/?' do
@@ -79,10 +79,10 @@ class Register < Sinatra::Base
       type   = educator[:type]
       teacher = educator[:educator]
       if type == 'school'
-        halt erb :'register/error'
+        halt erb :'register/modals/error'
       end 
     else
-      halt erb :'register/error'
+      halt erb :'register/modals/error'
     end
 
     # let's just assume it's a teacher for now...........
@@ -167,7 +167,7 @@ class Register < Sinatra::Base
     email_admins("Someone from class #{params[:class_code]} accessed web app")
 
 
-    erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.name}
+    erb :'register/index', locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.name}
 
   end
 
@@ -222,7 +222,7 @@ class Register < Sinatra::Base
     if terms.size < 1
       # return ''
       # have a more informative error message?
-      halt erb :'register/error'
+      halt erb :'register/modals/error'
     elsif terms.size == 1 # just the first name
       first_name = terms.first[0].upcase + terms.first[1..-1]
       last_name  = ''
@@ -242,7 +242,7 @@ class Register < Sinatra::Base
     puts "res = #{res.inspect}"
 
     if res.code != 201
-      halt erb :'register/error'
+      halt erb :'register/modals/error'
     end
 
     # do something with return if not 201
@@ -263,7 +263,7 @@ class Register < Sinatra::Base
 
 
   get '/error' do
-    halt erb :'register/error' 
+    halt erb :'register/modals/error' 
   end
 
 
