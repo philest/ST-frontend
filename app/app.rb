@@ -76,17 +76,13 @@ class App < Sinatra::Base
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
-  # use Rack::Session::Cookie, :key => 'rack.session',
-  #                          :path => '/',
-  #                          :secret => '328479283uf923fu8932fu923uf9832f23f232'
-
   #root
   get '/' do
     case session[:role]
     when 'admin'
-      redirect to '/admin_dashboard'
+      redirect to '/dashboard/admin_dashboard'
     when 'teacher'
-      redirect to '/dashboard'
+      redirect to '/dashboard/dashboard'
     else
       erb :'homepage/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
@@ -101,9 +97,9 @@ class App < Sinatra::Base
   end
 
 
+  # texts user with link to download app 
   post '/get-app/send-app-link' do
     phone = params['phone']
-    puts "in /get-app/send-app-link, phone = #{phone}"
     msg = "Download the Storytime app here: stbooks.org/app"
     MessageWorker.perform_async(msg, phone, STORYTIME_NO)
     return 200
@@ -118,8 +114,6 @@ class App < Sinatra::Base
   get '/error' do
     halt erb :'register/error'
   end
-
-
 
   get '/privacy' do
     erb :privacy_policy
