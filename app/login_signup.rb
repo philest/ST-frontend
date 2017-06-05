@@ -84,20 +84,20 @@ class LoginSignup < Sinatra::Base
   set :session_secret, ENV['SESSION_SECRET']
 
   helpers do 
-    def loginSignupAttempt(params)
-      puts "RACK_ENV = #{ENV['RACK_ENV']}"
-
-      # create teacher here
+    # attemps to login in the teacher or admin based on the provided params.
+    def loginAttempt(params)
       username    = params[:username]
       password    = params[:password]
       role        = params[:role]
 
+      # instead of a plaintext password, params may include
+      # the hashed password_digest instead. 
+      # this method can work with both.
       if not params[:digest].nil? and not params[:digest].empty?
         password = params[:password] = params[:digest]
       end
 
-      puts "st-enroll (but really joinstorytime) params = #{params}"
-
+      # if missing any params, return 500
       if username.nil? or password.nil? or username.empty? or password.empty? 
         txt = "username: #{username.inspect}, Password: #{password.inspect}"
 
@@ -109,7 +109,7 @@ class LoginSignup < Sinatra::Base
         return 500
       end
 
-      # add phone number functionality later
+      # educator = the teacher/admin in question.
       case role
       when 'admin'
         educator = Admin.where_username_is(username)
@@ -125,6 +125,7 @@ class LoginSignup < Sinatra::Base
         end
       end
 
+
       if educator.nil?
         # never existed
         return 500
@@ -138,23 +139,16 @@ class LoginSignup < Sinatra::Base
         return 305
       end
 
-
       school = educator.school
 
-
+      # if the PASSWORD DIGEST was provided, authenticate it. 
       if not params[:digest].nil? and not params[:digest].empty?
-        puts "digest exists!"
-        puts "authenticate = #{educator.password_digest == params[:digest]}"
         if educator.password_digest != params[:digest]
           puts "incorrect password digest lol"
           return 500
         end
-
+      # else if the PLAINTEXT PASSWORD was provided, authenticate it. 
       else
-        puts "password = #{password}"
-        puts "authenticate = #{educator.authenticate password}"
-
-        # now authenticate
         if educator.authenticate(password) == false
           # wrong password!
           puts "incorrect password! lol"
@@ -163,14 +157,10 @@ class LoginSignup < Sinatra::Base
       end
 
       if role == 'teacher'
-        puts "about to do flyerworker thing...."
         FlyerWorker.perform_async(educator.id, school.id) # if new_signup
       end
 
-        
-      puts "educator = #{educator.inspect}"
-      puts "their school = #{educator.school.inspect}"
-
+      # get school/educator metadata.
       educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :phone, :code, :t_number, :signin_count].include? k}
       school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
 
@@ -180,6 +170,7 @@ class LoginSignup < Sinatra::Base
 
       # status 200
 
+      # the educator is signing in, so increment the signin_count
       educator.update(signin_count: educator.signin_count + 1)
 
       return {
@@ -188,8 +179,6 @@ class LoginSignup < Sinatra::Base
         secret: 'our little secret',
         role: role
       }.to_json
-
-
     end
 
   end
@@ -198,14 +187,12 @@ class LoginSignup < Sinatra::Base
 
   post '/freemium-signup-register' do
     require 'bcrypt'
-    puts "in /freemium-signup-register new educator #{params} wants to sign up!"
-    # STORE PASSWORD, NOT PASSWORD DIGEST
 
+    # STORE PASSWORD, NOT PASSWORD DIGEST
     plaintext_password = params['password']
     params['password_digest'] = BCrypt::Password.create params['password']
     
-    puts "in /freemium-signup-register new educator #{params} wants to sign up!"
-    
+    # delete the plaintext password so we're not sending it over HTTP (security reasons)
     params.delete 'password'
 
     if is_not_us?(params['first_name']) and is_not_us?(params['username']) and is_not_us?(plaintext_password) and is_not_us?(params['last_name'])
@@ -220,6 +207,7 @@ class LoginSignup < Sinatra::Base
     redirect to "/freemium-signup"
   end
 
+  # get the index page for the purple-signup-modals.
   get '/freemium-signup' do
     if [session[:first_name], session[:last_name], session[:username], session[:password]].include? nil or
        [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
@@ -229,6 +217,14 @@ class LoginSignup < Sinatra::Base
   end
 
 
+  # If all is successful, creates a freemium
+  # 1. teacher 
+  # 2. admin
+  # 3. or user
+  # depending on params['role']
+  # 
+  # This route is used by the purple-modals signup page. 
+  # 
   post '/freemium-signup' do
 
     # handle session data and email us with new info
@@ -245,9 +241,7 @@ class LoginSignup < Sinatra::Base
 
     case params['role']
     when 'parent'
-      puts "in freemium signup for parents with params=#{params} and session=#{session.inspect}"
       # check that teacher email is there
-
 
       # POST to birdv 
       response = HTTParty.post(
@@ -255,14 +249,9 @@ class LoginSignup < Sinatra::Base
                   body: params
                 )
 
-      puts "response = #{response.inspect}"
-
       return response.code 
 
     when 'teacher', 'admin'
-      puts "WE'RE DOING THE FREEMIUM THING FOR TEACHERS NOW!!!!!"
-
-      puts "in freemium signup for teachers/admin with params=#{params} and session=#{session.inspect}"
 
       begin
         # get the school id! 
@@ -270,10 +259,9 @@ class LoginSignup < Sinatra::Base
 
         school = School.where(id: school_id).first 
 
-        puts "HERE'S OUR SCHOOL BROOOO!!!! #{school.inspect}"
-
         password_digest = BCrypt::Password.create params['password']
 
+        # variable to determine whether we're creating a new school in our database
         new_school = false
 
         if school.nil?
@@ -281,9 +269,9 @@ class LoginSignup < Sinatra::Base
           new_school = true
 
           # this school doesn't exist bro!
-          # will need to create it! 
-          puts "THIS SCHOOL DOESN'T EXIST BRO!!!!!!!!"
+          # we'll need to create it! 
 
+          # create a school with a free_ass_class_code
           free_ass_class_code = "#{params['school_name']}_#{params['school_city']}_#{params['school_state']}"
           school_info = {
             signature: params['school_name'],
@@ -298,7 +286,7 @@ class LoginSignup < Sinatra::Base
         
         end # if school.nil? 
 
-        puts "school is not nil"
+        # otherwise, school is not nil
 
         # create teacher/admin
         educator_info = {
@@ -317,17 +305,13 @@ class LoginSignup < Sinatra::Base
           return 401 # for invalid username/phone/email
         end
 
-        puts "valid username submitted"
-
-
         educator_info[contactType] = session[:username]
 
-
         if params['role'] == 'teacher'
-          # am i overwriting anything here?
-          puts "i'm a teacher, look at MEEEEEEE"
+
           educator = Teacher.where_username_is(session[:username])
-          # if the teacher already exists, don't do JACK SHIT!!!!!
+          
+          # if the educator doesn't exist yet, create them! 
           if educator.nil?
 
             educator = Teacher.create(educator_info)
@@ -336,13 +320,9 @@ class LoginSignup < Sinatra::Base
 
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
-            # SHOULD I SEND A WELCOME EMAIL TO THAT TEACHER?
-
-            puts "new_school = #{new_school}"
-
             if new_school == false
-              puts "DOING WelcomeTeacherWorker NOW!"
               if !educator.email.nil?
+                # send a welcome email to that teacher
                 WelcomeTeacherWorker.perform_async(educator.id) 
               end
 
@@ -350,27 +330,24 @@ class LoginSignup < Sinatra::Base
 
             params['class_code'] = educator.code.split('|').first
 
-            # need phone in params....
-            # don't need that anymore!
-            # params['phone'] = params['username']
 
-            # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
+            # POST to birdv baby!!!! create that fucking USER!!!!!!!!
             response = HTTParty.post(
               ENV['birdv_url'] + '/api/auth/signup',
               body: params
             )
-            puts "response = #{response.inspect}"
 
             # yyyyyyeaaeaaaah baby
 
           else
+            # if the teacher already exists, don't do JACK SHIT!!!!!
             puts "this teacher already exists...."
           end
 
           # and THEN create the user!
           # with the correct class code the way you normally would!!!!!!!!!
-        else
-          puts "I'M AN ADMIN YO!"
+        else # ADMIN!
+
           educator = Admin.where_username_is(session[:username])
           if educator.nil?
             educator = Admin.create(educator_info)
@@ -384,17 +361,14 @@ class LoginSignup < Sinatra::Base
               end
             end
 
-            # need phone in params....
-            # don't need this anymore!
-            # params['phone'] = params['username']
 
-            # POST to birdv baby!!!! create that fucking USER!!!!!!!!s 
+            # POST to birdv baby!!!! create that fucking USER!!!!!!!! 
+            # for the admin.
             response = HTTParty.post(
               ENV['birdv_url'] + '/api/auth/signup',
               body: params
             )
 
-            puts "response = #{response.inspect}"
             # yyyyyyeaaeaaaah baby
           end
 
@@ -467,15 +441,8 @@ class LoginSignup < Sinatra::Base
     redirect to root
   end
 
-  # http://localhost:4567/signin?admin=david.mcpeek@yale.edu&school=rmp
-  # 
-  # http://localhost:4567/signin?email=david.mcpeek@yale.edu&school=rmp&name=David+McPeek
-  # 
-  # http://joinstorytime.com/signin?school=rmp&email=aperricone@rockymountainprep.org&name='Mrs. Perricone'
 
-  # need to update this for new roles.....
-  # need to have a role parameter
-  # 
+  # the signin route used for teacher/admin dashboard quicklinks.
   get '/signin' do
     puts "signin params = #{params}"
 
@@ -487,22 +454,13 @@ class LoginSignup < Sinatra::Base
       params['username'] = params['email']
     end
 
-    # post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
-    # puts "post_url = #{post_url}"
 
-    data = loginSignupAttempt({
+    data = loginAttempt({
       digest: params['digest'],
       username: params['username'],
       role: params['role']
     })
 
-    # data = HTTParty.post(
-    #   "#{post_url}/signup", 
-    #   body: {
-        
-    #   }
-    # )
-    # puts "data = #{data.code.inspect}"
 
     if data == 500 or data == 501
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
@@ -522,8 +480,7 @@ class LoginSignup < Sinatra::Base
 
     data = JSON.parse(data)
 
-    puts data
-
+    # have some secret to make sure this is coming from our server.
     if data["secret"] != 'our little secret'
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
@@ -533,11 +490,8 @@ class LoginSignup < Sinatra::Base
     session[:educator] = data['educator']
     session[:school]   = data['school']
     session[:role]     = data['role']
-    # session[:educator]  = data['teacher']
     session[:users]    = data['users']
-    # session[:educator]    = data['admin']
 
-    puts session.inspect
 
     if session['educator'].nil?
       # maybe have a banner saying, "must log in through teacher account"
@@ -547,7 +501,7 @@ class LoginSignup < Sinatra::Base
 
     case session['role']
     when 'admin'
-      puts "going to admin dashboard"
+      # automatically open the invite-teachers modal with the invite parameter.
       if params['invite']
         redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
@@ -555,7 +509,7 @@ class LoginSignup < Sinatra::Base
       end
       redirect to root + 'dashboard/admin_dashboard'
     when 'teacher'
-      puts "going to teacher dashboard"
+      # automatically open the invite-flyers modal with the flyers parameter.
       if params['flyers']
         redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
@@ -566,17 +520,10 @@ class LoginSignup < Sinatra::Base
   end
 
    
-  # users sign in. posted from st-enroll.
+  # the normal signin route used from the homepage.
   post '/signin' do
-    puts "params = #{params}"
     post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
-    puts "post_url = #{post_url}"
-    # data = HTTParty.post(
-    #   "#{post_url}/signup", 
-    #   body: params
-    # )
-    # puts "data = #{data.code.inspect}"
-    data = loginSignupAttempt(params)
+    data = loginAttempt(params)
 
     if data == 500 or data == 501
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
@@ -597,8 +544,7 @@ class LoginSignup < Sinatra::Base
 
     data = JSON.parse(data)
 
-    puts data
-
+    # have some secret to make sure this is coming from our server.
     if data["secret"] != 'our little secret'
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
@@ -608,12 +554,8 @@ class LoginSignup < Sinatra::Base
     session[:educator] = data['educator']
     session[:school]  = data['school']
     session[:users]   = data['users']
-    # session[:educator]   = data['admin']
     session[:role]    = data['role']
 
-    puts session.inspect
-
-    # redirect to '/signup'
 
     if session['educator'].nil?
       # maybe have a banner saying, "must log in through teacher account"
@@ -623,8 +565,7 @@ class LoginSignup < Sinatra::Base
 
     case session['role']
     when 'admin'
-      puts "going to admin dashboard"
-
+      # automatically open the invite-teachers modal with the invite parameter.
       if params['invite']
         redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
@@ -632,7 +573,7 @@ class LoginSignup < Sinatra::Base
       end
 
     when 'teacher'
-      puts "going to teacher dashboard"
+      # automatically open the invite-flyers modal with the flyers parameter.
       if params['flyers']
         redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
@@ -651,8 +592,7 @@ class LoginSignup < Sinatra::Base
 
     case session['role']
     when 'admin'
-      puts "going to admin dashboard"
-
+      # automatically open the invite-teachers modal with the invite parameter.
       if params['invite']
         redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
       else
@@ -660,7 +600,7 @@ class LoginSignup < Sinatra::Base
       end
 
     when 'teacher'
-      puts "going to teacher dashboard"
+      # automatically open the invite-flyers modal with the flyers parameter.
       if params['flyers']
         redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
       else
@@ -671,7 +611,7 @@ class LoginSignup < Sinatra::Base
   end
 
 
-
+  # used for the school search bar in the freemium-signup page.
   get '/list-of-schools' do
     blacklist = [
       'StoryTime', 
@@ -682,27 +622,16 @@ class LoginSignup < Sinatra::Base
 
     regex = "%#{params['term']}%"
 
-    puts "regex = #{regex}"
-
-    puts "first FREEMIUMSCHOOL = #{FreemiumSchool.first.inspect}"
-
     # only send the first 50 results, let's say
     matching_schools = FreemiumSchool.where(Sequel.ilike(:signature, regex))
                                         .limit(50).map do |school|
 
-
-      puts "school = #{school.inspect}"
-
       location = ''
-      puts "school vals = #{school.city}, #{school.state}"
       if school.city and school.state
-        puts "1"
         location = "#{school.city}, #{school.state}"
       elsif school.city
-        puts "2"
         location = "#{school.city}"
       elsif school.state
-        puts "3"
         location = "#{school.state}"
       end
 
@@ -719,15 +648,11 @@ class LoginSignup < Sinatra::Base
 
     matching_schools += School.where(Sequel.ilike(:signature, regex)).map do |school|
       location = ''
-      puts "school vals = #{school.city}, #{school.state}"
       if school.city and school.state
-        puts "1"
         location = "#{school.city}, #{school.state}"
       elsif school.city
-        puts "2"
         location = "#{school.city}"
       elsif school.state
-        puts "3"
         location = "#{school.state}"
       end
       {
@@ -738,13 +663,11 @@ class LoginSignup < Sinatra::Base
         state: school.state
       }
     end 
-
+    # THE DEVIL IS ALIVE! 
     matching_schools.to_json
 
   end
 
-
-  ######### ENROLL STUFF NAO ###############
 
 
 

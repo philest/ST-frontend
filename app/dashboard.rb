@@ -39,7 +39,6 @@ class Dashboard < Sinatra::Base
   # sets the view directory correctly
   set :views, Proc.new { File.join(root, "views") }
 
-
   register Sinatra::Flash
 
   require "sinatra/reloader" if development? 
@@ -81,10 +80,6 @@ class Dashboard < Sinatra::Base
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
-  # use Rack::Session::Cookie, :key => 'rack.session',
-  #                          :path => '/',
-  #                          :secret => '328479283uf923fu8932fu923uf9832f23f232'
-
   #root
   get '/' do
     case session[:role]
@@ -97,59 +92,35 @@ class Dashboard < Sinatra::Base
     end 
   end
 
-  get '/app' do
-    erb :'pages/get-the-app'
-  end
-
-
-  get '/test_dashboard' do
-    session[:educator] = { "id"=>1, "name"=>nil, "email"=>"david.mcpeek@yale.edu", "signature"=>"Mr. McPeek", "code"=>nil }
-    session[:role] = 'admin'
-    session[:school] = {"id"=>39, "name"=>"Rocky Mountain Prep", "code"=>"RMP|RMP-es", "signature"=>"RMP"}
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
-    data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
-    puts "data dashboard = #{data.body.inspect}"
-    erb :'dashboard/teachers/index', :locals => {:teachers => JSON.parse(data)}
-  end
-
+  # opens the teacher dashboard
   get '/dashboard' do
     if session[:educator].nil?
       redirect to '/'
     end
-    puts "session[:educator] = #{session[:educator]}"
-
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['dashboard_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/users/#{session[:educator]['id']}")
-    puts "data dashboard = #{data.body.inspect}"
-
     erb :'dashboard/teachers/index', :locals => {:users => JSON.parse(data)}
   end
 
-
+  # opens the admin dashboard
   get '/admin_dashboard' do
     if session[:educator].nil?
       redirect to '/'
     end
-    puts "session[:educator] = #{session[:educator]}"
-    puts "session[:school] = #{session[:school]}"
-    get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
+    get_url = ENV['RACK_ENV'] == 'production' ? ENV['dashboard_url'] : 'http://localhost:4567/dashboard'
     data = HTTParty.get("#{get_url}/teachers/#{session[:educator]['id']}")
-    puts "data dashboard = #{data.body.inspect}"
     if data.body != "[]"
-      puts "normal admin dashboard"
       erb :'dashboard/admin/index', :locals => {:teachers => JSON.parse(data), school_users: nil}
     else # this is a school with no teachers....
       # so check for students
-      get_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/dashboard'
+      get_url = ENV['RACK_ENV'] == 'production' ? ENV['dashboard_url'] : 'http://localhost:4567/dashboard'
       data = HTTParty.get("#{get_url}/school/users/#{session[:educator]['id']}")
-      puts "data_dashboard2.0 = #{data.body.inspect}"
-      puts "data = #{JSON.parse(data)}"
-      if data != "" # go to the SPECIAL school_dashboard
-        # process locals somehow.........
-        puts "user admin dashboard"
+      # if there ARE students,
+      if data != "" # go to the SPECIAL school_dashboard with USERS ONLY
+        # process locals
         erb :'dashboard/admin/index', :locals => {:school_users => JSON.parse(data)}
+      # if there are NO STUDENTS, just yield the regular admin dashboard. 
       else # regular admin dashboard with no teachers...... :(
-        puts "normal admin dashboard"
         erb :'dashboard/admin/index', :locals => {:teachers => JSON.parse(data), school_users: nil}
       end
     end
@@ -183,9 +154,9 @@ class Dashboard < Sinatra::Base
       end
     end
 
-    Pony.mail(:to => 'phil.esterman@yale.edu,david@joinstorytime.com',
-              :cc => 'aubrey.wahl@yale.edu',
-              :from => 'david.mcpeek@yale.edu',
+    Pony.mail(:to => 'phil@joinstorytime.com',
+              :cc => 'aawahl@gmail.com',
+              :from => 'phil@joinstorytime.com',
               :subject => "ST: #{session[:educator]['signature']} uploaded a spreadsheet",
               :body => "Check it out. #{filename}")
     flash[:spreadsheet] = "Congrats! We'll send your class a text in a few days."
@@ -202,17 +173,12 @@ class Dashboard < Sinatra::Base
     puts "contact info params = #{params}"
 
     HTTParty.post(
-      "#{ENV['enroll_url']}/invite_teachers",
+      "#{ENV['dashboard_url']}/invite_teachers",
       body: params
     )
-    # Pony.mail(:to => 'supermcpeek@gmail.com',
-    #           :cc => '',
-    #           :from => 'supermcpeek@gmail.com',
-    #           :subject => "An admin invited teachers",
-    #           :body => "#{params}")
 
-    Pony.mail(:to => 'phil.esterman@yale.edu,supermcpeek@gmail.com,aawahl@gmail.com',
-                :from => 'david@joinstorytime.com',
+    Pony.mail(:to => 'phil@joinstorytime.com,aawahl@gmail.com',
+                :from => 'phil@joinstorytime.com',
                 :headers => { 'Content-Type' => 'text/html' },
                 :subject => "An admin #{params['admin_sig']} from #{params['school_sig']} invited teachers",
                 :body => params)
@@ -224,15 +190,16 @@ class Dashboard < Sinatra::Base
     redirect to '/admin_dashboard'
   end
 
+  # increments the teacher's signin_count.
+  # signin_count keeps track of the teacher's dashboard usage.
+  # when signin_count = 0 (first time logged in), we show the dashboard tutorial.
   get '/teacher/visited_page' do
-    puts "visited page session = #{session.inspect}"
-    puts "in visited page"
     session[:educator]['signin_count'] += 1
     status 200
     return session[:educator]['signin_count'].to_s
   end
 
-
+  # resets the signin_count for teachers.
   get '/reset' do
     session[:educator]['signin_count'] = 0
     status 200
@@ -269,7 +236,6 @@ class Dashboard < Sinatra::Base
         if parent.nil? then 
           parent = User.create(:phone => phone_num, platform: 'app')
           parent.state_table.update(subscribed?: false)
-          # parent.state_table.update(story_number: 0)
         else # parent exists
           # we don't want to send them multiple texts.....
           puts "parent already exists, don't send them a text plz....."
@@ -356,22 +322,22 @@ class Dashboard < Sinatra::Base
 
 
   post '/invite_teachers' do
-
-    puts "st-enroll params = #{params}"
-
-    # if admin = Admin.where(id: params['admin_id']).first
-    #   admin.update(signin_count: admin.signin_count + 1)
-    # end
-
     NotifyTeacherWorker.perform_async(params)
   end
 
+
+  # Returns a json object that contains the metadata for 
+  # every teacher and every teacher's associated parents
+  # at a particular admin's school.
+  # 
+  # Essentially, the totality of the school's teachers and parents. 
+  # 
+  # This route supplies most of the data for the admin_dashboard.
+  # 
+  # Based on the admin_id.
   get '/teachers/:admin_id' do
-    puts "admin id = #{params[:admin_id]}"
 
     admin = Admin.where(id: params[:admin_id]).first
-
-    puts "admin is #{admin.inspect}"
 
     if admin.nil?
       return 404
@@ -383,6 +349,8 @@ class Dashboard < Sinatra::Base
       h[:this_month] = 0
       h[:this_week] = 0
       h[:num_families] = teacher.users.size
+
+      # map each teachers' parent-user data. 
       h[:users] = teacher.users.map do |u|
         x = u.to_hash.select {|t,p| [:id, :first_name, :last_name, :phone, :enrolled_on, :locale, :code, :platform, :role].include? t }
         x[:story_number] = u.state_table.story_number
@@ -409,13 +377,10 @@ class Dashboard < Sinatra::Base
 
           # get string value of their name
           if x[:first_name].nil?
-            puts "factor = 4.6"
             factor = 4.6
           else
             # do what must be done, lord vader.... do not hesitate; show no mercy.
-
             factor = ((x[:first_name].split('').reduce(0) {|sum, n| sum += n.ord}) % 4) + 2
-            puts "factor = #{factor}"
           end
 
 
@@ -432,26 +397,32 @@ class Dashboard < Sinatra::Base
           x[:reading_time] = 0
         end
 
-
-        puts "teacher month = #{h[:this_month]}, parent month = #{x[:this_month]}"
         x
       end
+
+      # "total time spent reading" metadata
       h[:this_month] = h[:users].inject(0) {|sum, user| sum += user[:this_month] }
       h[:reading_time] = h[:users].inject(0) {|sum, user| sum += user[:reading_time] }
       h[:this_week] = h[:users].inject(0) {|sum, user| sum += user[:this_week] }
       h
     end
 
-    # puts "teacher_hash = #{teachers_hash.inspect}"
-
     return teachers_hash.to_json
 
   end
 
-
+  # Returns a json object that contains the metadata for 
+  # every parent-user at a particular admin's school.
+  # 
+  # Essentially, the totality of users at a school. 
+  # 
+  # This route is used to supply most of the data for the admin_dashboard
+  #   in the case that a school does not have any teachers.
+  #   (the New Haven library, for example.)
+  # 
+  # Based on the admin_id.
   get '/school/users/:admin_id' do
     admin = Admin.where(id: params[:admin_id]).first
-    puts "admin is #{admin.inspect}"
     if admin.nil?
       return 404
     end
@@ -500,8 +471,6 @@ class Dashboard < Sinatra::Base
         h[:reading_time] = 0
       end
 
-      puts "month = #{h[:this_month]}, reading_time = #{h[:reading_time]}"
-
       h
     end
 
@@ -509,6 +478,13 @@ class Dashboard < Sinatra::Base
     
   end
 
+
+  # Returns a json object that contains the metadata for 
+  # every parent in a particular teacher's classroom. 
+  # 
+  # This route supplies most of the data for the teacher dashboard.
+  # 
+  # Based on the teacher_id.
   get '/users/:teacher_id' do
     teacher = Teacher.where(id: params[:teacher_id]).first
 
@@ -516,8 +492,6 @@ class Dashboard < Sinatra::Base
     if teacher.nil?
       return 404
     end
-
-    # parents = teacher.users.select {|u| u.role == 'parent' }
 
     users_hash = teacher.users.map do |u|
       h = u.to_hash.select {|k,v| [:id, :first_name, :last_name, :phone, :enrolled_on, :locale, :code, :platform, :role].include? k }
@@ -568,10 +542,9 @@ class Dashboard < Sinatra::Base
     return users_hash.to_json
   end
 
+  # returns the admin's signature based on username params.
   get '/admin_sig' do
-    puts "admin_sig params = #{params}"
     admin = Admin.where(Sequel.ilike(:email, params['username'])).first
-    puts "admin = #{admin.inspect}"
     if admin
       return admin.signature
     end
