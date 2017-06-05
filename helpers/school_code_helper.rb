@@ -1,3 +1,5 @@
+# module to match a code to a school or educator. 
+
 module SchoolCodeMatcher
 
   def is_matching_code?(body_text)

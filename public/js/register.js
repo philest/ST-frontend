@@ -1,3 +1,7 @@
+/**
+ * JS for the user registration page. 
+ */
+
 $(document).ready(function () {
 
   var timezone = getUserTimezone();

@@ -1,4 +1,6 @@
-#email, to learn of failures
+# some shitty-ass legacy code
+# email, to learn of failures
+#
 require 'pony'
 require_relative '../config/pony'
 
