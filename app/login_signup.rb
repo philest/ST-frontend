@@ -522,7 +522,6 @@ class LoginSignup < Sinatra::Base
    
   # the normal signin route used from the homepage.
   post '/signin' do
-    post_url = ENV['RACK_ENV'] == 'production' ? ENV['enroll_url'] : 'http://localhost:4567/auth/enroll'
     data = loginAttempt(params)
 
     if data == 500 or data == 501
