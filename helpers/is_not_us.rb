@@ -1,3 +1,8 @@
+# is_not_us.rb
+# 
+# helper module so we're not emailed during testing
+# 
+
 require 'bcrypt'
 
 class NilClass

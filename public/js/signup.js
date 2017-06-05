@@ -1,3 +1,7 @@
+/**
+ * JS for the purple-modals freemium signup page.
+ */
+
 $(document).ready(function () {
   
   var timezone = getUserTimezone();
