@@ -36,11 +36,12 @@
     </div>
   <% end %>
 
-
   <% if school_users.nil? %>
+    <!-- This means it's a school with teachers. -->
     <%= erb :'dashboard/admin/dash-with-teachers', locals: {teachers: teachers} %>
 
   <% else %>
+    <!-- This means it's like the New Haven Library— there's no teachers. -->
     <%= erb :'dashboard/admin/dash-with-only-users', locals: {school_users: school_users} %>
 
   <% end %>

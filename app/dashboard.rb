@@ -171,7 +171,8 @@ class Dashboard < Sinatra::Base
     redirect to('/join')
   end
 
-  # comment 
+
+  # This is for admins to invite teachers
   post '/enroll_teachers_form_success' do
     puts "contact info params = #{params}"
 
@@ -209,6 +210,7 @@ class Dashboard < Sinatra::Base
     return session[:educator]['signin_count'].to_s
   end
 
+# For when teachers want to invite parents by phone number on this form
   post '/enroll_families_form_success' do 
     puts "params = #{params}"
 
