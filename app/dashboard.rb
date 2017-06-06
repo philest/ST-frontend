@@ -93,6 +93,8 @@ class Dashboard < Sinatra::Base
   end
 
   # opens the teacher dashboard
+  # 
+  # suffix the route like dashboard_teacher
   get '/dashboard' do
     if session[:educator].nil?
       redirect to '/'
@@ -169,6 +171,7 @@ class Dashboard < Sinatra::Base
     redirect to('/join')
   end
 
+  # comment 
   post '/enroll_teachers_form_success' do
     puts "contact info params = #{params}"
 

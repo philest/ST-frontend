@@ -150,7 +150,7 @@
                     // $.post('/freemium-signup', $('form#school-info').serialize());
 
                     $.ajax({
-                      url: '/freemium-signup',
+                      url: '/auth/freemium-signup',
                       type: 'post',
                       data: $('#page6 form#school-info').serialize()
                     }).done(function(data, statusText, xhr) {
@@ -189,7 +189,7 @@
               </form>
 
              <!-- submit form -->
-             <form id='log-into-dat-account' action='auth/signin' method='post' data-ajax="false" style="display: none;">
+             <form id='log-into-dat-account' action='/auth/signin' method='post' data-ajax="false" style="display: none;">
                <input type="hidden" name='username' value='<%= session[:username] %>'>
                <input type="hidden" name='signature' value=''>
                <input type="hidden" name='password' value='<%= session[:password] %>'>

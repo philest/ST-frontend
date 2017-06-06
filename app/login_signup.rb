@@ -37,6 +37,12 @@ require_relative '../lib/workers'
 require 'sinatra/flash'
 
 class LoginSignup < Sinatra::Base
+  # sets root as the parent-directory of the current file
+  set :root, File.join(File.dirname(__FILE__), '../')
+  # sets the view directory correctly
+  set :views, Proc.new { File.join(root, "views") }
+
+  
   register Sinatra::Flash
 
   require "sinatra/reloader" if development? 
@@ -185,6 +191,10 @@ class LoginSignup < Sinatra::Base
 
   #########  ROUTES  #########
 
+  # add more info
+
+  # stores the post information into the session.
+  # this is the entrypoint to the purple-modals page from the homepage. 
   post '/freemium-signup-register' do
     require 'bcrypt'
 
@@ -462,6 +472,7 @@ class LoginSignup < Sinatra::Base
     })
 
 
+    # add constants for better explanatory
     if data == 500 or data == 501
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
