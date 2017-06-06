@@ -119,7 +119,7 @@
                       var availableSchools = [];
                         
                         $( "#page4 input[name=school_name]" ).autocomplete({
-                          source: '/list-of-schools',
+                          source: '/auth/list-of-schools',
                           minLength: 2,
                           appendTo: "#just-to-append",
                           position: { my: "left top", at: "left bottom", of: "#status-text" },
@@ -240,7 +240,7 @@
 
 
                       $.ajax({
-                        url: '/freemium-signup',
+                        url: '/auth/freemium-signup',
                         type: 'post',
                         data: $('#page4 form#school-info').serialize()
                       }).done(function(data, statusText, xhr) {
@@ -274,7 +274,7 @@
                 </form>
 
                 <!-- submit form -->
-                <form id='log-into-dat-account' action='auth/signin' method='post' data-ajax="false" style="display: none;">
+                <form id='log-into-dat-account' action='/auth/signin' method='post' data-ajax="false" style="display: none;">
                   <input type="hidden" name='username' value='<%= session[:username] %>'>
                   <input type="hidden" name='signature' value=''>
                   <input type="hidden" name='password' value='<%= session[:password] %>'>
