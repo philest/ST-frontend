@@ -17,6 +17,7 @@
     </div>
   </div>
 
+<!-- Begin Teacher Modal -->
   <% teacher_icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
   <% teacher_icon_index = 0 %>
   <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
