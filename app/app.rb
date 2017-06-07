@@ -93,7 +93,7 @@ class App < Sinatra::Base
   end
 
   get '/test' do
-    erb :test
+    "hi"
   end
 
 
