@@ -27,7 +27,7 @@ module RoutesHelper
 
       # Report new followers.
       Pony.mail(:to => 'phil.esterman@yale.edu',
-            # :cc => 'david.mcpeek@yale.edu',
+            # :cc => 'phil@joinstorytime.com',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: #{params[:username]} subscribed for updates.",
             :body => "Now, \
@@ -44,7 +44,7 @@ module RoutesHelper
     
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
-            :cc => 'david.mcpeek@yale.edu',
+            :cc => 'phil@joinstorytime.com',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: Demo requested.",
             :body => "Here's all the details so you can follow-up:\n #{params}")
@@ -57,7 +57,7 @@ module RoutesHelper
 
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
-            :cc => 'david.mcpeek@yale.edu',
+            :cc => 'phil@joinstorytime.com',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: A new person (#{params[:username]}) signed up.",
             :body => "They're on the list to get an invite.")
@@ -117,7 +117,7 @@ module RoutesHelper
 
       # Report new enrollees.
       Pony.mail(:to => 'phil.esterman@yale.edu',
-            :cc => 'david.mcpeek@yale.edu',
+            :cc => 'phil@joinstorytime.com',
             :from => 'phil.esterman@yale.edu',
             :subject => "ST: A new teacher (#{params[:teacher_signature]}) enrolled \
                            #{(params.count / 2)-1} student.",

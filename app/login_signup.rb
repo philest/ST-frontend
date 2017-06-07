@@ -24,6 +24,7 @@ require_relative '../config/initializers/aws'
 require_relative '../helpers/routes_helper'
 require_relative '../helpers/school_code_helper'
 require_relative '../helpers/is_not_us'
+require_relative '../helpers/login_attempt'
 
 # Error tracking. 
 require 'airbrake'
@@ -36,12 +37,13 @@ require_relative '../lib/workers'
 
 require 'sinatra/flash'
 
+
+
 class LoginSignup < Sinatra::Base
   # sets root as the parent-directory of the current file
   set :root, File.join(File.dirname(__FILE__), '../')
   # sets the view directory correctly
   set :views, Proc.new { File.join(root, "views") }
-
   
   register Sinatra::Flash
 
@@ -72,6 +74,8 @@ class LoginSignup < Sinatra::Base
   helpers RoutesHelper
   helpers SchoolCodeMatcher
   helpers TwilioTextingHelpers
+  helpers IsNotUs
+  helpers LoginAttempt # has the loginAttempt() method
 
   helpers do
     def base_url
@@ -84,117 +88,27 @@ class LoginSignup < Sinatra::Base
 
   end
 
-  helpers IsNotUs
-
   enable :sessions unless test?
   set :session_secret, ENV['SESSION_SECRET']
 
-  helpers do 
-    # attemps to login in the teacher or admin based on the provided params.
-    def loginAttempt(params)
-      username    = params[:username]
-      password    = params[:password]
-      role        = params[:role]
-
-      # instead of a plaintext password, params may include
-      # the hashed password_digest instead. 
-      # this method can work with both.
-      if not params[:digest].nil? and not params[:digest].empty?
-        password = params[:password] = params[:digest]
-      end
-
-      # if missing any params, return 500
-      if username.nil? or password.nil? or username.empty? or password.empty? 
-        txt = "username: #{username.inspect}, Password: #{password.inspect}"
-
-        missing = []
-        missing << "username" if (username.nil? or username.empty?)
-        missing << "password" if (password.nil? or password.empty?)
-
-        notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
-        return 500
-      end
-
-      # educator = the teacher/admin in question.
-      case role
-      when 'admin'
-        educator = Admin.where_username_is(username)
-      when 'teacher'
-        educator = Teacher.where_username_is(username)
-      else
-        educator = Admin.where_username_is(username)
-        if educator.nil?
-          educator = Teacher.where_username_is(username)
-          role = 'teacher'
-        else
-          role = 'admin'
-        end
-      end
-
-
-      if educator.nil?
-        # never existed
-        return 500
-      end
-
-      if educator.grade.nil? or educator.grade > 3 # kindergarten
-        # not the right grade!
-        if educator.is_not_us
-          notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
-        end
-        return 305
-      end
-
-      school = educator.school
-
-      # if the PASSWORD DIGEST was provided, authenticate it. 
-      if not params[:digest].nil? and not params[:digest].empty?
-        if educator.password_digest != params[:digest]
-          puts "incorrect password digest lol"
-          return 500
-        end
-      # else if the PLAINTEXT PASSWORD was provided, authenticate it. 
-      else
-        if educator.authenticate(password) == false
-          # wrong password!
-          puts "incorrect password! lol"
-          return 500
-        end
-      end
-
-      if role == 'teacher'
-        FlyerWorker.perform_async(educator.id, school.id) # if new_signup
-      end
-
-      # get school/educator metadata.
-      educator_hash = educator.to_hash.select {|k, v| [:id, :name, :signature, :email, :phone, :code, :t_number, :signin_count].include? k}
-      school_hash   = school.to_hash.select {|k, v| [:id, :name, :signature, :code].include? k }
-
-      unless password.downcase == 'test' or password.downcase == 'read' or ENV['RACK_ENV'] == 'development'
-        email_admins("#{role.capitalize} #{educator.signature} at #{school.signature} signed into their account")
-      end
-
-      # status 200
-
-      # the educator is signing in, so increment the signin_count
-      educator.update(signin_count: educator.signin_count + 1)
-
-      return {
-        educator: educator_hash,
-        school: school_hash,
-        secret: 'our little secret',
-        role: role
-      }.to_json
-    end
-
-  end
 
   #########  ROUTES  #########
 
-  # add more info
+  # the signin route used for teacher/admin dashboard quicklinks.
+  get '/signin' do
+    loginAttempt(params)
+  end
 
-  # stores the post information into the session.
+  # the normal signin route used from the homepage.
+  post '/signin' do
+    loginAttempt(params)
+  end
+
+
+  # stores the POST information from the homepage into the session.
   # this is the entrypoint to the purple-modals page from the homepage. 
+  # the params contain data that the user inputs from the homepage
+  #   to begin signing up.
   post '/freemium-signup-register' do
     require 'bcrypt'
 
@@ -452,175 +366,6 @@ class LoginSignup < Sinatra::Base
   end
 
 
-  # the signin route used for teacher/admin dashboard quicklinks.
-  get '/signin' do
-    puts "signin params = #{params}"
-
-    password_digest = params['digest']
-    username        = params['username']
-    role            = params['role']
-
-    if !params['email'].nil? and !params['email'].empty?
-      params['username'] = params['email']
-    end
-
-
-    data = loginAttempt({
-      digest: params['digest'],
-      username: params['username'],
-      role: params['role']
-    })
-
-
-    # add constants for better explanatory
-    if data == 500 or data == 501
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-      # return 
-    end
-
-    if data == 303
-      flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
-      redirect '/'
-    end
-
-    if data == 305
-      flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
-      redirect '/'
-    end
-
-    data = JSON.parse(data)
-
-    # have some secret to make sure this is coming from our server.
-    if data["secret"] != 'our little secret'
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-    end
-
-    # puts params
-    session[:educator] = data['educator']
-    session[:school]   = data['school']
-    session[:role]     = data['role']
-    session[:users]    = data['users']
-
-
-    if session['educator'].nil?
-      # maybe have a banner saying, "must log in through teacher account"
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-    end
-
-    case session['role']
-    when 'admin'
-      # automatically open the invite-teachers modal with the invite parameter.
-      if params['invite']
-        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
-      else
-        redirect to root + 'dashboard/admin_dashboard'
-      end
-      redirect to root + 'dashboard/admin_dashboard'
-    when 'teacher'
-      # automatically open the invite-flyers modal with the flyers parameter.
-      if params['flyers']
-        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
-      else
-        redirect to root + 'dashboard/dashboard'
-      end
-    end
-
-  end
-
-   
-  # the normal signin route used from the homepage.
-  post '/signin' do
-    data = loginAttempt(params)
-
-    if data == 500 or data == 501
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-      # return 
-      puts "ass me!!!!!!!"
-    end
-
-    if data == 303
-      flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
-      redirect '/'
-    end
-
-    if data == 305
-      flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
-      redirect '/'
-    end
-
-    data = JSON.parse(data)
-
-    # have some secret to make sure this is coming from our server.
-    if data["secret"] != 'our little secret'
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-    end
-
-    # puts params
-    session[:educator] = data['educator']
-    session[:school]  = data['school']
-    session[:users]   = data['users']
-    session[:role]    = data['role']
-
-
-    if session['educator'].nil?
-      # maybe have a banner saying, "must log in through teacher account"
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-    end
-
-    case session['role']
-    when 'admin'
-      # automatically open the invite-teachers modal with the invite parameter.
-      if params['invite']
-        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
-      else
-        redirect to root + 'dashboard/admin_dashboard'
-      end
-
-    when 'teacher'
-      # automatically open the invite-flyers modal with the flyers parameter.
-      if params['flyers']
-        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
-      else
-        redirect to root + 'dashboard/dashboard'
-      end
-    end
-
-  end
-
-  get '/signup' do
-    if session['educator'].nil?
-      # maybe have a banner saying, "must log in through teacher account"
-      flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
-      redirect to '/'
-    end
-
-    case session['role']
-    when 'admin'
-      # automatically open the invite-teachers modal with the invite parameter.
-      if params['invite']
-        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
-      else
-        redirect to root + 'dashboard/admin_dashboard'
-      end
-
-    when 'teacher'
-      # automatically open the invite-flyers modal with the flyers parameter.
-      if params['flyers']
-        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
-      else
-        redirect to root + 'dashboard/dashboard'
-      end
-
-    end
-  end
-
-
   # used for the school search bar in the freemium-signup page.
   get '/list-of-schools' do
     blacklist = [
@@ -677,6 +422,7 @@ class LoginSignup < Sinatra::Base
     matching_schools.to_json
 
   end
+
 
 
 
