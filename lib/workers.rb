@@ -2,7 +2,7 @@ require 'sidekiq'
 require 'active_support/time'
 require 'rack'
 require 'airbrake'
-require 'airbrake/sidekiq/error_handler'
+require 'airbrake/sidekiq'
 # redis_url = ENV['REDIS_URL'] || 'redis://localhost:6379/12'
 redis_url = ENV['REDIS_URL'] || 'redis://localhost:6380/12'
 # hopefull this will work out

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+		<title>StoryTime | Our Team</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+		<meta name="description" content="StoryTime - Free stories by text message. For every family without books. We're closing the word gap at scale.">
+		
+		<meta property="og:image" content="https://www.joinstorytime.com/images/modules/st-og-image.png">
+
+		 <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
+
+    <!-- end Boostrap -->
+		
+		<script type="text/javascript" src="/js/analytics.js"></script>
+		
+		<link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+		<link rel="stylesheet" href="/stylesheets/imports/grids-responsive-min.css">
+
+		<link rel="stylesheet" href="/stylesheets/job_board.css" type="text/css" />
+
+		<link rel="stylesheet" href="/stylesheets/alert.css" type="text/css" />
+
+		<link rel="stylesheet" href="/stylesheets/fonts.css" type="text/css">
+
+		<link rel="stylesheet" href="/stylesheets/main.css" type="text/css" />
+		<link rel="stylesheet" href="/stylesheets/homepage.css" type="text/css" />
+
+		<link rel="stylesheet" href="/stylesheets/team.css" type="text/css" />
+
+		<link rel="stylesheet" href="/stylesheets/pure-push-pull.css" type="text/css" />
+
+
+		<script type="text/javascript" src="/js/validations.js"></script>
+
+
+<script type="text/javascript" src="/js/homepage.js"></script>
+    <script type="text/javascript" src="/js/videoModal.js"></script>
+
+
+		<%= erb :'components/favicon' %>
+
+	</head>
+
+	<body>
+		<!-- Notify about form submission -->
+	
+		<%= erb :'components/nav' %>
+
+	<!-- modals -->
+    <%= erb :'homepage/modals/rayna-video' %>
+    <%= erb :'homepage/modals/educator-login' %>
+    <%= erb :'homepage/modals/demo' %>
+    <%= erb :'pages/modals/school-role' %>
+    <%= erb :'pages/modals/teacher-name' %>
+    <%= erb :'pages/modals/admin-name' %>
+  <!-- modals end -->
+
+
+		<br class="mobile_only">
+		<div id="jobs">
+								<img id="logo-new" src="/images/modules/logo.png">
+								<h2 class="our_team">Our Team</h2>
+		</div>
+		
+			<div class="team">
+			
+				<% team_names = ["Phil Esterman", "Jose David McPeek", "Aubrey Alonzo Wahl", "Sarah Weston", "Sophie Burrows"] %>
+				<% team_roles = ["CEO", "CTO", "engineering", "content", "illustration"] %>
+				<% team_books = ["The Lorax", "Where the Wild Things Are", "The Gruffalo", "Fox in Socks", "Harold and the Purple Crayon"] %>
+				
+				<% team_authors = ["Dr. Seuss", "Maurice Sendak", "Julia Donaldson", "Dr. Seuss", "Crockett Johnson"] %>
+
+
+				<% team_names.each_with_index do |full_name, idx| %>
+				
+				<% team_bios = 
+
+				["Phil studied computer science at Yale and taught Head Start preschool. Previously, he’s researched social policy at Yale, Harvard, and Columbia. He taught at Luciano Martinez Head Start, where he built StoryTime with his class’s families.",
+
+					"David studied computer science at Yale and turned down a job at Google to start StoryTime. Previously, he’s researched bioinformatics and robotics in Yale labs, engineered at web startups, and taught computer science.  He’s also an actor, having led in 15 shows. He started StoryTime to use art and tech to bring families closer.",
+
+					"Aubrey studied computer science at Yale and grew up in Honduras and Guatemala. Previously, he’s researched social networks in Honduras with the Yale Network Science Institute and taught computer science. He’s also a competitive ultimate frisbee player and avid consumer of podcasts.",
+
+
+					"Sarah graduated from Stanford studying English and earned her MPhil at Cambridge through a Beinecke Scholarship. At Stanford, she wrote for and edited over 8 publications and led writing workshops for survivors of abuse.",
+
+					"Sophie studied illustration at the University of West England. She's won the Macmillan Prize for Children's Illustration and has illustrated for clients including HarperCollins and Parragon Books. She also enjoys really bad TV."
+				]%>
+
+
+
+ <section class="the-product pure-g"> 
+
+				<div class="prize team_profile pure-u-1 pure-u-sm-1-2">
+					<img src=<%= "/images/team/"+full_name.split.first.downcase + ".png"%> "/images/team/phil.png" alt="" id="padded-img">
+				</div>
+				<div class="pure-u-1 pure-u-sm-1-2">
+					<div class="team-text">
+						<h2 id="people"> <a href = mailto:<%=full_name.split.first.downcase%>@joinstorytime.com> <%= full_name%></a></h2>
+						<h2 id="role"><%= team_roles[idx].downcase%></h2>
+
+						<p> <%=team_bios[idx]%> </p>
+						<p id="favorite-book-colon"><span>Favorite Children's Book:<span></p>
+						<p id="favorite-book-answer"><span id="favorite-book-title"> <%=team_books[idx]%></span>, <%=team_authors[idx]%></p>
+
+					</div>
+				</div>
+				
+				
+			</section>
+
+			
+			<% end %>
+
+			<div class="divider"><div></div></div>
+			<div class="divider" id="divider-mobile"><div></div></div>
+
+				<h1 class="banner" id="call-to-action">Help us get millions of families reading.</h1>
+
+				<p id="hiring-call">We're hiring engineers and others to close the 30-million word gap and change the odds for low-income kids.</p> 
+
+							<div class="demo" data-toggle="modal" data-target="#myDemo">
+
+				              <a href="mailto:phil@joinstorytime.com">
+					              <button type="button" style="width:11em;" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="start-modal-button">
+					                Email us
+					              </button>
+				              </a>
+							</div>
+
+		
+
+	</body>
+		<%= erb :'components/footer' %> 
+
+
+	<footer>
+	</footer>
+</html>

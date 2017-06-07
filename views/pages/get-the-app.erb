@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+  
+    <script>
+
+      var os = getMobileOperatingSystem();
+
+      if (os.toLowerCase() == 'android') {
+        console.log('android');
+        window.location = "https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime";
+      }
+
+      if (os.toLowerCase() == 'ios') {
+        console.log('ios');
+        window.location = "https://itunes.apple.com/us/app/storytime-literacy/id1201886605?mt=8";
+      }
+    </script>
+
+
+  
+    <%= erb :'components/headers' %>
+
+
+
+  <!-- Bootstrap modal files -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- end Boostrap -->
+
+    <!-- Load jQuery and  -->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/additional-methods.js"></script>
+
+    <!-- pure -->
+    <link rel="stylesheet" href="/stylesheets/imports/pure-min.css">
+    
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
+    <!--<![endif]-->
+
+
+    <link rel="stylesheet" href="/stylesheets/pure-push-pull.css" type="text/css" />
+
+    <link href='https://fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+    
+
+    <%= erb :'components/favicon' %>
+
+
+    <!-- our stylesheets -->
+
+    <link rel="stylesheet" href="stylesheets/get-the-app.css" type="text/css" />
+
+    <link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
+      
+    <!-- This is only needed for below-the-fold content. -->
+    <link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+
+    <link rel="stylesheet" href="stylesheets/teacher-form-input.css" type="text/css" />
+
+
+    <!-- <link rel="stylesheet" href="stylesheets/main_new.css" type="text/css" /> -->
+    <link rel="stylesheet" href="stylesheets/homepage.css" type="text/css" />
+    
+
+    <link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
+
+
+    <!-- our scripts -->
+    <script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+    <script type="text/javascript" src="/js/homepage.js"></script>
+    <script type="text/javascript" src="/js/videoModal.js"></script>
+
+    <script type="text/javascript">
+   
+
+      $(document).ready(function(){
+
+        $('.modal input').on('click', function () {
+          $(this).focus();
+        })
+
+
+        if (isMobileDevice()) {
+          $('body').addClass('isMobile');
+
+        } else {
+          $('body').addClass('isDesktop');
+        }
+
+      });
+
+
+    </script>
+
+    <style>
+
+      .navbar-right {
+        margin-top: 0.8em;
+      }
+
+    </style>
+
+
+  </head>
+
+  <body id="override">
+
+  <!-- Notify about form submission -->
+  <% if flash[:notice] %>
+    <div id="alert">
+        <a class="alert" href="#alert">Great! Someone from our outreach team will be in touch soon.</a>
+    </div>
+  <% end %>
+
+      <!-- Notify about form submission -->
+  <% if flash[:signin_error] %>
+    <div id="alert">
+        <a class="alert" href="#alert">Incorrect login info. Check with your admin for the correct school code!</a>
+    </div>
+  <% end %>
+
+  <%= erb :'/components/nav' %>
+
+  <div class="pure-g" style="margin-top:3em;margin-bottom:3em;">
+    <div class="pure-u-md-1-2" style="display:flex;align-items:center;">
+
+      <div class="text-wrapper">
+        
+        <h2>Get the StoryTime app.</h2>
+        <p>Send free children's books home to any phone.</p>
+
+        <form id="text-me-link-form" action="/text-link-to-app" method="post">
+          <div class="input-group">
+            <input type="text" style="height: 3.5em;" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
+            <span style="background: #ed7844;color:white;" class="input-group-addon" id="text-me-link-button">Text me a link</span>
+          </div>
+        </form>
+
+        <p id="confirm-message-sent" style="display:none;"></p>
+
+        <p id="need-number" style="display:none;color:red;">Invalid phone.</p>
+
+        <script>
+          $('#text-me-link-button').click(function(event){
+            // get input
+            var phone = $('form#text-me-link-form input[name=phone]').val();
+            console.log(phone);
+
+            // validate the form
+            if ((phone == '') || (phone.length < 10) || !(/^\d+$/.test(phone))) {
+              $('#need-number').css('display', 'block');
+              return false;
+            }
+
+            // post form
+            $.post('/get-app/send-app-link', $('form#text-me-link-form').serialize());
+
+            // initiate slide-down drop down
+            $('#need-number').css('display', 'none');
+            $('#confirm-message-sent').html('Download link sent to ' + phone);
+            $('#confirm-message-sent').slideDown();
+
+          });
+        </script>
+
+      </div>
+    </div>
+
+
+    <div class="pure-u-md-1-2" id="apps-on-phones">
+      <img src="/images/apps-on-phones.jpg" alt="">
+    </div>
+
+  </div>
+
+
+    <!-- modals -->
+  <div>
+      <%= erb :'pages/modals/school-role' %>
+      <%= erb :'pages/modals/teacher-name' %>
+      <%= erb :'pages/modals/admin-name' %>
+      <%= erb :'homepage/modals/signup-signature' %>
+      <%= erb :'homepage/modals/signup-school-role' %>
+      <%= erb :'homepage/modals/school-info' %>
+      <%= erb :'homepage/modals/rayna-video' %>
+      <%= erb :'homepage/modals/signup-name-password' %>
+      <%= erb :'homepage/modals/educator-login' %>
+      <%= erb :'homepage/modals/demo' %>
+      <%= erb :'homepage/modals/signup-email' %>
+      <%= erb :'homepage/modals/main-signup-form' %>
+      <%= erb :'homepage/modals/congrats-modal' %>
+  </div>
+  <!-- modals end -->
+
+  <%= erb :'components/footer' %> 
+
+
+
+  </body>
+
+</html>

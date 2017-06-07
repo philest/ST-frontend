@@ -27,7 +27,7 @@ class Admin < Sequel::Model(:admins)
     end
 
     if username and signature and self.school and password_digest
-      "#{st_url}/signin?username=#{username}&digest=#{self.password_digest}&role=admin"
+      "#{st_url}/auth/signin?username=#{username}&digest=#{self.password_digest}&role=admin"
     else
       ''
     end

@@ -1,0 +1,89 @@
+/**
+ * dashboard.scss
+ *
+ * Styling for the teacher and admin dashboards.
+ */
+
+
+@import 'dashboard/mediaqueries';
+@import 'dashboard/navbar';
+@import 'dashboard/school-totals';
+@import 'dashboard/table';
+@import 'dashboard/invite-teacher-modal';
+@import 'dashboard/empty';
+@import 'dashboard/classroom-modal';
+@import 'dashboard/addpeople';
+
+
+body {
+  font-family: 'Karla';
+}
+
+.container {
+  height: 100%;
+}
+
+/* modal */
+#myModal {
+  width: 100%;
+  
+  .modal-body {
+    padding: 0px;
+    height: 90vh;
+    max-height: 1000px;
+  }
+
+}
+
+.modal-body {
+  overflow-y: scroll;
+}
+
+a#logout {
+  font-weight: 800;
+
+  @include mobile {
+    display: none; 
+  }
+}
+
+b, i {
+  font-family: 'Karla';
+}
+
+/* end modal */
+
+thead {
+  background-color: #eceff1
+}
+
+
+@include mobile {
+
+  h1 {
+    display: block; 
+    clear:both;
+    font-weight: 800;
+  }
+
+  body {
+    background: url("/images/modules/bird.gif") top left no-repeat;
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

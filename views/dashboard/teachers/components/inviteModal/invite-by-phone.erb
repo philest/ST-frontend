@@ -1,0 +1,82 @@
+<!-- begin invite-by-phone -->
+<div class="main-box by-phone" id="main-envelope">
+
+  <% @sample_names = ["Jane Doe", "Alice Smith", "John Doe", "Bob Johnson", "Art Vandelay"] %>
+  <% @sample_phones = ["(555) 555-5555", "(444) 444-4444", "(333) 333-3333", "(222) 222-2222", "(888) 888-8888"] %>
+
+    <div id="logo-container">
+      <div id="jobs">
+        <h2 class="our_team enroll_header">Invite by phone.</h2>
+      </div>
+    </div>
+
+    <!-- <img class="flyer-image phone-image enroll-image" src="http://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+
+
+
+    <form class="enroll-teacher-class" id="enroll-teacher-class">     
+      <div class="enroll group-invite">
+        <div class="box-header">
+          <h2 class="box-header-title">Enter phone numbers</h2>
+          <h3 class="box-header-subtext">
+            Enter contact information in the space provided
+          </h3>
+        </div>
+        <div class="box-body">
+          <div class="row row-small">
+            <div class="table-input">
+              <header class="table-input-header-row">
+                <span class="table-input-cell-validation table-input-cell">
+                </span>
+  
+                <div class="table-input-header-cell table-input-cell"> Child name</div>
+                <div class="table-input-header-cell table-input-cell"> Parent phone
+                </div>
+
+              </header>
+
+              <div class="table-input-container">
+                <div class="table-input-body">
+                  <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+                    <span class="table-input-body-row">
+                      <span class="table-input-cell-validation table-input-cell">
+                      </span>
+
+                      <span class="table-input-body-cell table-input-cell">
+                        <div class="form-cell-input">
+                          <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
+                        </div>
+                      </span>
+    
+                      <span class="table-input-body-cell table-input-cell">
+                        <div class="form-cell-input">
+                          <input name="<%="phone_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                        </div>
+                      </span>
+                    </span>
+                  <%end%>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="field legal-field">
+            <span class="thunder">
+            Families will be able to get their first book next week. We'll keep you updated by email. 
+            </span>
+          </div>
+
+            <button class="Button-ready" onclick="inviteFamilies();" type="button">Invite class</button>  
+
+
+            <h2 id="invite-parents-success" style="display:none;font-size:18px;text-align:center;">Great! They'll get an invite to join your class.</h2>
+
+    
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+<!-- end invite-by-phone -->

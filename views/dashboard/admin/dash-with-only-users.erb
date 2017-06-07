@@ -1,0 +1,165 @@
+<div class="container">
+  <div class="page-header">
+    <div class="mobile-navbar">
+      <a class="navbar-menu" href="/auth/logout">Logout</a></li>
+    </div>
+    <h1><%= session[:school]['name'] %></h1>
+
+    <div class="navbar-buttons">
+      <a id="logout" class="navbar-menu" href="/auth/logout">Logout</a>
+      <a href="mailto:hello@joinstorytime.com?&subject=Storytime Help"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="/app" id="get-dat-app-link" target="_blank"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get the app</button></a>
+      <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
+                  Invite teachers
+                  </button>
+
+    </div>
+  </div>
+
+  <%= erb :'dashboard/modals/invite-teachers' %>
+
+  <% if session[:educator]['signin_count'] == 0 and school_users.size == 0 # the admin has never signed in  %>
+      <%= erb :'dashboard/dashboard_tutorial' %>
+
+  <% else # the admin has signed in before %>
+
+      <!-- re-use the school-totals.erb template (exact same markup) -->
+      <%= erb :'dashboard/admin/components/school-totals', locals: {teachers:school_users} %>
+
+
+          <div class="big-daddy-data">
+            <h4><%= session[:school]['signature'] %> Familes (<%= school_users.size %> joined) </h4>
+
+             <div class="panel panel-default header">
+              <table class="table fields">
+                  <thead>
+                    <tr>
+                      <th class="user-name-top">Name</th>
+                      <th class="user-role-top">Role</th>
+                      <th class="date-joined">Date joined</th>
+                    </tr>
+                  </thead>
+              </table>
+            </div>
+
+            <% if school_users.size > 0 %>
+                <div class="panel panel-default table-body">
+               
+                  <div class="table-responsive pure-u-sm-1-2 pure-u-2-5 users-table-responsive">
+                    <table class="table data users-table">
+                      <tbody>
+                        <% school_users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                            <tr class="user-info" id=<%= user['id'] %> >
+                              <% if user['first_name'].nil? or user['first_name'].empty? %>
+                                <% user_name = "(not given)" %>
+                              <% else %>
+                                <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+                              <% end %>
+                              <th class="user-name"><%= user_name %></th>
+                              <th class="user-role"><%= user['role'] %></th>
+                              <th class="date-joined"><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th>
+                            </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+
+                    <div class="leftover-space"></div>
+
+                  </div>
+                
+                  <div class="pure-u-sm-1-2 pure-u-3-5 the-data">
+
+                    <%= erb :'dashboard/admin/components/user-table-list', locals:{users:school_users} %>
+
+                  </div>
+                </div> <%# panel-default table-body %>
+
+
+              <% else %> <%# there are 0 school_users.... %>
+                <div class="panel panel-default">
+                  <div class="table-bordered">
+                    <table class="table data">
+                      <tbody>
+                        <tr>
+                          <th>No one has joined yet.</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>    
+              <% end %>
+
+          </div> <%# big-daddy-data %>
+
+      <% end # the signin-count block %> 
+
+
+
+</div> <!-- class="container" -->
+
+
+<script type="text/javascript">
+  $(document).ready(function () {
+        $('.the-whole-user-thing').first().css('display', 'block');
+        $('.user-info').slice(1).addClass('user-info-first-box');
+        $('.user-info:first-child').addClass('user-spotlight first-row');
+      });
+
+      $(document).ready(function() {
+        var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+
+        if (isSafari) {
+          // $('.table-responsive').css('direction', 'ltr');
+          document.styleSheets[0].addRule('.table-responsive::-webkit-scrollbar','width: 0');
+          $('th.teacher-name').css('padding-left', '2em');
+          $('th.teacher-name').next('th').css('padding-left', '2em');
+          $('th.user-name').css('padding-left', '2em');
+          // $('-webkit-scrollbar').css('width', '0 !important');
+        }
+      });
+
+
+      $(document).ready(function () {
+        $('.user-info').click(function(event) {
+          $('.user-info').not(this).removeClass('user-spotlight');
+          $(this).addClass('user-spotlight');
+          if ($(this).is(':first-child')) {
+            $('.user-info').not(this).addClass('user-info-first-box');
+            $(this).addClass('first-row');
+          } else {
+            $('.user-info').not(this).removeClass('user-info-first-box');
+            $('.user-info:first-child').removeClass('first-row');
+          }
+
+          var id = $(this).attr('id');
+          var infoBox = $('#' + id + '.the-whole-user-thing'); 
+          $('.the-whole-user-thing').not(infoBox).css('display', 'none');
+          infoBox.css('display', 'block');
+          $('.default-user-info').css('display', 'none');
+        });
+
+    
+         // get a border on the bottom of the left table panel
+        var rows_height = $('.users-table').height();
+        // check if this is greater than the height of the table, 27.5em
+        var table_height = $('.users-table-responsive').height();
+
+        var leftover_height;
+
+        if (rows_height > table_height) {
+          leftover_height = 0;
+        } else {
+          leftover_height = table_height - rows_height;
+        }
+
+
+        $('.leftover-space').css('height', leftover_height);
+
+        $('.user-info:last-child').css('border-bottom', 'solid rgb(210, 218, 224) 0.5px')
+
+      });
+
+
+
+</script>

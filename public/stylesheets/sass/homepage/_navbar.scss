@@ -1,0 +1,156 @@
+/**
+ * _navbar.scss
+ *
+ * Styling for the homepage navbar.
+ */
+
+
+ /** Navbar **/
+
+.navbar {
+   max-width: 1445px;
+   margin-left: auto;
+   margin-right: auto;
+
+   position: fixed;
+   top: 0;
+   left: 0; // to center
+   right: 0; // to center
+   z-index: 300;
+   width: 100%;
+   height: 4em;
+   background-color: transparent;
+   display: none;
+
+   @media (min-width: 48em) { // 768px
+     display: block; 
+   }
+
+   -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+     -o-transition: all 0.5s ease;
+     transition: all 0.5s ease;
+
+   &.highlighted { 
+     -webkit-box-shadow:0px 1px 1px #dcdee2;
+     -moz-box-shadow:0px 1px 1px #dcdee2;
+       box-shadow: 0 0 1px 1px #dcdee2;
+     background-color: white;
+     a#navbar-title div {
+       color: #ed7844;
+     }
+   
+     li a {
+       text-decoration: none;
+       color: #ed7844;
+     }
+   }
+
+   &.navbar-mobile {
+     display: block;
+
+     @media (min-width: 48em) { // 768px
+       display: none; 
+     }
+
+
+     .navbar-right {
+       padding-left: 0px;
+     }
+
+   }
+
+}
+
+
+button#top-button {
+  background-color: #ed7844;
+  font-family: 'Karla', sans-serif;
+}
+
+button.signup-button {
+  font-weight: 900;
+  font-size: 16px;
+  padding: 12px 12px 8px;
+  text-transform: uppercase;
+
+}
+
+button.log-in-fake-button {
+   background-color: transparent !important;
+   text-transform: none;
+   margin-top: 0px;
+   border: none;
+   padding-top: 7px;
+}
+
+.navbar-logo {
+  background-image: url("https://d2yudi7y1eei74.cloudfront.net/assets/new-logo/logo-no-circle.png");
+  background-size: 70px 50px;
+  background-position: center;
+  background-repeat: no-repeat;
+  float: left;
+  height: 90px;
+  width: 162px;
+}
+
+#override h1.navbar-title {
+  text-align: left;
+  font-family: 'dk_cool_crayonregular'
+}
+
+.navbar li {
+  padding-top: 0.5em;
+  padding-bottom: 2.5em;
+  float: left;
+  margin-left: 2em;
+  font-size: 1em;
+  // color: #ed7844;
+  color: white;
+}
+
+.nav > li {
+  position: relative; 
+  display: block; 
+}
+
+.navbar li.navbar-button-item {
+  padding-top: 0em; 
+}
+
+
+#text-me-link-button {
+  cursor: pointer; cursor: hand;
+}
+
+
+.navbar-right { 
+  float: right !important;
+  list-style: none;
+  display: none;
+
+  @media (min-width: 48em) { // 768px
+    display: block;
+    margin-bottom: 6px;
+
+    li {
+      margin-left: 1em;
+    }
+  }
+
+
+  @media (min-width: 54em) {
+    margin-left: 2em;
+  }
+
+
+  li a {
+    text-decoration: none;
+    // color: #ed7844;
+    color: white;
+  }
+}
+
+.navbar.navbar-mobile .navbar-right {
+  display: block;
+}

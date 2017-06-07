@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+    <%= erb :'components/headers' %>
+    
+    <%= erb :'signup/headers/mixpanel', locals: {mixpanel_homepage_key: mixpanel_homepage_key} %>
+
+    <%= erb :'signup/headers/libraries' %>
+    
+    <%= erb :'components/favicon' %>
+
+    <!-- our scripts -->
+    <script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+    <script type="text/javascript" src="/js/signup.js"></script>
+
+
+    <style>
+        ul#navbar-header {
+            background-color: #59567F;
+        }
+    </style>
+
+</head>
+
+<body id="override">
+  <!-- navbar -->
+  <%= erb :'signup/modals/role' %>
+  <%= erb :'signup/modals/invite-teacher' %>
+  <%= erb :'signup/modals/signature' %>
+  <%= erb :'signup/modals/find-school' %>
+  <%= erb :'signup/modals/school-info' %>
+  <%= erb :'signup/modals/success' %>
+  <%= erb :'signup/modals/get-app', locals: {subtitle_app: subtitle_app, header_app: header_app} %>
+  <%= erb :'signup/modals/go-to-dashboard' %>
+<footer>
+
+    <script>
+    </script>
+
+</footer>
+    
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
