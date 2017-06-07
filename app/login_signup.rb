@@ -111,8 +111,10 @@ class LoginSignup < Sinatra::Base
   end
 
 
-  # stores the post information into the session.
+  # stores the POST information from the homepage into the session.
   # this is the entrypoint to the purple-modals page from the homepage. 
+  # the params contain data that the user inputs from the homepage
+  #   to begin signing up.
   post '/freemium-signup-register' do
     require 'bcrypt'
 
