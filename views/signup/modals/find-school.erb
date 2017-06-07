@@ -199,14 +199,18 @@
                       var grade = $('#page4 select[name=classroom_grade]').val();
                       grade = parseInt(grade); 
 
-                      if (grade <= 3) {
+                    if (grade <= 3) {
+                      if(isMobileDevice()){
+                        $('#page4link').attr('href', '#page7');
+                      } else {
                         $('#page4link').attr('href', '#');
                         // we're going to go to the dashboard.
-                      } else {
-                        $('#page4link').attr('href', '#page7');
-                        // change the page5 text maybe?
-                        // or maybe just have a separated page with that text
                       }
+                    } else {
+                      $('#page4link').attr('href', '#page8');
+                      // change the page5 text maybe?
+                      // or maybe just have a separated page with that text
+                    }
 
                       // check which one
 
