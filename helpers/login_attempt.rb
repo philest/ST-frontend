@@ -1,14 +1,21 @@
 module LoginAttempt
+
+  # constants
+  INCORRECT_LOGIN = 500
+  FREEMIUM_PERMISSION_ERROR = 303
+  WRONG_GRADE_LEVEL = 305
+
   def getEducatorData(params)
-    username    = params[:username]
-    password    = params[:password]
-    role        = params[:role]
+
+    username    = params['username']
+    password    = params['password']
+    role        = params['role']
 
     # instead of a plaintext password, params may include
     # the hashed password_digest instead. 
     # this method can work with both.
-    if not params[:digest].nil? and not params[:digest].empty?
-      password = params[:password] = params[:digest]
+    if not params['digest'].nil? and not params['digest'].empty?
+      password = params['password'] = params['digest']
     end
 
     # if missing any params, return 500
@@ -42,7 +49,7 @@ module LoginAttempt
 
     if educator.nil?
       # never existed
-      return @@INCORRECT_LOGIN
+      return INCORRECT_LOGIN
     end
 
     if !educator.grade.nil? and educator.grade > 0 # kindergarten
@@ -50,23 +57,23 @@ module LoginAttempt
       if educator.is_not_us
         notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
       end
-      return @@WRONG_GRADE_LEVEL
+      return WRONG_GRADE_LEVEL
     end
 
     school = educator.school
 
     # if the PASSWORD DIGEST was provided, authenticate it. 
-    if not params[:digest].nil? and not params[:digest].empty?
-      if educator.password_digest != params[:digest]
+    if not params['digest'].nil? and not params['digest'].empty?
+      if educator.password_digest != params['digest']
         puts "incorrect password digest lol"
-        return @@INCORRECT_LOGIN
+        return INCORRECT_LOGIN
       end
     # else if the PLAINTEXT PASSWORD was provided, authenticate it. 
     else
       if educator.authenticate(password) == false
         # wrong password!
         puts "incorrect password! lol"
-        return @@INCORRECT_LOGIN
+        return INCORRECT_LOGIN
       end
     end
 
@@ -100,24 +107,27 @@ module LoginAttempt
   # attemps to login in the teacher or admin based on the provided params.
   def loginAttempt(params)
 
-    data = JSON.parse(getEducatorData(params))
+    data = getEducatorData(params)
 
-    if data == @@INCORRECT_LOGIN
+    if data == INCORRECT_LOGIN
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
       redirect to '/'
       # return 
       puts "ass me!!!!!!!"
     end
 
-    if data == @@FREEMIUM_PERMISSION_ERROR
+    if data == FREEMIUM_PERMISSION_ERROR
       flash[:freemium_permission_error] = "We'll have your free StoryTime profile ready for you soon!"
       redirect '/'
     end
 
-    if data == @@WRONG_GRADE_LEVEL
+    if data == WRONG_GRADE_LEVEL
       flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
       redirect '/'
     end
+
+
+    data = JSON.parse(data)
 
     # have some secret to make sure this is coming from our server.
     if data["secret"] != 'our little secret'

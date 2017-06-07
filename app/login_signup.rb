@@ -45,11 +45,6 @@ class LoginSignup < Sinatra::Base
   # sets the view directory correctly
   set :views, Proc.new { File.join(root, "views") }
 
-  # constants
-  @@INCORRECT_LOGIN = 500
-  @@FREEMIUM_PERMISSION_ERROR = 303
-  @@WRONG_GRADE_LEVEL = 305
-
   
   register Sinatra::Flash
 
@@ -107,6 +102,7 @@ class LoginSignup < Sinatra::Base
 
   # the normal signin route used from the homepage.
   post '/signin' do
+    puts "the fucking PARAMS bro #{params}"
     loginAttempt(params)
   end
 
