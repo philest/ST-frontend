@@ -141,17 +141,17 @@ module LoginAttempt
     when 'admin'
       # automatically open the invite-teachers modal with the invite parameter.
       if params['invite']
-        redirect to root + 'dashboard/admin_dashboard?invite=' + params['invite']
+        redirect to root + 'dashboard/dashboard_admin?invite=' + params['invite']
       else
-        redirect to root + 'dashboard/admin_dashboard'
+        redirect to root + 'dashboard/dashboard_admin'
       end
 
     when 'teacher'
       # automatically open the invite-flyers modal with the flyers parameter.
       if params['flyers']
-        redirect to root + 'dashboard/dashboard?flyers=' + params['flyers']
+        redirect to root + 'dashboard/dashboard_teacher?flyers=' + params['flyers']
       else
-        redirect to root + 'dashboard/dashboard'
+        redirect to root + 'dashboard/dashboard_teacher'
       end
     end
   end
