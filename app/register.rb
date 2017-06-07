@@ -191,6 +191,7 @@ class Register < Sinatra::Base
   end
 
 
+  # creates (registers) the user and associates them with their teacher (through class code)
   post '/user-finish-registration' do
 
     if params.values.include? nil or params.values.include? ""

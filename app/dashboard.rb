@@ -218,7 +218,7 @@ class Dashboard < Sinatra::Base
     return session[:educator]['signin_count'].to_s
   end
 
-# For when teachers want to invite parents by phone number on this form
+  # For when teachers want to invite parents by phone number on this form
   post '/enroll_families_form_success' do 
     puts "params = #{params}"
 
@@ -307,7 +307,7 @@ class Dashboard < Sinatra::Base
   end
 
 
-  # ENROLL STUFF
+  # transactional emails
   post '/update_admin' do
     UpdateAdminWorker.perform_async(params[:sig], 
                                       params[:username], 
@@ -320,7 +320,7 @@ class Dashboard < Sinatra::Base
 
   end
 
-
+  # transactional emails
   post '/update_teacher' do
     UpdateTeacherWorker.perform_async(params[:sig], 
                                       params[:username], 
@@ -333,7 +333,7 @@ class Dashboard < Sinatra::Base
 
   end
 
-
+  # transactional emails
   post '/invite_teachers' do
     NotifyTeacherWorker.perform_async(params)
   end
