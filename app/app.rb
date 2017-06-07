@@ -80,9 +80,9 @@ class App < Sinatra::Base
   get '/' do
     case session[:role]
     when 'admin'
-      redirect to '/dashboard/admin_dashboard'
+      redirect to '/dashboard/dashboard_admin'
     when 'teacher'
-      redirect to '/dashboard/dashboard'
+      redirect to '/dashboard/dashboard_teacher'
     else
       erb :'homepage/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
