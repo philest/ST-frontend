@@ -45,7 +45,7 @@ module LoginAttempt
       return @@INCORRECT_LOGIN
     end
 
-    if !educator.grade.nil? and educator.grade > 3 # kindergarten
+    if !educator.grade.nil? and educator.grade > 0 # kindergarten
       # not the right grade!
       if educator.is_not_us
         notify_admins("educator id=#{educator.id} of grade #{educator.grade.inspect} was refused access to the dashboard because they don't teach prek")
