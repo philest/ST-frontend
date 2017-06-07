@@ -1,23 +1,19 @@
+#  register.rb          Phil Esterman, David McPeek, Aubrey Wahl     
+# 
+#  Controller for the user-registration page.
+#  
+#  --------------------------------------------------------
+
 require 'sinatra/base'
 
 require_relative '../helpers/school_code_helper'
 require_relative '../helpers/is_not_us'
-
-# Error tracking. 
-# require 'airbrake'
-# require_relative '../config/initializers/airbrake'
-
-#analytics
-# require 'mixpanel-ruby'
-
 require_relative '../lib/workers'
 
 class Register < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
 
   disable :sessions
-
-  # use Airbrake::Rack::Middleware
 
   require "sinatra/reloader" if development? 
 
@@ -30,7 +26,6 @@ class Register < Sinatra::Base
   PRO ||= "production"
   TEST ||= "test"
 
-  # tracker = Mixpanel::Tracker.new('358fa62873cd7120591bdc455b6098db')
 
   #########  ROUTES  #########
 
@@ -42,10 +37,13 @@ class Register < Sinatra::Base
     redirect to '../'
   end
 
-  get '/role/?' do
-    puts "in get /register/role"
-    # puts "params = #{params}"
 
+  get '/class/readup' do
+    redirect to 'https://invis.io/W3BCF5O2T#/229525683_Details' 
+  end
+
+  # the "choose role" modal
+  get '/role/?' do
     text = {}
 
       text[:header] = "Cuéntanos algo sobre ti"
@@ -55,11 +53,12 @@ class Register < Sinatra::Base
       text[:identity][:admin] = ["Soy administrador","Director de escuela o de currículo."]
 
 
-    erb :'role', locals: {text: text}
+    erb :'register/modals/role', locals: {text: text}
   end
 
+
+  # the main index route.
   get '/class/:class_code/?' do
-    puts "IN REGISTER /CLASS/:CLASS_CODE"
 
     if params[:class_code].downcase == 'app'
       redirect to '../../app'
@@ -67,21 +66,19 @@ class Register < Sinatra::Base
     end
 
     educator = educator?(params[:class_code])
-    puts "educator = #{educator.inspect}"
     if educator
       locale = educator[:locale]
       type   = educator[:type]
       teacher = educator[:educator]
       if type == 'school'
-        halt erb :error
+        halt erb :'register/modals/error'
       end 
     else
-      halt erb :error
+      halt erb :'register/modals/error'
     end
 
-    # let's just assume it's a teacher for now...........
+    # assuming it's a teacher for now
     school = teacher.school
-    puts "school = #{school.inspect}"
 
     # locale stuff.....
     text = {}
@@ -161,13 +158,14 @@ class Register < Sinatra::Base
     email_admins("Someone from class #{params[:class_code]} accessed web app")
 
 
-    erb :register, locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.name}
+    erb :'register/index', locals: {text: text,class_code:params[:class_code], locale:locale,teacher_id:teacher.id, teacher: teacher.signature, school: school.name}
 
   end
 
 
+  # route to keep track of when users START registration.
+  # this helps us measure the efficacy of the UX + follow-through rate.
   post '/user-start-registration' do
-    puts "new user is starting registration.... #{params}"
     if params.values.include? nil or params.values.include? ""
       # return 400 # or something...
       return [400, { 'Content-Type' => 'text/plain' }, ['Params missing.']]
@@ -192,7 +190,8 @@ class Register < Sinatra::Base
 
   end
 
-  # maybe have an endpoint mid-registration after phone number...........
+
+  # creates (registers) the user and associates them with their teacher (through class code)
   post '/user-finish-registration' do
 
     if params.values.include? nil or params.values.include? ""
@@ -214,9 +213,8 @@ class Register < Sinatra::Base
     # get first and last name
     terms = full_name.split(' ')
     if terms.size < 1
-      # return ''
       # have a more informative error message?
-      halt erb :error
+      halt erb :'register/modals/error'
     elsif terms.size == 1 # just the first name
       first_name = terms.first[0].upcase + terms.first[1..-1]
       last_name  = ''
@@ -228,24 +226,19 @@ class Register < Sinatra::Base
     params['first_name'] = first_name
     params['last_name']  = last_name
 
-    # username = username.delete(' ').delete('-').delete('(').delete(')')
 
-    # submit this to birdv
+    # create user by submitting these params to birdv
     res = HTTParty.post("#{ENV['birdv_url']}/api/auth/signup", body: params)
 
-    puts "res = #{res.inspect}"
-
     if res.code != 201
-      halt erb :error
+      # fail if not success lol
+      halt erb :'register/modals/error'
     end
 
-    # do something with return if not 201
-
-    puts "ABOUT TO NOTIFY ADMINS"
     test_code = /(\Atest\d+\z)|(\Atest-es\d+\z)/i
 
     if test_code.match(class_code).nil? and is_not_us?(username) and is_not_us?(password) and is_not_us?(full_name)
-      params.delete 'password'
+      params.delete 'password' # do not send plaintext password for security reasons...
       notify_admins("user with username #{username} finished registration", params.to_s)
     else
       puts "it's just a test, no worries fellas..."
@@ -254,43 +247,10 @@ class Register < Sinatra::Base
     return 201
   end
 
-  get '/coming-soon' do
-    puts "params = #{params}"
-
-    text = {}
-    case params[:locale]
-    when 'es'
-      text[:exclaim] = "¡Muy bien!"
-      text[:header] = "empieza pronto!"
-      text[:return] = "Le enviaremos un mensaje de texto"
-      text[:weekday] = "el jueves"
-      text[:date] = "4 de enero para empezar!"
-      text[:info] = "Storytime para iPhobe saldrá <b>la próxima semana</b>! Le enviaremos la app con libros <b>el próximo viernes.</b>"
-
-      text[:subtitle] = "Consigue libros gratis de #{params[:teacher_sig]} directamente en su celular"
-    else
-      text[:exclaim] = "Great!"
-      text[:header] = "starts soon!"
-      text[:return] = "We will text you on"
-      text[:weekday] = "Thursday"
-      text[:date] = "January 4th to start!"
-      text[:info] = "Storytime for iPhone comes out in <b>one week</b>! We will text you the app with books <b>next Friday</b>"
-
-
-      text[:subtitle] = "Get free books from #{params[:teacher_sig]} right on your phone"
-
-    end
-
-    # erb :'get-app', locals: {school: session[:school_sig], teacher: session[:teacher_sig], text: text}
-    # erb :maintenance, locals: {school: session[:school_sig], text: text}
-
-    erb :maintenance, locals: {school: params[:school_sig], teacher: params[:teacher_sig], text: text}
-  end
-
 
 
   get '/error' do
-    halt erb :error 
+    halt erb :'register/modals/error' 
   end
 
 

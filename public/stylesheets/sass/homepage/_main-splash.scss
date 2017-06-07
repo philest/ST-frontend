@@ -1,0 +1,63 @@
+/**
+ * _main-splash.scss
+ *
+ * Styling for the main header splash of the homepage.
+ */
+
+ /* Splash */
+
+#splash {
+  padding-top: 1em;
+  text-align: left;
+
+  @media (min-width: 35.5em) { // 568px
+    padding-top: 3em;
+  }
+}
+
+#splash .animation {
+  display: inline-block;
+
+  img {
+    margin-left: auto;
+
+    @media (min-width: 35.5em) { // 568px
+      margin-top: 2em;
+    }
+  }
+
+}
+
+
+@media (min-width: 48em) { // 768px
+  #splash h1.storytime-tagline{
+    text-align: left;
+  }
+
+  #splash .hero-splash-text-container {
+    padding-left: 50px;
+  }
+}
+
+/***** Smaller desktop screen ******/
+@media (min-width: 992px) {
+
+  #splash .hero-splash-text-container {
+    padding-left: 100px;
+  }
+} 
+
+
+/***** Large desktop screen ******/
+@media (min-width: 80em) { // 1280px
+
+  #splash .hero-splash-text-container {
+    padding-left: 165px;
+  }
+
+} 
+
+
+
+
+

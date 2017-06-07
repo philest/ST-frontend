@@ -1,0 +1,85 @@
+<!-- Invite teachers Modal -->
+<div class="modal fade" id="inviteTeachersModal" role="dialog" tabindex='-1'>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-body">
+
+        <!-- begin invite-by-phone -->
+          <div class="main-box by-phone" id="main-envelope">
+
+            <% @sample_names = ["Mrs. Doe", "Ms. Smith", "Mr. Jones", "Mr. Johnson", "Mr. Vandelay"] %>
+            <% @sample_phones = ["jane.doe@storytime.edu", "alice.smith@storytime.edu", "john.jones@storytime.edu", "bob.johnson@storytime.edu", "art.vanelay@storytime.edu"] %>
+
+              <div id="logo-container">
+                <div id="jobs">
+                  <h2 class="our_team enroll_header">Invite Teachers.</h2>
+                </div>
+              </div>
+
+              <!-- <img class="flyer-image phone-image enroll-image" src="https://s3.amazonaws.com/st-webpage/assets/phone-text-2.png"> -->
+
+              <form class="enroll-teacher-class invite-teachers" action="enroll_teachers_form_success" method="post">     
+                <div class="enroll group-invite">
+                  <div class="box-header">
+                    <h2 class="box-header-title">Enter emails below</h2>
+                    <h3 class="box-header-subtext">
+                      Teachers will get their classroom flyers to start sharing.
+                    </h3>
+                  </div>
+                  <div class="box-body">
+                    <div class="row row-small">
+                      <div class="table-input">
+                        <header class="table-input-header-row">
+                          <span class="table-input-cell-validation table-input-cell">
+                          </span>
+            
+                          <div class="table-input-header-cell table-input-cell"> Teacher title</div>
+                          <div class="table-input-header-cell table-input-cell"> Teacher email
+                          </div>
+
+                        </header>
+
+                        <div class="table-input-container">
+                          <div class="table-input-body">
+                            <input type="hidden" name="school_id" value=<%= session[:school]['id'] %> />
+                            <input type="hidden" name="admin_id" value=<%= session[:educator]['id'] %> />
+
+                            <input type="hidden" name="school_sig" value=<%= session[:school]['signature'].delete(' ') %> />
+                            <input type="hidden" name="admin_sig" value=<%= session[:educator]['signature'].delete(' ') %> />
+                            <%25.times do |idx| @idx = idx; @new_idx= idx % @sample_names.count%>
+                              <span class="table-input-body-row">
+                                <span class="table-input-cell-validation table-input-cell">
+                                </span>
+
+                                <span class="table-input-body-cell table-input-cell">
+                                  <div class="form-cell-input">
+                                    <input name="<%="name_".concat @idx.to_s%>" value placeholder= "<%=@sample_names[@new_idx]%>">
+                                  </div>
+                                </span>
+              
+                                <span class="table-input-body-cell table-input-cell">
+                                  <div class="form-cell-input">
+                                    <input name="<%="email_".concat @idx.to_s%>" value placeholder="<%=@sample_phones[@new_idx]%>" >
+                                  </div>
+                                </span>
+                              </span>
+                            <%end%>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+          
+                      <button class="Button-ready" type="submit">Invite class</button>          
+                  </div>
+                </div>
+              </form>
+            </div>
+
+          <!-- end invite-by-phone -->
+
+      </div>
+    </div>
+  </div>
+</div> <%# end invite teachers modal %>

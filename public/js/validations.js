@@ -1,106 +1,46 @@
-// script to validate the signature, email, and password fields for login
-$(document).ready(function () {
+/**
+ * Custom validation methods
+ * Must require this before other JS files in .erb files; otherwise use a js bundler.
+ */
 
-  $('#login').validate({ // initialize the plugin
-      rules: {
-          email: {
-              required: true,
-              email: true
-          },
-          password: {
-              required: true
-          },
-          signature: {
-            required: true
-          }
+ $( document ).ready(function() {
+
+  jQuery.validator.addMethod("validateContactId", function(value, element) {
+    return ValidateEmail(value) || validatePhone(value);
+  }, "Invalid email or phone number.");
+
+
+  function ValidateEmail(mail)   
+  {  
+   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/.test(mail))  
+    {  
+      return (true)  
+    }  
+
+    return (false)  
+  }  
+
+  function validatePhone(phone) {
+      var error = "";
+      var stripped = phone.replace(/[\(\)\.\-\ ]/g, '');
+
+     if (stripped == "") {
+          error = "You didn't enter a phone number.";
+          return false;
+      } else if (isNaN(parseInt(stripped))) {
+          phone = "";
+          error = "The phone number contains illegal characters.";
+          return false;
+
+      } else if (!(stripped.length == 10 || stripped.length == 11)) {
+          phone = "";
+          error = "The phone number is the wrong length. Make sure you included an area code.\n";
+          return false;
+      } else {
+        return true;
       }
-  });
+  }
+
+
 
 });
-
-
-// the demo form
-
-  (function($,W,D)
-              {
-                  var JQUERY4U = {};
-
-                  JQUERY4U.UTIL =
-                  {
-
-                      setupFormValidation: function()
-                      {
-                        // Setup form validation on the .table-input-body-row element
-                        $("form#demo-form").each(function () {
-                          $(this).validate({
-
-                                // Specify the validation rules
-                            rules: {
-                            
-                                  teacher_email: {
-                                    required: true,
-                                    email: true
-                                  },
-
-                                  demo_first_name: {
-                                    required: true
-                                  },
-
-                                  demo_last_name: {
-                                    required: true
-                                  }
-
-
-
-                            },
-
-                            messages: {
-
-                                  teacher_email: "Invalid email"                    
-
-                            },
-
-                             submitHandler: function(form) {
-                                form.submit();
-                            },
-
-            invalidHandler: function(form, validator) {
-              var errors = validator.numberOfInvalids();
-              if (errors) {
-                var message = errors == 1
-                  ? 'Please correct the following error:\n'
-                  : 'Please correct the following ' + errors + ' errors.\n';
-                var errors = "";
-                if (validator.errorList.length > 0) {
-                    for (x=0;x<validator.errorList.length;x++) {
-                        errors += "\n\u25CF " + validator.errorList[x].message;
-                    }
-                }
-
-                // $('.submit-errors').show()
-                // $("html, body").animate({ scrollTop: 0 }, "slow");
-
-                // alert(message + errors);
-              }
-              validator.focusInvalid();
-            }
-
-
-                        });
-
-                       });
-
-                  }
-                }
-
-
-                  //when the dom has loaded setup form validation rules
-                  $(D).ready(function($) {
-                      JQUERY4U.UTIL.setupFormValidation();
-                      // $('.Button-ready').hide()
-
-                  });
-
-
-
-              })(jQuery, window, document);

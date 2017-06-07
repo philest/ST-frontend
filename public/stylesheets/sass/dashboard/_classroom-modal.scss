@@ -1,0 +1,60 @@
+/**
+ * _classroom-modal.scss
+ *
+ * Styling for the pop-up classroom modal corresponding to an individual teacher. 
+ * Resides on the admin dashboard.
+ *
+ */
+
+
+
+/* teacher modal */
+.teacherModal .modal-body {
+  overflow-y: auto;
+
+}
+
+.teacherModal .modal-content {
+  width: 60vw;
+  margin: 0 auto;
+
+  @include tablet-large {
+    width: 68vw;
+    margin: 0 auto;
+  }
+  
+  @include tablet-medium {
+    width: 80vw;
+    margin: 0 auto;
+  }
+
+  @include tablet-small {
+    width: 97vw;
+    margin: 0 auto;
+  }
+
+  @include mobile {
+    width: 95vw;
+    margin: 0 auto;
+  }
+
+}
+
+.teacher-title {
+  margin: 0 auto;
+  text-align: center; 
+  margin-left: -2em;
+
+}
+
+.teacher-title h1 {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.teacherModal .teacher-title img {
+  width: 80px;
+}
+
+
+/* end teacher modal */

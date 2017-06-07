@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+    <%= erb :'components/headers' %>
+
+    <%= erb :'register/headers/mixpanel' %>
+
+    <%= erb :'register/headers/libraries' %>
+
+    <%= erb :'components/favicon' %>
+
+    <!-- our scripts -->
+    <script type="text/javascript" src="/js/validations.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+    <script type="text/javascript" src="/js/register.js"></script>
+
+    <style>
+
+      ul#navbar-header {
+        background-color: #ed7a44;
+      }
+      
+    </style>
+
+</head>
+
+<body id="override">
+  <!-- navbar -->
+  <% locals = {text: text,class_code:class_code, locale:locale,teacher_id:teacher_id, teacher: teacher, school: school} %>
+  <%= erb :'register/modals/user-name-phone', locals: locals %>
+  <%= erb :'register/modals/role', locals: locals %>
+  <%= erb :'register/modals/password', locals: locals %>
+  <%= erb :'register/modals/get-app', locals: locals %>
+  <%= erb :'register/modals/maintenance', locals: locals %>
+
+  <form id="hidden-inputs">
+    <input type="hidden" name="teacher_sig" value="<%= teacher %>">
+    <input type="hidden" name="teacher_id" value="<%= teacher_id %>">
+    <input type="hidden" name="locale" value="<%= locale %>">
+    <input type="hidden" name="class_code" value="<%= class_code %>">
+  </form>
+
+
+<footer>
+
+</footer>
+    
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

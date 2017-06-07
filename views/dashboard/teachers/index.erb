@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StoryTime - Your Class Dashboard</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="description" content="StoryTime lets early grade teachers send books by text message to their class's families. Made at Yale, it builds 1 year of literacy growth after just 14 weeks.">
+    <meta property="og:image" content="https://st-webpage.s3.amazonaws.com/assets/redesign/st-og-image-pencil.png">
+    <meta property="og:title" content="Storytime | Books by text.">
+    <meta property="og:description" content="StoryTime lets early grade teachers send books by text message to their class's families. It builds 1 year of literacy growth after just 14 weeks.">
+    <%= erb :'dashboard/teachers/headers/mixpanel' %>
+    <%= erb :'dashboard/teachers/headers/libraries' %>
+    <%= erb :'components/favicon' %>
+    <!-- our stylesheets -->
+    <link rel="stylesheet" href="/stylesheets/alert.css" type="text/css" />
+    <link rel="stylesheet" href="/stylesheets/what-parents-do.css" type="text/css" />
+    <link rel="stylesheet" href="/stylesheets/fonts.css" type="text/css">
+    <link rel="stylesheet" href="/stylesheets/dashboard.css" type="text/css" />
+
+
+    <!-- our scripts -->
+    <script async type="text/javascript" src="/js/analytics.js"></script>
+    <script type="text/javascript" src="/js/dashboard/teacher.js"></script>
+    <script type="text/javascript" src="/js/helpers.js"></script>
+
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+        if (isMobileDevice()) {
+          $('.sub-heading-text').hide();
+        } else { //it's desktop, so hide mobile
+          $('.sub-heading-text-mobile').hide();
+        }
+      });
+    </script>
+</head>
+
+<body id="bs-override">
+
+<div class="container">
+  <div class="page-header">
+
+    <div class="mobile-navbar">
+      <a class="navbar-menu" href="/auth/logout">Logout</a></li>
+    </div>
+    <h1><%= session[:educator]['signature'] %>'s Class</h1>
+
+    <div class="navbar-buttons">
+      <a id="logout" class="navbar-menu" href="/auth/logout">Logout</a>
+      <a href="mailto:hello@joinstorytime.com?&subject=Storytime Help"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+
+      <a href="/app" id="get-dat-app-link" target="_blank"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get the app</button></a>
+      <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
+
+
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#myModal">
+                  Add people
+                  </button>
+    </div>
+
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog" tabindex='-1'>
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+  
+        <div class="modal-body">
+          <%= erb :'dashboard/teachers/components/inviteModal/index' %>        
+        </div>
+    
+      </div>
+    </div>
+  </div>
+
+  <% if users.size <= 1 # No parents have joined the class, show the dashboard tutorial  %>
+
+      <%= erb :'dashboard/teachers/components/welcome' %>
+
+  <% else # the teacher has signed in before, show the regular dashboard %>
+
+      <%= erb :'dashboard/teachers/components/class-totals', locals: { users: users } %>
+
+      
+      <div class="big-daddy-data">
+        <h4>Class (<%= users.size %> joined) </h4>
+
+         <div class="panel panel-default header">
+          <table class="table fields">
+              <thead>
+                <tr>
+                  <th class="user-name-top">Name</th>
+                  <th class="user-role-top">Role</th>
+                  <th class="date-joined">Date joined</th>
+                </tr>
+              </thead>
+          </table>
+        </div>
+
+        <% if users.size > 0 %>
+
+          <%= erb :'dashboard/teachers/components/userTable/user-table', locals: { users: users } %>
+
+        <% else %> <%# there are 0 users.... %>
+
+          <%= erb :'dashboard/teachers/components/userTable/no-users-joined', locals: { users: users } %>    
+        <% end %>
+
+      </div> <%# big-daddy-data %>
+
+  <% end # the signin-count block %> 
+
+</div> <!-- class="container" -->
+  
+</body>
+</html>
+
+
+
+
+
+
+
+

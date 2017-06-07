@@ -1,0 +1,157 @@
+<div class="container">
+  <div class="page-header">
+    <div class="mobile-navbar">
+      <a class="navbar-menu" href="/auth/logout">Logout</a></li>
+    </div>
+    <h1><%= session[:school]['name'] %></h1>
+
+    <div class="navbar-buttons">
+      <a id="logout" class="navbar-menu" href="/auth/logout">Logout</a>
+      <a href="mailto:hello@joinstorytime.com?&subject=Storytime Help"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Help</button></a>
+      <a href="/app" id="get-dat-app-link" target="_blank"><button type="button" id="get-help" class="btn btn-primary btn-lg outline navbar-menu">Get the app</button></a>
+      <!-- <button type="button" class="btn btn-primary btn-lg outline navbar-menu">Add people</button> -->
+      <button type="button" id="top-button" class="btn btn-primary btn-lg outline navbar-menu signup-button" data-toggle="modal" data-target="#inviteTeachersModal">
+                  Invite teachers
+                  </button>
+
+    </div>
+  </div>
+
+<!-- Begin Teacher Modal -->
+  <% teacher_icons = ['open-book', 'spaceship', 'globe', 'closed-book', 'grade-a', 'dinosaur'] %>
+  <% teacher_icon_index = 0 %>
+  <% teachers.select {|t| t['num_families'] > 0 }.sort_by {|u| u['num_families']}.reverse.each do |teacher| %>
+    <div class="modal fade teacherModal" tabindex="-1" id="teacherModal-<%= teacher['id'] %>" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content">
+          
+          <div class="modal-body">
+            <div class="teacher-title">
+              <img src="/images/<%= teacher_icons[teacher_icon_index] %>-icon.png" alt="">
+              <% teacher_icon_index = (teacher_icon_index + 1) % teacher_icons.length %>
+              <h1><%= teacher['signature'] %>'s Class</h1>
+            </div>
+
+            <% users = teacher['users'] %>
+
+            <!-- THE REAL STUFF -->
+            <div class="big-daddy-data big-user">
+              <h4>Class (<%= users.size %> joined) </h4>
+
+               <div class="panel panel-default header">
+                <table class="table fields">
+                    <thead>
+                      <tr>
+                        <th class="user-name-top teacher-panel">Name</th>
+                        <th class="user-role teacher-panel">Role</th>
+                      </tr>
+                    </thead>
+                </table>
+              </div>
+
+              <% if users.size > 0 %>
+                <div class="panel panel-default table-body">
+
+                  <div class="table-responsive pure-u-2-5">
+                    <table class="table data">
+                      <tbody>
+                        <% users.sort_by {|u| Time.parse(u['enrolled_on'])}.reverse.each do |user| %>
+                            <tr class="user-info" id=<%= user['id'] %> >
+                              <% if user['first_name'].nil? or user['first_name'].empty? %>
+                                <% user_name = "(not given)" %>
+                              <% else %>
+                                <% user_name = user['first_name'].to_s + " " + user['last_name'].to_s %>
+                              <% end %>
+                              <th class="user-name"><%= user_name %></th>
+                              <th class="user-role"><%= user['role'] %></th>
+                              <!-- <th><%= Time.parse(user['enrolled_on']).strftime("%b %-d, %Y") %></th> -->
+                            </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="pure-u-3-5 the-data">
+                    <div class="default-user-info" style="display: none;">
+                        <h2>
+                          Click on a family to see how they're reading!
+                        </h2>
+                    </div>
+
+
+                    <%= erb :'dashboard/admin/components/user-table-list', locals: {users:users} %>
+
+                  </div>
+                </div> <%# panel-default table-body %>
+
+              <% else %> <%# there are 0 users.... %>
+
+                <div class="panel panel-default">
+                  <div class="table-bordered">
+                    <table class="table data">
+                      <tbody>
+                        <tr>
+                          <th>No one has joined yet.</th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>    
+              <% end %>
+
+            </div> <%# big-daddy-data %>
+
+            <!-- END THE REAL STUFF -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% end %>
+  <!-- end Teacher Modal-->
+
+  <%= erb :'dashboard/modals/invite-teachers' %>
+
+  <% if session[:educator]['signin_count'] == 0 and teachers.select {|t| t['num_families'] > 0 }.size == 0 # the admin has never signed in  %>
+    
+      <%= erb :'dashboard/admin/components/tutorial' %>
+
+  <% else # the admin has signed in before %>
+
+      <%= erb :'dashboard/admin/components/school-totals', locals: {teachers:teachers} %>
+
+      
+      <div class="big-daddy-data">
+        <h4>Classrooms (<%= teachers.select {|t| t['num_families'] > 0 }.size %> started) </h4>
+
+         <div class="panel panel-default header">
+          <table class="table fields">
+              <thead>
+                <tr>
+                  <th class="user-name-top admin">Name</th>
+
+                  <th class="date-joined">Date joined</th>
+                </tr>
+              </thead>
+          </table>
+        </div>
+
+
+        <% if teachers.select {|t| t['num_families'] > 0 }.size > 0 %>
+            
+          <%= erb :'dashboard/admin/components/teacherTable/teacher-table', locals: {teachers:teachers} %>
+            
+        <% else %> <%# there are 0 teachers.... %>
+      
+          <%= erb :'dashboard/admin/components/teacherTable/no-teachers-joined' %>
+              
+        <% end %>
+
+      </div> <%# big-daddy-data %>
+
+  <% end # the signin-count block %> 
+
+
+</div> <!-- class="container" -->
