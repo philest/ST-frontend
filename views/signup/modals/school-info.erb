@@ -84,17 +84,17 @@
                       <label class="label">Grade level</label>
                       <select class="form-control" id="classroom_grade" name="classroom_grade" required>
                         <option value="">Select your grade</option>
-                        <option value="0">Infant</option>
-                        <option value="1">Toddler</option>
-                        <option value="2">Preschool</option>
-                        <option value="3">Kindergarten</option>
-                        <option value="4">1st Grade</option>
-                        <option value="5">2nd Grade</option>
-                        <option value="6">3rd Grade</option>
-                        <option value="7">4th Grade</option>
-                        <option value="8">5th Grade</option>
-                        <option value="9">6th Grade</option>
-                        <option value="10">7th Grade or above</option>
+                        <option value="-3">Infant</option>
+                        <option value="-2">Toddler</option>
+                        <option value="-1">Preschool</option>
+                        <option value="0">Kindergarten</option>
+                        <option value="1">1st Grade</option>
+                        <option value="2">2nd Grade</option>
+                        <option value="3">3rd Grade</option>
+                        <option value="4">4th Grade</option>
+                        <option value="5">5th Grade</option>
+                        <option value="6">6th Grade</option>
+                        <option value="7">7th Grade or above</option>
 
                       </select>
                     </div>
@@ -115,7 +115,7 @@
                     var grade = $('#page6-school-info select[name=classroom_grade]').val();
                     grade = parseInt(grade); 
 
-                    if (grade <= 3) {
+                    if (grade <= 0) {
                       $('#page6link').attr('href', '#');
                       // we're going to go to the dashboard.
                     } else {
@@ -162,7 +162,7 @@
                         var grade = $('#page6-school-info select[name=classroom_grade]').val();
                         grade = parseInt(grade); 
 
-                        if (grade <= 3) {
+                        if (grade <= 0) {
                           console.log('yup, gonna submit');
                           $('#page6-school-info form#log-into-dat-account').submit();
                           // we're going to go to the dashboard.
