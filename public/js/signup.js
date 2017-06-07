@@ -22,12 +22,4 @@ $(document).ready(function () {
   $('#register').append($(operating_system));
 
 
-  // if (os.toLowerCase() == 'android') {
-  //   $('#app-link').attr('href', 'https://play.google.com/store/apps/details?id=com.mcesterwahl.storytime');
-  // }
-
-  // if (os.toLowerCase() == 'ios') {
-  //   $('#page3link').attr('href', '#page5');
-  // }
-
 });
