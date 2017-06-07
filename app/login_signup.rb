@@ -101,6 +101,7 @@ class LoginSignup < Sinatra::Base
 
   # the normal signin route used from the homepage.
   post '/signin' do
+    puts "the fucking PARAMS bro #{params}"
     loginAttempt(params)
   end
 
