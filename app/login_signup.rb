@@ -44,12 +44,6 @@ class LoginSignup < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
   # sets the view directory correctly
   set :views, Proc.new { File.join(root, "views") }
-
-  # constants
-  @@INCORRECT_LOGIN = 500
-  @@FREEMIUM_PERMISSION_ERROR = 303
-  @@WRONG_GRADE_LEVEL = 305
-
   
   register Sinatra::Flash
 
