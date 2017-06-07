@@ -223,7 +223,7 @@ class LoginSignup < Sinatra::Base
        [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
        redirect to '/'
     end
-    erb :'signup/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
+    erb :'signup/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE'], subtitle_app: "See how parents use Storytime to get free books on their phone.", header_app: "Get the StoryTime app"}
   end
 
 

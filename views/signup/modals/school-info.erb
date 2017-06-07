@@ -116,10 +116,14 @@
                     grade = parseInt(grade); 
 
                     if (grade <= 3) {
-                      $('#page6link').attr('href', '#');
-                      // we're going to go to the dashboard.
+                      if(isMobileDevice()){
+                        $('#page6link').attr('href', '#page7');
+                      } else {
+                        $('#page6link').attr('href', '#');
+                        // we're going to go to the dashboard.
+                      }
                     } else {
-                      $('#page6link').attr('href', '#page7');
+                      $('#page6link').attr('href', '#page8');
                       // change the page5 text maybe?
                       // or maybe just have a separated page with that text
                     }
