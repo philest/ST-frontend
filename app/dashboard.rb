@@ -84,18 +84,26 @@ class Dashboard < Sinatra::Base
   get '/' do
     case session[:role]
     when 'admin'
-      redirect to '/admin_dashboard'
+      redirect to '/dashboard_admin'
     when 'teacher'
-      redirect to '/dashboard'
+      redirect to '/dashboard_teacher'
     else
       erb :'homepage/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE']}
     end 
   end
 
+  get '/admin_dashboard' do 
+    redirect to 'dashboard_admin'
+  end
+
+  get '/dashboard' do
+    redirect to 'dashboard_teacher'
+  end
+
   # opens the teacher dashboard
   # 
   # suffix the route like dashboard_teacher
-  get '/dashboard' do
+  get '/dashboard_teacher' do
     if session[:educator].nil?
       redirect to '/'
     end
@@ -105,7 +113,7 @@ class Dashboard < Sinatra::Base
   end
 
   # opens the admin dashboard
-  get '/admin_dashboard' do
+  get '/dashboard_admin' do
     if session[:educator].nil?
       redirect to '/'
     end
@@ -191,7 +199,7 @@ class Dashboard < Sinatra::Base
     flash[:teacher_invite_success] = "Congrats! We'll send your teachers an invitation to join StoryTime."
     session[:educator]['signin_count'] += 1
 
-    redirect to '/admin_dashboard'
+    redirect to '/dashboard_admin'
   end
 
   # increments the teacher's signin_count.
@@ -210,7 +218,7 @@ class Dashboard < Sinatra::Base
     return session[:educator]['signin_count'].to_s
   end
 
-# For when teachers want to invite parents by phone number on this form
+  # For when teachers want to invite parents by phone number on this form
   post '/enroll_families_form_success' do 
     puts "params = #{params}"
 
@@ -269,7 +277,7 @@ class Dashboard < Sinatra::Base
 
     # Report new enrollees.
     Pony.mail(:to => 'phil.esterman@yale.edu',
-          :cc => 'david.mcpeek@yale.edu',
+          :cc => 'phil@joinstorytime.com',
           :from => 'phil.esterman@yale.edu',
           :subject => "ST: A new teacher (#{params[:teacher_signature]}) enrolled \
                          #{(params.count / 2)-1} student.",
@@ -299,7 +307,7 @@ class Dashboard < Sinatra::Base
   end
 
 
-  # ENROLL STUFF
+  # transactional emails
   post '/update_admin' do
     UpdateAdminWorker.perform_async(params[:sig], 
                                       params[:username], 
@@ -312,7 +320,7 @@ class Dashboard < Sinatra::Base
 
   end
 
-
+  # transactional emails
   post '/update_teacher' do
     UpdateTeacherWorker.perform_async(params[:sig], 
                                       params[:username], 
@@ -325,7 +333,7 @@ class Dashboard < Sinatra::Base
 
   end
 
-
+  # transactional emails
   post '/invite_teachers' do
     NotifyTeacherWorker.perform_async(params)
   end
@@ -337,7 +345,7 @@ class Dashboard < Sinatra::Base
   # 
   # Essentially, the totality of the school's teachers and parents. 
   # 
-  # This route supplies most of the data for the admin_dashboard.
+  # This route supplies most of the data for the dashboard_admin.
   # 
   # Based on the admin_id.
   get '/teachers/:admin_id' do
@@ -421,7 +429,7 @@ class Dashboard < Sinatra::Base
   # 
   # Essentially, the totality of users at a school. 
   # 
-  # This route is used to supply most of the data for the admin_dashboard
+  # This route is used to supply most of the data for the dashboard_admin
   #   in the case that a school does not have any teachers.
   #   (the New Haven library, for example.)
   # 
