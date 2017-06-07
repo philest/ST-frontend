@@ -1,9 +1,9 @@
 module LoginAttempt
-
   # constants
   INCORRECT_LOGIN = 500
   FREEMIUM_PERMISSION_ERROR = 303
   WRONG_GRADE_LEVEL = 305
+
 
   def getEducatorData(params)
 
@@ -27,7 +27,7 @@ module LoginAttempt
       missing << "password" if (password.nil? or password.empty?)
 
       notify_admins("A teacher failed to sign in to their account - missing #{missing}", txt)
-      return 500
+      return INCORRECT_LOGIN
     end
 
     # educator = the teacher/admin in question.
