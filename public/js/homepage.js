@@ -37,6 +37,10 @@
     }
   }
 
+  $('#signup-email-button-mobile').click(function(event) {
+    transitionToNamePassword();
+  });
+
 
   $('form#signup-email-mobile input[name=usernameDisplay]').change(function(event) {
     var usernameDisplay = $('form#signup-email-mobile input[name=usernameDisplay]').val();
@@ -175,10 +179,6 @@
     // we want to POST this, clear the first-signup-form, the move on to the next modal
     $('#signup-name-password').submit();
 
-    // $('body').addClass('modalTransition');
-    // move on to next modal
-    // $('#signupSchoolRole').modal('toggle');
-    // $("body").addClass("modal-open");
   });
 
 

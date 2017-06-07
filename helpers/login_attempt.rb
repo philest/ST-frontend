@@ -6,15 +6,16 @@ module LoginAttempt
 
 
   def getEducatorData(params)
-    username    = params[:username]
-    password    = params[:password]
-    role        = params[:role]
+
+    username    = params['username']
+    password    = params['password']
+    role        = params['role']
 
     # instead of a plaintext password, params may include
     # the hashed password_digest instead. 
     # this method can work with both.
-    if not params[:digest].nil? and not params[:digest].empty?
-      password = params[:password] = params[:digest]
+    if not params['digest'].nil? and not params['digest'].empty?
+      password = params['password'] = params['digest']
     end
 
     # if missing any params, return 500
@@ -62,8 +63,8 @@ module LoginAttempt
     school = educator.school
 
     # if the PASSWORD DIGEST was provided, authenticate it. 
-    if not params[:digest].nil? and not params[:digest].empty?
-      if educator.password_digest != params[:digest]
+    if not params['digest'].nil? and not params['digest'].empty?
+      if educator.password_digest != params['digest']
         puts "incorrect password digest lol"
         return INCORRECT_LOGIN
       end
@@ -106,7 +107,7 @@ module LoginAttempt
   # attemps to login in the teacher or admin based on the provided params.
   def loginAttempt(params)
 
-    data = JSON.parse(getEducatorData(params))
+    data = getEducatorData(params)
 
     if data == INCORRECT_LOGIN
       flash[:signin_error] = "Incorrect login information. Check with your administrator for the correct school code!"
@@ -124,6 +125,9 @@ module LoginAttempt
       flash[:wrong_grade_level_error] = "Right now, Storytime is only available for preschool. We'll email you when it's ready for your grade level!"
       redirect '/'
     end
+
+
+    data = JSON.parse(data)
 
     # have some secret to make sure this is coming from our server.
     if data["secret"] != 'our little secret'
