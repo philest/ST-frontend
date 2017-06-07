@@ -269,7 +269,7 @@ class Dashboard < Sinatra::Base
 
     # Report new enrollees.
     Pony.mail(:to => 'phil.esterman@yale.edu',
-          :cc => 'david.mcpeek@yale.edu',
+          :cc => 'phil@joinstorytime.com',
           :from => 'phil.esterman@yale.edu',
           :subject => "ST: A new teacher (#{params[:teacher_signature]}) enrolled \
                          #{(params.count / 2)-1} student.",

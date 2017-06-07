@@ -34,7 +34,7 @@ module IsNotUs
     email_blacklist = [
       'josedmcpeek@gmail.com',
       'aawahl@gmail.com',
-      'david.mcpeek@yale.edu',
+      'phil@joinstorytime.com',
       'phil.esterman@yale.edu',
       'phil@joinstorytime.com',
       'david@joinstorytime.com',

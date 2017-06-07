@@ -25,13 +25,13 @@ WelcomeTeacherWorker.perform_async(266)
 
 
 def destroy
-  if User.where(email: 'david.mcpeek@yale.edu').or(phone: 'david.mcpeek@yale.edu').first
-    User.where(email: 'david.mcpeek@yale.edu').or(phone: 'david.mcpeek@yale.edu').first.destroy
+  if User.where(email: 'phil@joinstorytime.com').or(phone: 'phil@joinstorytime.com').first
+    User.where(email: 'phil@joinstorytime.com').or(phone: 'phil@joinstorytime.com').first.destroy
   end
 
 
-  if Teacher.where(email: 'david.mcpeek@yale.edu').or(phone: 'david.mcpeek@yale.edu').first
-    Teacher.where(email: 'david.mcpeek@yale.edu').or(phone: 'david.mcpeek@yale.edu').first.destroy
+  if Teacher.where(email: 'phil@joinstorytime.com').or(phone: 'phil@joinstorytime.com').first
+    Teacher.where(email: 'phil@joinstorytime.com').or(phone: 'phil@joinstorytime.com').first.destroy
   end
 
   User.where_username_is('8186897323').destroy if User.where_username_is('8186897323')
