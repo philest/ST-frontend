@@ -303,6 +303,10 @@ class LoginSignup < Sinatra::Base
 
         end
 
+        # This is a human-readable, actionable update on the new user
+        readable_notif = "#{params['first_name']} #{params['last_name']}, #{params['username']}, #{params['role']}, #{params['school_name']}, #{params['classroom_grade']}, #{params['school_state']}, #{params['school_city']}"
+        puts "Here's the 2nd notif: #{readable_notif}"
+
         if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
           # don't send the actual password! 
           # 
@@ -313,12 +317,6 @@ class LoginSignup < Sinatra::Base
             username: session[:username],
             params: params.to_s
           }
-
-
-
-          # This is a human-readable, actionable update on the new user
-          readable_notif = "#{params['first_name']} #{params['last_name']}, #{params['username']}, #{params['role']}, #{params['school_name']}, #{params['school_name']}, #{params['classroom_grade']}, #{params['school_state']}, #{params['school_city']}"
-          puts "Here's the 2nd notif: #{readable_notif}"
 
           notify_admins("#{params['role']} finished freemium signup", readable_notif)
         end
