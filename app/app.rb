@@ -116,11 +116,11 @@ class App < Sinatra::Base
   end
 
   get '/privacy' do
-    erb :privacy_policy
+    erb :'pages/privacy_policy'
   end
 
   get '/terms' do
-    erb :terms
+    erb :'pages/terms'
   end
 
   get '/illustration-guide' do
