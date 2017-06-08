@@ -115,7 +115,8 @@
                     var grade = $('#page6-school-info select[name=classroom_grade]').val();
                     grade = parseInt(grade); 
 
-                    if (grade <= 0) {
+                    // Allow up to (and including) 1st grade teachers!  
+                    if (grade <= 1) {
                       if(isMobileDevice()){
                         $('#page4link').attr('href', '#page7');
                       } else {

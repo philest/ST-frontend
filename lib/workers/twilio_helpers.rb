@@ -131,7 +131,7 @@ module TwilioTextingHelpers
   def email_admins(subject, body="")
     Pony.mail(:to => 'phil.esterman@yale.edu',
               :cc => 'aawahl@gmail.com',
-              :from => 'phil@joinstorytime.com',
+              :from => 'phil.esterman@yale.edu',
               :headers => { 'Content-Type' => 'text/html' },
               :subject => subject,
               :body => body)
