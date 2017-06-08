@@ -41,7 +41,9 @@ module IsNotUs
       'aubrey.wahl@yale.edu'
     ]
     first_name_blacklist = [
-      'test'
+      'test',
+      't',
+      'tt'
     ]
 
     password_blacklist = Password.create('stpass')
