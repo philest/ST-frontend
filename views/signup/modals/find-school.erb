@@ -135,12 +135,24 @@
                             }
                             // return false;
                           },
-                          close: function(event, ui) {
-
-                          },
                           focus: function(event, ui) {
+                            $('#page4-find-school input[name=school_name]').val(ui.item.label);
+                            if (isMobileDevice()){
+                              $('#page4-find-school input[name=school_name]').blur();
+                              last_selected = ui.item.label;
+
+                              $('#page4-find-school input[name=school_id]').val(ui.item.value);
+
                               $('#page4-find-school input[name=school_name]').val(ui.item.label);
-                              return false;
+
+                              $('#page4-find-school input[name=school_city]').val(ui.item.city);
+
+                              $('#page4-find-school input[name=school_state]').val(ui.item.state); 
+
+                              $("#page4-find-school input[name=school_name]").autocomplete('close');
+
+                            }
+                            return false;
                           },
                           select: function(event, ui) {
                             $('#page4-find-school input[name=school_name]').blur();
@@ -154,12 +166,15 @@
 
                             $('#page4-find-school input[name=school_state]').val(ui.item.state); 
 
+                            $("#page4-find-school input[name=school_name]").autocomplete('close');
+                            
                             return false;
                           }
                         }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                           return $( "<li>", {
                               class: 'school-selector',
                               click: function(event) {
+                                  $('#page4-find-school input[name=school_name]').blur();
                               }
                            })
                            .append( "<a>" + item.label + "<br><span class='city'>" + item.desc + "</span></a>" )
@@ -169,7 +184,7 @@
                     // });
 
                       
-                    $('#page4-find-school input[name=school_name]').focus(function() {
+                    $('#page4-find-school input[name=school_name]').click(function() {
                       $('.dropdown-menu').css('display', 'block');
                     });
 
@@ -184,7 +199,7 @@
                       var input_val = $('#page4-find-school input[name=school_name]').val();
                       
                       $('#page4-find-school input[name=school_name]').val(last_selected);
-
+                      $("#page4-find-school input[name=school_name]").autocomplete('close');
                       $('.dropdown-menu').css('display', 'none');
                     });
 
