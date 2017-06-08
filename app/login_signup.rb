@@ -120,8 +120,12 @@ class LoginSignup < Sinatra::Base
     # delete the plaintext password so we're not sending it over HTTP (security reasons)
     params.delete 'password'
 
+    # This is a human-readable, actionable update on the new user
+    readable_notif = "#{params['first_name']} #{params['last_name']}, #{params['username']}"
+    puts "Here's the 1st notif: #{readable_notif}"
+
     if is_not_us?(params['first_name']) and is_not_us?(params['username']) and is_not_us?(plaintext_password) and is_not_us?(params['last_name'])
-      notify_admins("Someone joined freemium", params.to_s)
+      notify_admins("Someone joined freemium", readable_notif)
     end
 
     session[:first_name] = params['first_name']
@@ -299,6 +303,10 @@ class LoginSignup < Sinatra::Base
 
         end
 
+        # This is a human-readable, actionable update on the new user
+        readable_notif = "#{params['first_name']} #{params['last_name']}, #{params['username']}, #{params['role']}, #{params['school_name']}, #{params['classroom_grade']}, #{params['school_state']}, #{params['school_city']}"
+        puts "Here's the 2nd notif: #{readable_notif}"
+
         if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
           # don't send the actual password! 
           # 
@@ -310,7 +318,7 @@ class LoginSignup < Sinatra::Base
             params: params.to_s
           }
 
-          notify_admins("#{params['role']} finished freemium signup", notify_params.to_s)
+          notify_admins("#{params['role']} finished freemium signup", readable_notif)
         end
 
         if new_school

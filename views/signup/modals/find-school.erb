@@ -265,7 +265,8 @@
                           var grade = $('#page4-find-school select[name=classroom_grade]').val();
                           grade = parseInt(grade); 
 
-                          if (grade <= 0) {
+                          // Allow up to (and including) 1st grade teachers!  
+                          if (grade <= 1) {
                             $('#page6-school-info form#log-into-dat-account').submit();
                             // we're going to go to the dashboard.
                           }
