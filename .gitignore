@@ -8,3 +8,4 @@ lib/bootup
 demo_users.rb
 log/newrelic_agent.log
 dump.rdb
+*.scssc
