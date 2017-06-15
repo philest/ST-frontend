@@ -1,21 +1,51 @@
   <!-- navbar -->
-  <div data-role="page" class="wrapper" id="page7" style="background: #f2f3f5;">
-    <%= erb :'components/navbar' %>
-      <div data-role="main" class="body" style="background: transparent;">
-        <div class="container" style="background: transparent;">
-          
-          <div class="pure-g">
+      <div data-role="page" class="wrapper" id="page9-get-invites">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body invite-teacher">
+
+          <div class="lalaContainer" style="margin: auto; margin-top:80px; background:white; border-radius:.5em; width:50%; text-align:center; padding:40px;">
+          <div>
+            <div class="content-wrapper">
             <div class="pure-u-1 class-information password-text">
 
                  <h1 style="font-size: 2em; color:black">Invite Parents!</h1>
+                 <br/><br/>
                 <img style="max-width: 100%;" src="/images/home.png" alt="">
-                <p>Parents support learning at home with new books.</p> 
+                <br/><br/>
+                <p>Parents support learning at home with free books.</p> 
                 <p>We created invites for you </p>
             </div>
-            <a id="app-link" href="/app" style="width: 100%;" data-ajax="false">
-                <img style="max-width: 100%;" src="https://s3.amazonaws.com/st-webpage/assets/redesign/storytime-app-button.png" alt="">
-            </a>
+
+            <center><a class="transition-link ui-btn web-mobile-signup-button flyerModal" data-transition="fade" 
+            style="width:50%;">
+              Get Invites
+            </a></center>
+
+
+            <script>
+              $(document).on('click', '.flyerModal', function(){
+                $.ajax({
+                  url: 'get-teacher-data',
+                  type: 'get',
+                  async: false,
+                  success: function(result){
+                    window.open(result, '_blank')
+                  }
+                });
+
+
+              });
+
+            </script>
+
+
+
+              <center>
+ 
+              </center>
           </div>
+        </div>
         </div>
       </div> <%# body class %>
   </div> <%# wrapper %>
