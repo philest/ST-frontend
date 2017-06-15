@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'app'
+# require 'app'
 require 'timecop'
 require 'active_support/time'
 require 'workers'

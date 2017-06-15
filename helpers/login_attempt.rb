@@ -160,9 +160,19 @@ module LoginAttempt
       # automatically open the invite-flyers modal with the flyers parameter.
       if params['flyers']
         redirect to root + 'dashboard/dashboard_teacher?flyers=' + params['flyers']
-      else
-        redirect to root + 'dashboard/dashboard_teacher'
+      elsif mobile_device?
+        redirect to root + 'auth/freemium-signup#page7'
+      else 
+        redirect to root + 'auth/freemium-signup#page9-get-invites'
       end
+    end
+  end
+
+  def mobile_device?
+    if session[:mobile_param]
+      session[:mobile_param] == "1"
+    else
+      request.user_agent =~ /Mobile|webOS/
     end
   end
 
