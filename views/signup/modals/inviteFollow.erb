@@ -1,5 +1,5 @@
   <!-- navbar -->
-      <div data-role="page" class="wrapper" id="page9-get-invites">
+      <div data-role="page" class="wrapper" id="page10-invite-follow">
         <%= erb :'components/navbar' %>
      
         <div data-role="main" class="body invite-teacher">
@@ -9,34 +9,40 @@
             <div class="content-wrapper">
             <div class="pure-u-1 class-information password-text">
 
-                 <h1 style="font-size: 2em; color:black">Invite Parents!</h1>
+                 <h1 style="font-size: 2em; color:black">Send parent invites home</h1>
                  <br/><br/>
-                <img style="max-width: 100%;" src="/images/home.png" alt="">
+                <img style="max-width: 100%;" src="/images/invites-done.png" alt="">
                 <br/><br/>
-                <p>Parents support learning at home with free books.</p> 
-                <p>We created invites for you </p>
+                <p>Check your <strong>"downloads" folder</strong> or <strong>email</strong> to get your invites. Print and hand them out!</p> 
             </div>
 
-            <center><a class="transition-link ui-btn web-mobile-signup-button flyerModal" data-transition="fade" 
+            <center><a class="signUpDash transition-link ui-btn web-mobile-signup-button" data-transition="fade" 
             style="width:50%;">
-              Get Invites
+              Go to Dashboard
             </a></center>
 
-            <div class="jqueryHook" hidden><a href="" class="tempLink" download></a></div>
+            <center><a class="spanFlyerModal" data-transition="fade" 
+            style="width:50%;">
+              Spanish Invites
+            </a></center>
 
 
             <script>
-              $(document).on('click', '.flyerModal', function(e){
+
+              $(document).on('click', '.spanFlyerModal', function(){
                 $.ajax({
                   url: 'get-teacher-data',
                   type: 'get',
                   async: false,
                   success: function(result){
                     result = JSON.parse(result);
-                    $('a.tempLink').attr("href", result['fullUrl']);
-                    $('a.tempLink')[0].click();
+                    window.open(result['spanUrl'], '_blank');
                   }
                 });
+              });
+
+              $(document).on('click', 'a.signUpDash', function(){
+                window.location.href = "/";
               });
 
             </script>
