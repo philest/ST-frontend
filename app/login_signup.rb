@@ -149,26 +149,30 @@ class LoginSignup < Sinatra::Base
   fullUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}.pdf"
   spanUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}-Spanish.pdf"
 
+  if session[:username].index('@') != nil
+
     # Authenticate with your API key
     auth = { :api_key => '3178e57316547310895b48c195da986ee9d65a2bab76724d' }
 
-# The unique identifier for this smart email
-smart_email_id = 'ddd16357-7f28-4aa8-ac5a-6be037ee84c2'
+    # The unique identifier for this smart email
+    smart_email_id = 'ddd16357-7f28-4aa8-ac5a-6be037ee84c2'
 
-# Create a new mailer and define your message
-tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
-message = {
-  'To' => 'David Liu <david.liu@yale.edu>',
-  'Data' => {
-    'flyer-link' => fullUrl,
-    'flyer-link-spanish' => spanUrl
-  }
-}
+    # Create a new mailer and define your message
+    tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
+    message = {
+      'To' => session[:username],
+      'Data' => {
+        'flyer-link' => fullUrl,
+        'flyer-link-spanish' => spanUrl
+      }
+    }
 
-# Send the message and save the response
-response = tx_smart_mailer.send(message)
+    # Send the message and save the response
+    response = tx_smart_mailer.send(message)
 
-return {fullUrl: fullUrl, spanUrl: spanUrl}.to_json
+  end
+
+  return {fullUrl: fullUrl, spanUrl: spanUrl}.to_json
 end
 
 
