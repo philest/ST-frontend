@@ -253,7 +253,7 @@
 
 
                       $.ajax({
-                        url: '/auth/freemium-signup',
+                        url: 'freemium-signup',
                         type: 'post',
                         data: $('#page4-find-school form#school-info').serialize()
                       }).done(function(data, statusText, xhr) {
@@ -283,6 +283,7 @@
                       mixpanel.people.set(data);
                       mixpanel.track('finished freemium signup');
                     });
+
 
                   </script>
                 </form>

@@ -1,21 +1,84 @@
   <!-- navbar -->
-  <div data-role="page" class="wrapper" id="page7" style="background: #f2f3f5;">
-    <%= erb :'components/navbar' %>
-      <div data-role="main" class="body" style="background: transparent;">
-        <div class="container" style="background: transparent;">
-          
-          <div class="pure-g">
+      <div data-role="page" class="wrapper" id="page9-get-invites">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body invite-teacher">
+
+          <div class="lalaContainer" style="margin: auto; margin-top:80px; background:white; border-radius:.5em; width:50%; text-align:center; padding:40px;">
+          <div>
+            <div class="content-wrapper">
             <div class="pure-u-1 class-information password-text">
 
-                 <h1 style="font-size: 2em; color:black">Invite Parents!</h1>
+                 <h1 style="font-size: 1.5em; font-weight:bold; color:black;">Invite Parents!</h1>
+                 <br/><br/>
                 <img style="max-width: 100%;" src="/images/home.png" alt="">
-                <p>Parents support learning at home with new books.</p> 
+                <br/><br/>
+                <p>Parents support learning at home with free books.</p> 
                 <p>We created invites for you </p>
             </div>
-            <a id="app-link" href="/app" style="width: 100%;" data-ajax="false">
-                <img style="max-width: 100%;" src="https://s3.amazonaws.com/st-webpage/assets/redesign/storytime-app-button.png" alt="">
-            </a>
+
+            <center><a class="transition-link ui-btn web-mobile-signup-button flyerModal" data-transition="fade" 
+            style="width:50%;">
+              Get Invites
+            </a></center>
+
+            <div class="jqueryHook" hidden><a href="" class="tempLink" download></a></div>
+
+
+            <script>
+
+
+              $(document).on('click', '.flyerModal', function(e){
+                $.ajax({
+                  url: 'get-teacher-data',
+                  type: 'get',
+                  async: false,
+                  success: function(result){
+                    result = JSON.parse(result);
+                    if (browserCheck()){
+                      window.open(result['fullUrl'], '_blank');
+                    }
+                    else {
+                      $('a.tempLink').attr("href", result['fullUrl']);
+                      $('a.tempLink')[0].click();
+                    }
+                    window.location.href = "#page10-invite-follow"
+                  }
+                });
+              });
+
+
+
+              // browser check for whether to do direct flyer download or open new tab with flyer
+              // returns true if browser is safari or IE
+              function browserCheck(){
+                var ua = window.navigator.userAgent;
+                var msie = ua.indexOf("MSIE ");
+
+                if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)){
+                  return true;
+                }
+
+                ua = ua.toLowerCase();
+
+                if (ua.indexOf('safari') != -1) { 
+                  if (!(ua.indexOf('chrome') > -1)) {
+                    return true;
+                  } 
+                }
+
+                return false;
+              }
+
+            </script>
+
+
+
+              <center>
+ 
+              </center>
           </div>
+        </div>
         </div>
       </div> <%# body class %>
   </div> <%# wrapper %>

@@ -16,6 +16,7 @@ require 'sinatra/base'
 require "bundler/setup"
 
 require 'twilio-ruby'
+require 'createsend'
 
 #for access in views
 require_relative '../config/initializers/aws'
@@ -36,7 +37,6 @@ require 'mixpanel-ruby'
 require_relative '../lib/workers'
 
 require 'sinatra/flash'
-
 
 
 class LoginSignup < Sinatra::Base
@@ -139,11 +139,46 @@ class LoginSignup < Sinatra::Base
   # get the index page for the purple-signup-modals.
   get '/freemium-signup' do
     if [session[:first_name], session[:last_name], session[:username], session[:password]].include? nil or
-       [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
-       redirect to '/'
-    end
-    erb :'signup/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE'], subtitle_app: "See how parents use Storytime to get free books on their phone.", header_app: "Get the StoryTime app"}
+     [session[:first_name], session[:last_name], session[:username], session[:password]].include? ''
+     redirect to '/'
+   end
+   erb :'signup/index', locals: {mixpanel_homepage_key: ENV['MIXPANEL_HOMEPAGE'], subtitle_app: "See how parents use Storytime to get free books on their phone.", header_app: "Get the StoryTime app"}
+ end
+
+ get '/get-teacher-data' do
+  teacher = Teacher.where_username_is(session[:username])
+  school = School.where(id: session[:school_id]).first 
+  teacher_dir = teacher.signature + "-" + teacher.t_number.to_s
+  aws_url = "https://s3.amazonaws.com/teacher-materials/#{school.signature}/#{teacher_dir}/flyers"
+  fullUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}.pdf"
+  spanUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}-Spanish.pdf"
+
+  if session[:username].index('@') != nil
+
+    # Authenticate with your API key
+    auth = { :api_key => '3178e57316547310895b48c195da986ee9d65a2bab76724d' }
+
+    # The unique identifier for this smart email
+    smart_email_id = 'ddd16357-7f28-4aa8-ac5a-6be037ee84c2'
+
+    # Create a new mailer and define your message
+    tx_smart_mailer = CreateSend::Transactional::SmartEmail.new(auth, smart_email_id)
+    message = {
+      'To' => session[:username],
+      'Data' => {
+        'flyer-link' => fullUrl,
+        'flyer-link-spanish' => spanUrl
+      }
+    }
+
+    # Send the message and save the response
+    response = tx_smart_mailer.send(message)
+
   end
+
+  return {fullUrl: fullUrl, spanUrl: spanUrl}.to_json
+end
+
 
 
   # If all is successful, creates a freemium
@@ -187,6 +222,8 @@ class LoginSignup < Sinatra::Base
         school_id = params['school_id'].to_i
 
         school = School.where(id: school_id).first 
+        session[:school_id] = school_id
+        puts school_id
 
         password_digest = BCrypt::Password.create params['password']
 
@@ -211,7 +248,10 @@ class LoginSignup < Sinatra::Base
             plan: 'free'
           }
 
+          # session[:school] = school_info
+
           school = School.where(school_info).first || School.create(school_info)
+          session[:school_id] = school.id
         
         end # if school.nil? 
 
@@ -225,6 +265,9 @@ class LoginSignup < Sinatra::Base
           password_digest: password_digest,
           grade: params['classroom_grade'].to_i
         }
+
+        # session[:educator] = educator_info
+
 
         if session[:username].is_email?
           contactType = 'email'
@@ -248,14 +291,6 @@ class LoginSignup < Sinatra::Base
             school.signup_teacher(educator)
 
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
-
-            if new_school == false
-              if !educator.email.nil?
-                # send a welcome email to that teacher
-                WelcomeTeacherWorker.perform_async(educator.id) 
-              end
-
-            end
 
             params['class_code'] = educator.code.split('|').first
 
