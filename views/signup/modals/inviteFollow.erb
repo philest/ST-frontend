@@ -36,7 +36,13 @@
                   async: false,
                   success: function(result){
                     result = JSON.parse(result);
-                    window.open(result['spanUrl'], '_blank');
+                    if (browserCheck()){
+                      window.open(result['spanUrl'], '_blank');
+                    }
+                    else {
+                      $('a.tempLink').attr("href", result['spanUrl']);
+                      $('a.tempLink')[0].click();
+                    }
                   }
                 });
               });

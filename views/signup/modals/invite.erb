@@ -26,6 +26,8 @@
 
 
             <script>
+
+
               $(document).on('click', '.flyerModal', function(e){
                 $.ajax({
                   url: 'get-teacher-data',
@@ -33,11 +35,40 @@
                   async: false,
                   success: function(result){
                     result = JSON.parse(result);
-                    $('a.tempLink').attr("href", result['fullUrl']);
-                    $('a.tempLink')[0].click();
+                    if (browserCheck()){
+                      window.open(result['fullUrl'], '_blank');
+                    }
+                    else {
+                      $('a.tempLink').attr("href", result['fullUrl']);
+                      $('a.tempLink')[0].click();
+                    }
+                    window.location.href = "#page10-invite-follow"
                   }
                 });
               });
+
+
+
+              // browser check for whether to do direct flyer download or open new tab with flyer
+              // returns true if browser is safari or IE
+              function browserCheck(){
+                var ua = window.navigator.userAgent;
+                var msie = ua.indexOf("MSIE ");
+
+                if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)){
+                  return true;
+                }
+
+                ua = ua.toLowerCase();
+
+                if (ua.indexOf('safari') != -1) { 
+                  if (!(ua.indexOf('chrome') > -1)) {
+                    return true;
+                  } 
+                }
+
+                return false;
+              }
 
             </script>
 
