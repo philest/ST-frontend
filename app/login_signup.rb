@@ -147,6 +147,7 @@ class LoginSignup < Sinatra::Base
   teacher_dir = teacher.signature + "-" + teacher.t_number.to_s
   aws_url = "https://s3.amazonaws.com/teacher-materials/#{school.signature}/#{teacher_dir}/flyers"
   fullUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}.pdf"
+  spanUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}-Spanish.pdf"
 
     # Authenticate with your API key
     auth = { :api_key => '3178e57316547310895b48c195da986ee9d65a2bab76724d' }
@@ -160,14 +161,14 @@ message = {
   'To' => 'David Liu <david.liu@yale.edu>',
   'Data' => {
     'flyer-link' => fullUrl,
-    'flyer-link-spanish' => 'insert this user\'s Spanish flyer link here!'
+    'flyer-link-spanish' => spanUrl
   }
 }
 
 # Send the message and save the response
 response = tx_smart_mailer.send(message)
 
-return fullUrl
+return {fullUrl: fullUrl, spanUrl: spanUrl}.to_json
 end
 
 
