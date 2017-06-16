@@ -288,14 +288,6 @@ end
 
             FlyerWorker.perform_async(educator.id, school.id) # if new_signup
 
-            if new_school == false
-              if !educator.email.nil?
-                # send a welcome email to that teacher
-                WelcomeTeacherWorker.perform_async(educator.id) 
-              end
-
-            end
-
             params['class_code'] = educator.code.split('|').first
 
 
