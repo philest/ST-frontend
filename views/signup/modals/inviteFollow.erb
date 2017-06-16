@@ -1,0 +1,65 @@
+  <!-- navbar -->
+      <div data-role="page" class="wrapper" id="page10-invite-follow">
+        <%= erb :'components/navbar' %>
+     
+        <div data-role="main" class="body invite-teacher">
+
+          <div class="lalaContainer" style="margin: auto; margin-top:80px; background:white; border-radius:.5em; width:50%; text-align:center; padding:40px;">
+          <div>
+            <div class="content-wrapper">
+            <div class="pure-u-1 class-information password-text">
+
+                 <h1 style="font-size: 1.5em; color:black">Finish Signup</h1>
+                 <br/><br/>
+                <img style="max-width: 100%;" src="/images/invites-done.png" alt="">
+                <br/><br/>
+                <p>Check your <strong>"downloads" folder</strong> or <strong>email</strong> to get your invites. Print and hand them out!</p> 
+            </div>
+
+            <center><a class="signUpDash transition-link ui-btn web-mobile-signup-button" data-transition="fade" 
+            style="width:50%;">
+              Go to Dashboard
+            </a></center>
+
+            <center><a class="spanFlyerModal" data-transition="fade" 
+            style="width:50%;">
+              Spanish Invites
+            </a></center>
+
+
+            <script>
+
+              $(document).on('click', '.spanFlyerModal', function(){
+                $.ajax({
+                  url: 'get-teacher-data',
+                  type: 'get',
+                  async: false,
+                  success: function(result){
+                    result = JSON.parse(result);
+                    if (browserCheck()){
+                      window.open(result['spanUrl'], '_blank');
+                    }
+                    else {
+                      $('a.tempLink').attr("href", result['spanUrl']);
+                      $('a.tempLink')[0].click();
+                    }
+                  }
+                });
+              });
+
+              $(document).on('click', 'a.signUpDash', function(){
+                window.location.href = "/";
+              });
+
+            </script>
+
+
+
+              <center>
+ 
+              </center>
+          </div>
+        </div>
+        </div>
+      </div> <%# body class %>
+  </div> <%# wrapper %>

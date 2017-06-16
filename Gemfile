@@ -40,7 +40,6 @@ gem 'dotenv'
 gem 'sass'
 gem 'sprockets'
 
-
 group :development, :test do
   gem 'fuubar'
 end
