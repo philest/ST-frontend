@@ -5,7 +5,7 @@
     margin-bottom: 0.5em;
   }
 
-  #page4-find-school input[name=school_name] {
+  #page2-parent-school input[name=school_name] {
     background: url(images/icons/magnifying-glass.png) no-repeat scroll 7px 7px;
     padding-left: 45px;
     background-size: 30px;
@@ -50,7 +50,7 @@
 
 </style>
 
-      <div data-role="page" class="wrapper" id="page4-find-school">
+      <div data-role="page" class="wrapper" id="page2-parent-school">
         <%= erb :'components/navbar' %>
      
         <div data-role="main" class="body invite-teacher">
@@ -78,7 +78,7 @@
                     </div>
 
                     <div id="add-your-school-link">
-                      <p>Can't find your school? <a id="page4link-add-school" href="#page6-school-info" data-transition="fade">Add one now.</a></p>
+                      <p>Can't find your school? <a id="page2link-add-school" href="#page6-school-info" data-transition="fade">Add one now.</a></p>
                     </div>
                   </div>
 
@@ -107,7 +107,7 @@
                   <input type="hidden" name="role" value="">
                   <input type="hidden" name="signature" value="">
 
-                  <a id="page4link" class="transition-link ui-btn web-mobile-signup-button" href="#" data-transition="fade">
+                  <a id="page2link" class="transition-link ui-btn web-mobile-signup-button" href="#" data-transition="fade">
                     Continue
                   </a>
         
@@ -118,7 +118,7 @@
 
                       var availableSchools = [];
                         
-                        $( "#page4-find-school input[name=school_name]" ).autocomplete({
+                        $( "#page2-parent-school input[name=school_name]" ).autocomplete({
                           source: '/auth/list-of-schools',
                           minLength: 2,
                           appendTo: "#just-to-append",
@@ -136,37 +136,37 @@
                             // return false;
                           },
                           focus: function(event, ui) {
-                            $('#page4-find-school input[name=school_name]').val(ui.item.label);
+                            $('#page2-parent-school input[name=school_name]').val(ui.item.label);
                             if (isMobileDevice()){
-                              $('#page4-find-school input[name=school_name]').blur();
+                              $('#page2-parent-school input[name=school_name]').blur();
                               last_selected = ui.item.label;
 
-                              $('#page4-find-school input[name=school_id]').val(ui.item.value);
+                              $('#page2-parent-school input[name=school_id]').val(ui.item.value);
 
-                              $('#page4-find-school input[name=school_name]').val(ui.item.label);
+                              $('#page2-parent-school input[name=school_name]').val(ui.item.label);
 
-                              $('#page4-find-school input[name=school_city]').val(ui.item.city);
+                              $('#page2-parent-school input[name=school_city]').val(ui.item.city);
 
-                              $('#page4-find-school input[name=school_state]').val(ui.item.state); 
+                              $('#page2-parent-school input[name=school_state]').val(ui.item.state); 
 
-                              $("#page4-find-school input[name=school_name]").autocomplete('close');
+                              $("#page2-parent-school input[name=school_name]").autocomplete('close');
 
                             }
                             return false;
                           },
                           select: function(event, ui) {
-                            $('#page4-find-school input[name=school_name]').blur();
+                            $('#page2-parent-school input[name=school_name]').blur();
                             last_selected = ui.item.label;
 
-                            $('#page4-find-school input[name=school_id]').val(ui.item.value);
+                            $('#page2-parent-school input[name=school_id]').val(ui.item.value);
 
-                            $('#page4-find-school input[name=school_name]').val(ui.item.label);
+                            $('#page2-parent-school input[name=school_name]').val(ui.item.label);
 
-                            $('#page4-find-school input[name=school_city]').val(ui.item.city);
+                            $('#page2-parent-school input[name=school_city]').val(ui.item.city);
 
-                            $('#page4-find-school input[name=school_state]').val(ui.item.state); 
+                            $('#page2-parent-school input[name=school_state]').val(ui.item.state); 
 
-                            $("#page4-find-school input[name=school_name]").autocomplete('close');
+                            $("#page2-parent-school input[name=school_name]").autocomplete('close');
                             
                             return false;
                           }
@@ -174,7 +174,7 @@
                           return $( "<li>", {
                               class: 'school-selector',
                               click: function(event) {
-                                  $('#page4-find-school input[name=school_name]').blur();
+                                  $('#page2-parent-school input[name=school_name]').blur();
                               }
                            })
                            .append( "<a>" + item.label + "<br><span class='city'>" + item.desc + "</span></a>" )
@@ -184,47 +184,45 @@
                     // });
 
                       
-                    $('#page4-find-school input[name=school_name]').click(function() {
+                    $('#page2-parent-school input[name=school_name]').click(function() {
                       $('.dropdown-menu').css('display', 'block');
                     });
 
-                    $('#page4link-add-school').on('mousedown', function(event) {
+                    $('#page2link-add-school').on('mousedown', function(event) {
                       // event.stopImmediatePropagation();
                       event.preventDefault(); 
                     });
                     
 
-                    $('#page4-find-school input[name=school_name]').blur(function() {
+                    $('#page2-parent-school input[name=school_name]').blur(function() {
                       // check to see if we selected something nice
-                      var input_val = $('#page4-find-school input[name=school_name]').val();
+                      var input_val = $('#page2-parent-school input[name=school_name]').val();
                       
-                      $('#page4-find-school input[name=school_name]').val(last_selected);
-                      $("#page4-find-school input[name=school_name]").autocomplete('close');
+                      $('#page2-parent-school input[name=school_name]').val(last_selected);
+                      $("#page2-parent-school input[name=school_name]").autocomplete('close');
                       $('.dropdown-menu').css('display', 'none');
                     });
 
-                    $('#page4-find-school select[name=classroom_grade]').change(function(event){
+                    $('#page2-parent-school select[name=classroom_grade]').change(function(event){
                       // get the grade
-                      var grade = $('#page4-find-school select[name=classroom_grade]').val();
+                      var grade = $('#page2-parent-school select[name=classroom_grade]').val();
                       grade = parseInt(grade); 
 
                     if (grade <= 0) {
                       if(isMobileDevice()){
-                        $('#page4link').attr('href', '#page7');
+                        $('#page2link').attr('href', '#page7');
                       } else {
-                        $('#page4link').attr('href', '#');
+                        console.log("in else statement");
+                        $('#page2link').click(function(){
+                          console.log("clicked");
+                          window.location.href = '/';
+                        });
                         // we're going to go to the dashboard.
                       }
                     } else {
-                      $('#page4link').attr('href', '#page8-go-to-dashboard');
+                      $('#page2link').attr('href', '#page8-go-to-dashboard');
                       // change the page5 text maybe?
                       // or maybe just have a separated page with that text
-                    }
-
-                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
-
-                    if (role == 'parent') {
-                      $('#page4link').attr('href', '#page2-invite-teacher');
                     }
 
                       // check which one
@@ -234,8 +232,8 @@
                     });
 
 
-                    $(document).on('click', '#page4-find-school #page4link',function(event){
-                      var ValidStatus = $("#page4-find-school #school-info").valid();
+                    $(document).on('click', '#page2-parent-school #page2link',function(event){
+                      var ValidStatus = $("#page2-parent-school #school-info").valid();
                       // console.log(ValidStatus);
                       if (ValidStatus == false) {
                           event.preventDefault();
@@ -245,12 +243,11 @@
                       }
 
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
-
-                      $('#page4-find-school form#school-info').find('input[name=role]').val(role);
+                      $('#page2-parent-school form#school-info').find('input[name=role]').val(role);
 
                       var sig = $('form#educator-signature-form').find('input[name=signature]').val();
 
-                      $('#page4-find-school form#school-info').find('input[name=signature]').val(sig);    
+                      $('#page2-parent-school form#school-info').find('input[name=signature]').val(sig);    
 
                       // check if preschool or below
                       // if preschool, perform the regular action of logging in
@@ -258,40 +255,37 @@
                       // if not, forward to page6 or whatever and change the text to say that we don't do older grades
                       // 
 
-                      if (role != 'parent') {
 
-                        $.ajax({
-                          url: 'freemium-signup',
-                          type: 'post',
-                          data: $('#page4-find-school form#school-info').serialize()
-                        }).done(function(data, statusText, xhr) {
-                            console.log(data);
-                            console.log('statusText is:');
-                            console.log(statusText);
-                            console.log(xhr);
+                      $.ajax({
+                        url: 'freemium-signup',
+                        type: 'post',
+                        data: $('#page2-parent-school form#school-info').serialize()
+                      }).done(function(data, statusText, xhr) {
+                          console.log(data);
+                          console.log('statusText is:');
+                          console.log(statusText);
+                          console.log(xhr);
 
-                            var grade = $('#page4-find-school select[name=classroom_grade]').val();
-                            grade = parseInt(grade); 
+                          var grade = $('#page2-parent-school select[name=classroom_grade]').val();
+                          grade = parseInt(grade); 
 
-                            // Allow up to (and including) 1st grade teachers!  
-                            if (grade <= 1) {
-                              $('#page6-school-info form#log-into-dat-account').submit();
-                              // we're going to go to the dashboard.
-                            }
-                            // $('form#log-into-dat-account input[name=password]').val(data);
-                        });
+                          // Allow up to (and including) 1st grade teachers!  
+                          if (grade <= 1) {
+                            $('#page6-school-info form#log-into-dat-account').submit();
+                            // we're going to go to the dashboard.
+                          }
+                          // $('form#log-into-dat-account input[name=password]').val(data);
+                      });
 
-                        var formdata = $("#page4-find-school form#school-info").serializeArray();
-                        console.log(formdata);
-                        var data = {};
-                        $(formdata).each(function(index, obj){
-                            data[obj.name] = obj.value;
-                        });
-                        console.log(data);
-                        mixpanel.people.set(data);
-                        mixpanel.track('finished freemium signup');
-
-                      }
+                      var formdata = $("#page2-parent-school form#school-info").serializeArray();
+                      console.log(formdata);
+                      var data = {};
+                      $(formdata).each(function(index, obj){
+                          data[obj.name] = obj.value;
+                      });
+                      console.log(data);
+                      mixpanel.people.set(data);
+                      mixpanel.track('finished freemium signup');
                     });
 
 
@@ -311,7 +305,8 @@
                   </button> -->
 
                   <script>
-                    $('#page4-find-school form#log-into-dat-account').on('submit', function(event) {
+                    $('#page2-parent-school form#log-into-dat-account').on('submit', function(event) {
+                      alert("here");
                       var role = $('form#choose-educator-role-form').find('input[name=role]').val();
                       $('form#log-into-dat-account').find('input[name=role]').val(role);
 
@@ -320,7 +315,6 @@
                       $('form#log-into-dat-account').find('input[name=signature]').val(sig);
 
 
-                      // $('form#log-into-dat-account').submit();
                     });
                   </script>
 

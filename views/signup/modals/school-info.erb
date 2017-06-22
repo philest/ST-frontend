@@ -129,6 +129,10 @@
                       // or maybe just have a separated page with that text
                     }
                     // check which one
+                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+                    if (role == "parent") {
+                      $('#page4link').attr('href', '#page2-invite-teacher');
+                    }
 
                     // change link based on that
 
@@ -154,38 +158,40 @@
 
                     // $.post('/freemium-signup', $('form#school-info').serialize());
 
-                    $.ajax({
-                      url: '/auth/freemium-signup',
-                      type: 'post',
-                      data: $('#page6-school-info form#school-info').serialize()
-                    }).done(function(data, statusText, xhr) {
-                        console.log(data);
-                        console.log('statusText is:');
-                        console.log(statusText);
-                        console.log(xhr);
+                    if (role != parent) {
+                      $.ajax({
+                        url: '/auth/freemium-signup',
+                        type: 'post',
+                        data: $('#page6-school-info form#school-info').serialize()
+                      }).done(function(data, statusText, xhr) {
+                          console.log(data);
+                          console.log('statusText is:');
+                          console.log(statusText);
+                          console.log(xhr);
 
-                        var grade = $('#page6-school-info select[name=classroom_grade]').val();
-                        grade = parseInt(grade); 
+                          var grade = $('#page6-school-info select[name=classroom_grade]').val();
+                          grade = parseInt(grade); 
 
-                        if (grade <= 0) {
-                          console.log('yup, gonna submit');
-                          $('#page6-school-info form#log-into-dat-account').submit();
-                          // we're going to go to the dashboard.
-                        }
-
-
-                        // $('form#log-into-dat-account input[name=password]').val(data);
-                    });
+                          if (grade <= 0) {
+                            console.log('yup, gonna submit');
+                            $('#page6-school-info form#log-into-dat-account').submit();
+                            // we're going to go to the dashboard.
+                          }
 
 
-                    var formdata = $("form#school-info").serializeArray();
-                    var data = {};
-                    $(formdata).each(function(index, obj){
-                        data[obj.name] = obj.value;
-                    });
-                    console.log(data);
-                    mixpanel.people.set(data);
-                    mixpanel.track('finished freemium signup');
+                          // $('form#log-into-dat-account input[name=password]').val(data);
+                      });
+
+
+                      var formdata = $("form#school-info").serializeArray();
+                      var data = {};
+                      $(formdata).each(function(index, obj){
+                          data[obj.name] = obj.value;
+                      });
+                      console.log(data);
+                      mixpanel.people.set(data);
+                      mixpanel.track('finished freemium signup');
+                    }
 
 
                   });

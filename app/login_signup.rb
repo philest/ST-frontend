@@ -248,8 +248,6 @@ end
             plan: 'free'
           }
 
-          # session[:school] = school_info
-
           school = School.where(school_info).first || School.create(school_info)
           session[:school_id] = school.id
         

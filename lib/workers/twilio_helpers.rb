@@ -145,6 +145,7 @@ module TwilioTextingHelpers
     if text_body.length < 360
       MessageWorker.perform_async(text_body, phil, ENV['ST_USER_REPLIES_NO'])
       MessageWorker.perform_async(text_body, aubs, ENV['ST_USER_REPLIES_NO'])
+      
     else
       MessageWorker.perform_async(subject, phil, ENV['ST_USER_REPLIES_NO'])
       MessageWorker.perform_async(subject, aubs, ENV['ST_USER_REPLIES_NO'])

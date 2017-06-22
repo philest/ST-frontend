@@ -35,7 +35,7 @@
                         $.ajax({
                           url: '/auth/freemium-signup', 
                           type: 'post',
-                          data: $('#invite-teacher-form').serialize(),
+                          data: $('#invite-teacher-form').serialize() + '&' + $('#page4-find-school form#school-info').serialize(),
                           statusCode: {
                               404: function() {
                                 // window.location.href = "/app";
