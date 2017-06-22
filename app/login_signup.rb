@@ -213,6 +213,10 @@ end
                   body: params
                 )
 
+      # Search placeholder
+      readable_notif = "#{params['first_name']} #{params['last_name']}, #{params['username']}, #{params['role']}, #{params['school_name']}, #{params['classroom_grade']}, #{params['school_state']}, #{params['school_city']}"
+      puts "Notif: #{readable_notif}"
+      notify_admins("#{params['role']} finished freemium signup", readable_notif)
       return response.code 
 
     when 'teacher', 'admin'

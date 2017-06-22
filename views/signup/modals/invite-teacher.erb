@@ -2,24 +2,37 @@
     <%= erb :'components/navbar' %>
       <div data-role="main" class="body invite-teacher" style="vertical-align: top;">
         <div class="container password">
+          <a href="#page4-find-school">
+            <img style="width: 4%; height: 4%; margin-left: 20px; margin-top: 10px;" align="left" src="/images/left-arrow.png" alt=""></a>
           <div class="pure-g">
               <div class="pure-u-1 class-information invite-teacher">
-                <h1>Invite your teacher</h1>
-                <h3 class="purple-subtitle">It's simple and free.</h3>
+                <h1>Teacher Details</h1>
               </div>
+              <div class="pure-u-1" id="schoolText"></div>
               <div class="pure-u-1 login-form">
                 <form id="invite-teacher-form"> 
                   <div class="signup-setup">
                     <div class="field" id="signup-field">
+                      <input name="teacher_name" placeholder="Teacher Name" class="input" required>
                       <input name="teacher_email" placeholder="Teacher email address" class="input" required>
                       <input name="role" type="hidden" value="" required>
                     </div>
                     <!-- fades to page5: success -->
                      <a id="page2link" class="transition-link ui-btn web-mobile-signup-button" href="#">
-                        <%= "Invite" %>
+                        <%= "Add Details" %>
                      </a>
 
                     <script>
+
+                          // $("#schoolText").html("hi");
+
+                      $(document).on('click', '#page4link', function(){
+                        console.log($('#page4-find-school form#school-info input[name=school_name]').val());
+
+                        $("#schoolText").html("<span style='color:#A9A9A9;'>" + $('#page4-find-school form#school-info input[name=school_name]').val() + "</span>");
+
+                      });
+
 
                       $(document).on('click', '#page2link',function(event){
 

@@ -115,13 +115,18 @@
                     var grade = $('#page6-school-info select[name=classroom_grade]').val();
                     grade = parseInt(grade); 
 
+                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
+
                     // Allow up to (and including) 1st grade teachers!  
                     if (grade <= 1) {
-                      if(isMobileDevice()){
+                      if (role == "parent") {
+                        $('#page4link').attr('href', '#page2-invite-teacher');
+                      }
+                      else if (isMobileDevice()){
                         $('#page4link').attr('href', '#page7');
-                      } else {
+                      }
+                      else {
                         $('#page4link').attr('href', '#');
-                        // we're going to go to the dashboard.
                       }
                     } else {
                       $('#page4link').attr('href', '#page8-go-to-dashboard');
@@ -129,10 +134,7 @@
                       // or maybe just have a separated page with that text
                     }
                     // check which one
-                    var role = $('form#choose-educator-role-form').find('input[name=role]').val();
-                    if (role == "parent") {
-                      $('#page4link').attr('href', '#page2-invite-teacher');
-                    }
+
 
                     // change link based on that
 
@@ -172,7 +174,7 @@
                           var grade = $('#page6-school-info select[name=classroom_grade]').val();
                           grade = parseInt(grade); 
 
-                          if (grade <= 0) {
+                          if (grade <= 1) {
                             console.log('yup, gonna submit');
                             $('#page6-school-info form#log-into-dat-account').submit();
                             // we're going to go to the dashboard.

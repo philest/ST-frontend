@@ -140,15 +140,17 @@ module TwilioTextingHelpers
   def notify_admins(subject, body="")
     email_admins(subject, body)
     text_body   = subject + ":\n" + body
-    phil, aubs = '+15612125831', '+13013328953'
+    phil, aubs, dav = '+15612125831', '+13013328953', '+16263209877'
     puts "NOTIFYING ADMINS......."
     if text_body.length < 360
+      # search placeholder
       MessageWorker.perform_async(text_body, phil, ENV['ST_USER_REPLIES_NO'])
-      MessageWorker.perform_async(text_body, aubs, ENV['ST_USER_REPLIES_NO'])
-      
+      # MessageWorker.perform_async(text_body, aubs, ENV['ST_USER_REPLIES_NO'])
+      # MessageWorker.perform_async(text_body, dav, ENV['ST_USER_REPLIES_NO'])
     else
       MessageWorker.perform_async(subject, phil, ENV['ST_USER_REPLIES_NO'])
-      MessageWorker.perform_async(subject, aubs, ENV['ST_USER_REPLIES_NO'])
+      # MessageWorker.perform_async(subject, aubs, ENV['ST_USER_REPLIES_NO'])
+      # MessageWorker.perform_async(subject, dav, ENV['ST_USER_REPLIES_NO'])
     end
   end
 
