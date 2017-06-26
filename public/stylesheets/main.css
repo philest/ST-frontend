@@ -845,6 +845,7 @@ h4 span a{
 		font-size: 2em; /*added for Karla*/
 		padding-left: .15em;
 		padding-right: .15em;
+		margin-top: 35px; /*added because trio section was cut*/
 	}
 
 	h1.banner#call-to-action{
