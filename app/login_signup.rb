@@ -463,6 +463,7 @@ end
       }
     end 
     # THE DEVIL IS ALIVE! 
+    headers 'Access-Control-Allow-Origin' => 'http://localhost:3000' # allows readupapp to access this routes
     matching_schools.to_json
 
   end
