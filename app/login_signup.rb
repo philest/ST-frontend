@@ -1,17 +1,17 @@
-#  login_signup.rb          Phil Esterman, David McPeek, Aubrey Wahl     
-# 
+#  login_signup.rb          Phil Esterman, David McPeek, Aubrey Wahl
+#
 #  The login/signup controller for teachers and admin.
 #  The authentication entrypoint to the dashboards.
-#  
+#
 #  *Also enable users to signup for a free trial.*
 #  --------------------------------------------------------
 
 #########  DEPENDENCIES  #########
 #
-#config the load path 
+#config the load path
 require 'bundler/setup'
 
-#siantra dependencies 
+#siantra dependencies
 require 'sinatra/base'
 require "bundler/setup"
 
@@ -27,7 +27,7 @@ require_relative '../helpers/school_code_helper'
 require_relative '../helpers/is_not_us'
 require_relative '../helpers/login_attempt'
 
-# Error tracking. 
+# Error tracking.
 require 'airbrake'
 require_relative '../config/initializers/airbrake'
 
@@ -44,10 +44,10 @@ class LoginSignup < Sinatra::Base
   set :root, File.join(File.dirname(__FILE__), '../')
   # sets the view directory correctly
   set :views, Proc.new { File.join(root, "views") }
-  
+
   register Sinatra::Flash
 
-  require "sinatra/reloader" if development? 
+  require "sinatra/reloader" if development?
 
   configure :development do
     register Sinatra::Reloader
@@ -107,7 +107,7 @@ class LoginSignup < Sinatra::Base
 
 
   # stores the POST information from the homepage into the session.
-  # this is the entrypoint to the purple-modals page from the homepage. 
+  # this is the entrypoint to the purple-modals page from the homepage.
   # the params contain data that the user inputs from the homepage
   #   to begin signing up.
   post '/freemium-signup-register' do
@@ -116,7 +116,7 @@ class LoginSignup < Sinatra::Base
     # STORE PASSWORD, NOT PASSWORD DIGEST
     plaintext_password = params['password']
     params['password_digest'] = BCrypt::Password.create params['password']
-    
+
     # delete the plaintext password so we're not sending it over HTTP (security reasons)
     params.delete 'password'
 
@@ -147,7 +147,7 @@ class LoginSignup < Sinatra::Base
 
  get '/get-teacher-data' do
   teacher = Teacher.where_username_is(session[:username])
-  school = School.where(id: session[:school_id]).first 
+  school = School.where(id: session[:school_id]).first
   teacher_dir = teacher.signature + "-" + teacher.t_number.to_s
   aws_url = "https://s3.amazonaws.com/teacher-materials/#{school.signature}/#{teacher_dir}/flyers"
   fullUrl = "#{aws_url}/StoryTime-Invite-Flyer-#{teacher.signature}.pdf"
@@ -182,13 +182,13 @@ end
 
 
   # If all is successful, creates a freemium
-  # 1. teacher 
+  # 1. teacher
   # 2. admin
   # 3. or user
   # depending on params['role']
-  # 
-  # This route is used by the purple-modals signup page. 
-  # 
+  #
+  # This route is used by the purple-modals signup page.
+  #
   post '/freemium-signup' do
 
     # handle session data and email us with new info
@@ -207,21 +207,21 @@ end
     when 'parent'
       # check that teacher email is there
 
-      # POST to birdv 
+      # POST to birdv
       response = HTTParty.post(
                   ENV['birdv_url'] + '/api/auth/signup_free_agent',
                   body: params
                 )
 
-      return response.code 
+      return response.code
 
     when 'teacher', 'admin'
 
       begin
-        # get the school id! 
+        # get the school id!
         school_id = params['school_id'].to_i
 
-        school = School.where(id: school_id).first 
+        school = School.where(id: school_id).first
         session[:school_id] = school_id
         puts school_id
 
@@ -235,7 +235,7 @@ end
           new_school = true
 
           # this school doesn't exist bro!
-          # we'll need to create it! 
+          # we'll need to create it!
 
           # create a school with a free_ass_class_code
           free_ass_class_code = "#{params['school_name']}_#{params['school_city']}_#{params['school_state']}"
@@ -252,8 +252,8 @@ end
 
           school = School.where(school_info).first || School.create(school_info)
           session[:school_id] = school.id
-        
-        end # if school.nil? 
+
+        end # if school.nil?
 
         # otherwise, school is not nil
 
@@ -282,8 +282,8 @@ end
         if params['role'] == 'teacher'
 
           educator = Teacher.where_username_is(session[:username])
-          
-          # if the educator doesn't exist yet, create them! 
+
+          # if the educator doesn't exist yet, create them!
           if educator.nil?
 
             educator = Teacher.create(educator_info)
@@ -326,7 +326,7 @@ end
             end
 
 
-            # POST to birdv baby!!!! create that fucking USER!!!!!!!! 
+            # POST to birdv baby!!!! create that fucking USER!!!!!!!!
             # for the admin.
             response = HTTParty.post(
               ENV['birdv_url'] + '/api/auth/signup',
@@ -343,8 +343,8 @@ end
         puts "Here's the 2nd notif: #{readable_notif}"
 
         if is_not_us?(session[:first_name]) and is_not_us?(session[:username]) and is_not_us?(session[:last_name])
-          # don't send the actual password! 
-          # 
+          # don't send the actual password!
+          #
           # CHANGE THIS SHIT
           notify_params = {
             first_name: session[:first_name],
@@ -365,7 +365,7 @@ end
           return 'valid_code'
         end
 
-      
+
       rescue => e
         p e.message
         puts "returning 404, i guess"
@@ -413,8 +413,8 @@ end
   # used for the school search bar in the freemium-signup page.
   get '/list-of-schools' do
     blacklist = [
-      'StoryTime', 
-      'Freemium', 
+      'StoryTime',
+      'Freemium',
       'Freemium School',
       'ST Elementary'
     ]
@@ -436,6 +436,7 @@ end
 
       {
         label: school.signature,
+        id: school.id,
         value: 'free_school_value',
         desc: location,
         city: school.city,
@@ -457,13 +458,16 @@ end
       {
         label: school.signature,
         value: school.id,
+        id: school.id,
         desc: location,
         city: school.city,
         state: school.state
       }
+
     end 
     # THE DEVIL IS ALIVE! 
     headers 'Access-Control-Allow-Origin' => 'http://localhost:3000' # allows readupapp to access this routes
+
     matching_schools.to_json
 
   end
@@ -472,6 +476,6 @@ end
 
 
 
-                          
+
 
 end # class LoginSignup
