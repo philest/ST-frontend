@@ -437,6 +437,7 @@ end
       {
         label: school.signature,
         id: school.id,
+        value: 'free_school_value',
         desc: location,
         city: school.city,
         state: school.state
