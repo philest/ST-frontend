@@ -178,41 +178,41 @@ class App < Sinatra::Base
     redirect to('/resources')
   end 
 
-  get '/team/?' do 
-    erb :'pages/team'
-  end
+  # get '/team/?' do 
+  #   erb :'pages/team'
+  # end
 
-  get '/case_study/?' do 
-    erb :'pages/case_study'
-  end
+  # get '/case_study/?' do 
+  #   erb :'pages/case_study'
+  # end
 
-  get '/join' do 
-    erb :'pages/job_board'
-  end
+  # get '/join' do 
+  #   erb :'pages/job_board'
+  # end
 
-  get '/product_lead' do 
-    erb :'pages/jobs/product'
-  end
+  # get '/product_lead' do 
+  #   erb :'pages/jobs/product'
+  # end
 
-  get '/developer' do 
-    erb :'pages/jobs/developer'
-  end 
+  # get '/developer' do 
+  #   erb :'pages/jobs/developer'
+  # end 
 
-  get '/pilots' do 
-    erb :'pages/jobs/pilots'
-  end 
+  # get '/pilots' do 
+  #   erb :'pages/jobs/pilots'
+  # end 
 
-  get '/schools' do 
-    erb :'pages/jobs/schools'
-  end 
+  # get '/schools' do 
+  #   erb :'pages/jobs/schools'
+  # end 
 
-  get '/illustrator' do 
-    erb :'pages/jobs/illustrator'
-  end 
+  # get '/illustrator' do 
+  #   erb :'pages/jobs/illustrator'
+  # end 
 
-  get '/design' do 
-    erb :'pages/jobs/design'
-  end 
+  # get '/design' do 
+  #   erb :'pages/jobs/design'
+  # end 
 
 
   # redirect to Messenger app. 
