@@ -182,9 +182,9 @@ class App < Sinatra::Base
   #   erb :'pages/team'
   # end
 
-  # get '/case_study/?' do 
-  #   erb :'pages/case_study'
-  # end
+  get '/case_study/?' do 
+    erb :'pages/case_study'
+  end
 
   # get '/join' do 
   #   erb :'pages/job_board'
