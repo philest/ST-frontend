@@ -2,13 +2,13 @@
  * SASS for the case-study page.
  */
 
-
-html{ font-size:100%; }
+html {
+  font-size: 100%;
+}
 
 body {
   font-size: 1em;
 }
-
 
 iframe {
   display: block;
@@ -16,9 +16,8 @@ iframe {
 }
 
 body {
-  font-family: "Karla"
+  font-family: "Karla";
 }
-
 
 .rmp-banner {
   img {
@@ -32,13 +31,14 @@ section {
   padding-bottom: 3em;
 }
 
-h1, h2, p {
+h1,
+h2,
+p {
   padding-left: 4%;
   padding-right: 4%;
 }
 
 .main-quote {
-
   h1 {
     line-height: 1.2em;
     max-width: 100%;
@@ -50,7 +50,7 @@ h1, h2, p {
   }
 
   .reading-challenges & {
-    max-width: 51em; 
+    max-width: 51em;
   }
 
   .reading-habits & {
@@ -71,17 +71,16 @@ h1, h2, p {
     }
 
     &:last-child {
-      font-weight: normal; 
+      font-weight: normal;
       font-style: italic;
     }
-
   }
 }
 
 .centered {
   display: block;
   margin: 0 auto;
-  text-align: center; 
+  text-align: center;
 }
 
 .more-info {
@@ -90,7 +89,6 @@ h1, h2, p {
   .testimony-sub {
     padding-left: 7%;
   }
-
 }
 
 .section-divider {
@@ -98,7 +96,8 @@ h1, h2, p {
   text-align: center;
   min-height: 30em;
   padding-top: 8em;
-  p, h2 {
+  p,
+  h2 {
     color: white;
     font-weight: normal;
   }
@@ -106,33 +105,33 @@ h1, h2, p {
     font-size: 2em;
   }
 
-
   &#part-1 {
-    background: url('/images/case-study/Creekside1.jpg') center top/cover no-repeat #03686b;
+    background: url("/images/case-study/Creekside1.jpg") center top/cover
+      no-repeat #03686b;
   }
 
   &#part-2 {
-    background: url('/images/case-study/Creekside2.jpg') center top/cover no-repeat #03686b;
+    background: url("/images/case-study/Creekside2.jpg") center top/cover
+      no-repeat #03686b;
   }
 
   &#part-3 {
-    background: url('/images/case-study/Creekside5.jpg') center top/cover no-repeat #03686b;
+    background: url("/images/case-study/Creekside5.jpg") center top/cover
+      no-repeat #03686b;
   }
 
   .circle-title {
     border-radius: 50%;
-    background-color: red;
+    background-color: #ed7a44;
     width: 6em;
-    height: 6em; 
+    height: 6em;
     margin: 0 auto;
-    /* width and height can be anything, as long as they're equal */ 
+    /* width and height can be anything, as long as they're equal */
     p {
       padding-top: 1.2em;
       font-size: 1.5em;
     }
   }
-
-
 }
 
 #inner-main-quote {
@@ -145,24 +144,21 @@ h1, h2, p {
   line-height: 2.2em;
 }
 
-
 .key-results {
   padding-top: 4em;
   min-height: 25em;
-  background-color: #F5F8F9;
-  border-top: 1px solid #BDBDBE;
-  border-bottom: 1px solid #BDBDBE;
+  background-color: #f5f8f9;
+  border-top: 1px solid #bdbdbe;
+  border-bottom: 1px solid #bdbdbe;
 
   h1 {
     margin-bottom: 2em;
   }
 
-
   .pure-g {
     width: 80%;
     margin: 0 auto;
   }
-
 
   .inner-wrapper {
     width: 14.5em;
@@ -171,16 +167,16 @@ h1, h2, p {
     text-align: center;
     line-height: 0em;
   }
-  
 }
 
-@media (min-width: 35.5em) { // 568px
+@media (min-width: 35.5em) {
+  // 568px
 
   // h1, h2, p {
   //   padding-left: 0px;
   //   padding-right: 0px;
   // }
-  
+
   section {
     padding-top: 3em;
     padding-bottom: 3em;
@@ -196,7 +192,7 @@ h1, h2, p {
     }
 
     .reading-challenges & {
-      max-width: 51em; 
+      max-width: 51em;
     }
 
     .reading-habits & {
@@ -217,17 +213,16 @@ h1, h2, p {
       }
 
       &:last-child {
-        font-weight: normal; 
+        font-weight: normal;
         font-style: italic;
       }
-
     }
   }
 
   .centered {
     display: block;
     margin: 0 auto;
-    text-align: center; 
+    text-align: center;
   }
 
   .more-info {
@@ -236,7 +231,6 @@ h1, h2, p {
     .testimony-sub {
       padding-left: 7%;
     }
-
   }
 
   .section-divider {
@@ -244,7 +238,8 @@ h1, h2, p {
     text-align: center;
     min-height: 30em;
     padding-top: 8em;
-    p, h2 {
+    p,
+    h2 {
       color: white;
       font-weight: normal;
     }
@@ -252,33 +247,33 @@ h1, h2, p {
       font-size: 2em;
     }
 
-
     &#part-1 {
-      background: url('/images/case-study/Creekside1.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside1.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-2 {
-      background: url('/images/case-study/Creekside2.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside2.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-3 {
-      background: url('/images/case-study/Creekside5.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside5.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     .circle-title {
       border-radius: 50%;
       background-color: red;
       width: 6em;
-      height: 6em; 
+      height: 6em;
       margin: 0 auto;
-      /* width and height can be anything, as long as they're equal */ 
+      /* width and height can be anything, as long as they're equal */
       p {
         padding-top: 1.2em;
         font-size: 1.5em;
       }
     }
-
-
   }
 
   #inner-main-quote {
@@ -291,24 +286,21 @@ h1, h2, p {
     line-height: 2.2em;
   }
 
-
   .key-results {
     padding-top: 4em;
     min-height: 25em;
-    background-color: #F5F8F9;
-    border-top: 1px solid #BDBDBE;
-    border-bottom: 1px solid #BDBDBE;
+    background-color: #f5f8f9;
+    border-top: 1px solid #bdbdbe;
+    border-bottom: 1px solid #bdbdbe;
 
     h1 {
       margin-bottom: 2em;
     }
 
-
     .pure-g {
       width: 80%;
       margin: 0 auto;
     }
-  
 
     .inner-wrapper {
       width: 14.5em;
@@ -317,25 +309,25 @@ h1, h2, p {
       text-align: center;
       line-height: 0em;
     }
-    
   }
-
-
 }
 
 // TABLET!!!!
-@media (min-width: 48em) { // 768px
+@media (min-width: 48em) {
+  // 768px
   .main-quote.centered {
     // line-height: 1.2em;
     max-width: 90%;
     margin: 0 auto;
   }
 
-  h1, h2, p {
+  h1,
+  h2,
+  p {
     padding-left: 0px;
     padding-right: 0px;
   }
-  
+
   section {
     padding-top: 3em;
     padding-bottom: 3em;
@@ -345,7 +337,6 @@ h1, h2, p {
     h1 {
       line-height: 2em;
     }
-
 
     .citation {
       text-align: right;
@@ -357,17 +348,16 @@ h1, h2, p {
       }
 
       &:last-child {
-        font-weight: normal; 
+        font-weight: normal;
         font-style: italic;
       }
-
     }
   }
 
   .centered {
     display: block;
     margin: 0 auto;
-    text-align: center; 
+    text-align: center;
   }
 
   .more-info {
@@ -376,7 +366,6 @@ h1, h2, p {
     .testimony-sub {
       padding-left: 7%;
     }
-
   }
 
   .section-divider {
@@ -384,7 +373,8 @@ h1, h2, p {
     text-align: center;
     min-height: 30em;
     padding-top: 8em;
-    p, h2 {
+    p,
+    h2 {
       color: white;
       font-weight: normal;
     }
@@ -392,33 +382,33 @@ h1, h2, p {
       font-size: 2em;
     }
 
-
     &#part-1 {
-      background: url('/images/case-study/Creekside1.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside1.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-2 {
-      background: url('/images/case-study/Creekside2.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside2.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-3 {
-      background: url('/images/case-study/Creekside5.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside5.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     .circle-title {
       border-radius: 50%;
       background-color: red;
       width: 6em;
-      height: 6em; 
+      height: 6em;
       margin: 0 auto;
-      /* width and height can be anything, as long as they're equal */ 
+      /* width and height can be anything, as long as they're equal */
       p {
         padding-top: 1.2em;
         font-size: 1.5em;
       }
     }
-
-
   }
 
   #inner-main-quote {
@@ -431,24 +421,21 @@ h1, h2, p {
     line-height: 2.2em;
   }
 
-
   .key-results {
     padding-top: 4em;
     min-height: 25em;
-    background-color: #F5F8F9;
-    border-top: 1px solid #BDBDBE;
-    border-bottom: 1px solid #BDBDBE;
+    background-color: #f5f8f9;
+    border-top: 1px solid #bdbdbe;
+    border-bottom: 1px solid #bdbdbe;
 
     h1 {
       margin-bottom: 2em;
     }
 
-
     .pure-g {
       width: 80%;
       margin: 0 auto;
     }
-  
 
     .inner-wrapper {
       width: 14.5em;
@@ -457,23 +444,19 @@ h1, h2, p {
       text-align: center;
       line-height: 0em;
     }
-    
   }
-
-
 }
 
+@media (min-width: 64em) {
+  // 1024px
 
-
-
-@media (min-width: 64em) { // 1024px
- 
-
-  h1, h2, p {
+  h1,
+  h2,
+  p {
     padding-left: 0px;
     padding-right: 0px;
   }
-  
+
   section {
     padding-top: 3em;
     padding-bottom: 3em;
@@ -489,7 +472,7 @@ h1, h2, p {
     }
 
     .reading-challenges & {
-      max-width: 51em; 
+      max-width: 51em;
     }
 
     .reading-habits & {
@@ -510,17 +493,16 @@ h1, h2, p {
       }
 
       &:last-child {
-        font-weight: normal; 
+        font-weight: normal;
         font-style: italic;
       }
-
     }
   }
 
   .centered {
     display: block;
     margin: 0 auto;
-    text-align: center; 
+    text-align: center;
   }
 
   .more-info {
@@ -529,7 +511,6 @@ h1, h2, p {
     .testimony-sub {
       padding-left: 7%;
     }
-
   }
 
   .section-divider {
@@ -537,7 +518,8 @@ h1, h2, p {
     text-align: center;
     min-height: 30em;
     padding-top: 8em;
-    p, h2 {
+    p,
+    h2 {
       color: white;
       font-weight: normal;
     }
@@ -545,33 +527,33 @@ h1, h2, p {
       font-size: 2em;
     }
 
-
     &#part-1 {
-      background: url('/images/case-study/Creekside1.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside1.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-2 {
-      background: url('/images/case-study/Creekside2.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside2.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     &#part-3 {
-      background: url('/images/case-study/Creekside5.jpg') center top/cover no-repeat #03686b;
+      background: url("/images/case-study/Creekside5.jpg") center top/cover
+        no-repeat #03686b;
     }
 
     .circle-title {
       border-radius: 50%;
       background-color: red;
       width: 6em;
-      height: 6em; 
+      height: 6em;
       margin: 0 auto;
-      /* width and height can be anything, as long as they're equal */ 
+      /* width and height can be anything, as long as they're equal */
       p {
         padding-top: 1.2em;
         font-size: 1.5em;
       }
     }
-
-
   }
 
   #inner-main-quote {
@@ -584,24 +566,21 @@ h1, h2, p {
     line-height: 2.2em;
   }
 
-
   .key-results {
     padding-top: 4em;
     min-height: 25em;
-    background-color: #F5F8F9;
-    border-top: 1px solid #BDBDBE;
-    border-bottom: 1px solid #BDBDBE;
+    background-color: #f5f8f9;
+    border-top: 1px solid #bdbdbe;
+    border-bottom: 1px solid #bdbdbe;
 
     h1 {
       margin-bottom: 2em;
     }
 
-
     .pure-g {
       width: 80%;
       margin: 0 auto;
     }
-  
 
     .inner-wrapper {
       width: 14.5em;
@@ -610,30 +589,5 @@ h1, h2, p {
       text-align: center;
       line-height: 0em;
     }
-    
   }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
