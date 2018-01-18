@@ -4,54 +4,50 @@
  * All styling for the homepage (and other static pages)
  */
 
-@import 'homepage/navbar';
-@import 'homepage/main-splash';
-@import 'homepage/product-sections';
-@import 'homepage/footer';
-@import 'homepage/modals';
+@import "homepage/navbar";
+@import "homepage/main-splash";
+@import "homepage/product-sections";
+@import "homepage/footer";
+@import "homepage/modals";
 
-html { 
+html {
   overflow-y: scroll;
-  font-size:100%;
+  font-size: 100%;
 }
-
 
 body {
   font-size: 1em;
-  font-family: 'Karla', sans-serif;
+  font-family: "Karla", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-
 .container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-left: 4.0619%;
+  padding-right: 4.0619%;
+
+  @media (min-width: 35.5em) {
+    // 568px
     margin-right: auto;
     margin-left: auto;
     padding-left: 4.0619%;
     padding-right: 4.0619%;
+  }
 
+  @media (min-width: 48em) {
+    // 768px
+    width: 92%;
+  }
 
-    @media (min-width: 35.5em) { // 568px
-      margin-right: auto;
-      margin-left: auto;
-      padding-left: 4.0619%;
-      padding-right: 4.0619%;
-    }
-    
-    @media (min-width: 48em) { // 768px
-      width: 92%;
-    }
+  @media (min-width: 992px) {
+    width: 92%;
+  }
 
-    @media (min-width: 992px) {
-      width: 92%;
-    }
-
-
-    @media (min-width: 80em) {
-      width: 92%;
-    }
-
+  @media (min-width: 80em) {
+    width: 92%;
+  }
 }
-
-
 
 #logo-new {
   width: 13em;
@@ -61,57 +57,53 @@ body {
   margin-top: 0px;
 
   @media (min-width: 28.125em) {
-    width: 14em; 
+    width: 14em;
   }
 
   @media (min-width: 666px) {
-    width: 16em; 
+    width: 16em;
   }
 
-  @media (min-width: 48em) { // 768px
+  @media (min-width: 48em) {
+    // 768px
     width: 18em;
     z-index: 200;
     margin-left: 0px;
     margin-top: 7em;
   }
 
-  @media (min-width: 48em) { // 768px
-    
+  @media (min-width: 48em) {
+    // 768px
   }
 
   @media (min-width: 820px) {
     width: 20em;
   }
-
 }
-
-
 
 h1 br.subheading-br {
   display: inline-block;
 
   @media (min-width: 28.125em) {
-    display: none; 
+    display: none;
   }
-} 
+}
 
 h2 {
   font-size: 21px;
   margin-bottom: 20px;
 
-  @media (min-width: 35.5em) { // 568px
-    font-size: 24px; 
+  @media (min-width: 35.5em) {
+    // 568px
+    font-size: 24px;
   }
 }
-
-
 
 /*BELOW THE FOLD*/
 
 .text p {
   font-size: 1.1em;
 }
-
 
 div.text {
   padding-top: 0px;
@@ -120,25 +112,23 @@ div.text {
   margin: auto;
   max-width: 270px;
 
-  @media (min-width: 48em) { // 768px
+  @media (min-width: 48em) {
+    // 768px
     padding-top: 200px;
     text-align: left;
-  } 
-
+  }
 }
-
 
 /*curriculum*/
 .the-product .phone img {
   width: 65%;
 
-  @media (min-width: 35.5em) { // 568px
+  @media (min-width: 35.5em) {
+    // 568px
     width: 100%;
-    max-width: 370px; 
+    max-width: 370px;
   }
-
 }
-
 
 h3.call-to-action-text {
   text-align: center;
@@ -146,21 +136,18 @@ h3.call-to-action-text {
   font-weight: 100;
   margin-left: 20px;
   margin-right: 20px;
-
 }
 
-h1.banner#call-to-action{
+h1.banner#call-to-action {
   font-size: 21px;
   margin-bottom: 1em;
   padding-top: 1em;
 
-  @media (min-width: 48em) { // 768px
-    font-size: 26px;  
+  @media (min-width: 48em) {
+    // 768px
+    font-size: 26px;
   }
 }
-
-
-
 
 div.home--features {
   max-width: 1024px;
@@ -168,32 +155,28 @@ div.home--features {
 }
 
 div#divider-mobile {
-  padding-bottom: 2em; 
+  padding-bottom: 2em;
 }
 
 div.divider {
-  padding-bottom: 2em; 
+  padding-bottom: 2em;
 }
 
-
-#padded-img{
+#padded-img {
   padding-top: 1.4em;
 
-  @media (min-width: 48em) { // 768px
+  @media (min-width: 48em) {
+    // 768px
     padding-top: 4.4em;
   }
 }
 
-
-
 @media (min-width: 520px) {
-  
   button#join.dialog-button.signup-form-button {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 90%;
-
   }
 
   button.signup-form-button {
@@ -202,14 +185,12 @@ div.divider {
     margin-right: auto;
     width: 90%;
     margin-top: 0em;
-
   }
-
 }
 
-
 /***** Large tablet ******/
-@media (min-width: 48em) { // 768px
+@media (min-width: 48em) {
+  // 768px
 
   div.splash-text {
     z-index: 10;
@@ -224,14 +205,7 @@ div.divider {
     margin-bottom: 50px;
   }
 
-  h1.banner#call-to-action{
+  h1.banner#call-to-action {
     font-size: 26px;
   }
-
-} 
-
-
-
-
-
-
+}
