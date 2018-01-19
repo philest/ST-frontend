@@ -31,6 +31,9 @@
 
 
     <!-- our scripts -->
+    <script src="js/smooth-scroll-min.js"></script>
+  
+
     <script type="text/javascript" src="/js/validations.js"></script>
     <script type="text/javascript" src="/js/homepage.js"></script>
     <script type="text/javascript" src="/js/videoModal.js"></script>
@@ -170,8 +173,9 @@
             </li>
 
             <li class="navbar-button-item">
-              <a>       
-                  <button id="top-button" onclick="mixpanel.track('navbar signup button clicked', {'location': 'navbar'});" data-toggle="modal" data-target="#signupEmail" class="pure-button-primary pure-button signup-button">
+              <a data-scroll href="#">       
+                  <button id="top-button" onclick="SignupClicked();
+                  "  class="pure-button-primary pure-button signup-button">
                     Sign up
                   </button>
               </a>
@@ -234,7 +238,7 @@
     margin: 0 auto;
     margin-top: 30px;
 ">
-            <input type="text" style="height: 3.5em;" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
+            <input id='phone-input-field' type="text" style="height: 3.5em;" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
             <span style="background: #ed7844;color:white;     font-weight: bold;
     border: none;" class="input-group-addon" id="text-me-link-button">Text me a link</span>
           </div>
@@ -439,6 +443,12 @@
 
       function DemoButtonClicked() {
         mixpanel.track("Demo Button Clicked");
+      }
+
+      function SignupClicked() {
+
+        $('#phone-input-field').focus();
+        console.log('clicked.');
       }
 
   </script>
