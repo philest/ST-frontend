@@ -10,6 +10,14 @@
     
     <%= erb :'components/favicon' %>
 
+
+
+
+  <!-- Bootstrap modal files -->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/imports/limited/bootstrap.min.css">
+
+    <!-- end Boostrap -->
+
     <!-- our stylesheets -->
     <link rel="stylesheet" href="stylesheets/alert.css" type="text/css" />
     <link rel="stylesheet" href="stylesheets/teacher-form-input.css" type="text/css" />
@@ -17,6 +25,10 @@
     <link rel="stylesheet" href="stylesheets/fonts.css" type="text/css">
     <!-- This is only needed for below-the-fold content. -->
     <link rel="stylesheet" href="stylesheets/main.css" type="text/css" />
+
+
+
+
 
     <!-- our scripts -->
     <script type="text/javascript" src="/js/validations.js"></script>
@@ -215,9 +227,25 @@
       <div class="title">
         <h1 id="pitch">Get families books and grow readers.</h1>
         <h4 id="sub-pitch">Send children's books home to any phone— for free.</h4>
-        <button type="button" data-toggle="modal" data-target="#signupEmail" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button" onclick="mixpanel.track('splash signup button clicked', {'location': 'splash'});">
+
+
+        <form id="text-me-link-form" action="/text-link-to-app" method="post">
+          <div class="input-group" style="    width: 350px;
+    margin: 0 auto;
+    margin-top: 30px;
+">
+            <input type="text" style="height: 3.5em;" name="phone" class="form-control" placeholder="(555) 555-5555" aria-describedby="basic-addon2">
+            <span style="background: #ed7844;color:white;     font-weight: bold;
+    border: none;" class="input-group-addon" id="text-me-link-button">Text me a link</span>
+          </div>
+        </form>
+
+
+
+
+<!--         <button type="button" data-toggle="modal" data-target="#signupEmail" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button" onclick="mixpanel.track('splash signup button clicked', {'location': 'splash'});">
                     Sign up
-                  </button>
+                  </button> -->
       </div>
       
 
@@ -347,7 +375,7 @@
 
           <div class="demo" data-toggle="modal" data-target="#myDemo">
 
-                  <button type="button" onclick="DemoButtonClicked();" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" style="width: 11em;" id="start-modal-button">
+                  <button type="button" onclick="DemoButtonClicked();" class="demo-request-button btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" style="width: 11em; border: none;" id="start-modal-button">
                     Request a Demo
                   </button>
           </div>
