@@ -12,6 +12,8 @@ module TwilioTextingHelpers
   STORYTIME_NO     = ENV['ST_MAIN_NO']
   USER_REPLIES_NO  = ENV['ST_USER_REPLIES_NO']
 
+  puts 'STORYTIME_NO is #{STORYTIME_NO}'
+
   DEMO_NO = "+12033035711"
   # Sprint name, from Twilio_Lookups url. 
   SPRINT = "Sprint Spectrum, L.P."
