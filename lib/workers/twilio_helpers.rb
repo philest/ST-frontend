@@ -130,7 +130,6 @@ module TwilioTextingHelpers
 
   def email_admins(subject, body="")
     Pony.mail(:to => 'phil.esterman@yale.edu',
-              :cc => 'aawahl@gmail.com',
               :from => 'phil.esterman@yale.edu',
               :headers => { 'Content-Type' => 'text/html' },
               :subject => subject,
@@ -140,14 +139,12 @@ module TwilioTextingHelpers
   def notify_admins(subject, body="")
     email_admins(subject, body)
     text_body   = subject + ":\n" + body
-    phil, aubs = '+15612125831', '+13013328953'
+    phil = '+15612125831'
     puts "NOTIFYING ADMINS......."
     if text_body.length < 360
       MessageWorker.perform_async(text_body, phil, ENV['ST_USER_REPLIES_NO'])
-      MessageWorker.perform_async(text_body, aubs, ENV['ST_USER_REPLIES_NO'])
     else
       MessageWorker.perform_async(subject, phil, ENV['ST_USER_REPLIES_NO'])
-      MessageWorker.perform_async(subject, aubs, ENV['ST_USER_REPLIES_NO'])
     end
   end
 
