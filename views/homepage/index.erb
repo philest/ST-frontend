@@ -240,6 +240,37 @@
           </div>
         </form>
 
+        <p id="confirm-message-sent" style="display:none;color: white;
+    font-weight: bold;
+    font-size: 14px; "></p>
+
+        <p id="need-number" style="display:none;color: white;
+    font-weight: bold;
+    font-size: 14px;">Invalid phone.</p>
+
+        <script>
+          $('#text-me-link-button').click(function(event){
+            // get input
+            var phone = $('form#text-me-link-form input[name=phone]').val();
+            console.log(phone);
+
+            // validate the form
+            if ((phone == '') || (phone.length < 10) || !(/^\d+$/.test(phone))) {
+              $('#need-number').css('display', 'block');
+              return false;
+            }
+
+            // post form
+            $.post('/get-app/send-app-link', $('form#text-me-link-form').serialize());
+
+            // initiate slide-down drop down
+            $('#need-number').css('display', 'none');
+            $('#confirm-message-sent').html('Download link sent to ' + phone);
+            $('#confirm-message-sent').slideDown();
+
+          });
+        </script>
+
 
 
 
