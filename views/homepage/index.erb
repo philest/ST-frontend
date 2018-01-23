@@ -159,7 +159,7 @@
 
             <li class="navbar-button-item">
               <a>       
-                  <button id="top-button" onclick="mixpanel.track('navbar signup button clicked', {'location': 'navbar'});" data-toggle="modal" data-target="#signupEmail" class="pure-button-primary pure-button signup-button">
+                  <button disabled id="top-button" onclick="mixpanel.track('navbar signup button clicked', {'location': 'navbar'});" data-toggle="modal" data-target="#signupEmail" class="pure-button-primary pure-button signup-button">
                     Sign up
                   </button>
               </a>
@@ -182,7 +182,7 @@
                 <input type="hidden" name='username'>
               </div>
 
-                <button type="button" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
+                <button disabled type="button" id="signup-email-button-mobile" class="signup-form-button pure-button pure-button-primary get_update dialog-button">Continue</button>
           </div>
       </form>
 
@@ -215,7 +215,7 @@
       <div class="title">
         <h1 id="pitch">Get families books and grow readers.</h1>
         <h4 id="sub-pitch">Send children's books home to any phone— for free.</h4>
-        <button type="button" data-toggle="modal" data-target="#signupEmail" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button" onclick="mixpanel.track('splash signup button clicked', {'location': 'splash'});">
+        <button disabled type="button" data-toggle="modal" data-target="#signupEmail" class="btn btn-primary btn-lg pure-button pure-button-primary get_update dialog-button" id="main-signup-button" onclick="mixpanel.track('splash signup button clicked', {'location': 'splash'});">
                     Sign up
                   </button>
       </div>
