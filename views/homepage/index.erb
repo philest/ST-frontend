@@ -81,7 +81,7 @@
 
 
     <div id="alert">
-        <a class="alert" href="#alert">Storytime shutdown as of December 31, 2017. Thanks for reading with us!</a>
+        <a class="alert" href="#alert">Storytime shutdown as of December 31, 2016. Thanks for reading with us!</a>
     </div>
 
 
@@ -337,7 +337,10 @@
 </section >
 
 
-<section class="product-display" id="any-family" style="display: none;">
+<% @display = (params['b'] ? 'none' : 'block') %>
+
+
+<section class="product-display" id="any-family" style="display: <%= @display %> ;">
   <h1 class="section-banner">Free for every family across the country
 </h1>
   <div class="pure-g">
