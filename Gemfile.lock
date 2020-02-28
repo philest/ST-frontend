@@ -131,7 +131,7 @@ GEM
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
     public_suffix (2.0.5)
-    puma (3.9.0)
+    puma (3.12.3)
     rack (1.6.8)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
